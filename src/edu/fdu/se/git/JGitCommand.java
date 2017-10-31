@@ -197,6 +197,21 @@ public class JGitCommand {
 		}
 		return 0;
 	}
+	public int readCommitTime(String commitId){
+		try {
+			ObjectId id = ObjectId.fromString(commitId);
+			RevCommit revCommit = revWalk.parseCommit(id);
+			int time = revCommit.getCommitTime();
+			return time;
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
 	
 	public void walkAllTags(CommitTagVisitor visitor) {
 		Map<String,Ref> tags = repository.getTags();
