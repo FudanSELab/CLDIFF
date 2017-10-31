@@ -191,6 +191,25 @@ public class JGitCommand {
 				System.out.println(item.getValue());
 			}
 	}
+	public String[] getCommitParents(String commitId){
+		ObjectId id = ObjectId.fromString(commitId);
+		try {
+			RevCommit commit = revWalk.parseCommit(id);
+			RevCommit[] parentCommits = commit.getParents();
+			String[] parentCommitsString = new String[parentCommits.length];
+			for(int i=0;i<parentCommits.length;i++){
+				parentCommitsString[i]=parentCommits[i].getName();
+			}
+			return parentCommitsString;
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public void checkout(String commitid) {
 		try {
@@ -209,11 +228,11 @@ public class JGitCommand {
 		}
 	}
 
+
 	public static void main(String[] args) {
 		JGitCommand cmd = new JGitCommand("D:\\Workspace\\Android_Diff\\Android_Official_Framework_Repo\\base\\.git");
 		// cmd.walkRepoFromBackwards(new CommitVisitor());//1.
 //		cmd.walkAllTags(new CommitVisitor());
-
 	}
 
 	public byte[] extract(String fileName, String revisionId) {
