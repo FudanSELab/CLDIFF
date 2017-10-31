@@ -183,14 +183,26 @@ public class JGitCommand {
 		}
 
 	}
-	//TODO
-	public void walkAllTags(CommitVisitor visitor) {
-			Map<String,Ref> tags = repository.getTags();
-			for(Entry<String,Ref> item:tags.entrySet()){
-				System.out.println(item.getKey());
-				System.out.println(item.getValue());
-			}
+	public int readCommitTime(ObjectId commitId){
+		try {
+			RevCommit revCommit = revWalk.parseCommit(commitId);
+			int time = revCommit.getCommitTime();
+			return time;
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
+	
+	public void walkAllTags(CommitTagVisitor visitor) {
+		Map<String,Ref> tags = repository.getTags();
+		visitor.visit(this,tags.entrySet());
+	}
+	
 	public String[] getCommitParents(String commitId){
 		ObjectId id = ObjectId.fromString(commitId);
 		try {
