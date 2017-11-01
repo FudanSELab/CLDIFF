@@ -9,7 +9,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import edu.fdu.se.git.JGitCommand;
-
+/**
+ * generate git diff command that facilitates viewing diff
+ * @author huangkaifeng
+ *
+ */
 public class FastPeerCommit {
 	public FastPeerCommit(String path,String out){
 		this.commitFilePath = path;

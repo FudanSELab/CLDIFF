@@ -6,7 +6,11 @@ import java.util.List;
 
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
-
+/**
+ * Load Android SDK into database table: android_sdk_java_file
+ * @author huangkaifeng
+ *
+ */
 public class BrowseSDKFile {
 	static List<AndroidSDKJavaFile> insertationList = new ArrayList<AndroidSDKJavaFile>();
 	static String rootDir;

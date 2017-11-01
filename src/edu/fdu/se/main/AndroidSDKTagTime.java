@@ -4,7 +4,13 @@ import java.util.Scanner;
 
 import edu.fdu.se.git.CommitTagVisitor;
 import edu.fdu.se.git.JGitCommand;
-
+/**
+ * browse Android SDK tag and get its time
+ * input: revision id
+ * output: first android release tag that newer than it 
+ * @author huangkaifeng
+ *
+ */
 public class AndroidSDKTagTime {
 	
 	private JGitCommand cmd;
