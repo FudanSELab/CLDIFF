@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Map;
 
 import edu.fdu.se.git.JGitCommand;
 /**
@@ -24,7 +26,7 @@ public class FastPeerCommit {
 	private JGitCommand cmd;
 	public static void main(String args[]){
 		String file = "C:/Users/huangkaifeng/Desktop/10-20_Commits/android_sdk_commits_commit_msg_contains_add_null_check.txt";
-		String out = "C:/Users/huangkaifeng/Desktop/10-20_Commits/android_sdk_commits_commit_msg_contains_add_null_check-add cmd.txt";
+		String out = "C:/Users/huangkaifeng/Desktop/10-20_Commits/android_sdk_commits_commit_msg_contains_add_null_check-fast peer.txt";
 		FastPeerCommit fpc = new FastPeerCommit(file,out);
 		fpc.output();
 	}
@@ -34,24 +36,33 @@ public class FastPeerCommit {
 			FileInputStream fis=new FileInputStream(this.commitFilePath);
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fis)); 
 			FileOutputStream fos=new FileOutputStream(this.filteredCommits);
+			int count=1;
 			String str = null;  
 			String msg = null;
 	        while((str = bufferedReader.readLine()) != null)  
 	        {
 	        	msg = bufferedReader.readLine();
-            	
+	        	fos.write(String.valueOf(count).getBytes());
+	        	count++;
+	        	fos.write("\n".getBytes());
 	        	fos.write(str.getBytes());
             	fos.write("\n".getBytes());
             	fos.write(msg.getBytes());
             	fos.write("\n".getBytes());
-	        	
-	            
+            	Map<String,Map<String,List<String>>> data = cmd.getCommitParentMappedFileList(str); 
+
 	            String[] parentCommitsString = cmd.getCommitParents(str);
 	            for(String tmp : parentCommitsString){
-	            	String line = "git diff " + tmp + " "+str + "\n";
-	            	fos.write(line.getBytes());
+	            	Map<String,List<String>> parentChangedList = data.get(tmp);
+	            	List<String> changedFileList = parentChangedList.get("modifiedFiles");
+	            	for(String s:changedFileList){
+	            		if(s.startsWith("core/java/android")){
+	            			String line = "git diff " + tmp + " "+str + " -- "+ s + "\n";
+	    	            	fos.write(line.getBytes());
+	            		}
+	            	}
+	            	
 	            }
-
             	fos.write("\n".getBytes());
 	        }  
 	        fis.close();  

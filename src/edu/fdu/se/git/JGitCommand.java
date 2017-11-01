@@ -83,7 +83,6 @@ public class JGitCommand {
 	 * @return
 	 */
 	public Map<String, List<String>> getCommitFileList(String commmitid) {
-
 		ObjectId commitId = ObjectId.fromString(commmitid);
 		RevCommit commit = null;
 		Map<String, List<String>> fileList = new HashMap<String, List<String>>();
@@ -127,6 +126,68 @@ public class JGitCommand {
 				fileList.put("deletedFiles", deleteList);
 			}
 			return fileList;
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	/**
+	 * 
+	 */
+	public Map<String,Map<String, List<String>>> getCommitParentMappedFileList(String commmitid) {
+		Map<String,Map<String,List<String>>> result =new HashMap<String,Map<String,List<String>>>();
+		ObjectId commitId = ObjectId.fromString(commmitid);
+		RevCommit commit = null;
+		Map<String, List<String>> fileList = null;
+		List<String> addList = null;
+		List<String> modifyList = null;
+		List<String> deleteList = null;
+
+		try {
+			commit = revWalk.parseCommit(commitId);
+			RevCommit[] parentsCommits = commit.getParents();
+			for (RevCommit parent : parentsCommits) {
+				fileList = new HashMap<String, List<String>>();
+				addList = new ArrayList<String>();
+				modifyList = new ArrayList<String>();
+				deleteList = new ArrayList<String>();
+				ObjectReader reader = git.getRepository().newObjectReader();
+				CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
+				ObjectId newTree = commit.getTree().getId();
+				newTreeIter.reset(reader, newTree);
+				CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
+				RevCommit pCommit = revWalk.parseCommit(parent.getId());
+				ObjectId oldTree = pCommit.getTree().getId();
+				oldTreeIter.reset(reader, oldTree);
+				DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
+				diffFormatter.setRepository(git.getRepository());
+				List<DiffEntry> entries = diffFormatter.scan(oldTreeIter, newTreeIter);
+				for (DiffEntry entry : entries) {
+					switch (entry.getChangeType()) {
+					case ADD:
+						addList.add(entry.getNewPath());
+						break;
+					case MODIFY:
+						modifyList.add(entry.getNewPath());
+						break;
+					case DELETE:
+						deleteList.add(entry.getNewPath());
+						break;
+					default:
+						break;
+					}
+				}
+				diffFormatter.close();
+				fileList.put("addedFiles", addList);
+				fileList.put("modifiedFiles", modifyList);
+				fileList.put("deletedFiles", deleteList);
+				result.put(pCommit.getName(), fileList);
+			}
+			return result;
 		} catch (MissingObjectException e) {
 			e.printStackTrace();
 		} catch (IncorrectObjectTypeException e) {
