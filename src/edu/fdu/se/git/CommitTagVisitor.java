@@ -1,7 +1,5 @@
 package edu.fdu.se.git;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -67,10 +65,8 @@ public class CommitTagVisitor {
 			simpleMList.add(item);
 		}
 		simpleMList.sort(new Comparator<Map.Entry<String, Integer>>(){
-
 			@Override
 			public int compare(Entry<String, Integer> arg0, Entry<String, Integer> arg1) {
-				// TODO Auto-generated method stub
 				return arg0.getValue()-arg1.getValue();
 			}
 			

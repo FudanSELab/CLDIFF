@@ -1,5 +1,6 @@
 package edu.fdu.se.git;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.Git;
@@ -26,6 +28,7 @@ import org.eclipse.jgit.api.errors.RefNotFoundException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -41,6 +44,7 @@ import org.eclipse.jgit.revwalk.RevTag;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
@@ -51,7 +55,10 @@ public class JGitCommand {
 	private RevWalk revWalk;
 	public String repoPath;
 	private Git git;
-
+	/**
+	 * Constructor
+	 * @param repopath
+	 */
 	public JGitCommand(String repopath) {
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		try {
@@ -70,9 +77,12 @@ public class JGitCommand {
 	}
 
 	private RevCommit revCommit;
-
+	/**
+	 * get added/changed/removed file list given a commit id
+	 * @param commmitid
+	 * @return
+	 */
 	public Map<String, List<String>> getCommitFileList(String commmitid) {
-
 		ObjectId commitId = ObjectId.fromString(commmitid);
 		RevCommit commit = null;
 		Map<String, List<String>> fileList = new HashMap<String, List<String>>();
@@ -125,7 +135,75 @@ public class JGitCommand {
 		}
 		return null;
 	}
+	/**
+	 * 
+	 */
+	public Map<String,Map<String, List<String>>> getCommitParentMappedFileList(String commmitid) {
+		Map<String,Map<String,List<String>>> result =new HashMap<String,Map<String,List<String>>>();
+		ObjectId commitId = ObjectId.fromString(commmitid);
+		RevCommit commit = null;
+		Map<String, List<String>> fileList = null;
+		List<String> addList = null;
+		List<String> modifyList = null;
+		List<String> deleteList = null;
 
+		try {
+			commit = revWalk.parseCommit(commitId);
+			RevCommit[] parentsCommits = commit.getParents();
+			for (RevCommit parent : parentsCommits) {
+				fileList = new HashMap<String, List<String>>();
+				addList = new ArrayList<String>();
+				modifyList = new ArrayList<String>();
+				deleteList = new ArrayList<String>();
+				ObjectReader reader = git.getRepository().newObjectReader();
+				CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
+				ObjectId newTree = commit.getTree().getId();
+				newTreeIter.reset(reader, newTree);
+				CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
+				RevCommit pCommit = revWalk.parseCommit(parent.getId());
+				ObjectId oldTree = pCommit.getTree().getId();
+				oldTreeIter.reset(reader, oldTree);
+				DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
+				diffFormatter.setRepository(git.getRepository());
+				List<DiffEntry> entries = diffFormatter.scan(oldTreeIter, newTreeIter);
+				for (DiffEntry entry : entries) {
+					switch (entry.getChangeType()) {
+					case ADD:
+						addList.add(entry.getNewPath());
+						break;
+					case MODIFY:
+						modifyList.add(entry.getNewPath());
+						break;
+					case DELETE:
+						deleteList.add(entry.getNewPath());
+						break;
+					default:
+						break;
+					}
+				}
+				diffFormatter.close();
+				fileList.put("addedFiles", addList);
+				fileList.put("modifiedFiles", modifyList);
+				fileList.put("deletedFiles", deleteList);
+				result.put(pCommit.getName(), fileList);
+			}
+			return result;
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	/**
+	 * get Commits within range 
+	 * NOT Used
+	 * @param begin
+	 * @param end
+	 * @return
+	 */
 	public List<RevCommit> getCommitsInRange(String begin, String end) {
 		List<RevCommit> commitList = new ArrayList<RevCommit>();
 		try {
@@ -149,7 +227,10 @@ public class JGitCommand {
 
 		return null;
 	}
-
+	/**
+	 * get all the commit info reversely
+	 * @param visitor
+	 */
 	public void walkRepoFromBackwards(CommitVisitor visitor) {
 		try {
 			Map<String, Ref> refs = repository.getAllRefs();
@@ -183,6 +264,11 @@ public class JGitCommand {
 		}
 
 	}
+	/**
+	 * read commit time
+	 * @param commitId
+	 * @return seconds since epoch
+	 */
 	public int readCommitTime(ObjectId commitId){
 		try {
 			RevCommit revCommit = revWalk.parseCommit(commitId);
@@ -197,6 +283,11 @@ public class JGitCommand {
 		}
 		return 0;
 	}
+	/**
+	 * read commit time
+	 * @param commitId
+	 * @return seconds since epoch
+	 */
 	public int readCommitTime(String commitId){
 		try {
 			ObjectId id = ObjectId.fromString(commitId);
@@ -217,7 +308,65 @@ public class JGitCommand {
 		Map<String,Ref> tags = repository.getTags();
 		visitor.visit(this,tags.entrySet());
 	}
-	
+	/**
+	 * TODO print Diff entry
+	 * @param commit
+	 * @return
+	 */
+//	public List<Object> getChangeFiles(RevCommit commit){
+////    	List<ChangeFile> changeFiles= new ArrayList<ChangeFile>();
+//		
+//		AbstractTreeIterator newTree = prepareTreeParser(commit);
+//		if(commit.getParentCount()==0) return changeFiles;
+//    	AbstractTreeIterator oldTree = prepareTreeParser(commit.getParent(0));
+//    	List<DiffEntry> diff= null;
+//		try {
+//			diff = git.diff().setOldTree(oldTree).setNewTree(newTree).call();
+//		} catch (GitAPIException e) {
+//			e.printStackTrace();
+//		}
+//        //每一个diffEntry都是文件版本之间的变动差异
+//		for (DiffEntry diffEntry : diff) {
+//			//DiffEntry.ChangeType.MODIFY.toString().equals(diffEntry.getChangeType().toString())&&
+//			if(diffEntry.getNewPath()!=null&&diffEntry.getNewPath().endsWith(".java")){
+////				changeFiles.add(new ChangeFile(diffEntry.getChangeType().toString(), diffEntry.getOldPath(), diffEntry.getNewPath(), 
+////	        			commit.getName(), (commit.getParents()[0]).getName(), diffEntry.getNewId().toObjectId(), diffEntry.getOldId().toObjectId()));
+//
+//				String fName = "aa"+(new Random()).nextInt(1000);
+//				while(new File(fName).exists()){
+//					fName = "aa"+(new Random()).nextInt(1000);
+//				}
+//				BufferedOutputStream out =null;
+//	            try {
+//	            	out = new BufferedOutputStream(new FileOutputStream(fName));
+//					DiffFormatter df = new DiffFormatter(out);
+//	                df.setDiffComparator(RawTextComparator.WS_IGNORE_ALL);
+//	                df.setRepository(git.getRepository());
+//	            	df.format(diffEntry);
+//	            	out.flush();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}finally{
+//					try {
+//						if(out!=null)
+//							out.close();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//	            
+//	            insertAllAddAndDelete(commit.getName(),changeFiles.get(changeFiles.size()-1),fName);
+//				File file = new File(fName);
+//				file.delete();
+//			}
+//		} 
+//       return changeFiles;
+//	}
+	/**
+	 * get parents commit id in string
+	 * @param commitId
+	 * @return
+	 */
 	public String[] getCommitParents(String commitId){
 		ObjectId id = ObjectId.fromString(commitId);
 		try {
@@ -237,7 +386,11 @@ public class JGitCommand {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * checkout to one commit
+	 * @param commitid
+	 */
 	public void checkout(String commitid) {
 		try {
 			CheckoutCommand checkoutCommand = git.checkout();
@@ -261,7 +414,12 @@ public class JGitCommand {
 		// cmd.walkRepoFromBackwards(new CommitVisitor());//1.
 //		cmd.walkAllTags(new CommitVisitor());
 	}
-
+	/**
+	 * extract file given file path and commit id
+	 * @param fileName
+	 * @param revisionId
+	 * @return
+	 */
 	public byte[] extract(String fileName, String revisionId) {
 		if (revisionId == null || fileName == null) {
 			System.err.println("revisionId/fileName is null..");
@@ -276,6 +434,7 @@ public class JGitCommand {
 			ObjectId objId = repository.resolve(revisionId);
 			if (objId == null) {
 				System.err.println("The revision:" + revisionId + " does not exist.");
+				walk.close();
 				return null;
 			}
 			RevCommit commit = walk.parseCommit(repository.resolve(revisionId));
@@ -300,6 +459,7 @@ public class JGitCommand {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		walk.close();
 		return null;
 	}
 
