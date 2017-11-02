@@ -56,12 +56,11 @@ public class FastPeerCommit {
 	            	Map<String,List<String>> parentChangedList = data.get(tmp);
 	            	List<String> changedFileList = parentChangedList.get("modifiedFiles");
 	            	for(String s:changedFileList){
-	            		if(s.startsWith("core/java/android")){
+	            		if(s.startsWith("core/java/android")&&s.endsWith("java")){
 	            			String line = "git diff " + tmp + " "+str + " -- "+ s + "\n";
 	    	            	fos.write(line.getBytes());
 	            		}
 	            	}
-	            	
 	            }
             	fos.write("\n".getBytes());
 	        }  
