@@ -9,6 +9,8 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 
 public class Main {
+	
+
 	public static void main(String args[]){
 		String repoPath="D:\\Workspace\\Android_Diff\\Android_Official_Framework_Repo\\base";
 		String resource = "mybatis-config.xml";
