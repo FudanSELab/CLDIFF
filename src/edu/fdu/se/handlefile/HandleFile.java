@@ -1,4 +1,5 @@
 package edu.fdu.se.handlefile;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,6 +9,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 public class HandleFile {
+
+	private static int count = 0;
+
 	/**
 	 * 删除文件中的各种注释，包含//、/* * /等
 	 *
@@ -49,14 +53,13 @@ public class HandleFile {
 			// target.replaceAll("\\/\\/[^\\n]*|\\/\\*([^\\*^\\/]*|[\\*^\\/*]*|[^\\**\\/]*)*\\*\\/",
 			// ""); //本段正则摘自网上，有一种情况无法满足（/* ...**/），略作修改
 			String s = target.replaceAll("\\/\\/[^\\n]*|\\/\\*([^\\*^\\/]*|[\\*^\\/*]*|[^\\**\\/]*)*\\*+\\/", "");
-			// System.out.println(s);
 			// 使用对应的编码格式输出
 			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset));
 			out.write(s);
 			out.flush();
 			out.close();
-			// count++;
-			// System.out.println("-----文件处理完成---" + count);
+			count++;
+			System.out.println("-----文件处理完成---" + count);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,9 +78,8 @@ public class HandleFile {
 	}
 
 	public static void main(String[] args) {
-		// clearComment("D:\\eclipse3.3\\workspace\\Sanguosha"); //
 		// 删除目录下所有java文件注释
 		// 删除某个具体文件的注释
-		clearComment("C:\\Users\\Administrator\\Desktop\\Observable.java");
+		clearComment("D:\\Workspace\\Android_Diff\\SDKTools\\sources\\android-5\\android");
 	}
 }
