@@ -267,4 +267,11 @@
 			)
 		</foreach>
 	</insert>
+	
+  	<select id="selectByFileName" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from android_sdk_java_file
+		where file_name=#{fileName}
+	</select>
 </mapper>

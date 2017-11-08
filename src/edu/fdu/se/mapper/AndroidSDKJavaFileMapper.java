@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 
+
 public interface AndroidSDKJavaFileMapper {
 
 	/**
@@ -53,4 +54,6 @@ public interface AndroidSDKJavaFileMapper {
 			@Param("example") AndroidSDKJavaFileExample example);
 
 	int insertBatch(List<AndroidSDKJavaFile> androidsdkjavafile);
+	
+	List<AndroidSDKJavaFile> selectByFileName(@Param(value = "fileName") String fileName);
 }

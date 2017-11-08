@@ -39,4 +39,7 @@ public class AndroidSDKJavaFileDAO {
 		androidsdkjavafilemapper.insertBatch(androidsdkjavafile);
 		sqlSession.commit();
 	}
+	public static List<AndroidSDKJavaFile> selectByFileName(String fileName){
+		return androidsdkjavafilemapper.selectByFileName(fileName);
+	}
 }
