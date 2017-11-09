@@ -1,6 +1,7 @@
 package edu.fdu.se.androidapiclasses;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,10 +13,15 @@ import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
 
 public class GenerateDiffCmd {
+	public static boolean isSameSize(String a,String b){
+		File fa = new File(a);
+		File fb = new File(b);
+		return fa.length()==fb.length();
+	}
 	public static void main(String args[]){
 		try {
 			FileInputStream fis = new FileInputStream("C:/Users/huangkaifeng/Desktop/NTU-Summer/10-1/gt100.txt");
-			FileOutputStream fos = new FileOutputStream("C:/Users/huangkaifeng/Desktop/NTU-Summer/10-1/gt100_gitdiff_cmds.txt");
+			FileOutputStream fos = new FileOutputStream("C:/Users/huangkaifeng/Desktop/NTU-Summer/10-1/gt100_gitdiff_cmds2.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String line;
 			int cnt=1;
@@ -33,8 +39,11 @@ public class GenerateDiffCmd {
 				for(int i=0;i<mList.size()-1;i++){
 					String cur = mList.get(i).getFileFullPath();
 					String next = mList.get(i+1).getFileFullPath();
+					if(isSameSize(cur,next)){
+						continue;
+					}
 					String out = "git diff ";
-					String result = out + cur.replace('\\', '/') +" "+ next.replace('\\', '/')+'\n';
+					String result = out + next.replace('\\', '/') +" "+ cur.replace('\\', '/')+'\n';
 					fos.write(result.getBytes());
 				}
 				fos.write("\n".getBytes());
