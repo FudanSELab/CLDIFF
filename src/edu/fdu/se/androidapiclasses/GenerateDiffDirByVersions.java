@@ -12,7 +12,7 @@ import java.util.List;
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
 
-public class GenerateDiffDirs {
+public class GenerateDiffDirByVersions {
 	public static boolean isSameSize(String a,String b){
 		File fa = new File(a);
 		File fb = new File(b);
@@ -38,62 +38,56 @@ public class GenerateDiffDirs {
 		return false;
 	}
 	public static boolean makeDir(String path){
-		File newDir = new File(path);
-		if(!newDir.exists()) newDir.mkdirs();
-		File subDir1 = new File(path+"/prev");
-		File subDir2 = new File(path+"/curr");
-		if(!subDir1.exists())
-			subDir1.mkdirs();
-		if(!subDir2.exists())
-			subDir2.mkdirs();
+		File rootPath =new File(path);
+		if(!rootPath.exists())
+			rootPath.mkdirs();
+		for(int i=3;i<=24;i++){
+			String subDir = String.valueOf(i+1)+"-"+String.valueOf(i);
+			File subDirPathPrev = new File(rootPath+"/"+subDir+"/prev");
+			File subDirPathCurr = new File(rootPath+"/"+subDir+"/curr");
+			if(!subDirPathPrev.exists())
+				subDirPathPrev.mkdirs();
+			if(!subDirPathCurr.exists())
+				subDirPathCurr.mkdirs();
+		}
 		return true;
 	}
 	public static void copyIntoDir(String fileNamePath,AndroidSDKJavaFile comparePrev,AndroidSDKJavaFile compareCurr){
-		String cur = compareCurr.getFileFullPath();
-		String prev = comparePrev.getFileFullPath();
-		String prevPath = fileNamePath+"/prev";
-		String currPath = fileNamePath+"/curr";
-		String dstFileName = String.valueOf(compareCurr.getSdkVersion())+"-"+String.valueOf(comparePrev.getSdkVersion())+".txt";
-		String dstFilePath = prevPath+"/"+dstFileName;
-		copy(prev,dstFilePath);
-		dstFilePath = currPath+"/"+dstFileName;
-		copy(cur,dstFilePath);
-		
+		String subDir = "/" + String.valueOf(compareCurr.getSdkVersion())+"-"+String.valueOf(comparePrev.getSdkVersion());
+		String prevPath = fileNamePath+subDir +  "/prev";
+		String currPath = fileNamePath+subDir + "/curr";
+		if(!new File(prevPath).exists())
+			return;
+		if(!new File(currPath).exists())
+			return;
+		copy(comparePrev.getFileFullPath(),prevPath+"/"+comparePrev.getFileName());
+		copy(compareCurr.getFileFullPath(),currPath+"/"+compareCurr.getFileName());
 	}
 	public static void main(String args[]){
 		try {
-			String dir = "C:/Users/huangkaifeng/Desktop/11-8/DiffDir";
+			String dir = "C:/Users/huangkaifeng/Desktop/11-8/DiffDirByVersion";
+			makeDir(dir);
 			FileInputStream fis = new FileInputStream("C:/Users/huangkaifeng/Desktop/NTU-Summer/10-1/gt100.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String line;
-			int cnt=1;
-			FileOutputStream fos = new FileOutputStream("C:/Users/huangkaifeng/Desktop/11-8/DiffDir/beyond_compare_path.txt");
 			while((line = br.readLine())!=null){
 				String[] data = line.split(" ");
 				String[] data2 = data[0].split("\\.");
 				String fileName = data2[data2.length-1]+".java";
 				System.out.println(fileName);
-				makeDir(dir+"/"+data2[data2.length-1]);
 				List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectByFileName(fileName);
 				if(mList.size()==0||mList.size()==1) 
 					continue;
-				fos.write(String.valueOf(cnt).getBytes());cnt++;
-				fos.write(".\n".getBytes());
-				String tmp1 = dir+"/"+data2[data2.length-1]+"/curr\n";
-				String tmp2 = dir+"/"+data2[data2.length-1]+"/prev\n\n";
-				fos.write(tmp1.getBytes());
-				fos.write(tmp2.getBytes());
 				for(int i=0;i<mList.size()-1;i++){
 					String cur = mList.get(i).getFileFullPath();
 					String next = mList.get(i+1).getFileFullPath();
 					if(isSameSize(cur,next)){
 						continue;
 					}
-					copyIntoDir(dir+"/"+data2[data2.length-1],mList.get(i),mList.get(i+1));
+					copyIntoDir(dir,mList.get(i),mList.get(i+1));
 				}
 			}
 			br.close();
-			fos.close();
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
