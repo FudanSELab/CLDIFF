@@ -274,4 +274,10 @@
 		from android_sdk_java_file
 		where file_name=#{fileName}
 	</select>
+	<select id="selectByFileNameAndFilterSupportPackage" resultMap="BaseResultMap">
+	    select
+	    <include refid="Base_Column_List" />
+		from android_sdk_java_file
+		where file_name=#{fileName} and sub_sub_category="support"
+	</select>
 </mapper>

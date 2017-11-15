@@ -53,8 +53,16 @@
 <dependency>
     <groupId>com.github.mpkorstanje</groupId>
     <artifactId>simmetrics-core</artifactId>
-    <version>4.1.1</version>
+    <version>3.2.3</version>
+
+    <exclusions>
+    	<exclusion>
+    		<artifactId>guava</artifactId>
+    		<groupId>com.google.guava</groupId>
+    	</exclusion>
+    </exclusions>
 </dependency>
+
 <!-- https://mvnrepository.com/artifact/net.sf.trove4j/trove4j -->
 <dependency>
     <groupId>net.sf.trove4j</groupId>
@@ -73,6 +81,19 @@
     <artifactId>jgrapht-core</artifactId>
     <version>1.0.1</version>
 </dependency>
+<!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
+<dependency>
+    <groupId>org.reflections</groupId>
+    <artifactId>reflections</artifactId>
+    <version>0.9.11</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.eclipse.jdt/org.eclipse.jdt.core -->
+<dependency>
+    <groupId>org.eclipse.jdt</groupId>
+    <artifactId>org.eclipse.jdt.core</artifactId>
+    <version>3.12.3</version>
+</dependency>
+
 
 
 

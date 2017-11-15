@@ -56,4 +56,6 @@ public interface AndroidSDKJavaFileMapper {
 	int insertBatch(List<AndroidSDKJavaFile> androidsdkjavafile);
 	
 	List<AndroidSDKJavaFile> selectByFileName(@Param(value = "fileName") String fileName);
+	
+	List<AndroidSDKJavaFile> selectByFileNameAndFilterSupportPackage(@Param(value = "fileName")String fileName);
 }

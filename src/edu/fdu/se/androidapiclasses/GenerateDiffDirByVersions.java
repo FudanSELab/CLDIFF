@@ -75,7 +75,7 @@ public class GenerateDiffDirByVersions {
 				String[] data2 = data[0].split("\\.");
 				String fileName = data2[data2.length-1]+".java";
 				System.out.println(fileName);
-				List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectByFileName(fileName);
+				List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectByFileNameAndFilterSupportPackage(fileName);
 				if(mList.size()==0||mList.size()==1) 
 					continue;
 				for(int i=0;i<mList.size()-1;i++){

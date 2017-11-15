@@ -1,10 +1,11 @@
 package edu.fdu.se.ast;
 
+import java.io.File;
 import java.io.IOException;
 
 import com.github.gumtreediff.client.Run;
 import com.github.gumtreediff.gen.Generators;
-import com.github.gumtreediff.gen.jdt.JdtTreeGenerator;
+import com.github.gumtreediff.jdt.JdtTreeGenerator;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.ITree;
@@ -18,8 +19,8 @@ public class MyASTParser {
 		ITree src=null;
 		ITree dst=null;
 		try {
-			src = Generators.getInstance().getTree(file1).getRoot();
-			dst = Generators.getInstance().getTree(file2).getRoot();
+			src = new JdtTreeGenerator().generateFromFile(new File(file1)).getRoot();//.getTree(file1).getRoot();
+			dst =  new JdtTreeGenerator().generateFromFile(new File(file2)).getRoot();
 		} catch (UnsupportedOperationException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -30,5 +31,6 @@ public class MyASTParser {
 		System.out.println("aa");
 		
 	}
+	
 
 }
