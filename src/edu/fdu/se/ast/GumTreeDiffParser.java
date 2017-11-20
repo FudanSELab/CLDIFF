@@ -3,10 +3,13 @@ package edu.fdu.se.ast;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.github.gumtreediff.actions.ActionClusterFinder;
 import com.github.gumtreediff.actions.ActionGenerator;
+import com.github.gumtreediff.actions.ActionUtil;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
@@ -20,6 +23,8 @@ import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeUtils;
+
+import edu.fdu.se.fileutil.FileUtil;
 
 
 
@@ -50,10 +55,22 @@ public class GumTreeDiffParser {
 			Matcher m = Matchers.getInstance().getMatcher(src, dst); // retrieve the default matcher
 			m.match();
 			mapping = m.getMappings();
+//			Map<ITree,ITree> srcMap = mapping.getSrcMap();
+//			for(Entry<ITree,ITree> item:srcMap.entrySet()){
+//				System.out.println(item.getKey().toPrettyString(srcTC)+"---->"+item.getValue().toPrettyString(dstTC));
+//			}
+//			System.out.println("---%$#@#$---");
+//			Map<ITree,ITree> dstMap = mapping.getDstMap();
+//			for(Entry<ITree,ITree> item:dstMap.entrySet()){
+//				System.out.println(item.getKey().toPrettyString(srcTC)+"---->"+item.getValue().toPrettyString(dstTC));
+//			}
+			
 			ActionGenerator g = new ActionGenerator(src, dst, mapping);
 			g.generate();
 			actions = g.getActions();
-			finder = new ActionClusterFinder(srcTC, dstTC, actions);
+//			TreeContext newTcx = ActionUtil.apply(srcTC, actions);
+//			toTreeString(newTcx, src);
+//			finder = new ActionClusterFinder(srcTC, dstTC, actions);
 //			finder.show();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -99,6 +116,7 @@ public class GumTreeDiffParser {
 			System.out.print("Delete>");
 			Delete delete = (Delete)a;
 			ITree deleteNode = delete.getNode();
+			
 			System.out.println(prettyString(dstTC,deleteNode)+" from "+prettyString(dstTC,deleteNode.getParent()));//old
 			System.out.println(delete.toString());
 		}
@@ -137,6 +155,7 @@ public class GumTreeDiffParser {
 	}
 	
 	public static String prettyString(TreeContext con, ITree node){
+		//
 		return node.getId()+". "+con.getTypeLabel(node)+":"+node.getLabel();
 	}
 	private String indent(ITree t) {
@@ -148,37 +167,27 @@ public class GumTreeDiffParser {
     public String toTreeString(TreeContext con, ITree tree) {
         StringBuilder b = new StringBuilder();
         for (ITree t : TreeUtils.preOrder(tree))
-            b.append(indent(t)+t.toShortString()+" | " + prettyString(con, t) + "\n");
+            b.append(indent(t) + prettyString(con, t) + "\n");
+        //t.toShortString()+" | " +
         return b.toString();
     }
     
 	public static void main(String[] args) {
-//		String file1 = "src/test/java/resources/StringBuilderCase1.java";
-//		String file2 = "src/test/java/resources/StringBuilderCase2.java";
-//		String file1 = "src/test/java/resources/StringEquals1.java";
-//		String file2 = "src/test/java/resources/StringEquals2.java";
-//		String file1 = "src/test/java/resources/CloseCase1.java";
-//		String file2 = "src/test/java/resources/CloseCase2.java";
-//		String file1 = "src/test/java/resources/DeleteFileCase1.java";
-//		String file2 = "src/test/java/resources/DeleteFileCase2.java";
-//		String file1 = "src/test/java/resources/ClassChangeCase1.java";
-//		String file2 = "src/test/java/resources/ClassChangeCase2.java";
-		String file2 = "C:/Users/huangkaifeng/Desktop/11-8/test/curr/GumTreePaperExample.java";
-		String file1 = "C:/Users/huangkaifeng/Desktop/11-8/test/prev/GumTreePaperExample.java";
+		String file2 = "C:/Users/huangkaifeng/Desktop/11-8/test/curr/GumTreeExample3.java";
+		String file1 = "C:/Users/huangkaifeng/Desktop/11-8/test/prev/GumTreeExample3.java";
 		GumTreeDiffParser diff = new GumTreeDiffParser(file1,file2);
 		diff.init();
-//		System.out.println("---------------------------------Old Tree------------------------------------");
-//		System.out.println(diff.getOldTreeString());
-//		System.out.println("---------------------------------New Tree------------------------------------");
-//		System.out.println(diff.getNewTreeString());
-//		System.out.println("---------------------------------------------------------------------");
-		System.out.println("---------------------------------Old Tree------------------------------------");
-		System.out.println(diff.getPrettyOldTreeString());
-		System.out.println("---------------------------------New Tree------------------------------------");
-		System.out.println(diff.getPrettyNewTreeString());
-		System.out.println("###############################Actions----------------------------------");
+//		FileUtil.writeInAll("C:/Users/huangkaifeng/Desktop/11-8/srcTree.txt",diff.getPrettyOldTreeString());
+//		FileUtil.writeInAll("C:/Users/huangkaifeng/Desktop/11-8/dstTree.txt",diff.dstTC);
+//		FileUtil.writeInAll("C:/Users/huangkaifeng/Desktop/11-8/srcTree.txt",diff.srcTC.toString());
+		FileUtil.writeInAll("C:/Users/huangkaifeng/Desktop/11-8/dstTree.txt",diff.getPrettyNewTreeString());
+		TreeContext temp = ActionUtil.apply(srcTC, diff.actions);
+		FileUtil.writeInAll("C:/Users/huangkaifeng/Desktop/11-8/dstnewTree.txt",diff.getPrettyOldTreeString());
+//		FileUtil.writeInAll("C:/Users/huangkaifeng/Desktop/11-8/dstnewTree.txt",temp.toString());
+		
+		System.out.println("----------------------Actions----------------------------------");
 		diff.printActions(diff.getActions());
-		diff.listStartNodes();
+//		diff.listStartNodes();
 //		int count = 0;
 //		for(Set<Action> as : diff.getCluster()){
 //			System.out.println("***************************************************"+count+"********************************************");
