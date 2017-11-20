@@ -44,7 +44,7 @@ public class AndroidSDKJavaFileDAO {
 	}
 	
 	
-	public static List<AndroidSDKJavaFile> selectByFileNameAndFilterSupportPackage(String fileName){
+	public static List<AndroidSDKJavaFile> selectByFileNameOnAndroidSubDirectoryAndFilterSupportPackage(String fileName){
 		return androidsdkjavafilemapper.selectByFileNameAndFilterSupportPackage(fileName);
 	}
 }

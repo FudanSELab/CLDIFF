@@ -7,7 +7,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
@@ -75,16 +79,35 @@ public class GenerateDiffDirByVersions {
 				String[] data2 = data[0].split("\\.");
 				String fileName = data2[data2.length-1]+".java";
 				System.out.println(fileName);
-				List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectByFileNameAndFilterSupportPackage(fileName);
+				List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectByFileNameOnAndroidSubDirectoryAndFilterSupportPackage(fileName);
 				if(mList.size()==0||mList.size()==1) 
 					continue;
-				for(int i=0;i<mList.size()-1;i++){
-					String cur = mList.get(i).getFileFullPath();
-					String next = mList.get(i+1).getFileFullPath();
-					if(isSameSize(cur,next)){
-						continue;
+				Map<String,List<AndroidSDKJavaFile>> mMap = new HashMap<String,List<AndroidSDKJavaFile>>();
+				for(AndroidSDKJavaFile item:mList){
+					if(mMap.containsKey(item.getSubSubCategory())){
+						mMap.get(item.getSubSubCategory()).add(item);
+					}else{
+						List<AndroidSDKJavaFile> tmpList = new ArrayList<AndroidSDKJavaFile>();
+						tmpList.add(item);
+						mMap.put(item.getSubSubCategory(), tmpList);
 					}
-					copyIntoDir(dir,mList.get(i),mList.get(i+1));
+				}
+				for(String subsub:mMap.keySet()){
+					List<AndroidSDKJavaFile> tmpList = mMap.get(subsub);
+					tmpList.sort(new Comparator<AndroidSDKJavaFile>(){
+						@Override
+						public int compare(AndroidSDKJavaFile arg0, AndroidSDKJavaFile arg1) {
+							return arg0.getSdkVersion()-arg1.getSdkVersion();
+						}
+					});
+					for(int i=0;i<tmpList.size()-1;i++){
+						String cur = tmpList.get(i).getFileFullPath();
+						String next = tmpList.get(i+1).getFileFullPath();
+						if(isSameSize(cur,next)){
+							continue;
+						}
+						copyIntoDir(dir,tmpList.get(i),tmpList.get(i+1));
+					}
 				}
 			}
 			br.close();
