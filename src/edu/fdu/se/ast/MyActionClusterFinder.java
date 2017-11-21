@@ -71,8 +71,8 @@ public class MyActionClusterFinder {
 //            }
 //        }
 //
-        ConnectivityInspector<Action, DefaultEdge> alg = new ConnectivityInspector<>(graph);
-        clusters = alg.connectedSets();
+//        ConnectivityInspector<Action, DefaultEdge> alg = new ConnectivityInspector<>(graph);
+//        clusters = alg.connectedSets();
         
     }
     public void doCluster(){
@@ -122,6 +122,26 @@ public class MyActionClusterFinder {
     	}
         return false;
     }
+    
+    public List<List<Action>> clusteredActions(){
+    	List<List<Action>> result =new ArrayList<List<Action>>();
+		for(Action item : this.getStartNodes()){
+			List<Action> oneEntry =new ArrayList<Action>();
+			oneEntry.add(item);
+			for(DefaultEdge edge : graph.edgesOf(item)){
+				Action a1=graph.getEdgeSource(edge);
+				Action a2=graph.getEdgeTarget(edge);
+				if(item.equals(a1)){
+					oneEntry.add(a2);
+				}else{
+					oneEntry.add(a1);
+				}
+			}
+			result.add(oneEntry);
+		}
+		return result;
+    }
+    
     
     
     public List<Action> getStartNodes() {
