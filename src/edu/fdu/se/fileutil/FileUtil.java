@@ -9,6 +9,12 @@ import java.util.Map;
 
 public class FileUtil {
 
+	final public static int FILE_NEW_AND_APPEND=0;
+	
+	final public static int FILE_APPEND_AND_NOT_CLOSE=1;
+	
+	final public static int FILE_APPEND_AND_CLOSE=2;
+	
 	public static void writeInAll(String filePath, String content) {
 		try {
 			FileOutputStream fos = new FileOutputStream(filePath);
@@ -31,6 +37,11 @@ public class FileUtil {
 	 */
 	public static void writeInSegments(File mFile, String content, int flag) {
 		try {
+			if(flag == FileUtil.FILE_NEW_AND_APPEND){
+				if (fileMap.containsKey(mFile)) {
+					fileMap.remove(mFile);
+				}
+			}
 			if (fileMap.containsKey(mFile)) {
 				FileOutputStream fos = fileMap.get(mFile);
 				fos.write(content.getBytes());
@@ -40,7 +51,7 @@ public class FileUtil {
 				fos.write(content.getBytes());
 				fileMap.put(mFile, fos);
 			}
-			if(flag==2){
+			if(flag==FileUtil.FILE_APPEND_AND_CLOSE){
 				fileMap.get(mFile).close();
 				fileMap.remove(mFile);
 			}

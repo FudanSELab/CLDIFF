@@ -96,13 +96,9 @@ public class MyActionClusterFinder {
     	int size = actions.size();
     	for(int index=0;index<size;index++){
     		Action item = actions.get(index);
-    		// 计算三个index 
     		int [] threeRanges=this.candidateRange(index);
-    		
-    		if(this.isParentOf(a1, a2)||this.isSameParent(a1, a2)){
-    			graph.addEdge(a1, a2);
-    			startNodes.remove(a2);
-    		}
+    		this.findParentOf(item, threeRanges[0], threeRanges[1]);
+    		this.findSiblingsOf(item,threeRanges[1]+1,threeRanges[2]);
     	}
     }
     
@@ -122,34 +118,61 @@ public class MyActionClusterFinder {
     		}
     	}
     	int[] intermediate = {this.lastChildrenIndex.get(i-2),this.lastChildrenIndex.get(i-1),bfsActionIndex};
+    	System.out.println("Intermediate:");
+    	for(int a:intermediate)
+    		System.out.println(a);
     	int a = intermediate[0];
     	int b = intermediate[1];
     	int c = intermediate[2];
-    	int j;// 1  3  5  7
+    	int j;
     	boolean flagA = true;
     	boolean flagB = true;
-    	int indexA;
-    	int indexB;
+    	int indexA=-1;
+    	int indexB=-1;
+    	int indexC=-1;
+    	// action list 1  3 5  7  9  ast的 4  7
     	for(j=0;j<this.actionIndexList.size();j++){
     		int bfsNum = this.actionIndexList.get(j);
     		if(a<bfsNum&&flagA){
     			flagA=false;
     			indexA = j;
     		}
-    		if(!flagA&&bfsNum<b&&flagB){
-    			flagB=false;
+    		if(!flagA&&bfsNum<=b){
     			indexB = j;
     		}
-    		if()
+    		if(bfsNum>=c){
+    			indexC = j-1;
+    		}
     	}
-    	
-    	
+    	// [a,b] [b+1,c]
+    	int[] result={indexA,indexB,indexC};
+    	System.out.println("Action Index:");
+    	for(int tmp:result)
+    		System.out.println(tmp);
     	return result;
     }
-    public void findParentOf(Action a,int indx){
-    	int index = this.actionIndexList.get(indx);
-    	List<Action> candidateList = 
+    
+    public void findParentOf(Action a,int start,int end){
+    	for(int i=start;i<=end;i++){
+    		Action candidate = this.actions.get(i);
+    		if(this.isParentOf(candidate, a)){
+    			graph.addEdge(candidate, a);
+    			startNodes.remove(a);
+    			System.out.println("\nMapping: "+candidate.getNode().getId() + " and " + a.getNode().getId()+"\n");
+    		}
+    	}
     }
+    public void findSiblingsOf(Action a,int start,int end){
+    	for(int i=start;i<end;i++){
+    		Action candidate = this.actions.get(i);
+    		if(this.isSameParent(candidate, a)){
+    			graph.addEdge(candidate, a);
+    			startNodes.remove(a);
+    			System.out.println("\nMapping: "+candidate.getNode().getId() + " and " + a.getNode().getId()+"\n");
+    		}
+    	}
+    }
+
     private boolean isParentOf(Action a1,Action a2){
     	if(a1.getNode()==null||a2.getNode()==null){
     		return false;
@@ -189,7 +212,6 @@ public class MyActionClusterFinder {
     
     public List<List<Action>> clusteredActions(){
     	doCluster();
-    	
     	List<List<Action>> result =new ArrayList<List<Action>>();
 		for(Action item : this.getStartNodes()){
 			List<Action> oneEntry =new ArrayList<Action>();

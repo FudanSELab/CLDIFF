@@ -25,7 +25,7 @@ public class MyGumTreeParser extends GumTreeDiffParser{
 	public void printClusteredActions(List<List<Action>> actionSet){
 		String actionOutputFile = "C:/Users/huangkaifeng/Desktop/11-8/clusteredAction.txt";
 		File mFile = new File(actionOutputFile);
-		FileUtil.writeInSegments(mFile,"%%%%%%%%%%%%%%%%%%%%   start:  %%%%%%%%%%%\n",1);
+		FileUtil.writeInSegments(mFile,"%%%%%%%%%%%%%%%%%%%%   ClusterSize:"+actionSet.size()+"  %%%%%% Start:\n\n",FileUtil.FILE_NEW_AND_APPEND);
 		for(List<Action> oneEntry:actionSet){
 			boolean isFirst=true;
 			FileUtil.writeInSegments(mFile,"@@@@ Cluter:   @@@@\n",1);
@@ -34,11 +34,11 @@ public class MyGumTreeParser extends GumTreeDiffParser{
 					isFirst=false;
 				}
 				String oneAction = this.printMyOneActionString(a);
-				FileUtil.writeInSegments(mFile, oneAction, 1);
+				FileUtil.writeInSegments(mFile, oneAction, FileUtil.FILE_APPEND_AND_NOT_CLOSE);
 			}
-			FileUtil.writeInSegments(mFile, "\n\n\n", 1);
+			FileUtil.writeInSegments(mFile, "\n\n\n", FileUtil.FILE_APPEND_AND_NOT_CLOSE);
 		}
-		FileUtil.writeInSegments(mFile, "--------", 2);
+		FileUtil.writeInSegments(mFile, "--------", FileUtil.FILE_APPEND_AND_CLOSE);
 	}
 	public String printMyOneActionString(Action a){
 		StringBuilder sb = new StringBuilder();
