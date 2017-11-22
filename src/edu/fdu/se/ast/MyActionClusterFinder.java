@@ -124,8 +124,8 @@ public class MyActionClusterFinder {
     	boolean flag=true;
     	for(i=0;i<this.lastChildrenIndex.size();i++){
     		num = this.lastChildrenIndex.get(i);
-    		if(bfsActionIndex<num){
-    			flag=false;
+    		if(num >= bfsActionIndex){
+    			flag = false;
     			break;
     		}
     	}
@@ -167,7 +167,7 @@ public class MyActionClusterFinder {
     			}else{
     				indexC = j;
     			}
-    			flagC=false;
+    			flagC = false;
     		}
     	}
     	// [a,b] [b+1,c]
@@ -184,7 +184,7 @@ public class MyActionClusterFinder {
     		if(this.isParentOf(candidate, a)){
     			graph.addEdge(candidate, a);
     			startNodes.remove(a);
-    			System.out.println("\nMapping: "+candidate.getNode().getId() + " and " + a.getNode().getId()+"\n");
+//    			System.out.println("\nMapping: "+candidate.getNode().getId() + " and " + a.getNode().getId()+"\n");
     		}
     	}
     }

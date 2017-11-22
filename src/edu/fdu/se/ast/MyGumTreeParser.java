@@ -45,14 +45,14 @@ public class MyGumTreeParser extends GumTreeDiffParser{
 	public String printMyOneActionString(Action a){
 		StringBuilder sb = new StringBuilder();
 		if(a instanceof Delete){
-			sb.append("\tDelete>");
+			sb.append("\tDelete > ");
 			Delete delete = (Delete)a;
 			ITree deleteNode = delete.getNode();
 			sb.append(prettyString(dstTC,deleteNode)+" from "+prettyString(dstTC,deleteNode.getParent())+"\n");
 			sb.append(delete.toString()+"\n");
 		}
 		if(a instanceof Insert){
-			sb.append("\tInsert>");
+			sb.append("\tInsert > ");
 			Insert insert = (Insert)a;
 			ITree insertNode = insert.getNode();
 			sb.append(prettyString(dstTC,insertNode)+" to "+prettyString(dstTC,insertNode.getParent())+" at "+ insert.getPosition()+"\n");
@@ -61,7 +61,7 @@ public class MyGumTreeParser extends GumTreeDiffParser{
 			sb.append(prettyString(dstTC, insert.getParent())+"\n");//old
 		}
 		if(a instanceof Move){
-			sb.append("\tMove>");
+			sb.append("\tMove > ");
 			Move move = (Move)a;
 			ITree moveNode = move.getNode();
 			sb.append(prettyString(dstTC,moveNode)+" to "+prettyString(dstTC,move.getParent())+" at "+ move.getPosition()+"\n");//old
@@ -72,7 +72,7 @@ public class MyGumTreeParser extends GumTreeDiffParser{
 			sb.append(prettyString(dstTC, move.getParent())+"\n");//new
 		}
 		if(a instanceof Update){
-			sb.append("\tUpdate>");
+			sb.append("\tUpdate > ");
 			Update update = (Update)a;
 			ITree updateNode = update.getNode();
 			sb.append("from "+updateNode.getLabel()+" to "+update.getValue()+"\n");//old
@@ -81,7 +81,7 @@ public class MyGumTreeParser extends GumTreeDiffParser{
 		sb.append(prettyString(dstTC, a.getNode())+"\n");
 		//move-old,update-old,insert-new,delete-old
 //		sb.append(toTreeString(dstTC, a.getNode()));
-		sb.append("-----------------Action.getNode.getParent--------\n");
+		sb.append("---------------Action.getNode.getParent--------\n");
 		sb.append(prettyString(dstTC, a.getNode().getParent())+"\n");//move-old,update-old,insert-new,delete-old
 //		sb.append(toTreeString(dstTC, a.getNode().getParent()));
 		return sb.toString();
