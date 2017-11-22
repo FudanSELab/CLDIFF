@@ -79,7 +79,8 @@ public class MyActionGenerator {
     public List<Action> getActions() {
         return actions;
     }
-
+    public List<Integer> layeredActionIndexList;
+    public List<Integer> layeredLastChildrenIndexList;
     public List<Action> generate() {
         ITree srcFakeRoot = new AbstractTree.FakeTree(copySrc);
         ITree dstFakeRoot = new AbstractTree.FakeTree(origDst);
@@ -93,8 +94,13 @@ public class MyActionGenerator {
         lastId = copySrc.getSize() + 1;
         newMappings.link(srcFakeRoot, dstFakeRoot);
 
-        List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
-        for (ITree item: bfsDst) {
+//        List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
+        layeredLastChildrenIndexList = new ArrayList<Integer>();
+        List<ITree> bfsDst = TreeUtils.layeredBreadthFirst(origDst, layeredLastChildrenIndexList);
+//        for (ITree item: bfsDst) {
+        layeredActionIndexList = new ArrayList<Integer>();
+        for (int i=1;i<=bfsDst.size();i++){
+        	ITree item = bfsDst.get(i-1);
             ITree w = null;
             ITree parentDst = item.getParent();
             ITree parentSrc = newMappings.getSrc(parentDst);
@@ -110,6 +116,7 @@ public class MyActionGenerator {
                 // generated ID.
                 Action ins = new Insert(item, origSrcTrees.get(parentSrc.getId()), k);
                 actions.add(ins);
+                layeredActionIndexList.add(i);
                 //System.out.println(ins);
                 origSrcTrees.put(w.getId(), item);
                 newMappings.link(w, item);
@@ -121,6 +128,7 @@ public class MyActionGenerator {
                 if (!item.equals(origDst)) { // TODO => x != origDst // Case of the root
                     ITree v = w.getParent();
                     if (!w.getLabel().equals(item.getLabel())) {
+                    	layeredActionIndexList.add(i);
                         actions.add(new Update(origSrcTrees.get(w.getId()), item.getLabel()));
                         w.setLabel(item.getLabel());
                     }
@@ -128,6 +136,7 @@ public class MyActionGenerator {
                         int k = findPos(item);
                         Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(parentSrc.getId()), k);
                         actions.add(mv);
+                        layeredActionIndexList.add(i);
                         //System.out.println(mv);
                         int oldk = w.positionInParent();
                         parentSrc.getChildren().add(k, w);

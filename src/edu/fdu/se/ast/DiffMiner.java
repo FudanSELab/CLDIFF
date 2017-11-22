@@ -32,8 +32,8 @@ public class DiffMiner {
 	}
 	//2.Action Cluster
 	public void userGTIntermediate(){
-		String file1 = "C:\\Users\\huangkaifeng\\Desktop\\11-8\\test\\prev\\GTExample2.java";
-		String file2 = "C:\\Users\\huangkaifeng\\Desktop\\11-8\\test\\curr\\GTExample2.java";
+		String file1 = "C:\\Users\\huangkaifeng\\Desktop\\11-8\\test\\prev\\ClusterAction1.java";
+		String file2 = "C:\\Users\\huangkaifeng\\Desktop\\11-8\\test\\curr\\ClusterAction1.java";
 		MyGumTreeParser his = new MyGumTreeParser(file1,file2);
 		his.init();
 		FileUtil.writeInAll("C:/Users/huangkaifeng/Desktop/11-8/srcTree.txt",his.getPrettyOldTreeString());
@@ -42,14 +42,22 @@ public class DiffMiner {
 		MyActionGenerator g = new MyActionGenerator(his.src, his.dst, his.mapping);
 		his.actions = g.generate();
 		his.printActions(his.getActions());
-		MyActionClusterFinder finder = new MyActionClusterFinder(his.srcTC, his.dstTC,his.actions);
+		MyActionClusterFinder finder = new MyActionClusterFinder(his.srcTC, his.dstTC,his.actions,g.layeredActionIndexList,g.layeredLastChildrenIndexList);
 		List<List<Action>> result = finder.clusteredActions();
 		his.printClusteredActions(result);
+	}
+	public void test(){
+		String file1 = "C:\\Users\\huangkaifeng\\Desktop\\11-8\\test\\prev\\ClusterAction1.java";
+		String file2 = "C:\\Users\\huangkaifeng\\Desktop\\11-8\\test\\curr\\ClusterAction1.java";
+		MyGumTreeParser his = new MyGumTreeParser(file1,file2);
+		his.init();
+		his.test();
 	}
 
 	public static void main(String args[]){
 		DiffMiner i = new DiffMiner();
 		i.userGTIntermediate();
+//		i.test();
 	}
 
 }

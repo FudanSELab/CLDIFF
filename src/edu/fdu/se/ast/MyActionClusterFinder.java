@@ -48,6 +48,10 @@ public class MyActionClusterFinder {
     private List<Set<Action>> clusters;
     
     public List<Action> startNodes = new ArrayList<>();
+    
+    public List<Integer> lastChildrenIndex;
+    
+    public List<Integer> actionIndexList;
 
     public MyActionClusterFinder(TreeContext src, TreeContext dst, List<Action> actions) {
         this.src = src;
@@ -75,18 +79,78 @@ public class MyActionClusterFinder {
 //        clusters = alg.connectedSets();
         
     }
+    
+    public MyActionClusterFinder(TreeContext src, TreeContext dst, List<Action> actions,List<Integer> actionIndexList,List<Integer> lastChildrenIndex) {
+        this.src = src;
+        this.dst = dst;
+        this.actions = actions;
+        this.lastChildrenIndex = lastChildrenIndex;
+        this.actionIndexList= actionIndexList;
+        startNodes.addAll(actions);
+        graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        for (Action a: actions)
+            graph.addVertex(a);
+    }
+    
     public void doCluster(){
     	int size = actions.size();
-    	for(int i=0;i<size-1;i++){
-    		Action a1 = actions.get(i);
-    		Action a2 = actions.get(i+1);
+    	for(int index=0;index<size;index++){
+    		Action item = actions.get(index);
+    		// 计算三个index 
+    		int [] threeRanges=this.candidateRange(index);
+    		
     		if(this.isParentOf(a1, a2)||this.isSameParent(a1, a2)){
     			graph.addEdge(a1, a2);
     			startNodes.remove(a2);
     		}
     	}
     }
-    public boolean isParentOf(Action a1,Action a2){
+    
+    /**
+     * 
+     * @param indx index of action in action list
+     * @return start and end index in bfs node list -> start and end node index in action list
+     */
+    private int[] candidateRange(int indx){
+    	int bfsActionIndex = this.actionIndexList.get(indx);
+    	int i;
+    	int num;
+    	for(i=0;i<this.lastChildrenIndex.size();i++){
+    		num = this.lastChildrenIndex.get(i);
+    		if(bfsActionIndex<num){
+    			break;
+    		}
+    	}
+    	int[] intermediate = {this.lastChildrenIndex.get(i-2),this.lastChildrenIndex.get(i-1),bfsActionIndex};
+    	int a = intermediate[0];
+    	int b = intermediate[1];
+    	int c = intermediate[2];
+    	int j;// 1  3  5  7
+    	boolean flagA = true;
+    	boolean flagB = true;
+    	int indexA;
+    	int indexB;
+    	for(j=0;j<this.actionIndexList.size();j++){
+    		int bfsNum = this.actionIndexList.get(j);
+    		if(a<bfsNum&&flagA){
+    			flagA=false;
+    			indexA = j;
+    		}
+    		if(!flagA&&bfsNum<b&&flagB){
+    			flagB=false;
+    			indexB = j;
+    		}
+    		if()
+    	}
+    	
+    	
+    	return result;
+    }
+    public void findParentOf(Action a,int indx){
+    	int index = this.actionIndexList.get(indx);
+    	List<Action> candidateList = 
+    }
+    private boolean isParentOf(Action a1,Action a2){
     	if(a1.getNode()==null||a2.getNode()==null){
     		return false;
     	}
@@ -103,7 +167,7 @@ public class MyActionClusterFinder {
     	}
         return false;
     }
-    public boolean isSameParent(Action a1,Action a2){
+    private boolean isSameParent(Action a1,Action a2){
     	if(a1.getNode()==null||a2.getNode()==null){
     		return false;
     	}
@@ -124,6 +188,8 @@ public class MyActionClusterFinder {
     }
     
     public List<List<Action>> clusteredActions(){
+    	doCluster();
+    	
     	List<List<Action>> result =new ArrayList<List<Action>>();
 		for(Action item : this.getStartNodes()){
 			List<Action> oneEntry =new ArrayList<Action>();
@@ -134,7 +200,7 @@ public class MyActionClusterFinder {
 				if(item.equals(a1)){
 					oneEntry.add(a2);
 				}else{
-					oneEntry.add(a1);
+//					oneEntry.add(a1);
 				}
 			}
 			result.add(oneEntry);

@@ -27,7 +27,14 @@ public class MyASTParser {
 		
 		String a1="AA";
 		String a2="BB";
-		System.out.println(a1 instanceof String);
+		List<String> mlist=new ArrayList<String>();
+		t(mlist);
+		System.out.println(mlist);
+	}
+	
+	public static  void t(List<String> tes){
+		tes.add("a");
+		tes.add("b");
 	}
 
 }
