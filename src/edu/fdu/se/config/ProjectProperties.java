@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Properties; 
 
 public class ProjectProperties {
-	public Map<String,String> kvMap;
+	private Map<String,String> kvMap;
 	private ProjectProperties(){
 		kvMap = new HashMap<String,String>();
 		Properties prop = new Properties();     
@@ -19,7 +19,6 @@ public class ProjectProperties {
             Iterator<String> it=prop.stringPropertyNames().iterator();
             while(it.hasNext()){
                 String key=it.next();
-//                System.out.println(key+":"+prop.getProperty(key));
                 kvMap.put(key, prop.getProperty(key));
             }
             in.close();
@@ -29,11 +28,20 @@ public class ProjectProperties {
         }
 	}
 	private static ProjectProperties instance;
+	
+	
 	public static ProjectProperties getInstance(){
 		if(instance==null){
 			instance = new ProjectProperties();
 		}
 		return instance;
+	}
+	
+	public String getValue(String key){
+		if(!this.kvMap.containsKey(key)){
+			return null;
+		}
+		return this.kvMap.get(key);
 	}
 	public static void main(String args[]){
 		ProjectProperties ins = ProjectProperties.getInstance();

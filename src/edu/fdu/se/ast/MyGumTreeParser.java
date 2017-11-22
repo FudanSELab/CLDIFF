@@ -16,6 +16,8 @@ import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeUtils;
 
 import cn.edu.fudan.se.apiChangeExtractor.gumtreeParser.GumTreeDiffParser;
+import edu.fdu.se.config.ProjectProperties;
+import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileUtil;
 
 public class MyGumTreeParser extends GumTreeDiffParser{
@@ -23,9 +25,9 @@ public class MyGumTreeParser extends GumTreeDiffParser{
 		super(oldFileName, newFileName);
 	}
 	public void printClusteredActions(List<List<Action>> actionSet){
-		String actionOutputFile = "C:/Users/huangkaifeng/Desktop/11-8/clusteredAction.txt";
+		String actionOutputFile = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/clusteredAction.txt";
 		File mFile = new File(actionOutputFile);
-		FileUtil.writeInSegments(mFile,"%%%%%%%%%%%%%%%%%%%%   ClusterSize:"+actionSet.size()+"  %%%%%% Start:\n\n",FileUtil.FILE_NEW_AND_APPEND);
+		FileUtil.writeInSegments(mFile,"%%%%%%%%%%%%%%%%%   ClusterSize:"+actionSet.size()+"  %%%%%% Start:\n\n",FileUtil.FILE_NEW_AND_APPEND);
 		for(List<Action> oneEntry:actionSet){
 			boolean isFirst=true;
 			FileUtil.writeInSegments(mFile,"@@@@ Cluter:   @@@@\n",1);

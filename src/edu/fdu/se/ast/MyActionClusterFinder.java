@@ -86,6 +86,16 @@ public class MyActionClusterFinder {
         this.actions = actions;
         this.lastChildrenIndex = lastChildrenIndex;
         this.actionIndexList= actionIndexList;
+        System.out.println("LastChildrenIndex:");
+        for(int tmp:this.lastChildrenIndex){
+        	System.out.print(tmp+" ");
+        }
+        System.out.println("");
+        System.out.println("ActionIndex:");
+        for(int tmp:this.actionIndexList){
+        	System.out.print(tmp+" ");
+        }
+        System.out.println("");
         startNodes.addAll(actions);
         graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         for (Action a: actions)
@@ -111,44 +121,60 @@ public class MyActionClusterFinder {
     	int bfsActionIndex = this.actionIndexList.get(indx);
     	int i;
     	int num;
+    	boolean flag=true;
     	for(i=0;i<this.lastChildrenIndex.size();i++){
     		num = this.lastChildrenIndex.get(i);
     		if(bfsActionIndex<num){
+    			flag=false;
     			break;
     		}
     	}
+    	if(flag){
+    		i--;
+    	}
     	int[] intermediate = {this.lastChildrenIndex.get(i-2),this.lastChildrenIndex.get(i-1),bfsActionIndex};
-    	System.out.println("Intermediate:");
-    	for(int a:intermediate)
-    		System.out.println(a);
+//    	System.out.println("Intermediate:");
+//    	for(int a:intermediate)
+//    		System.out.println(a);
     	int a = intermediate[0];
     	int b = intermediate[1];
     	int c = intermediate[2];
     	int j;
     	boolean flagA = true;
-    	boolean flagB = true;
+    	boolean flagC = true;
     	int indexA=-1;
     	int indexB=-1;
     	int indexC=-1;
+    	// action list 36  37 38   36 38 38
+    	// [36,36] [37,37]
     	// action list 1  3 5  7  9  ast的 4  7
     	for(j=0;j<this.actionIndexList.size();j++){
     		int bfsNum = this.actionIndexList.get(j);
-    		if(a<bfsNum&&flagA){
+    		if(a<=bfsNum&&flagA){
+    			if(bfsNum==a){
+    				indexA = j+1;
+    			} else {
+    				indexA =j;
+    			}
     			flagA=false;
-    			indexA = j;
     		}
-    		if(!flagA&&bfsNum<=b){
+    		if(bfsNum<=b){
     			indexB = j;
     		}
-    		if(bfsNum>=c){
-    			indexC = j-1;
+    		if(bfsNum>=c&&flagC){
+    			if(bfsNum==c){
+    				indexC = j-1;
+    			}else{
+    				indexC = j;
+    			}
+    			flagC=false;
     		}
     	}
     	// [a,b] [b+1,c]
     	int[] result={indexA,indexB,indexC};
-    	System.out.println("Action Index:");
-    	for(int tmp:result)
-    		System.out.println(tmp);
+//    	System.out.println("Action Index:");
+//    	for(int tmp:result)
+//    		System.out.println(tmp);
     	return result;
     }
     
