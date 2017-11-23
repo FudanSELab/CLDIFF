@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import edu.fdu.se.bean.AndroidSDKJavaFile;
+import edu.fdu.se.config.ProjectProperties;
+import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
 
 public class GenerateDiffDirByVersions {
@@ -69,9 +71,9 @@ public class GenerateDiffDirByVersions {
 	}
 	public static void main(String args[]){
 		try {
-			String dir = "C:/Users/huangkaifeng/Desktop/11-8/DiffDirByVersion";
+			String dir = ProjectProperties.getInstance().getValue(PropertyKeys.GENERATE_DIFF_CMD_OUTPUT_DIR);
 			makeDir(dir);
-			FileInputStream fis = new FileInputStream("C:/Users/huangkaifeng/Desktop/NTU-Summer/10-1/gt100.txt");
+			FileInputStream fis = new FileInputStream(ProjectProperties.getInstance().getValue(PropertyKeys.GENERATE_DIFF_CMD_OUTPUT_DIR)+"/gt100.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String line;
 			while((line = br.readLine())!=null){

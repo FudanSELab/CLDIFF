@@ -1,4 +1,4 @@
-package edu.fdu.se.main;
+package edu.fdu.se.androidrepo;
 
 import java.util.Scanner;
 

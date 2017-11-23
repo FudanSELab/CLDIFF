@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import edu.fdu.se.bean.AndroidSDKJavaFile;
+import edu.fdu.se.config.ProjectProperties;
+import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
 
 public class GenerateDiffDirs {
@@ -62,12 +64,12 @@ public class GenerateDiffDirs {
 	}
 	public static void main(String args[]){
 		try {
-			String dir = "C:/Users/huangkaifeng/Desktop/11-8/DiffDir";
-			FileInputStream fis = new FileInputStream("C:/Users/huangkaifeng/Desktop/NTU-Summer/10-1/gt100.txt");
+			String dir = ProjectProperties.getInstance().getValue(PropertyKeys.GENERATE_DIFF_CMD_OUTPUT_DIR)+"/DiffDir";
+			FileInputStream fis = new FileInputStream(ProjectProperties.getInstance().getValue(PropertyKeys.GENERATE_DIFF_CMD_OUTPUT_DIR)+"gt100.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String line;
 			int cnt=1;
-			FileOutputStream fos = new FileOutputStream("C:/Users/huangkaifeng/Desktop/11-8/DiffDir/beyond_compare_path.txt");
+			FileOutputStream fos = new FileOutputStream(dir+"/beyond_compare_path.txt");
 			while((line = br.readLine())!=null){
 				String[] data = line.split(" ");
 				String[] data2 = data[0].split("\\.");

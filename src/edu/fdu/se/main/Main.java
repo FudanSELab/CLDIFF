@@ -17,7 +17,7 @@ public class Main {
         InputStream is = Main.class.getClassLoader().getResourceAsStream(resource);
         SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(is);
         SqlSession session = sessionFactory.openSession();
-        String statement = "edu.fdu.se.mapping.androidSDKJavaFileMapper.getAndroidSDKJavaFile";//Ó³ÉäsqlµÄ±êÊ¶×Ö·û´®
+        String statement = "edu.fdu.se.mapping.androidSDKJavaFileMapper.getAndroidSDKJavaFile";
         AndroidSDKJavaFile user = session.selectOne(statement, 1);
         System.out.println(user);
 	}

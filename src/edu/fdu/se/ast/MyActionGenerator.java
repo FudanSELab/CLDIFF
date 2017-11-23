@@ -26,6 +26,8 @@ import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.AbstractTree;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
+
+import edu.fdu.se.gumtree.MyTreeUtil;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
@@ -96,7 +98,7 @@ public class MyActionGenerator {
 
 //        List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
         layeredLastChildrenIndexList = new ArrayList<Integer>();
-        List<ITree> bfsDst = TreeUtils.layeredBreadthFirst(origDst, layeredLastChildrenIndexList);
+        List<ITree> bfsDst = MyTreeUtil.layeredBreadthFirst(origDst, layeredLastChildrenIndexList);
 //        for (ITree item: bfsDst) {
         layeredActionIndexList = new ArrayList<Integer>();
         for (int i=1;i<=bfsDst.size();i++){

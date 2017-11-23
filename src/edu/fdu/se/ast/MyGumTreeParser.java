@@ -19,6 +19,7 @@ import cn.edu.fudan.se.apiChangeExtractor.gumtreeParser.GumTreeDiffParser;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileUtil;
+import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MyGumTreeParser extends GumTreeDiffParser{
 	public MyGumTreeParser(String oldFileName, String newFileName) {
@@ -90,7 +91,7 @@ public class MyGumTreeParser extends GumTreeDiffParser{
 	
 	public void test(){
 		List<Integer> num =new ArrayList<Integer>();
-		TreeUtils.layeredBreadthFirst(this.src, num);
+		MyTreeUtil.layeredBreadthFirst(this.src, num);
 		System.out.println(num);
 	}
 	
