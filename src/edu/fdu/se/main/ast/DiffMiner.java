@@ -16,7 +16,11 @@ import cn.edu.fudan.se.apiChangeExtractor.gumtreeParser.GumTreeDiffParser;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
-
+/**
+ * given two files, generate edit script.
+ * @author huangkaifeng
+ *
+ */
 public class DiffMiner {
 	//1.TODO check
 	public void checkIfAppliedActionOnSrcSameAsDst(){
