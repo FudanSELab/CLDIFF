@@ -22,9 +22,9 @@ public class GenerateDiffCmd {
 	}
 	public static void main(String args[]){
 		try {
-			FileInputStream fis = new FileInputStream(ProjectProperties.getInstance().getValue(PropertyKeys.GENERATE_DIFF_CMD_OUTPUT_DIR)+
+			FileInputStream fis = new FileInputStream(ProjectProperties.getInstance().getValue(PropertyKeys.TOP_SDK_CLASS_OUTPUT_DIR)+
 					"/gt100.txt");
-			FileOutputStream fos = new FileOutputStream(ProjectProperties.getInstance().getValue(PropertyKeys.GENERATE_DIFF_CMD_OUTPUT_DIR)
+			FileOutputStream fos = new FileOutputStream(ProjectProperties.getInstance().getValue(PropertyKeys.TOP_SDK_CLASS_OUTPUT_DIR)
 					+"/gt100_gitdiff_cmds2.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String line;

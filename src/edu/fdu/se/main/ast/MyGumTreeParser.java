@@ -26,7 +26,7 @@ public class MyGumTreeParser extends GumTreeDiffParser{
 		super(oldFileName, newFileName);
 	}
 	public void printClusteredActions(List<List<Action>> actionSet){
-		String actionOutputFile = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/clusteredAction.txt";
+		String actionOutputFile = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/clusteredAction.txt";
 		File mFile = new File(actionOutputFile);
 		FileWriter.writeInSegments(mFile,"%%%%%%%%%%%%%%%%%   ClusterSize:"+actionSet.size()+"  %%%%%% Start:\n\n",FileWriter.FILE_NEW_AND_APPEND);
 		for(List<Action> oneEntry:actionSet){

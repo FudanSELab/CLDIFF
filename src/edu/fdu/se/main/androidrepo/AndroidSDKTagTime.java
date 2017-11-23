@@ -2,6 +2,10 @@ package edu.fdu.se.main.androidrepo;
 
 import java.util.Scanner;
 
+import org.apache.ibatis.annotations.Property;
+
+import edu.fdu.se.config.ProjectProperties;
+import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.git.CommitTagVisitor;
 import edu.fdu.se.git.JGitCommand;
 /**
@@ -21,8 +25,8 @@ public class AndroidSDKTagTime {
 		astt.comparTimePrompt();
 	}
 	public void walkTags(){
-		cmd = new JGitCommand("D:\\Workspace\\Android_Diff\\Android_Official_Framework_Repo\\base\\.git");
-		ctv =new CommitTagVisitor("C:/Users/huangkaifeng/Desktop/10-20_Commits/android_sdk_tag_info.txt");
+		cmd = new JGitCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH)+"/.git");
+		ctv =new CommitTagVisitor(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_OUTPUT_DIR)+ "/android_sdk_tag_info.txt");
 		cmd.walkAllTags(ctv);
 		
 	}

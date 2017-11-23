@@ -64,8 +64,8 @@ public class GenerateDiffDirs {
 	}
 	public static void main(String args[]){
 		try {
-			String dir = ProjectProperties.getInstance().getValue(PropertyKeys.GENERATE_DIFF_CMD_OUTPUT_DIR)+"/DiffDir";
-			FileInputStream fis = new FileInputStream(ProjectProperties.getInstance().getValue(PropertyKeys.GENERATE_DIFF_CMD_OUTPUT_DIR)+"gt100.txt");
+			String dir = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE)+"/DiffDir";
+			FileInputStream fis = new FileInputStream(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE)+"gt100.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String line;
 			int cnt=1;
