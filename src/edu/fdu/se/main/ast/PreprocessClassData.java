@@ -1,4 +1,4 @@
-package edu.fdu.se.ast;
+package edu.fdu.se.main.ast;
 
 import java.util.List;
 import java.util.Map;

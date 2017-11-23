@@ -6,7 +6,14 @@ import java.util.Map.Entry;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 
-public class CommitVisitor {
+import edu.fdu.se.fileutil.FileWriter;
+
+public class CommitVisitor extends AbstractVisitor{
+	
+	
+	public CommitVisitor(String fileName){
+		super(fileName);
+	}
 
 	public void visit(RevCommit commit,Map<String,List<String>> mMap){
 		
@@ -21,9 +28,10 @@ public class CommitVisitor {
 			}
 		}
 		if(flag==true){
-			System.out.println(commit.getName());
-			System.out.println(commit.getShortMessage());
+			FileWriter.writeInSegments(this.getFile(), commit.getName(), FileWriter.FILE_APPEND_AND_NOT_CLOSE);
+			FileWriter.writeInSegments(this.getFile(), commit.getShortMessage(), FileWriter.FILE_APPEND_AND_NOT_CLOSE);
 		}
 	}
+
 
 }

@@ -1,4 +1,4 @@
-package edu.fdu.se.ast;
+package edu.fdu.se.main.ast;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import com.github.gumtreediff.tree.TreeContext;
 import cn.edu.fudan.se.apiChangeExtractor.gumtreeParser.GumTreeDiffParser;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-import edu.fdu.se.fileutil.FileUtil;
+import edu.fdu.se.fileutil.FileWriter;
 
 public class DiffMiner {
 	//1.TODO check
@@ -24,13 +24,13 @@ public class DiffMiner {
 		String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_CURR_FILE);
 		MyGumTreeParser diff = new MyGumTreeParser(file1,file2);
 		diff.init();
-		FileUtil.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/srcTree.txt",diff.getPrettyOldTreeString());
-		FileUtil.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/dstTree.txt",diff.getPrettyNewTreeString());
+		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/srcTree.txt",diff.getPrettyOldTreeString());
+		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/dstTree.txt",diff.getPrettyNewTreeString());
 		System.out.println("----------------------Actions----------------------------------");
 		diff.printActions(diff.getActions());
 		TreeContext temp = ActionUtil.apply(diff.srcTC, diff.getActions());
 		diff.srcTC.validate();
-		FileUtil.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/dstnewTree.txt",diff.getPrettyOldTreeString());
+		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/dstnewTree.txt",diff.getPrettyOldTreeString());
 	}
 	
 	//2.Action Cluster
@@ -39,8 +39,8 @@ public class DiffMiner {
 		String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_CURR_FILE);
 		MyGumTreeParser his = new MyGumTreeParser(file1,file2);
 		his.init();
-		FileUtil.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
-		FileUtil.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
+		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
+		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
 		System.out.println("----------------------------Actions----------------------------------");
 		MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
 		his.actions = gen.generate();

@@ -1,4 +1,4 @@
-package edu.fdu.se.androidrepo;
+package edu.fdu.se.main.androidrepo;
 
 import java.io.BufferedReader;
 import java.io.File;

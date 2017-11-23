@@ -1,10 +1,12 @@
-package edu.fdu.se.androidrepo;
+package edu.fdu.se.main.androidrepo;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.fdu.se.bean.AndroidSDKJavaFile;
+import edu.fdu.se.config.ProjectProperties;
+import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
 /**
  * Load Android SDK into database table: android_sdk_java_file
@@ -49,9 +51,12 @@ public class BrowseSDKFile {
 			filePathToDb(f.getAbsolutePath());
 		}
 	}
-	
+	/**
+	 * browse android sdk dir and put all the entry into database
+	 * @param args
+	 */
 	public static void main(String args[]){
-		String path = "D:\\Workspace\\Android_Diff\\SDKTools\\sources\\android-";
+		String path = ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_SDK_PATH)+"sources\\android-";
 		int i=3;
 		for(i=3;i<=25;i++){
 			sdkVersion = i;

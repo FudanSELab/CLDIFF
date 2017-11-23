@@ -49,6 +49,8 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 
+import edu.fdu.se.fileutil.FileUtil;
+
 public class JGitCommand {
 
 	private Repository repository;
@@ -325,7 +327,7 @@ public class JGitCommand {
 //		} catch (GitAPIException e) {
 //			e.printStackTrace();
 //		}
-//        //Ã¿Ò»¸ödiffEntry¶¼ÊÇÎÄ¼þ°æ±¾Ö®¼äµÄ±ä¶¯²îÒì
+//        //Ã¿Ò»ï¿½ï¿½diffEntryï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½æ±¾Ö®ï¿½ï¿½Ä±ä¶¯ï¿½ï¿½ï¿½ï¿½
 //		for (DiffEntry diffEntry : diff) {
 //			//DiffEntry.ChangeType.MODIFY.toString().equals(diffEntry.getChangeType().toString())&&
 //			if(diffEntry.getNewPath()!=null&&diffEntry.getNewPath().endsWith(".java")){
