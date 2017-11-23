@@ -327,7 +327,6 @@ public class JGitCommand {
 //		} catch (GitAPIException e) {
 //			e.printStackTrace();
 //		}
-//        //ÿһ��diffEntry�����ļ��汾֮��ı䶯����
 //		for (DiffEntry diffEntry : diff) {
 //			//DiffEntry.ChangeType.MODIFY.toString().equals(diffEntry.getChangeType().toString())&&
 //			if(diffEntry.getNewPath()!=null&&diffEntry.getNewPath().endsWith(".java")){
@@ -411,11 +410,6 @@ public class JGitCommand {
 	}
 
 
-	public static void main(String[] args) {
-		JGitCommand cmd = new JGitCommand("D:\\Workspace\\Android_Diff\\Android_Official_Framework_Repo\\base\\.git");
-		// cmd.walkRepoFromBackwards(new CommitVisitor());//1.
-//		cmd.walkAllTags(new CommitVisitor());
-	}
 	/**
 	 * extract file given file path and commit id
 	 * @param fileName

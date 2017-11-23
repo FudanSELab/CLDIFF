@@ -17,7 +17,11 @@ import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
-
+/**
+ * 根据积累的常用android sdk class,把这些类放到形如25-24/prev 25-24/curr的目录中，方便在meld上查看dif内容
+ * @author huangkaifeng
+ *
+ */
 public class GenerateDiffDirByVersions {
 	public static boolean isSameSize(String a,String b){
 		File fa = new File(a);

@@ -8,6 +8,7 @@ import edu.fdu.se.git.JGitCommand;
 
 /**
  * browser git repo, filter commits with android sdk file, write to output dir.
+ * 1.commit输出到文本文件  2.tag输出到文本文件
  * @author huangkaifeng
  *
  */
@@ -27,6 +28,9 @@ public class BrowseAndroidRepo {
 		JGitCommand cmd = new JGitCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH)+"/.git");
 		CommitTagVisitor cv = new CommitTagVisitor(ProjectProperties.getInstance().getValue(PropertyKeys.COMMIT_INFO_OUTPUT_DIR)+"/android_sdk_commits2.txt");
 		cmd.walkAllTags(cv);
+	}
+	private static void walkRepoFromBackwardsAndSortOutBranches(){
+		//TODO
 	}
 	
 }

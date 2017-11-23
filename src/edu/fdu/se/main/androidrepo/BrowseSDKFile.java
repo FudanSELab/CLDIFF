@@ -10,6 +10,7 @@ import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
 /**
  * Load Android SDK into database table: android_sdk_java_file
+ * 把sdk的文件录入数据库
  * @author huangkaifeng
  *
  */
