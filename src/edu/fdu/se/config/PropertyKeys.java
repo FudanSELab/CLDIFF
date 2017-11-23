@@ -13,4 +13,7 @@ public class PropertyKeys {
 	final public static String DIFF_MINER_PREV_FILE = "diff_miner_prev_file";
 	
 	final public static String DIFF_MINER_OUTPUT_DIR ="diff_miner_output_dir";
+	
+	final public static String GENERATE_DIFF_CMD_OUTPUT_DIR="generate_diff_cmd_output_dir";
+
 }

@@ -60,7 +60,6 @@ public class DiffMiner {
 	public static void main(String args[]){
 		DiffMiner i = new DiffMiner();
 		i.userGTIntermediate();
-//		i.test();
 	}
 
 }
