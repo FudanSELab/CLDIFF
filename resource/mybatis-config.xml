@@ -14,7 +14,8 @@
         </environment>
     </environments>
       <mappers>
-<mapper resource="edu/fdu/se/sqlmap/AndroidSDKJavaFileMapper.xml"/>
+		<mapper resource="edu/fdu/se/sqlmap/AndroidSDKJavaFileMapper.xml"/>
+		<mapper resource="edu/fdu/se/sqlmap/AndroidRepoCommitmMapper.xml"/>
      </mappers>
     
 </configuration>
