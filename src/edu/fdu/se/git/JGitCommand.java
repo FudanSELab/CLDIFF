@@ -19,6 +19,7 @@ import java.util.Random;
 
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.ListTagCommand;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -265,6 +266,49 @@ public class JGitCommand {
 			e.printStackTrace();
 		}
 
+	}
+	/**
+	 *  分支的commit 信息存在本地 ，变动信息在remote
+	 */
+	public void walkRepoBackwardDividedByBranch(){
+		try {
+//			List<Ref> mList = this.git.branchList().setListMode( ListMode.REMOTE ).call();
+			List<Ref> mList = this.git.branchList().setListMode( ListMode.ALL ).call();
+			System.out.println(mList.size());
+			for(Ref item:mList){
+				System.out.println(item);
+			}
+			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
+			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
+			for (Ref item : mList) {
+				RevCommit commit = revWalk.parseCommit(item.getObjectId());
+				commitQueue.offer(commit);
+				while (commitQueue.size() != 0) {
+					RevCommit queueCommitItem = commitQueue.poll();
+					RevCommit[] parentCommits = queueCommitItem.getParents();
+					if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
+						continue;
+					}
+//					Map<String, List<String>> changedFiles = this.getCommitFileList(queueCommitItem.getName());
+//					visitor.visit(queueCommitItem, changedFiles);
+					System.out.println(queueCommitItem.getName());
+					isTraversed.put(queueCommitItem.getName(), true);
+					for (RevCommit item2 : parentCommits) {
+						RevCommit commit2 = revWalk.parseCommit(item2.getId());
+						commitQueue.offer(commit2);
+					}
+				}
+			}
+		} catch (GitAPIException e) {
+			e.printStackTrace();
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	/**
 	 * read commit time

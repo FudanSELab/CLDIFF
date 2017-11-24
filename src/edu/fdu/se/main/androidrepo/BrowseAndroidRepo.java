@@ -15,8 +15,9 @@ import edu.fdu.se.git.JGitCommand;
 public class BrowseAndroidRepo {
 	
 	public static void main(String[] args) {
-		walkRepoFromBackwards();
-		walkAllTags();
+//		walkRepoFromBackwards();
+//		walkAllTags();
+		walkRepoFromBackwardsAndSortOutBranches();
 	}
 	private static void walkRepoFromBackwards(){
 		JGitCommand cmd = new JGitCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH)+"/.git");
@@ -30,7 +31,10 @@ public class BrowseAndroidRepo {
 		cmd.walkAllTags(cv);
 	}
 	private static void walkRepoFromBackwardsAndSortOutBranches(){
-		//TODO
+		//TODO jieshi
+		JGitCommand cmd = new JGitCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH)+"/.git");
+		cmd.walkRepoBackwardDividedByBranch();
+		
 	}
 	
 }
