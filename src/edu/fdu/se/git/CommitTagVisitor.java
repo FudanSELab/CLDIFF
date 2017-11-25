@@ -1,5 +1,6 @@
 package edu.fdu.se.git;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -16,12 +17,21 @@ import org.eclipse.jgit.lib.Ref;
 
 import edu.fdu.se.fileutil.FileWriter;
 
-public class CommitTagVisitor extends AbstractVisitor {
+public class CommitTagVisitor{
 
-	public CommitTagVisitor(String outputFile) {
-		super(outputFile);
+	public CommitTagVisitor(String fileName) {
+		this.logFile = new File(fileName);
 	}
-
+	
+private File logFile;
+	
+	public File getFile(){
+		return logFile;
+	}
+	
+	final public void close(){
+		FileWriter.close(logFile);
+	}
 	List<Entry<String, Ref>> mList;
 	Map<String, Integer> mMap;
 	List<Entry<String, Integer>> simpleMList;

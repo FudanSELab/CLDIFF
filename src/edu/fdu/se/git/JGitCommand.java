@@ -234,10 +234,42 @@ public class JGitCommand {
 	 * get all the commit info reversely
 	 * @param visitor
 	 */
-	public void walkRepoFromBackwards(CommitVisitor visitor) {
+	public void walkRepoFromBackwards(CommitVisitorLog visitor) {
 		try {
 			Map<String, Ref> refs = repository.getAllRefs();
+			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
+			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
+			for (Entry<String, Ref> item : refs.entrySet()) {
+				RevCommit commit = revWalk.parseCommit(item.getValue().getObjectId());
+				commitQueue.offer(commit);
+				while (commitQueue.size() != 0) {
+					RevCommit queueCommitItem = commitQueue.poll();
+					RevCommit[] parentCommits = queueCommitItem.getParents();
+					if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
+						continue;
+					}
+					Map<String, List<String>> changedFiles = this.getCommitFileList(queueCommitItem.getName());
+					visitor.visit(queueCommitItem, changedFiles);
+					isTraversed.put(queueCommitItem.getName(), true);
+					for (RevCommit item2 : parentCommits) {
+						RevCommit commit2 = revWalk.parseCommit(item2.getId());
+						commitQueue.offer(commit2);
+					}
+				}
+			}
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
+	}
+	
+	public void walkRepoFromBackwardsToDB(CommitVisitorDB visitor) {
+		try {
+			Map<String, Ref> refs = repository.getAllRefs();
 			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
 			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
 			for (Entry<String, Ref> item : refs.entrySet()) {
@@ -278,6 +310,7 @@ public class JGitCommand {
 			for(Ref item:mList){
 				System.out.println(item);
 			}
+			if(true) return;
 			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
 			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
 			for (Ref item : mList) {
