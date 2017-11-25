@@ -16,13 +16,19 @@ import edu.fdu.se.git.JGitCommand;
 public class BrowseAndroidRepo {
 	
 	public static void main(String[] args) {
-		writeCommitsToDB();
+		walkRepoFromBackwardsAndSortOutBranches();
 	}
+	/**
+	 * 1
+	 */
 	private static void writeSDKCommitsToFile(){
 		JGitCommand cmd = new JGitCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH)+"/.git");
 		CommitVisitorLog cv = new CommitVisitorLog(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_OUTPUT_DIR)+"/android_sdk_commits3.txt");
 		cmd.walkRepoFromBackwards(cv);
 	}
+	/**
+	 * 
+	 */
 	private static void writeCommitsToDB(){
 		JGitCommand cmd = new JGitCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH)+"/.git");
 		CommitVisitorDB cv = new CommitVisitorDB();
@@ -33,11 +39,11 @@ public class BrowseAndroidRepo {
 		CommitTagVisitor cv = new CommitTagVisitor(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_OUTPUT_DIR)+"/android_sdk_commits2.txt");
 		cmd.walkAllTags(cv);
 	}
-//	private static void walkRepoFromBackwardsAndSortOutBranches(){
-//		JGitCommand cmd = new JGitCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH)+"/.git");
-//		CommitVisitorDB cv = new CommitVisitorDB();
-//		cmd.walkRepoBackwardDividedByBranch();
-//		
-//	}
+	private static void walkRepoFromBackwardsAndSortOutBranches(){
+		JGitCommand cmd = new JGitCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH)+"/.git");
+		CommitVisitorDB cv = new CommitVisitorDB();
+		cmd.walkRepoBackwardDividedByBranch();
+		
+	}
 	
 }

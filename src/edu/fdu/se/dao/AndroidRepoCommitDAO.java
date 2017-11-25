@@ -39,6 +39,11 @@ public class AndroidRepoCommitDAO {
 		androidrepocommitmapper.insertBatch(androidRepoCommit);
 		sqlSession.commit();
 	}
-
-
+	public static AndroidRepoCommitWithBLOBs selectWithCommitSHA(String commitId){
+		return androidrepocommitmapper.selectByCommitId(commitId);
+	}
+	
+	public static int countByCommitId(String commitId){
+		return androidrepocommitmapper.countByCommitId(commitId);
+	}
 }

@@ -19,6 +19,7 @@ public class CommitVisitorDB {
 	public void visit(RevCommit commit, Map<String, List<String>> mMap) {
 		boolean flag = false;
 		AndroidRepoCommitWithBLOBs dbCommit = new AndroidRepoCommitWithBLOBs();
+
 		dbCommit.setCommitId(commit.getName());
 		dbCommit.setCommitLog(commit.getShortMessage());
 		dbCommit.setCommitLogFull(commit.getFullMessage());
@@ -26,7 +27,7 @@ public class CommitVisitorDB {
 		Date date = new Date(l);
 		dbCommit.setCommitDatetime(date);
 		dbCommit.setCommitTimestamp(date);
-		
+		System.out.println(commit.getName());
 		for (Entry<String, List<String>> item : mMap.entrySet()) {
 			// System.out.println(item.getKey());
 			for (String filePath : item.getValue()) {

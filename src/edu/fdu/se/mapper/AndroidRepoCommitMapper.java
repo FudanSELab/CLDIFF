@@ -65,4 +65,8 @@ public interface AndroidRepoCommitMapper {
 	int updateByExample(@Param("record") AndroidRepoCommit record, @Param("example") AndroidRepoCommitExample example);
 
 	int insertBatch(List<AndroidRepoCommitWithBLOBs> androidRepoCommit);
+	
+	AndroidRepoCommitWithBLOBs selectByCommitId(@Param("commitId") String commitId);
+	
+	int countByCommitId(@Param("commitId")String commitId);
 }

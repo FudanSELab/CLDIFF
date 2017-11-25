@@ -50,6 +50,7 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 
+import edu.fdu.se.dao.AndroidRepoCommitDAO;
 import edu.fdu.se.fileutil.FileUtil;
 
 public class JGitCommand {
@@ -282,7 +283,10 @@ public class JGitCommand {
 						continue;
 					}
 					Map<String, List<String>> changedFiles = this.getCommitFileList(queueCommitItem.getName());
-					visitor.visit(queueCommitItem, changedFiles);
+					int res = AndroidRepoCommitDAO.countByCommitId(commit.getName());
+					if(res==0){
+						visitor.visit(queueCommitItem, changedFiles);
+					}
 					isTraversed.put(queueCommitItem.getName(), true);
 					for (RevCommit item2 : parentCommits) {
 						RevCommit commit2 = revWalk.parseCommit(item2.getId());
