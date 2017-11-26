@@ -16,7 +16,7 @@ import edu.fdu.se.git.JGitCommand;
 public class BrowseAndroidRepo {
 	
 	public static void main(String[] args) {
-		walkRepoFromBackwardsAndSortOutBranches();
+		writeCommitsToDB();
 	}
 	/**
 	 * 1
@@ -42,7 +42,7 @@ public class BrowseAndroidRepo {
 	private static void walkRepoFromBackwardsAndSortOutBranches(){
 		JGitCommand cmd = new JGitCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH)+"/.git");
 		CommitVisitorDB cv = new CommitVisitorDB();
-		cmd.walkRepoBackwardDividedByBranch();
+		cmd.walkRepoBackwardDividedByBranch(cv);
 		
 	}
 	

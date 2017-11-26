@@ -282,11 +282,11 @@ public class JGitCommand {
 					if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
 						continue;
 					}
-					Map<String, List<String>> changedFiles = this.getCommitFileList(queueCommitItem.getName());
-					int res = AndroidRepoCommitDAO.countByCommitId(commit.getName());
-					if(res==0){
-						visitor.visit(queueCommitItem, changedFiles);
-					}
+//					Map<String, List<String>> changedFiles = this.getCommitFileList(queueCommitItem.getName());
+//					int res = AndroidRepoCommitDAO.countByCommitId(commit.getName());
+//					if(res==0){
+//						visitor.visit(queueCommitItem, changedFiles);
+//					}
 					isTraversed.put(queueCommitItem.getName(), true);
 					for (RevCommit item2 : parentCommits) {
 						RevCommit commit2 = revWalk.parseCommit(item2.getId());
@@ -294,6 +294,7 @@ public class JGitCommand {
 					}
 				}
 			}
+			System.out.println("CommitSum:"+isTraversed.size());
 		} catch (MissingObjectException e) {
 			e.printStackTrace();
 		} catch (IncorrectObjectTypeException e) {
@@ -306,7 +307,7 @@ public class JGitCommand {
 	/**
 	 *  分支的commit 信息存在本地 ，变动信息在remote
 	 */
-	public void walkRepoBackwardDividedByBranch(){
+	public void walkRepoBackwardDividedByBranch(CommitVisitorDB visitor){
 		try {
 //			List<Ref> mList = this.git.branchList().setListMode( ListMode.REMOTE ).call();
 			List<Ref> mList = this.git.branchList().setListMode( ListMode.ALL ).call();

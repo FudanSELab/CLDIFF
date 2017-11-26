@@ -23,10 +23,54 @@ public class CommitVisitorDB {
 		dbCommit.setCommitId(commit.getName());
 		dbCommit.setCommitLog(commit.getShortMessage());
 		dbCommit.setCommitLogFull(commit.getFullMessage());
-		Long l = new Long(commit.getCommitTime());
+		Long l = new Long(commit.getCommitTime()*1000L);
+//		l = l*1000;
 		Date date = new Date(l);
 		dbCommit.setCommitDatetime(date);
 		dbCommit.setCommitTimestamp(date);
+		System.out.println(commit.getName());
+		for (Entry<String, List<String>> item : mMap.entrySet()) {
+			// System.out.println(item.getKey());
+			for (String filePath : item.getValue()) {
+				if (filePath.startsWith("core/java/android")) {
+					flag = true;
+				}
+				// System.out.println(filePath);
+			}
+		}
+		if (flag == true) {
+			dbCommit.setIssdkfile(1);
+		}else{
+			dbCommit.setIssdkfile(0);
+		}
+//		if(mList == null){
+//			mList = new ArrayList<AndroidRepoCommitWithBLOBs>();
+//		}
+//		mList.add(dbCommit);
+		try{
+			AndroidRepoCommitDAO.insert(dbCommit);
+		}catch(Exception e){
+			System.err.println(dbCommit.getCommitId());
+			e.printStackTrace();
+		}
+//		if(mList.size()>1000){
+//			AndroidRepoCommitDAO.insertBatch(mList);
+//			mList.clear();
+//		}
+	}
+	
+	public void visitUpdate(RevCommit commit, Map<String, List<String>> mMap) {
+		boolean flag = false;
+		AndroidRepoCommitWithBLOBs dbCommit = new AndroidRepoCommitWithBLOBs();
+
+		dbCommit.setCommitId(commit.getName());
+		dbCommit.setCommitLog(commit.getShortMessage());
+		dbCommit.setCommitLogFull(commit.getFullMessage());
+		Long l = new Long(commit.getCommitTime());
+		Date date = new Date(l);
+		Date date2 = new Date(l);
+		dbCommit.setCommitDatetime(date);
+		dbCommit.setCommitTimestamp(date2);
 		System.out.println(commit.getName());
 		for (Entry<String, List<String>> item : mMap.entrySet()) {
 			// System.out.println(item.getKey());
