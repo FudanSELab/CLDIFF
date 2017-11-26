@@ -313,30 +313,11 @@ public class JGitCommand {
 			List<Ref> mList = this.git.branchList().setListMode( ListMode.ALL ).call();
 			System.out.println(mList.size());
 			for(Ref item:mList){
-				System.out.println(item);
-			}
-			if(true) return;
-			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
-			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
-			for (Ref item : mList) {
+				System.out.println(item.getName());
 				RevCommit commit = revWalk.parseCommit(item.getObjectId());
-				commitQueue.offer(commit);
-				while (commitQueue.size() != 0) {
-					RevCommit queueCommitItem = commitQueue.poll();
-					RevCommit[] parentCommits = queueCommitItem.getParents();
-					if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
-						continue;
-					}
-//					Map<String, List<String>> changedFiles = this.getCommitFileList(queueCommitItem.getName());
-//					visitor.visit(queueCommitItem, changedFiles);
-					System.out.println(queueCommitItem.getName());
-					isTraversed.put(queueCommitItem.getName(), true);
-					for (RevCommit item2 : parentCommits) {
-						RevCommit commit2 = revWalk.parseCommit(item2.getId());
-						commitQueue.offer(commit2);
-					}
-				}
+				visitor.visitBranch(commit, item.getName());
 			}
+			
 		} catch (GitAPIException e) {
 			e.printStackTrace();
 		} catch (MissingObjectException e) {

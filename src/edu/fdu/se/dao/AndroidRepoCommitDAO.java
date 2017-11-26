@@ -46,4 +46,8 @@ public class AndroidRepoCommitDAO {
 	public static int countByCommitId(String commitId){
 		return androidrepocommitmapper.countByCommitId(commitId);
 	}
+	public static void insertIntoBranchTable(AndroidRepoCommitWithBLOBs item){
+		androidrepocommitmapper.insertIntoBranchTable(item);
+		sqlSession.commit();
+	}
 }

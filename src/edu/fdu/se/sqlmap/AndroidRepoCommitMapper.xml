@@ -387,4 +387,16 @@
 		from android_repo_commit
 		where commit_id=#{commitId}
 	</select>
+	
+    
+     <insert id="insertIntoBranchTable" parameterType="edu.fdu.se.bean.AndroidRepoCommitWithBLOBs">
+    insert into android_repo_sdk_file_branch_head_commit (commit_id, branch_id, branch_name, 
+      tag_name, commit_datetime, commit_timestamp, 
+      issdkfile, commit_log, commit_log_full
+      )
+    values (#{commitId,jdbcType=VARCHAR}, #{branchId,jdbcType=INTEGER}, #{branchName,jdbcType=VARCHAR}, 
+      #{tagName,jdbcType=VARCHAR}, #{commitDatetime,jdbcType=TIMESTAMP}, #{commitTimestamp,jdbcType=TIMESTAMP}, 
+      #{issdkfile,jdbcType=INTEGER}, #{commitLog,jdbcType=LONGVARCHAR}, #{commitLogFull,jdbcType=LONGVARCHAR}
+      )
+  </insert>
 </mapper>

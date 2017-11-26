@@ -69,4 +69,6 @@ public interface AndroidRepoCommitMapper {
 	AndroidRepoCommitWithBLOBs selectByCommitId(@Param("commitId") String commitId);
 	
 	int countByCommitId(@Param("commitId")String commitId);
+	
+	int insertIntoBranchTable(AndroidRepoCommitWithBLOBs item);
 }

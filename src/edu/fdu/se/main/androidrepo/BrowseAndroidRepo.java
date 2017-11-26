@@ -16,7 +16,7 @@ import edu.fdu.se.git.JGitCommand;
 public class BrowseAndroidRepo {
 	
 	public static void main(String[] args) {
-		writeCommitsToDB();
+		walkRepoFromBackwardsAndSortOutBranches();
 	}
 	/**
 	 * 1
