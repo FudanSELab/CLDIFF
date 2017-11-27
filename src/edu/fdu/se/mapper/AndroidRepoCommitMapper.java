@@ -2,6 +2,8 @@ package edu.fdu.se.mapper;
 
 import edu.fdu.se.bean.AndroidRepoCommit;
 import edu.fdu.se.bean.AndroidRepoCommitExample;
+
+import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import edu.fdu.se.bean.AndroidRepoCommitWithBLOBs;
@@ -71,4 +73,6 @@ public interface AndroidRepoCommitMapper {
 	int countByCommitId(@Param("commitId")String commitId);
 	
 	int insertIntoBranchTable(AndroidRepoCommitWithBLOBs item);
+	
+	List<AndroidRepoCommit> selectFromBranchHeads(@Param("commitTime")Date commitTime);
 }

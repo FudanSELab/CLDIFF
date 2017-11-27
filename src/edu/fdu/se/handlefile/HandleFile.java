@@ -80,6 +80,6 @@ public class HandleFile {
 	public static void main(String[] args) {
 		// 删除目录下所有java文件注释
 		// 删除某个具体文件的注释
-		clearComment("D:\\Workspace\\Android_Diff\\SDKTools\\sources\\android-13\\android");
+		clearComment("C:/Users/huangkaifeng/Desktop/android-27-decompile/android");
 	}
 }

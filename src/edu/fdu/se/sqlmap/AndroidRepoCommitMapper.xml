@@ -399,4 +399,11 @@
       #{issdkfile,jdbcType=INTEGER}, #{commitLog,jdbcType=LONGVARCHAR}, #{commitLogFull,jdbcType=LONGVARCHAR}
       )
   </insert>
+  <select id="selectFromBranchHeads" resultMap="BaseResultMap">
+     	<include refid="Base_Column_List" />
+		from android_repo_sdk_file_branch_head_commit
+		where commit_datetime > #{commitTime,jdbcType=TIMESTAMP}
+  </select>
+  
+     
 </mapper>
