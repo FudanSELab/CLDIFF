@@ -1,62 +1,81 @@
 package edu.fdu.se.fileutil;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
+import org.eclipse.jgit.errors.MissingObjectException;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.treewalk.WorkingTreeOptions;
+import org.eclipse.jgit.util.io.AutoCRLFInputStream;
 
 public class FileUtil {
-
-	final public static int FILE_NEW_AND_APPEND=0;
-	
-	final public static int FILE_APPEND_AND_NOT_CLOSE=1;
-	
-	final public static int FILE_APPEND_AND_CLOSE=2;
-	
-	public static void writeInAll(String filePath, String content) {
+	public static boolean fileOutput(byte[] a,String output){
 		try {
-			FileOutputStream fos = new FileOutputStream(filePath);
-			fos.write(content.getBytes());
+			FileOutputStream fos=new FileOutputStream(new File(output));
+			fos.write(a);
 			fos.close();
+			return true;
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
-
+//		return false;
+	}
+	
+	public static byte[] toByteArray(InputStream input) throws IOException {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		copy(input, output);
+		return output.toByteArray();
 	}
 
-	private static Map<File, FileOutputStream> fileMap = new HashMap<File, FileOutputStream>();
+	public static long copyLarge(InputStream input, OutputStream output) throws IOException {
+		byte[] buffer = new byte[4096];
+		long count = 0L;
+		int n = 0;
+		while (-1 != (n = input.read(buffer))) {
+			output.write(buffer, 0, n);
+			count += n;
+		}
+		return count;
+	}
 
-	/**
-	 * 
-	 * @param mFile
-	 * @param content
-	 * @param flag
-	 *            1:normal 2:write end
-	 */
-	public static void writeInSegments(File mFile, String content, int flag) {
+	public static int copy(InputStream input, OutputStream output) throws IOException {
+		long count = copyLarge(input, output);
+		if (count > 2147483647L) {
+			return -1;
+		}
+		return (int) count;
+	}
+
+	public static InputStream open(ObjectId blobId, Repository db) throws IOException, IncorrectObjectTypeException {
+		if (blobId == null)
+			return new ByteArrayInputStream(new byte[0]);
+
 		try {
-			if(flag == FileUtil.FILE_NEW_AND_APPEND){
-				if (fileMap.containsKey(mFile)) {
-					fileMap.remove(mFile);
-				}
+			WorkingTreeOptions workingTreeOptions = db.getConfig().get(WorkingTreeOptions.KEY);
+			switch (workingTreeOptions.getAutoCRLF()) {
+			case INPUT:
+				// When autocrlf == input the working tree could be either CRLF
+				// or LF, i.e. the comparison
+				// itself should ignore line endings.
+			case FALSE:
+				return db.open(blobId, Constants.OBJ_BLOB).openStream();
+			case TRUE:
+			default:
+				return new AutoCRLFInputStream(db.open(blobId, Constants.OBJ_BLOB).openStream(), true);
 			}
-			if (fileMap.containsKey(mFile)) {
-				FileOutputStream fos = fileMap.get(mFile);
-				fos.write(content.getBytes());
-
-			} else {
-				FileOutputStream fos = new FileOutputStream(mFile);
-				fos.write(content.getBytes());
-				fileMap.put(mFile, fos);
-			}
-			if(flag==FileUtil.FILE_APPEND_AND_CLOSE){
-				fileMap.get(mFile).close();
-				fileMap.remove(mFile);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (MissingObjectException notFound) {
+			return null;
 		}
 	}
 

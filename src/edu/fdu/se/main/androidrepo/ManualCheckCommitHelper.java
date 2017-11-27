@@ -1,4 +1,4 @@
-package edu.fdu.se.androidrepo;
+package edu.fdu.se.main.androidrepo;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,8 +16,8 @@ import edu.fdu.se.git.JGitCommand;
  * @author huangkaifeng
  *
  */
-public class FastPeerCommit {
-	public FastPeerCommit(String path,String out){
+public class ManualCheckCommitHelper {
+	public ManualCheckCommitHelper(String path,String out){
 		this.commitFilePath = path;
 		this.filteredCommits=out;
 	}
@@ -27,7 +27,7 @@ public class FastPeerCommit {
 	public static void main(String args[]){
 		String file = "C:/Users/huangkaifeng/Desktop/10-20_Commits/android_sdk_commits_commit_msg_contains_add_null_check.txt";
 		String out = "C:/Users/huangkaifeng/Desktop/10-20_Commits/android_sdk_commits_commit_msg_contains_add_null_check-fast peer.txt";
-		FastPeerCommit fpc = new FastPeerCommit(file,out);
+		ManualCheckCommitHelper fpc = new ManualCheckCommitHelper(file,out);
 		fpc.output();
 	}
 	public void output(){

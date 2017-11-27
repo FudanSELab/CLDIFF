@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package edu.fdu.se.ast;
+package edu.fdu.se.main.ast;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.Mapping;

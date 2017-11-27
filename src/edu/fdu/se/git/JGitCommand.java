@@ -19,6 +19,7 @@ import java.util.Random;
 
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.ListTagCommand;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -48,6 +49,9 @@ import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
+
+import edu.fdu.se.dao.AndroidRepoCommitDAO;
+import edu.fdu.se.fileutil.FileUtil;
 
 public class JGitCommand {
 
@@ -231,10 +235,9 @@ public class JGitCommand {
 	 * get all the commit info reversely
 	 * @param visitor
 	 */
-	public void walkRepoFromBackwards(CommitVisitor visitor) {
+	public void walkRepoFromBackwards(CommitVisitorLog visitor) {
 		try {
 			Map<String, Ref> refs = repository.getAllRefs();
-
 			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
 			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
 			for (Entry<String, Ref> item : refs.entrySet()) {
@@ -263,6 +266,68 @@ public class JGitCommand {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void walkRepoFromBackwardsToDB(CommitVisitorDB visitor) {
+		try {
+			Map<String, Ref> refs = repository.getAllRefs();
+			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
+			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
+			for (Entry<String, Ref> item : refs.entrySet()) {
+				RevCommit commit = revWalk.parseCommit(item.getValue().getObjectId());
+				commitQueue.offer(commit);
+				while (commitQueue.size() != 0) {
+					RevCommit queueCommitItem = commitQueue.poll();
+					RevCommit[] parentCommits = queueCommitItem.getParents();
+					if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
+						continue;
+					}
+//					Map<String, List<String>> changedFiles = this.getCommitFileList(queueCommitItem.getName());
+//					int res = AndroidRepoCommitDAO.countByCommitId(commit.getName());
+//					if(res==0){
+//						visitor.visit(queueCommitItem, changedFiles);
+//					}
+					isTraversed.put(queueCommitItem.getName(), true);
+					for (RevCommit item2 : parentCommits) {
+						RevCommit commit2 = revWalk.parseCommit(item2.getId());
+						commitQueue.offer(commit2);
+					}
+				}
+			}
+			System.out.println("CommitSum:"+isTraversed.size());
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	/**
+	 *  鍒嗘敮鐨刢ommit 淇℃伅瀛樺湪鏈湴 锛屽彉鍔ㄤ俊鎭湪remote
+	 */
+	public void walkRepoBackwardDividedByBranch(CommitVisitorDB visitor){
+		try {
+//			List<Ref> mList = this.git.branchList().setListMode( ListMode.REMOTE ).call();
+			List<Ref> mList = this.git.branchList().setListMode( ListMode.ALL ).call();
+			System.out.println(mList.size());
+			for(Ref item:mList){
+				System.out.println(item.getName());
+				RevCommit commit = revWalk.parseCommit(item.getObjectId());
+				visitor.visitBranch(commit, item.getName());
+			}
+			
+		} catch (GitAPIException e) {
+			e.printStackTrace();
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	/**
 	 * read commit time
@@ -325,7 +390,6 @@ public class JGitCommand {
 //		} catch (GitAPIException e) {
 //			e.printStackTrace();
 //		}
-//        //每一个diffEntry都是文件版本之间的变动差异
 //		for (DiffEntry diffEntry : diff) {
 //			//DiffEntry.ChangeType.MODIFY.toString().equals(diffEntry.getChangeType().toString())&&
 //			if(diffEntry.getNewPath()!=null&&diffEntry.getNewPath().endsWith(".java")){
@@ -409,11 +473,6 @@ public class JGitCommand {
 	}
 
 
-	public static void main(String[] args) {
-		JGitCommand cmd = new JGitCommand("D:\\Workspace\\Android_Diff\\Android_Official_Framework_Repo\\base\\.git");
-		// cmd.walkRepoFromBackwards(new CommitVisitor());//1.
-//		cmd.walkAllTags(new CommitVisitor());
-	}
 	/**
 	 * extract file given file path and commit id
 	 * @param fileName

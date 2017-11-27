@@ -7,14 +7,15 @@
             <!-- 配置数据库连接信息 -->
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://localhost:3306/android_sdk_diff?serverTimezone=UTC" />
+                <property name="url" value="jdbc:mysql://localhost:3306/android_sdk_diff?serverTimezone=UTC&amp;useUnicode=true;" />
                 <property name="username" value="root" />
                 <property name="password" value="root" />
             </dataSource>
         </environment>
     </environments>
       <mappers>
-<mapper resource="edu/fdu/se/sqlmap/AndroidSDKJavaFileMapper.xml"/>
+		<mapper resource="edu/fdu/se/sqlmap/AndroidSDKJavaFileMapper.xml"/>
+		<mapper resource="edu/fdu/se/sqlmap/AndroidRepoCommitMapper.xml"/>
      </mappers>
     
 </configuration>

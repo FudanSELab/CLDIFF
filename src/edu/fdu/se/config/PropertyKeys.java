@@ -6,14 +6,14 @@ public class PropertyKeys {
 	
 	final public static String ANDROID_REPO_PATH= "android_repo_path";
 	
-	final public static String COMMIT_INFO_OUTPUT_DIR = "commit_info_output_dir";
+	final public static String ANDROID_REPO_OUTPUT_DIR = "android_repo_output_dir";
 	
-	final public static String DIFF_MINER_CURR_FILE = "diff_miner_curr_file";
+	final public static String AST_PARSER_CURR_FILE = "ast_parser_curr_file";
 	
-	final public static String DIFF_MINER_PREV_FILE = "diff_miner_prev_file";
+	final public static String AST_PARSER_PREV_FILE = "ast_parser_prev_file";
 	
-	final public static String DIFF_MINER_OUTPUT_DIR ="diff_miner_output_dir";
+	final public static String AST_PARSER_OUTPUT_DIR ="ast_parser_output_dir";
 	
-	final public static String GENERATE_DIFF_CMD_OUTPUT_DIR="generate_diff_cmd_output_dir";
+	final public static String TOP_SDK_CLASS_OUTPUT_DIR="top_sdk_class_output_dir";
 
 }

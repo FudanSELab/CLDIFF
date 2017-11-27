@@ -1,4 +1,4 @@
-package edu.fdu.se.ast;
+package edu.fdu.se.main.ast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import com.github.gumtreediff.tree.TreeUtils;
 import cn.edu.fudan.se.apiChangeExtractor.gumtreeParser.GumTreeDiffParser;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-import edu.fdu.se.fileutil.FileUtil;
+import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MyGumTreeParser extends GumTreeDiffParser{
@@ -26,22 +26,22 @@ public class MyGumTreeParser extends GumTreeDiffParser{
 		super(oldFileName, newFileName);
 	}
 	public void printClusteredActions(List<List<Action>> actionSet){
-		String actionOutputFile = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_OUTPUT_DIR)+"/clusteredAction.txt";
+		String actionOutputFile = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/clusteredAction.txt";
 		File mFile = new File(actionOutputFile);
-		FileUtil.writeInSegments(mFile,"%%%%%%%%%%%%%%%%%   ClusterSize:"+actionSet.size()+"  %%%%%% Start:\n\n",FileUtil.FILE_NEW_AND_APPEND);
+		FileWriter.writeInSegments(mFile,"%%%%%%%%%%%%%%%%%   ClusterSize:"+actionSet.size()+"  %%%%%% Start:\n\n",FileWriter.FILE_NEW_AND_APPEND);
 		for(List<Action> oneEntry:actionSet){
 			boolean isFirst=true;
-			FileUtil.writeInSegments(mFile,"@@@@ Cluter:   @@@@\n",1);
+			FileWriter.writeInSegments(mFile,"@@@@ Cluter:   @@@@\n",1);
 			for(Action a:oneEntry){
 				if(isFirst==true){
 					isFirst=false;
 				}
 				String oneAction = this.printMyOneActionString(a);
-				FileUtil.writeInSegments(mFile, oneAction, FileUtil.FILE_APPEND_AND_NOT_CLOSE);
+				FileWriter.writeInSegments(mFile, oneAction, FileWriter.FILE_APPEND_AND_NOT_CLOSE);
 			}
-			FileUtil.writeInSegments(mFile, "\n\n\n", FileUtil.FILE_APPEND_AND_NOT_CLOSE);
+			FileWriter.writeInSegments(mFile, "\n\n\n", FileWriter.FILE_APPEND_AND_NOT_CLOSE);
 		}
-		FileUtil.writeInSegments(mFile, "--------", FileUtil.FILE_APPEND_AND_CLOSE);
+		FileWriter.writeInSegments(mFile, "--------", FileWriter.FILE_APPEND_AND_CLOSE);
 	}
 	public String printMyOneActionString(Action a){
 		StringBuilder sb = new StringBuilder();

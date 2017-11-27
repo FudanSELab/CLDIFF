@@ -1,4 +1,4 @@
-package edu.fdu.se.androidapiclasses;
+package edu.fdu.se.main.popularsdkclasses;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,7 +17,11 @@ import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
-
+/**
+ * 根据积累的常用android sdk class,把这些类放到形如25-24/prev 25-24/curr的目录中，方便在meld上查看dif内容
+ * @author huangkaifeng
+ *
+ */
 public class GenerateDiffDirByVersions {
 	public static boolean isSameSize(String a,String b){
 		File fa = new File(a);
@@ -71,9 +75,9 @@ public class GenerateDiffDirByVersions {
 	}
 	public static void main(String args[]){
 		try {
-			String dir = ProjectProperties.getInstance().getValue(PropertyKeys.GENERATE_DIFF_CMD_OUTPUT_DIR);
+			String dir = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
 			makeDir(dir);
-			FileInputStream fis = new FileInputStream(ProjectProperties.getInstance().getValue(PropertyKeys.GENERATE_DIFF_CMD_OUTPUT_DIR)+"/gt100.txt");
+			FileInputStream fis = new FileInputStream(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE)+"/gt100.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String line;
 			while((line = br.readLine())!=null){

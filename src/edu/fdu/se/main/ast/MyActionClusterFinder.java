@@ -17,7 +17,7 @@
  * Copyright 2017 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package edu.fdu.se.ast;
+package edu.fdu.se.main.ast;
 
 import cn.edu.fudan.se.apiChangeExtractor.gumtreeParser.JGraphPanel;
 
