@@ -37,11 +37,7 @@ public class MyActionClusterFinder {
 
     private TreeContext src;
 
-    @SuppressWarnings("unused")
 	private TreeContext dst;
-
-    @SuppressWarnings("unused")
-	private List<Action> actions;
 
     private DirectedGraph<Action, DefaultEdge> graph;
 
@@ -49,10 +45,6 @@ public class MyActionClusterFinder {
     
     public List<Action> startNodes = new ArrayList<>();
     
-    public List<Integer> lastChildrenIndex;
-    
-    public List<Integer> actionIndexList;
-
     public MyActionClusterFinder(TreeContext src, TreeContext dst, List<Action> actions) {
         this.src = src;
         this.dst = dst;
@@ -80,12 +72,15 @@ public class MyActionClusterFinder {
         
     }
     
-    public MyActionClusterFinder(TreeContext src, TreeContext dst, List<Action> actions,List<Integer> actionIndexList,List<Integer> lastChildrenIndex) {
+    public List<Integer> lastChildrenIndex;
+	private List<Action> actions;
+    public List<Integer> actionIndexList;
+    public MyActionClusterFinder(TreeContext src, TreeContext dst,ActionGeneratorBean data) {
         this.src = src;
         this.dst = dst;
-        this.actions = actions;
-        this.lastChildrenIndex = lastChildrenIndex;
-        this.actionIndexList= actionIndexList;
+        this.actions = action;
+        this.lastChildrenIndex = ;
+        this.actionIndexList= ;
         System.out.println("LastChildrenIndex:");
         for(int tmp:this.lastChildrenIndex){
         	System.out.print(tmp+" ");
@@ -138,7 +133,7 @@ public class MyActionClusterFinder {
     	MyActionClusterFinder d = new MyActionClusterFinder();
     }
     /**
-     * 
+     * cluster children 
      */
     public void doCluster(){
     	System.out.println("ActionSize:"+this.actions.size());

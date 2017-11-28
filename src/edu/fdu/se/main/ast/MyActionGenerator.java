@@ -54,7 +54,7 @@ public class MyActionGenerator {
 
     private int lastId;
 
-    private List<Action> actions;
+//    private List<Action> actions;
 
     private TIntObjectMap<ITree> origSrcTrees;
 
@@ -76,20 +76,18 @@ public class MyActionGenerator {
         for (Mapping m: mappings)
             this.origMappings.link(copySrcTrees.get(m.getFirst().getId()), m.getSecond());
         this.newMappings = origMappings.copy();
+        myAgbData = new ActionGeneratorBean();
     }
 
-    public List<Action> getActions() {
-        return actions;
-    }
-    public List<Integer> layeredActionIndexList;
-    public List<Integer> layeredLastChildrenIndexList;
-    public List<Action> generate() {
+
+    public ActionGeneratorBean myAgbData;
+    public ActionGeneratorBean generate() {
+    	myAgbData = new ActionGeneratorBean();
         ITree srcFakeRoot = new AbstractTree.FakeTree(copySrc);
         ITree dstFakeRoot = new AbstractTree.FakeTree(origDst);
         copySrc.setParent(srcFakeRoot);
         origDst.setParent(dstFakeRoot);
 
-        actions = new ArrayList<>();
         dstInOrder = new HashSet<>();
         srcInOrder = new HashSet<>();
 
@@ -97,10 +95,8 @@ public class MyActionGenerator {
         newMappings.link(srcFakeRoot, dstFakeRoot);
 
 //        List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
-        layeredLastChildrenIndexList = new ArrayList<Integer>();
-        List<ITree> bfsDst = MyTreeUtil.layeredBreadthFirst(origDst, layeredLastChildrenIndexList);
-//        for (ITree item: bfsDst) {
-        layeredActionIndexList = new ArrayList<Integer>();
+        List<ITree> bfsDst = MyTreeUtil.layeredBreadthFirst(origDst, myAgbData.dstLayerLastNodeIndex);
+        
         for (int i=1;i<=bfsDst.size();i++){
         	ITree item = bfsDst.get(i-1);
             ITree w = null;
@@ -117,9 +113,9 @@ public class MyActionGenerator {
                 // furnish x instead of w and fake that x has the newly
                 // generated ID.
                 Action ins = new Insert(item, origSrcTrees.get(parentSrc.getId()), k);
-                actions.add(ins);
-                layeredActionIndexList.add(i);
-                //System.out.println(ins);
+                myAgbData.dstTreeActions.add(ins);
+                myAgbData.dstTreeActionIndex.add(i);
+
                 origSrcTrees.put(w.getId(), item);
                 newMappings.link(w, item);
                 parentSrc.getChildren().add(k, w);
@@ -130,15 +126,16 @@ public class MyActionGenerator {
                 if (!item.equals(origDst)) { // TODO => x != origDst // Case of the root
                     ITree v = w.getParent();
                     if (!w.getLabel().equals(item.getLabel())) {
-                    	layeredActionIndexList.add(i);
-                        actions.add(new Update(origSrcTrees.get(w.getId()), item.getLabel()));
+                    	Update upd = new Update(origSrcTrees.get(w.getId()), item.getLabel());
+                    	myAgbData.dstTreeActions.add(upd);
+                        myAgbData.dstTreeActionIndex.add(i);
                         w.setLabel(item.getLabel());
                     }
                     if (!parentSrc.equals(v)) {
                         int k = findPos(item);
                         Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(parentSrc.getId()), k);
-                        actions.add(mv);
-                        layeredActionIndexList.add(i);
+                        myAgbData.dstTreeActions.add(mv);
+                        myAgbData.dstTreeActionIndex.add(i);
                         //System.out.println(mv);
                         int oldk = w.positionInParent();
                         parentSrc.getChildren().add(k, w);
@@ -151,21 +148,24 @@ public class MyActionGenerator {
             //FIXME not sure why :D
             srcInOrder.add(w);
             dstInOrder.add(item);
-            alignChildren(w, item);
+            alignChildren(w, item,i);
         }
-
-        for (ITree w : copySrc.postOrder()) {
+        List<ITree> bfsSrc = MyTreeUtil.layeredBreadthFirst(copySrc, myAgbData.srcLayerLastNodeIndex);
+//        for (ITree w : copySrc.postOrder()) {
+        for (int i=1;i<=bfsSrc.size();i++){
+        	ITree w = bfsSrc.get(i);
             if (!newMappings.hasSrc(w)) {
-                actions.add(new Delete(origSrcTrees.get(w.getId())));
+            	myAgbData.srcTreeActions.add(new Delete(origSrcTrees.get(w.getId())));
+            	myAgbData.srcTreeActionIndex.add(i);
                 //w.getParent().getChildren().remove(w);
             }
+//            count++;
         }
-
+        return myAgbData;
         //FIXME should ensure isomorphism.
-        return actions;
     }
 
-    private void alignChildren(ITree w, ITree x) {
+    private void alignChildren(ITree w, ITree x,int nodeIndex) {
         srcInOrder.removeAll(w.getChildren());
         dstInOrder.removeAll(x.getChildren());
 
@@ -194,7 +194,8 @@ public class MyActionGenerator {
                     if (!lcs.contains(new Mapping(a, b))) {
                         int k = findPos(b);
                         Action mv = new Move(origSrcTrees.get(a.getId()), origSrcTrees.get(w.getId()), k);
-                        actions.add(mv);
+                        myAgbData.dstTreeActions.add(mv);
+                        myAgbData.dstTreeActionIndex.add(nodeIndex);
                         //System.out.println(mv);
                         int oldk = a.positionInParent();
                         w.getChildren().add(k, a);
