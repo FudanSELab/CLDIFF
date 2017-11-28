@@ -102,34 +102,47 @@ public class MyActionClusterFinder {
             graph.addVertex(a);
     }
     public MyActionClusterFinder(){
+    	//1 2 5 9 11 14 18 19 21 
+//    	ActionIndex:
+//    		9 10 11 12 13 15 16 17 18 19 20 21 
     	this.actionIndexList= new ArrayList<Integer>();
     	this.lastChildrenIndex=new ArrayList<Integer>();
+    	this.actionIndexList.add(9);
+    	this.actionIndexList.add(10);
+    	this.actionIndexList.add(11);
+    	this.actionIndexList.add(12);
+    	this.actionIndexList.add(13);
     	this.actionIndexList.add(15);
     	this.actionIndexList.add(16);
     	this.actionIndexList.add(17);
-    	
+    	this.actionIndexList.add(18);
+    	this.actionIndexList.add(19);
+    	this.actionIndexList.add(20);
+    	this.actionIndexList.add(21);
     	this.lastChildrenIndex.add(1);
     	this.lastChildrenIndex.add(2);
     	this.lastChildrenIndex.add(5);
-    	this.lastChildrenIndex.add(8);
-    	this.lastChildrenIndex.add(10);
-    	this.lastChildrenIndex.add(12);
-    	this.lastChildrenIndex.add(15);
-    	this.lastChildrenIndex.add(16);
-    	this.lastChildrenIndex.add(17);
+    	this.lastChildrenIndex.add(9);
+    	this.lastChildrenIndex.add(11);
+    	this.lastChildrenIndex.add(14);
+    	this.lastChildrenIndex.add(18);
+    	this.lastChildrenIndex.add(19);
+    	this.lastChildrenIndex.add(20);
+    	this.lastChildrenIndex.add(21);
+    	for(int i=0;i<this.actionIndexList.size();i++){
+    		this.candidateRange(i);
+    	}
+    	
     }
     public static void main(String args[]){
     	MyActionClusterFinder d = new MyActionClusterFinder();
-    	for(int item : d.candidateRange(1)){
-    		System.out.println(item);
-    	}
-    	
-    	
     }
     /**
      * 
      */
     public void doCluster(){
+    	System.out.println("ActionSize:"+this.actions.size());
+    	System.out.println("List:"+this.actionIndexList.size());
     	int size = actions.size();
     	for(int index=0;index<size;index++){
     		Action item = actions.get(index);
@@ -149,11 +162,9 @@ public class MyActionClusterFinder {
     	int bfsActionIndex = this.actionIndexList.get(indx);
     	int i;
     	int num;
-    	boolean flag=true;
     	for(i=0;i<this.lastChildrenIndex.size();i++){
     		num = this.lastChildrenIndex.get(i);
     		if(num >= bfsActionIndex){
-    			flag = false;
     			break;
     		}
     	}
@@ -190,6 +201,10 @@ public class MyActionClusterFinder {
     		}
     	}
     	int[] result = {indexA,indexB,indexC,indexD};
+    	System.out.println("Result:");
+    	for(int item:result){
+    		System.out.println(item);
+    	}
     	return result;
     	//bug
 //    	int j;
@@ -321,34 +336,7 @@ public class MyActionClusterFinder {
     	JGraphPanel frame = new JGraphPanel(graph, clusters);
     	frame.init();
     }
-    
-//    /**
-//     * 
-//     * @param a1
-//     * @param a2
-//     * @return true if a1 is a2's parent
-//     */
-//    private boolean embeddedInserts(Action a1, Action a2) {
-//        if (!(a1 instanceof Insert && a2 instanceof Insert))
-//            return false;
-//        Insert i1 = (Insert) a1;
-//        Insert i2 = (Insert) a2;
-//        if (i2.getParent().equals(i1.getNode()))
-//            return true;
-//        else
-//            return false;
-//    }
-    
-//    private boolean embeddedAdditions(Action a1, Action a2) {
-//        if (!(a1 instanceof Addition && a2 instanceof Addition))
-//            return false;
-//        Addition i1 = (Addition) a1;
-//        Addition i2 = (Addition) a2;
-//        if (i1.getParent().equals(i2.getNode()))
-//            return true;
-//        else
-//            return false;
-//    }
+
     
 //    private boolean embeddedDeletes(Action a1, Action a2) {
 //        if (!(a1 instanceof Delete && a2 instanceof Delete))
