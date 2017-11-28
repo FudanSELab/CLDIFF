@@ -2,6 +2,7 @@ package edu.fdu.se.dao;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.io.Resources;
@@ -49,5 +50,8 @@ public class AndroidRepoCommitDAO {
 	public static void insertIntoBranchTable(AndroidRepoCommitWithBLOBs item){
 		androidrepocommitmapper.insertIntoBranchTable(item);
 		sqlSession.commit();
+	}
+	public static List<AndroidRepoCommit> selectBranchHeads(Date commitTime){
+		return androidrepocommitmapper.selectFromBranchHeads(commitTime);
 	}
 }

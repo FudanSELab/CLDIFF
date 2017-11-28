@@ -57,9 +57,9 @@ public class BrowseSDKFile {
 	 * @param args
 	 */
 	public static void main(String args[]){
-		String path = ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_SDK_PATH)+"sources\\android-";
-		int i=3;
-		for(i=3;i<=25;i++){
+		String path = ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_SDK_PATH)+"\\sources\\android-";
+		int i=26;
+		for(i=26;i<=26;i++){
 			sdkVersion = i;
 			rootDir = "android-"+String.valueOf(i);
 			String browsePath = path+String.valueOf(i);

@@ -101,16 +101,44 @@ public class MyActionClusterFinder {
         for (Action a: actions)
             graph.addVertex(a);
     }
-    
+    public MyActionClusterFinder(){
+    	this.actionIndexList= new ArrayList<Integer>();
+    	this.lastChildrenIndex=new ArrayList<Integer>();
+    	this.actionIndexList.add(15);
+    	this.actionIndexList.add(16);
+    	this.actionIndexList.add(17);
+    	
+    	this.lastChildrenIndex.add(1);
+    	this.lastChildrenIndex.add(2);
+    	this.lastChildrenIndex.add(5);
+    	this.lastChildrenIndex.add(8);
+    	this.lastChildrenIndex.add(10);
+    	this.lastChildrenIndex.add(12);
+    	this.lastChildrenIndex.add(15);
+    	this.lastChildrenIndex.add(16);
+    	this.lastChildrenIndex.add(17);
+    }
+    public static void main(String args[]){
+    	MyActionClusterFinder d = new MyActionClusterFinder();
+    	for(int item : d.candidateRange(1)){
+    		System.out.println(item);
+    	}
+    	
+    	
+    }
+    /**
+     * 
+     */
     public void doCluster(){
     	int size = actions.size();
     	for(int index=0;index<size;index++){
     		Action item = actions.get(index);
-    		int [] threeRanges=this.candidateRange(index);
-    		this.findParentOf(item, threeRanges[0], threeRanges[1]);
-    		this.findSiblingsOf(item,threeRanges[1]+1,threeRanges[2]);
+    		int [] twoRanges=this.candidateRange(index);
+    		this.findParentOf(item, twoRanges[0], twoRanges[1]);
+    		this.findSiblingsOf(item,twoRanges[2],twoRanges[3]);
     	}
     }
+    
     
     /**
      * 
@@ -129,53 +157,78 @@ public class MyActionClusterFinder {
     			break;
     		}
     	}
-    	if(flag){
-    		i--;
-    	}
     	int[] intermediate = {this.lastChildrenIndex.get(i-2),this.lastChildrenIndex.get(i-1),bfsActionIndex};
-//    	System.out.println("Intermediate:");
-//    	for(int a:intermediate)
-//    		System.out.println(a);
+    	System.out.println("Intermediate:");
+    	for(int a:intermediate)
+    		System.out.println(a);
     	int a = intermediate[0];
     	int b = intermediate[1];
     	int c = intermediate[2];
-    	int j;
-    	boolean flagA = true;
-    	boolean flagC = true;
-    	int indexA=-1;
-    	int indexB=-1;
-    	int indexC=-1;
-    	// action list 36  37 38   36 38 38
-    	// [36,36] [37,37]
-    	// action list 1  3 5  7  9  ast的 4  7
-    	for(j=0;j<this.actionIndexList.size();j++){
-    		int bfsNum = this.actionIndexList.get(j);
-    		if(a<=bfsNum&&flagA){
-    			if(bfsNum==a){
-    				indexA = j+1;
-    			} else {
-    				indexA =j;
-    			}
-    			flagA=false;
+    	boolean flagA=false;
+    	boolean flagB=false;
+    	boolean flagC=false;
+    	boolean flagD=false;
+    	int indexA=-1,indexB=-1,indexC=-1,indexD=-1;
+    	//[a+1,b]  [b+1,c-1]
+    	for(int j=0;j<this.actionIndexList.size();j++){
+    		int tmp = this.actionIndexList.get(j);
+    		if(tmp >= a+1 && !flagA){
+    			flagA = true;
+    			indexA = j;
     		}
-    		if(bfsNum<=b){
-    			indexB = j;
+    		if(tmp > b && !flagB){
+    			flagB = true;
+    			indexB =j-1;
     		}
-    		if(bfsNum>=c&&flagC){
-    			if(bfsNum==c){
-    				indexC = j-1;
-    			}else{
-    				indexC = j;
-    			}
-    			flagC = false;
+    		if(tmp >= b+1 && !flagC){
+    			flagC =true;
+    			indexC = j;
+    		}
+    		if(tmp > c-1 && !flagD){
+    			flagD = true;
+    			indexD =j-1;
     		}
     	}
-    	// [a,b] [b+1,c]
-    	int[] result={indexA,indexB,indexC};
-//    	System.out.println("Action Index:");
-//    	for(int tmp:result)
-//    		System.out.println(tmp);
+    	int[] result = {indexA,indexB,indexC,indexD};
     	return result;
+    	//bug
+//    	int j;
+//    	boolean flagA = true;
+//    	boolean flagC = true;
+//    	int indexA=-1;
+//    	int indexB=-1;
+//    	int indexC=-1;
+//    	// action list 36  37 38   36 38 38
+//    	// [36,36] [37,37]
+//    	// action list 1  3 5  7  9  ast 的 4  7
+//    	for(j=0;j<this.actionIndexList.size();j++){
+//    		int bfsNum = this.actionIndexList.get(j);
+//    		if(a<=bfsNum&&flagA){
+//    			if(bfsNum==a){
+//    				indexA = j+1;
+//    			} else {
+//    				indexA =j;
+//    			}
+//    			flagA=false;
+//    		}
+//    		if(bfsNum<=b){
+//    			indexB = j;
+//    		}
+//    		if(bfsNum>=c&&flagC){
+//    			if(bfsNum==c){
+//    				indexC = j-1;
+//    			}else{
+//    				indexC = j;
+//    			}
+//    			flagC = false;
+//    		}
+//    	}
+//    	// [a,b] [b+1,c]
+//    	int[] result={indexA,indexB,indexC};
+////    	System.out.println("Action Index:");
+////    	for(int tmp:result)
+////    		System.out.println(tmp);
+//    	return result;
     }
     
     public void findParentOf(Action a,int start,int end){
