@@ -39,22 +39,24 @@ public class MyActionClusterFinder {
 
 	private TreeContext dst;
 
-    private DirectedGraph<Action, DefaultEdge> graph;
-
-    private List<Set<Action>> clusters;
+//    private DirectedGraph<Action, DefaultEdge> graph;
+//
+//    private List<Set<Action>> clusters;
+//    
+//    public List<Action> startNodes = new ArrayList<>();
+	protected ActionGeneratorBean myAgb;
     
-    public List<Action> startNodes = new ArrayList<>();
-    
-    public MyActionClusterFinder(TreeContext src, TreeContext dst, List<Action> actions) {
-        this.src = src;
-        this.dst = dst;
-        this.actions = actions;
-        startNodes.addAll(actions);
-        graph = new DefaultDirectedGraph<>(DefaultEdge.class);
-
-        for (Action a: actions)
-            graph.addVertex(a);
-        doCluster();
+//    public MyActionClusterFinder(TreeContext src, TreeContext dst, List<Action> actions) {
+//        this.src = src;
+//        this.dst = dst;
+//        this.actions = actions;
+//        
+//        startNodes.addAll(actions);
+//        graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+//
+//        for (Action a: actions)
+//            graph.addVertex(a);
+//        doCluster();
         
 //        for (Action a1: actions) {
 //            for (Action a2: actions) {
@@ -70,7 +72,7 @@ public class MyActionClusterFinder {
 //        ConnectivityInspector<Action, DefaultEdge> alg = new ConnectivityInspector<>(graph);
 //        clusters = alg.connectedSets();
         
-    }
+//    }
     
     public List<Integer> lastChildrenIndex;
 	private List<Action> actions;
@@ -78,7 +80,7 @@ public class MyActionClusterFinder {
     public MyActionClusterFinder(TreeContext src, TreeContext dst,ActionGeneratorBean data) {
         this.src = src;
         this.dst = dst;
-        this.actions = action;
+        this.myAgb = data;
         this.lastChildrenIndex = ;
         this.actionIndexList= ;
         System.out.println("LastChildrenIndex:");
@@ -201,44 +203,6 @@ public class MyActionClusterFinder {
     		System.out.println(item);
     	}
     	return result;
-    	//bug
-//    	int j;
-//    	boolean flagA = true;
-//    	boolean flagC = true;
-//    	int indexA=-1;
-//    	int indexB=-1;
-//    	int indexC=-1;
-//    	// action list 36  37 38   36 38 38
-//    	// [36,36] [37,37]
-//    	// action list 1  3 5  7  9  ast 的 4  7
-//    	for(j=0;j<this.actionIndexList.size();j++){
-//    		int bfsNum = this.actionIndexList.get(j);
-//    		if(a<=bfsNum&&flagA){
-//    			if(bfsNum==a){
-//    				indexA = j+1;
-//    			} else {
-//    				indexA =j;
-//    			}
-//    			flagA=false;
-//    		}
-//    		if(bfsNum<=b){
-//    			indexB = j;
-//    		}
-//    		if(bfsNum>=c&&flagC){
-//    			if(bfsNum==c){
-//    				indexC = j-1;
-//    			}else{
-//    				indexC = j;
-//    			}
-//    			flagC = false;
-//    		}
-//    	}
-//    	// [a,b] [b+1,c]
-//    	int[] result={indexA,indexB,indexC};
-////    	System.out.println("Action Index:");
-////    	for(int tmp:result)
-////    		System.out.println(tmp);
-//    	return result;
     }
     
     public void findParentOf(Action a,int start,int end){

@@ -44,7 +44,7 @@ public class PreprocessClassData {
 
 	public static void main(String[] args) {
 		PreprocessClassData preprocessClassData = new PreprocessClassData();
-		preprocessClassData.fileDiff("E:\\BpNet1.java", "E:\\BpNet2.java");
+		preprocessClassData.fileDiff("C:\\Users\\huangkaifeng\\Desktop\\DiffMiner\\11-8-GumTree\\DiffDirByVersion\\25-24\\prev\\AbsListView.java", "C:\\Users\\huangkaifeng\\Desktop\\DiffMiner\\11-8-GumTree\\DiffDirByVersion\\25-24\\curr\\AbsListView.java");
 		preprocessClassData.print();
 	}
 	

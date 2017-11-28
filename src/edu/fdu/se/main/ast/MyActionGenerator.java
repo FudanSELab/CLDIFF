@@ -19,7 +19,9 @@
  */
 
 package edu.fdu.se.main.ast;
-
+/**
+ * generate action and cluster
+ */
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
