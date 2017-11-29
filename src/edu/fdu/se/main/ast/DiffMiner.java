@@ -12,7 +12,6 @@ import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import cn.edu.fudan.se.apiChangeExtractor.gumtreeParser.GumTreeDiffParser;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
@@ -52,6 +51,8 @@ public class DiffMiner {
 		MyActionClusterFinder finder = new MyActionClusterFinder(his.srcTC, his.dstTC,data);
 		List<List<Action>> result = finder.clusteredActions();
 		his.printClusteredActions(result);
+		FindPattern fp = new FindPattern(his.srcTC,his.dstTC);
+		fp.isCheckNull(result.get(0));
 	}
 	public void test(){
 		String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
