@@ -56,7 +56,6 @@ public class MyActionGenerator {
 
     private int lastId;
 
-//    private List<Action> actions;
 
     private TIntObjectMap<ITree> origSrcTrees;
 
@@ -152,16 +151,22 @@ public class MyActionGenerator {
             dstInOrder.add(item);
             alignChildren(w, item,i);
         }
-        List<ITree> bfsSrc = MyTreeUtil.layeredBreadthFirst(copySrc, myAgbData.srcLayerLastNodeIndex);
-//        for (ITree w : copySrc.postOrder()) {
-        for (int i=1;i<=bfsSrc.size();i++){
-        	ITree w = bfsSrc.get(i);
+        Delete prev = null;
+        for (ITree w : copySrc.postOrder()) {
             if (!newMappings.hasSrc(w)) {
-            	myAgbData.srcTreeActions.add(new Delete(origSrcTrees.get(w.getId())));
-            	myAgbData.srcTreeActionIndex.add(i);
+            	Delete del = new Delete(origSrcTrees.get(w.getId()));
+            	if(prev == null){
+            		prev = del;
+            	}else{
+            		if(ActionNodeRelation.isParentOf(del, prev)){
+            			myAgbData.srcTreeActionIndex.add(myAgbData.srcTreeActions.size()-1);
+            		}else if(ActionNodeRelation.isSameParent(prev, del)){
+            			myAgbData.srcTreeActionIndex.add(myAgbData.srcTreeActions.size()-1);
+            		}
+            	}
+            	myAgbData.srcTreeActions.add(del);
                 //w.getParent().getChildren().remove(w);
             }
-//            count++;
         }
         return myAgbData;
         //FIXME should ensure isomorphism.

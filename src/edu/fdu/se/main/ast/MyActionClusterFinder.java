@@ -19,14 +19,9 @@
 
 package edu.fdu.se.main.ast;
 
-import cn.edu.fudan.se.apiChangeExtractor.gumtreeParser.JGraphPanel;
-
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.TreeContext;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 
 import java.util.ArrayList;
@@ -39,95 +34,60 @@ public class MyActionClusterFinder {
 
 	private TreeContext dst;
 
-//    private DirectedGraph<Action, DefaultEdge> graph;
-//
-//    private List<Set<Action>> clusters;
-//    
-//    public List<Action> startNodes = new ArrayList<>();
 	protected ActionGeneratorBean myAgb;
+//    if (embeddedInserts(a1, a2) || sameValueUpdates(a1, a2) || sameParentMoves(a1, a2) || embeddedDeletes(a1, a2)){
+//    ConnectivityInspector<Action, DefaultEdge> alg = new ConnectivityInspector<>(graph);
+//    clusters = alg.connectedSets();
     
-//    public MyActionClusterFinder(TreeContext src, TreeContext dst, List<Action> actions) {
-//        this.src = src;
-//        this.dst = dst;
-//        this.actions = actions;
-//        
-//        startNodes.addAll(actions);
-//        graph = new DefaultDirectedGraph<>(DefaultEdge.class);
-//
-//        for (Action a: actions)
-//            graph.addVertex(a);
-//        doCluster();
-        
-//        for (Action a1: actions) {
-//            for (Action a2: actions) {
-//                if (a1 != a2) {
-//                    if (embeddedInserts(a1, a2) || sameValueUpdates(a1, a2) || sameParentMoves(a1, a2) || embeddedDeletes(a1, a2)){
-//                    	graph.addEdge(a1, a2);
-//                    	startNodes.remove(a1);
-//                    }
-//                }
-//            }
-//        }
-//
-//        ConnectivityInspector<Action, DefaultEdge> alg = new ConnectivityInspector<>(graph);
-//        clusters = alg.connectedSets();
-        
-//    }
     
-    public List<Integer> lastChildrenIndex;
-	private List<Action> actions;
-    public List<Integer> actionIndexList;
     public MyActionClusterFinder(TreeContext src, TreeContext dst,ActionGeneratorBean data) {
         this.src = src;
         this.dst = dst;
         this.myAgb = data;
-        this.lastChildrenIndex = ;
-        this.actionIndexList= ;
         System.out.println("LastChildrenIndex:");
-        for(int tmp:this.lastChildrenIndex){
+        for(int tmp:myAgb.dstLayerLastNodeIndex){
         	System.out.print(tmp+" ");
         }
         System.out.println("");
         System.out.println("ActionIndex:");
-        for(int tmp:this.actionIndexList){
+        for(int tmp:myAgb.dstTreeActionIndex){
         	System.out.print(tmp+" ");
         }
         System.out.println("");
-        startNodes.addAll(actions);
-        graph = new DefaultDirectedGraph<>(DefaultEdge.class);
-        for (Action a: actions)
-            graph.addVertex(a);
+        
     }
     public MyActionClusterFinder(){
-    	//1 2 5 9 11 14 18 19 21 
-//    	ActionIndex:
-//    		9 10 11 12 13 15 16 17 18 19 20 21 
-    	this.actionIndexList= new ArrayList<Integer>();
-    	this.lastChildrenIndex=new ArrayList<Integer>();
-    	this.actionIndexList.add(9);
-    	this.actionIndexList.add(10);
-    	this.actionIndexList.add(11);
-    	this.actionIndexList.add(12);
-    	this.actionIndexList.add(13);
-    	this.actionIndexList.add(15);
-    	this.actionIndexList.add(16);
-    	this.actionIndexList.add(17);
-    	this.actionIndexList.add(18);
-    	this.actionIndexList.add(19);
-    	this.actionIndexList.add(20);
-    	this.actionIndexList.add(21);
-    	this.lastChildrenIndex.add(1);
-    	this.lastChildrenIndex.add(2);
-    	this.lastChildrenIndex.add(5);
-    	this.lastChildrenIndex.add(9);
-    	this.lastChildrenIndex.add(11);
-    	this.lastChildrenIndex.add(14);
-    	this.lastChildrenIndex.add(18);
-    	this.lastChildrenIndex.add(19);
-    	this.lastChildrenIndex.add(20);
-    	this.lastChildrenIndex.add(21);
-    	for(int i=0;i<this.actionIndexList.size();i++){
-    		this.candidateRange(i);
+//    	LastChildrenIndex:
+//    		1 2 5 10 17 28 42 48 57 63 73 75 79 
+//    		ActionIndex:
+//    		13 20 21 31 32 33  
+    	this.myAgb = new ActionGeneratorBean();
+    	this.myAgb.dstTreeActionIndex= new ArrayList<Integer>();
+    	this.myAgb.dstLayerLastNodeIndex=new ArrayList<Integer>();
+    	
+    	myAgb.dstTreeActionIndex.add(13);
+    	myAgb.dstTreeActionIndex.add(20);
+    	myAgb.dstTreeActionIndex.add(21);
+    	myAgb.dstTreeActionIndex.add(31);
+    	this.myAgb.dstTreeActionIndex.add(32);
+    	this.myAgb.dstTreeActionIndex.add(33);
+    	
+    	myAgb.dstLayerLastNodeIndex.add(1);
+    	myAgb.dstLayerLastNodeIndex.add(2);
+    	myAgb.dstLayerLastNodeIndex.add(5);
+    	myAgb.dstLayerLastNodeIndex.add(10);
+    	myAgb.dstLayerLastNodeIndex.add(17);
+    	myAgb.dstLayerLastNodeIndex.add(28);
+    	myAgb.dstLayerLastNodeIndex.add(42);
+    	myAgb.dstLayerLastNodeIndex.add(48);
+    	myAgb.dstLayerLastNodeIndex.add(57);
+    	myAgb.dstLayerLastNodeIndex.add(63);
+    	myAgb.dstLayerLastNodeIndex.add(73);
+    	myAgb.dstLayerLastNodeIndex.add(75);
+    	myAgb.dstLayerLastNodeIndex.add(79);
+    	
+    	for(int i=0;i<this.myAgb.dstTreeActionIndex.size();i++){
+    		this.candidateRange(i,this.myAgb.dstLayerLastNodeIndex,this.myAgb.dstTreeActionIndex);
     	}
     	
     }
@@ -138,12 +98,11 @@ public class MyActionClusterFinder {
      * cluster children 
      */
     public void doCluster(){
-    	System.out.println("ActionSize:"+this.actions.size());
-    	System.out.println("List:"+this.actionIndexList.size());
-    	int size = actions.size();
+    	// ins upd mov
+    	int size = this.myAgb.dstTreeActions.size();
     	for(int index=0;index<size;index++){
-    		Action item = actions.get(index);
-    		int [] twoRanges=this.candidateRange(index);
+    		Action item = this.myAgb.dstTreeActions.get(index);
+    		int [] twoRanges=this.candidateRange(index,this.myAgb.dstLayerLastNodeIndex,this.myAgb.dstTreeActionIndex);
     		this.findParentOf(item, twoRanges[0], twoRanges[1]);
     		this.findSiblingsOf(item,twoRanges[2],twoRanges[3]);
     	}
@@ -155,20 +114,20 @@ public class MyActionClusterFinder {
      * @param indx index of action in action list
      * @return start and end index in bfs node list -> start and end node index in action list
      */
-    private int[] candidateRange(int indx){
-    	int bfsActionIndex = this.actionIndexList.get(indx);
+    private int[] candidateRange(int indx, List<Integer> layerNodeIndex,List<Integer> actionIndex){
+    	int bfsActionIndex = actionIndex.get(indx);
     	int i;
     	int num;
-    	for(i=0;i<this.lastChildrenIndex.size();i++){
-    		num = this.lastChildrenIndex.get(i);
+    	for(i=0;i<layerNodeIndex.size();i++){
+    		num = layerNodeIndex.get(i);
     		if(num >= bfsActionIndex){
     			break;
     		}
     	}
-    	int[] intermediate = {this.lastChildrenIndex.get(i-2),this.lastChildrenIndex.get(i-1),bfsActionIndex};
-    	System.out.println("Intermediate:");
-    	for(int a:intermediate)
-    		System.out.println(a);
+    	int[] intermediate = {layerNodeIndex.get(i-2),layerNodeIndex.get(i-1),bfsActionIndex};
+//    	System.out.println("Intermediate:");
+//    	for(int a:intermediate)
+//    		System.out.println(a);
     	int a = intermediate[0];
     	int b = intermediate[1];
     	int c = intermediate[2];
@@ -178,8 +137,8 @@ public class MyActionClusterFinder {
     	boolean flagD=false;
     	int indexA=-1,indexB=-1,indexC=-1,indexD=-1;
     	//[a+1,b]  [b+1,c-1]
-    	for(int j=0;j<this.actionIndexList.size();j++){
-    		int tmp = this.actionIndexList.get(j);
+    	for(int j=0;j<actionIndex.size();j++){
+    		int tmp = actionIndex.get(j);
     		if(tmp >= a+1 && !flagA){
     			flagA = true;
     			indexA = j;
@@ -198,80 +157,46 @@ public class MyActionClusterFinder {
     		}
     	}
     	int[] result = {indexA,indexB,indexC,indexD};
-    	System.out.println("Result:");
-    	for(int item:result){
-    		System.out.println(item);
-    	}
+//    	System.out.println("Result:");
+//    	for(int item:result){
+//    		System.out.println(item);
+//    	}
     	return result;
     }
     
     public void findParentOf(Action a,int start,int end){
     	for(int i=start;i<=end;i++){
-    		Action candidate = this.actions.get(i);
-    		if(this.isParentOf(candidate, a)){
-    			graph.addEdge(candidate, a);
-    			startNodes.remove(a);
-//    			System.out.println("\nMapping: "+candidate.getNode().getId() + " and " + a.getNode().getId()+"\n");
+    		Action candidate = this.myAgb.dstTreeActions.get(i);
+    		if(ActionNodeRelation.isParentOf(candidate, a)){
+    			this.myAgb.graph.addEdge(candidate, a);
+    			this.myAgb.startNodes.remove(a);
+//    			System.out.println("\nMapping: "+candidate.getNode().getId() + " and " + a.getNode().getId());
     		}
     	}
     }
     public void findSiblingsOf(Action a,int start,int end){
-    	for(int i=start;i<end;i++){
-    		Action candidate = this.actions.get(i);
-    		if(this.isSameParent(candidate, a)){
-    			graph.addEdge(candidate, a);
-    			startNodes.remove(a);
-    			System.out.println("\nMapping: "+candidate.getNode().getId() + " and " + a.getNode().getId()+"\n");
+    	for(int i=start;i<=end;i++){
+    		Action candidate = this.myAgb.dstTreeActions.get(i);
+    		if(ActionNodeRelation.isSameParent(candidate, a)){
+    			this.myAgb.graph.addEdge(candidate, a);
+    			this.myAgb.startNodes.remove(a);
+//    			System.out.println("\nMapping: "+candidate.getNode().getId() + " and " + a.getNode().getId());
     		}
     	}
     }
 
-    private boolean isParentOf(Action a1,Action a2){
-    	if(a1.getNode()==null||a2.getNode()==null){
-    		return false;
-    	}
-    	if ((a1 instanceof Insert && a2 instanceof Insert)){
-    		Insert i1 = (Insert)a1;
-    		Insert i2 = (Insert)a2;
-    		if (i2.getParent().equals(i1.getNode()))
-                return true;
- 
-    	}
-    	if((a1 instanceof Update && a2 instanceof Update)||(a1 instanceof Delete && a2 instanceof Delete)){
-    		if(a1.getNode().equals(a2.getNode().getParent()))
-    			return true;
-    	}
-        return false;
-    }
-    private boolean isSameParent(Action a1,Action a2){
-    	if(a1.getNode()==null||a2.getNode()==null){
-    		return false;
-    	}
-    	if ((a1 instanceof Insert && a2 instanceof Insert)){
-    		Insert i1 = (Insert)a1;
-    		Insert i2 = (Insert)a2;
-    		if (i2.getParent().equals(i1.getParent()))
-                return true;
- 
-    	}
-    	if((a1 instanceof Update && a2 instanceof Update)||(a1 instanceof Delete && a2 instanceof Delete)){
-    		if(a1.getNode().getParent()==null)
-    			return false;
-    		if(a1.getNode().getParent().equals(a2.getNode().getParent()))
-    			return true;
-    	}
-        return false;
-    }
-    
+
     public List<List<Action>> clusteredActions(){
+    	this.myAgb.initClusterData();
     	doCluster();
     	List<List<Action>> result =new ArrayList<List<Action>>();
-		for(Action item : this.getStartNodes()){
+    	
+		for(Action item : this.myAgb.startNodes){
 			List<Action> oneEntry =new ArrayList<Action>();
 			oneEntry.add(item);
-			for(DefaultEdge edge : graph.edgesOf(item)){
-				Action a1=graph.getEdgeSource(edge);
-				Action a2=graph.getEdgeTarget(edge);
+			for(DefaultEdge edge : this.myAgb.graph.edgesOf(item)){
+				Action a1=this.myAgb.graph.getEdgeSource(edge);
+				Action a2=this.myAgb.graph.getEdgeTarget(edge);
 				if(item.equals(a1)){
 					oneEntry.add(a2);
 				}else{
@@ -282,59 +207,7 @@ public class MyActionClusterFinder {
 		}
 		return result;
     }
-    
-    
-    
-    public List<Action> getStartNodes() {
-        return startNodes;
-    }
-    public List<Set<Action>> getClusters() {
-        return clusters;
-    }
-    public void show(){
-    	JGraphPanel frame = new JGraphPanel(graph, clusters);
-    	frame.init();
-    }
 
-    
-//    private boolean embeddedDeletes(Action a1, Action a2) {
-//        if (!(a1 instanceof Delete && a2 instanceof Delete))
-//            return false;
-//        Delete d1 = (Delete) a1;
-//        Delete d2 = (Delete) a2;
-//        if (d2.getNode().getParent() == null)
-//            return false;
-//        if (d2.getNode().getParent().equals(d1.getNode()))
-//            return true;
-//        else
-//            return false;
-//    }
-
-//    private boolean sameParentMoves(Action a1, Action a2) {
-//        if (!(a1 instanceof Move && a2 instanceof Move))
-//            return false;
-//        Move m1 = (Move) a1;
-//        Move m2 = (Move) a2;
-//        if (m1.getNode() == null)
-//            return false;
-//        if (m2.getNode() == null)
-//            return false;
-//        if (m1.getNode().getParent().equals(m2.getNode().getParent()))
-//            return true;
-//        else
-//            return false;
-//    }
-
-    private boolean sameValueUpdates(Action a1, Action a2) {
-        if (!(a1 instanceof Update && a2 instanceof Update))
-            return false;
-        Update u1 = (Update) a1;
-        Update u2 = (Update) a2;
-        if (u1.getValue().equals(u2.getValue()))
-            return true;
-        else
-            return false;
-    }
 
     public String getClusterLabel(Set<Action> cluster) {
         if (cluster.size() == 0)
@@ -343,7 +216,7 @@ public class MyActionClusterFinder {
         if (first instanceof Insert) {
             Insert root = null;
             for (Action a : cluster)
-                if (graph.inDegreeOf(a) == 0)
+                if (this.myAgb.graph.inDegreeOf(a) == 0)
                     root = (Insert) a;
             return root.format(src);
         } else if (first instanceof Move) {
@@ -355,7 +228,7 @@ public class MyActionClusterFinder {
         } else if (first instanceof Delete) {
             Delete root = null;
             for (Action a : cluster)
-                if (graph.inDegreeOf(a) == 0)
+                if (this.myAgb.graph.inDegreeOf(a) == 0)
                     root = (Delete) a;
             return root.format(src);
         } else
