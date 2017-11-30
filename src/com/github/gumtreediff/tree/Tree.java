@@ -27,6 +27,8 @@ import java.util.Map.Entry;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import com.github.gumtreediff.actions.model.Action;
+
 //import cn.edu.fudan.se.apiChangeExtractor.bean.JdtMethodCall;
 
 public class Tree extends AbstractTree implements ITree {
@@ -46,7 +48,8 @@ public class Tree extends AbstractTree implements ITree {
     private ASTNode astNode;
 //    private JdtMethodCall methodCall = null;
     
-    private String actionType;
+//    private String actionType;
+    private Action doAction;
     
 	public Tree(int type, String label, ASTNode n) {
         this.type = type;
@@ -226,12 +229,13 @@ public class Tree extends AbstractTree implements ITree {
             return new EmptyEntryIterator();
         return metadata.iterator();
     }
-	public String getActionType() {
-		return actionType;
+	public Action getDoAction() {
+		return doAction;
 	}
-	public void setActionType(String actionType) {
-		this.actionType = actionType;
+	public void setDoAction(Action doAction) {
+		this.doAction = doAction;
 	}
+	
    
 //    public JdtMethodCall getMethodCall() {
 //		return methodCall;

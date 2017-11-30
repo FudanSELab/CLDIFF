@@ -2,9 +2,9 @@ package edu.fdu.se.astdiff.generatingactions;
 
 public class ActionConstants {
 	
-	public static String DELETE = "DELETE";
-	public static String INSERT = "INSERT";
-	public static String UPDATE = "UPDATE";
-	public static String MOVE = "MOVE";
+	final public static String DELETE = "DELETE";
+	final public static String INSERT = "INSERT";
+	final public static String UPDATE = "UPDATE";
+	final public static String MOVE = "MOVE";
 
 }

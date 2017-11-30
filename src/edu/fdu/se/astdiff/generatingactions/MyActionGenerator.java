@@ -117,7 +117,7 @@ public class MyActionGenerator {
                 // generated ID.
                 Action ins = new Insert(item, origSrcTrees.get(parentSrc.getId()), k);
                 Tree tmp = (Tree) item;
-                tmp.setActionType(ActionConstants.INSERT);
+                tmp.setDoAction(ins);
                 myAgbData.addAction(ins, i);
                 
                 origSrcTrees.put(w.getId(), item);
@@ -133,14 +133,15 @@ public class MyActionGenerator {
                     	Update upd = new Update(origSrcTrees.get(w.getId()), item.getLabel());
                     	myAgbData.addAction(upd, i);
                         Tree tmp = (Tree) item;
-                        tmp.setActionType(ActionConstants.MOVE);
+                        tmp.setDoAction(upd);
                         w.setLabel(item.getLabel());
                     }
                     if (!parentSrc.equals(v)) {
                         int k = findPos(item);
                         Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(parentSrc.getId()), k);
                         Tree tmp = (Tree) item;
-                        tmp.setActionType("MOVE");
+//                        tmp.setActionType("MOVE");
+                        tmp.setDoAction(mv);
                         myAgbData.addAction(mv, i);
 
                         //System.out.println(mv);
@@ -163,7 +164,7 @@ public class MyActionGenerator {
             if (!newMappings.hasSrc(w)) {
             	Delete del = new Delete(origSrcTrees.get(w.getId()));
             	Tree tmp = (Tree) w;
-                tmp.setActionType("DELETE");
+            	tmp.setDoAction(del);
             	if(prev == null){
             		prev = del;
 //        			myAgbData.getSrcTreeActions().add(del);

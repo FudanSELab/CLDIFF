@@ -3,7 +3,9 @@ package edu.fdu.se.gumtree;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 public class MyTreeUtil{
 	/**
@@ -32,6 +34,19 @@ public class MyTreeUtil{
             currents.addAll(c.getChildren());
         }
         return trees;
+    }
+    
+    public static List<Action> traverseNodeGetSameEditActions(Action a){
+    	List<Action> result = new ArrayList<Action>();
+    	ITree node = a.getNode();
+    	for(ITree tmp:node.preOrder()){
+    		Tree myTree = (Tree) tmp;
+    		if(myTree.getDoAction()==null) continue;
+    		if(myTree.getDoAction().getClass().equals(a.getClass())){
+    			result.add(myTree.getDoAction());
+    		}
+    	}
+    	return result;
     }
 
 }

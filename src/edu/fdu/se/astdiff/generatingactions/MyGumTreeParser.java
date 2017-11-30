@@ -57,7 +57,7 @@ public class MyGumTreeParser extends GumTreeDiffParser{
 	public void printMyActions(List<Action> actions){
 		System.out.println(actions.size());
 		for(Action a : actions){
-			System.out.println(this.printMyOneActionString(a, 0));
+			System.out.print(this.printMyOneActionString(a, 0));
 		}
 	}
 	public String printMyOneActionString(Action a,int tabNum){

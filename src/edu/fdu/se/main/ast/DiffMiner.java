@@ -54,13 +54,14 @@ public class DiffMiner {
 		ActionGeneratorBean data = gen.generate();
 		his.printMyActions(data.getDstTreeActions());
 		his.printMyActions(data.getSrcTreeActions());
-		MyActionClusterFinder finder = new MyActionClusterFinder(his.srcTC, his.dstTC,data);
-		List<List<Action>> result = finder.clusteredActions();
-		his.printClusteredActions(result);
+//		MyActionClusterFinder finder = new MyActionClusterFinder(his.srcTC, his.dstTC,data);
+//		List<List<Action>> result = finder.clusteredActions();
+//		his.printClusteredActions(result);
 		//step 2
+		System.out.println("Begin to find Pattern:");
 		MiningActionBean bean = new MiningActionBean(data,his.srcTC,his.dstTC,his.mapping);
-//		FindPattern fp = new FindPattearn();
-//		fp.isCheckNull(result.get(0));
+		FindPattern fp = new FindPattern(bean);
+		fp.find();
 		
 	}
 	public void test(){
