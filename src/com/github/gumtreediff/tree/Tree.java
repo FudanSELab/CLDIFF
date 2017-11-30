@@ -46,6 +46,8 @@ public class Tree extends AbstractTree implements ITree {
     private ASTNode astNode;
 //    private JdtMethodCall methodCall = null;
     
+    private String actionType;
+    
 	public Tree(int type, String label, ASTNode n) {
         this.type = type;
         this.label = (label == null) ? NO_LABEL : label.intern();
@@ -65,6 +67,7 @@ public class Tree extends AbstractTree implements ITree {
     }
     public void setAstNode(ASTNode astNode){
     	this.astNode = astNode;
+    	
     }
     
     /**
@@ -223,6 +226,12 @@ public class Tree extends AbstractTree implements ITree {
             return new EmptyEntryIterator();
         return metadata.iterator();
     }
+	public String getActionType() {
+		return actionType;
+	}
+	public void setActionType(String actionType) {
+		this.actionType = actionType;
+	}
    
 //    public JdtMethodCall getMethodCall() {
 //		return methodCall;

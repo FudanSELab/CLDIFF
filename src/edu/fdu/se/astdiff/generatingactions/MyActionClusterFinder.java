@@ -17,7 +17,7 @@
  * Copyright 2017 Jean-Rémy Falleri <jr.falleri@gmail.com>
  */
 
-package edu.fdu.se.main.ast;
+package edu.fdu.se.astdiff.generatingactions;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.TreeContext;

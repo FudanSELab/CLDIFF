@@ -1,4 +1,4 @@
-package edu.fdu.se.main.ast;
+package edu.fdu.se.astdiff.generatingactions;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;

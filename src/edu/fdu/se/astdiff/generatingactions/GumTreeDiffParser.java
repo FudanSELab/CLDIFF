@@ -1,4 +1,4 @@
-package edu.fdu.se.main.ast;
+package edu.fdu.se.astdiff.generatingactions;
 
 import java.io.File;
 import java.io.IOException;

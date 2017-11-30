@@ -1,17 +1,17 @@
-package edu.fdu.se.main.ast;
+package edu.fdu.se.astdiff.miningactions;
 
 import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 public class FindPattern {
 	
 	public FindPattern(TreeContext src,TreeContext dst){
 		this.srcTC =src ;
-		
 		this.dstTC =dst;
 	}
 	
@@ -29,8 +29,14 @@ public class FindPattern {
 			ITree insNode = ins.getNode();
 			if(dstTC.getTypeLabel(insNode).equals("IfStatement")){
 				System.err.println("aaa");
+				ITree child = insNode.getChild(0);
+				if(dstTC.getTypeLabel(child).equals("InfixExpression")){
+					System.err.println("bbb");
+				}
 				for(ITree tmp:insNode.preOrder()){
-					System.out.println(dstTC.getTypeLabel(tmp));
+					Tree t = (Tree) tmp;
+//					if(t.getActionType())
+//					System.out.println(dstTC.getTypeLabel(tmp));
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-package edu.fdu.se.main.ast;
+package edu.fdu.se.astdiff.generatingactions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,19 +9,26 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Delete;
+import com.github.gumtreediff.actions.model.Insert;
+import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.actions.model.Update;
 
 public class ActionGeneratorBean {
 	
 	
-	protected List<Action> dstTreeActions;
-	protected List<Integer> dstLayerLastNodeIndex;
-	protected List<Integer> dstTreeActionIndex;
+	private List<Action> dstTreeActions;
+	private List<Integer> dstLayerLastNodeIndex;
+	private List<Integer> dstTreeActionIndex;
 	
+	private List<Action> srcTreeActions;
+	private List<Integer> srcLayerLastNodeIndex;
+	private List<Integer> srcTreeActionIndex;
 	
-	protected List<Action> srcTreeActions;
-	protected List<Integer> srcLayerLastNodeIndex;
-	protected List<Integer> srcTreeActionIndex;
-	
+	private List<Action> insertActions;
+	private List<Action> updateActions;
+	private List<Action> moveActions;
+	private List<Action> deleteActions;
 
 	public ActionGeneratorBean() {
 		super();
@@ -32,8 +39,36 @@ public class ActionGeneratorBean {
 		this.srcTreeActions = new ArrayList<Action>();
 		this.srcLayerLastNodeIndex =new ArrayList<Integer>();
 		this.srcTreeActionIndex = new ArrayList<Integer>();
+		this.insertActions = new ArrayList<Action>();
+		this.moveActions = new ArrayList<Action>();
+		this.updateActions = new ArrayList<Action>();
+		this.deleteActions = this.srcTreeActions;
+		
 		this.startNodes = new ArrayList<>();
 		this.graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+	}
+	
+	public void addAction(Action action,int actionIndex){
+		if(action instanceof Insert){
+			this.dstTreeActions.add(action);
+            this.dstTreeActionIndex.add(actionIndex);
+            this.insertActions.add(action);
+		}else if(action instanceof Update){
+        	this.dstTreeActions.add(action);
+            this.dstTreeActionIndex.add(actionIndex);
+            this.updateActions.add(action);
+		}else if(action instanceof Move){
+			this.dstTreeActions.add(action);
+            this.dstTreeActionIndex.add(actionIndex);
+            this.moveActions.add(action);
+		}else if(action instanceof Delete){
+			if(actionIndex == -1){
+				this.srcTreeActions.add(action);
+			}else{
+				this.srcTreeActionIndex.add(this.srcTreeActions.size()-1);
+				this.srcTreeActions.add(action);
+			}
+		}
 	}
 
 

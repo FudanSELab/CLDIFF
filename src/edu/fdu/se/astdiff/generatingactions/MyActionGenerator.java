@@ -18,7 +18,7 @@
  * Copyright 2011-2015 Floréal Morandat <florealm@gmail.com>
  */
 
-package edu.fdu.se.main.ast;
+package edu.fdu.se.astdiff.generatingactions;
 /**
  * generate action and cluster
  */
@@ -27,6 +27,7 @@ import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.AbstractTree;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeUtils;
 
 import edu.fdu.se.gumtree.MyTreeUtil;
@@ -82,6 +83,8 @@ public class MyActionGenerator {
 
 
     public ActionGeneratorBean myAgbData;
+    
+    
     public ActionGeneratorBean generate() {
     	myAgbData = new ActionGeneratorBean();
         ITree srcFakeRoot = new AbstractTree.FakeTree(copySrc);
@@ -96,8 +99,7 @@ public class MyActionGenerator {
         newMappings.link(srcFakeRoot, dstFakeRoot);
 
 //        List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
-        List<ITree> bfsDst = MyTreeUtil.layeredBreadthFirst(origDst, myAgbData.dstLayerLastNodeIndex);
-        
+        List<ITree> bfsDst = MyTreeUtil.layeredBreadthFirst(origDst, myAgbData.getDstLayerLastNodeIndex());
         for (int i=1;i<=bfsDst.size();i++){
         	ITree item = bfsDst.get(i-1);
             ITree w = null;
@@ -114,9 +116,10 @@ public class MyActionGenerator {
                 // furnish x instead of w and fake that x has the newly
                 // generated ID.
                 Action ins = new Insert(item, origSrcTrees.get(parentSrc.getId()), k);
-                myAgbData.dstTreeActions.add(ins);
-                myAgbData.dstTreeActionIndex.add(i);
-
+                Tree tmp = (Tree) item;
+                tmp.setActionType(ActionConstants.INSERT);
+                myAgbData.addAction(ins, i);
+                
                 origSrcTrees.put(w.getId(), item);
                 newMappings.link(w, item);
                 parentSrc.getChildren().add(k, w);
@@ -128,15 +131,18 @@ public class MyActionGenerator {
                     ITree v = w.getParent();
                     if (!w.getLabel().equals(item.getLabel())) {
                     	Update upd = new Update(origSrcTrees.get(w.getId()), item.getLabel());
-                    	myAgbData.dstTreeActions.add(upd);
-                        myAgbData.dstTreeActionIndex.add(i);
+                    	myAgbData.addAction(upd, i);
+                        Tree tmp = (Tree) item;
+                        tmp.setActionType(ActionConstants.MOVE);
                         w.setLabel(item.getLabel());
                     }
                     if (!parentSrc.equals(v)) {
                         int k = findPos(item);
                         Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(parentSrc.getId()), k);
-                        myAgbData.dstTreeActions.add(mv);
-                        myAgbData.dstTreeActionIndex.add(i);
+                        Tree tmp = (Tree) item;
+                        tmp.setActionType("MOVE");
+                        myAgbData.addAction(mv, i);
+
                         //System.out.println(mv);
                         int oldk = w.positionInParent();
                         parentSrc.getChildren().add(k, w);
@@ -153,18 +159,27 @@ public class MyActionGenerator {
         }
         Delete prev = null;
         for (ITree w : copySrc.postOrder()) {
+        	// 后顺遍历 父亲节点晚于孩子节点出现 ，出现关联之后 标记前者的index
             if (!newMappings.hasSrc(w)) {
             	Delete del = new Delete(origSrcTrees.get(w.getId()));
+            	Tree tmp = (Tree) w;
+                tmp.setActionType("DELETE");
             	if(prev == null){
             		prev = del;
+//        			myAgbData.getSrcTreeActions().add(del);
+        			myAgbData.addAction(del, -1);
             	}else{
             		if(ActionNodeRelation.isParentOf(del, prev)){
-            			myAgbData.srcTreeActionIndex.add(myAgbData.srcTreeActions.size()-1);
+//            			myAgbData.srcTreeActionIndex.add(myAgbData.srcTreeActions.size()-1);
+//            			myAgbData.srcTreeActions.add(del);
+            			myAgbData.addAction(del, 0);
             		}else if(ActionNodeRelation.isSameParent(prev, del)){
-            			myAgbData.srcTreeActionIndex.add(myAgbData.srcTreeActions.size()-1);
+//            			myAgbData.srcTreeActionIndex.add(myAgbData.srcTreeActions.size()-1);
+//            			myAgbData.srcTreeActions.add(del);
+            			myAgbData.addAction(del, 0);
             		}
             	}
-            	myAgbData.srcTreeActions.add(del);
+            	
                 //w.getParent().getChildren().remove(w);
             }
         }
@@ -201,8 +216,7 @@ public class MyActionGenerator {
                     if (!lcs.contains(new Mapping(a, b))) {
                         int k = findPos(b);
                         Action mv = new Move(origSrcTrees.get(a.getId()), origSrcTrees.get(w.getId()), k);
-                        myAgbData.dstTreeActions.add(mv);
-                        myAgbData.dstTreeActionIndex.add(nodeIndex);
+                        myAgbData.addAction(mv, nodeIndex);
                         //System.out.println(mv);
                         int oldk = a.positionInParent();
                         w.getChildren().add(k, a);
