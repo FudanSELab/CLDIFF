@@ -1,19 +1,10 @@
 package edu.fdu.se.main.ast;
 
-import java.util.List;
 
 import com.github.gumtreediff.actions.ActionUtil;
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
-import com.github.gumtreediff.actions.model.Update;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.ActionGeneratorBean;
-import edu.fdu.se.astdiff.generatingactions.MyActionClusterFinder;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
 import edu.fdu.se.astdiff.generatingactions.MyGumTreeParser;
 import edu.fdu.se.astdiff.miningactions.FindPattern;

@@ -37,7 +37,7 @@ public class FindPattern {
 	 */
 	public int matchIf(Action a, String type) {
 		String ifOrElseif = "";
-		if (AstRelations.isFatherIfStatement(a)) {
+		if (AstRelations.isFatherIfStatement(a,this.mMiningActionBean.mDstTree)) {
 			ifOrElseif = "else if";
 		} else {
 			ifOrElseif = "if";
@@ -47,7 +47,7 @@ public class FindPattern {
 		for (Action tmp : ifSubActions) {
 			this.mMiningActionBean.mActionGeneratorBean.getInsertActionMap().put(tmp, 1);
 			Insert blockIns = (Insert) tmp;
-			String str = StaticTreeContext.mDstTree.getTypeLabel(blockIns.getNode());
+			String str = this.mMiningActionBean.mDstTree.getTypeLabel(blockIns.getNode());
 			if ("Block".equals(str)) {
 				Tree tree = (Tree) blockIns.getNode();
 				List<ITree> children = tree.getChildren();
@@ -108,7 +108,7 @@ public class FindPattern {
 			children.add(it);
 		}
 		if(AstRelations.isAllChildrenNew(children)){
-			if(AstRelations.isClassCreation(subActions)){
+			if(AstRelations.isClassCreation(subActions,this.mMiningActionBean.mDstTree)){
 				summary = "insert variable declaration - class creation";
 			}else{
 				summary = "insert variable declaration";
@@ -132,7 +132,7 @@ public class FindPattern {
 			children.add(it);
 		}
 		if(AstRelations.isAllChildrenNew(children)){
-			if(AstRelations.isClassCreation(subActions)){
+			if(AstRelations.isClassCreation(subActions,this.mMiningActionBean.mDstTree)){
 				summary = "insert expression assignment - class creation";
 			}else{
 				summary = "insert expression assignment";
@@ -165,7 +165,7 @@ public class FindPattern {
 			}
 			Insert ins = (Insert) a;
 			ITree insNode = ins.getNode();
-			String type = StaticTreeContext.mDstTree.getTypeLabel(insNode);
+			String type = this.mMiningActionBean.mDstTree.getTypeLabel(insNode);
 			System.out.println(type);
 			switch (type) {
 			case StatementConstants.IFSTATEMENT:
@@ -175,7 +175,7 @@ public class FindPattern {
 				break;
 			case StatementConstants.BLOCK:
 				// Pattern 1.2 Match else
-				if (AstRelations.isFatherIfStatement(a)) {
+				if (AstRelations.isFatherIfStatement(a,this.mMiningActionBean.mDstTree)) {
 					count = this.matchElse(a);
 					insertActionCount -= count;
 				} else {
@@ -200,6 +200,9 @@ public class FindPattern {
 		}
 	}
 	public void findUpdate(){
+		int updateActionMap = this.mMiningActionBean.mActionGeneratorBean.getUpdateActionMap().size();
+		//TODO value update
+		
 		
 	}
 

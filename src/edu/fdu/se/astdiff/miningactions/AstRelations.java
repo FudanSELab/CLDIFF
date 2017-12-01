@@ -6,12 +6,13 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.TreeContext;
 
 public class AstRelations {
 	
-	public static boolean isFatherIfStatement(Action a){
+	public static boolean isFatherIfStatement(Action a,TreeContext treeContext){
 		Tree t = (Tree) a.getNode();
-		String type = StaticTreeContext.mDstTree.getTypeLabel(t.getParent());
+		String type = treeContext.getTypeLabel(t.getParent());
 		if(type.equals(StatementConstants.IFSTATEMENT)){
 			return true;
 		}
@@ -34,9 +35,9 @@ public class AstRelations {
 		return allNewChildren;
 	}
 	
-	public static boolean isClassCreation(List<Action> list){
+	public static boolean isClassCreation(List<Action> list,TreeContext treeContext){
 		for(Action a:list){
-			String str = StaticTreeContext.mDstTree.getTypeLabel(a.getNode());
+			String str = treeContext.getTypeLabel(a.getNode());
 			if(StatementConstants.CLASSINSTANCECREATION.equals(str)){
 				return true;
 			}
