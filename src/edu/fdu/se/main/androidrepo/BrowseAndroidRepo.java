@@ -41,9 +41,11 @@ public class BrowseAndroidRepo {
 	}
 	private static void walkRepoFromBackwardsAndSortOutBranches(){
 		JGitCommand cmd = new JGitCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH)+"/.git");
-		CommitVisitorDB cv = new CommitVisitorDB();
-		cmd.walkRepoBackwardDividedByBranch(cv);
+//		CommitVisitorDB cv = new CommitVisitorDB();
+//		cmd.walkRepoBackwardDividedByBranch(cv);
+		cmd.test();
 		
 	}
+	
 	
 }

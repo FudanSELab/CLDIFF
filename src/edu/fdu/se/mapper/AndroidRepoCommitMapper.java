@@ -75,4 +75,6 @@ public interface AndroidRepoCommitMapper {
 	int insertIntoBranchTable(AndroidRepoCommitWithBLOBs item);
 	
 	List<AndroidRepoCommit> selectFromBranchHeads(@Param("commitTime")Date commitTime);
+	
+	List<AndroidRepoCommit> selectAll();
 }

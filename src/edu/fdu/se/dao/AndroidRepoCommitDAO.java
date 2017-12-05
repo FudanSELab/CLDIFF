@@ -54,4 +54,7 @@ public class AndroidRepoCommitDAO {
 	public static List<AndroidRepoCommit> selectBranchHeads(Date commitTime){
 		return androidrepocommitmapper.selectFromBranchHeads(commitTime);
 	}
+	public static List<AndroidRepoCommit> selectAll(){
+		return androidrepocommitmapper.selectAll();
+	}
 }

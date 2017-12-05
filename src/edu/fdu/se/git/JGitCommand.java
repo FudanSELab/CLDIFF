@@ -24,6 +24,7 @@ import org.eclipse.jgit.api.ListTagCommand;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRefNameException;
+import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.api.errors.RefAlreadyExistsException;
 import org.eclipse.jgit.api.errors.RefNotFoundException;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -304,6 +305,20 @@ public class JGitCommand {
 		}
 
 	}
+	public void test(){
+		try {
+			int cnt= 0;
+			for(RevCommit item:this.git.log().call()){
+				System.out.println(item.getName());
+				cnt++;
+			}
+			System.out.println(cnt);
+		} catch (NoHeadException e) {
+			e.printStackTrace();
+		} catch (GitAPIException e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 *  分支的commit 信息存在本地 ，变动信息在remote
 	 */
@@ -312,20 +327,20 @@ public class JGitCommand {
 //			List<Ref> mList = this.git.branchList().setListMode( ListMode.REMOTE ).call();
 			List<Ref> mList = this.git.branchList().setListMode( ListMode.ALL ).call();
 			System.out.println(mList.size());
-			for(Ref item:mList){
-				System.out.println(item.getName());
-				RevCommit commit = revWalk.parseCommit(item.getObjectId());
-				visitor.visitBranch(commit, item.getName());
-			}
+//			for(Ref item:mList){
+//				System.out.println(item.getName());
+//				RevCommit commit = revWalk.parseCommit(item.getObjectId());
+//				visitor.visitBranch(commit, item.getName());
+//			}
 			
 		} catch (GitAPIException e) {
 			e.printStackTrace();
-		} catch (MissingObjectException e) {
-			e.printStackTrace();
-		} catch (IncorrectObjectTypeException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+//		} catch (MissingObjectException e) {
+//			e.printStackTrace();
+//		} catch (IncorrectObjectTypeException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
 		}
 		
 	}

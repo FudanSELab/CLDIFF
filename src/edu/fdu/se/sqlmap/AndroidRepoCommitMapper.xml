@@ -400,9 +400,14 @@
       )
   </insert>
   <select id="selectFromBranchHeads" resultMap="BaseResultMap">
-     	<include refid="Base_Column_List" />
+     	select <include refid="Base_Column_List" />
 		from android_repo_sdk_file_branch_head_commit
 		where commit_datetime > #{commitTime,jdbcType=TIMESTAMP}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+      select <include refid="Base_Column_List" />
+      from android_repo_sdk_file_commit
   </select>
   
      
