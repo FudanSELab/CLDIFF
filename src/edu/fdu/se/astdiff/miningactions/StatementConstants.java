@@ -14,5 +14,10 @@ public class StatementConstants {
 	
 	final public static String CLASSINSTANCECREATION= "ClassInstanceCreation";
 	
-
+	final public static String SIMPLENAME = "SimpleName";
+	
+	final public static String METHODINVOCATION = "MethodInvocation";
+	
+	final public static String VARIABLEDECLARATIONFRAGMENT = "VariableDeclarationFragment";
+	
 }

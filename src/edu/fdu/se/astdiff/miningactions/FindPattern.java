@@ -6,11 +6,13 @@ import java.util.Map;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
+import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class FindPattern {
@@ -37,7 +39,7 @@ public class FindPattern {
 	 */
 	public int matchIf(Action a, String type) {
 		String ifOrElseif = "";
-		if (AstRelations.isFatherIfStatement(a,this.mMiningActionBean.mDstTree)) {
+		if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mDstTree)) {
 			ifOrElseif = "else if";
 		} else {
 			ifOrElseif = "if";
@@ -51,9 +53,9 @@ public class FindPattern {
 			if ("Block".equals(str)) {
 				Tree tree = (Tree) blockIns.getNode();
 				List<ITree> children = tree.getChildren();
-				if(AstRelations.isAllChildrenNew(children)){
+				if (AstRelations.isAllChildrenNew(children)) {
 					summary += " clause and body";
-				}else{
+				} else {
 					summary += " clause to api calls";
 				}
 			}
@@ -67,9 +69,9 @@ public class FindPattern {
 		String summary = "";
 		Tree root = (Tree) a.getNode();
 		List<ITree> children = root.getChildren();
-		if(AstRelations.isAllChildrenNew(children)){
+		if (AstRelations.isAllChildrenNew(children)) {
 			summary = "insert else clause and body";
-		}else{
+		} else {
 			summary = "insert else clause to api calls";
 		}
 		List<Action> ifSubActions = MyTreeUtil.traverseNodeGetSameEditActions(a);
@@ -85,9 +87,9 @@ public class FindPattern {
 		List<Action> ifSubActions = MyTreeUtil.traverseNodeGetSameEditActions(a);
 		Tree root = (Tree) a.getNode();
 		List<ITree> children = root.getChildren();
-		if(AstRelations.isAllChildrenNew(children)){
+		if (AstRelations.isAllChildrenNew(children)) {
 			summary = "insert try catch clause and body";
-		}else{
+		} else {
 			summary = "insert try catch clause to api calls";
 		}
 		for (Action tmp : ifSubActions) {
@@ -96,10 +98,10 @@ public class FindPattern {
 		System.out.println(summary);
 		return ifSubActions.size();
 	}
-	
-	public int matchVariableDeclaration(Action a){
-		//variable declaration statement
-		String summary="";
+
+	public int matchVariableDeclaration(Action a) {
+		// variable declaration statement
+		String summary = "";
 		List<Action> subActions = MyTreeUtil.traverseNodeGetSameEditActions(a);
 		List<ITree> children = new ArrayList<ITree>();
 		for (Action tmp : subActions) {
@@ -107,23 +109,24 @@ public class FindPattern {
 			Tree it = (Tree) a.getNode();
 			children.add(it);
 		}
-		if(AstRelations.isAllChildrenNew(children)){
-			if(AstRelations.isClassCreation(subActions,this.mMiningActionBean.mDstTree)){
-				summary = "insert variable declaration - class creation";
-			}else{
-				summary = "insert variable declaration";
+		if (AstRelations.isAllChildrenNew(children)) {
+			if (AstRelations.isClassCreation(subActions, this.mMiningActionBean.mDstTree)) {
+				summary = "[insert] variable declaration - class creation";
+			} else {
+				summary = "[insert] variable declaration";
 			}
-			
-		}else{
+
+		} else {
 			System.err.println("Unexpected Condition 2");
 		}
-		
+
 		System.out.println(summary);
 		return subActions.size();
-		
+
 	}
-	public int matchExpression(Action a){
-		String summary="";
+
+	public int matchExpression(Action a) {
+		String summary = "";
 		List<Action> subActions = MyTreeUtil.traverseNodeGetSameEditActions(a);
 		List<ITree> children = new ArrayList<ITree>();
 		for (Action tmp : subActions) {
@@ -131,28 +134,43 @@ public class FindPattern {
 			Tree it = (Tree) a.getNode();
 			children.add(it);
 		}
-		if(AstRelations.isAllChildrenNew(children)){
-			if(AstRelations.isClassCreation(subActions,this.mMiningActionBean.mDstTree)){
+		if (AstRelations.isAllChildrenNew(children)) {
+			if (AstRelations.isClassCreation(subActions, this.mMiningActionBean.mDstTree)) {
 				summary = "insert expression assignment - class creation";
-			}else{
+			} else {
 				summary = "insert expression assignment";
 			}
-			
-		}else{
+
+		} else {
 			System.err.println("Unexpected Condition 2");
 		}
-		
+
 		System.out.println(summary);
 		return subActions.size();
 	}
-	public void find(){
+
+	public int matchSimplename(Action a) {
+		if (AstRelations.ifFatherStatementSame(a, this.mMiningActionBean.mDstTree,StatementConstants.METHODINVOCATION)) {
+			System.out.println("Method call change / parameter addition \n");
+			return 1;
+		} 
+		if (AstRelations.ifFatherStatementSame(a, this.mMiningActionBean.mDstTree,StatementConstants.VARIABLEDECLARATIONFRAGMENT)) {
+			System.err.println("Unexpected Condition 3");
+			return 1;
+		} 
+		System.err.println("Unexpected Condition 4");
+		return 1;
+
+	}
+
+	public void find() {
 		this.findInsert();
 		this.findUpdate();
 	}
 
 	// if else if else情况
 	public void findInsert() {
-		
+
 		int insertActionCount = this.mMiningActionBean.mActionGeneratorBean.getInsertActionMap().size();
 		int insertActionIndex = 0;
 		int count = 0;
@@ -166,7 +184,8 @@ public class FindPattern {
 			Insert ins = (Insert) a;
 			ITree insNode = ins.getNode();
 			String type = this.mMiningActionBean.mDstTree.getTypeLabel(insNode);
-			System.out.println(type);
+			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
+			System.out.println(nextAction);
 			switch (type) {
 			case StatementConstants.IFSTATEMENT:
 				// Pattern 1. Match If/else if
@@ -175,35 +194,44 @@ public class FindPattern {
 				break;
 			case StatementConstants.BLOCK:
 				// Pattern 1.2 Match else
-				if (AstRelations.isFatherIfStatement(a,this.mMiningActionBean.mDstTree)) {
+				if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mDstTree)) {
 					count = this.matchElse(a);
 					insertActionCount -= count;
 				} else {
 					System.err.println("Other Condition");
-					// TODO剩下的情况
+					//TODO剩下的情况
 				}
 				break;
 			case StatementConstants.TRYSTATEMENT:
 				count = matchTry(a);
-				insertActionCount -= count;
-				
+				insertActionCount -= count;break;
 			case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
 				count = this.matchVariableDeclaration(a);
-				insertActionCount -= count;
+				insertActionCount -= count;break;
 			case StatementConstants.EXPRESSIONSTATEMENT:
 				count = this.matchExpression(a);
-				insertActionCount -= count;
+				insertActionCount -= count;break;
+			case StatementConstants.SIMPLENAME:
+				count = this.matchSimplename(a);
+				insertActionCount -= count;break;
 			default:
 				break;
 			}
 
 		}
 	}
-	public void findUpdate(){
-		int updateActionMap = this.mMiningActionBean.mActionGeneratorBean.getUpdateActionMap().size();
-		//TODO value update
-		
-		
+
+	public void findUpdate() {
+		int updateActionMapSize = this.mMiningActionBean.mActionGeneratorBean.getUpdateActionMap().size();
+		int index = 0;
+		while (updateActionMapSize != index) {
+			Action a = this.mMiningActionBean.mActionGeneratorBean.getUpdateActions().get(index);
+			index++;
+			Update up = (Update) a;
+			ITree tmp = a.getNode();
+			System.out.println("[update] from" + tmp.getLabel()+" to " + up.getValue());
+		}
+
 	}
 
 }

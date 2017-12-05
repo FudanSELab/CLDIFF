@@ -19,6 +19,16 @@ public class AstRelations {
 		return false;
 	}
 	
+	public static boolean ifFatherStatementSame(Action a,TreeContext treeContext,String statementConstants){
+		Tree t = (Tree) a.getNode();
+		String type = treeContext.getTypeLabel(t.getParent());
+		
+		if(type.equals(statementConstants)){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean isAllChildrenNew(List<ITree> list){
 		boolean allNewChildren = true;
 		for(ITree a:list){
