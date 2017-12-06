@@ -20,4 +20,12 @@ public class StatementConstants {
 	
 	final public static String VARIABLEDECLARATIONFRAGMENT = "VariableDeclarationFragment";
 	
+	final public static String NUMBERLITERAL = "NumberLiteral";
+	
+	final public static String STRINGLITERAL= "StringLiteral";
+	
+	final public static String NULLLITERAL = "NullLiteral";
+	
+	final public static String INFIXEXPRESSION = "InfixExpression";
+	
 }

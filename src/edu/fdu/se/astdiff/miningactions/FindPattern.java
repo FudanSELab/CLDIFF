@@ -17,7 +17,13 @@ import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.gumtree.MyTreeUtil;
-
+/**
+ * Most of our basic work on this java class
+ * Input: 4 kinds of edit action, insert,move,update,delete
+ * Output: sort of summary of actions
+ * @author huangkaifeng
+ *
+ */
 public class FindPattern {
 
 	public FindPattern(MiningActionBean bean) {
@@ -43,6 +49,7 @@ public class FindPattern {
 		}
 		String summary = "insert " + ifOrElseif;
 		List<Action> ifSubActions = MyTreeUtil.traverseNodeGetSameEditActions(a);
+		boolean nullCheck = AstRelations.isNullCheck(a.getNode(), this.mMiningActionBean.mDstTree);
 		for (Action tmp : ifSubActions) {
 			this.mMiningActionBean.mActionGeneratorBean.getInsertActionMap().put(tmp, 1);
 			Insert blockIns = (Insert) tmp;
@@ -57,6 +64,10 @@ public class FindPattern {
 				}
 			}
 		}
+		if(nullCheck){
+			System.out.println("5.Adding a null checker."+summary);
+		}
+		
 		System.out.println(summary);
 		return ifSubActions.size();
 	}
@@ -133,7 +144,7 @@ public class FindPattern {
 		}
 		if (AstRelations.isAllChildrenNew(children)) {
 			if (AstRelations.isClassCreation(subActions, this.mMiningActionBean.mDstTree)) {
-				summary = "insert expression assignment - class creation";
+				summary = "6.Initializing an object - Insert expression assignment - class creation";
 			} else {
 				summary = "insert expression assignment";
 			}
@@ -203,7 +214,10 @@ public class FindPattern {
 		return 1;
 
 	}
-
+	/**
+	 * main 入口
+	 * 
+	 */
 	public void find() {
 		this.findInsert();
 		this.findUpdate();
@@ -212,7 +226,6 @@ public class FindPattern {
 	}
 
 	public void findInsert() {
-
 		int insertActionCount = this.mMiningActionBean.mActionGeneratorBean.getInsertActionMap().size();
 		int insertActionIndex = 0;
 		int count = 0;
@@ -257,6 +270,7 @@ public class FindPattern {
 				insertActionCount -= count;
 				break;
 			case StatementConstants.SIMPLENAME:
+//			case StatementConstants.
 				// simple name情况比较特殊 ，目前思路： 按照parent为key存储map，insert update
 				// delete 遍历操作之后再进行判断
 				count = this.matchSimplename(a);

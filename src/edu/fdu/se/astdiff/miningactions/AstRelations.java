@@ -54,4 +54,23 @@ public class AstRelations {
 		}
 		return false;
 	}
+	
+	public static boolean isNullCheck(ITree ifStatementNode,TreeContext treeContext){
+		if(ifStatementNode.getChildren().size()==2){
+			Tree c1 = (Tree)ifStatementNode.getChild(0);
+			Tree c2 = (Tree)ifStatementNode.getChild(1);
+			String type = treeContext.getTypeLabel(c2);
+			if(StatementConstants.BLOCK.equals(type)){
+				for(ITree tmp:c1.postOrder()){
+					if(StatementConstants.NULLLITERAL.equals(treeContext.getTypeLabel(tmp))){
+						return true;
+					}
+				}
+				return false;
+			}else{
+				System.err.println("Not a block Error if");
+			}
+		}
+		return false;
+	}
 }
