@@ -3,8 +3,11 @@ package edu.fdu.se.astdiff.miningactions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.tree.ITree;
@@ -23,12 +26,6 @@ public class FindPattern {
 
 	private MiningActionBean mMiningActionBean;
 
-	// ITree insNode = ins.getNode();
-	// if(dstTC.getTypeLabel(insNode).equals("IfStatement")){
-	// ITree child = insNode.getChild(0);
-	// if(dstTC.getTypeLabel(child).equals("InfixExpression")){
-	// for(ITree tmp:insNode.preOrder()){
-	//// System.out.println(dstTC.getTypeLabel(tmp));
 	/**
 	 * if 操作识别两种 一种是 原来语句包一个if 一种是直接新增if语句 if -> children update 可能 insert 可能
 	 * null 目前没有找到反例 TODO
@@ -149,15 +146,59 @@ public class FindPattern {
 		return subActions.size();
 	}
 
+	/**
+	 * type 为simple name action可以为update 可以为insert match 之后标记action为已读 ，
+	 * 放入新的list再一起处理
+	 * 
+	 * @param a
+	 * @return
+	 */
 	public int matchSimplename(Action a) {
-		if (AstRelations.ifFatherStatementSame(a, this.mMiningActionBean.mDstTree,StatementConstants.METHODINVOCATION)) {
-			System.out.println("Method call change / parameter addition \n");
-			return 1;
-		} 
-		if (AstRelations.ifFatherStatementSame(a, this.mMiningActionBean.mDstTree,StatementConstants.VARIABLEDECLARATIONFRAGMENT)) {
+//		if (AstRelations.ifFatherStatementSame(a, this.mMiningActionBean.mDstTree,
+//		StatementConstants.VARIABLEDECLARATIONFRAGMENT)) {
+//	System.err.println("Unexpected Condition 3");
+//	return 1;
+//}
+		if (AstRelations.ifFatherStatementSame(a, this.mMiningActionBean.mDstTree,
+				StatementConstants.METHODINVOCATION)) {
+			ITree tree = a.getNode();
+			int pos = tree.getParent().getChildPosition(tree);
+			if(pos ==1){
+				System.out.println("2.Calling another method with the same parameters");
+				return 1;
+			}else if(pos ==0){
+				System.out.println("X.Change variable");
+				return 1;
+			}
+			List<Action> list = MyTreeUtil.traverseNodeChildrenGetSameEditAction(a);
+			for (Action item : list) {
+				if (item instanceof Insert) {
+					this.mMiningActionBean.mActionGeneratorBean.getInsertActionMap().put(item, 1);
+					if (this.mMiningActionBean.mMapping.getSrc(tree.getParent()) != null) {
+						 ITree srcParent = this.mMiningActionBean.mMapping.getSrc(tree.getParent());
+						 this.mMiningActionBean.addMethodInvocationAction(srcParent,item);
+					} else{
+						System.err.println("ERerererR");
+					}
+				} else if (item instanceof Update) {
+					this.mMiningActionBean.mActionGeneratorBean.getUpdateActionMap().put(item, 1);
+					this.mMiningActionBean.addMethodInvocationAction(item.getNode().getParent(), item);
+				} else if (item instanceof Delete) {
+					this.mMiningActionBean.mActionGeneratorBean.getDeleteActionMap().put(item, 1);
+					this.mMiningActionBean.addMethodInvocationAction(item.getNode().getParent(), item);
+				} else {
+					System.err.println("Unexpected Condition 5");
+				}
+
+			}
+			return list.size();
+		}
+		if (AstRelations.ifFatherStatementSame(a, this.mMiningActionBean.mDstTree,
+				StatementConstants.VARIABLEDECLARATIONFRAGMENT)) {
 			System.err.println("Unexpected Condition 3");
 			return 1;
-		} 
+		}
+
 		System.err.println("Unexpected Condition 4");
 		return 1;
 
@@ -166,9 +207,10 @@ public class FindPattern {
 	public void find() {
 		this.findInsert();
 		this.findUpdate();
+		this.findDelete();
+		this.findMethodInvocationChange();
 	}
 
-	// if else if else情况
 	public void findInsert() {
 
 		int insertActionCount = this.mMiningActionBean.mActionGeneratorBean.getInsertActionMap().size();
@@ -199,21 +241,27 @@ public class FindPattern {
 					insertActionCount -= count;
 				} else {
 					System.err.println("Other Condition");
-					//TODO剩下的情况
+					// TODO剩下的情况
 				}
 				break;
 			case StatementConstants.TRYSTATEMENT:
 				count = matchTry(a);
-				insertActionCount -= count;break;
+				insertActionCount -= count;
+				break;
 			case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
 				count = this.matchVariableDeclaration(a);
-				insertActionCount -= count;break;
+				insertActionCount -= count;
+				break;
 			case StatementConstants.EXPRESSIONSTATEMENT:
 				count = this.matchExpression(a);
-				insertActionCount -= count;break;
+				insertActionCount -= count;
+				break;
 			case StatementConstants.SIMPLENAME:
+				// simple name情况比较特殊 ，目前思路： 按照parent为key存储map，insert update
+				// delete 遍历操作之后再进行判断
 				count = this.matchSimplename(a);
-				insertActionCount -= count;break;
+				insertActionCount -= count;
+				break;
 			default:
 				break;
 			}
@@ -222,16 +270,80 @@ public class FindPattern {
 	}
 
 	public void findUpdate() {
-		int updateActionMapSize = this.mMiningActionBean.mActionGeneratorBean.getUpdateActionMap().size();
+		int updateActionCount = this.mMiningActionBean.mActionGeneratorBean.getUpdateActionMap().size();
 		int index = 0;
-		while (updateActionMapSize != index) {
+		int count = 0;
+		while (updateActionCount != 0) {
 			Action a = this.mMiningActionBean.mActionGeneratorBean.getUpdateActions().get(index);
+			if (this.mMiningActionBean.mActionGeneratorBean.getUpdateActionMap().get(a) == 1) {
+				// 标记过的 update action
+				continue;
+			}
 			index++;
 			Update up = (Update) a;
 			ITree tmp = a.getNode();
-			System.out.println("[update] from" + tmp.getLabel()+" to " + up.getValue());
+			String type = this.mMiningActionBean.mDstTree.getTypeLabel(tmp);
+			System.out.println(type);
+			switch (type) {
+			case StatementConstants.SIMPLENAME:
+				count = this.matchSimplename(a);
+				updateActionCount -= count;
+				break;
+			default:
+				break;
+			}
 		}
 
+	}
+	
+	public void findDelete(){
+		int deleteActionCount = this.mMiningActionBean.mActionGeneratorBean.getDeleteActionMap().size();
+		int index = 0;
+		int count = 0;
+		while (deleteActionCount != 0) {
+			Action a = this.mMiningActionBean.mActionGeneratorBean.getDeleteActions().get(index);
+			if (this.mMiningActionBean.mActionGeneratorBean.getDeleteActionMap().get(a) == 1) {
+				continue;
+			}
+			index++;
+			Delete del = (Delete) a;
+			ITree tmp = a.getNode();
+			String type = this.mMiningActionBean.mDstTree.getTypeLabel(tmp);
+			System.out.println(type);
+			switch (type) {
+			case StatementConstants.SIMPLENAME:
+				count = this.matchSimplename(a);
+				deleteActionCount -= count;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	public void findMethodInvocationChange(){
+		for(Entry<ITree,List<Action>> item : this.mMiningActionBean.methodInvocationList.entrySet()){
+			Tree srcParentNode = (Tree) item.getKey();
+			Tree dstParentNode = (Tree) this.mMiningActionBean.mMapping.getDst(srcParentNode);
+			List<Action> mList = item.getValue();
+			Set<String> mSet = this.mMiningActionBean.methodInvocationActionList.get(item.getKey());
+			int lenSrc = srcParentNode.getChildren().size();
+			int lenDst = dstParentNode.getChildren().size();
+			if(lenSrc > lenDst){
+				if(mSet.contains(ActionConstants.UPDATE)){
+					System.out.println("1.Altering method parameters -Delete&update parameter");
+				}else{
+					System.out.println("1.Altering method parameters - Delete parameter");
+				}
+			}else if(lenSrc < lenDst){
+				if(mSet.contains(ActionConstants.UPDATE)){
+					System.out.println("1.Altering method parameters - Add&update parameter");
+				}else{
+					System.out.println("1.Atering method parameters - Add parameter / 3.Calling another overloaded method with one more parameter");
+				}
+			}else {
+				System.out.println("1.Altering method parameters - Update parameter");
+			}
+		}
 	}
 
 }

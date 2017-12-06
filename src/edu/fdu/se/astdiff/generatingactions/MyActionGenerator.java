@@ -101,46 +101,52 @@ public class MyActionGenerator {
 //        List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
         List<ITree> bfsDst = MyTreeUtil.layeredBreadthFirst(origDst, myAgbData.getDstLayerLastNodeIndex());
         for (int i=1;i<=bfsDst.size();i++){
-        	ITree item = bfsDst.get(i-1);
+        	ITree dstItem = bfsDst.get(i-1);
             ITree w = null;
-            ITree parentDst = item.getParent();
+            ITree parentDst = dstItem.getParent();
             ITree parentSrc = newMappings.getSrc(parentDst);
 
-            if (!newMappings.hasDst(item)) {
+            if (!newMappings.hasDst(dstItem)) {
             	//item is not in src
-                int k = findPos(item);
+                int k = findPos(dstItem);
                 // Insertion case : insert new node.
                 w = new AbstractTree.FakeTree();
                 w.setId(newId());
                 // In order to use the real nodes from the second tree, we
                 // furnish x instead of w and fake that x has the newly
                 // generated ID.
-                Action ins = new Insert(item, origSrcTrees.get(parentSrc.getId()), k);
-                Tree tmp = (Tree) item;
+                // insert增加过程中，tree也在更新，mapping也在更新
+                Action ins = new Insert(dstItem, origSrcTrees.get(parentSrc.getId()), k);
+                Tree tmp = (Tree) dstItem;
                 tmp.setDoAction(ins);
                 myAgbData.addAction(ins, i);
                 
-                origSrcTrees.put(w.getId(), item);
-                newMappings.link(w, item);
+                origSrcTrees.put(w.getId(), dstItem);
+                newMappings.link(w, dstItem);
                 parentSrc.getChildren().add(k, w);
                 w.setParent(parentSrc);
             } else {
             	//in 
-                w = newMappings.getSrc(item);
-                if (!item.equals(origDst)) { // TODO => x != origDst // Case of the root
+            	// 有mapping
+                w = newMappings.getSrc(dstItem);
+                if (!dstItem.equals(origDst)) { // TODO => x != origDst // Case of the root
                     ITree v = w.getParent();
-                    if (!w.getLabel().equals(item.getLabel())) {
-                    	Update upd = new Update(origSrcTrees.get(w.getId()), item.getLabel());
+                    if (!w.getLabel().equals(dstItem.getLabel())) {
+                    	Update upd = new Update(origSrcTrees.get(w.getId()), dstItem.getLabel());
                     	myAgbData.addAction(upd, i);
-                        Tree tmp = (Tree) item;
+                        Tree tmp = (Tree) dstItem;
                         tmp.setDoAction(upd);
-                        w.setLabel(item.getLabel());
+                        // 设置 src dst 节点都有action引用
+                        ITree srcNode = origSrcTrees.get(w.getId());
+                        Tree srcTree = (Tree) srcNode;
+                        srcTree.setDoAction(upd);
+                        
+                        w.setLabel(dstItem.getLabel());
                     }
                     if (!parentSrc.equals(v)) {
-                        int k = findPos(item);
+                        int k = findPos(dstItem);
                         Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(parentSrc.getId()), k);
-                        Tree tmp = (Tree) item;
-//                        tmp.setActionType("MOVE");
+                        Tree tmp = (Tree) dstItem;
                         tmp.setDoAction(mv);
                         myAgbData.addAction(mv, i);
 
@@ -155,28 +161,23 @@ public class MyActionGenerator {
 
             //FIXME not sure why :D
             srcInOrder.add(w);
-            dstInOrder.add(item);
-            alignChildren(w, item,i);
+            dstInOrder.add(dstItem);
+            alignChildren(w, dstItem,i);
         }
         Delete prev = null;
         for (ITree w : copySrc.postOrder()) {
         	// 后顺遍历 父亲节点晚于孩子节点出现 ，出现关联之后 标记前者的index
             if (!newMappings.hasSrc(w)) {
             	Delete del = new Delete(origSrcTrees.get(w.getId()));
-            	Tree tmp = (Tree) w;
+            	Tree tmp = (Tree) origSrcTrees.get(w.getId());
             	tmp.setDoAction(del);
             	if(prev == null){
             		prev = del;
-//        			myAgbData.getSrcTreeActions().add(del);
         			myAgbData.addAction(del, -1);
             	}else{
             		if(ActionNodeRelation.isParentOf(del, prev)){
-//            			myAgbData.srcTreeActionIndex.add(myAgbData.srcTreeActions.size()-1);
-//            			myAgbData.srcTreeActions.add(del);
             			myAgbData.addAction(del, 0);
             		}else if(ActionNodeRelation.isSameParent(prev, del)){
-//            			myAgbData.srcTreeActionIndex.add(myAgbData.srcTreeActions.size()-1);
-//            			myAgbData.srcTreeActions.add(del);
             			myAgbData.addAction(del, 0);
             		}
             	}

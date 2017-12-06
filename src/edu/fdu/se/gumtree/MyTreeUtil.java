@@ -48,5 +48,21 @@ public class MyTreeUtil{
     	}
     	return result;
     }
+    
+    public static List<Action> traverseNodeChildrenGetSameEditAction(Action a){
+    	List<Action> result = new ArrayList<Action>();
+    	ITree node  = a.getNode();
+    	ITree parent = node.getParent();
+    	int pos = parent.getChildPosition(node);
+    	if(pos <= 1) return result;
+    	for(int i=pos;i<parent.getChildren().size();i++){
+    		Tree myTree = (Tree) parent.getChildren().get(i);
+    		if(myTree.getDoAction()==null) continue;
+    		if(myTree.getDoAction().getClass().equals(a.getClass())){
+    			result.add(myTree.getDoAction());
+    		}
+    	}
+    	return result;
+    }
 
 }

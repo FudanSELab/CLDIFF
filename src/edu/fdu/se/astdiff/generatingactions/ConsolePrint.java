@@ -35,20 +35,12 @@ public class ConsolePrint {
 			Insert insert = (Insert)a;
 			ITree insertNode = insert.getNode();
 			sb.append(prettyString(dstTC,insertNode)+" to "+prettyString(dstTC,insertNode.getParent())+" at "+ insert.getPosition()+"\n");
-//			sb.append(insert.toString()+"\n");
-//			sb.append("Insert.getParent(Old Tree):\n");
-//			sb.append(prettyString(dstTC, insert.getParent())+"\n");//old
 		}
 		if(a instanceof Move){
 			sb.append(tabStr+"Move > ");
 			Move move = (Move)a;
 			ITree moveNode = move.getNode();
 			sb.append(prettyString(dstTC,moveNode)+" to "+prettyString(dstTC,move.getParent())+" at "+ move.getPosition()+"\n");//old
-//			sb.append(move.toString()+"\n");
-//			sb.append(move.getParent()==move.getNode().getParent());
-
-//			sb.append("\n------------Move.getParent(New Tree)-------------\n");
-//			sb.append(prettyString(dstTC, move.getParent())+"\n");//new
 		}
 		if(a instanceof Update){
 			sb.append(tabStr+"Update > ");
@@ -56,10 +48,6 @@ public class ConsolePrint {
 			ITree updateNode = update.getNode();
 			sb.append("from "+updateNode.getLabel()+" to "+update.getValue()+"\n");//old
 		}
-//		sb.append(prettyString(dstTC, a.getNode())+"\n");
-//		sb.append(toTreeString(dstTC, a.getNode()));
-//		sb.append(prettyString(dstTC, a.getNode().getParent())+"\n");//move-old,update-old,insert-new,delete-old
-//		sb.append(toTreeString(dstTC, a.getNode().getParent()));
 		return sb.toString();
 	}
 	
