@@ -19,6 +19,7 @@ public class FileWriter {
 		try {
 			FileOutputStream fos = new FileOutputStream(filePath);
 			fos.write(content.getBytes());
+			fos.flush();
 			fos.close();
 		} catch (IOException e) {
 			e.printStackTrace();

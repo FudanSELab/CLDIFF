@@ -26,6 +26,7 @@ public class DiffMiner {
 		diff.init();
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",diff.getPrettyOldTreeString());
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",diff.getPrettyNewTreeString());
+		System.out.println(diff.getPrettyNewTreeString());
 		System.out.println("----------------------Actions----------------------------------");
 		diff.printActions(diff.getActions());
 		TreeContext temp = ActionUtil.apply(diff.srcTC, diff.getActions());
@@ -67,5 +68,6 @@ public class DiffMiner {
 		DiffMiner i = new DiffMiner();
 		i.userGTIntermediate();
 	}
+	
 
 }

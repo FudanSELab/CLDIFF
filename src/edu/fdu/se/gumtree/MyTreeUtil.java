@@ -35,7 +35,11 @@ public class MyTreeUtil{
         }
         return trees;
     }
-    
+    /**
+     * a的所有直接非直接孩子，并且标记同样的action操作
+     * @param a
+     * @return
+     */
     public static List<Action> traverseNodeGetSameEditActions(Action a){
     	List<Action> result = new ArrayList<Action>();
     	ITree node = a.getNode();
@@ -48,7 +52,11 @@ public class MyTreeUtil{
     	}
     	return result;
     }
-    
+    /**
+     * a的直接孩子，而且是标记同样action操作
+     * @param a
+     * @return
+     */
     public static List<Action> traverseNodeChildrenGetSameEditAction(Action a){
     	List<Action> result = new ArrayList<Action>();
     	ITree node  = a.getNode();
@@ -64,5 +72,22 @@ public class MyTreeUtil{
     	}
     	return result;
     }
-
+    
+    public static boolean traverseAllChilrenCheckIfSameAction(Action a,List<Action> result){
+    	if(result == null){
+    		System.err.println("ERR");
+    	}
+    	ITree node = a.getNode();
+    	boolean isAllSameAction = true;
+    	for(ITree tmp:node.preOrder()){
+    		Tree myTree = (Tree) tmp;
+    		if(myTree.getDoAction()==null) continue;
+    		if(myTree.getDoAction().getClass().equals(a.getClass())){
+    			result.add(myTree.getDoAction());
+    		}else{
+    			isAllSameAction = false;
+    		}
+    	}
+    	return isAllSameAction;
+    }
 }
