@@ -84,9 +84,9 @@ public class AstRelations {
 	 * 
 	 * @param node
 	 * @param treeContext
-	 * @return
+	 * @return 返回fafafather
 	 */
-	public static String findChildBelongsToWhichKindsOfStatement(ITree node, TreeContext treeContext) {
+	public static ITree findChildBelongsToWhichKindsOfStatement(ITree node, TreeContext treeContext) {
 		// if statement
 		String type = null;
 		ITree curNode = node;
@@ -104,6 +104,6 @@ public class AstRelations {
 			}
 		}
 		
-		return returnType;
+		return curNode;
 	}
 }
