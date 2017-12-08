@@ -81,12 +81,12 @@ public class AstRelations {
 
 	/**
 	 * simplename 或者是literal 往前推属于哪个statement
-	 * 
+	 * XXXStatement MethodDelclaration
 	 * @param node
 	 * @param treeContext
 	 * @return 返回fafafather
 	 */
-	public static ITree findChildBelongsToWhichKindsOfStatement(ITree node, TreeContext treeContext) {
+	public static ITree findFafafatherNode(ITree node, TreeContext treeContext) {
 		// if statement
 		String type = null;
 		ITree curNode = node;
@@ -106,4 +106,5 @@ public class AstRelations {
 		
 		return curNode;
 	}
+
 }

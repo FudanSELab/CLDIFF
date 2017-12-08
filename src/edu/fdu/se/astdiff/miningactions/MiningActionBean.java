@@ -26,7 +26,7 @@ public class MiningActionBean {
 		this.mActionGeneratorBean.generateActionMap();
 		this.mDstTree = dst;
 		this.mSrcTree = src;
-		this.methodInvocationList = new HashMap<ITree, List<Action>>();
+		this.methodInvocationMap = new HashMap<ITree, List<Action>>();
 		this.methodInvocationActionList = new HashMap<ITree, Set<String>>();
 	}
 
@@ -36,30 +36,23 @@ public class MiningActionBean {
 	public TreeContext mDstTree;
 	public TreeContext mSrcTree;
 
-	public Map<ITree, List<Action>> methodInvocationList;
+	public Map<ITree, List<Action>> methodInvocationMap;
 	public Map<ITree, Set<String>> methodInvocationActionList;
 
+	public Map<ITree, List<Action>> methodSignatureMap;
+	public Map<ITree, Set<String>> methodSignatureAcionList;
+
 	public void addMethodInvocationAction(ITree parent, Action a) {
-		if (this.methodInvocationList.containsKey(parent)) {
-			List<Action> mList = this.methodInvocationList.get(parent);
+		if (this.methodInvocationMap.containsKey(parent)) {
+			List<Action> mList = this.methodInvocationMap.get(parent);
 			mList.add(a);
 
 		} else {
 			List<Action> mList = new ArrayList<Action>();
 			mList.add(a);
-			this.methodInvocationList.put(parent, mList);
+			this.methodInvocationMap.put(parent, mList);
 		}
-		String type = null;
-		if (a instanceof Insert) {
-			type = ActionConstants.INSERT;
-		} else if (a instanceof Update) {
-			type = ActionConstants.UPDATE;
-		} else if (a instanceof Delete) {
-			type = ActionConstants.DELETE;
-		} else {
-			System.err.println("Upexpected Condition 6");
-			return;
-		}
+		String type = ActionConstants.getInstanceStringName(a);
 		if (this.methodInvocationActionList.containsKey(parent)) {
 			Set<String> mSet = this.methodInvocationActionList.get(parent);
 			mSet.add(type);
@@ -67,6 +60,58 @@ public class MiningActionBean {
 			Set<String> mSet = new HashSet<String>();
 			mSet.add(type);
 			this.methodInvocationActionList.put(parent, mSet);
+		}
+	}
+
+	public void addMethodSignatureAction(ITree fafafather, Action a) {
+		if (this.methodSignatureMap.containsKey(fafafather)) {
+			List<Action> mList = this.methodSignatureMap.get(fafafather);
+			mList.add(a);
+		} else {
+			List<Action> mList = new ArrayList<Action>();
+			mList.add(a);
+			this.methodSignatureMap.put(fafafather, mList);
+		}
+		String type = ActionConstants.getInstanceStringName(a);
+		if (this.methodSignatureAcionList.containsKey(fafafather)) {
+			Set<String> mSet = this.methodSignatureAcionList.get(fafafather);
+			mSet.add(type);
+		} else {
+			Set<String> mSet = new HashSet<String>();
+			mSet.add(type);
+			this.methodSignatureAcionList.put(fafafather, mSet);
+		}
+	}
+
+	public void addMethodSignatureAction(ITree fafafather, List<Action> mActionList) {
+		for (Action a : mActionList) {
+			if (this.methodSignatureMap.containsKey(fafafather)) {
+				List<Action> mList = this.methodSignatureMap.get(fafafather);
+				mList.add(a);
+			} else {
+				List<Action> mList = new ArrayList<Action>();
+				mList.add(a);
+				this.methodSignatureMap.put(fafafather, mList);
+			}
+			String type = ActionConstants.getInstanceStringName(a);
+			if (this.methodSignatureAcionList.containsKey(fafafather)) {
+				Set<String> mSet = this.methodSignatureAcionList.get(fafafather);
+				mSet.add(type);
+			} else {
+				Set<String> mSet = new HashSet<String>();
+				mSet.add(type);
+				this.methodSignatureAcionList.put(fafafather, mSet);
+			}
+		}
+	}
+	
+	public void setActionTraversedMap(List<Action> mList){
+		for(Action tmp:mList){
+			if(tmp instanceof Insert){
+				
+			}else if(tmp instanceof Update){
+				
+			}else if(tmp instanceof )
 		}
 	}
 

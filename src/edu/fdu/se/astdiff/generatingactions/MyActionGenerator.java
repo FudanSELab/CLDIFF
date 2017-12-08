@@ -134,8 +134,8 @@ public class MyActionGenerator {
                     if (!w.getLabel().equals(dstItem.getLabel())) {
                     	Update upd = new Update(origSrcTrees.get(w.getId()), dstItem.getLabel());
                     	myAgbData.addAction(upd, i);
-                        Tree tmp = (Tree) dstItem;
-                        tmp.setDoAction(upd);
+//                        Tree tmp = (Tree) dstItem;
+//                        tmp.setDoAction(upd);
                         // 设置 src dst 节点都有action引用
                         ITree srcNode = origSrcTrees.get(w.getId());
                         Tree srcTree = (Tree) srcNode;

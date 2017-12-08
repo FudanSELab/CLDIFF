@@ -23,35 +23,35 @@ public class ConsolePrint {
 		return res;
 	}
 
-	public static String printMyOneActionString(Action a, int tabNum, TreeContext dstTC) {
+	public static String printMyOneActionString(Action a, int tabNum, TreeContext treeContext) {
 		StringBuilder sb = new StringBuilder();
 		String tabStr = tabs(tabNum);
 		if (a instanceof Delete) {
 			sb.append(tabStr + "Delete > ");
 			Delete delete = (Delete) a;
 			ITree deleteNode = delete.getNode();
-			sb.append(prettyString(dstTC, deleteNode) + " from " + prettyString(dstTC, deleteNode.getParent()) + "\n");
+			sb.append(prettyString(treeContext, deleteNode) + " from " + prettyString(treeContext, deleteNode.getParent()) + "\n");
 //			sb.append(delete.toString() + "\n");
 		}
 		if (a instanceof Insert) {
 			sb.append(tabStr + "Insert > ");
 			Insert insert = (Insert) a;
 			ITree insertNode = insert.getNode();
-			sb.append(prettyString(dstTC, insertNode) + " to " + prettyString(dstTC, insertNode.getParent()) + " at "
+			sb.append(prettyString(treeContext, insertNode) + " to " + prettyString(treeContext, insertNode.getParent()) + " at "
 					+ insert.getPosition() + "\n");
 		}
 		if (a instanceof Move) {
 			sb.append(tabStr + "Move > ");
 			Move move = (Move) a;
 			ITree moveNode = move.getNode();
-			sb.append(prettyString(dstTC, moveNode) + " to " + prettyString(dstTC, move.getParent()) + " at "
+			sb.append(prettyString(treeContext, moveNode) + " to " + prettyString(treeContext, move.getParent()) + " at "
 					+ move.getPosition() + "\n");// old
 		}
 		if (a instanceof Update) {
 			sb.append(tabStr + "Update > ");
 			Update update = (Update) a;
 			ITree updateNode = update.getNode();
-			sb.append(prettyString(dstTC, updateNode) + "from " + updateNode.getLabel() + " to " + update.getValue()
+			sb.append(prettyString(treeContext, updateNode) + "from " + updateNode.getLabel() + " to " + update.getValue()
 					+ "\n");// old
 		}
 		return sb.toString();

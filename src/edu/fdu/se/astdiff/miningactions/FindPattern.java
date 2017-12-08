@@ -32,34 +32,31 @@ public class FindPattern {
 	}
 
 	private MiningActionBean mMiningActionBean;
-	
-	
+
 	/**
-	 * level III
-	 * insert 操作中的新增方法
+	 * level III insert 操作中的新增方法
+	 * 
 	 * @param a
 	 * @return
 	 */
-	public int matchNewMethod(Action a){
-		List<Action> actions =new ArrayList<Action>();
+	public int matchNewMethod(Action a) {
+		List<Action> actions = new ArrayList<Action>();
 		boolean flag = MyTreeUtil.traverseAllChilrenCheckIfSameAction(a, actions);
-		if(flag){
+		if (flag) {
 			System.out.println("New method");
-		}else{
+		} else {
 			System.out.println("What? New Method?");
 		}
 		for (Action tmp : actions) {
 			this.mMiningActionBean.mActionGeneratorBean.getInsertActionMap().put(tmp, 1);
 		}
 		return actions.size();
-		
+
 	}
 
 	/**
-	 * level III
-	 * if 操作识别两种 一种是 原来语句包一个if 一种是直接新增if语句 if -> children update 可能 insert 可能
-	 * 新增if/else if + body是否也是新 2*2 = 4种情况 
-	 * null 目前没有找到反例 TODO
+	 * level III if 操作识别两种 一种是 原来语句包一个if 一种是直接新增if语句 if -> children update 可能
+	 * insert 可能 新增if/else if + body是否也是新 2*2 = 4种情况 null 目前没有找到反例
 	 * 
 	 * @param a
 	 * @param type
@@ -73,28 +70,30 @@ public class FindPattern {
 			ifOrElseif = "if";
 		}
 		String summary = "insert " + ifOrElseif;
-//		List<Action> ifSubActions = MyTreeUtil.traverseNodeGetSameEditActions(a);
+		// List<Action> ifSubActions =
+		// MyTreeUtil.traverseNodeGetSameEditActions(a);
 		List<Action> ifSubActions = new ArrayList<Action>();
 		boolean flag = MyTreeUtil.traverseAllChilrenCheckIfSameAction(a, ifSubActions);
 		boolean nullCheck = AstRelations.isNullCheck(a.getNode(), this.mMiningActionBean.mDstTree);
 		for (Action tmp : ifSubActions) {
 			this.mMiningActionBean.mActionGeneratorBean.getInsertActionMap().put(tmp, 1);
-//			Insert blockIns = (Insert) tmp;
-//			String str = this.mMiningActionBean.mDstTree.getTypeLabel(blockIns.getNode());
-//			if (StatementConstants.BLOCK.equals(str)) {
-//				System.out.println("adsad block");
-//				Tree tree = (Tree) blockIns.getNode();
-//				List<ITree> children = tree.getChildren();
-//				if (AstRelations.isAllChildrenNew(children)) {
-//					summary += " clause and body";
-//				} else {
-//					summary += " clause to api calls";
-//				}
-//			}
+			// Insert blockIns = (Insert) tmp;
+			// String str =
+			// this.mMiningActionBean.mDstTree.getTypeLabel(blockIns.getNode());
+			// if (StatementConstants.BLOCK.equals(str)) {
+			// System.out.println("adsad block");
+			// Tree tree = (Tree) blockIns.getNode();
+			// List<ITree> children = tree.getChildren();
+			// if (AstRelations.isAllChildrenNew(children)) {
+			// summary += " clause and body";
+			// } else {
+			// summary += " clause to api calls";
+			// }
+			// }
 		}
-		if(flag){
+		if (flag) {
 			summary += " clause and body";
-		}else{
+		} else {
 			summary += " clause to api calls";
 		}
 		if (nullCheck) {
@@ -104,8 +103,10 @@ public class FindPattern {
 		System.out.println(summary);
 		return ifSubActions.size();
 	}
+
 	/**
 	 * level III
+	 * 
 	 * @param a
 	 * @return
 	 */
@@ -126,8 +127,10 @@ public class FindPattern {
 		System.out.println(summary);
 		return ifSubActions.size();
 	}
+
 	/**
 	 * level III
+	 * 
 	 * @param a
 	 * @return
 	 */
@@ -147,8 +150,10 @@ public class FindPattern {
 		System.out.println(summary);
 		return ifSubActions.size();
 	}
+
 	/**
 	 * level III
+	 * 
 	 * @param a
 	 * @return
 	 */
@@ -177,8 +182,10 @@ public class FindPattern {
 		return subActions.size();
 
 	}
+
 	/**
 	 * level III
+	 * 
 	 * @param a
 	 * @return
 	 */
@@ -205,39 +212,46 @@ public class FindPattern {
 		System.out.println(summary);
 		return subActions.size();
 	}
+
 	/**
 	 * level IV type simplename 父父父亲节点为method declaration
+	 * 
 	 * @param a
 	 * @param treeContext
 	 * @return
 	 */
-	public int matchMethodDeclaration(Action a,TreeContext treeContext){
-		//TODO
+	public int matchMethodDeclaration(Action a, TreeContext treeContext) {
+		// TODO
 		System.err.println("Method declaration - not considered");
-//		if(StatementConstants.METHODDECLARATION.equals(AstRelations.fatherStatement(a, treeContext))){
-//		}
-		
+		// if(StatementConstants.METHODDECLARATION.equals(AstRelations.fatherStatement(a,
+		// treeContext))){
+		// }
+
 		return 0;
 	}
+
 	/**
-	 * level IV
+	 * level IV For EnchancedFor
+	 * 
 	 * @param a
 	 * @param treeContext
 	 * @return
 	 */
-	public int matchForPredicate(Action a,TreeContext treeContext){
-		//TODO
+	public int matchForPredicate(Action a, TreeContext treeContext) {
+		// TODO
 		return 0;
 	}
+
 	/**
 	 * level IV 因为往上找如果是if body那么匹配不是if statement 所以这部分应该就是predicate
+	 * 
 	 * @param a
 	 * @param treeContext
 	 * @return
 	 */
-	public int matchIfPredicate(Action a,TreeContext treeContext,ITree fafafatherNode){
-		//fafafatherNode是if 那么 第一个孩子是if里的内容
-		List<Action> list = MyTreeUtil.traverseNodeGetSameEditActions(a,fafafatherNode.getChild(0));
+	public int matchIfPredicate(Action a, TreeContext treeContext, ITree fafafatherNode) {
+		// fafafatherNode是if 那么 第一个孩子是if里的内容
+		List<Action> list = MyTreeUtil.traverseNodeGetSameEditActions(a, fafafatherNode.getChild(0));
 		for (Action item : list) {
 			if (item instanceof Insert) {
 				this.mMiningActionBean.mActionGeneratorBean.getInsertActionMap().put(item, 1);
@@ -260,13 +274,15 @@ public class FindPattern {
 		}
 		return list.size();
 	}
+
 	/**
 	 * level IV
+	 * 
 	 * @param a
 	 * @param treeContext
 	 * @return
 	 */
-	public int matchExpressionStatementAndVariableDeclarationStatement(Action a,TreeContext treeContext){
+	public int matchExpressionStatementAndVariableDeclarationStatement(Action a, TreeContext treeContext) {
 		if (AstRelations.ifFatherStatementSame(a, treeContext, StatementConstants.METHODINVOCATION)) {
 			ITree tree = a.getNode();
 			int pos = tree.getParent().getChildPosition(tree);
@@ -300,30 +316,29 @@ public class FindPattern {
 			}
 			return list.size();
 		} else {
-			System.err.println("直接亲属不是method invocation："+AstRelations.fatherStatement(a, treeContext));
+			System.err.println("直接亲属不是method invocation：" + AstRelations.fatherStatement(a, treeContext));
 			return 0;
 		}
 	}
 
 	/**
-	 * Sub sub level-III
-	 * 访问到simple name节点或者literal 节点分两种情况，一种是father 为ifStatement
-	 * 另一种是father不是ifstatement type 为simple name action可以为update 可以为insert match
-	 * 之后标记action为已读 ， 目前思路： 按照parent为key存储map，insert update delete 遍历操作之后再进行判断
-	 * 放入新的list再一起处理
+	 * Sub sub level-III 访问到simple name节点或者literal 节点分两种情况，一种是father
+	 * 为ifStatement 另一种是father不是ifstatement type 为simple name action可以为update
+	 * 可以为insert match 之后标记action为已读 ， 目前思路： 按照parent为key存储map，insert update
+	 * delete 遍历操作之后再进行判断 放入新的list再一起处理
 	 * 
 	 * @param a
 	 * @return
 	 */
 	public int matchSimplenameOrLiteral(Action a, TreeContext curContext) {
 		// if predicate
-		ITree fafafatherNode = AstRelations.findChildBelongsToWhichKindsOfStatement(a.getNode(), curContext);
+		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), curContext);
 		String fafafatherType = curContext.getTypeLabel(fafafatherNode);
 		int returnVal = -1;
 		switch (fafafatherType) {
 		case StatementConstants.IFSTATEMENT:
 			System.out.println("If predicate");
-			returnVal = this.matchIfPredicate(a, curContext,fafafatherNode);
+			returnVal = this.matchIfPredicate(a, curContext, fafafatherNode);
 			break;
 		case StatementConstants.FORSTATEMENT:
 			System.out.println("For predicate");
@@ -333,7 +348,7 @@ public class FindPattern {
 			System.out.println("Method declaration");
 			returnVal = this.matchMethodDeclaration(a, curContext);
 			break;
-		case StatementConstants.VARIABLEDECLARATIONSTATEMENT: 
+		case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
 		case StatementConstants.EXPRESSIONSTATEMENT:
 			System.out.println("variable/expression");
 			returnVal = this.matchExpressionStatementAndVariableDeclarationStatement(a, curContext);
@@ -346,8 +361,38 @@ public class FindPattern {
 	}
 
 	/**
-	 * main level-I 
-	 * 入口 思路：围绕if/else/else if 和method call来抽 AST 节点：
+	 * 方法签名改变的情况
+	 * 
+	 * @param a
+	 * @param fafafather
+	 * @return
+	 */
+	public int matchMethodSignatureChange(Action a, ITree fafafather) {
+		System.out.println("Method Signature Changed - add");
+		ITree srcfafafather = null;
+		ITree dstfafafathr = null;
+		if (a instanceof Insert) {
+			dstfafafathr = fafafather;
+			srcfafafather = this.mMiningActionBean.mMapping.getSrc(dstfafafathr);
+			if (srcfafafather == null) {
+				System.err.println("err null mapping");
+			}
+		} else {
+			srcfafafather = fafafather;
+			dstfafafathr = this.mMiningActionBean.mMapping.getDst(srcfafafather);
+			if (dstfafafathr == null) {
+				System.err.println("err null mapping");
+			}
+		}
+		List<Action> signatureChidlren = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(dstfafafathr);
+		this.mMiningActionBean.addMethodSignatureAction(srcfafafather, signatureChidlren);
+		List<Action> signatureChidlren2 = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(srcfafafather);
+		this.mMiningActionBean.addMethodSignatureAction(srcfafafather, signatureChidlren2);
+		return signatureChidlren.size() + signatureChidlren2.size();
+	}
+
+	/**
+	 * main level-I 入口 思路：围绕if/else/else if 和method call来抽 AST 节点：
 	 * VariableDeclarationStatement，ExpressionStatement，IfStatement
 	 */
 	public void find() {
@@ -357,8 +402,10 @@ public class FindPattern {
 		this.findUpdate();
 		System.out.println("Delete------------------------------------------");
 		this.findDelete();
+		this.findMethodSignatureChange();
 		this.findMethodInvocationChange();
 	}
+
 	/**
 	 * Sub level-II
 	 */
@@ -376,64 +423,116 @@ public class FindPattern {
 			Insert ins = (Insert) a;
 			ITree insNode = ins.getNode();
 			String type = this.mMiningActionBean.mDstTree.getTypeLabel(insNode);
+			ITree fafafather = AstRelations.findFafafatherNode(insNode, this.mMiningActionBean.mDstTree);
+			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafather);
 			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
 			System.out.print(nextAction);
-			switch (type) {
-			case StatementConstants.METHODDECLARATION:
-				// new method
+			if (StatementConstants.METHODDECLARATION.equals(type)) {
+				// 新增方法
 				count = matchNewMethod(a);
 				insertActionCount -= count;
-				break;
-			case StatementConstants.IFSTATEMENT:
-				// Pattern 1. Match If/else if
-				count = matchIf(a, type);
-				insertActionCount -= count;
-				break;
-			case StatementConstants.BLOCK:
-				// Pattern 1.2 Match else
-				if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mDstTree)) {
-					count = this.matchElse(a);
-					insertActionCount -= count;
+			} else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
+				// 方法签名修改
+				if (StatementConstants.BLOCK.equals(type)) {
+					System.err.println("Not considered");
 				} else {
-					System.err.println("Other Condition");
-					// TODO剩下的情况
+					count = matchMethodSignatureChange(a, fafafather);
+					insertActionCount -= count;
 				}
-				break;
-			case StatementConstants.TRYSTATEMENT:
-				count = matchTry(a);
-				insertActionCount -= count;
-				break;
-			case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
-				count = this.matchVariableDeclaration(a);
-				insertActionCount -= count;
-				break;
-			case StatementConstants.EXPRESSIONSTATEMENT:
-				count = this.matchExpression(a);
-				insertActionCount -= count;
-				break;
-			// 方法参数
-			case StatementConstants.SIMPLENAME:
-			case StatementConstants.STRINGLITERAL:
-			case StatementConstants.NULLLITERAL:
-			case StatementConstants.CHARACTERLITERAL:
-			case StatementConstants.NUMBERLITERAL:
-			case StatementConstants.BOOLEANLITERAL:
-			case StatementConstants.INFIXEXPRESSION:
-				count = this.matchSimplenameOrLiteral(a, this.mMiningActionBean.mDstTree);
-				insertActionCount -= count;
-				break;
-			default:
-				System.out.println("Default1:"+type);
-				break;
+			} else {
+				// 方法体
+				switch (type) {
+				case StatementConstants.IFSTATEMENT:
+					// Pattern 1. Match If/else if
+					count = matchIf(a, type);
+					insertActionCount -= count;
+					break;
+				case StatementConstants.BLOCK:
+					// Pattern 1.2 Match else
+					if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mDstTree)) {
+						count = this.matchElse(a);
+						insertActionCount -= count;
+					} else {
+						System.err.println("Other Condition");
+						// TODO剩下的情况
+					}
+					break;
+				case StatementConstants.TRYSTATEMENT:
+					count = matchTry(a);
+					insertActionCount -= count;
+					break;
+				case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
+					count = this.matchVariableDeclaration(a);
+					insertActionCount -= count;
+					break;
+				case StatementConstants.EXPRESSIONSTATEMENT:
+					count = this.matchExpression(a);
+					insertActionCount -= count;
+					break;
+				// 方法参数
+				case StatementConstants.SIMPLENAME:
+				case StatementConstants.STRINGLITERAL:
+				case StatementConstants.NULLLITERAL:
+				case StatementConstants.CHARACTERLITERAL:
+				case StatementConstants.NUMBERLITERAL:
+				case StatementConstants.BOOLEANLITERAL:
+				case StatementConstants.INFIXEXPRESSION:
+					count = this.matchSimplenameOrLiteral(a, this.mMiningActionBean.mDstTree);
+					insertActionCount -= count;
+					break;
+				default:
+					System.err.println("Default1:" + type);
+					break;
+				}
 			}
 
 		}
 	}
+
+	/**
+	 * Sub level-II
+	 */
+	public void findDelete() {
+		int deleteActionCount = this.mMiningActionBean.mActionGeneratorBean.getDeleteActions().size();
+		int index = 0;
+		int count = 0;
+		while (deleteActionCount != 0) {
+			Action a = this.mMiningActionBean.mActionGeneratorBean.getDeleteActions().get(index);
+			if (this.mMiningActionBean.mActionGeneratorBean.getDeleteActionMap().get(a) == 1) {
+				continue;
+			}
+			index++;
+			Delete del = (Delete) a;
+			ITree tmp = a.getNode();
+			String type = this.mMiningActionBean.mDstTree.getTypeLabel(tmp);
+			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
+			ITree fafafather = AstRelations.findFafafatherNode(tmp, this.mMiningActionBean.mSrcTree);
+			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafather);
+			System.out.print(nextAction);
+			if (StatementConstants.METHODDECLARATION.equals(type)) {
+				// 删除方法体
+			} else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
+				// 删除方法参数
+			} else {
+				// 方法体内部
+				switch (type) {
+				case StatementConstants.SIMPLENAME:
+					count = this.matchSimplenameOrLiteral(a, this.mMiningActionBean.mSrcTree);
+					deleteActionCount -= count;
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+
 	/**
 	 * Sub level-II
 	 */
 	public void findUpdate() {
-		int updateActionCount = this.mMiningActionBean.mActionGeneratorBean.getUpdateActionMap().size();
+
+		int updateActionCount = this.mMiningActionBean.mActionGeneratorBean.getUpdateActions().size();
 		int index = 0;
 		int count = 0;
 		while (updateActionCount != 0) {
@@ -447,52 +546,41 @@ public class FindPattern {
 			ITree tmp = a.getNode();
 			String type = this.mMiningActionBean.mDstTree.getTypeLabel(tmp);
 			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
+			ITree fafafather = AstRelations.findFafafatherNode(tmp, this.mMiningActionBean.mSrcTree);
+			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafather);
 			System.out.print(nextAction);
-			switch (type) {
-			case StatementConstants.SIMPLENAME:
-				count = this.matchSimplenameOrLiteral(a, this.mMiningActionBean.mSrcTree);
-				updateActionCount -= count;
-				break;
-			default:
-				break;
+			if (StatementConstants.METHODDECLARATION.equals(type)) {
+				// 新增方法
+				System.err.println("Update 应该不会是method declaration");
+			} else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
+				// 方法签名update
+				if (StatementConstants.BLOCK.equals(type)) {
+					System.err.println("Not considered");
+				} else {
+					count = matchMethodSignatureChange(a, fafafather);
+					updateActionCount -= count;
+				}
+			} else {
+				// 方法体
+				switch (type) {
+				case StatementConstants.SIMPLENAME:
+					count = this.matchSimplenameOrLiteral(a, this.mMiningActionBean.mSrcTree);
+					updateActionCount -= count;
+					break;
+				default:
+					break;
+				}
 			}
 		}
 
 	}
-	/**
-	 * Sub level-II
-	 */
-	public void findDelete() {
-		int deleteActionCount = this.mMiningActionBean.mActionGeneratorBean.getDeleteActionMap().size();
-		int index = 0;
-		int count = 0;
-		while (deleteActionCount != 0) {
-			Action a = this.mMiningActionBean.mActionGeneratorBean.getDeleteActions().get(index);
-			if (this.mMiningActionBean.mActionGeneratorBean.getDeleteActionMap().get(a) == 1) {
-				continue;
-			}
-			index++;
-			Delete del = (Delete) a;
-			ITree tmp = a.getNode();
-			String type = this.mMiningActionBean.mDstTree.getTypeLabel(tmp);
-			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
-			System.out.print(nextAction);
-			switch (type) {
-			case StatementConstants.SIMPLENAME:
-				count = this.matchSimplenameOrLiteral(a, this.mMiningActionBean.mSrcTree);
-				deleteActionCount -= count;
-				break;
-			default:
-				break;
-			}
-		}
-	}
+
 	/**
 	 * Sub level-II
 	 * 
 	 */
 	public void findMethodInvocationChange() {
-		for (Entry<ITree, List<Action>> item : this.mMiningActionBean.methodInvocationList.entrySet()) {
+		for (Entry<ITree, List<Action>> item : this.mMiningActionBean.methodInvocationMap.entrySet()) {
 			Tree srcParentNode = (Tree) item.getKey();
 			Tree dstParentNode = (Tree) this.mMiningActionBean.mMapping.getDst(srcParentNode);
 			List<Action> mList = item.getValue();
@@ -515,6 +603,12 @@ public class FindPattern {
 			} else {
 				System.out.println("1.Altering method parameters - Update parameter");
 			}
+		}
+	}
+
+	public void findMethodSignatureChange() {
+		for (Entry<ITree, List<Action>> item : this.mMiningActionBean.methodSignatureMap.entrySet()) {
+
 		}
 	}
 

@@ -35,6 +35,7 @@ public class ActionGeneratorBean {
 	private Map<Action, Integer> updateActionMap;
 	private Map<Action, Integer> deleteActionMap;
 	private Map<Action, Integer> moveActionMap;
+	private Map<Action, Integer> allActionMap;
 
 	public ActionGeneratorBean() {
 		super();
@@ -57,6 +58,7 @@ public class ActionGeneratorBean {
 		this.updateActionMap = new HashMap<Action,Integer>();
 		this.deleteActionMap = new HashMap<Action,Integer>();
 		this.moveActionMap = new HashMap<Action,Integer>();
+		this.allActionMap = new HashMap<Action,Integer>();
 	}
 
 	public void addAction(Action action, int actionIndex) {
@@ -179,15 +181,19 @@ public class ActionGeneratorBean {
 		
 		for (Action tmp : this.insertActions) {
 			this.insertActionMap.put(tmp, 0);
+			this.allActionMap.put(tmp, 0);
 		}
 		for (Action tmp : this.moveActions) {
 			this.moveActionMap.put(tmp, 0);
+			this.allActionMap.put(tmp, 0);
 		}
 		for (Action tmp : this.updateActions) {
 			this.updateActionMap.put(tmp, 0);
+			this.allActionMap.put(tmp, 0);
 		}
 		for (Action tmp : this.deleteActions) {
 			this.deleteActionMap.put(tmp, 0);
+			this.allActionMap.put(tmp, 0);
 		}
 	}
 

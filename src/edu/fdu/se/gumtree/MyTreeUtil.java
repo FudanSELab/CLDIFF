@@ -113,4 +113,23 @@ public class MyTreeUtil{
     	}
     	return isAllSameAction;
     }
+    /**
+     * 遍历从MethodDeclaration 遍历下来的节点 添加有doAction引用的节点
+     */
+    public static List<Action> traverseMethodSignatureChildrenWithoutBlock(ITree node){
+    	List<ITree> children = node.getChildren();
+    	List<Action> allEditAction = new ArrayList<Action>();
+    	int len = children.size();
+    	//默认最后一个节点为block
+    	for(int i=0;i<len-1;i++){
+    		ITree child = children.get(i);
+    		for(ITree item : child.postOrder()){
+    			Tree myTree = (Tree) item;
+    			if(myTree.getDoAction()==null) continue;
+        		allEditAction.add(myTree.getDoAction());
+    		}
+    	}
+    	
+    	return allEditAction;
+    }
 }
