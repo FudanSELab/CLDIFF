@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
+import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
@@ -74,29 +75,11 @@ public class FindPattern {
 		} else {
 			ifOrElseif = "if";
 		}
-		String summary = "insert " + ifOrElseif;
-		// List<Action> ifSubActions =
-		// MyTreeUtil.traverseNodeGetSameEditActions(a);
+		String summary = "[PATTERN] insert " + ifOrElseif;
 		List<Action> ifSubActions = new ArrayList<Action>();
 		boolean flag = MyTreeUtil.traverseAllChilrenCheckIfSameAction(a, ifSubActions);
 		boolean nullCheck = AstRelations.isNullCheck(a.getNode(), this.mMiningActionBean.mDstTree);
 		this.mMiningActionBean.setActionTraversedMap(ifSubActions);
-//		for (Action tmp : ifSubActions) {
-//			this.mMiningActionBean.mActionGeneratorBean.getInsertActionMap().put(tmp, 1);
-//			// Insert blockIns = (Insert) tmp;
-//			// String str =
-//			// this.mMiningActionBean.mDstTree.getTypeLabel(blockIns.getNode());
-//			// if (StatementConstants.BLOCK.equals(str)) {
-//			// System.out.println("adsad block");
-//			// Tree tree = (Tree) blockIns.getNode();
-//			// List<ITree> children = tree.getChildren();
-//			// if (AstRelations.isAllChildrenNew(children)) {
-//			// summary += " clause and body";
-//			// } else {
-//			// summary += " clause to api calls";
-//			// }
-//			// }
-//		}
 		if (flag) {
 			summary += " clause and body";
 		} else {
@@ -203,11 +186,6 @@ public class FindPattern {
 		List<Action> subActions = MyTreeUtil.traverseNodeGetSameEditActions(a);
 		List<ITree> children = new ArrayList<ITree>();
 		this.mMiningActionBean.setActionTraversedMap(subActions);
-//		for (Action tmp : subActions) {
-//			this.mMiningActionBean.mActionGeneratorBean.getInsertActionMap().put(tmp, 1);
-//			Tree it = (Tree) a.getNode();
-//			children.add(it);
-//		}
 		Tree t = (Tree) a.getNode().getChild(0);
 		MethodInvocation mi = (MethodInvocation)(t.getAstNode());
 		System.out.println("rrrrr:");
@@ -239,10 +217,6 @@ public class FindPattern {
 	public int matchMethodDeclaration(Action a, TreeContext treeContext) {
 		// TODO
 		System.err.println("Method declaration - not considered");
-		// if(StatementConstants.METHODDECLARATION.equals(AstRelations.fatherStatement(a,
-		// treeContext))){
-		// }
-
 		return 0;
 	}
 
@@ -414,6 +388,7 @@ public class FindPattern {
 	 * VariableDeclarationStatement，ExpressionStatement，IfStatement
 	 */
 	public void find() {
+		this.findMove();
 		this.findInsert();
 		this.findUpdate();
 		this.findDelete();
@@ -595,6 +570,31 @@ public class FindPattern {
 		
 
 	}
+	
+	public void findMove(){
+		int moveActionCount = this.mMiningActionBean.mActionGeneratorBean.getMoveActions().size();
+		int index = 0;
+		while (true) {
+			if(index == moveActionCount){
+				break;
+			}
+			Action a = this.mMiningActionBean.mActionGeneratorBean.getMoveActions().get(index);
+			index++;
+			if (this.mMiningActionBean.mActionGeneratorBean.getAllActionMap().get(a) == 1) {
+				// 标记过的 update action
+				continue;
+			}
+			Move up = (Move) a;
+			ITree tmp = a.getNode();
+			String type = this.mMiningActionBean.mDstTree.getTypeLabel(tmp);
+			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
+			ITree fafafather = AstRelations.findFafafatherNode(tmp, this.mMiningActionBean.mSrcTree);
+			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafather);
+			System.out.print(nextAction);
+			//TODO
+		}
+		
+	}
 
 	/**
 	 * Sub level-II
@@ -629,8 +629,8 @@ public class FindPattern {
 
 	public void findMethodSignatureChange() {
 		for (Entry<ITree, List<Action>> item : this.mMiningActionBean.methodSignatureMap.entrySet()) {
-			Tree srcParentNode = (Tree) item.getKey();
-			Tree dstParentNode = (Tree) this.mMiningActionBean.mMapping.getDst(srcParentNode);
+//			Tree srcParentNode = (Tree) item.getKey();
+//			Tree dstParentNode = (Tree) this.mMiningActionBean.mMapping.getDst(srcParentNode);
 			System.out.println("[PATTREN] Method Signature Change");
 		}
 	}
