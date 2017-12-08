@@ -31,10 +31,10 @@ public class ActionGeneratorBean {
 	private List<Action> moveActions;
 	private List<Action> deleteActions;
 
-	private Map<Action, Integer> insertActionMap;
-	private Map<Action, Integer> updateActionMap;
-	private Map<Action, Integer> deleteActionMap;
-	private Map<Action, Integer> moveActionMap;
+//	private Map<Action, Integer> insertActionMap;
+//	private Map<Action, Integer> updateActionMap;
+//	private Map<Action, Integer> deleteActionMap;
+//	private Map<Action, Integer> moveActionMap;
 	private Map<Action, Integer> allActionMap;
 
 	public ActionGeneratorBean() {
@@ -54,10 +54,10 @@ public class ActionGeneratorBean {
 		this.startNodes = new ArrayList<>();
 		this.graph = new DefaultDirectedGraph<>(DefaultEdge.class);
 		
-		this.insertActionMap = new HashMap<Action,Integer>();
-		this.updateActionMap = new HashMap<Action,Integer>();
-		this.deleteActionMap = new HashMap<Action,Integer>();
-		this.moveActionMap = new HashMap<Action,Integer>();
+//		this.insertActionMap = new HashMap<Action,Integer>();
+//		this.updateActionMap = new HashMap<Action,Integer>();
+//		this.deleteActionMap = new HashMap<Action,Integer>();
+//		this.moveActionMap = new HashMap<Action,Integer>();
 		this.allActionMap = new HashMap<Action,Integer>();
 	}
 
@@ -161,40 +161,44 @@ public class ActionGeneratorBean {
 		this.deleteActions = deleteActions;
 	}
 
-	public Map<Action, Integer> getInsertActionMap() {
-		return insertActionMap;
-	}
-
-	public Map<Action, Integer> getUpdateActionMap() {
-		return updateActionMap;
-	}
-
-	public Map<Action, Integer> getDeleteActionMap() {
-		return deleteActionMap;
-	}
-
-	public Map<Action, Integer> getMoveActionMap() {
-		return moveActionMap;
-	}
+//	public Map<Action, Integer> getInsertActionMap() {
+//		return insertActionMap;
+//	}
+//
+//	public Map<Action, Integer> getUpdateActionMap() {
+//		return updateActionMap;
+//	}
+//
+//	public Map<Action, Integer> getDeleteActionMap() {
+//		return deleteActionMap;
+//	}
+//
+//	public Map<Action, Integer> getMoveActionMap() {
+//		return moveActionMap;
+//	}
+	
 
 	public void generateActionMap() {
-		
 		for (Action tmp : this.insertActions) {
-			this.insertActionMap.put(tmp, 0);
+//			this.insertActionMap.put(tmp, 0);
 			this.allActionMap.put(tmp, 0);
 		}
 		for (Action tmp : this.moveActions) {
-			this.moveActionMap.put(tmp, 0);
+//			this.moveActionMap.put(tmp, 0);
 			this.allActionMap.put(tmp, 0);
 		}
 		for (Action tmp : this.updateActions) {
-			this.updateActionMap.put(tmp, 0);
+//			this.updateActionMap.put(tmp, 0);
 			this.allActionMap.put(tmp, 0);
 		}
 		for (Action tmp : this.deleteActions) {
-			this.deleteActionMap.put(tmp, 0);
+//			this.deleteActionMap.put(tmp, 0);
 			this.allActionMap.put(tmp, 0);
 		}
+	}
+
+	public Map<Action, Integer> getAllActionMap() {
+		return allActionMap;
 	}
 
 }

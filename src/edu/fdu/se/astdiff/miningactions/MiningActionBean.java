@@ -17,17 +17,22 @@ import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.generatingactions.ActionGeneratorBean;
+import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 
 public class MiningActionBean {
 
 	public MiningActionBean(ActionGeneratorBean agb, TreeContext src, TreeContext dst, MappingStore mapping) {
 		this.mActionGeneratorBean = agb;
 		this.mMapping = mapping;
-		this.mActionGeneratorBean.generateActionMap();
+		
 		this.mDstTree = dst;
 		this.mSrcTree = src;
 		this.methodInvocationMap = new HashMap<ITree, List<Action>>();
 		this.methodInvocationActionList = new HashMap<ITree, Set<String>>();
+		
+		this.methodSignatureMap = new HashMap<ITree, List<Action>>();
+		this.methodSignatureAcionList = new HashMap<ITree,Set<String>>();
+		this.mActionGeneratorBean.generateActionMap();
 	}
 
 	public ActionGeneratorBean mActionGeneratorBean;
@@ -42,7 +47,7 @@ public class MiningActionBean {
 	public Map<ITree, List<Action>> methodSignatureMap;
 	public Map<ITree, Set<String>> methodSignatureAcionList;
 
-	public void addMethodInvocationAction(ITree parent, Action a) {
+	public void mapMethodInvocationAndAction(ITree parent, Action a) {
 		if (this.methodInvocationMap.containsKey(parent)) {
 			List<Action> mList = this.methodInvocationMap.get(parent);
 			mList.add(a);
@@ -63,7 +68,7 @@ public class MiningActionBean {
 		}
 	}
 
-	public void addMethodSignatureAction(ITree fafafather, Action a) {
+	public void mapMethodSignatureAction(ITree fafafather, Action a) {
 		if (this.methodSignatureMap.containsKey(fafafather)) {
 			List<Action> mList = this.methodSignatureMap.get(fafafather);
 			mList.add(a);
@@ -83,12 +88,13 @@ public class MiningActionBean {
 		}
 	}
 
-	public void addMethodSignatureAction(ITree fafafather, List<Action> mActionList) {
+	public void mapMethodSignatureAction(ITree fafafather, List<Action> mActionList) {
 		for (Action a : mActionList) {
 			if (this.methodSignatureMap.containsKey(fafafather)) {
 				List<Action> mList = this.methodSignatureMap.get(fafafather);
 				mList.add(a);
 			} else {
+				System.out.println("put");
 				List<Action> mList = new ArrayList<Action>();
 				mList.add(a);
 				this.methodSignatureMap.put(fafafather, mList);
@@ -107,11 +113,12 @@ public class MiningActionBean {
 	
 	public void setActionTraversedMap(List<Action> mList){
 		for(Action tmp:mList){
-			if(tmp instanceof Insert){
-				
-			}else if(tmp instanceof Update){
-				
-			}else if(tmp instanceof )
+			if(this.mActionGeneratorBean.getAllActionMap().containsKey(tmp)){
+				ConsolePrint.printMyOneActionString(tmp, 0, mDstTree);
+				this.mActionGeneratorBean.getAllActionMap().put(tmp, 1);
+			}else {
+				System.err.println("action not added");
+			}
 		}
 	}
 

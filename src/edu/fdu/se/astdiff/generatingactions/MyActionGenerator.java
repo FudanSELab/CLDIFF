@@ -164,26 +164,27 @@ public class MyActionGenerator {
             dstInOrder.add(dstItem);
             alignChildren(w, dstItem,i);
         }
-        Delete prev = null;
-        for (ITree w : copySrc.postOrder()) {
-        	// 后顺遍历 父亲节点晚于孩子节点出现 ，出现关联之后 标记前者的index
+//        Delete prev = null;
+//        for (ITree w : copySrc.postOrder()) {
+        for(ITree w :copySrc.breadthFirst()){
+        	// 后顺遍历 父亲节点晚于孩子节点出现 ，出现关联之后 标记前者的index/remove
             if (!newMappings.hasSrc(w)) {
             	Delete del = new Delete(origSrcTrees.get(w.getId()));
             	Tree tmp = (Tree) origSrcTrees.get(w.getId());
             	tmp.setDoAction(del);
-            	if(prev == null){
-            		prev = del;
-        			myAgbData.addAction(del, -1);
-            	}else{
-            		if(ActionNodeRelation.isParentOf(del, prev)){
-            			myAgbData.addAction(del, 0);
-            		}else if(ActionNodeRelation.isSameParent(prev, del)){
-            			myAgbData.addAction(del, 0);
-            		}
+//            	if(prev == null){
+//            		prev = del;
+        			myAgbData.addAction(del, 0);
+//            	}else{
+//            		if(ActionNodeRelation.isParentOf(del, prev)){
+//            			myAgbData.addAction(del, 0);
+//            		}else if(ActionNodeRelation.isSameParent(prev, del)){
+//            			myAgbData.addAction(del, 0);
+//            		}
             	}
             	
                 //w.getParent().getChildren().remove(w);
-            }
+//            }
         }
         return myAgbData;
         //FIXME should ensure isomorphism.

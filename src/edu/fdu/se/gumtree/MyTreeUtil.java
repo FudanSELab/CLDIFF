@@ -115,21 +115,29 @@ public class MyTreeUtil{
     }
     /**
      * 遍历从MethodDeclaration 遍历下来的节点 添加有doAction引用的节点
+     * 遍历node下的所有的孩子，把所有有action引用的添加到alleditaction ，返回值表示与action a相同修改类型的个数
+     * @param a
+     * @param node
+     * @param allEditAction
+     * @return
      */
-    public static List<Action> traverseMethodSignatureChildrenWithoutBlock(ITree node){
+    public static int traverseMethodSignatureChildrenWithoutBlock(Action a,ITree node,List<Action> allEditAction){
     	List<ITree> children = node.getChildren();
-    	List<Action> allEditAction = new ArrayList<Action>();
     	int len = children.size();
+    	int count = 0;
     	//默认最后一个节点为block
     	for(int i=0;i<len-1;i++){
     		ITree child = children.get(i);
     		for(ITree item : child.postOrder()){
     			Tree myTree = (Tree) item;
     			if(myTree.getDoAction()==null) continue;
+    			if(a.getClass().equals(myTree.getDoAction().getClass())){
+    				count++;
+    			}
         		allEditAction.add(myTree.getDoAction());
     		}
     	}
     	
-    	return allEditAction;
+    	return count;
     }
 }

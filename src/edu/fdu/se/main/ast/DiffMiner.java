@@ -36,7 +36,7 @@ public class DiffMiner {
 	}
 	
 	//2.Action Cluster
-	public void userGTIntermediate(){
+	public void run(){
 		//
 		System.out.println("Generating Diff Actions");
 		String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
@@ -62,7 +62,7 @@ public class DiffMiner {
 
 	public static void main(String args[]){
 		DiffMiner i = new DiffMiner();
-		i.userGTIntermediate();
+		i.run();
 	}
 	
 
