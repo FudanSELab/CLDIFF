@@ -136,7 +136,6 @@ public class MyActionGenerator {
                     	myAgbData.addAction(upd, i);
 //                        Tree tmp = (Tree) dstItem;
 //                        tmp.setDoAction(upd);
-                        // 设置 src dst 节点都有action引用
                         ITree srcNode = origSrcTrees.get(w.getId());
                         Tree srcTree = (Tree) srcNode;
                         srcTree.setDoAction(upd);
@@ -150,7 +149,6 @@ public class MyActionGenerator {
                         tmp.setDoAction(mv);
                         myAgbData.addAction(mv, i);
 
-                        //System.out.println(mv);
                         int oldk = w.positionInParent();
                         parentSrc.getChildren().add(k, w);
                         w.getParent().getChildren().remove(oldk);
@@ -164,26 +162,14 @@ public class MyActionGenerator {
             dstInOrder.add(dstItem);
             alignChildren(w, dstItem,i);
         }
-//        Delete prev = null;
 //        for (ITree w : copySrc.postOrder()) {
         for(ITree w :copySrc.breadthFirst()){
-        	// 后顺遍历 父亲节点晚于孩子节点出现 ，出现关联之后 标记前者的index/remove
             if (!newMappings.hasSrc(w)) {
             	Delete del = new Delete(origSrcTrees.get(w.getId()));
             	Tree tmp = (Tree) origSrcTrees.get(w.getId());
             	tmp.setDoAction(del);
-            	System.out.println("as");
-//            	if(prev == null){
-//            		prev = del;
-        			myAgbData.addAction(del, 0);
-//            	}else{
-//            		if(ActionNodeRelation.isParentOf(del, prev)){
-//            			myAgbData.addAction(del, 0);
-//            		}else if(ActionNodeRelation.isSameParent(prev, del)){
-//            			myAgbData.addAction(del, 0);
-//            		}
+        		myAgbData.addAction(del, 0);
             	}
-            	
                 //w.getParent().getChildren().remove(w);
 //            }
         }

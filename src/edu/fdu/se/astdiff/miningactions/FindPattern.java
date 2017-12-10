@@ -478,10 +478,10 @@ public class FindPattern {
 			}
 			Delete del = (Delete) a;
 			ITree tmp = a.getNode();
-			String type = this.mMiningActionBean.mDstTree.getTypeLabel(tmp);
-			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
+			String type = this.mMiningActionBean.mSrcTree.getTypeLabel(tmp);
+			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mSrcTree);
 			ITree fafafather = AstRelations.findFafafatherNode(tmp, this.mMiningActionBean.mSrcTree);
-			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafather);
+			String fatherType = this.mMiningActionBean.mSrcTree.getTypeLabel(fafafather);
 			System.out.print(nextAction);
 			if (StatementConstants.METHODDECLARATION.equals(type)) {
 				// 删除方法体
@@ -522,7 +522,7 @@ public class FindPattern {
 				case StatementConstants.NUMBERLITERAL:
 				case StatementConstants.BOOLEANLITERAL:
 				case StatementConstants.INFIXEXPRESSION:
-					count = this.matchSimplenameOrLiteral(a, this.mMiningActionBean.mDstTree);
+					count = this.matchSimplenameOrLiteral(a, this.mMiningActionBean.mSrcTree);
 					break;
 
 				default:
@@ -551,10 +551,10 @@ public class FindPattern {
 			}
 			Update up = (Update) a;
 			ITree tmp = a.getNode();
-			String type = this.mMiningActionBean.mDstTree.getTypeLabel(tmp);
-			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
+			String type = this.mMiningActionBean.mSrcTree.getTypeLabel(tmp);
+			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mSrcTree);
 			ITree fafafather = AstRelations.findFafafatherNode(tmp, this.mMiningActionBean.mSrcTree);
-			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafather);
+			String fatherType = this.mMiningActionBean.mSrcTree.getTypeLabel(fafafather);
 			System.out.print(nextAction);
 			if (StatementConstants.METHODDECLARATION.equals(type)) {
 				// 新增方法
@@ -595,10 +595,10 @@ public class FindPattern {
 			}
 			Move up = (Move) a;
 			ITree moveNode = a.getNode();
-			String type = this.mMiningActionBean.mDstTree.getTypeLabel(moveNode);
-			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
+			String type = this.mMiningActionBean.mSrcTree.getTypeLabel(moveNode);
+			String nextAction = ConsolePrint.printMyOneActionString(a, 0, this.mMiningActionBean.mSrcTree);
 			ITree fafafather = AstRelations.findFafafatherNode(moveNode, this.mMiningActionBean.mSrcTree);
-			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafather);
+			String fatherType = this.mMiningActionBean.mSrcTree.getTypeLabel(fafafather);
 			System.out.print(nextAction);
 			ITree dstNode = up.getParent();
 

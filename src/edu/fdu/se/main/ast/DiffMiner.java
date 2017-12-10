@@ -2,6 +2,7 @@ package edu.fdu.se.main.ast;
 
 
 import com.github.gumtreediff.actions.ActionUtil;
+import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.ActionGeneratorBean;
@@ -38,7 +39,7 @@ public class DiffMiner {
 	//2.Action Cluster
 	public void run(){
 		//
-		System.out.println("Generating Diff Actions");
+		System.out.println("Generating Diff Actions:");
 		String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
 		String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
 		GumTreeDiffParser his = new GumTreeDiffParser(file1,file2);
@@ -48,7 +49,7 @@ public class DiffMiner {
 		MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
 		ActionGeneratorBean data = gen.generate();
 		ConsolePrint.printMyActions(data.getDstTreeActions(),his.dstTC);
-		ConsolePrint.printMyActions(data.getSrcTreeActions(),his.dstTC);
+		ConsolePrint.printMyActions(data.getSrcTreeActions(),his.srcTC);
 //		MyActionClusterFinder finder = new MyActionClusterFinder(his.srcTC, his.dstTC,data);
 //		List<List<Action>> result = finder.clusteredActions();
 		//step 2
