@@ -140,4 +140,19 @@ public class MyTreeUtil{
     	
     	return count;
     }
+    
+    /**
+     * Node下所有孩子，只要是被标记action的都加入list
+     * @param node
+     * @return
+     */
+    public static List<Action> traverseNodeGetAllEditAction(ITree node){
+    	List<Action> result = new ArrayList<Action>();
+    	for(ITree tmp:node.preOrder()){
+    		Tree myTree = (Tree) tmp;
+    		if(myTree.getDoAction()==null) continue;
+    		result.add(myTree.getDoAction());
+    	}
+    	return result;
+    }
 }

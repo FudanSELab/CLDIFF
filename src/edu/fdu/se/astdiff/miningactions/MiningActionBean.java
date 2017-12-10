@@ -27,47 +27,93 @@ public class MiningActionBean {
 		
 		this.mDstTree = dst;
 		this.mSrcTree = src;
-		this.methodInvocationMap = new HashMap<ITree, List<Action>>();
-		this.methodInvocationActionList = new HashMap<ITree, Set<String>>();
+		this.fatherToActionMap = new HashMap<ITree, List<Action>>();
+		this.fatherToActionChangeTypeMap = new HashMap<ITree, Set<String>>();
+		this.fatherTypeToFathersMap = new HashMap<String,List<ITree>>();
 		
 		this.methodSignatureMap = new HashMap<ITree, List<Action>>();
 		this.methodSignatureAcionList = new HashMap<ITree,Set<String>>();
 		this.mActionGeneratorBean.generateActionMap();
 	}
+	
 
 	public ActionGeneratorBean mActionGeneratorBean;
 	public MappingStore mMapping;
 
 	public TreeContext mDstTree;
 	public TreeContext mSrcTree;
-
-	public Map<ITree, List<Action>> methodInvocationMap;
-	public Map<ITree, Set<String>> methodInvocationActionList;
+	/**
+	 * fatherTypeTofatherMap存每一种类型的father的list，
+	 * 由这个list去其他两个map找对应的action和变化的类型
+	 */
+	public Map<String,List<ITree>> fatherTypeToFathersMap;
+	public Map<ITree, List<Action>> fatherToActionMap;
+	public Map<ITree, Set<String>> fatherToActionChangeTypeMap;
 
 	public Map<ITree, List<Action>> methodSignatureMap;
 	public Map<ITree, Set<String>> methodSignatureAcionList;
-
-	public void mapMethodInvocationAndAction(ITree parent, Action a) {
-		if (this.methodInvocationMap.containsKey(parent)) {
-			List<Action> mList = this.methodInvocationMap.get(parent);
+	
+	
+	public void addParentAndAction(ITree parent, Action a) {
+		if (this.fatherToActionMap.containsKey(parent)) {
+			List<Action> mList = this.fatherToActionMap.get(parent);
 			mList.add(a);
 
 		} else {
 			List<Action> mList = new ArrayList<Action>();
 			mList.add(a);
-			this.methodInvocationMap.put(parent, mList);
+			this.fatherToActionMap.put(parent, mList);
 		}
 		String type = ActionConstants.getInstanceStringName(a);
-		if (this.methodInvocationActionList.containsKey(parent)) {
-			Set<String> mSet = this.methodInvocationActionList.get(parent);
+		if (this.fatherToActionChangeTypeMap.containsKey(parent)) {
+			Set<String> mSet = this.fatherToActionChangeTypeMap.get(parent);
 			mSet.add(type);
 		} else {
 			Set<String> mSet = new HashSet<String>();
 			mSet.add(type);
-			this.methodInvocationActionList.put(parent, mSet);
+			this.fatherToActionChangeTypeMap.put(parent, mSet);
 		}
 	}
-
+	public void mapMethodInvocationAndAction(ITree parent,Action a){
+		if(this.fatherTypeToFathersMap.containsKey(ActionConstants.METHODINVOCATION)){
+			List<ITree> mList = this.fatherTypeToFathersMap.get(ActionConstants.METHODINVOCATION);
+			mList.add(parent);
+		}else{
+			List<ITree> mList = new ArrayList<ITree>();
+			mList.add(parent);
+			this.fatherTypeToFathersMap.put(ActionConstants.METHODINVOCATION, mList);
+		}
+		addParentAndAction(parent,a);
+	}
+	public void mapIfPredicateAndAction(ITree parent,Action a){
+		if(this.fatherTypeToFathersMap.containsKey(ActionConstants.IfPredicate)){
+			List<ITree> mList = this.fatherTypeToFathersMap.get(ActionConstants.IfPredicate);
+			mList.add(parent);
+		}else{
+			List<ITree> mList = new ArrayList<ITree>();
+			mList.add(parent);
+			this.fatherTypeToFathersMap.put(ActionConstants.IfPredicate, mList);
+		}
+		addParentAndAction(parent,a);
+	}
+	public void mapForPredicateAndAction(ITree parent,Action a){
+		if(this.fatherTypeToFathersMap.containsKey(ActionConstants.ForPredicate)){
+			List<ITree> mList = this.fatherTypeToFathersMap.get(ActionConstants.ForPredicate);
+			mList.add(parent);
+		}else{
+			List<ITree> mList = new ArrayList<ITree>();
+			mList.add(parent);
+			this.fatherTypeToFathersMap.put(ActionConstants.ForPredicate, mList);
+		}
+		addParentAndAction(parent,a);
+	}
+	
+	
+	/**
+	 * fafafather即mathod declaration节点为key，action 为value
+	 * @param fafafather
+	 * @param a
+	 */
 	public void mapMethodSignatureAction(ITree fafafather, Action a) {
 		if (this.methodSignatureMap.containsKey(fafafather)) {
 			List<Action> mList = this.methodSignatureMap.get(fafafather);
@@ -87,14 +133,17 @@ public class MiningActionBean {
 			this.methodSignatureAcionList.put(fafafather, mSet);
 		}
 	}
-
+	/**
+	 * fafafather即mathod declaration节点为key，action list 为value
+	 * @param fafafather
+	 * @param mActionList
+	 */
 	public void mapMethodSignatureAction(ITree fafafather, List<Action> mActionList) {
 		for (Action a : mActionList) {
 			if (this.methodSignatureMap.containsKey(fafafather)) {
 				List<Action> mList = this.methodSignatureMap.get(fafafather);
 				mList.add(a);
 			} else {
-				System.out.println("put");
 				List<Action> mList = new ArrayList<Action>();
 				mList.add(a);
 				this.methodSignatureMap.put(fafafather, mList);
@@ -110,7 +159,10 @@ public class MiningActionBean {
 			}
 		}
 	}
-	
+	/**
+	 * mList的action，把map中的entry置为已访问
+	 * @param mList
+	 */
 	public void setActionTraversedMap(List<Action> mList){
 		for(Action tmp:mList){
 			if(this.mActionGeneratorBean.getAllActionMap().containsKey(tmp)){

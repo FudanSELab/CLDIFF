@@ -146,7 +146,7 @@ public class MyActionGenerator {
                     if (!parentSrc.equals(v)) {
                         int k = findPos(dstItem);
                         Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(parentSrc.getId()), k);
-                        Tree tmp = (Tree) dstItem;
+                        Tree tmp = (Tree) origSrcTrees.get(w.getId());
                         tmp.setDoAction(mv);
                         myAgbData.addAction(mv, i);
 
@@ -172,6 +172,7 @@ public class MyActionGenerator {
             	Delete del = new Delete(origSrcTrees.get(w.getId()));
             	Tree tmp = (Tree) origSrcTrees.get(w.getId());
             	tmp.setDoAction(del);
+            	System.out.println("as");
 //            	if(prev == null){
 //            		prev = del;
         			myAgbData.addAction(del, 0);
