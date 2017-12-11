@@ -19,7 +19,7 @@ public class AstRelations {
 		return false;
 	}
 
-	public static boolean ifFatherStatementSame(Action a, TreeContext treeContext, String statementConstants) {
+	public static boolean ifFatherNodeTypeSameAs(Action a, TreeContext treeContext, String statementConstants) {
 		Tree t = (Tree) a.getNode();
 		String type = treeContext.getTypeLabel(t.getParent());
 
@@ -34,21 +34,21 @@ public class AstRelations {
 		return type;
 	}
 
-	public static boolean isAllChildrenNew(List<ITree> list) {
-		boolean allNewChildren = true;
-		for (ITree a : list) {
-			Tree t = (Tree) a;
-			if (t.getDoAction() == null) {
-				System.err.println("Unexpected Condition XXX");
-			} else if (t.getDoAction() instanceof Insert) {
-
-			} else {
-				// update 或者move 操作 说明if语句内部有原语句
-				allNewChildren = false;
-			}
-		}
-		return allNewChildren;
-	}
+//	public static boolean isAllChildrenNew(List<ITree> list) {
+//		boolean allNewChildren = true;
+//		for (ITree a : list) {
+//			Tree t = (Tree) a;
+//			if (t.getDoAction() == null) {
+//				System.err.println("Unexpected Condition XXX");
+//			} else if (t.getDoAction() instanceof Insert) {
+//
+//			} else {
+//				// update 或者move 操作 说明if语句内部有原语句
+//				allNewChildren = false;
+//			}
+//		}
+//		return allNewChildren;
+//	}
 
 	public static boolean isClassCreation(List<Action> list, TreeContext treeContext) {
 		for (Action a : list) {

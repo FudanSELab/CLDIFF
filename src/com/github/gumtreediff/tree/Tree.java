@@ -49,7 +49,7 @@ public class Tree extends AbstractTree implements ITree {
 //    private JdtMethodCall methodCall = null;
     
 //    private String actionType;
-    private Action doAction;
+    private List<Action> doActions;
     
 	public Tree(int type, String label, ASTNode n) {
         this.type = type;
@@ -229,13 +229,15 @@ public class Tree extends AbstractTree implements ITree {
             return new EmptyEntryIterator();
         return metadata.iterator();
     }
-	public Action getDoAction() {
-		return doAction;
+	public List<Action> getDoAction() {
+		return doActions;
 	}
 	public void setDoAction(Action doAction) {
-		this.doAction = doAction;
+		if(this.doActions == null){
+			this.doActions = new ArrayList<Action>();
+		}
+		this.doActions.add(doAction);
 	}
-	
    
 //    public JdtMethodCall getMethodCall() {
 //		return methodCall;

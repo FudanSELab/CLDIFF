@@ -40,14 +40,17 @@ public class MyTreeUtil{
      * @param a
      * @return
      */
-    public static List<Action> traverseNodeGetSameEditActions(Action a){
+    public static List<Action> traverseActionNodeGetSameEditActions(Action a){
     	List<Action> result = new ArrayList<Action>();
     	ITree node = a.getNode();
     	for(ITree tmp:node.preOrder()){
     		Tree myTree = (Tree) tmp;
     		if(myTree.getDoAction()==null) continue;
-    		if(myTree.getDoAction().getClass().equals(a.getClass())){
-    			result.add(myTree.getDoAction());
+    		List<Action> nodeActions = myTree.getDoAction();
+    		for(Action aTmp:nodeActions){
+    			if(aTmp.getClass().equals(a.getClass())){
+    				result.add(aTmp);
+    			}
     		}
     	}
     	return result;
@@ -63,8 +66,11 @@ public class MyTreeUtil{
     	for(ITree tmp:node.preOrder()){
     		Tree myTree = (Tree) tmp;
     		if(myTree.getDoAction()==null) continue;
-    		if(myTree.getDoAction().getClass().equals(a.getClass())){
-    			result.add(myTree.getDoAction());
+    		List<Action> nodeActions = myTree.getDoAction();
+    		for(Action aTmp:nodeActions){
+    			if(aTmp.getClass().equals(a.getClass())){
+    				result.add(aTmp);
+    			}
     		}
     	}
     	return result;
@@ -83,8 +89,11 @@ public class MyTreeUtil{
     	for(int i=pos;i<parent.getChildren().size();i++){
     		Tree myTree = (Tree) parent.getChildren().get(i);
     		if(myTree.getDoAction()==null) continue;
-    		if(myTree.getDoAction().getClass().equals(a.getClass())){
-    			result.add(myTree.getDoAction());
+    		List<Action> nodeActions = myTree.getDoAction();
+    		for(Action aTmp:nodeActions){
+    			if(aTmp.getClass().equals(a.getClass())){
+    				result.add(aTmp);
+    			}
     		}
     	}
     	return result;
@@ -105,10 +114,13 @@ public class MyTreeUtil{
     	for(ITree tmp:node.preOrder()){
     		Tree myTree = (Tree) tmp;
     		if(myTree.getDoAction()==null) continue;
-    		if(myTree.getDoAction().getClass().equals(a.getClass())){
-    			result.add(myTree.getDoAction());
-    		}else{
-    			isAllSameAction = false;
+    		List<Action> nodeActions = myTree.getDoAction();
+    		for(Action aTmp:nodeActions){
+    			if(aTmp.getClass().equals(a.getClass())){
+    				result.add(aTmp);
+    			}else{
+    				isAllSameAction = false;
+    			}
     		}
     	}
     	return isAllSameAction;
@@ -131,10 +143,17 @@ public class MyTreeUtil{
     		for(ITree item : child.postOrder()){
     			Tree myTree = (Tree) item;
     			if(myTree.getDoAction()==null) continue;
-    			if(a.getClass().equals(myTree.getDoAction().getClass())){
-    				count++;
-    			}
-        		allEditAction.add(myTree.getDoAction());
+    			List<Action> nodeActions = myTree.getDoAction();
+        		for(Action aTmp:nodeActions){
+        			if(aTmp.getClass().equals(a.getClass())){        			
+        				count++;
+        			}
+        			allEditAction.add(aTmp);
+        		}
+//    			if(a.getClass().equals(myTree.getDoAction().getClass())){
+//    				count++;
+//    			}
+//        		allEditAction.add(myTree.getDoAction());
     		}
     	}
     	
@@ -151,7 +170,10 @@ public class MyTreeUtil{
     	for(ITree tmp:node.preOrder()){
     		Tree myTree = (Tree) tmp;
     		if(myTree.getDoAction()==null) continue;
-    		result.add(myTree.getDoAction());
+    		List<Action> nodeActions = myTree.getDoAction();
+    		for(Action aTmp:nodeActions){
+    			result.add(aTmp);
+    		}
     	}
     	return result;
     }

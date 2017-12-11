@@ -23,7 +23,7 @@ public class ConsolePrint {
 		return res;
 	}
 
-	public static String printMyOneActionString(Action a, int tabNum, TreeContext treeContext) {
+	public static String getMyOneActionString(Action a, int tabNum, TreeContext treeContext) {
 		StringBuilder sb = new StringBuilder();
 		String tabStr = tabs(tabNum);
 		if (a instanceof Delete) {
@@ -79,7 +79,7 @@ public class ConsolePrint {
 	public static void printMyActions(List<Action> actions, TreeContext con) {
 		System.out.println("ActionSize:" + actions.size());
 		for (Action a : actions) {
-			System.out.print(ConsolePrint.printMyOneActionString(a, 0, con));
+			System.out.print(ConsolePrint.getMyOneActionString(a, 0, con));
 		}
 	}
 

@@ -74,7 +74,7 @@ public class MiningActionBean {
 			this.fatherToActionChangeTypeMap.put(parent, mSet);
 		}
 	}
-	public void mapMethodInvocationAndAction(ITree parent,Action a){
+	private void mapMethodInvocationAndAction(ITree parent,Action a){
 		if(this.fatherTypeToFathersMap.containsKey(ActionConstants.METHODINVOCATION)){
 			List<ITree> mList = this.fatherTypeToFathersMap.get(ActionConstants.METHODINVOCATION);
 			mList.add(parent);
@@ -85,7 +85,7 @@ public class MiningActionBean {
 		}
 		addParentAndAction(parent,a);
 	}
-	public void mapIfPredicateAndAction(ITree parent,Action a){
+	private void mapIfPredicateAndAction(ITree parent,Action a){
 		if(this.fatherTypeToFathersMap.containsKey(ActionConstants.IfPredicate)){
 			List<ITree> mList = this.fatherTypeToFathersMap.get(ActionConstants.IfPredicate);
 			mList.add(parent);
@@ -96,7 +96,7 @@ public class MiningActionBean {
 		}
 		addParentAndAction(parent,a);
 	}
-	public void mapForPredicateAndAction(ITree parent,Action a){
+	private void mapForPredicateAndAction(ITree parent,Action a){
 		if(this.fatherTypeToFathersMap.containsKey(ActionConstants.ForPredicate)){
 			List<ITree> mList = this.fatherTypeToFathersMap.get(ActionConstants.ForPredicate);
 			mList.add(parent);
@@ -106,6 +106,21 @@ public class MiningActionBean {
 			this.fatherTypeToFathersMap.put(ActionConstants.ForPredicate, mList);
 		}
 		addParentAndAction(parent,a);
+	}
+	public void mapMethodInvocationAndActions(ITree parent,List<Action> mList){
+		for(Action tmp:mList){
+			this.mapMethodInvocationAndAction(parent, tmp);
+		}
+	}
+	public void mapIfPredicateAndAction(ITree parent,List<Action> mList){
+		for(Action tmp:mList){
+			this.mapIfPredicateAndAction(parent, tmp);
+		}
+	}
+	public void mapForPredicateAndAction(ITree parent,List<Action> mList){
+		for(Action tmp:mList){
+			this.mapForPredicateAndAction(parent, tmp);
+		}
 	}
 	
 	
@@ -166,7 +181,6 @@ public class MiningActionBean {
 	public void setActionTraversedMap(List<Action> mList){
 		for(Action tmp:mList){
 			if(this.mActionGeneratorBean.getAllActionMap().containsKey(tmp)){
-				ConsolePrint.printMyOneActionString(tmp, 0, mDstTree);
 				this.mActionGeneratorBean.getAllActionMap().put(tmp, 1);
 			}else {
 				System.err.println("action not added");

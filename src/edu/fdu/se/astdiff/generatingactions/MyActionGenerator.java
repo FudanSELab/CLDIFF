@@ -135,7 +135,6 @@ public class MyActionGenerator {
                     	Update upd = new Update(origSrcTrees.get(w.getId()), dstItem.getLabel());
                     	myAgbData.addAction(upd, i);
 //                        Tree tmp = (Tree) dstItem;
-//                        tmp.setDoAction(upd);
                         ITree srcNode = origSrcTrees.get(w.getId());
                         Tree srcTree = (Tree) srcNode;
                         srcTree.setDoAction(upd);

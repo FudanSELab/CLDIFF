@@ -3,6 +3,7 @@ package edu.fdu.se.main.ast;
 
 import com.github.gumtreediff.actions.ActionUtil;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.ActionGeneratorBean;
@@ -54,12 +55,17 @@ public class DiffMiner {
 //		List<List<Action>> result = finder.clusteredActions();
 		//step 2
 		System.out.println("Begin to find Pattern:-------------------");
+
 		MiningActionBean bean = new MiningActionBean(data,his.srcTC,his.dstTC,his.mapping);
 		FindPattern fp = new FindPattern(bean);
 		fp.find();
 		
 	}
-	
+//	ITree tmp = his.src.getChild(0).getChild(2).getChild(4).getChild(5).getChild(1).getChild(1).getChild(3);
+//	Tree tr = (Tree)tmp;
+//	System.out.println(his.srcTC.getTypeLabel(tmp));
+//	System.out.println(tr.getDoAction()==null);
+//	
 
 	public static void main(String args[]){
 		DiffMiner i = new DiffMiner();
