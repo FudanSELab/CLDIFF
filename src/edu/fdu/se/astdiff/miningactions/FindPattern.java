@@ -354,7 +354,7 @@ public class FindPattern {
 		this.findUpdate();
 		this.findDelete();
 		this.findMethodSignatureChange();
-		// this.findMethodInvocationChange();
+		 this.findStatementChange();
 	}
 
 	/**
@@ -590,7 +590,22 @@ public class FindPattern {
 	 * Sub level-II
 	 * 
 	 */
-	public void findMethodInvocationChange() {
+	public void findStatementChange() {
+		for(Entry<String,List<ITree>> entry : this.mMiningActionBean.fatherTypeToFathersMap.entrySet()){
+			String type = entry.getKey();
+			List<ITree> value = entry.getValue();
+			switch(type){
+			case ActionConstants.METHODINVOCATION:
+			case ActionConstants.IfPredicate:
+			case ActionConstants.ForPredicate:
+			case ActionConstants.ExpressionStatement:
+			case ActionConstants.VariableDelcarationStatement:
+				break;
+				//TODO
+			default:
+				break;
+			}
+		}
 		for (Entry<ITree, List<Action>> item : this.mMiningActionBean.fatherToActionMap.entrySet()) {
 			Tree srcParentNode = (Tree) item.getKey();
 			Tree dstParentNode = (Tree) this.mMiningActionBean.mMapping.getDst(srcParentNode);

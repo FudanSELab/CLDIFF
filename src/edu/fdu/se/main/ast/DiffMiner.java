@@ -37,10 +37,8 @@ public class DiffMiner {
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstnewTree.txt",diff.getPrettyOldTreeString());
 	}
 	
-	//2.Action Cluster
 	public void run(){
-		//
-		System.out.println("Generating Diff Actions:");
+		System.out.println("Step1 Generating Diff Actions:----------------------");
 		String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
 		String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
 		GumTreeDiffParser his = new GumTreeDiffParser(file1,file2);
@@ -53,8 +51,7 @@ public class DiffMiner {
 		ConsolePrint.printMyActions(data.getSrcTreeActions(),his.srcTC);
 //		MyActionClusterFinder finder = new MyActionClusterFinder(his.srcTC, his.dstTC,data);
 //		List<List<Action>> result = finder.clusteredActions();
-		//step 2
-		System.out.println("Begin to find Pattern:-------------------");
+		System.out.println("Step2 Begin to find Pattern:-------------------");
 
 		MiningActionBean bean = new MiningActionBean(data,his.srcTC,his.dstTC,his.mapping);
 		FindPattern fp = new FindPattern(bean);
