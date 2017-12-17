@@ -15,6 +15,10 @@ public class FileWriter {
 	
 	final public static int FILE_APPEND_AND_CLOSE=2;
 	
+	final public static int FILE_WRITE_ONCE = 3;
+	
+	final public static int FILE_WRITE_MULTIPLE = 4;
+	
 	public static void writeInAll(String filePath, String content) {
 		try {
 			FileOutputStream fos = new FileOutputStream(filePath);
@@ -31,7 +35,6 @@ public class FileWriter {
 			try {
 				fileMap.get(mFile).close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			fileMap.remove(mFile);

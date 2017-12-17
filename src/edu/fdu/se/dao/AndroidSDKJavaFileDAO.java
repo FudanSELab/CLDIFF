@@ -47,4 +47,13 @@ public class AndroidSDKJavaFileDAO {
 	public static List<AndroidSDKJavaFile> selectByFileNameOnAndroidSubDirectoryAndFilterSupportPackage(String fileName){
 		return androidsdkjavafilemapper.selectByFileNameAndFilterSupportPackage(fileName);
 	}
+	/**
+	 * java sdk file android-x/android/  without support file
+	 * @param versionId
+	 * @return
+	 */
+	public static List<AndroidSDKJavaFile> selectAllFileBySDKVersion(int versionId){
+		return androidsdkjavafilemapper.selectAllFileBySDKVersion(versionId);
+	}
+	
 }

@@ -72,7 +72,8 @@ public class FileUtil {
 				return db.open(blobId, Constants.OBJ_BLOB).openStream();
 			case TRUE:
 			default:
-				return new AutoCRLFInputStream(db.open(blobId, Constants.OBJ_BLOB).openStream(), true);
+				return db.open(blobId, Constants.OBJ_BLOB).openStream();
+//				return new AutoCRLFInputStream(db.open(blobId, Constants.OBJ_BLOB).openStream(), true);
 			}
 		} catch (MissingObjectException notFound) {
 			return null;

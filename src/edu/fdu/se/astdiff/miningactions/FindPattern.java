@@ -354,7 +354,7 @@ public class FindPattern {
 		this.findUpdate();
 		this.findDelete();
 		this.findMethodSignatureChange();
-		 this.findStatementChange();
+		this.findStatementChange();
 	}
 
 	/**
