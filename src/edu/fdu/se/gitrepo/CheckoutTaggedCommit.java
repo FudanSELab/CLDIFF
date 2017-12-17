@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.ObjectId;
@@ -16,9 +18,11 @@ import org.eclipse.jgit.revwalk.RevTag;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 import edu.fdu.se.bean.AndroidSDKJavaFile;
+import edu.fdu.se.bean.AndroidTag;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
+import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepositoryHelper;
@@ -26,54 +30,34 @@ import edu.fdu.se.git.RepositoryHelper;
 public class CheckoutTaggedCommit {
 
 	public static void run() {
-		JGitTagCommand cmd = new JGitTagCommand(
-				ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH) + "/.git");
-		String commitHash = cmd.commitIdOfTag("b1b26a80d388371e2745caafc368fd0fe6a7866f");
-		System.out.println(commitHash);
-		List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectAllFileBySDKVersion(25);
+		String tagStr = "android-8.0.0_r1";
+		// 对应的tag id
+		List<AndroidTag> mTagList = AndroidTagDAO.selectTags(tagStr);
+		Map<String,String> tagMap = new HashMap<String,String>();
+		for(AndroidTag item :mTagList){
+			tagMap.put(item.getProjectName(), item.getTagShaId());
+		}
+		SDKFileToRepoFilePath.tagMap = tagMap;
+		List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectAllFileBySDKVersion(26);
 		List<String> wrongedFile = new ArrayList<String>();
-		int cnt = 0;
-		int cnt2 = 0;
+		List<String> diffFile = new ArrayList<String>();
 		for (AndroidSDKJavaFile file : mList) {
-			String filePath = file.getFileFullPath();
-			File localFile = new File(filePath);
-			long length = localFile.length();
-			String gitPath = SDKFileToRepoFilePath.v26PathMapping(file);
-			boolean flag = true;
-			byte[] gitFile = null;
-			try {
-				gitFile = cmd.extract(gitPath, commitHash);
-				if (length != gitFile.length) {
-					System.out.println("Error");
-					System.out.println("Src:" + length);
-					System.out.println("Dst:" + gitFile.length);
-					// flag = false;
-					cnt++;
-				}
-			} catch (Exception e) {
-				wrongedFile.add(gitPath);
-				cnt2++;
-				System.err.println("ERR0R Wrong path");
+			String res = SDKFileToRepoFilePath.checkFileInRepo(file);
+			if("YES".equals(res)){
+				
+			}else if("NO".equals(res)){
+				diffFile.add(file.getSubSubCategoryPath());
+			}else if("ERROR".equals(res)){
+				wrongedFile.add(file.getSubSubCategoryPath());
 			}
-			// if(flag==false){
-			// FileOutputStream fos;
-			// try {
-			// fos = new FileOutputStream(new File("D:/"+file.getFileName()));
-			// fos.write(gitFile);
-			// fos.close();
-			// } catch ( IOException e) {
-			// e.printStackTrace();
-			// }
-			// break;
-			// }
-
 		}
 		System.out.println("-----------------------------------------");
 		for (String a : wrongedFile) {
 			System.out.println(a);
 		}
-		System.out.println(cnt);
-		System.out.println(cnt2);
+		System.out.println(wrongedFile.size());
+		System.out.println(diffFile.size());
+		
 	}
 
 	public static void main(String args[]) {

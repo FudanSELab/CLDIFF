@@ -49,4 +49,6 @@ public interface AndroidTagMapper {
 	int updateByExample(@Param("record") AndroidTag record, @Param("example") AndroidTagExample example);
 
 	List<AndroidTag> selectAll();
+	
+	List<AndroidTag> selectTags(@Param("tagShortName")String tagShortName);
 }

@@ -236,4 +236,11 @@
     <include refid="Base_Column_List" />
     from android_tag
   </select>
+  
+  <select id="selectTags" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from android_tag
+    where tag_name_short=#{tagShortName,jdbcType=VARCHAR}
+    </select>
 </mapper>
