@@ -57,10 +57,10 @@ import edu.fdu.se.fileutil.FileUtil;
 
 public class JGitCommand {
 
-	protected Repository repository;
-	protected RevWalk revWalk;
+	public Repository repository;
+	public RevWalk revWalk;
 	public String repoPath;
-	protected Git git;
+	public Git git;
 
 	/**
 	 * Constructor

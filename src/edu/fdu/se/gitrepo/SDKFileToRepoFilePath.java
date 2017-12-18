@@ -3,6 +3,8 @@ package edu.fdu.se.gitrepo;
 import java.io.File;
 import java.util.Map;
 
+import org.eclipse.jgit.revwalk.RevCommit;
+
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
@@ -15,36 +17,68 @@ import edu.fdu.se.git.JGitTagCommand;
 public class SDKFileToRepoFilePath {
 
 	public static Map<String,String> tagMap;
-	public static String correctKey;
 
-	public static String getCorrectKey(AndroidSDKJavaFile file){
+	
+	public static String[] getCorrectRepositoryNameKeyAndPath(AndroidSDKJavaFile file){
 		String key = null;
+		String gitPath = null;
+		String subFilePath = file.getSubSubCategoryPath();
+		String[] result = new String[2];
 		String subsubPath = file.getSubSubCategoryPath();
 		if(subsubPath.startsWith("\\android\\bluetooth\\client")){
 			key = RepoConstants.platform_frameworks_opt_bluetooth_;
+			gitPath = subFilePath.replace('\\','/');
 		}
-		if(subsubPath.startsWith("\\android\\bordeaux")){
+		else if(subsubPath.startsWith("\\android\\bordeaux")){
 			key = RepoConstants.platform_frameworks_ml_;
+			gitPath = subFilePath.replace('\\','/');
 		}
-		if(subsubPath.startsWith("\\android\\databinding")){
+		else if(subsubPath.startsWith("\\android\\databinding")){
 			key = RepoConstants.platform_frameworks_data_binding_;
-		}
-		//TODO
-		switch(file.getSubSubCategoryPath()){
-		default:
+			gitPath = subFilePath.replace('\\','/');
+		}else{
+			//TODO
 			key = RepoConstants.platform_frameworks_base_;
-			break;
+			switch(file.getSubSubCategory()){
+			case "telephony":
+				gitPath = "telephony/java"+ subFilePath.replace('\\', '/');break;
+			case "opengl":
+				gitPath = "opengl/java"+subFilePath.replace('\\', '/');break;
+			case "net":
+				gitPath = "wifi/java"+subFilePath.replace('\\', '/');break;
+			case "drm":
+				gitPath = "drm/java"+subFilePath.replace('\\', '/');break;
+			case "location":
+				gitPath = "location/java"+subFilePath.replace('\\', '/');break;
+			case "telecom":
+				gitPath = "telecomm/java"+subFilePath.replace('\\', '/');break;
+			case "sax":
+				gitPath = "sax/java" +subFilePath.replace('\\', '/');break;
+			case "graphics":
+				gitPath = "graphics/java" +subFilePath.replace('\\', '/');break;
+			case "media":
+				gitPath = "media/java" +subFilePath.replace('\\', '/');break;
+			case "security":
+				gitPath = "keystore/java"+subFilePath.replace('\\', '/');break;
+			case "renderscript":
+				gitPath = "rs/java"+subFilePath.replace('\\', '/');break;
+			default:
+				gitPath = "core/java"+subFilePath.replace('\\','/');
+			}
 		}
-		return key;
+		result[0] = key;
+		result[1] = gitPath;
+		return result;
 	}
 
 	
 	public static String checkFileInRepo(AndroidSDKJavaFile file){
 		//choose one exact cmd
-		String filePath = file.getFileFullPath();
 		// fileP ->  cmd key -> tagStr 
 		//	           cmd Key -> full path
-		correctKey = getCorrectKey(file);
+		String[] data = getCorrectRepositoryNameKeyAndPath(file);
+		String correctKey = data[0];
+		String truePath = data[1];
 		JGitTagCommand correctCmd = JGitRepositoryManager.getCommand(correctKey);
 		String tagStr = null;
 		if(tagMap.containsKey(correctKey)){
@@ -53,53 +87,24 @@ public class SDKFileToRepoFilePath {
 			System.err.println("ERROR no repo of revision");
 			return "ERROR";
 		}
-		String commitHash = correctCmd.commitIdOfTag(tagStr);
-		String path = getCorrectPath(file);
-		File localFile = new File(filePath);
+		RevCommit commit = correctCmd.revCommitOfTag(tagStr);
+		File localFile = new File(file.getFileFullPath());
 		long length = localFile.length();
 		byte[] gitFile = null;
 		try{
-			gitFile = correctCmd.extract(path, commitHash);
+			gitFile = correctCmd.extract(truePath, commit.getName());
 		}catch(Exception e){
+			System.out.println("Path Incorrect："+truePath);
 			return "ERROR";
 		}
 		if(gitFile.length==length){
 			return "YES";
 		}else{
+			System.out.println("Not Equal");
 			return "NO";
 		}
 	}
 	
-	public static String getCorrectPath(AndroidSDKJavaFile file){
-		String gitPath = null;
-		String subFilePath = file.getSubSubCategoryPath();
-		switch(file.getSubSubCategory()){
-		case "telephony":
-			gitPath = "telephony/java"+ subFilePath.replace('\\', '/');break;
-		case "opengl":
-			gitPath = "opengl/java"+subFilePath.replace('\\', '/');break;
-		case "net":
-			gitPath = "wifi/java"+subFilePath.replace('\\', '/');break;
-		case "drm":
-			gitPath = "drm/java"+subFilePath.replace('\\', '/');break;
-		case "location":
-			gitPath = "location/java"+subFilePath.replace('\\', '/');break;
-		case "telecom":
-			gitPath = "telecomm/java"+subFilePath.replace('\\', '/');break;
-		case "sax":
-			gitPath = "sax/java" +subFilePath.replace('\\', '/');break;
-		case "graphics":
-			gitPath = "graphics/java" +subFilePath.replace('\\', '/');break;
-		case "media":
-			gitPath = "media/java" +subFilePath.replace('\\', '/');break;
-		case "security":
-			gitPath = "keystore/java"+subFilePath.replace('\\', '/');break;
-		case "renderscript":
-			gitPath = "rs/java"+subFilePath.replace('\\', '/');break;
-		default:
-			gitPath = "core/java"+subFilePath.replace('\\','/');
-		}
-		return gitPath;
-	}
+	
 
 }

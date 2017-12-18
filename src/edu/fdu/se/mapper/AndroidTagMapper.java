@@ -51,4 +51,6 @@ public interface AndroidTagMapper {
 	List<AndroidTag> selectAll();
 	
 	List<AndroidTag> selectTags(@Param("tagShortName")String tagShortName);
+	
+	List<AndroidTag> selectTagByShortNameAndProjName(@Param("tagShortName") String tagShortName,@Param("projectName")String projectName);
 }

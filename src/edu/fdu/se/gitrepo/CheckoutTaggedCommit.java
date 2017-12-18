@@ -26,11 +26,18 @@ import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepositoryHelper;
-
+/**
+ * sdk的文件 map到repo中
+ * @author huangkaifeng
+ *
+ */
 public class CheckoutTaggedCommit {
-
+	/**
+	 * 输入tag名 输出tag对应git和sdk文件的对应关系
+	 */
 	public static void run() {
 		String tagStr = "android-8.0.0_r1";
+		int versionNum = 26;
 		// 对应的tag id
 		List<AndroidTag> mTagList = AndroidTagDAO.selectTags(tagStr);
 		Map<String,String> tagMap = new HashMap<String,String>();
@@ -38,13 +45,13 @@ public class CheckoutTaggedCommit {
 			tagMap.put(item.getProjectName(), item.getTagShaId());
 		}
 		SDKFileToRepoFilePath.tagMap = tagMap;
-		List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectAllFileBySDKVersion(26);
+		List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectAllFileBySDKVersion(versionNum);
 		List<String> wrongedFile = new ArrayList<String>();
 		List<String> diffFile = new ArrayList<String>();
 		for (AndroidSDKJavaFile file : mList) {
 			String res = SDKFileToRepoFilePath.checkFileInRepo(file);
 			if("YES".equals(res)){
-				
+				continue;
 			}else if("NO".equals(res)){
 				diffFile.add(file.getSubSubCategoryPath());
 			}else if("ERROR".equals(res)){
@@ -52,9 +59,9 @@ public class CheckoutTaggedCommit {
 			}
 		}
 		System.out.println("-----------------------------------------");
-		for (String a : wrongedFile) {
-			System.out.println(a);
-		}
+//		for (String a : wrongedFile) {
+//			System.out.println(a);
+//		}
 		System.out.println(wrongedFile.size());
 		System.out.println(diffFile.size());
 		
