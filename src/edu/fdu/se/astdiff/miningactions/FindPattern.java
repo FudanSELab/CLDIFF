@@ -78,6 +78,9 @@ public class FindPattern {
 		}
 		String changeType = ActionConstants.getInstanceStringName(a);
 		String summary = "[PATTERN] " + changeType + " " + ifOrElseif;
+//		String labelType = this.mMiningActionBean.mDstTree.getTypeLabel(a.getNode());
+//		if(!StatementConstants.BLOCK.equals(labelType))
+//			summary += "(no {})";
 		List<Action> ifSubActions = new ArrayList<Action>();
 		boolean flag = MyTreeUtil.traverseAllChilrenCheckIfSameAction(a, ifSubActions);
 		boolean nullCheck = AstRelations.isNullCheck(a.getNode(), this.mMiningActionBean.mDstTree);
@@ -109,6 +112,9 @@ public class FindPattern {
 	public int matchElse(Action a) {
 		String changeType = ActionConstants.getInstanceStringName(a);
 		String summary = changeType + " else clause ";
+		String labelType = this.mMiningActionBean.mDstTree.getTypeLabel(a.getNode());
+		if(!StatementConstants.BLOCK.equals(labelType))
+			summary += "(no {}) ";
 		Tree root = (Tree) a.getNode();
 		List<ITree> children = root.getChildren();
 		List<Action> result = new ArrayList<Action>();
@@ -416,7 +422,11 @@ public class FindPattern {
 					count = this.matchVariableDeclaration(a);
 					break;
 				case StatementConstants.EXPRESSIONSTATEMENT:
-					count = this.matchExpression(a);
+					if(AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mDstTree))
+						// Pattern 1.2 Match else
+						count = this.matchElse(a);
+					else
+					    count = this.matchExpression(a);
 					break;
 				// 方法参数
 				case StatementConstants.SIMPLENAME:
@@ -484,7 +494,11 @@ public class FindPattern {
 					}
 					break;
 				case StatementConstants.EXPRESSIONSTATEMENT:
-					count = this.matchExpression(a);
+					// Pattern 1.2 Match else
+					if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mSrcTree))
+						count = this.matchElse(a);
+					else
+					    count = this.matchExpression(a);
 					break;
 				case StatementConstants.TRYSTATEMENT:
 					count = matchTry(a);
