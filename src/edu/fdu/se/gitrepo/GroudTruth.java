@@ -9,10 +9,17 @@ public class GroudTruth {
 	
 	public static void main(String args[]){
 		String path = "C:/Users/huangkaifeng/Desktop/commits_between_tags.txt";
-		Scanner sc = new Scanner(new FileInputStream(path));
-		while(sc.hasNext()){
-			
+		Scanner sc;
+		try {
+			sc = new Scanner(new FileInputStream(path));
+			while(sc.hasNext()){
+				
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 	}
 
 }
