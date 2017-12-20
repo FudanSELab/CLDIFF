@@ -27,15 +27,20 @@ public class SDKFileToRepoFilePath {
 		String subsubPath = file.getSubSubCategoryPath();
 		if(subsubPath.startsWith("\\android\\bluetooth\\client")){
 			key = RepoConstants.platform_frameworks_opt_bluetooth_;
-			gitPath = subFilePath.replace('\\','/');
+			gitPath = "src" + subFilePath.replace('\\','/');
 		}
 		else if(subsubPath.startsWith("\\android\\bordeaux")){
+			if(subsubPath.startsWith("\\android\\bordeaux\\services")){
+				gitPath = "bordeaux/service/src"+subFilePath.replace('\\','/');
+			}else if(subsubPath.startsWith("\\android\\bordeaux\\leanring")){
+				gitPath = subFilePath.replace('\\','/');
+			}
 			key = RepoConstants.platform_frameworks_ml_;
-			gitPath = subFilePath.replace('\\','/');
+			
 		}
 		else if(subsubPath.startsWith("\\android\\databinding")){
 			key = RepoConstants.platform_frameworks_data_binding_;
-			gitPath = subFilePath.replace('\\','/');
+			gitPath = "data-binding/baseLibrary/src/main/java"+subFilePath.replace('\\','/');
 		}else{
 			//TODO
 			key = RepoConstants.platform_frameworks_base_;
@@ -73,9 +78,6 @@ public class SDKFileToRepoFilePath {
 
 	
 	public static String checkFileInRepo(AndroidSDKJavaFile file){
-		//choose one exact cmd
-		// fileP ->  cmd key -> tagStr 
-		//	           cmd Key -> full path
 		String[] data = getCorrectRepositoryNameKeyAndPath(file);
 		String correctKey = data[0];
 		String truePath = data[1];
@@ -94,13 +96,13 @@ public class SDKFileToRepoFilePath {
 		try{
 			gitFile = correctCmd.extract(truePath, commit.getName());
 		}catch(Exception e){
-			System.out.println("Path Incorrect："+truePath);
+			System.out.println("Path Incorrect："+file.getSubSubCategoryPath()+"---------"+truePath);
 			return "ERROR";
 		}
 		if(gitFile.length==length){
 			return "YES";
 		}else{
-			System.out.println("Not Equal");
+//			System.out.println("Not Equal"+ file.getSubSubCategoryPath()+"-----------"+truePath);
 			return "NO";
 		}
 	}

@@ -17,7 +17,7 @@ final public class RepoConstants {
 	final public static String platform_frameworks_media_libvideoeditor_ = "/platform/frameworks/media/libvideoeditor/";
 	final public static String platform_frameworks_mff_ = "/platform/frameworks/mff/";
 	final public static String platform_frameworks_minikin_ = "/platform/frameworks/minikin/";
-	final public static String platform_frameworks_ml_ = "/platform/frameworks/ml/";
+	final public static String platform_frameworks_ml_ = "/platform/frameworks/ml/";//
 	final public static String platform_frameworks_multidex_ = "/platform/frameworks/multidex/";
 	final public static String platform_frameworks_native_ = "/platform/frameworks/native/";
 	final public static String platform_frameworks_opt_bitmap_ = "/platform/frameworks/opt/bitmap/";

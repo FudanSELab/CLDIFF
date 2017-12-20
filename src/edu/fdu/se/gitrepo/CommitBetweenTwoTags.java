@@ -1,6 +1,11 @@
 package edu.fdu.se.gitrepo;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,24 +50,64 @@ public class CommitBetweenTwoTags {
 		res[0] = commitPrev;
 		return res;
 	}
-
-	public static void main(String args[]) {
-//		String tagPrev = "android-7.1.1_r1";
-//		String tagCurr = "android-8.0.0_r1";
-		
-		String tagPrev = "android-4.4w_r1";
-		String tagCurr = "android-5.0.1_r1";
+	public static int count =0;
+	public static void run(String tagPrev,String tagCurr,boolean flag){
 		String repoName = RepoConstants.platform_frameworks_base_;
 		JGitTagCommand cmd = JGitRepositoryManager.getCommand(repoName);
 		RevCommit[] mList = revCommitOfTagStr(tagPrev, tagCurr, cmd, repoName);
 		RevCommit commitCurr = mList[1];
 		RevCommit commitPrev = mList[0];
-		System.out.println("CurrentCommit:"+ commitCurr.getName());
-		System.out.println("PrevCommit:"+ commitPrev.getName());
+		
 		List<RevCommit> commitsInBetweenTags = new ArrayList<RevCommit>();
 		boolean result = cmd.walkRepoBackwardsStartWithCommitId(commitCurr, commitPrev, commitsInBetweenTags);
-		System.out.println(result);
-	
+		if(flag == true){
+			if(result==true && commitsInBetweenTags.size()>2){
+				System.out.println(count+" "+commitsInBetweenTags.size());
+				count++;
+				System.out.println(tagPrev+" <---> "+tagCurr);
+				System.out.println("CurrentCommit:"+ commitCurr.getName());
+				System.out.println("PrevCommit:"+ commitPrev.getName());
+				System.out.println(result);
+				for(RevCommit item: commitsInBetweenTags){
+					System.out.println(item.getName());
+				}
+				System.out.println("\n");
+			}
+		}else{
+			
+		}
+		
+		
+	}
+	public static List<String> readTagList(){
+		FileInputStream fos;
+		List<String> mList = new ArrayList<String>();
+		try {
+			fos = new FileInputStream(new File("C:/Users/huangkaifeng/Desktop/12-14-Android-Repo/android_tags_filtered2"));
+			InputStreamReader inputReader = new InputStreamReader(fos);
+			BufferedReader br = new BufferedReader(inputReader);
+			String str = null;
+			while((str = br.readLine())!= null ){
+				String tagStr = str.substring(10);
+				mList.add(tagStr);
+			}
+			return mList;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static void main(String args[]) {
+		List<String> tagList = readTagList();
+		for(int i =0;i<tagList.size()-1;i++){
+			String tagPrev = tagList.get(i);
+			String tagCurr = tagList.get(i+1);
+			run(tagPrev,tagCurr,true);
+			
+		}
 	}
 	// Ref peeledRef = cmd.repository.peel(ref);
 	// if(peeledRef.getPeeledObjectId() != null) {

@@ -38,7 +38,6 @@ public class CheckoutTaggedCommit {
 	public static void run() {
 		String tagStr = "android-8.0.0_r1";
 		int versionNum = 26;
-		// 对应的tag id
 		List<AndroidTag> mTagList = AndroidTagDAO.selectTags(tagStr);
 		Map<String,String> tagMap = new HashMap<String,String>();
 		for(AndroidTag item :mTagList){

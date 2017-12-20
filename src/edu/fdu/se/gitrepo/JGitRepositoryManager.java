@@ -9,6 +9,7 @@ public class JGitRepositoryManager {
 	private static JGitTagCommand baseCmd;
 	private static JGitTagCommand blueToothCmd;
 	private static JGitTagCommand databindingCmd;
+	private static JGitTagCommand mlCmd;
 
 	private static String ANDROID_PLATFORM_FRAMEWORK_ROOT_PATH;
 	static {
@@ -20,6 +21,8 @@ public class JGitRepositoryManager {
 				ANDROID_PLATFORM_FRAMEWORK_ROOT_PATH + RepoConstants.platform_frameworks_opt_bluetooth_ + ".git");
 		databindingCmd = new JGitTagCommand(
 				ANDROID_PLATFORM_FRAMEWORK_ROOT_PATH + RepoConstants.platform_frameworks_data_binding_ + ".git");
+		
+		mlCmd = new JGitTagCommand(ANDROID_PLATFORM_FRAMEWORK_ROOT_PATH +RepoConstants.platform_frameworks_ml_ +".git");
 
 	}
 
@@ -34,6 +37,9 @@ public class JGitRepositoryManager {
 			break;
 		case RepoConstants.platform_frameworks_data_binding_:
 			jtc = databindingCmd;
+			break;
+		case RepoConstants.platform_frameworks_ml_:
+			jtc = mlCmd;
 			break;
 		default:
 			jtc = baseCmd;

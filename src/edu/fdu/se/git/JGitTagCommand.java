@@ -120,7 +120,6 @@ public class JGitTagCommand extends JGitCommand {
 					continue;
 				}
 				isTraversed.put(queueCommitItem.getName(), true);
-				System.out.println(queueCommitItem.getName());
 				revCommitList.add(queueCommitItem);
 				if (queueCommitItem.getName().equals(end.getName())) {
 					res = true;

@@ -14,6 +14,13 @@ import edu.fdu.se.git.JGitTagCommand;
  */
 public class LoadRepoTagToDb {
 	public static void main(String args[]){
+		
+		
+	}
+	/**
+	 * load to db
+	 */
+	public static void run(){
 		List<AndroidPlatformFrameworkProject> mList = AndroidPlatformFrameworkProjectDAO.selectAll();
 		for(AndroidPlatformFrameworkProject item : mList){
 			String subPath = item.getProjectSubPath();
@@ -22,7 +29,6 @@ public class LoadRepoTagToDb {
 			int size = cmd.listTags(item);
 			System.out.println(subPath +": "+size);
 		}
-		
 	}
 
 }
