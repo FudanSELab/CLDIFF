@@ -392,13 +392,16 @@ public class FindPattern {
 				// 新增方法
 				resultStr = matchNewOrDeleteMethod(a);
 				System.out.println(resultStr);
-			} else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
+				continue;
+			} 
+			
+			if (StatementConstants.METHODDECLARATION.equals(fatherType)&&!StatementConstants.BLOCK.equals(type)) {
 				// 方法签名修改
-				if (StatementConstants.BLOCK.equals(type)) {
-					System.err.println("Not considered");
-				} else {
+//				if () {
+//					System.err.println("Not considered");
+//				} else {
 					count = matchMethodSignatureChange(a, fafafather);
-				}
+//				}
 			} else {
 				// 方法体
 				switch (type) {

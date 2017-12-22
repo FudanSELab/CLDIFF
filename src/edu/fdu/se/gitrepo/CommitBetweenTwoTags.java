@@ -19,7 +19,9 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevTag;
 
+import edu.fdu.se.bean.AndroidRepoCommitWithBLOBs;
 import edu.fdu.se.bean.AndroidTag;
+import edu.fdu.se.dao.AndroidRepoCommitDAO;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitTagCommand;
 
@@ -51,6 +53,7 @@ public class CommitBetweenTwoTags {
 		return res;
 	}
 	public static int count =0;
+	public static int count2=0;
 	public static void run(String tagPrev,String tagCurr,boolean flag){
 		String repoName = RepoConstants.platform_frameworks_base_;
 		JGitTagCommand cmd = JGitRepositoryManager.getCommand(repoName);
@@ -60,25 +63,55 @@ public class CommitBetweenTwoTags {
 		
 		List<RevCommit> commitsInBetweenTags = new ArrayList<RevCommit>();
 		boolean result = cmd.walkRepoBackwardsStartWithCommitId(commitCurr, commitPrev, commitsInBetweenTags);
-		if(flag == true){
-			if(result==true && commitsInBetweenTags.size()>2){
-				System.out.println(count+" "+commitsInBetweenTags.size());
-				count++;
-				System.out.println(tagPrev+" <---> "+tagCurr);
-				System.out.println("CurrentCommit:"+ commitCurr.getName());
-				System.out.println("PrevCommit:"+ commitPrev.getName());
-				System.out.println(result);
-				for(RevCommit item: commitsInBetweenTags){
-					System.out.println(item.getName());
-				}
-				System.out.println("\n");
-			}
+		
+		if(result == true){
+			count++;
+//			if(result==true && commitsInBetweenTags.size()>2){
+//				System.out.println(count+" "+commitsInBetweenTags.size());
+//				count++;
+//				System.out.println(tagPrev+" <---> "+tagCurr);
+//				System.out.println("CurrentCommit:"+ commitCurr.getName());
+//				System.out.println("PrevCommit:"+ commitPrev.getName());
+//				System.out.println(result);
+//				for(RevCommit item: commitsInBetweenTags){
+//					if(bugOrNot(item)){
+//						//TODO
+//						AndroidRepoCommitWithBLOBs  a = AndroidRepoCommitDAO.selectWithCommitSHA(item.getName());
+//						if(a!=null){
+//							if(a.getIssdkfile()!=0)
+//								System.out.println(item.getName()+" "+item.getShortMessage());
+//						}else{
+//							System.err.println("EEEE");
+//						}
+//					}else{
+//						System.out.println(item.getName());
+//					}
+//					
+//				}
+//				System.out.println("\n");
+//			}
 		}else{
-			
+			//false
+			count2++;
 		}
 		
 		
+		
 	}
+	
+	public static boolean bugOrNot(RevCommit rev){
+		String msg = rev.getShortMessage().toLowerCase();
+		String msgFull = rev.getFullMessage().toLowerCase();
+		boolean result = false;
+		if(msg.contains("bug")|| msg.contains("fix")||msg.contains("patch")||msg.contains("fixing")){
+			result = true;
+		}
+		if(msgFull.contains("bug")|| msgFull.contains("fix")||msgFull.contains("patch")||msgFull.contains("fixing")){
+			result = true;
+		}
+		return result;
+	}
+	
 	public static List<String> readTagList(){
 		FileInputStream fos;
 		List<String> mList = new ArrayList<String>();
@@ -108,6 +141,7 @@ public class CommitBetweenTwoTags {
 			run(tagPrev,tagCurr,true);
 			
 		}
+		System.out.println(count+":"+count2);
 	}
 	// Ref peeledRef = cmd.repository.peel(ref);
 	// if(peeledRef.getPeeledObjectId() != null) {

@@ -17,5 +17,7 @@ public class PropertyKeys {
 	final public static String TOP_SDK_CLASS_OUTPUT_DIR="top_sdk_class_output_dir";
 	
 	final public static String ANDROID_REPO_PATH2 = "android_repo_path2";
+	
+	final public static String LOCAL_DESKTOP = "local_desktop";
 
 }

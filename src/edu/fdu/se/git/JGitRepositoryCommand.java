@@ -15,6 +15,10 @@ import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
 
+import edu.fdu.se.bean.AndroidRepoCommit;
+import edu.fdu.se.bean.AndroidRepoCommitWithBLOBs;
+import edu.fdu.se.dao.AndroidRepoCommitDAO;
+
 public class JGitRepositoryCommand extends JGitCommand{
 
 	public JGitRepositoryCommand(String repopath) {
@@ -58,13 +62,22 @@ public class JGitRepositoryCommand extends JGitCommand{
 		}
 
 	}
+
+	
 	public void walkRepoFromBackwardsToDB(CommitVisitorDB visitor) {
 		try {
-			Map<String, Ref> refs = repository.getAllRefs();
+//			Map<String, Ref> refs = repository.getAllRefs();
 			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
 			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
-			for (Entry<String, Ref> item : refs.entrySet()) {
-				RevCommit commit = revWalk.parseCommit(item.getValue().getObjectId());
+//			
+//			List<AndroidRepoCommit> allData = AndroidRepoCommitDAO.selectAll();
+//			for(AndroidRepoCommit item:allData){
+//				isTraversed.put(item.getCommitId(),true);
+//			}
+//			;//343365
+			List<Ref> mList = this.git.branchList().setListMode(ListMode.ALL).call();
+			for (Ref item : mList) {
+				RevCommit commit = revWalk.parseCommit(item.getObjectId());
 				commitQueue.offer(commit);
 				while (commitQueue.size() != 0) {
 					RevCommit queueCommitItem = commitQueue.poll();
@@ -72,16 +85,12 @@ public class JGitRepositoryCommand extends JGitCommand{
 					if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
 						continue;
 					}
-					// Map<String, List<String>> changedFiles =
-					// this.getCommitFileList(queueCommitItem.getName());
-					// int res =
-					// AndroidRepoCommitDAO.countByCommitId(commit.getName());
-					// if(res==0){
-					// visitor.visit(queueCommitItem, changedFiles);
-					// }
+					Map<String, List<String>> changedFiles = this.getCommitFileList(queueCommitItem.getName());
+					visitor.visit(queueCommitItem, changedFiles);
+					System.out.println(queueCommitItem.getName());
 					isTraversed.put(queueCommitItem.getName(), true);
 					for (RevCommit item2 : parentCommits) {
-						RevCommit commit2 = revWalk.parseCommit(item2.getId());
+						RevCommit commit2 = revWalk.parseCommit(item2.getId()); 
 						commitQueue.offer(commit2);
 					}
 				}
@@ -93,6 +102,9 @@ public class JGitRepositoryCommand extends JGitCommand{
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (GitAPIException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 
 	}
