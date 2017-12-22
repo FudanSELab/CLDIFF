@@ -113,7 +113,10 @@ public class MyTreeUtil{
     	boolean isAllSameAction = true;
     	for(ITree tmp:node.preOrder()){
     		Tree myTree = (Tree) tmp;
-    		if(myTree.getDoAction()==null) continue;
+    		if(myTree.getDoAction()==null) {
+    			isAllSameAction=false;
+    			continue;
+			}
     		List<Action> nodeActions = myTree.getDoAction();
     		for(Action aTmp:nodeActions){
     			if(aTmp.getClass().equals(a.getClass())){
