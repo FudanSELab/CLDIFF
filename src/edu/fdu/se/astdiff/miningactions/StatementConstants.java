@@ -35,6 +35,6 @@ public class StatementConstants {
 	final public static String FORSTATEMENT = "ForStatement";
 	
 	final public static String ENHANCEDFORSTATEMENT = "EnhancedForStatement";
-	
-	
+
+	final public static String SYNCHRONIZEDSTATEMENT = "SynchronizedStatement";
 }

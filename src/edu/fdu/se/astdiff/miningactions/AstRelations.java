@@ -18,6 +18,22 @@ public class AstRelations {
 		}
 		return false;
 	}
+	public static boolean isChildCotainSynchronizedStatement(Action a, TreeContext treeContext) {
+		//Tree t = (Tree) a.getNode();
+		List<ITree> child = a.getNode().getChildren();
+		if(child.size()<1){
+			System.err.println("There is no child");
+			return false;
+		}
+		for(ITree tmp:child){
+			Tree t = (Tree) tmp;
+			String type = treeContext.getTypeLabel(t);
+			if (type.equals(StatementConstants.SYNCHRONIZEDSTATEMENT)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public static boolean ifFatherNodeTypeSameAs(Action a, TreeContext treeContext, String statementConstants) {
 		Tree t = (Tree) a.getNode();
@@ -93,9 +109,12 @@ public class AstRelations {
 		String returnType = null;
 		while (true) {
 			type = treeContext.getTypeLabel(curNode);
-			if(type.endsWith("Statement")){
+			if(type.endsWith("Statement")) {
 				returnType = type;
 				break;
+			}else if(type.endsWith("Block")){
+					returnType = type;
+					break;
 			}else if(StatementConstants.METHODDECLARATION.equals(type)){
 				returnType = type;
 				break;
