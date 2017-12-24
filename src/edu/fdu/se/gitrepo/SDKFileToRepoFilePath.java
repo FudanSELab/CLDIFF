@@ -78,10 +78,12 @@ public class SDKFileToRepoFilePath {
 
 	
 	public static String checkFileInRepo(AndroidSDKJavaFile file){
+		System.out.println(file.getSubSubCategoryPath());
 		String[] data = getCorrectRepositoryNameKeyAndPath(file);
 		String correctKey = data[0];
 		String truePath = data[1];
-		JGitTagCommand correctCmd = JGitRepositoryManager.getCommand(correctKey);
+		JGitTagCommand correctCmd = JGitRepositoryManager.getBaseCommand();
+
 		String tagStr = null;
 		if(tagMap.containsKey(correctKey)){
 			tagStr = tagMap.get(correctKey);

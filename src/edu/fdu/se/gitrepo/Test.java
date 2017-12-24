@@ -15,11 +15,26 @@ import edu.fdu.se.git.JGitTagCommand;
 
 public class Test {
 	public static void main(String args[]){
-		JGitTagCommand correctCmd = JGitRepositoryManager.getCommand(RepoConstants.platform_frameworks_ml_);
-		String filePath = "\\android\\bordeaux\\services\\TimeStatsAggregator.java";
-		String tagId = "3c6d4648f6687c7fedf260fe72a8de26e868bbd0";
-		RevCommit rev = correctCmd.revCommitOfTag(tagId);
-		System.out.println(rev);
+		System.out.println(new Test().uniquePaths(3, 7));
+	}
+	int [][] dp;
+	public int uniquePaths(int m,int n){
+		dp = new int[m+1][n+1];
+		for(int i=0;i<=n;i++){
+			dp[1][i] = 1;
+			dp[0][i] = 1;
+		}
+		for(int j=0;j<=m;j++){
+			dp[j][1] = 1;
+			dp[j][0] =1;
+		
+		}
+		for(int i=2;i<=n;i++)
+			for(int j=2;j<=m;j++){
+				dp[j][i] = dp[j][i-1]+dp[j-1][i];
+			}
+		return dp[3][7];
+		
 	}
 
 }

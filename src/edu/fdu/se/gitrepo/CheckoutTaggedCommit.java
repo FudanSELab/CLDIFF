@@ -61,6 +61,7 @@ public class CheckoutTaggedCommit {
 //		for (String a : wrongedFile) {
 //			System.out.println(a);
 //		}
+		System.out.println(mList.size());
 		System.out.println(wrongedFile.size());
 		System.out.println(diffFile.size());
 		

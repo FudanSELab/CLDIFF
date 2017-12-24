@@ -47,5 +47,9 @@ public class JGitRepositoryManager {
 		}
 		return jtc;
 	}
+	
+	public static JGitTagCommand getBaseCommand(){
+		return baseCmd;
+	}
 
 }
