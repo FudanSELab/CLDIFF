@@ -16,7 +16,11 @@ import java.util.regex.Pattern;
 
 import edu.fdu.se.bean.AndroidRepoCommit;
 import edu.fdu.se.dao.AndroidRepoCommitDAO;
-
+/**
+ * commit intention category
+ * @author huangkaifeng
+ *
+ */
 public class CommitType {
 	public static void main(String args[]) {
 		commitKeyword();

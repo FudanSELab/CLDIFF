@@ -18,7 +18,7 @@ import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitTagCommand;
-import edu.fdu.se.gitrepo.RepoConstants;
+import edu.fdu.se.main.androidrepo.preprocessing.RepoConstants;
 
 public class SortTagByCommitTime {
 	

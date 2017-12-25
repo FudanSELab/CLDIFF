@@ -24,6 +24,7 @@ import edu.fdu.se.bean.AndroidTag;
 import edu.fdu.se.dao.AndroidRepoCommitDAO;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitTagCommand;
+import edu.fdu.se.main.androidrepo.preprocessing.RepoConstants;
 
 /**
  * 给两个tag id，判断是否是一条开发线，返回两个tag 之间的commit

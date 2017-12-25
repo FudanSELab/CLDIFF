@@ -31,7 +31,7 @@ import edu.fdu.se.bean.AndroidRepoCommitWithBLOBs;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidRepoCommitDAO;
-import edu.fdu.se.gitrepo.RepoConstants;
+import edu.fdu.se.main.androidrepo.preprocessing.RepoConstants;
 
 public class JGitRepositoryCommand extends JGitCommand{
 

@@ -1,4 +1,4 @@
-package edu.fdu.se.gitrepo;
+package edu.fdu.se.main.androidrepo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,6 +26,7 @@ import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepositoryHelper;
+import edu.fdu.se.gitrepo.SDKFileToRepoFilePath;
 /**
  * sdk的文件 map到repo中
  * @author huangkaifeng

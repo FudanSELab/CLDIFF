@@ -31,8 +31,8 @@ import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
-import edu.fdu.se.gitrepo.RepoConstants;
 import edu.fdu.se.javaparser.JavaParserFactory;
+import edu.fdu.se.main.androidrepo.preprocessing.RepoConstants;
 /**
  * 输入tag标签，tag标签之前的candidate commit
  * @author huangkaifeng
