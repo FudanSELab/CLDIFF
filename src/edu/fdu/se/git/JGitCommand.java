@@ -120,10 +120,10 @@ public class JGitCommand {
 				List<DiffEntry> entries = diffFormatter.scan(oldTreeIter, newTreeIter);
 				for (DiffEntry entry : entries) {
 					switch (entry.getChangeType()) {
-					
+
 					case ADD:
 						addList.add(entry.getNewPath());
-						
+
 						break;
 					case MODIFY:
 						modifyList.add(entry.getNewPath());
@@ -214,11 +214,6 @@ public class JGitCommand {
 		return null;
 	}
 
-
-
-
-
-	
 	/**
 	 * read commit time
 	 * 
@@ -261,7 +256,6 @@ public class JGitCommand {
 		}
 		return 0;
 	}
-
 
 	/**
 	 * TODO print Diff entry
@@ -370,6 +364,7 @@ public class JGitCommand {
 	/**
 	 * extract file given file path and commit id
 	 * core/java/android/app/Activity.java
+	 * 
 	 * @param fileName
 	 * @param revisionId
 	 * @return
@@ -396,7 +391,7 @@ public class JGitCommand {
 				RevTree tree = commit.getTree();
 				TreeWalk treeWalk = TreeWalk.forPath(repository, fileName, tree);
 				ObjectId id = treeWalk.getObjectId(0);
-				
+
 				InputStream is = FileUtil.open(id, repository);
 				byte[] res = FileUtil.toByteArray(is);
 				return res;
@@ -417,11 +412,11 @@ public class JGitCommand {
 		walk.close();
 		return null;
 	}
-	
-	
+
 	/**
 	 * extract file given file path and commit id
 	 * core/java/android/app/Activity.java
+	 * 
 	 * @param fileName
 	 * @param revisionId
 	 * @return
@@ -448,7 +443,7 @@ public class JGitCommand {
 				RevTree tree = commit.getTree();
 				TreeWalk treeWalk = TreeWalk.forPath(repository, fileName, tree);
 				ObjectId id = treeWalk.getObjectId(0);
-				
+
 				InputStream is = FileUtil.open(id, repository);
 				return is;
 			} else {
@@ -468,8 +463,10 @@ public class JGitCommand {
 		walk.close();
 		return null;
 	}
+
 	/**
-	 * 仅仅考虑java文件
+	 * 所有java文件
+	 * 
 	 * @param commmitid
 	 * @return
 	 */
@@ -496,7 +493,59 @@ public class JGitCommand {
 					switch (entry.getChangeType()) {
 					case MODIFY:
 						String mOldPath = entry.getOldPath();
-						if(mOldPath.startsWith("core/java/")&&mOldPath.endsWith(".java")){
+						FileHeader fileHeader = diffFormatter.toFileHeader(entry);
+						EditList editList = fileHeader.toEditList();
+						cci.addFileChangeEntry(parent, mOldPath, entry.getNewPath(), editList);
+						break;
+					case ADD:
+					case DELETE:
+					default:
+						break;
+					}
+				}
+				diffFormatter.close();
+			}
+			return cci;
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 仅仅考虑java文件
+	 * 
+	 * @param commmitid
+	 * @return
+	 */
+	public CommitCodeInfo getCommitJavaFileEditSummary(String commmitid) {
+		ObjectId commitId = ObjectId.fromString(commmitid);
+		RevCommit commit = null;
+		try {
+			commit = revWalk.parseCommit(commitId);
+			CommitCodeInfo cci = new CommitCodeInfo(commit);
+			RevCommit[] parentsCommits = commit.getParents();
+			for (RevCommit parent : parentsCommits) {
+				ObjectReader reader = git.getRepository().newObjectReader();
+				CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
+				ObjectId newTree = commit.getTree().getId();
+				newTreeIter.reset(reader, newTree);
+				CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
+				RevCommit pCommit = revWalk.parseCommit(parent.getId());
+				ObjectId oldTree = pCommit.getTree().getId();
+				oldTreeIter.reset(reader, oldTree);
+				DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
+				diffFormatter.setRepository(git.getRepository());
+				List<DiffEntry> entries = diffFormatter.scan(oldTreeIter, newTreeIter);
+				for (DiffEntry entry : entries) {
+					switch (entry.getChangeType()) {
+					case MODIFY:
+						String mOldPath = entry.getOldPath();
+						if (mOldPath.startsWith("core/java/") && mOldPath.endsWith(".java")) {
 							FileHeader fileHeader = diffFormatter.toFileHeader(entry);
 							EditList editList = fileHeader.toEditList();
 							cci.addFileChangeEntry(parent, mOldPath, entry.getNewPath(), editList);

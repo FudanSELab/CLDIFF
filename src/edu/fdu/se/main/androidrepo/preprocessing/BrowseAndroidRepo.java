@@ -15,6 +15,7 @@ import edu.fdu.se.git.CommitVisitorDB;
 import edu.fdu.se.git.CommitVisitorLog;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitRepositoryCommand;
+import edu.fdu.se.gitrepo.RepoConstants;
 
 /**
  * browser git repo, filter commits with android sdk file, write to output dir.

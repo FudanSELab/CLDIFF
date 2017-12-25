@@ -38,6 +38,11 @@ public class CommitCodeInfo {
 	public Map<RevCommit, List<FileChangeEditList>> getFileDiffEntryMap() {
 		return fileDiffEntryMap;
 	}
+
+	public RevCommit getmCommit() {
+		return mCommit;
+	}
+	
 	
 	
 	

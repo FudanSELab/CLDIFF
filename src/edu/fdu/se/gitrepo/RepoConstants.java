@@ -1,4 +1,4 @@
-package edu.fdu.se.main.androidrepo.preprocessing;
+package edu.fdu.se.gitrepo;
 
 final public class RepoConstants {
 	final public static String platform_frameworks_av_ = "/platform/frameworks/av/";

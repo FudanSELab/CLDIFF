@@ -3,7 +3,6 @@ package edu.fdu.se.gitrepo;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.git.JGitTagCommand;
-import edu.fdu.se.main.androidrepo.preprocessing.RepoConstants;
 
 public class JGitRepositoryManager {
 

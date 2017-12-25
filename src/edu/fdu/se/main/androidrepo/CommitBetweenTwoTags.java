@@ -1,4 +1,4 @@
-package edu.fdu.se.gitrepo;
+package edu.fdu.se.main.androidrepo;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +24,8 @@ import edu.fdu.se.bean.AndroidTag;
 import edu.fdu.se.dao.AndroidRepoCommitDAO;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitTagCommand;
-import edu.fdu.se.main.androidrepo.preprocessing.RepoConstants;
+import edu.fdu.se.gitrepo.JGitRepositoryManager;
+import edu.fdu.se.gitrepo.RepoConstants;
 
 /**
  * 给两个tag id，判断是否是一条开发线，返回两个tag 之间的commit
@@ -65,32 +66,32 @@ public class CommitBetweenTwoTags {
 		List<RevCommit> commitsInBetweenTags = new ArrayList<RevCommit>();
 		boolean result = cmd.walkRepoBackwardsStartWithCommitId(commitCurr, commitPrev, commitsInBetweenTags);
 		
-		if(result == true){
+		if(flag == true){
 			count++;
-//			if(result==true && commitsInBetweenTags.size()>2){
-//				System.out.println(count+" "+commitsInBetweenTags.size());
-//				count++;
-//				System.out.println(tagPrev+" <---> "+tagCurr);
-//				System.out.println("CurrentCommit:"+ commitCurr.getName());
-//				System.out.println("PrevCommit:"+ commitPrev.getName());
-//				System.out.println(result);
-//				for(RevCommit item: commitsInBetweenTags){
-//					if(bugOrNot(item)){
-//						//TODO
-//						AndroidRepoCommitWithBLOBs  a = AndroidRepoCommitDAO.selectWithCommitSHA(item.getName());
-//						if(a!=null){
-//							if(a.getIssdkfile()!=0)
-//								System.out.println(item.getName()+" "+item.getShortMessage());
-//						}else{
-//							System.err.println("EEEE");
-//						}
-//					}else{
-//						System.out.println(item.getName());
-//					}
-//					
-//				}
-//				System.out.println("\n");
-//			}
+			if(result==true && commitsInBetweenTags.size()>2){
+				System.out.println(count+" "+commitsInBetweenTags.size());
+				count++;
+				System.out.println(tagPrev+" <---> "+tagCurr);
+				System.out.println("CurrentCommit:"+ commitCurr.getName());
+				System.out.println("PrevCommit:"+ commitPrev.getName());
+				System.out.println(result);
+				for(RevCommit item: commitsInBetweenTags){
+					if(bugOrNot(item)){
+						//TODO
+						AndroidRepoCommitWithBLOBs  a = AndroidRepoCommitDAO.selectWithCommitSHA(item.getName());
+						if(a!=null){
+							if(a.getIssdkfile()!=0)
+								System.out.println(item.getName()+" "+item.getShortMessage());
+						}else{
+							System.err.println("EEEE");
+						}
+					}else{
+						System.out.println(item.getName());
+					}
+					
+				}
+				System.out.println("\n");
+			}
 		}else{
 			//false
 			count2++;
@@ -133,8 +134,7 @@ public class CommitBetweenTwoTags {
 		}
 		return null;
 	}
-
-	public static void main(String args[]) {
+	public static void runTagList(){
 		List<String> tagList = readTagList();
 		for(int i =0;i<tagList.size()-1;i++){
 			String tagPrev = tagList.get(i);
@@ -144,7 +144,12 @@ public class CommitBetweenTwoTags {
 		}
 		System.out.println(count+":"+count2);
 	}
-	// Ref peeledRef = cmd.repository.peel(ref);
-	// if(peeledRef.getPeeledObjectId() != null) {
-	// log.add(peeledRef.getPeeledObjectId());
+	
+	public static void runTagPair(){
+		run("android-7.1.0_r1","android-7.1.0_r5",true);
+	}
+	public static void main(String args[]) {
+		runTagPair();
+		//runTagList();
+	}
 }

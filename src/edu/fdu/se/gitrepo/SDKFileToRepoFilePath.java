@@ -9,7 +9,6 @@ import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.git.JGitTagCommand;
-import edu.fdu.se.main.androidrepo.preprocessing.RepoConstants;
 /**
  * SDKFile Path in, repository file out
  * @author huangkaifeng
