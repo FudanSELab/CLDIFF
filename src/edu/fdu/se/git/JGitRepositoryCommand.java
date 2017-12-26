@@ -1,5 +1,6 @@
 package edu.fdu.se.git;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.diff.EditList;
+import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
@@ -193,7 +195,9 @@ public class JGitRepositoryCommand extends JGitCommand{
 				RevCommit pCommit = revWalk.parseCommit(parent.getId());
 				ObjectId oldTree = pCommit.getTree().getId();
 				oldTreeIter.reset(reader, oldTree);
-				DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+//				DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
+				DiffFormatter diffFormatter = new DiffFormatter(out);
 				diffFormatter.setRepository(git.getRepository());
 				List<DiffEntry> entries = diffFormatter.scan(oldTreeIter, newTreeIter);
 				for (DiffEntry entry : entries) {
@@ -211,6 +215,7 @@ public class JGitRepositoryCommand extends JGitCommand{
 							System.out.println(item.getEndA());
 						}
 						
+						
 						break;
 					case DELETE:
 						deleteList.add(entry.getNewPath());
@@ -218,6 +223,26 @@ public class JGitRepositoryCommand extends JGitCommand{
 					default:
 						break;
 					}
+				}
+				ArrayList<String> diffText = new ArrayList<String>();
+				diffFormatter.setContext(0);
+				for(DiffEntry diff : entries)
+		        {
+		           try {
+		                 //Format a patch script for one file entry.
+		        	   diffFormatter.format(diff);
+		        	   
+		                RawText r = new RawText(out.toByteArray());
+		                r.getLineDelimiter();
+		                diffText.add(out.toString());
+		                out.reset();
+		            } catch (IOException e) {
+		                e.printStackTrace();
+		            }
+
+		         }
+				for(String tmp:diffText){
+					System.out.print(tmp);
 				}
 				diffFormatter.close();
 				fileList.put("addedFiles", addList);

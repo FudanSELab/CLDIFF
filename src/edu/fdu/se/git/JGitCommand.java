@@ -515,14 +515,18 @@ public class JGitCommand {
 		}
 		return null;
 	}
-
+	
+	
+	final static public int ALL_FILE = 0;
+	final static public int JAVA_FILE = 1;
+	final static public int CORE_JAVA_FILE = 2;
 	/**
 	 * 仅仅考虑java文件
 	 * 
 	 * @param commmitid
 	 * @return
 	 */
-	public CommitCodeInfo getCommitJavaFileEditSummary(String commmitid) {
+	public CommitCodeInfo getCommitFileEditSummary(String commmitid,int flag) {
 		ObjectId commitId = ObjectId.fromString(commmitid);
 		RevCommit commit = null;
 		try {
@@ -545,10 +549,22 @@ public class JGitCommand {
 					switch (entry.getChangeType()) {
 					case MODIFY:
 						String mOldPath = entry.getOldPath();
-						if (mOldPath.startsWith("core/java/") && mOldPath.endsWith(".java")) {
+						if(JGitCommand.ALL_FILE == flag){
 							FileHeader fileHeader = diffFormatter.toFileHeader(entry);
 							EditList editList = fileHeader.toEditList();
 							cci.addFileChangeEntry(parent, mOldPath, entry.getNewPath(), editList);
+						}else if(JGitCommand.JAVA_FILE == flag){
+							if (mOldPath.endsWith(".java")) {
+								FileHeader fileHeader = diffFormatter.toFileHeader(entry);
+								EditList editList = fileHeader.toEditList();
+								cci.addFileChangeEntry(parent, mOldPath, entry.getNewPath(), editList);
+							}
+						}else if(JGitCommand.CORE_JAVA_FILE == flag){
+							if (mOldPath.startsWith("core/java/") && mOldPath.endsWith(".java")) {
+								FileHeader fileHeader = diffFormatter.toFileHeader(entry);
+								EditList editList = fileHeader.toEditList();
+								cci.addFileChangeEntry(parent, mOldPath, entry.getNewPath(), editList);
+							}
 						}
 						break;
 					case ADD:

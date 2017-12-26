@@ -1,12 +1,15 @@
 package edu.fdu.se.main.gitgui;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.DefaultListModel;
+import javax.swing.text.BadLocationException;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 
@@ -34,7 +37,7 @@ public class JGitRepoManager {
 				+ RepoConstants.platform_frameworks_base_ + ".git");
 	}
 	public void parserCommit(String commitId){
-		this.cci = myCmd.getCommitJavaFileEditSummary(commitId);
+		this.cci = myCmd.getCommitFileEditSummary(commitId, JGitCommand.JAVA_FILE);
 		
 	}
 	
@@ -87,6 +90,27 @@ public class JGitRepoManager {
 		return sb.toString();
 		
 		
+	}
+	
+	public InputStream readFile(int rank,String filePath,Map<Integer,Integer> coloredLine){
+		String commitName = null;
+		for(Entry<RevCommit,List<FileChangeEditList>> item:cci.getFileDiffEntryMap().entrySet()){
+			if(rank != 0){
+				rank = 0;
+				continue;
+			}
+			RevCommit commit = item.getKey();
+			commitName = commit.getName();
+			
+			List<FileChangeEditList> mList = item.getValue();
+			for(FileChangeEditList item2 : mList){
+				if(filePath.equals(item2.getOldFilePath())){
+					break;
+				}
+			}
+			break;
+		}
+		return this.myCmd.extractAndReturnInputStream(filePath,commitName);
 	}
 	
 	

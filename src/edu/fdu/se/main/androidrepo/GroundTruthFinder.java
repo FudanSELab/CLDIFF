@@ -28,6 +28,7 @@ import edu.fdu.se.bean.AndroidTag;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidTagDAO;
+import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
@@ -113,7 +114,7 @@ public class GroundTruthFinder {
 					System.out.println("early skip");
 					continue;
 				}
-				CommitCodeInfo mCCI = tagCmd.getCommitJavaFileEditSummary(line);
+				CommitCodeInfo mCCI = tagCmd.getCommitFileEditSummary(line, JGitCommand.JAVA_FILE);
 				Map<RevCommit, List<FileChangeEditList>> mMap = mCCI.getFileDiffEntryMap();
 				for (Entry<RevCommit, List<FileChangeEditList>> item : mMap.entrySet()) {
 					RevCommit parent = item.getKey();
