@@ -1,37 +1,25 @@
 package edu.fdu.se.git;
 
-import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Random;
 
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand.ListMode;
-import org.eclipse.jgit.api.ListTagCommand;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRefNameException;
-import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.api.errors.RefAlreadyExistsException;
 import org.eclipse.jgit.api.errors.RefNotFoundException;
 import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.EditList;
-import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -64,6 +52,9 @@ public class JGitCommand {
 	public RevWalk revWalk;
 	public String repoPath;
 	public Git git;
+	final static public int ALL_FILE = 0;
+	final static public int JAVA_FILE = 1;
+	final static public int CORE_JAVA_FILE = 2;
 
 	/**
 	 * Constructor
@@ -74,9 +65,6 @@ public class JGitCommand {
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		try {
 			repository = builder.setGitDir(new File(repopath)).readEnvironment() // scan
-																					// environment
-																					// GIT_*
-																					// variables
 					.findGitDir() // scan up the file system tree
 					.build();
 			revWalk = new RevWalk(repository);
@@ -102,7 +90,6 @@ public class JGitCommand {
 		List<String> addList = new ArrayList<String>();
 		List<String> modifyList = new ArrayList<String>();
 		List<String> deleteList = new ArrayList<String>();
-
 		try {
 			commit = revWalk.parseCommit(commitId);
 			RevCommit[] parentsCommits = commit.getParents();
@@ -120,10 +107,8 @@ public class JGitCommand {
 				List<DiffEntry> entries = diffFormatter.scan(oldTreeIter, newTreeIter);
 				for (DiffEntry entry : entries) {
 					switch (entry.getChangeType()) {
-
 					case ADD:
 						addList.add(entry.getNewPath());
-
 						break;
 					case MODIFY:
 						modifyList.add(entry.getNewPath());
@@ -152,7 +137,7 @@ public class JGitCommand {
 	}
 
 	/**
-	 * 
+	 * 带有parent id的file list
 	 */
 	public Map<String, Map<String, List<String>>> getCommitParentMappedFileList(String commmitid) {
 		Map<String, Map<String, List<String>>> result = new HashMap<String, Map<String, List<String>>>();
@@ -464,13 +449,26 @@ public class JGitCommand {
 		return null;
 	}
 
+	
+	
+	public boolean filterRule(int flag,String oldPath){
+		if (JGitCommand.ALL_FILE == flag) {
+			return true;
+		} else if (JGitCommand.JAVA_FILE == flag && oldPath.endsWith(".java")) {
+			return true;
+		} else if (JGitCommand.CORE_JAVA_FILE == flag && oldPath.startsWith("core/java/") && oldPath.endsWith(".java")) {
+			return true;
+		}
+		return false;
+	}
+
 	/**
-	 * 所有java文件
+	 * 仅仅考虑java文件
 	 * 
 	 * @param commmitid
 	 * @return
 	 */
-	public CommitCodeInfo getCommitEditSummary(String commmitid) {
+	public CommitCodeInfo getCommitFileEditSummary(String commmitid, int flag) {
 		ObjectId commitId = ObjectId.fromString(commmitid);
 		RevCommit commit = null;
 		try {
@@ -486,16 +484,22 @@ public class JGitCommand {
 				RevCommit pCommit = revWalk.parseCommit(parent.getId());
 				ObjectId oldTree = pCommit.getTree().getId();
 				oldTreeIter.reset(reader, oldTree);
-				DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				DiffFormatter diffFormatter = new DiffFormatter(out);
 				diffFormatter.setRepository(git.getRepository());
 				List<DiffEntry> entries = diffFormatter.scan(oldTreeIter, newTreeIter);
 				for (DiffEntry entry : entries) {
 					switch (entry.getChangeType()) {
 					case MODIFY:
 						String mOldPath = entry.getOldPath();
-						FileHeader fileHeader = diffFormatter.toFileHeader(entry);
-						EditList editList = fileHeader.toEditList();
-						cci.addFileChangeEntry(parent, mOldPath, entry.getNewPath(), editList);
+						if(this.filterRule(flag, mOldPath)){
+							FileHeader fileHeader = diffFormatter.toFileHeader(entry);
+							EditList editList = fileHeader.toEditList();
+							diffFormatter.format(entry);
+//							System.out.print(out.toString());
+							cci.addFileChangeEntry(parent, mOldPath, entry.getNewPath(), editList,out.toString());
+							out.reset();
+						}
 						break;
 					case ADD:
 					case DELETE:
@@ -515,67 +519,27 @@ public class JGitCommand {
 		}
 		return null;
 	}
-	
-	
-	final static public int ALL_FILE = 0;
-	final static public int JAVA_FILE = 1;
-	final static public int CORE_JAVA_FILE = 2;
+
 	/**
-	 * 仅仅考虑java文件
+	 * edit script
 	 * 
 	 * @param commmitid
 	 * @return
 	 */
-	public CommitCodeInfo getCommitFileEditSummary(String commmitid,int flag) {
-		ObjectId commitId = ObjectId.fromString(commmitid);
+	public List<String> getCommitEditScript(String commmitid, DiffEntry entry) {
+//		ObjectId commitId = ObjectId.fromString(commmitid);
 		RevCommit commit = null;
 		try {
-			commit = revWalk.parseCommit(commitId);
-			CommitCodeInfo cci = new CommitCodeInfo(commit);
-			RevCommit[] parentsCommits = commit.getParents();
-			for (RevCommit parent : parentsCommits) {
-				ObjectReader reader = git.getRepository().newObjectReader();
-				CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
-				ObjectId newTree = commit.getTree().getId();
-				newTreeIter.reset(reader, newTree);
-				CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
-				RevCommit pCommit = revWalk.parseCommit(parent.getId());
-				ObjectId oldTree = pCommit.getTree().getId();
-				oldTreeIter.reset(reader, oldTree);
-				DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
-				diffFormatter.setRepository(git.getRepository());
-				List<DiffEntry> entries = diffFormatter.scan(oldTreeIter, newTreeIter);
-				for (DiffEntry entry : entries) {
-					switch (entry.getChangeType()) {
-					case MODIFY:
-						String mOldPath = entry.getOldPath();
-						if(JGitCommand.ALL_FILE == flag){
-							FileHeader fileHeader = diffFormatter.toFileHeader(entry);
-							EditList editList = fileHeader.toEditList();
-							cci.addFileChangeEntry(parent, mOldPath, entry.getNewPath(), editList);
-						}else if(JGitCommand.JAVA_FILE == flag){
-							if (mOldPath.endsWith(".java")) {
-								FileHeader fileHeader = diffFormatter.toFileHeader(entry);
-								EditList editList = fileHeader.toEditList();
-								cci.addFileChangeEntry(parent, mOldPath, entry.getNewPath(), editList);
-							}
-						}else if(JGitCommand.CORE_JAVA_FILE == flag){
-							if (mOldPath.startsWith("core/java/") && mOldPath.endsWith(".java")) {
-								FileHeader fileHeader = diffFormatter.toFileHeader(entry);
-								EditList editList = fileHeader.toEditList();
-								cci.addFileChangeEntry(parent, mOldPath, entry.getNewPath(), editList);
-							}
-						}
-						break;
-					case ADD:
-					case DELETE:
-					default:
-						break;
-					}
-				}
-				diffFormatter.close();
-			}
-			return cci;
+//			commit = revWalk.parseCommit(commitId);
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			DiffFormatter diffFormatter = new DiffFormatter(out);
+			diffFormatter.format(entry);
+			RawText r = new RawText(out.toByteArray());
+			r.getLineDelimiter();
+			System.out.println(out.toString());
+			out.reset();
+			diffFormatter.close();
 		} catch (MissingObjectException e) {
 			e.printStackTrace();
 		} catch (IncorrectObjectTypeException e) {

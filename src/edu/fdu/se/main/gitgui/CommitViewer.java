@@ -1,6 +1,5 @@
 package edu.fdu.se.main.gitgui;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,6 +11,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,6 +38,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
+import javax.swing.text.Highlighter;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -80,7 +83,7 @@ public class CommitViewer {
 		controlPanel = new JPanel();
 		controlPanel.setLayout(new BorderLayout());
 		mainFrame.add(controlPanel);
-		mainFrame.setLocationRelativeTo(null);  
+		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
 	}
 
@@ -93,14 +96,14 @@ public class CommitViewer {
 		panel.setLayout(layout);
 		panel.add(new JLabel(" Repository:/platform/frameworks/base/.git"));
 		commitInput = new JTextField(54);
-		commitInput.setText("0d75603ea7da774d19bf5b015de42f374dad82ed");
+		commitInput.setText("c7f502947b5b80baca084101fb7a0aaa74db9974");
 		panel.add(commitInput);
 		jButton = new JButton("load");
 		jButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String commitId = commitInput.getText();
-				if(commitId.length()!=40){
+				if (commitId.length() != 40) {
 					return;
 				}
 				JGitRepoManager.getInstance().parserCommit(commitId);
@@ -114,6 +117,7 @@ public class CommitViewer {
 		controlPanel.add(panel, BorderLayout.NORTH);
 		mainFrame.setVisible(true);
 	}
+
 	/**
 	 * tab1
 	 */
@@ -126,12 +130,12 @@ public class CommitViewer {
 	JList<String> fileList;
 	DefaultListModel<String> listModel;
 	List<Integer> commitIdIndexOfJList;
-	
+
 	private void subPanel() {
 		JTabbedPane jtabpane = new JTabbedPane();
 		JPanel jp1 = new JPanel();
 		commitLogDetail = new JTextArea("Commit msg text");
-		commitLogDetail.setPreferredSize(new Dimension(980,400));
+		commitLogDetail.setPreferredSize(new Dimension(980, 400));
 		jp1.add(commitLogDetail);
 		//
 		JPanel jp2 = new JPanel(new BorderLayout());
@@ -140,62 +144,59 @@ public class CommitViewer {
 		listModel.addElement("load your commit");
 
 		fileList = new JList<String>(listModel);
-		fileList.setPreferredSize(new Dimension(352,500));
+		fileList.setPreferredSize(new Dimension(352, 500));
 		fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		fileList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-            	if(fileList.getValueIsAdjusting()){
-            		System.out.println("click");
-            	}else{
-            		int index = fileList.getSelectedIndex();
-            		if(commitIdIndexOfJList==null || commitIdIndexOfJList.contains(index)){
-            			System.out.println("contain. not do anything");
-            		}else{
-            			int commitRank = -1;
-            			if(commitIdIndexOfJList.contains(index)){
-            				commitRank = commitIdIndexOfJList.indexOf(index);
-            			}
-            			String filePath = fileList.getSelectedValue();
-            			System.out.println(filePath);
-            			Map<Integer,Integer> coloredLine = new HashMap<Integer,Integer>();
-            			InputStream t = JGitRepoManager.getInstance().readFile(commitRank,filePath,coloredLine);
-            			fillTextPane(t,coloredLine);
-            			
-            		}
-            		
-            	}
-            }
+			public void valueChanged(ListSelectionEvent e) {
+				if (fileList.getValueIsAdjusting()) {
+					System.out.println("click");
+				} else {
+					int index = fileList.getSelectedIndex();
+					if (commitIdIndexOfJList == null || commitIdIndexOfJList.contains(index)) {
+						System.out.println("contain. not do anything");
+					} else {
+						int commitRank = -1;
+						if (commitIdIndexOfJList.contains(index)) {
+							commitRank = commitIdIndexOfJList.indexOf(index);
+						}
+						String filePath = fileList.getSelectedValue();
+						System.out.println(filePath);
+						String content = JGitRepoManager.getInstance().readFile(filePath);
+						fillTextPane(content);
 
-        });
-		
+					}
+
+				}
+			}
+
+		});
+
 		JScrollPane fileListPanel = new JScrollPane(fileList);
 		fileListPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		changedFileContent = new JTextPane();
 		changedFileContent.setPreferredSize(new Dimension(600, 500));
 		JScrollPane jsp1 = new JScrollPane(changedFileContent);
-		
+
 		linePane = new JTextPane();
 		linePane.setPreferredSize(new Dimension(10, 500));
 		JScrollPane jsp2 = new JScrollPane(linePane);
-		
-		jsp1.addMouseWheelListener(new MouseWheelListener(){
+
+		jsp1.addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent arg0) {
-				JScrollBar sBar = jsp1.getVerticalScrollBar(); 
+				JScrollBar sBar = jsp1.getVerticalScrollBar();
 				int value = sBar.getValue();
 				JScrollBar sBar2 = jsp2.getVerticalScrollBar();
 				sBar2.setValue(value);
-				
+
 			}
-			
+
 		});
 		jsp2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		jsp2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jp2.add(fileListPanel, BorderLayout.WEST);
-		jp2.add(jsp2,BorderLayout.CENTER);
-		jp2.add(jsp1,BorderLayout.EAST);
-		
-
+		jp2.add(jsp2, BorderLayout.CENTER);
+		jp2.add(jsp1, BorderLayout.EAST);
 
 		jtabpane.addTab("Commit", jp1);
 		jtabpane.addTab("Diff", jp2);
@@ -205,49 +206,97 @@ public class CommitViewer {
 		controlPanel.add(jtabpane, BorderLayout.SOUTH);
 		mainFrame.setVisible(true);
 	}
-	
-	public void fillTextPane(InputStream fis,Map<Integer,Integer> redGreenFlag){
+
+	public void fillTextPane(InputStream fis, Map<Integer, Integer> redGreenFlag) {
 		InputStreamReader ir = new InputStreamReader(fis);
 		BufferedReader br = new BufferedReader(ir);
 		StyledDocument doc = changedFileContent.getStyledDocument();
 		Style style = changedFileContent.addStyle("mStyle", null);
 		String line = null;
-		int index=0;
+		int index = 0;
 		try {
-			while((line = br.readLine()) != null){
-				 if(redGreenFlag.containsKey(index)){
-					 int value = redGreenFlag.get(index);
-					 if(value==1){
-						 //red
-						 StyleConstants.setForeground(style, Color.red);
-						 try { doc.insertString(doc.getLength(), line,style); }
-					        catch (BadLocationException e){}
-					 }else{
-						 //green
-						 StyleConstants.setForeground(style, Color.green);
-						 try { doc.insertString(doc.getLength(), line,style); }
-					        catch (BadLocationException e){}
-					 }
-				 }else{
-					 //normal
-					 StyleConstants.setForeground(style, Color.white);
-					 try { doc.insertString(doc.getLength(), "BLEH",style); }
-				        catch (BadLocationException e){}
-				 }
-				 
-			 }
+			while ((line = br.readLine()) != null) {
+				if (redGreenFlag.containsKey(index)) {
+					int value = redGreenFlag.get(index);
+					if (value == 1) {
+						// red
+						StyleConstants.setForeground(style, Color.red);
+						try {
+							doc.insertString(doc.getLength(), line, style);
+						} catch (BadLocationException e) {
+						}
+					} else {
+						// green
+						StyleConstants.setForeground(style, Color.green);
+						try {
+							doc.insertString(doc.getLength(), line, style);
+						} catch (BadLocationException e) {
+						}
+					}
+				} else {
+					// normal
+					StyleConstants.setForeground(style, Color.white);
+					try {
+						doc.insertString(doc.getLength(), "BLEH", style);
+					} catch (BadLocationException e) {
+					}
+				}
+
+			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		 StyledDocument lineDoc = linePane.getStyledDocument();
-		 Style style2 = lineDoc.addStyle("mStyle", null);
-		 for(int i=0;i<index;i++){
-			 try{lineDoc.insertString(doc.getLength(), String.valueOf(i+1)+"\n",style2);}
-			 catch (BadLocationException e){}
-		 }
-	       
+		StyledDocument lineDoc = linePane.getStyledDocument();
+		Style style2 = lineDoc.addStyle("mStyle", null);
+		for (int i = 0; i < index; i++) {
+			try {
+				lineDoc.insertString(doc.getLength(), String.valueOf(i + 1) + "\n", style2);
+			} catch (BadLocationException e) {
+			}
+		}
+
 	}
 
+	public void fillTextPane(String fileContent) {
+		InputStream is = new ByteArrayInputStream(fileContent.getBytes());
+		InputStreamReader isb = new InputStreamReader(is);
+		BufferedReader br = new BufferedReader(isb);
+		StyledDocument doc = changedFileContent.getStyledDocument();
+		changedFileContent.setText("");
+		Style style = changedFileContent.addStyle("mStyle", null);
+		String line = null;
+		int lineNum = 0;
+		try {
+			while ((line = br.readLine()) != null) {
+				lineNum++;
 
+				if (line.startsWith("+-")) {
+					StyleConstants.setForeground(style, Color.blue);
+				} else if (line.startsWith("+")) {
+					StyleConstants.setForeground(style, Color.green);
+				} else if (line.startsWith("-")) {
+					StyleConstants.setForeground(style, Color.red);
+				} else {
+					StyleConstants.setForeground(style, Color.black);
+				}
+				doc.insertString(doc.getLength(), line + "\n", style);
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		StyledDocument lineDoc = linePane.getStyledDocument();
+
+		Style style2 = lineDoc.addStyle("mStyle", null);
+		for (int i = 0; i < lineNum; i++) {
+			try {
+				lineDoc.insertString(lineDoc.getLength(), String.valueOf(i + 1) + "\n", style2);
+			} catch (BadLocationException e) {
+			}
+		}
+
+	}
 
 }

@@ -54,7 +54,6 @@ public class JGitRepoManager {
 			listModel.addElement(str);
 			result.add(i);
 			i++;
-			System.out.println(str);
 			List<FileChangeEditList> mList = item.getValue();
 			for(FileChangeEditList item2 : mList){
 				listModel.addElement(item2.getOldFilePath());
@@ -92,25 +91,24 @@ public class JGitRepoManager {
 		
 	}
 	
-	public InputStream readFile(int rank,String filePath,Map<Integer,Integer> coloredLine){
-		String commitName = null;
+	public String readFile(String filePath){
+		FileChangeEditList m = null;
+		boolean isFind = false;
 		for(Entry<RevCommit,List<FileChangeEditList>> item:cci.getFileDiffEntryMap().entrySet()){
-			if(rank != 0){
-				rank = 0;
-				continue;
-			}
-			RevCommit commit = item.getKey();
-			commitName = commit.getName();
-			
 			List<FileChangeEditList> mList = item.getValue();
 			for(FileChangeEditList item2 : mList){
 				if(filePath.equals(item2.getOldFilePath())){
+					m = item2;
+					isFind = true;
 					break;
 				}
 			}
-			break;
+			if(isFind){
+				break;
+			}
 		}
-		return this.myCmd.extractAndReturnInputStream(filePath,commitName);
+		
+		return m.getPatchScript();
 	}
 	
 	

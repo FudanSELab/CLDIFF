@@ -23,6 +23,7 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.patch.FileHeader;
+import org.eclipse.jgit.patch.HunkHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
@@ -33,6 +34,7 @@ import edu.fdu.se.bean.AndroidRepoCommitWithBLOBs;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidRepoCommitDAO;
+import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.gitrepo.RepoConstants;
 
 public class JGitRepositoryCommand extends JGitCommand{
@@ -168,25 +170,19 @@ public class JGitRepositoryCommand extends JGitCommand{
 	public static void main(String args[]){
 		JGitRepositoryCommand cmd = new JGitRepositoryCommand(
 				ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)+RepoConstants.platform_frameworks_base_ + ".git");
-		cmd.getCommitParentMappedFileList2("cd97c0e935d13bbd29dce0417093ec694c3ddd76");
+//		cmd.getCommitParentMappedFileList2("cd97c0e935d13bbd29dce0417093ec694c3ddd76");
+		CommitCodeInfo cci = cmd.getCommitFileEditSummary("c7f502947b5b80baca084101fb7a0aaa74db9974", JGitCommand.JAVA_FILE);
+		
 	}
 	public Map<String, Map<String, List<String>>> getCommitParentMappedFileList2(String commmitid) {
 		Map<String, Map<String, List<String>>> result = new HashMap<String, Map<String, List<String>>>();
 		ObjectId commitId = ObjectId.fromString(commmitid);
 		RevCommit commit = null;
-		Map<String, List<String>> fileList = null;
-		List<String> addList = null;
-		List<String> modifyList = null;
-		List<String> deleteList = null;
 
 		try {
 			commit = revWalk.parseCommit(commitId);
 			RevCommit[] parentsCommits = commit.getParents();
 			for (RevCommit parent : parentsCommits) {
-				fileList = new HashMap<String, List<String>>();
-				addList = new ArrayList<String>();
-				modifyList = new ArrayList<String>();
-				deleteList = new ArrayList<String>();
 				ObjectReader reader = git.getRepository().newObjectReader();
 				CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
 				ObjectId newTree = commit.getTree().getId();
@@ -200,55 +196,25 @@ public class JGitRepositoryCommand extends JGitCommand{
 				DiffFormatter diffFormatter = new DiffFormatter(out);
 				diffFormatter.setRepository(git.getRepository());
 				List<DiffEntry> entries = diffFormatter.scan(oldTreeIter, newTreeIter);
+				diffFormatter.setContext(0);
 				for (DiffEntry entry : entries) {
 					switch (entry.getChangeType()) {
 					case ADD:
-						addList.add(entry.getNewPath());
 						break;
 					case MODIFY:
-						modifyList.add(entry.getNewPath());
-						FileHeader fileHeader = diffFormatter.toFileHeader(entry);
-						EditList editList = fileHeader.toEditList();
-						for(Edit item:editList){
-							System.out.println(item.getType());
-							System.out.println(item.getBeginA());
-							System.out.println(item.getEndA());
-						}
-						
-						
-						break;
 					case DELETE:
-						deleteList.add(entry.getNewPath());
+//						this.getCommitEditScript(null, entry);	
+//			             RawText r = new RawText(out.toByteArray());
+//			               r.getLineDelimiter();
+			             System.out.println(out.toString());
+			             out.reset();
 						break;
+					
 					default:
 						break;
 					}
 				}
-				ArrayList<String> diffText = new ArrayList<String>();
-				diffFormatter.setContext(0);
-				for(DiffEntry diff : entries)
-		        {
-		           try {
-		                 //Format a patch script for one file entry.
-		        	   diffFormatter.format(diff);
-		        	   
-		                RawText r = new RawText(out.toByteArray());
-		                r.getLineDelimiter();
-		                diffText.add(out.toString());
-		                out.reset();
-		            } catch (IOException e) {
-		                e.printStackTrace();
-		            }
-
-		         }
-				for(String tmp:diffText){
-					System.out.print(tmp);
-				}
 				diffFormatter.close();
-				fileList.put("addedFiles", addList);
-				fileList.put("modifiedFiles", modifyList);
-				fileList.put("deletedFiles", deleteList);
-				result.put(pCommit.getName(), fileList);
 			}
 			return result;
 		} catch (MissingObjectException e) {

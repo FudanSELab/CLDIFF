@@ -6,10 +6,11 @@ public class FileChangeEditList {
 	String oldFilePath;
 	String newFilePath;
 	EditList mEditList;
-	public FileChangeEditList(String oldPath,String newPath,EditList list){
+	public FileChangeEditList(String oldPath,String newPath,EditList list,String patch){
 		this.oldFilePath = oldPath;
 		this.newFilePath = newPath;
 		this.mEditList = list;
+		this.patchScript = patch;
 	}
 	public String getOldFilePath() {
 		return oldFilePath;
@@ -19,6 +20,10 @@ public class FileChangeEditList {
 	}
 	public EditList getEditList() {
 		return mEditList;
+	}
+	String patchScript;
+	public String getPatchScript() {
+		return patchScript;
 	}
 	
 	

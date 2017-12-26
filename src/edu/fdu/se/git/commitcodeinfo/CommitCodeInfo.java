@@ -22,9 +22,9 @@ public class CommitCodeInfo {
 	 */
 	private Map<RevCommit,List<FileChangeEditList>> fileDiffEntryMap;
 	
-	public void addFileChangeEntry(RevCommit parentCommit,String oldPath,String newPath,EditList mEditList){
+	public void addFileChangeEntry(RevCommit parentCommit,String oldPath,String newPath,EditList mEditList,String patch){
 		List<FileChangeEditList> tmpList;
-		FileChangeEditList tmpItem = new FileChangeEditList(oldPath,newPath,mEditList);
+		FileChangeEditList tmpItem = new FileChangeEditList(oldPath,newPath,mEditList,patch);
 		if(fileDiffEntryMap.containsKey(parentCommit)){
 			tmpList = fileDiffEntryMap.get(parentCommit);
 			tmpList.add(tmpItem);
