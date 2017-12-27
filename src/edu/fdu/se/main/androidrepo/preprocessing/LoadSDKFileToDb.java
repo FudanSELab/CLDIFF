@@ -14,7 +14,7 @@ import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
  * @author huangkaifeng
  *
  */
-public class BrowseSDKFile {
+public class LoadSDKFileToDb {
 	static List<AndroidSDKJavaFile> insertationList = new ArrayList<AndroidSDKJavaFile>();
 	static String rootDir;
 	static int sdkVersion;

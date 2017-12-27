@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +31,32 @@ public class FileWriter {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public static void writeInAll(String filePath,byte[] content){
+		try {
+			FileOutputStream fos = new FileOutputStream(filePath);
+			fos.write(content);
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+  
+	
+	public static void writeInAll(String filePath,InputStream is){
+		try {
+			FileOutputStream fos = new FileOutputStream(filePath);
+			int ch;
+			while((ch = is.read())!= -1){
+				fos.write(ch);
+			}
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	public static void close(File mFile){
 		if (fileMap.containsKey(mFile)) {

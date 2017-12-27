@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.regex.Pattern;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.eclipse.jgit.diff.EditList;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -79,6 +80,7 @@ public class GroundTruthFinder {
 				ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
 						+ RepoConstants.platform_frameworks_base_ + ".git");
 		RevCommit revCommit = tagCmd.revCommitOfTag(mTag.getTagShaId());
+		System.out.println(tagName+" commit id: "+revCommit.getName());
 		this.commitAndTagMap.put(revCommit, tagName);
 	}
 
@@ -104,9 +106,12 @@ public class GroundTruthFinder {
 			InputStreamReader isr = new InputStreamReader(fis);
 			BufferedReader br = new BufferedReader(isr);
 			String line;
+			int cnt=0;
+			int size=0;
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
 				System.out.println(line);
+				size++;
 				line = line.substring(0,40);
 				int commitTime = tagCmd.readCommitTime(line);
 				List<RevCommit> candidate = this.chooseCandidateTag(commitTime);
@@ -119,7 +124,7 @@ public class GroundTruthFinder {
 				for (Entry<RevCommit, List<FileChangeEditList>> item : mMap.entrySet()) {
 					RevCommit parent = item.getKey();
 					List<FileChangeEditList> list = item.getValue();
-					System.out.println("\tParent");
+					System.out.println("\tParent: "+item.getKey().getName());
 					List<String> tagNameListAll = null;
 					for (FileChangeEditList item2 : list) {
 						// 每一个文件 都去比较一次
@@ -127,30 +132,36 @@ public class GroundTruthFinder {
 						String fileName = getClassNameFromPath(oldPath);
 						// commit change的文件
 						System.out.println("\t"+oldPath);
-						Map<String, List<MethodDeclaration>> codeFromRelease = this
+						Map<String, List<MethodDeclaration>> tagVersionMethods = this
 								.mappingTagStrToMethodDeclarationList(oldPath, fileName, candidate);
 
 						InputStream fileInputStream = tagCmd.extractAndReturnInputStream(oldPath, parent.getName());
-						List<MethodDeclaration> codePrev = JavaParserFactory
+						Set<MethodDeclaration> buggyMethods = JavaParserFactory
 								.parseInputStreamGetOverlapMethodDeclarationList(fileInputStream, fileName, item2);
-						List<String> tagNameList = this.compareTwoSet(codeFromRelease, codePrev);
-						if (tagNameListAll == null) {
-							tagNameListAll = tagNameList;
-						} else {
-							tagNameListAll.retainAll(tagNameList);
+						System.out.println("\tlinking:");
+						List<String> tagNameList = this.compareTwoSet(tagVersionMethods, buggyMethods);
+						if(tagNameList !=null && tagNameList.size()!=0){
+							if (tagNameListAll == null) {
+								tagNameListAll = tagNameList;
+							} else {
+								tagNameListAll.retainAll(tagNameList);
+							}
 						}
 					}
-					if (tagNameListAll != null) {
+					if (tagNameListAll != null &&tagNameListAll.size()!=0) {
+						System.out.print("Ok: tag name:");
+						cnt++;
 						for (String tmp : tagNameListAll) {
 							System.out.println("\t"+tmp);
 						}
+						System.out.println("");
 					} else {
-						System.out.println("No Tag commit matched");
+						System.out.println("No Tag commit matched\n\n");
 					}
 
 				}
-
 			}
+			System.out.println("\n\n最后统计mapped的buggy commit 数量："+cnt+"/"+size);
 			br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -163,35 +174,61 @@ public class GroundTruthFinder {
 		String fileName = path.substring(path.lastIndexOf("/") + 1);
 		return fileName.substring(0, fileName.length() - 5);
 	}
-
-	public List<String> compareTwoSet(Map<String, List<MethodDeclaration>> releasedTagMethod,
-			List<MethodDeclaration> mList) {
-		List<String> matchedTagList = new ArrayList<String>();
-		for (Entry<String, List<MethodDeclaration>> item : releasedTagMethod.entrySet()) {
-			String tagName = item.getKey();
-			List<MethodDeclaration> mList2 = item.getValue();
-			boolean isTagCommitMatch = true;
-			for (MethodDeclaration changeCode : mList) {
-				boolean isMatch = false;
-				for (MethodDeclaration tagRelease : mList2) {
-					if (tagRelease.getDeclarationAsString().equals(changeCode.getDeclarationAsString())
-							&& tagRelease.getBody().get().toString().equals(changeCode.getBody().get().toString())) {
-						System.out.println("mapped");
-						isMatch = true;
-						break;
+	
+	public List<String> isMethodFromCommitMatchRelease(Map<String, List<MethodDeclaration>> releasedTagMethod,MethodDeclaration m){
+		List<String> result = new ArrayList<String>();
+		for(Entry<String,List<MethodDeclaration>> entry:releasedTagMethod.entrySet()){
+			List<MethodDeclaration> mList2 = entry.getValue();
+			for (MethodDeclaration tagRelease : mList2) {
+				if (tagRelease.getDeclarationAsString().equals(m.getDeclarationAsString())
+						) {
+					System.out.println("\t\tMatch Same method signature:"+m.getDeclarationAsString());
+					if(tagRelease.getBody().get().toString().equals(m.getBody().get().toString())){
+						System.out.println("\t\tMatch Same method body:"+m.getDeclarationAsString());
+						result.add(entry.getKey());
 					}
-				}
-				// isMatch false没找到对应
-				if (!isMatch) {
-					isTagCommitMatch = false;
 					break;
 				}
-				// true 找到对应的
-			}
-			if (isTagCommitMatch) {
-				matchedTagList.add(tagName);
 			}
 		}
+		return result;
+	}
+		
+
+	public List<String> compareTwoSet(Map<String, List<MethodDeclaration>> releasedTagMethod,
+			Set<MethodDeclaration> mList) {
+		List<String> matchedTagList = null;
+		int cnt =0;
+		int size = mList.size();
+		for (MethodDeclaration changeCode : mList) {
+			List<String> result = this.isMethodFromCommitMatchRelease(releasedTagMethod, changeCode);
+			if(result !=null && result.size()!=0){
+				cnt++;
+				System.out.print("\t\t:match 一个method返回 匹配的tag");
+				for(String item:result){
+					System.out.print(item);
+				}
+				System.out.println("");
+			}
+			if(result.size() != 0){
+				if(matchedTagList == null ){
+					matchedTagList = result;
+				}else{
+					matchedTagList.retainAll(result);
+				}
+			}
+			
+			
+		}
+		
+		if(matchedTagList!=null && matchedTagList.size()!=0){
+			System.out.print("\t：Match 一个文件所有 buggy methods 匹配的tag");
+			for(String tmp:matchedTagList){
+				System.out.print(tmp);
+			}
+			System.out.println("\n");
+		}
+		System.out.println("\t文件buggy method统计："+cnt+"/"+size+"\n");
 		return matchedTagList;
 	}
 

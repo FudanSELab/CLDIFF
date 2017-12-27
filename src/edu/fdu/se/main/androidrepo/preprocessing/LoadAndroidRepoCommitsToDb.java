@@ -23,10 +23,10 @@ import edu.fdu.se.gitrepo.RepoConstants;
  * @author huangkaifeng
  *
  */
-public class BrowseAndroidRepo {
+public class LoadAndroidRepoCommitsToDb {
 	
 	public static void main(String[] args) {
-		writeCommitsToDB();
+//		writeCommitsToDB();
 	}
 	/**
 	 * 1
@@ -72,11 +72,6 @@ public class BrowseAndroidRepo {
 		
 		
 	}
-//	org.eclipse.jgit.errors.IncorrectObjectTypeException: Object 8906e78c463045d0f982404749d9555bbebf06e1 is not a commit.
-//	at org.eclipse.jgit.revwalk.RevWalk.parseCommit(RevWalk.java:774)
-//	at edu.fdu.se.git.JGitRepositoryCommand.walkRepoFromBackwardsToDB(JGitRepositoryCommand.java:78)
-//	at edu.fdu.se.main.androidrepo.BrowseAndroidRepo.writeCommitsToDB(BrowseAndroidRepo.java:37)
-//	at edu.fdu.se.main.androidrepo.BrowseAndroidRepo.main(BrowseAndroidRepo.java:21)
 //	private static void walkAllTags(){
 //		JGitRepositoryCommand cmd = new JGitRepositoryCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH)+"/.git");
 //		CommitTagVisitor cv = new CommitTagVisitor(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_OUTPUT_DIR)+"/android_sdk_commits2.txt");

@@ -121,7 +121,45 @@ public class JGitRepositoryCommand extends JGitCommand{
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (GitAPIException e1) {
-			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+	}
+	
+	/**
+	 * 给一个tag name，搜索所有的branch分支，是否有经过此tag的commit，如果有则说明与此tag关联
+	 * @param visitor
+	 */
+	public void walkRepoFromBackwardsGivenOneTagNameAndBranchNameList(String tagName) {
+		try {
+			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
+			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
+			List<Ref> mList = this.git.branchList().setListMode(ListMode.ALL).call();
+			for (Ref item : mList) {
+				RevCommit commit = revWalk.parseCommit(item.getObjectId());
+				commitQueue.offer(commit);
+				while (commitQueue.size() != 0) {
+					RevCommit queueCommitItem = commitQueue.poll();
+					RevCommit[] parentCommits = queueCommitItem.getParents();
+					if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
+						continue;
+					}
+					System.out.println(queueCommitItem.getName());
+					isTraversed.put(queueCommitItem.getName(), true);
+					for (RevCommit item2 : parentCommits) {
+						RevCommit commit2 = revWalk.parseCommit(item2.getId()); 
+						commitQueue.offer(commit2);
+					}
+				}
+			}
+			System.out.println("CommitSum:" + isTraversed.size());
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (GitAPIException e1) {
 			e1.printStackTrace();
 		}
 
@@ -146,33 +184,15 @@ public class JGitRepositoryCommand extends JGitCommand{
 		} catch (GitAPIException e) {
 			e.printStackTrace();
 		}
-
 	}
 	
-	public byte[] getFileContentBeforeAndAfterCommit(String fileName,String commitId){
-//		ObjectId commitObjectId = ObjectId.fromString(commitId);
-//		RevCommit revCommit = null;
-//		try{
-//			revCommit = revWalk.parseCommit(commitObjectId);
-//			RevCommit[] parentCommits = revCommit.getParents();
-//			for(RevCommit parent:parentCommits){
-//				RevCommit oldCommit = revWalk.parseCommit(parent.getId());
-//				RevTree oldTree = oldCommit.getTree();
-//				RevTree newTree = revCommit.getTree();
-//				TreeWalk
-//			}
-//			 FileHeader fileHeader = diffFormatter.toFileHeader( diffEntries.get( 0 ) );
-//			  return fileHeader.toEditList();
-//		}
-		return null;
-	}
+
 	
 	public static void main(String args[]){
 		JGitRepositoryCommand cmd = new JGitRepositoryCommand(
 				ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)+RepoConstants.platform_frameworks_base_ + ".git");
 //		cmd.getCommitParentMappedFileList2("cd97c0e935d13bbd29dce0417093ec694c3ddd76");
-		CommitCodeInfo cci = cmd.getCommitFileEditSummary("c7f502947b5b80baca084101fb7a0aaa74db9974", JGitCommand.JAVA_FILE);
-		
+//		CommitCodeInfo cci = cmd.getCommitFileEditSummary("c7f502947b5b80baca084101fb7a0aaa74db9974", JGitCommand.JAVA_FILE);
 	}
 	public Map<String, Map<String, List<String>>> getCommitParentMappedFileList2(String commmitid) {
 		Map<String, Map<String, List<String>>> result = new HashMap<String, Map<String, List<String>>>();

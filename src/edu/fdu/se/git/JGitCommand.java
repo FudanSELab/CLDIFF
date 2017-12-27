@@ -25,24 +25,18 @@ import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.RevisionSyntaxException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
-import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.patch.FileHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevObject;
-import org.eclipse.jgit.revwalk.RevTag;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
-
-import edu.fdu.se.dao.AndroidRepoCommitDAO;
 import edu.fdu.se.fileutil.FileUtil;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 
@@ -488,6 +482,7 @@ public class JGitCommand {
 				DiffFormatter diffFormatter = new DiffFormatter(out);
 				diffFormatter.setRepository(git.getRepository());
 				List<DiffEntry> entries = diffFormatter.scan(oldTreeIter, newTreeIter);
+				diffFormatter.setContext(0);
 				for (DiffEntry entry : entries) {
 					switch (entry.getChangeType()) {
 					case MODIFY:
@@ -548,6 +543,16 @@ public class JGitCommand {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public List<Ref> getAllBranches(){
+		List<Ref> branches = null;
+		try {
+			branches = git.branchList().call();
+		} catch (GitAPIException e) {
+			e.printStackTrace();
+		}
+		return branches;
 	}
 
 }

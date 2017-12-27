@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
@@ -47,6 +49,7 @@ import javax.swing.text.StyledDocument;
 
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
+import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.gitrepo.RepoConstants;
@@ -96,9 +99,10 @@ public class CommitViewer {
 		panel.setLayout(layout);
 		panel.add(new JLabel(" Repository:/platform/frameworks/base/.git"));
 		commitInput = new JTextField(54);
-		commitInput.setText("c7f502947b5b80baca084101fb7a0aaa74db9974");
+//		commitInput.setText("c7f502947b5b80baca084101fb7a0aaa74db9974");
 		panel.add(commitInput);
-		jButton = new JButton("load");
+		jButton = new JButton("commit");
+		JButton jButton2 = new JButton("tag");
 		jButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -111,7 +115,19 @@ public class CommitViewer {
 				commitLogDetail.setText(JGitRepoManager.getInstance().commitInfoSummary());
 			}
 		});
+		jButton2.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String commitId = commitInput.getText();
+				if (commitId.length() != 40) {
+					return;
+				}
+				byte[] buffer = JGitRepoManager.getInstance().myCmd.extract(listModel.getElementAt(fileList.getSelectedIndex()), commitId);
+				FileWriter.writeInAll("D:/tagFile", buffer);
+			}
+		});
 		panel.add(jButton);
+		panel.add(jButton2);
 		panel.setPreferredSize(new Dimension(1000, 100));
 
 		controlPanel.add(panel, BorderLayout.NORTH);
@@ -130,15 +146,16 @@ public class CommitViewer {
 	JList<String> fileList;
 	DefaultListModel<String> listModel;
 	List<Integer> commitIdIndexOfJList;
+	private JTextField tagCommitInput;
 
 	private void subPanel() {
 		JTabbedPane jtabpane = new JTabbedPane();
-		JPanel jp1 = new JPanel();
+		JPanel tab1 = new JPanel();
 		commitLogDetail = new JTextArea("Commit msg text");
 		commitLogDetail.setPreferredSize(new Dimension(980, 400));
-		jp1.add(commitLogDetail);
+		tab1.add(commitLogDetail);
 		//
-		JPanel jp2 = new JPanel(new BorderLayout());
+		JPanel tab2 = new JPanel(new BorderLayout());
 		listModel = new DefaultListModel<String>();
 
 		listModel.addElement("load your commit");
@@ -161,8 +178,10 @@ public class CommitViewer {
 						}
 						String filePath = fileList.getSelectedValue();
 						System.out.println(filePath);
+						selectedFilePath = filePath;
 						String content = JGitRepoManager.getInstance().readFile(filePath);
 						fillTextPane(content);
+						JGitRepoManager.getInstance().writePrevCurrFiles(filePath);
 
 					}
 
@@ -176,7 +195,7 @@ public class CommitViewer {
 		changedFileContent = new JTextPane();
 		changedFileContent.setPreferredSize(new Dimension(600, 500));
 		JScrollPane jsp1 = new JScrollPane(changedFileContent);
-
+		
 		linePane = new JTextPane();
 		linePane.setPreferredSize(new Dimension(10, 500));
 		JScrollPane jsp2 = new JScrollPane(linePane);
@@ -194,18 +213,57 @@ public class CommitViewer {
 		});
 		jsp2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		jsp2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		jp2.add(fileListPanel, BorderLayout.WEST);
-		jp2.add(jsp2, BorderLayout.CENTER);
-		jp2.add(jsp1, BorderLayout.EAST);
-
-		jtabpane.addTab("Commit", jp1);
-		jtabpane.addTab("Diff", jp2);
+		tab2.add(fileListPanel, BorderLayout.WEST);
+		tab2.add(jsp2, BorderLayout.CENTER);
+		tab2.add(jsp1, BorderLayout.EAST);
+		
+		
+//		JPanel tab3 = new JPanel(new BorderLayout());
+//		tagCommitInput = new JTextField();
+//		tagCommitInput.setPreferredSize(new Dimension(100, 20));
+//		tagCommitInput.addKeyListener(new KeyListener(){
+//			@Override
+//			public void keyPressed(KeyEvent arg0) {
+//				
+//			}
+//			@Override
+//			public void keyReleased(KeyEvent arg0) {
+//				if(arg0.getKeyCode()== 10){
+//					String fileTag = JGitRepoManager.getInstance().getFileContent(tagCommitInput.getText(),selectedFilePath);
+//					int index = fileList.getSelectedIndex();
+//					String prevCommitId = null;
+//					if(commitIdIndexOfJList.size()==1){
+//						prevCommitId = fileList.getModel().getElementAt(0);
+//					}else if(commitIdIndexOfJList.size()==2){
+//						if(index<commitIdIndexOfJList.get(1)){
+//							prevCommitId = fileList.getModel().getElementAt(0);
+//						}else{
+//							prevCommitId = fileList.getModel().getElementAt(commitIdIndexOfJList.get(1));
+//						}
+//					}
+//					String fileCommit = JGitRepoManager.getInstance().getFileContent(prevCommitId, selectedFilePath);
+//					FileWriter.writeInAll("D:/tag", fileTag);
+//					FileWriter.writeInAll("D:/prev", fileCommit);
+//				}
+//				
+//			}
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				
+//			}
+//		});
+//		tab3.add(tagCommitInput,BorderLayout.NORTH);
+		
+		jtabpane.addTab("Commit", tab1);
+		jtabpane.addTab("Diff", tab2);
+//		jtabpane.addTab("Tag Commit", tab3);
 
 		jtabpane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		jtabpane.setPreferredSize(new Dimension(1000, 400));
 		controlPanel.add(jtabpane, BorderLayout.SOUTH);
 		mainFrame.setVisible(true);
 	}
+	private String selectedFilePath;
 
 	public void fillTextPane(InputStream fis, Map<Integer, Integer> redGreenFlag) {
 		InputStreamReader ir = new InputStreamReader(fis);
@@ -284,7 +342,6 @@ public class CommitViewer {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		StyledDocument lineDoc = linePane.getStyledDocument();

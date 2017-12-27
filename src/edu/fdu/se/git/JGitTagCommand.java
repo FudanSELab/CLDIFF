@@ -60,11 +60,12 @@ public class JGitTagCommand extends JGitCommand {
 		}
 		return null;
 	}
-
+	/**
+	 * list项目所有的tag，并存数据库
+	 * @param project
+	 * @return
+	 */
 	public int listTags(AndroidPlatformFrameworkProject project) {
-		// RevWalk revWalk = new RevWalk(repository);
-		// filterTags(revWalk);
-
 		List<Ref> call = null;
 		try {
 			call = git.tagList().call();
@@ -82,20 +83,12 @@ public class JGitTagCommand extends JGitCommand {
 			// ref.getObjectId().getName() + "\n");
 		}
 		return call.size();
-		// i++;
 		// LogCommand log = git.log();
 		// Ref peeledRef = repository.peel(ref);
 		// if(peeledRef.getPeeledObjectId() != null) {
-		//
 		// log.add(peeledRef.getPeeledObjectId());
-		// } else {
 		// log.add(ref.getObjectId());
-		// }
 		// Iterable<RevCommit> logs = log.call();
-		// for (RevCommit rev : logs) {
-		// System.out.println("Commit: " + rev /* + ", name: " +
-		// rev.getName() + ", id: " + rev.getId().getName() */);
-		// }
 	}
 
 	/**
@@ -147,5 +140,53 @@ public class JGitTagCommand extends JGitCommand {
 		return false;
 
 	}
+	
+	
+	/**
+	 * true 如果是重叠的 false则不在时间线上
+	 * 
+	 * @param start
+	 * @param end
+	 * @param revCommitList
+	 * @return
+	 */
+	public void walkRepoBackwardsStartFromBranchHeadToTag(RevCommit endTagCommit, String branchHead, List<RevCommit> revCommitList) {
+		boolean res = false;
+		try {
+			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
+			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
+			commitQueue.offer(start);
+			while (commitQueue.size() != 0) {
+				RevCommit queueCommitItem = commitQueue.poll();
+				RevCommit[] parentCommits = queueCommitItem.getParents();
+				if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
+					continue;
+				}
+				isTraversed.put(queueCommitItem.getName(), true);
+				revCommitList.add(queueCommitItem);
+				if (queueCommitItem.getName().equals(end.getName())) {
+					res = true;
+					continue;
+				}
+				// early than end
+				if (queueCommitItem.getCommitTime() < end.getCommitTime()) {
+					continue;
+				}
+				for (RevCommit item2 : parentCommits) {
+					RevCommit commit2 = revWalk.parseCommit(item2.getId());
+					commitQueue.offer(commit2);
+				}
+			}
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	
 
 }

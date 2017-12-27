@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,6 +16,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
+import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
@@ -31,22 +33,27 @@ public class JGitRepoManager {
 		}
 		return jgitRepoManager;
 	}
-	private JGitCommand myCmd;
+	public JGitCommand myCmd;
 	public JGitRepoManager(){
-		myCmd = new JGitTagCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
-				+ RepoConstants.platform_frameworks_base_ + ".git");
+		myCmd = new JGitTagCommand("D:/Workspace/Android_Diff/android_framework_projects/platform/frameworks/base/.git");
 	}
 	public void parserCommit(String commitId){
 		this.cci = myCmd.getCommitFileEditSummary(commitId, JGitCommand.JAVA_FILE);
 		
 	}
+	public String getFileContent(String commitId,String fileName){
+		byte[] b = myCmd.extract(fileName, commitId);
+		String s = new String(b);
+		return s;
+	}
 	
 	private CommitCodeInfo cci;
-	
+	public Map<String,String> entryMap;
 	public List<Integer> updateDataModel(DefaultListModel<String> listModel){
 		listModel.clear();
 		String str = null;
 		int i=0;
+		entryMap = new HashMap<String,String>();
 		List<Integer> result = new ArrayList<Integer>();
 		for(Entry<RevCommit,List<FileChangeEditList>> item:cci.getFileDiffEntryMap().entrySet()){
 			RevCommit commit = item.getKey();
@@ -57,6 +64,7 @@ public class JGitRepoManager {
 			List<FileChangeEditList> mList = item.getValue();
 			for(FileChangeEditList item2 : mList){
 				listModel.addElement(item2.getOldFilePath());
+				entryMap.put(item2.getOldFilePath(), commit.getName());
 				i++;
 			}
 		}
@@ -71,9 +79,9 @@ public class JGitRepoManager {
 		sb.append(commit.getShortMessage());
 		sb.append("\n");
 		sb.append("Commiter: ");
-		sb.append(commit.getCommitterIdent().getName()+" "+commit.getCommitterIdent().getEmailAddress()+"\n");
+		sb.append(commit.getCommitterIdent().getName()+" "+commit.getCommitterIdent().getEmailAddress()+"/n");
 		sb.append("Author: ");
-		sb.append(commit.getAuthorIdent().getName()+" "+commit.getAuthorIdent().getEmailAddress()+"\n");
+		sb.append(commit.getAuthorIdent().getName()+" "+commit.getAuthorIdent().getEmailAddress()+"/n");
 		sb.append("Commit hash: ");
 		sb.append(commit.getName()+"\n");
 		sb.append("Date: ");
@@ -90,6 +98,7 @@ public class JGitRepoManager {
 		
 		
 	}
+	
 	
 	public String readFile(String filePath){
 		FileChangeEditList m = null;
@@ -109,6 +118,15 @@ public class JGitRepoManager {
 		}
 		
 		return m.getPatchScript();
+	}
+	
+	public void writePrevCurrFiles(String filePath){
+		byte[] curr = this.myCmd.extract(filePath, this.cci.getmCommit().getName());
+		
+		byte[] prev = this.myCmd.extract(filePath,this.entryMap.get(filePath));
+		FileWriter.writeInAll("D:/commit_prev", prev);
+		FileWriter.writeInAll("D:/commit_curr", curr);
+		
 	}
 	
 	

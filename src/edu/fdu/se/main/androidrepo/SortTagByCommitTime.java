@@ -23,6 +23,20 @@ import edu.fdu.se.gitrepo.RepoConstants;
 public class SortTagByCommitTime {
 	
 	public static void main(String args[]){
+//		run();
+		JGitTagCommand tagCmd = new JGitTagCommand(
+				ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
+				+ RepoConstants.platform_frameworks_base_ + ".git");
+		
+		List<AndroidTag> taglist = AndroidTagDAO.selectTagByShortNameAndProjName("android-8.0.0_r1", RepoConstants.platform_frameworks_base_);
+		if(taglist.size()==1){
+			AndroidTag at = taglist.get(0);
+			RevCommit commit = tagCmd.revCommitOfTag(at.getTagShaId());
+			System.out.println(commit.getName());
+		}
+		
+	}
+	public static void run(){
 		try {
 			JGitTagCommand tagCmd = new JGitTagCommand(
 					ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)

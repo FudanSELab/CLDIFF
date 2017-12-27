@@ -8,13 +8,12 @@ import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidPlatformFrameworkProjectDAO;
 import edu.fdu.se.git.JGitTagCommand;
 /**
- * android_tag表格信息
+ * android_tag表格信息 table:android_tag
  * @author huangkaifeng
  *
  */
 public class LoadRepoTagToDb {
 	public static void main(String args[]){
-		
 		
 	}
 	/**
