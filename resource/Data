@@ -1,3 +1,4 @@
+目前考虑的android 版本
 android-4.0.3_r1 15
 android-4.1.1_r1 16
 android-4.2_r1   17
@@ -9,3 +10,9 @@ android-6.0.0_r1 23
 android-7.0.0_r1 24
 android-7.1.0_r1 25 
 android-8.0.0_r1 26
+
+1.目前总commit数量 
+328939 updated  348475
+
+2.取消错误commit 
+328935 updated 348471

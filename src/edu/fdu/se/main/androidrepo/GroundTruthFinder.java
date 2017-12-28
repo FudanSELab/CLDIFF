@@ -31,9 +31,10 @@ import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitTagCommand;
+import edu.fdu.se.git.RepoConstants;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
-import edu.fdu.se.gitrepo.RepoConstants;
+import edu.fdu.se.gitrepo.JGitRepositoryManager;
 import edu.fdu.se.javaparser.JavaParserFactory;
 
 /**
@@ -45,8 +46,7 @@ import edu.fdu.se.javaparser.JavaParserFactory;
 public class GroundTruthFinder {
 
 	public GroundTruthFinder() {
-		tagCmd = new JGitTagCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
-				+ RepoConstants.platform_frameworks_base_ + ".git");
+		tagCmd = JGitRepositoryManager.getBaseCommand();
 		this.commitAndTagMap = new HashMap<RevCommit, String>();
 	}
 
@@ -217,8 +217,6 @@ public class GroundTruthFinder {
 					matchedTagList.retainAll(result);
 				}
 			}
-			
-			
 		}
 		
 		if(matchedTagList!=null && matchedTagList.size()!=0){
@@ -235,7 +233,6 @@ public class GroundTruthFinder {
 	public Map<String, List<MethodDeclaration>> mappingTagStrToMethodDeclarationList(String oldPath, String className,
 			List<RevCommit> candidate) {
 		Map<String, List<MethodDeclaration>> result = new HashMap<String, List<MethodDeclaration>>();
-
 		for (int i = 0; i < candidate.size(); i++) {
 			InputStream fileInputStream = tagCmd.extractAndReturnInputStream(oldPath, candidate.get(i).getName());
 			List<MethodDeclaration> mList = JavaParserFactory.parseFileGetAllMethodDeclaration(fileInputStream,

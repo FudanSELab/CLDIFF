@@ -1,4 +1,4 @@
-package edu.fdu.se.gitrepo;
+package edu.fdu.se.git;
 
 final public class RepoConstants {
 	final public static String platform_frameworks_av_ = "/platform/frameworks/av/";

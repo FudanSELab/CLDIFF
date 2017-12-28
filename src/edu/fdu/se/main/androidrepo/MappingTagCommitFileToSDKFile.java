@@ -32,7 +32,7 @@ import edu.fdu.se.gitrepo.SDKFileToRepoFilePath;
  * @author huangkaifeng
  *
  */
-public class CheckoutTaggedCommit {
+public class MappingTagCommitFileToSDKFile {
 	/**
 	 * 输入tag名 输出tag对应git和sdk文件的对应关系
 	 */

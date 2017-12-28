@@ -26,7 +26,7 @@ import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
-import edu.fdu.se.main.gitgui.JGitRepoManager;
+import edu.fdu.se.main.gitgui.RepoDataHelper;
 
 public class JavaParserFactory {
 	/**
@@ -119,14 +119,14 @@ public class JavaParserFactory {
 //	}
 	public static void main(String args[]){
 		
-		InputStream prev = JGitRepoManager.getInstance().
+		InputStream prev = RepoDataHelper.getInstance().
 				myCmd.extractAndReturnInputStream("services/core/java/com/android/server/ConnectivityService.java", "964c76b368889e82b820493f140aa91f66f76a92");
-		InputStream curr = JGitRepoManager.getInstance().
+		InputStream curr = RepoDataHelper.getInstance().
 				myCmd.extractAndReturnInputStream("services/core/java/com/android/server/ConnectivityService.java", "a21d687c2431f6084e9eeaad8182c41c9ee3eb32");
 //		FileWriter.writeInAll("D:/prev.java", prev);
 		FileWriter.writeInAll("D:/curr.java", curr);
 		FileChangeEditList a=null;
-		CommitCodeInfo cci = JGitRepoManager.getInstance().myCmd.getCommitFileEditSummary("a21d687c2431f6084e9eeaad8182c41c9ee3eb32", JGitCommand.JAVA_FILE);
+		CommitCodeInfo cci = RepoDataHelper.getInstance().myCmd.getCommitFileEditSummary("a21d687c2431f6084e9eeaad8182c41c9ee3eb32", JGitCommand.JAVA_FILE);
 		for(Entry<RevCommit,List<FileChangeEditList>> item : cci.getFileDiffEntryMap().entrySet()){
 			List<FileChangeEditList> mList = item.getValue();
 			for(FileChangeEditList m :mList){

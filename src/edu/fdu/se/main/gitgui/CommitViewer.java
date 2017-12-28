@@ -52,7 +52,7 @@ import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitTagCommand;
-import edu.fdu.se.gitrepo.RepoConstants;
+import edu.fdu.se.git.RepoConstants;
 
 public class CommitViewer {
 
@@ -110,9 +110,9 @@ public class CommitViewer {
 				if (commitId.length() != 40) {
 					return;
 				}
-				JGitRepoManager.getInstance().parserCommit(commitId);
-				commitIdIndexOfJList = JGitRepoManager.getInstance().updateDataModel(listModel);
-				commitLogDetail.setText(JGitRepoManager.getInstance().commitInfoSummary());
+				RepoDataHelper.getInstance().parserCommit(commitId);
+				commitIdIndexOfJList = RepoDataHelper.getInstance().updateDataModel(listModel);
+				commitLogDetail.setText(RepoDataHelper.getInstance().commitInfoSummary());
 			}
 		});
 		jButton2.addActionListener(new ActionListener(){
@@ -122,7 +122,7 @@ public class CommitViewer {
 				if (commitId.length() != 40) {
 					return;
 				}
-				byte[] buffer = JGitRepoManager.getInstance().myCmd.extract(listModel.getElementAt(fileList.getSelectedIndex()), commitId);
+				byte[] buffer = RepoDataHelper.getInstance().myCmd.extract(listModel.getElementAt(fileList.getSelectedIndex()), commitId);
 				FileWriter.writeInAll("D:/tagFile", buffer);
 			}
 		});
@@ -179,9 +179,9 @@ public class CommitViewer {
 						String filePath = fileList.getSelectedValue();
 						System.out.println(filePath);
 						selectedFilePath = filePath;
-						String content = JGitRepoManager.getInstance().readFile(filePath);
+						String content = RepoDataHelper.getInstance().readFile(filePath);
 						fillTextPane(content);
-						JGitRepoManager.getInstance().writePrevCurrFiles(filePath);
+						RepoDataHelper.getInstance().writePrevCurrFiles(filePath);
 
 					}
 

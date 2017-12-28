@@ -11,6 +11,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
+import edu.fdu.se.main.gitgui.RepoDataHelper;
 
 
 public class RepositoryHelper {
@@ -27,18 +28,19 @@ public class RepositoryHelper {
 		}
 		return repository;
     }
+    
+    private static RepositoryHelper repositoryhelper;
+	
+	public static RepositoryHelper getInstance(){
+		if(repositoryhelper == null){
+			repositoryhelper = new RepositoryHelper();
+		}
+		return repositoryhelper;
+	}
+	public JGitTagCommand myCmd;
+	public RepositoryHelper(){
+		myCmd = new JGitTagCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
+				+ RepoConstants.platform_frameworks_base_ + ".git");
+	}
 
-//    public static Repository createNewRepository() throws IOException {
-//        // prepare a new folder
-//        File localPath = File.createTempFile("TestGitRepository", "");
-//        if(!localPath.delete()) {
-//            throw new IOException("Could not delete temporary file " + localPath);
-//        }
-//
-//        // create the directory
-//        Repository repository = FileRepositoryBuilder.create(new File(localPath, ".git"));
-//        repository.create();
-//
-//        return repository;
-//    }
 }

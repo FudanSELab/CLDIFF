@@ -1,6 +1,5 @@
 package edu.fdu.se.main.gitgui;
 
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,31 +9,27 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.DefaultListModel;
-import javax.swing.text.BadLocationException;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import edu.fdu.se.config.ProjectProperties;
-import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
-import edu.fdu.se.gitrepo.RepoConstants;
 
-public class JGitRepoManager {
+public class RepoDataHelper {
 	
-	private static JGitRepoManager jgitRepoManager;
+	private static RepoDataHelper jgitRepoManager;
 	
-	public static JGitRepoManager getInstance(){
+	public static RepoDataHelper getInstance(){
 		if(jgitRepoManager == null){
-			jgitRepoManager = new JGitRepoManager();
+			jgitRepoManager = new RepoDataHelper();
 		}
 		return jgitRepoManager;
 	}
 	public JGitCommand myCmd;
-	public JGitRepoManager(){
+	public RepoDataHelper(){
 		myCmd = new JGitTagCommand("D:/Workspace/Android_Diff/android_framework_projects/platform/frameworks/base/.git");
 	}
 	public void parserCommit(String commitId){
