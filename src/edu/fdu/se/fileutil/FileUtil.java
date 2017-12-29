@@ -1,13 +1,18 @@
 package edu.fdu.se.fileutil;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -18,6 +23,30 @@ import org.eclipse.jgit.treewalk.WorkingTreeOptions;
 import org.eclipse.jgit.util.io.AutoCRLFInputStream;
 
 public class FileUtil {
+	
+	public static List<String> getLines(File f){
+		FileInputStream fos;
+		List<String> result = new ArrayList<String>();
+		String line;
+		try {
+			fos = new FileInputStream(f);
+			InputStreamReader ir = new InputStreamReader(fos);
+			BufferedReader br = new BufferedReader(ir);
+			while((line = br.readLine())!= null){
+				result.add(line.trim());
+			}
+			br.close();
+			return result;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 	public static boolean fileOutput(byte[] a,String output){
 		try {
 			FileOutputStream fos=new FileOutputStream(new File(output));
@@ -25,11 +54,9 @@ public class FileUtil {
 			fos.close();
 			return true;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-//		return false;
 	}
 	
 	public static byte[] toByteArray(InputStream input) throws IOException {

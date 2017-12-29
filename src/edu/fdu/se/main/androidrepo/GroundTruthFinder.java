@@ -94,9 +94,7 @@ public class GroundTruthFinder {
 		return candidateCommit;
 	}
 
-	/**
-	 * 
-	 */
+
 	public void run() {
 		FileInputStream fis = null;
 		try {

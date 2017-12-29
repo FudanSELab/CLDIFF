@@ -16,3 +16,47 @@ android-8.0.0_r1 26
 
 2.取消错误commit 
 328935 updated 348471
+
+
+ml project中 bordeaux 不再使用 e40bdc75c869050a62c36532606d8a1bc6fd2b7b
+
+
+andorid网页上的数据，有一部分没有写啥时候引入的，根据sdk的文件数据，添加了
+R.stylable仅仅标记，不做后面数据的考虑反正会过滤掉
+内部类的情况就参照外部类引入的时间
+
+
+version 3-13 decompile no stub
+14 -26    sources
+
+
+27 decompile
+
+
+26 rev1 8.0.0   android-8.0.0_r1
+
+25 rev1 7.1.1 	android-7.1.1_r1
+
+24 rev1 7.0	android-7.0.0_r1
+
+23 rev1 6.0	android-6.0.0_r1
+
+22 rev1 5.1.1	android-5.1.1_r1
+
+21 rev1 5.0.1	android-5.0.1_r1
+
+20 rev1 4.4W.2	android-4.4w_r1
+
+19 rev2 4.4.2	android-4.4_r1
+
+18 rev1 4.3.1
+
+17 rev1 4.2.2
+
+16 rev2 4.1.2
+
+15 rev2 4.0.3
+
+14 rev1 4.0
+
+

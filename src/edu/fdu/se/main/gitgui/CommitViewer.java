@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
@@ -56,11 +58,24 @@ import edu.fdu.se.git.RepoConstants;
 
 public class CommitViewer {
 
-	JGitCommand myCmd;
+	private JGitCommand myCmd;
 	private JFrame mainFrame;
 	private JPanel controlPanel;
-	private JButton jButton;
-	private JTextField commitInput;
+	private JTextField uppperCommitInput;
+	private String selectedFilePath;
+	/**
+	 * tab1
+	 */
+	private JTextArea tab1CommitDetail;
+	/**
+	 * tab2
+	 */
+	private JTextPane tab2FileContent;
+	private JTextPane tab2Lines;
+	private JList<String> tab2FileList;
+	private DefaultListModel<String> tab2FileListDataModel;
+	
+	private List<Integer> commitIdIndexOfJList;
 
 	public CommitViewer() {
 		prepareGUI();
@@ -97,78 +112,64 @@ public class CommitViewer {
 		layout.setHgap(10);
 		layout.setVgap(10);
 		panel.setLayout(layout);
-		panel.add(new JLabel(" Repository:/platform/frameworks/base/.git"));
-		commitInput = new JTextField(54);
-//		commitInput.setText("c7f502947b5b80baca084101fb7a0aaa74db9974");
-		panel.add(commitInput);
-		jButton = new JButton("commit");
-		JButton jButton2 = new JButton("tag");
-		jButton.addActionListener(new ActionListener() {
+		panel.add(new JLabel(" base/.git"));
+		uppperCommitInput = new JTextField(54);
+		panel.add(uppperCommitInput);
+		JButton commitBtn = new JButton("commit");
+		JButton tagBtn = new JButton("tag");
+		commitBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String commitId = commitInput.getText();
+				String commitId = uppperCommitInput.getText();
 				if (commitId.length() != 40) {
 					return;
 				}
 				RepoDataHelper.getInstance().parserCommit(commitId);
-				commitIdIndexOfJList = RepoDataHelper.getInstance().updateDataModel(listModel);
-				commitLogDetail.setText(RepoDataHelper.getInstance().commitInfoSummary());
+				commitIdIndexOfJList = RepoDataHelper.getInstance().updateDataModel(tab2FileListDataModel);
+				tab1CommitDetail.setText(RepoDataHelper.getInstance().commitInfoSummary());
 			}
 		});
-		jButton2.addActionListener(new ActionListener(){
+		tagBtn.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String commitId = commitInput.getText();
+				String commitId = uppperCommitInput.getText();
 				if (commitId.length() != 40) {
 					return;
 				}
-				byte[] buffer = RepoDataHelper.getInstance().myCmd.extract(listModel.getElementAt(fileList.getSelectedIndex()), commitId);
+				byte[] buffer = RepoDataHelper.getInstance().myCmd.extract(tab2FileListDataModel.getElementAt(tab2FileList.getSelectedIndex()), commitId);
 				FileWriter.writeInAll("D:/tagFile", buffer);
 			}
 		});
-		panel.add(jButton);
-		panel.add(jButton2);
+		panel.add(commitBtn);
+		panel.add(tagBtn);
 		panel.setPreferredSize(new Dimension(1000, 100));
 
 		controlPanel.add(panel, BorderLayout.NORTH);
 		mainFrame.setVisible(true);
 	}
 
-	/**
-	 * tab1
-	 */
-	private JTextArea commitLogDetail;
-	/**
-	 * tab2
-	 */
-	private JTextPane changedFileContent;
-	private JTextPane linePane;
-	JList<String> fileList;
-	DefaultListModel<String> listModel;
-	List<Integer> commitIdIndexOfJList;
-	private JTextField tagCommitInput;
-
 	private void subPanel() {
 		JTabbedPane jtabpane = new JTabbedPane();
 		JPanel tab1 = new JPanel();
-		commitLogDetail = new JTextArea("Commit msg text");
-		commitLogDetail.setPreferredSize(new Dimension(980, 400));
-		tab1.add(commitLogDetail);
+		tab1CommitDetail = new JTextArea("Commit msg text");
+		tab1CommitDetail.setPreferredSize(new Dimension(980, 400));
+		tab1.add(tab1CommitDetail);
 		//
 		JPanel tab2 = new JPanel(new BorderLayout());
-		listModel = new DefaultListModel<String>();
+		tab2FileListDataModel = new DefaultListModel<String>();
 
-		listModel.addElement("load your commit");
+		tab2FileListDataModel.addElement("load your commit");
 
-		fileList = new JList<String>(listModel);
-		fileList.setPreferredSize(new Dimension(352, 500));
-		fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		fileList.addListSelectionListener(new ListSelectionListener() {
+		tab2FileList = new JList<String>(tab2FileListDataModel);
+		tab2FileList.setPreferredSize(new Dimension(352, 500));
+		tab2FileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		tab2FileList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				if (fileList.getValueIsAdjusting()) {
+				if (tab2FileList.getValueIsAdjusting()) {
 					System.out.println("click");
 				} else {
-					int index = fileList.getSelectedIndex();
+					int index = tab2FileList.getSelectedIndex();
 					if (commitIdIndexOfJList == null || commitIdIndexOfJList.contains(index)) {
 						System.out.println("contain. not do anything");
 					} else {
@@ -176,7 +177,7 @@ public class CommitViewer {
 						if (commitIdIndexOfJList.contains(index)) {
 							commitRank = commitIdIndexOfJList.indexOf(index);
 						}
-						String filePath = fileList.getSelectedValue();
+						String filePath = tab2FileList.getSelectedValue();
 						System.out.println(filePath);
 						selectedFilePath = filePath;
 						String content = RepoDataHelper.getInstance().readFile(filePath);
@@ -190,15 +191,16 @@ public class CommitViewer {
 
 		});
 
-		JScrollPane fileListPanel = new JScrollPane(fileList);
-		fileListPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		changedFileContent = new JTextPane();
-		changedFileContent.setPreferredSize(new Dimension(600, 500));
-		JScrollPane jsp1 = new JScrollPane(changedFileContent);
+		JScrollPane fileListPanel = new JScrollPane(tab2FileList);
+		fileListPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		// 
+		tab2FileContent = new JTextPane();
+		tab2FileContent.setPreferredSize(new Dimension(600, 500));
+		JScrollPane jsp1 = new JScrollPane(tab2FileContent);
 		
-		linePane = new JTextPane();
-		linePane.setPreferredSize(new Dimension(10, 500));
-		JScrollPane jsp2 = new JScrollPane(linePane);
+		tab2Lines = new JTextPane();
+		tab2Lines.setPreferredSize(new Dimension(10, 500));
+		JScrollPane jsp2 = new JScrollPane(tab2Lines);
 
 		jsp1.addMouseWheelListener(new MouseWheelListener() {
 			@Override
@@ -207,9 +209,7 @@ public class CommitViewer {
 				int value = sBar.getValue();
 				JScrollBar sBar2 = jsp2.getVerticalScrollBar();
 				sBar2.setValue(value);
-
 			}
-
 		});
 		jsp2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		jsp2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -217,59 +217,46 @@ public class CommitViewer {
 		tab2.add(jsp2, BorderLayout.CENTER);
 		tab2.add(jsp1, BorderLayout.EAST);
 		
+		//tab3
+		JPanel tab3 = new JPanel(new BorderLayout());
+		JTextPane tab3TextPane = new JTextPane();
+		tab3TextPane.setPreferredSize(new Dimension(970, 500));
+		JScrollPane jsp3 = new JScrollPane(tab3TextPane);
 		
-//		JPanel tab3 = new JPanel(new BorderLayout());
-//		tagCommitInput = new JTextField();
-//		tagCommitInput.setPreferredSize(new Dimension(100, 20));
-//		tagCommitInput.addKeyListener(new KeyListener(){
-//			@Override
-//			public void keyPressed(KeyEvent arg0) {
-//				
-//			}
-//			@Override
-//			public void keyReleased(KeyEvent arg0) {
-//				if(arg0.getKeyCode()== 10){
-//					String fileTag = JGitRepoManager.getInstance().getFileContent(tagCommitInput.getText(),selectedFilePath);
-//					int index = fileList.getSelectedIndex();
-//					String prevCommitId = null;
-//					if(commitIdIndexOfJList.size()==1){
-//						prevCommitId = fileList.getModel().getElementAt(0);
-//					}else if(commitIdIndexOfJList.size()==2){
-//						if(index<commitIdIndexOfJList.get(1)){
-//							prevCommitId = fileList.getModel().getElementAt(0);
-//						}else{
-//							prevCommitId = fileList.getModel().getElementAt(commitIdIndexOfJList.get(1));
-//						}
-//					}
-//					String fileCommit = JGitRepoManager.getInstance().getFileContent(prevCommitId, selectedFilePath);
-//					FileWriter.writeInAll("D:/tag", fileTag);
-//					FileWriter.writeInAll("D:/prev", fileCommit);
-//				}
-//				
-//			}
-//			@Override
-//			public void keyTyped(KeyEvent arg0) {
-//				
-//			}
-//		});
-//		tab3.add(tagCommitInput,BorderLayout.NORTH);
-		
+		JTextPane tab3Line = new JTextPane();
+		tab3Line.setPreferredSize(new Dimension(10, 500));
+		JScrollPane jsp4 = new JScrollPane(tab2Lines);
+
+		jsp3.addMouseWheelListener(new MouseWheelListener() {
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent arg0) {
+				JScrollBar sBar = jsp1.getVerticalScrollBar();
+				int value = sBar.getValue();
+				JScrollBar sBar2 = jsp2.getVerticalScrollBar();
+				sBar2.setValue(value);
+			}
+		});
+		jsp2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		jsp2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		tab2.add(fileListPanel, BorderLayout.WEST);
+		tab2.add(jsp2, BorderLayout.CENTER);
+		tab2.add(jsp1, BorderLayout.EAST);
+		// end
 		jtabpane.addTab("Commit", tab1);
 		jtabpane.addTab("Diff", tab2);
-//		jtabpane.addTab("Tag Commit", tab3);
+		jtabpane.addTab("Tag Commit", tab3);
 
 		jtabpane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		jtabpane.setPreferredSize(new Dimension(1000, 400));
 		controlPanel.add(jtabpane, BorderLayout.SOUTH);
 		mainFrame.setVisible(true);
 	}
-	private String selectedFilePath;
 
-	public void fillTextPane(InputStream fis, Map<Integer, Integer> redGreenFlag) {
+	private void fillTextPane(InputStream fis, Map<Integer, Integer> redGreenFlag) {
 		InputStreamReader ir = new InputStreamReader(fis);
 		BufferedReader br = new BufferedReader(ir);
-		StyledDocument doc = changedFileContent.getStyledDocument();
-		Style style = changedFileContent.addStyle("mStyle", null);
+		StyledDocument doc = tab2FileContent.getStyledDocument();
+		Style style = tab2FileContent.addStyle("mStyle", null);
 		String line = null;
 		int index = 0;
 		try {
@@ -304,7 +291,7 @@ public class CommitViewer {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		StyledDocument lineDoc = linePane.getStyledDocument();
+		StyledDocument lineDoc = tab2Lines.getStyledDocument();
 		Style style2 = lineDoc.addStyle("mStyle", null);
 		for (int i = 0; i < index; i++) {
 			try {
@@ -315,13 +302,13 @@ public class CommitViewer {
 
 	}
 
-	public void fillTextPane(String fileContent) {
+	private void fillTextPane(String fileContent) {
 		InputStream is = new ByteArrayInputStream(fileContent.getBytes());
 		InputStreamReader isb = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isb);
-		StyledDocument doc = changedFileContent.getStyledDocument();
-		changedFileContent.setText("");
-		Style style = changedFileContent.addStyle("mStyle", null);
+		StyledDocument doc = tab2FileContent.getStyledDocument();
+		tab2FileContent.setText("");
+		Style style = tab2FileContent.addStyle("mStyle", null);
 		String line = null;
 		int lineNum = 0;
 		try {
@@ -344,7 +331,7 @@ public class CommitViewer {
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
-		StyledDocument lineDoc = linePane.getStyledDocument();
+		StyledDocument lineDoc = tab2Lines.getStyledDocument();
 
 		Style style2 = lineDoc.addStyle("mStyle", null);
 		for (int i = 0; i < lineNum; i++) {

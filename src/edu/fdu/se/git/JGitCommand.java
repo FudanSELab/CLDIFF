@@ -33,6 +33,8 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.patch.FileHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevObject;
+import org.eclipse.jgit.revwalk.RevTag;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -237,63 +239,9 @@ public class JGitCommand {
 		}
 		return 0;
 	}
-
-	/**
-	 * TODO print Diff entry
-	 * 
-	 * @param commit
-	 * @return
-	 */
-	// public List<Object> getChangeFiles(RevCommit commit){
-	//// List<ChangeFile> changeFiles= new ArrayList<ChangeFile>();
-	//
-	// AbstractTreeIterator newTree = prepareTreeParser(commit);
-	// if(commit.getParentCount()==0) return changeFiles;
-	// AbstractTreeIterator oldTree = prepareTreeParser(commit.getParent(0));
-	// List<DiffEntry> diff= null;
-	// try {
-	// diff = git.diff().setOldTree(oldTree).setNewTree(newTree).call();
-	// } catch (GitAPIException e) {
-	// e.printStackTrace();
-	// }
-	// for (DiffEntry diffEntry : diff) {
-	// //DiffEntry.ChangeType.MODIFY.toString().equals(diffEntry.getChangeType().toString())&&
-	// if(diffEntry.getNewPath()!=null&&diffEntry.getNewPath().endsWith(".java")){
-	//// changeFiles.add(new ChangeFile(diffEntry.getChangeType().toString(),
-	// diffEntry.getOldPath(), diffEntry.getNewPath(),
-	//// commit.getName(), (commit.getParents()[0]).getName(),
-	// diffEntry.getNewId().toObjectId(), diffEntry.getOldId().toObjectId()));
-	//
-	// String fName = "aa"+(new Random()).nextInt(1000);
-	// while(new File(fName).exists()){
-	// fName = "aa"+(new Random()).nextInt(1000);
-	// }
-	// BufferedOutputStream out =null;
-	// try {
 	// out = new BufferedOutputStream(new FileOutputStream(fName));
 	// DiffFormatter df = new DiffFormatter(out);
 	// df.setDiffComparator(RawTextComparator.WS_IGNORE_ALL);
-	// df.setRepository(git.getRepository());
-	// df.format(diffEntry);
-	// out.flush();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }finally{
-	// try {
-	// if(out!=null)
-	// out.close();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// insertAllAddAndDelete(commit.getName(),changeFiles.get(changeFiles.size()-1),fName);
-	// File file = new File(fName);
-	// file.delete();
-	// }
-	// }
-	// return changeFiles;
-	// }
 	/**
 	 * get parents commit id in string
 	 * 
@@ -562,6 +510,25 @@ public class JGitCommand {
 		Date date = new Date(s);
 		res = simpleDateFormat.format(date);
 		return res;
+	}
+	
+	public RevCommit revCommitOfBranchRef(Ref branch) {
+		try {
+			RevObject object;
+			object = revWalk.parseAny(branch.getObjectId());
+			if (object instanceof RevCommit) {
+				RevCommit commit = (RevCommit) object;
+				return commit;
+			} else {
+				System.err.println("invalid");
+			}
+			return null;
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 

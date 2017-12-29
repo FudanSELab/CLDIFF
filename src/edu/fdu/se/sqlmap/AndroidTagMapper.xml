@@ -250,4 +250,12 @@
     from android_tag
     where tag_name_short=#{tagShortName,jdbcType=VARCHAR} and project_name=#{projectName,jdbcType=VARCHAR}
     </select>
+    
+  
+   <select id="selectTagAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from android_tag
+    where project_name=#{projectName,jdbcType=VARCHAR}
+    </select>
 </mapper>

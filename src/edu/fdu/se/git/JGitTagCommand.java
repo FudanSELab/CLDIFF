@@ -1,6 +1,7 @@
 package edu.fdu.se.git;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,9 +29,9 @@ public class JGitTagCommand extends JGitCommand {
 		super(repopath);
 	}
 
-	public RevCommit revCommitOfTag(String tagStr) {
+	public RevCommit revCommitOfTag(String tagSHAId) {
 		try {
-			ObjectId commitId = ObjectId.fromString(tagStr);
+			ObjectId commitId = ObjectId.fromString(tagSHAId);
 			RevObject object;
 			object = revWalk.parseAny(commitId);
 			if (object instanceof RevTag) {
@@ -133,7 +134,62 @@ public class JGitTagCommand extends JGitCommand {
 			e.printStackTrace();
 		}
 		return false;
-
+	}
+	
+	public Ref getBranchByName(String branchName){
+		try {
+			List<Ref> branchList = this.git.branchList().call();
+			for(Ref ref :branchList){
+				String bName = ref.getName();
+				if(bName.equals(branchName)){
+					
+					return ref;
+				}
+			}
+			return null;
+		} catch (GitAPIException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public List<Ref> getBranchesByShortNames(String[] branchNames){
+		try {
+			String prefix = "refs/heads/";
+			List<Ref> branchList = this.git.branchList().call();
+			List<Ref> result = new ArrayList<Ref>();
+			for(Ref ref :branchList){
+				String bName = ref.getName();
+				for(String item : branchNames){
+					if(bName.equals(prefix+item)){
+						result.add(ref);
+						break;
+					}
+				}
+				
+			}
+			return result;
+		} catch (GitAPIException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Ref getBranchByShortName(String branchName){
+		try {
+			String prefix = "refs/heads/";
+			List<Ref> branchList = this.git.branchList().call();
+			for(Ref ref :branchList){
+				String bName = ref.getName();
+					if(bName.equals(prefix+branchName)){
+						return ref;
+					}
+			}
+			return null;
+		} catch (GitAPIException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	

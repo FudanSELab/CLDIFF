@@ -1,7 +1,13 @@
 package edu.fdu.se.main.androidrepo;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.jgit.revwalk.RevCommit;
+
 import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitRepositoryCommand;
+import edu.fdu.se.gitrepo.JGitRepositoryManager;
 import edu.fdu.se.main.gitgui.RepoDataHelper;
 
 public class ValidateGroundTruthFinder {
@@ -14,6 +20,8 @@ public class ValidateGroundTruthFinder {
 		String b = RepoDataHelper.getInstance().getFileContent(tagCommitId, filePath);
 		FileWriter.writeInAll("D:/a", a);
 		FileWriter.writeInAll("D:/b", b);
+//		List<RevCommit> commitList = new ArrayList<RevCommit>();
+//		JGitRepositoryManager.getBaseCommand().walkRepoToTagFromBranchName("", tagName, commitList);
 	}
 
 }
