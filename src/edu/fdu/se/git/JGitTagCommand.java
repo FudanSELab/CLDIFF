@@ -19,8 +19,10 @@ import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevTag;
 import org.eclipse.jgit.revwalk.RevWalk;
 
+import edu.fdu.se.bean.AndroidBranch;
 import edu.fdu.se.bean.AndroidPlatformFrameworkProject;
 import edu.fdu.se.bean.AndroidTag;
+import edu.fdu.se.dao.AndroidBranchDAO;
 import edu.fdu.se.dao.AndroidTagDAO;
 
 public class JGitTagCommand extends JGitCommand {
@@ -56,12 +58,61 @@ public class JGitTagCommand extends JGitCommand {
 		}
 		return null;
 	}
+	
+	
+	public RevCommit revCommitOfBranch(String branchId) {
+		try {
+			ObjectId commitId = ObjectId.fromString(branchId);
+			RevObject object;
+			object = revWalk.parseAny(commitId);
+			System.out.println(object.getClass().toString());
+//			if (object instanceof RevCommit) {
+//				// annotated
+//				RevTag tagObj = (RevTag) object;
+//				RevObject revObj = tagObj.getObject();
+//				if (revObj instanceof RevCommit) {
+//					RevCommit result = revWalk.parseCommit(revObj.getId());
+//					return (RevCommit) result;
+//				} else {
+//					System.err.println("ERR COmmit");
+//				}
+//			} else {
+//				// invalid
+//				System.err.println("invalid");
+//			}
+			return null;
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * return revcommit
+	 * @param branchId
+	 * @return
+	 */
+	public RevCommit revCommitOfCommitId(String commit) {
+		try {
+			ObjectId commitId = ObjectId.fromString(commit);
+			RevCommit object;
+			object = revWalk.parseCommit(commitId);
+			return object;
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	/**
 	 * list项目所有的tag，并存数据库
 	 * @param project
 	 * @return
 	 */
-	public int listTags(AndroidPlatformFrameworkProject project) {
+	public int listTagsAndSaveToDb(AndroidPlatformFrameworkProject project) {
 		List<Ref> call = null;
 		try {
 			call = git.tagList().call();
@@ -190,6 +241,41 @@ public class JGitTagCommand extends JGitCommand {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	/**
+	 * list项目所有的branch，并存数据库
+	 * @param project
+	 * @return
+	 */
+	public int listBranchesAndSaveToDb(AndroidPlatformFrameworkProject project) {
+		List<Ref> call = null;
+		try {
+			call = git.branchList().call();
+		} catch (GitAPIException e) {
+			e.printStackTrace();
+		}
+		for (Ref ref : call) {
+			String branchName = ref.getName();
+			String[] data = branchName.split("/");
+			String branchShortName = data[data.length - 1];
+			RevObject object = null;
+			String commitSha = null;
+			try {
+				object = revWalk.parseAny(ref.getObjectId());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (object instanceof RevCommit) {
+				RevCommit commit = (RevCommit) object;
+				commitSha = commit.getName();
+			} else {
+				System.err.println("invalid");
+			}
+			AndroidBranch ab = new AndroidBranch(0,branchName,branchShortName,commitSha,project.getProjectSubPath());
+			AndroidBranchDAO.insert(ab);
+		}
+		return call.size();
 	}
 	
 	

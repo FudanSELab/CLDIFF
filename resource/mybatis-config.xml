@@ -18,6 +18,7 @@
 		<mapper resource="edu/fdu/se/sqlmap/AndroidRepoCommitMapper.xml"/>
 		<mapper resource="edu/fdu/se/sqlmap/AndroidPlatformFrameworkProjectMapper.xml"/>
 		<mapper resource="edu/fdu/se/sqlmap/AndroidTagMapper.xml"/>
+		<mapper resource="edu/fdu/se/sqlmap/AndroidBranchMapper.xml"/>
      </mappers>
     
 </configuration>

@@ -26,6 +26,7 @@ import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepoConstants;
 import edu.fdu.se.gitrepo.JGitRepositoryManager;
+import edu.fdu.se.groundtruth.MatchBugFixingRules;
 
 /**
  * 给两个tag id，判断是否是一条开发线，返回两个tag 之间的commit
@@ -76,7 +77,7 @@ public class CommitBetweenTwoTags {
 				System.out.println("PrevCommit:"+ commitPrev.getName());
 				System.out.println(result);
 				for(RevCommit item: commitsInBetweenTags){
-					if(bugOrNot(item)){
+					if(MatchBugFixingRules.bugOrNot(item.getShortMessage(),item.getFullMessage())){
 						//TODO
 						AndroidRepoCommitWithBLOBs  a = AndroidRepoCommitDAO.selectWithCommitSHA(item.getName());
 						if(a!=null){
@@ -101,18 +102,7 @@ public class CommitBetweenTwoTags {
 		
 	}
 	
-	public static boolean bugOrNot(RevCommit rev){
-		String msg = rev.getShortMessage().toLowerCase();
-		String msgFull = rev.getFullMessage().toLowerCase();
-		boolean result = false;
-		if(msg.contains("bug")|| msg.contains("fix")||msg.contains("patch")||msg.contains("fixing")){
-			result = true;
-		}
-		if(msgFull.contains("bug")|| msgFull.contains("fix")||msgFull.contains("patch")||msgFull.contains("fixing")){
-			result = true;
-		}
-		return result;
-	}
+	
 	
 	public static List<String> readTagList(){
 		FileInputStream fos;

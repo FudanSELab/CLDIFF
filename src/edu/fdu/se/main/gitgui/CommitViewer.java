@@ -136,7 +136,7 @@ public class CommitViewer {
 				if (commitId.length() != 40) {
 					return;
 				}
-				byte[] buffer = RepoDataHelper.getInstance().myCmd.extract(tab2FileListDataModel.getElementAt(tab2FileList.getSelectedIndex()), commitId);
+				byte[] buffer = myCmd.extract(tab2FileListDataModel.getElementAt(tab2FileList.getSelectedIndex()), commitId);
 				FileWriter.writeInAll("D:/tagFile", buffer);
 			}
 		});
@@ -192,7 +192,7 @@ public class CommitViewer {
 		});
 
 		JScrollPane fileListPanel = new JScrollPane(tab2FileList);
-		fileListPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//		fileListPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		// 
 		tab2FileContent = new JTextPane();
 		tab2FileContent.setPreferredSize(new Dimension(600, 500));

@@ -1,15 +1,15 @@
 目前考虑的android 版本
-android-4.0.3_r1 15
-android-4.1.1_r1 16
-android-4.2_r1   17
-android-4.3_r1   18
-android-4.4_r1   19
-android-5.0.0_r1 21
-android-5.1.0_r1 22
-android-6.0.0_r1 23
-android-7.0.0_r1 24
-android-7.1.0_r1 25 
-android-8.0.0_r1 26
+15 Ice-Cream-Sandwich android-4.0.3_r1/android-4.0.4_r1 15
+16 jelly-bean android-4.1.1_r1 16
+17 jelly-bean android-4.2_r1   17
+18 jelly-brean android-4.3_r1   18  (238746,88494)
+19 kitkat android-4.4_r1   19  		(897,475)
+21 lollipop android-5.0.0_r1 21  	(18,15)
+22 lollipop android-5.1.0_r1 22  	(82,69)
+23 marshmallow android-6.0.0_r1 23  (759,485)
+24 nougat android-7.0.0_r1 24  		(178,172)
+25 nougat android-7.1.0_r1 25 		(47,44)
+26 oreo android-8.0.0_r1 26  		(356,167)
 
 1.目前总commit数量 
 328939 updated  348475

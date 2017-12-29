@@ -21,13 +21,16 @@ import java.util.regex.Pattern;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
 
+import edu.fdu.se.bean.AndroidBranch;
 import edu.fdu.se.bean.AndroidTag;
+import edu.fdu.se.dao.AndroidBranchDAO;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.fileutil.FileUtil;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepoConstants;
 import edu.fdu.se.gitrepo.JGitRepositoryManager;
+import edu.fdu.se.groundtruth.MatchBugFixingRules;
 import edu.fdu.se.manager.AndroidTagManager;
 /**
  * tag contains 命令输出tag所在的branch，文件的处理
@@ -38,7 +41,7 @@ public class FindOutTagAndBranchRelation {
 	
 	
 	public static void main(String args[]){
-		run2();
+		run3();
 	}
 	/**
 	 * which_branch_tag_in文件夹文本内容表示，tag contains, which_branch_tag_in2 输出，多了branch到该tag.txt
@@ -159,23 +162,64 @@ public class FindOutTagAndBranchRelation {
 	 */
 	public static void run3(){
 		File f = new File("D:/sort_tag_branch/which_branch_tag_in");
+		String tagStrP = "android-4.4_r1";
+		String tagStr2 = tagStrP.substring(0,tagStrP.length()-3);
 		File[] files = f.listFiles();
 		Set<RevCommit> mSet = new HashSet<RevCommit>();
+		Set<String> uniqueBranchList = new HashSet<String>();
 		for(File tmp:files){
 			if(tmp.isDirectory()){
 				continue;
 			}
 			String tagName = tmp.getName().substring(0,tmp.getName().length()-4);
-			if(tagName.startsWith("android-7.0.0")){
+			if(tagName.equals("android-4.4w_r1")){
+				continue;
+			}
+			if(tagName.startsWith(tagStr2)){
 				List<String> branchList = FileUtil.getLines(tmp);
 				for(String branch:branchList){
 					if(branch.equals("contains")){
 						continue;
 					}
-					
+					branch = branch.trim();
+					if(tagStrP.equals("android-4.4_r1") ){
+						if(branch.startsWith("kitkat"))
+							uniqueBranchList.add(branch);
+					}else{
+						uniqueBranchList.add(branch);
+					}
 				}
 			}
 		}
+		List<AndroidTag> at = AndroidTagDAO.selectTagByShortNameAndProjName(tagStrP, RepoConstants.platform_frameworks_base_);
+		if(at.size()!=1){
+			System.err.println("Err");
+		}
+		AndroidTag at2 = at.get(0);
+		RevCommit tagRev = JGitRepositoryManager.getBaseCommand().revCommitOfTag(at2.getTagShaId());
+		// branch list往前追溯到
+		for(String tmp:uniqueBranchList){
+			List<AndroidBranch> mm = AndroidBranchDAO.selectTagByShortNameAndProjName(tmp, RepoConstants.platform_frameworks_base_);
+			if(mm.size()==1){
+				AndroidBranch ab = mm.get(0);
+//				System.out.println(ab.getBranchNameFull());
+				List<RevCommit> tmpList = new ArrayList<RevCommit>();
+				RevCommit branchC = JGitRepositoryManager.getBaseCommand().revCommitOfCommitId(ab.getBranchCommitSha());
+				boolean flag = JGitRepositoryManager.getBaseCommand().walkRepoBackwardsStartWithCommitId(branchC, tagRev, tmpList);
+//				System.out.println(flag);
+				mSet.addAll(tmpList);
+			}else{
+				System.err.println("aa");
+			}
+		}
+		System.out.print("("+mSet.size());
+		int cnt =0 ;
+		for(RevCommit a:mSet){
+			if(MatchBugFixingRules.bugOrNot3(a.getShortMessage(), a.getFullMessage())){
+				cnt++;
+			}
+		}
+		System.out.println(","+cnt+")\n");
 	}
 	
 	public static int listCommitsNum(String tagName,String branchName){
