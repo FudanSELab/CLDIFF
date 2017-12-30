@@ -6,8 +6,10 @@ public class StatementConstants {
 	
 	final public static String BLOCK = "Block";
 	
-	final public static String TRYSTATEMENT = "TryStatement"; 
-	
+	final public static String TRYSTATEMENT = "TryStatement";
+
+	final public static String CATCHCLAUSE = "CatchClause";
+
 	final public static String VARIABLEDECLARATIONSTATEMENT = "VariableDeclarationStatement";
 	
 	final public static String EXPRESSIONSTATEMENT = "ExpressionStatement";
@@ -37,4 +39,6 @@ public class StatementConstants {
 	final public static String ENHANCEDFORSTATEMENT = "EnhancedForStatement";
 
 	final public static String SYNCHRONIZEDSTATEMENT = "SynchronizedStatement";
+
+	final public static String SWITCHSTATEMENT = "SwitchStatement";
 }
