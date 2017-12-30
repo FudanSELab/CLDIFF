@@ -96,8 +96,8 @@ public class AstRelations {
 	}
 
 	/**
-	 * simplename 或者是literal 往前推属于哪个statement
-	 * XXXStatement MethodDelclaration
+	 * 找当前节点的父节点
+	 * XXXStatement XXXDelclaration JavaDoc CatchClause
 	 * @param node
 	 * @param treeContext
 	 * @return 返回fafafather
@@ -105,24 +105,53 @@ public class AstRelations {
 	public static ITree findFafafatherNode(ITree node, TreeContext treeContext) {
 		// if statement
 		String type = null;
-		ITree curNode = node;
+		ITree curNode = node.getParent();
 		String returnType = null;
-		while (true) {
+		while (!curNode.isRoot()) {
 			type = treeContext.getTypeLabel(curNode);
 			if(type.endsWith("Statement")) {
 				returnType = type;
 				break;
-			}else if(type.endsWith("Block")){
+			}else if(type.equals("Declaration")){
 					returnType = type;
 					break;
-			}else if(StatementConstants.METHODDECLARATION.equals(type)){
+			}else if(type.equals("CatchClause")) {
 				returnType = type;
 				break;
-			}else{
+			}
+			else if(type.endsWith("Javadoc")) {
+				returnType = type;
+				break;
+			} else{
 				curNode = curNode.getParent();
 			}
 		}
-		
+		if(curNode.isRoot())
+		    return null;
+		else
+			return curNode;
+	}
+
+	/**
+	 * 根据所传statementType的值，找符合条件的父节点并返回
+	 * @param node
+	 * @param treeContext
+	 * @return 返回fafafather
+	 */
+	public static ITree findFafafatherNodeByStatementType(ITree node, TreeContext treeContext,String statementType) {
+		// CatchClause
+		String type = null;
+		ITree curNode = node;
+		String returnType = null;
+		while (true) {
+			type = treeContext.getTypeLabel(curNode);
+			if(type.endsWith(statementType)) {
+				returnType = type;
+				break;
+			} else{
+				curNode = curNode.getParent();
+			}
+		}
 		return curNode;
 	}
 
