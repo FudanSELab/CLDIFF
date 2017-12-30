@@ -47,7 +47,7 @@ public class AndroidTagDAO {
 	public static List<AndroidTag> selectTags(String tagShortName){
 		return androidtagmapper.selectTags(tagShortName);
 	}
-	public static List<AndroidTag> selectTagByShortNameAndProjName(String tagShortName,String projectName){
+	public static AndroidTag selectTagByShortNameAndProjName(String tagShortName,String projectName){
 		return androidtagmapper.selectTagByShortNameAndProjName(tagShortName, projectName);
 	}
 	public static List<AndroidTag> selectTagAll(String projName){

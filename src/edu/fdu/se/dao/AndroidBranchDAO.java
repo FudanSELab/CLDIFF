@@ -43,13 +43,13 @@ public class AndroidBranchDAO {
 	public static List<AndroidBranch> selectAll(){
 		return androidbranchmapper.selectAll();
 	}
-	public static List<AndroidBranch> selectTags(String branchShortName){
+	public static List<AndroidBranch> selectBranches(String branchShortName){
 		return androidbranchmapper.selectBranchByShortName(branchShortName);
 	}
-	public static List<AndroidBranch> selectTagByShortNameAndProjName(String branchShortName,String projectName){
+	public static AndroidBranch selectBranchByShortNameAndProjName(String branchShortName,String projectName){
 		return androidbranchmapper.selectBranchByShortNameAndProjName(branchShortName, projectName);
 	}
-	public static List<AndroidBranch> selectTagAll(String projName){
+	public static List<AndroidBranch> selectBranchesAll(String projName){
 		return androidbranchmapper.selectBranchAll(projName);
 	}
 }

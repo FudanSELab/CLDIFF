@@ -38,19 +38,11 @@ public class CommitBetweenTwoTags {
 
 	public static RevCommit[] revCommitOfTagStr(String prev, String curr, JGitTagCommand cmd, String repoName) {
 		RevCommit[] res = new RevCommit[2];
-		List<AndroidTag> mList = AndroidTagDAO.selectTagByShortNameAndProjName(curr, repoName);
-		if (mList.size() != 1) {
-			System.err.println("Err");
-		}
-		AndroidTag tagInsCurr = mList.get(0);
+		AndroidTag tagInsCurr = AndroidTagDAO.selectTagByShortNameAndProjName(curr, repoName);
 		RevCommit commitCurr = cmd.revCommitOfTag(tagInsCurr.getTagShaId());
 		res[1] = commitCurr;
 
-		mList = AndroidTagDAO.selectTagByShortNameAndProjName(prev, repoName);
-		if (mList.size() != 1) {
-			System.err.println("Err");
-		}
-		AndroidTag tagInsPrev = mList.get(0);
+		AndroidTag tagInsPrev = AndroidTagDAO.selectTagByShortNameAndProjName(prev, repoName);
 		RevCommit commitPrev = cmd.revCommitOfTag(tagInsPrev.getTagShaId());
 		res[0] = commitPrev;
 		return res;

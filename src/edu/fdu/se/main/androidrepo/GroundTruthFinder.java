@@ -70,12 +70,8 @@ public class GroundTruthFinder {
 	}
 
 	private void addReleaseCommitByTagName(String tagName) {
-		List<AndroidTag> tagList = AndroidTagDAO.selectTagByShortNameAndProjName(tagName,
+		AndroidTag mTag = AndroidTagDAO.selectTagByShortNameAndProjName(tagName,
 				RepoConstants.platform_frameworks_base_);
-		if (tagList.size() != 1) {
-			return;
-		}
-		AndroidTag mTag = tagList.get(0);
 		JGitTagCommand tagCmd = new JGitTagCommand(
 				ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
 						+ RepoConstants.platform_frameworks_base_ + ".git");

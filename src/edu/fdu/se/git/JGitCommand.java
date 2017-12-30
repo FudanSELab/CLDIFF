@@ -512,6 +512,15 @@ public class JGitCommand {
 		return res;
 	}
 	
+	public static String stampToDate(RevCommit rc) {
+		Long s = rc.getCommitTime()*1000L;
+		String res;
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = new Date(s);
+		res = simpleDateFormat.format(date);
+		return res;
+	}
+	
 	public RevCommit revCommitOfBranchRef(Ref branch) {
 		try {
 			RevObject object;

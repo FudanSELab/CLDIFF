@@ -68,6 +68,15 @@
       <ignoreColumn column="FRED" />
       <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />
     </table>
+    
+      
+       <table schema="android_sdk_diff" tableName="android_cache_commit" domainObjectName="AndroidCacheCommit" >
+      <property name="useActualColumnNames" value="false"/>
+      <generatedKey column="ID" sqlStatement="MySql" identity="true" />
+      <columnOverride column="DATE_FIELD" property="startDate" />
+      <ignoreColumn column="FRED" />
+      <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />
+    </table>
     <!-- end -->
 
   </context>

@@ -21,18 +21,13 @@ public class ListCommitsFromBranchHeadToTag {
 //		List<Ref> bList = cmd.getAllBranches();
 //		for(Ref i :bList){
 //			RevCommit c = cmd.revCommitOfBranchRef(i);
-//			
 //		}
 		listCommits();
 	}
 	public static void listCommits(){
 		String tagName = "android-8.1.0_r1";
 		String[] branchName = {"oreo-m2-release","oreo-mr1-cts-release","oreo-mr1-release"};
-		List<AndroidTag> tags = AndroidTagDAO.selectTagByShortNameAndProjName(tagName, RepoConstants.platform_frameworks_base_);
-		if(tags.size()!=1){
-			return;
-		}
-		AndroidTag t = tags.get(0);
+		AndroidTag t = AndroidTagDAO.selectTagByShortNameAndProjName(tagName, RepoConstants.platform_frameworks_base_);
 		JGitTagCommand cmd = JGitRepositoryManager.getBaseCommand();
 		RevCommit tagCommit = cmd.revCommitOfTag(t.getTagShaId());
 		

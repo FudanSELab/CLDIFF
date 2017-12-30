@@ -19,6 +19,7 @@
 		<mapper resource="edu/fdu/se/sqlmap/AndroidPlatformFrameworkProjectMapper.xml"/>
 		<mapper resource="edu/fdu/se/sqlmap/AndroidTagMapper.xml"/>
 		<mapper resource="edu/fdu/se/sqlmap/AndroidBranchMapper.xml"/>
+		<mapper resource="edu/fdu/se/sqlmap/AndroidCacheCommitMapper.xml"/>
      </mappers>
     
 </configuration>

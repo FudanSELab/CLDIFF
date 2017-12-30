@@ -169,11 +169,10 @@ public class JGitTagCommand extends JGitCommand {
 				if (queueCommitItem.getCommitTime() < end.getCommitTime()) {
 					continue;
 				}
-				// Map<String, List<String>> changedFiles =
-				// this.getCommitFileList(queueCommitItem.getName());
 				for (RevCommit item2 : parentCommits) {
 					RevCommit commit2 = revWalk.parseCommit(item2.getId());
 					commitQueue.offer(commit2);
+					
 				}
 			}
 			return res;
