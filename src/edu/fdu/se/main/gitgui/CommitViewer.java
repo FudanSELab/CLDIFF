@@ -63,13 +63,8 @@ public class CommitViewer {
 	private JPanel controlPanel;
 	private JTextField uppperCommitInput;
 	private String selectedFilePath;
-	/**
-	 * tab1
-	 */
+
 	private JTextArea tab1CommitDetail;
-	/**
-	 * tab2
-	 */
 	private JTextPane tab2FileContent;
 	private JTextPane tab2Lines;
 	private JList<String> tab2FileList;
@@ -114,6 +109,7 @@ public class CommitViewer {
 		panel.setLayout(layout);
 		panel.add(new JLabel(" base/.git"));
 		uppperCommitInput = new JTextField(54);
+		uppperCommitInput.setText("a21d687c2431f6084e9eeaad8182c41c9ee3eb32");
 		panel.add(uppperCommitInput);
 		JButton commitBtn = new JButton("commit");
 		JButton tagBtn = new JButton("tag");
@@ -170,18 +166,14 @@ public class CommitViewer {
 					System.out.println("click");
 				} else {
 					int index = tab2FileList.getSelectedIndex();
-					if (commitIdIndexOfJList == null || commitIdIndexOfJList.contains(index)) {
+					if (commitIdIndexOfJList.contains(index)) {
 						System.out.println("contain. not do anything");
 					} else {
-						int commitRank = -1;
-						if (commitIdIndexOfJList.contains(index)) {
-							commitRank = commitIdIndexOfJList.indexOf(index);
-						}
+
 						String filePath = tab2FileList.getSelectedValue();
 						System.out.println(filePath);
 						selectedFilePath = filePath;
-						String content = RepoDataHelper.getInstance().readFile(filePath);
-						fillTextPane(content);
+//						RepoDataHelper.getInstance().setColoredText(filePath,tab2FileContent,tab2Lines);
 						RepoDataHelper.getInstance().writePrevCurrFiles(filePath);
 
 					}
@@ -192,8 +184,6 @@ public class CommitViewer {
 		});
 
 		JScrollPane fileListPanel = new JScrollPane(tab2FileList);
-//		fileListPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		// 
 		tab2FileContent = new JTextPane();
 		tab2FileContent.setPreferredSize(new Dimension(600, 500));
 		JScrollPane jsp1 = new JScrollPane(tab2FileContent);
@@ -252,95 +242,6 @@ public class CommitViewer {
 		mainFrame.setVisible(true);
 	}
 
-	private void fillTextPane(InputStream fis, Map<Integer, Integer> redGreenFlag) {
-		InputStreamReader ir = new InputStreamReader(fis);
-		BufferedReader br = new BufferedReader(ir);
-		StyledDocument doc = tab2FileContent.getStyledDocument();
-		Style style = tab2FileContent.addStyle("mStyle", null);
-		String line = null;
-		int index = 0;
-		try {
-			while ((line = br.readLine()) != null) {
-				if (redGreenFlag.containsKey(index)) {
-					int value = redGreenFlag.get(index);
-					if (value == 1) {
-						// red
-						StyleConstants.setForeground(style, Color.red);
-						try {
-							doc.insertString(doc.getLength(), line, style);
-						} catch (BadLocationException e) {
-						}
-					} else {
-						// green
-						StyleConstants.setForeground(style, Color.green);
-						try {
-							doc.insertString(doc.getLength(), line, style);
-						} catch (BadLocationException e) {
-						}
-					}
-				} else {
-					// normal
-					StyleConstants.setForeground(style, Color.white);
-					try {
-						doc.insertString(doc.getLength(), "BLEH", style);
-					} catch (BadLocationException e) {
-					}
-				}
 
-			}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		StyledDocument lineDoc = tab2Lines.getStyledDocument();
-		Style style2 = lineDoc.addStyle("mStyle", null);
-		for (int i = 0; i < index; i++) {
-			try {
-				lineDoc.insertString(doc.getLength(), String.valueOf(i + 1) + "\n", style2);
-			} catch (BadLocationException e) {
-			}
-		}
-
-	}
-
-	private void fillTextPane(String fileContent) {
-		InputStream is = new ByteArrayInputStream(fileContent.getBytes());
-		InputStreamReader isb = new InputStreamReader(is);
-		BufferedReader br = new BufferedReader(isb);
-		StyledDocument doc = tab2FileContent.getStyledDocument();
-		tab2FileContent.setText("");
-		Style style = tab2FileContent.addStyle("mStyle", null);
-		String line = null;
-		int lineNum = 0;
-		try {
-			while ((line = br.readLine()) != null) {
-				lineNum++;
-
-				if (line.startsWith("+-")) {
-					StyleConstants.setForeground(style, Color.blue);
-				} else if (line.startsWith("+")) {
-					StyleConstants.setForeground(style, Color.green);
-				} else if (line.startsWith("-")) {
-					StyleConstants.setForeground(style, Color.red);
-				} else {
-					StyleConstants.setForeground(style, Color.black);
-				}
-				doc.insertString(doc.getLength(), line + "\n", style);
-			}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
-		StyledDocument lineDoc = tab2Lines.getStyledDocument();
-
-		Style style2 = lineDoc.addStyle("mStyle", null);
-		for (int i = 0; i < lineNum; i++) {
-			try {
-				lineDoc.insertString(lineDoc.getLength(), String.valueOf(i + 1) + "\n", style2);
-			} catch (BadLocationException e) {
-			}
-		}
-
-	}
 
 }

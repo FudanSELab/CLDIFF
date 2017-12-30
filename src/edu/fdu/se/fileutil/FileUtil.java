@@ -45,6 +45,27 @@ public class FileUtil {
 		return null;
 		
 	}
+	
+	public static List<String> getLines(byte[] buffer){
+		InputStream sbs = new ByteArrayInputStream(buffer); 
+		List<String> result = new ArrayList<String>();
+		String line;
+		try {
+			InputStreamReader ir = new InputStreamReader(sbs);
+			BufferedReader br = new BufferedReader(ir);
+			while((line = br.readLine())!= null){
+				result.add(line.trim());
+			}
+			br.close();
+			return result;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 	public static boolean fileOutput(byte[] a,String output){
 		try {
 			FileOutputStream fos=new FileOutputStream(new File(output));
