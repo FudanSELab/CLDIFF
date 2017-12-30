@@ -16,8 +16,8 @@ import edu.fdu.se.git.JGitCommand;
  * @author huangkaifeng
  *
  */
-public class ManualCheckCommitHelper {
-	public ManualCheckCommitHelper(String path,String out){
+public class GenerateGitCommitScript {
+	public GenerateGitCommitScript(String path,String out){
 		this.commitFilePath = path;
 		this.filteredCommits=out;
 	}
@@ -27,7 +27,7 @@ public class ManualCheckCommitHelper {
 	public static void main(String args[]){
 		String file = "C:/Users/huangkaifeng/Desktop/10-20_Commits/android_sdk_commits_commit_msg_contains_add_null_check.txt";
 		String out = "C:/Users/huangkaifeng/Desktop/10-20_Commits/android_sdk_commits_commit_msg_contains_add_null_check-fast peer.txt";
-		ManualCheckCommitHelper fpc = new ManualCheckCommitHelper(file,out);
+		GenerateGitCommitScript fpc = new GenerateGitCommitScript(file,out);
 		fpc.output();
 	}
 	public void output(){

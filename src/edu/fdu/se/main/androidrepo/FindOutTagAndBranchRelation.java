@@ -41,7 +41,7 @@ public class FindOutTagAndBranchRelation {
 	
 	
 	public static void main(String args[]){
-		run3();
+//		run3();
 	}
 	/**
 	 * which_branch_tag_in文件夹文本内容表示，tag contains, which_branch_tag_in2 输出，多了branch到该tag.txt
@@ -89,16 +89,10 @@ public class FindOutTagAndBranchRelation {
 				fos.close();
 				sc.close();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
-			
-
 		}
 		
 	
@@ -220,6 +214,10 @@ public class FindOutTagAndBranchRelation {
 			}
 		}
 		System.out.println(","+cnt+")\n");
+	}
+	
+	public static void run4(){
+		
 	}
 	
 	public static int listCommitsNum(String tagName,String branchName){

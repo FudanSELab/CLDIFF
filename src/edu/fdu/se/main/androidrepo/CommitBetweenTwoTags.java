@@ -100,9 +100,7 @@ public class CommitBetweenTwoTags {
 		
 		
 		
-	}
-	
-	
+	}	
 	
 	public static List<String> readTagList(){
 		FileInputStream fos;
