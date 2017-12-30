@@ -208,10 +208,10 @@ public class FindOutTagAndBranchRelation {
 			AndroidCacheCommit acc = null;
 			if(MatchBugFixingRules.bugOrNot3(a.getShortMessage(), a.getFullMessage())){
 				cnt++;
-				acc = new AndroidCacheCommit(0,tagStrP,a.getName());
-			}else{
 				acc = new AndroidCacheCommit(0,tagStrP+"--bug",a.getName());
+				AndroidCacheCommitDAO.insert(acc);
 			}
+			acc = new AndroidCacheCommit(0,tagStrP,a.getName());
 			AndroidCacheCommitDAO.insert(acc);
 		}
 		System.out.println(","+cnt+")\n");
