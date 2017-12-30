@@ -51,6 +51,8 @@ public class FindPattern {
 		//添加至mHighLevelOperationBeanList
 		mHighLevelOperationBeanList.add(new HighLevelOperationBean(curNode,curNodeType,curActions,actionType,parentNode,parentNodeType));
 	}
+	
+	
 	/**
 	 * level III insert 操作中的新增方法 ok
 	 * 
@@ -65,6 +67,7 @@ public class FindPattern {
 		if (flag) {
 			if (a instanceof Insert) {
 				result = "[PATTREN] Add method";
+				
 			} else if (a instanceof Delete) {
 				result = "[PATTERN] Delete Method";
 			}
@@ -86,12 +89,17 @@ public class FindPattern {
 	 */
 	public int matchIf(Action a, String type) {
 		String ifOrElseif = "";
+		String operationType = "";
+		String operationEntity = "";
 		if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mDstTree)) {
 			ifOrElseif = "else if clause";
+			operationEntity = "ELSE_IF";
 		} else {
 			ifOrElseif = "if clause";
+			operationEntity = "IF";
 		}
 		String changeType = ActionConstants.getInstanceStringName(a);
+		
 		String summary = "[PATTERN] " + changeType + " " + ifOrElseif;
 
 		List<ITree> children = a.getNode().getChildren();
@@ -111,19 +119,24 @@ public class FindPattern {
 		boolean nullCheck = AstRelations.isNullCheck(a.getNode(), this.mMiningActionBean.mDstTree);
 		this.mMiningActionBean.setActionTraversedMap(ifSubActions);
 		if (flag) {
+			operationType = changeType+"--BODY";
 			summary += " and body";
 		} else {
 			if (a instanceof Insert) {
 				summary += " wrapper[insert]";
+				operationType = changeType+"--WRAPPER";
 			} else if (a instanceof Delete) {
 				summary += " wrapper[delete]";
+				operationType = changeType+"--WRAPPER";
 			}
 
 		}
 		if (nullCheck) {
 			System.out.println("5.Adding a null checker." + summary);
 		}
-
+		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+				a.getNode(),type,ifSubActions,operationType,operationEntity,null,null);
+		this.mHighLevelOperationBeanList.add(mHighLevelOperationBean);
 		System.out.println(summary);
 		return ifSubActions.size();
 	}
@@ -464,6 +477,29 @@ public class FindPattern {
 		this.findDelete();
 		this.findMethodSignatureChange();
 		this.findStatementChange();
+	}
+	
+	public void find2(){
+		for(HighLevelOperationBean item:this.mHighLevelOperationBeanList){
+			if(item.getOperationEntity().equals("IF")){
+				Tree node = (Tree) item.getCurNode();
+				Tree parent = (Tree) node.getParent();
+				String parentType = null;
+				if(item.getCurAction() instanceof Insert){
+					parentType = this.mMiningActionBean.mDstTree.getTypeLabel(parent);
+					if(parentType.equals(StatementConstants.CATCHCLAUSE)){
+						System.out.println("在catch里增加了if语句");
+					}
+				}else{
+					parentType = this.mMiningActionBean.mSrcTree.getTypeLabel(parent);
+					if(parentType.equals(StatementConstants.CATCHCLAUSE)){
+						System.out.println("在catch里删除了if语句");
+					}
+				}
+				
+				
+			}
+		}
 	}
 
 	/**
