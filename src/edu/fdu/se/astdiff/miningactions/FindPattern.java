@@ -105,8 +105,6 @@ public class FindPattern {
 	public void findInsert() {
 		int insertActionCount = this.mMiningActionBean.mActionGeneratorBean.getInsertActions().size();
 		int insertActionIndex = 0;
-		int count = 0;// not used
-		String resultStr = null;
 		while (true) {
 			if (insertActionIndex == insertActionCount) {
 				break;
@@ -127,61 +125,50 @@ public class FindPattern {
 			String nextAction = ConsolePrint.getMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
 			System.out.print(nextAction);
 			if (StatementConstants.METHODDECLARATION.equals(type)) {
-				// 新增方法
-				resultStr = matchNewOrDeleteMethod(a);
-				System.out.println(resultStr);
+				MatchNewOrDeleteMethod.matchNewOrDeleteMethod(this,a);
 				continue;
 			}
 			if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
-                // 方法签名修改
-//				if (StatementConstants.BLOCK.equals(type)) {
-//					if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionBean.mDstTree))
-//						//同步语句块增加
-//						count = this.matchSynchronized(a);
-//					else
-//						System.err.println("Not considered");
-//				} else {
-					count = matchMethodSignatureChange(a, father);
-//				}
+				MatchMethodSignatureChange.matchMethodSignatureChange(this,a, father);
 			} else {
 				// 方法体
 				switch (type) {
 					case StatementConstants.IFSTATEMENT:
 						// Pattern 1. Match If/else if
-						count = matchIf(a, type);
+						MatchIfElse.matchIf(this,a, type);
 						break;
 					case StatementConstants.BLOCK:
 						if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mDstTree)) {
 							// Pattern 1.2 Match else
-							count = this.matchElse(a);
+							MatchIfElse.matchElse(this,a);
 						}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionBean.mDstTree)) {
 							//同步语句块增加
-							count = this.matchSynchronized(a);
+							MatchSynchronized.matchSynchronized(this,a);
 						}else {
 							System.err.println("Other Condition");
 							// TODO剩下的情况
 						}
 						break;
 					case StatementConstants.TRYSTATEMENT:
-						count = matchTry(a);
+						MatchTry.matchTry(this,a);
 						break;
 					case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
-						count = this.matchVariableDeclaration(a);
+						MatchVariableDeclarationExpression.matchVariableDeclaration(this,a);
 						break;
 					case StatementConstants.EXPRESSIONSTATEMENT:
 						if(AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mDstTree))
 							// Pattern 1.2 Match else
-							count = this.matchElse(a);
+							MatchIfElse.matchElse(this,a);
 						else
-							count = this.matchExpression(a);
+							MatchExpressionStatement.matchExpression(this,a);
 						break;
 					case StatementConstants.SYNCHRONIZEDSTATEMENT:
 						//同步语句块增加
-						count = this.matchSynchronized(a);
+						MatchSynchronized.matchSynchronized(this,a);
 						break;
 					case StatementConstants.SWITCHSTATEMENT:
 						//增加switch语句
-						count = this.matchSwitch(a);
+						MatchSwitch.matchSwitch(this,a);
 						break;
 					// 方法参数
 					case StatementConstants.SIMPLENAME:
@@ -192,7 +179,7 @@ public class FindPattern {
 					case StatementConstants.BOOLEANLITERAL:
 					case StatementConstants.INFIXEXPRESSION:
 					case StatementConstants.METHODINVOCATION:
-						count = this.matchSimplenameOrLiteral(a, this.mMiningActionBean.mDstTree);
+						MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, this.mMiningActionBean.mDstTree);
 						break;
 					default:
 						System.err.println("Default1:" + type);
@@ -238,15 +225,15 @@ public class FindPattern {
 				// 方法体内部
 				switch (type) {
 				case StatementConstants.IFSTATEMENT:
-					count = matchIf(a, type);
+					MatchIfElse.matchIf(this,a, type);
 					break;
 				case StatementConstants.BLOCK:
 					// Pattern 1.2 Match else
 					if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mSrcTree)) {
-						count = this.matchElse(a);
+						MatchIfElse.matchElse(this,a);
 					}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionBean.mDstTree)) {
 						//同步语句块增加
-						count = this.matchSynchronized(a);
+						MatchSynchronized.matchSynchronized(this,a);
 					} else {
 						System.err.println("Other Condition");
 						// TODO剩下的情况
@@ -255,23 +242,23 @@ public class FindPattern {
 				case StatementConstants.EXPRESSIONSTATEMENT:
 					// Pattern 1.2 Match else
 					if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mSrcTree))
-						count = this.matchElse(a);
+						MatchIfElse.matchElse(this,a);
 					else
-					    count = this.matchExpression(a);
+						MatchExpressionStatement.matchExpression(this,a);
 					break;
 				case StatementConstants.TRYSTATEMENT:
-					count = matchTry(a);
+					MatchTry.matchTry(this,a);
 					break;
 				case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
-					count = this.matchVariableDeclaration(a);
+					MatchVariableDeclarationExpression.matchVariableDeclaration(this,a);
 					break;
 				case StatementConstants.SYNCHRONIZEDSTATEMENT:
 					//同步语句块增加
-					count = this.matchSynchronized(a);
+					MatchSynchronized.matchSynchronized(this,a);
 					break;
 				case StatementConstants.SWITCHSTATEMENT:
 						//增加switch语句
-						count = this.matchSwitch(a);
+						MatchSwitch.matchSwitch(this,a);
 						break;
 				// 方法参数
 				case StatementConstants.SIMPLENAME:
@@ -282,7 +269,7 @@ public class FindPattern {
 				case StatementConstants.BOOLEANLITERAL:
 				case StatementConstants.INFIXEXPRESSION:
 				case StatementConstants.METHODINVOCATION:
-					count = this.matchSimplenameOrLiteral(a, this.mMiningActionBean.mSrcTree);
+					MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, this.mMiningActionBean.mDstTree);
 					break;
 
 				default:
@@ -298,7 +285,6 @@ public class FindPattern {
 	public void findUpdate() {
 		int updateActionCount = this.mMiningActionBean.mActionGeneratorBean.getUpdateActions().size();
 		int index = 0;
-		int count = 0;
 		while (true) {
 			if (index == updateActionCount) {
 				break;
@@ -324,13 +310,13 @@ public class FindPattern {
 				if (StatementConstants.BLOCK.equals(type)) {
 					System.err.println("Not considered");
 				} else {
-					count = matchMethodSignatureChange(a, fafafather);
+					MatchMethodSignatureChange.matchMethodSignatureChange(this,a, fafafather);
 				}
 			} else {
 				// 方法体
 				switch (type) {
 				case StatementConstants.SIMPLENAME:
-					count = this.matchSimplenameOrLiteral(a, this.mMiningActionBean.mSrcTree);
+					MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, this.mMiningActionBean.mSrcTree);
 					break;
 				default:
 					break;

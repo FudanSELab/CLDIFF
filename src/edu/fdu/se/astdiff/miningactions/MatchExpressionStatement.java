@@ -18,27 +18,29 @@ public class MatchExpressionStatement {
 	 * @param a
 	 * @return
 	 */
-	public int matchExpression(Action a) {
+	public static int matchExpression(FindPattern fp,Action a) {
 		TreeContext con = null;
 		if (a instanceof Insert) {
-			con = this.mMiningActionBean.mDstTree;
+			con = fp.getDstTree();
 		} else if (a instanceof Delete) {
-			con = this.mMiningActionBean.mSrcTree;
+			con = fp.getSrcTree();
 		}
 		String summary = "[PATTERN]";
 		summary += ActionConstants.getInstanceStringName(a);
 		List<Action> subActions = new ArrayList<Action>();
-		boolean flag = MyTreeUtil.traverseAllChilrenCheckIfSameAction(a, subActions);
-		this.mMiningActionBean.setActionTraversedMap(subActions);
-		if (flag) {
-			if (AstRelations.isClassCreation(subActions, con)) {
-				summary += " object Initializing - expression assignment";
-			} else {
-				summary += " expression assignment";
-			}
-		} else {
-			System.err.println("Unexpected Condition 2");
+		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
+		fp.setActionTraversedMap(subActions);
+		if(status == MyTreeUtil.TYPE1){
+			summary += "insert";
+		}else if(status == MyTreeUtil.TYPE2){
+			summary += "delete";
 		}
+		if (AstRelations.isClassCreation(subActions, con)) {
+			summary += " object Initializing - expression assignment";
+		} else {
+			summary += " expression assignment";
+		}
+		
 
 		System.out.println(summary);
 		return subActions.size();

@@ -12,15 +12,14 @@ import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSwitch {
 	
-	public int matchSwitch(Action a){
+	public static int matchSwitch(FindPattern fp,Action a){
 		String changeType = ActionConstants.getInstanceStringName(a);
 		String summary = "[PATTERN] " + changeType + " Switch ";
 
 		List<Action> ifSubActions = new ArrayList<Action>();
-		boolean flag = MyTreeUtil.traverseAllChilrenCheckIfSameAction(a, ifSubActions);
-		boolean nullCheck = AstRelations.isNullCheck(a.getNode(), this.mMiningActionBean.mDstTree);
-		this.mMiningActionBean.setActionTraversedMap(ifSubActions);
-		if (flag) {
+		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
+		fp.setActionTraversedMap(ifSubActions);
+		if (status == MyTreeUtil.TYPE1) {
 			summary += " and body";
 		} else {
 			if (a instanceof Insert) {
@@ -29,9 +28,6 @@ public class MatchSwitch {
 				summary += " wrapper[delete]";
 			}
 
-		}
-		if (nullCheck) {
-			System.out.println("5.Adding a null checker." + summary);
 		}
 
 		System.out.println(summary);

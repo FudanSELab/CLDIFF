@@ -18,34 +18,36 @@ public class MatchTry {
 	 * @param a
 	 * @return
 	 */
-	public int matchTry(Action a) {
+	public static int matchTry(FindPattern fp,Action a) {
 		String summary = "[PATTERN] " + ActionConstants.getInstanceStringName(a);
 		List<Action> tryAction = new ArrayList<Action>();
-		boolean flag = MyTreeUtil.traverseAllChilrenCheckIfSameAction(a, tryAction);
-		if (flag) {
+		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, tryAction);
+
+		if (status == MyTreeUtil.TYPE1) {
 			summary += " try catch clause and body";
 		} else{
 			summary += " try catch clause wrapper";
 		}
-		this.mMiningActionBean.setActionTraversedMap(tryAction);
+		fp.setActionTraversedMap(tryAction);
 		System.out.println(summary);
 		return tryAction.size();
 	}
 
-	public int matchTryPlus(Action a) {
+	public int matchTryPlus(FindPattern fp,Action a) {
 		String summary = "[PATTERN] " + ActionConstants.getInstanceStringName(a);
 		List<Action> tryAction = new ArrayList<Action>();
-		boolean flag = MyTreeUtil.traverseAllChilrenCheckIfSameAction(a, tryAction);
+		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, tryAction);
 		Insert ins = (Insert) a;
 		ITree insNode = ins.getNode();
-		ITree fafafatherCatchClause = AstRelations.findFafafatherNodeByStatementType(insNode, this.mMiningActionBean.mDstTree,StatementConstants.CATCHCLAUSE);
+		ITree fafafatherCatchClause = AstRelations.findFafafatherNodeByStatementType(insNode, fp.getDstTree(),StatementConstants.CATCHCLAUSE);
 		String fatherCatchClauseType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafatherCatchClause);
-		if (flag ) {
+		
+		if (status) {
 			summary += " try catch clause and body";
 		} else{
 			summary += " try catch clause wrapper";
 		}
-		this.mMiningActionBean.setActionTraversedMap(tryAction);
+		fp.setActionTraversedMap(tryAction);
 		System.out.println(summary);
 		return tryAction.size();
 	}

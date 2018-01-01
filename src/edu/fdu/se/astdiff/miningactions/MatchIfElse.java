@@ -22,7 +22,7 @@ public class MatchIfElse {
 	 * @param type
 	 * @return
 	 */
-	public HighLevelOperationBean matchIf(FindPattern f,Action a, String type) {
+	public static HighLevelOperationBean matchIf(FindPattern f,Action a, String type) {
 		String ifOrElseif = "";
 		String operationType = "";
 		String operationEntity = "";
@@ -88,7 +88,7 @@ public class MatchIfElse {
 	 * @param a
 	 * @return
 	 */
-	public int matchElse(FindPattern f,Action a) {
+	public static int matchElse(FindPattern f,Action a) {
 		String changeType = ActionConstants.getInstanceStringName(a);
 		String summary = changeType + " else clause ";
 		String labelType = f.getDstTreeContextTypeLabel(a.getNode()) ;
@@ -118,7 +118,7 @@ public class MatchIfElse {
 	 * @param treeContext
 	 * @return
 	 */
-	public int matchIfPredicate(Action a, TreeContext treeContext, ITree fafafatherNode) {
+	public static int matchIfPredicate(FindPattern fp,Action a, TreeContext treeContext, ITree fafafatherNode) {
 		// fafafatherNode是if 那么 第一个孩子是if里的内容
 		ITree srcParent = null;
 		List<Action> allActions = new ArrayList<Action>();
@@ -129,9 +129,10 @@ public class MatchIfElse {
 		default:break;
 		}
 		if (a instanceof Insert) {
-			if (this.mMiningActionBean.mMapping.getSrc(fafafatherNode) != null) {
-				srcParent = this.mMiningActionBean.mMapping.getSrc(fafafatherNode);
-				List<Action> tmp = MyTreeUtil.traverseNodeGetAllEditAction(srcParent);
+			if (fp.getMappedSrcOfDstNode(fafafatherNode) != null) {
+				srcParent = fp.getMappedSrcOfDstNode(fafafatherNode);
+				List<Action> tmp = new ArrayList<Action>();
+				int status2 = MyTreeUtil.traverseNodeGetAllEditActions(srcParent, tmp);
 				allActions.addAll(tmp);
 			} else {
 				System.err.println("ERerererR");
@@ -139,8 +140,8 @@ public class MatchIfElse {
 		} else {
 			srcParent = fafafatherNode;
 		}
-		this.mMiningActionBean.setActionTraversedMap(allActions);
-		this.mMiningActionBean.mapIfPredicateAndAction(srcParent, allActions);
+		fp.setActionTraversedMap(allActions);
+//		this.mMiningActionBean.mapIfPredicateAndAction(srcParent, allActions);
 		return allActions.size();
 	}
 

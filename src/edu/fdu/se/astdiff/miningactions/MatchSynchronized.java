@@ -12,7 +12,7 @@ import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSynchronized {
 	
-	public int matchSynchronized(Action a){
+	public static int matchSynchronized(FindPattern fp,Action a){
 
 //		List<ITree> child = a.getNode().getChildren();
 //		//String type = treeContext.getTypeLabel(t.getChild(0));
@@ -25,10 +25,9 @@ public class MatchSynchronized {
 		String summary = "[PATTERN] " + changeType + " Synchronized ";
 
 		List<Action> ifSubActions = new ArrayList<Action>();
-		boolean flag = MyTreeUtil.traverseAllChilrenCheckIfSameAction(a, ifSubActions);
-		boolean nullCheck = AstRelations.isNullCheck(a.getNode(), this.mMiningActionBean.mDstTree);
-		this.mMiningActionBean.setActionTraversedMap(ifSubActions);
-		if (flag) {
+		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
+		fp.setActionTraversedMap(ifSubActions);
+		if (status) {
 			summary += " and body";
 		} else {
 			if (a instanceof Insert) {
@@ -37,9 +36,6 @@ public class MatchSynchronized {
 				summary += " wrapper[delete]";
 			}
 
-		}
-		if (nullCheck) {
-			System.out.println("5.Adding a null checker." + summary);
 		}
 
 		System.out.println(summary);

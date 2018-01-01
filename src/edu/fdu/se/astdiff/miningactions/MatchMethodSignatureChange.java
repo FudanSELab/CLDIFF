@@ -37,7 +37,7 @@ public class MatchMethodSignatureChange {
 		List<Action> signatureChidlren = new ArrayList<Action>();
 		int insertCnt = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
 		MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
-		this.mMiningActionBean.mapMethodSignatureAction(srcfafafather, signatureChidlren);
+//		this.mMiningActionBean.mapMethodSignatureAction(srcfafafather, signatureChidlren);
 		fp.setActionTraversedMap(signatureChidlren);
 		return insertCnt;
 	}

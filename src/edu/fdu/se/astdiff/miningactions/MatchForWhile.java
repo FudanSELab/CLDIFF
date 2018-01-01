@@ -12,7 +12,7 @@ public class MatchForWhile {
 	 * @param treeContext
 	 * @return
 	 */
-	public int matchForPredicate(Action a, TreeContext treeContext) {
+	public static int matchForPredicate(FindPattern fp,Action a, TreeContext treeContext) {
 		// TODO
 		return 0;
 	}

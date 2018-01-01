@@ -1,5 +1,6 @@
 package edu.fdu.se.astdiff.miningactions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
@@ -19,23 +20,28 @@ public class MatchSimpleNameOrLiteral {
 	 * @param treeContext
 	 * @return
 	 */
-	public int matchExpressionStatementAndVariableDeclarationStatement(Action a, TreeContext treeContext,
+	public static int matchExpressionStatementAndVariableDeclarationStatement(FindPattern fp,Action a, TreeContext treeContext,
 			ITree fafafatherNode) {
 		ITree srcParent = null;
-		List<Action> allActions = MyTreeUtil.traverseNodeGetAllEditAction(fafafatherNode);
+		List<Action> allActions = new ArrayList<Action>();
+		int status = MyTreeUtil.traverseNodeGetAllEditActions(fafafatherNode, allActions);
+		// 如果为insert ，那么src树可能有别的标记
+		// 如果不是
 		if(a instanceof Insert){
-			if(this.mMiningActionBean.mMapping.getSrc(fafafatherNode)!=null){
-				srcParent = this.mMiningActionBean.mMapping.getSrc(fafafatherNode);
-				List<Action> tmp = MyTreeUtil.traverseNodeGetAllEditAction(srcParent);
-				allActions.addAll(tmp);
+			ITree tmp = fp.getMappedSrcOfDstNode(fafafatherNode);
+			if(tmp!=null){
+				srcParent = tmp;
+				List<Action> tmpList = new ArrayList<Action>();
+				int status2 = MyTreeUtil.traverseNodeGetAllEditActions(srcParent, tmpList);
+				allActions.addAll(tmpList);
 			}else{
 				System.err.println("ERERERER");
 			}
 		}else{
 			srcParent = fafafatherNode;
 		}
-		this.mMiningActionBean.setActionTraversedMap(allActions);
-		this.mMiningActionBean.mapMethodInvocationAndActions(srcParent, allActions);
+		fp.setActionTraversedMap(allActions);
+//		this.mMiningActionBean.mapMethodInvocationAndActions(srcParent, allActions);
 		return 0;
 	}
 
@@ -51,7 +57,7 @@ public class MatchSimpleNameOrLiteral {
 	 * @param a
 	 * @return
 	 */
-	public int matchSimplenameOrLiteral(Action a, TreeContext curContext) {
+	public static int matchSimplenameOrLiteral(FindPattern fp,Action a, TreeContext curContext) {
 		// if predicate
 		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), curContext);
 		String fafafatherType = curContext.getTypeLabel(fafafatherNode);
@@ -59,16 +65,16 @@ public class MatchSimpleNameOrLiteral {
 		switch (fafafatherType) {
 		case StatementConstants.IFSTATEMENT:
 			System.out.println("If predicate");
-			returnVal = this.matchIfPredicate(a, curContext, fafafatherNode);
+			MatchIfElse.matchIfPredicate(fp,a, curContext, fafafatherNode);
 			break;
 		case StatementConstants.FORSTATEMENT:
 			System.out.println("For predicate#TODO");
-			returnVal = this.matchForPredicate(a, curContext);
+			MatchForWhile.matchForPredicate(fp,a, curContext);
 			break;
 		case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
 		case StatementConstants.EXPRESSIONSTATEMENT:
 			System.out.println("variable/expression");
-			returnVal = this.matchExpressionStatementAndVariableDeclarationStatement(a, curContext, fafafatherNode);
+			matchExpressionStatementAndVariableDeclarationStatement(fp,a, curContext, fafafatherNode);
 			break;
 		default:
 			System.err.println("Default:" + fafafatherType);
