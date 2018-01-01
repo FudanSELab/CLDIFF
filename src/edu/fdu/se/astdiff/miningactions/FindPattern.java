@@ -73,8 +73,6 @@ public class FindPattern {
 		this.findInsert();
 		this.findUpdate();
 		this.findDelete();
-		this.findMethodSignatureChange();
-		this.findStatementChange();
 	}
 	
 	public void find2(){
@@ -352,62 +350,51 @@ public class FindPattern {
 
 	}
 
-	/**
-	 * Sub level-II
-	 * 
-	 */
-	public void findStatementChange() {
-		for(Entry<String,List<ITree>> entry : this.mMiningActionBean.fatherTypeToFathersMap.entrySet()){
-			String type = entry.getKey();
-			List<ITree> value = entry.getValue();
-			switch(type){
-			case ActionConstants.METHODINVOCATION:
-			case ActionConstants.IfPredicate:
-			case ActionConstants.ForPredicate:
-			case ActionConstants.ExpressionStatement:
-			case ActionConstants.VariableDelcarationStatement:
-				break;
-				//TODO
-			default:
-				break;
-			}
-		}
-		for (Entry<ITree, List<Action>> item : this.mMiningActionBean.fatherToActionMap.entrySet()) {
-			Tree srcParentNode = (Tree) item.getKey();
-			Tree dstParentNode = (Tree) this.mMiningActionBean.mMapping.getDst(srcParentNode);
-			List<Action> mList = item.getValue();
-			Set<String> mSet = this.mMiningActionBean.fatherToActionChangeTypeMap.get(item.getKey());
-			int lenSrc = srcParentNode.getChildren().size();
-			int lenDst = dstParentNode.getChildren().size();
-			if (lenSrc > lenDst) {
-				if (mSet.contains(ActionConstants.UPDATE)) {
-					System.out.println("1.Altering method parameters -Delete&update parameter");
-				} else {
-					System.out.println("1.Altering method parameters - Delete parameter");
-				}
-			} else if (lenSrc < lenDst) {
-				if (mSet.contains(ActionConstants.UPDATE)) {
-					System.out.println("1.Altering method parameters - Add&update parameter");
-				} else {
-					System.out.println(
-							"1.Atering method parameters - Add parameter / 3.Calling another overloaded method with one more parameter");
-				}
-			} else {
-				System.out.println("1.Altering method parameters - Update parameter");
-			}
-		}
-	}
-
-	public void findMethodSignatureChange() {
-		for (Entry<ITree, List<Action>> item : this.mMiningActionBean.methodSignatureMap.entrySet()) {
-			// Tree srcParentNode = (Tree) item.getKey();
-			// Tree dstParentNode = (Tree)
-			// this.mMiningActionBean.mMapping.getDst(srcParentNode);
-			System.out.println("[PATTREN] Method Signature Change");
-		}
-	}
-
-
+//	/**
+//	 * Sub level-II
+//	 * 
+//	 */
+//	public void findStatementChange() {
+//		for(Entry<String,List<ITree>> entry : this.mMiningActionBean.fatherTypeToFathersMap.entrySet()){
+//			String type = entry.getKey();
+//			List<ITree> value = entry.getValue();
+//			switch(type){
+//			case ActionConstants.METHODINVOCATION:
+//			case ActionConstants.IfPredicate:
+//			case ActionConstants.ForPredicate:
+//			case ActionConstants.ExpressionStatement:
+//			case ActionConstants.VariableDelcarationStatement:
+//				break;
+//				//TODO
+//			default:
+//				break;
+//			}
+//		}
+//		for (Entry<ITree, List<Action>> item : this.mMiningActionBean.fatherToActionMap.entrySet()) {
+//			Tree srcParentNode = (Tree) item.getKey();
+//			Tree dstParentNode = (Tree) this.mMiningActionBean.mMapping.getDst(srcParentNode);
+//			List<Action> mList = item.getValue();
+//			Set<String> mSet = this.mMiningActionBean.fatherToActionChangeTypeMap.get(item.getKey());
+//			int lenSrc = srcParentNode.getChildren().size();
+//			int lenDst = dstParentNode.getChildren().size();
+//			if (lenSrc > lenDst) {
+//				if (mSet.contains(ActionConstants.UPDATE)) {
+//					System.out.println("1.Altering method parameters -Delete&update parameter");
+//				} else {
+//					System.out.println("1.Altering method parameters - Delete parameter");
+//				}
+//			} else if (lenSrc < lenDst) {
+//				if (mSet.contains(ActionConstants.UPDATE)) {
+//					System.out.println("1.Altering method parameters - Add&update parameter");
+//				} else {
+//					System.out.println(
+//							"1.Atering method parameters - Add parameter / 3.Calling another overloaded method with one more parameter");
+//				}
+//			} else {
+//				System.out.println("1.Altering method parameters - Update parameter");
+//			}
+//		}
+//	}
 //	if (AstRelations.
 // ifFatherNodeTypeSameAs(a, treeContext, StatementConstants.METHODINVOCATION)) {
 //		ITree tree = a.getNode();
@@ -417,12 +404,6 @@ public class FindPattern {
 //		System.out.println(mi.getName());// method call的方法名
 //		System.out.println(mi.getExpression());// variable
 //		int pos = tree.getParent().getChildPosition(tree);
-//		if (pos == 1) {
-//			result = "2.Calling another method with the same parameters";
-//			return 1;
-//		} else if (pos == 0) {
-//			System.out.println("X.Change variable");
-//			return 1;
-//		}
+
 
 }
