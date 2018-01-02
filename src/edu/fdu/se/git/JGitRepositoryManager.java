@@ -1,9 +1,7 @@
-package edu.fdu.se.gitrepo;
+package edu.fdu.se.git;
 
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-import edu.fdu.se.git.JGitTagCommand;
-import edu.fdu.se.git.RepoConstants;
 
 public class JGitRepositoryManager {
 

@@ -1,32 +1,17 @@
 package edu.fdu.se.main.androidrepo;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevObject;
-import org.eclipse.jgit.revwalk.RevTag;
-import org.eclipse.jgit.revwalk.RevWalk;
 
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.bean.AndroidTag;
-import edu.fdu.se.config.ProjectProperties;
-import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitCommand;
-import edu.fdu.se.git.JGitTagCommand;
-import edu.fdu.se.git.RepositoryHelper;
-import edu.fdu.se.gitrepo.SDKFileToRepoFilePath;
+import edu.fdu.se.git.SDKFileToRepoFilePath;
 /**
  * sdk的文件 map到repo中
  * @author huangkaifeng

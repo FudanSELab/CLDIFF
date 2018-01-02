@@ -1,6 +1,5 @@
 package edu.fdu.se.git;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +7,6 @@ import java.util.Map.Entry;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import edu.fdu.se.bean.AndroidRepoCommit;
 import edu.fdu.se.bean.AndroidRepoCommitWithBLOBs;
 import edu.fdu.se.dao.AndroidRepoCommitDAO;
 

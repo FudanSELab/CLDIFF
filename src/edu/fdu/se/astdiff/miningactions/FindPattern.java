@@ -2,11 +2,6 @@ package edu.fdu.se.astdiff.miningactions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.eclipse.jdt.core.dom.MethodInvocation;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
@@ -17,9 +12,7 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
-import edu.fdu.se.gumtree.MyTreeUtil;
 
 /**
  * Most of our basic work on this java class Input: 4 kinds of edit action,

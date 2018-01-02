@@ -1,4 +1,4 @@
-package edu.fdu.se.main.androidrepo;
+package edu.fdu.se.main.groundtruth;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,9 +10,9 @@ import org.eclipse.jgit.revwalk.RevCommit;
 
 import edu.fdu.se.bean.AndroidTag;
 import edu.fdu.se.dao.AndroidTagDAO;
+import edu.fdu.se.git.JGitRepositoryManager;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepoConstants;
-import edu.fdu.se.gitrepo.JGitRepositoryManager;
 
 public class ListCommitsFromBranchHeadToTag {
 	

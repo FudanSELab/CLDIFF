@@ -11,8 +11,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import edu.fdu.se.bean.AndroidBranch;
-import edu.fdu.se.bean.AndroidRepoCommit;
-import edu.fdu.se.bean.AndroidRepoCommitWithBLOBs;
 import edu.fdu.se.mapper.AndroidBranchMapper;
 
 public class AndroidBranchDAO {

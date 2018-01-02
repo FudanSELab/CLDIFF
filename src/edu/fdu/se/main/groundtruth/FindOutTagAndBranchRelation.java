@@ -1,4 +1,4 @@
-package edu.fdu.se.main.androidrepo;
+package edu.fdu.se.main.groundtruth;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,10 +29,9 @@ import edu.fdu.se.dao.AndroidCacheCommitDAO;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.fileutil.FileUtil;
 import edu.fdu.se.git.JGitCommand;
+import edu.fdu.se.git.JGitRepositoryManager;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepoConstants;
-import edu.fdu.se.gitrepo.JGitRepositoryManager;
-import edu.fdu.se.groundtruth.MatchBugFixingRules;
 import edu.fdu.se.manager.AndroidTagManager;
 /**
  * tag contains 命令输出tag所在的branch，文件的处理
@@ -122,7 +121,7 @@ public class FindOutTagAndBranchRelation {
 				
 			}
 		}
-		List<Entry<String,Integer>> mmLit = new ArrayList(mList.entrySet());
+		List<Entry<String,Integer>> mmLit = new ArrayList<Entry<String,Integer>>(mList.entrySet());
 		mmLit.sort(new Comparator<Entry<String,Integer>>(){
 
 			@Override

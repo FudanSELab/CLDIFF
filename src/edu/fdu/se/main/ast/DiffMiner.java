@@ -2,8 +2,6 @@ package edu.fdu.se.main.ast;
 
 
 import com.github.gumtreediff.actions.ActionUtil;
-import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.ActionGeneratorBean;

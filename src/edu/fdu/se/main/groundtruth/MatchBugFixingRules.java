@@ -1,4 +1,4 @@
-package edu.fdu.se.groundtruth;
+package edu.fdu.se.main.groundtruth;
 
 
 public class MatchBugFixingRules {

@@ -1,4 +1,4 @@
-package edu.fdu.se.main.androidrepo;
+package edu.fdu.se.main.groundtruth;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -11,18 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
-import java.util.Optional;
-import java.util.Scanner;
 import java.util.Set;
 
-import org.eclipse.jgit.diff.EditList;
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.Position;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
 import edu.fdu.se.bean.AndroidTag;
@@ -30,11 +22,11 @@ import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitCommand;
+import edu.fdu.se.git.JGitRepositoryManager;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepoConstants;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
-import edu.fdu.se.gitrepo.JGitRepositoryManager;
 import edu.fdu.se.javaparser.JavaParserFactory;
 
 /**

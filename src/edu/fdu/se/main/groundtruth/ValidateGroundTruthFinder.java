@@ -1,4 +1,4 @@
-package edu.fdu.se.main.androidrepo;
+package edu.fdu.se.main.groundtruth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 
 import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitRepositoryCommand;
-import edu.fdu.se.gitrepo.JGitRepositoryManager;
+import edu.fdu.se.git.JGitRepositoryManager;
 import edu.fdu.se.main.gitgui.RepoDataHelper;
 
 public class ValidateGroundTruthFinder {

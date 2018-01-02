@@ -59,15 +59,15 @@ public class ActionNodeRelation {
 	// return false;
 	// }
 
-	private boolean sameValueUpdates(Action a1, Action a2) {
-		if (!(a1 instanceof Update && a2 instanceof Update))
-			return false;
-		Update u1 = (Update) a1;
-		Update u2 = (Update) a2;
-		if (u1.getValue().equals(u2.getValue()))
-			return true;
-		else
-			return false;
-	}
+//	private boolean sameValueUpdates(Action a1, Action a2) {
+//		if (!(a1 instanceof Update && a2 instanceof Update))
+//			return false;
+//		Update u1 = (Update) a1;
+//		Update u2 = (Update) a2;
+//		if (u1.getValue().equals(u2.getValue()))
+//			return true;
+//		else
+//			return false;
+//	}
 
 }
