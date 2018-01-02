@@ -109,18 +109,21 @@ public class FindPattern {
 			Insert ins = (Insert) a;
 			ITree insNode = ins.getNode();
 			String type = this.mMiningActionBean.mDstTree.getTypeLabel(insNode);
-//			ITree fafafather = AstRelations.findFafafatherNode(insNode, this.mMiningActionBean.mDstTree);
-//			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafather);
-			ITree father = insNode.getParent();
-			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(father);
+			ITree fafafather = AstRelations.findFafafatherNode(insNode, this.mMiningActionBean.mDstTree);
+			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafather);
+//			ITree father = insNode.getParent();
+//			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(father);
 			String nextAction = ConsolePrint.getMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
 			System.out.print(nextAction);
-			if (StatementConstants.METHODDECLARATION.equals(type)) {
+			if(StatementConstants.FIELDDECLARATION.equals(type)){
+				//
+			} else if(StatementConstants.FIELDDECLARATION.equals(fatherType)){
+				//
+			} else if (StatementConstants.METHODDECLARATION.equals(type)) {
 				MatchNewOrDeleteMethod.matchNewOrDeleteMethod(this,a);
 				continue;
-			}
-			if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
-				MatchMethodSignatureChange.matchMethodSignatureChange(this,a, father);
+			} else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
+				MatchMethodSignatureChange.matchMethodSignatureChange(this,a, fafafather);
 			} else {
 				// 方法体
 				switch (type) {

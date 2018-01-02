@@ -17,14 +17,15 @@ public class AstRelations {
 		}
 		return false;
 	}
+
 	public static boolean isChildCotainSynchronizedStatement(Action a, TreeContext treeContext) {
-		//Tree t = (Tree) a.getNode();
+		// Tree t = (Tree) a.getNode();
 		List<ITree> child = a.getNode().getChildren();
-		if(child.size()<1){
+		if (child.size() < 1) {
 			System.err.println("There is no child");
 			return false;
 		}
-		for(ITree tmp:child){
+		for (ITree tmp : child) {
 			Tree t = (Tree) tmp;
 			String type = treeContext.getTypeLabel(t);
 			if (type.equals(StatementConstants.SYNCHRONIZEDSTATEMENT)) {
@@ -43,27 +44,28 @@ public class AstRelations {
 		}
 		return false;
 	}
-	public static String fatherStatement(Action a,TreeContext con){
+
+	public static String fatherStatement(Action a, TreeContext con) {
 		Tree t = (Tree) a.getNode();
 		String type = con.getTypeLabel(t.getParent());
 		return type;
 	}
 
-//	public static boolean isAllChildrenNew(List<ITree> list) {
-//		boolean allNewChildren = true;
-//		for (ITree a : list) {
-//			Tree t = (Tree) a;
-//			if (t.getDoAction() == null) {
-//				System.err.println("Unexpected Condition XXX");
-//			} else if (t.getDoAction() instanceof Insert) {
-//
-//			} else {
-//				// update 或者move 操作 说明if语句内部有原语句
-//				allNewChildren = false;
-//			}
-//		}
-//		return allNewChildren;
-//	}
+	// public static boolean isAllChildrenNew(List<ITree> list) {
+	// boolean allNewChildren = true;
+	// for (ITree a : list) {
+	// Tree t = (Tree) a;
+	// if (t.getDoAction() == null) {
+	// System.err.println("Unexpected Condition XXX");
+	// } else if (t.getDoAction() instanceof Insert) {
+	//
+	// } else {
+	// // update 或者move 操作 说明if语句内部有原语句
+	// allNewChildren = false;
+	// }
+	// }
+	// return allNewChildren;
+	// }
 
 	public static boolean isClassCreation(List<Action> list, TreeContext treeContext) {
 		for (Action a : list) {
@@ -95,8 +97,8 @@ public class AstRelations {
 	}
 
 	/**
-	 * 找当前节点的父节点
-	 * XXXStatement XXXDelclaration JavaDoc CatchClause
+	 * 找当前节点的父节点 XXXStatement XXXDelclaration JavaDoc CatchClause
+	 * 
 	 * @param node
 	 * @param treeContext
 	 * @return 返回fafafather
@@ -108,46 +110,43 @@ public class AstRelations {
 		String returnType = null;
 		while (!curNode.isRoot()) {
 			type = treeContext.getTypeLabel(curNode);
-			if(type.endsWith("Statement")) {
+			if (type.endsWith("Statement")) {
 				returnType = type;
 				break;
-			}else if(type.equals("Declaration")){
-					returnType = type;
-					break;
-			}else if(type.equals("CatchClause")) {
+			} else if (type.endsWith("Declaration")) {
 				returnType = type;
 				break;
-			}
-			else if(type.endsWith("Javadoc")) {
+			} else if (type.endsWith("Javadoc")) {
 				returnType = type;
 				break;
-			} else{
+			} else {
 				curNode = curNode.getParent();
 			}
 		}
-		if(curNode.isRoot())
-		    return null;
+		if (curNode.isRoot())
+			return null;
 		else
 			return curNode;
 	}
 
 	/**
 	 * 根据所传statementType的值，找符合条件的父节点并返回
+	 * 
 	 * @param node
 	 * @param treeContext
 	 * @return 返回fafafather
 	 */
-	public static ITree findFafafatherNodeByStatementType(ITree node, TreeContext treeContext,String statementType) {
+	public static ITree findFafafatherNodeByStatementType(ITree node, TreeContext treeContext, String statementType) {
 		// CatchClause
 		String type = null;
 		ITree curNode = node;
 		String returnType = null;
 		while (true) {
 			type = treeContext.getTypeLabel(curNode);
-			if(type.endsWith(statementType)) {
+			if (type.endsWith(statementType)) {
 				returnType = type;
 				break;
-			} else{
+			} else {
 				curNode = curNode.getParent();
 			}
 		}

@@ -41,4 +41,6 @@ public class StatementConstants {
 	final public static String SYNCHRONIZEDSTATEMENT = "SynchronizedStatement";
 
 	final public static String SWITCHSTATEMENT = "SwitchStatement";
+	
+	final public static String FIELDDECLARATION = "FieldDeclaration";
 }
