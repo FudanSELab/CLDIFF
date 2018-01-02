@@ -27,7 +27,7 @@ public class MatchSynchronized {
 		List<Action> ifSubActions = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
 		fp.setActionTraversedMap(ifSubActions);
-		if (status) {
+		if (status == MyTreeUtil.TYPE1) {
 			summary += " and body";
 		} else {
 			if (a instanceof Insert) {

@@ -40,9 +40,9 @@ public class MatchTry {
 		Insert ins = (Insert) a;
 		ITree insNode = ins.getNode();
 		ITree fafafatherCatchClause = AstRelations.findFafafatherNodeByStatementType(insNode, fp.getDstTree(),StatementConstants.CATCHCLAUSE);
-		String fatherCatchClauseType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafatherCatchClause);
+		String fatherCatchClauseType = fp.getDstTreeContextTypeLabel(fafafatherCatchClause);
 		
-		if (status) {
+		if (status == MyTreeUtil.TYPE1) {
 			summary += " try catch clause and body";
 		} else{
 			summary += " try catch clause wrapper";
