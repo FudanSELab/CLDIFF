@@ -1,6 +1,5 @@
 package edu.fdu.se.manager;
 
-import java.util.List;
 
 import edu.fdu.se.bean.AndroidTag;
 import edu.fdu.se.dao.AndroidTagDAO;

@@ -1,11 +1,5 @@
 package edu.fdu.se.main.gitgui;
 
-import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,17 +11,12 @@ import java.util.regex.Pattern;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JTextPane;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import edu.fdu.se.fileutil.FileUtil;
 import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitCommand;
-import edu.fdu.se.git.JGitTagCommand;
+import edu.fdu.se.git.RepositoryHelper;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
 
@@ -43,7 +32,8 @@ public class RepoDataHelper {
 	}
 	public JGitCommand myCmd;
 	public RepoDataHelper(){
-		myCmd = new JGitTagCommand("D:/Workspace/Android_Diff/android_framework_projects/platform/frameworks/base/.git");
+		myCmd = RepositoryHelper.getInstance1().myCmd;
+//		myCmd = new JGitTagCommand("D:/Workspace/Android_Diff/android_framework_projects/platform/frameworks/base/.git");
 	}
 	public void parserCommit(String commitId){
 		this.cci = myCmd.getCommitFileEditSummary(commitId, JGitCommand.JAVA_FILE);

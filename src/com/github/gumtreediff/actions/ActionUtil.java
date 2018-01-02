@@ -21,7 +21,6 @@
 package com.github.gumtreediff.actions;
 
 import com.github.gumtreediff.actions.model.*;
-import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import java.util.List;

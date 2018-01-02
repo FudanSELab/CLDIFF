@@ -2,11 +2,13 @@ package edu.fdu.se.git;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Map.Entry;
 
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -20,8 +22,10 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 
+import edu.fdu.se.bean.AndroidRepoCommitWithBLOBs;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
+import edu.fdu.se.dao.AndroidRepoCommitDAO;
 
 public class JGitRepositoryCommand extends JGitCommand{
 
@@ -29,7 +33,7 @@ public class JGitRepositoryCommand extends JGitCommand{
 		super(repopath);
 	}
 	
-	public void walkRepoFromBackwardsToDB(CommitVisitorDB visitor) {
+	public void walkRepoFromBackwardsToDB() {
 		try {
 			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
 			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
@@ -44,7 +48,7 @@ public class JGitRepositoryCommand extends JGitCommand{
 						continue;
 					}
 					Map<String, List<String>> changedFiles = this.getCommitFileList(queueCommitItem.getName());
-					visitor.visit(queueCommitItem, changedFiles);
+					visit(queueCommitItem, changedFiles);
 					System.out.println(queueCommitItem.getName());
 					isTraversed.put(queueCommitItem.getName(), true);
 					for (RevCommit item2 : parentCommits) {
@@ -64,6 +68,50 @@ public class JGitRepositoryCommand extends JGitCommand{
 			e1.printStackTrace();
 		}
 
+	}
+	
+	
+	public void visit(RevCommit commit, Map<String, List<String>> mMap) {
+		boolean flag = false;
+		AndroidRepoCommitWithBLOBs dbCommit = new AndroidRepoCommitWithBLOBs();
+
+		dbCommit.setCommitId(commit.getName());
+		dbCommit.setCommitLog(commit.getShortMessage());
+		dbCommit.setCommitLogFull(commit.getFullMessage());
+		Long l = new Long(commit.getCommitTime()*1000L);
+//		l = l*1000;
+		Date date = new Date(l);
+		dbCommit.setCommitDatetime(date);
+		dbCommit.setCommitTimestamp(date);
+		System.out.println(commit.getName());
+		for (Entry<String, List<String>> item : mMap.entrySet()) {
+			// System.out.println(item.getKey());
+			for (String filePath : item.getValue()) {
+				if (filePath.startsWith("core/java/android")) {
+					flag = true;
+				}
+				// System.out.println(filePath);
+			}
+		}
+		if (flag == true) {
+			dbCommit.setIssdkfile(1);
+		}else{
+			dbCommit.setIssdkfile(0);
+		}
+//		if(mList == null){
+//			mList = new ArrayList<AndroidRepoCommitWithBLOBs>();
+//		}
+//		mList.add(dbCommit);
+		try{
+			AndroidRepoCommitDAO.insert(dbCommit);
+		}catch(Exception e){
+			System.err.println(dbCommit.getCommitId());
+			e.printStackTrace();
+		}
+//		if(mList.size()>1000){
+//			AndroidRepoCommitDAO.insertBatch(mList);
+//			mList.clear();
+//		}
 	}
 	
 

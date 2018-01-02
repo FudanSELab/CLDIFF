@@ -2,7 +2,6 @@ package edu.fdu.se.dao;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.io.Resources;
@@ -10,10 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-import edu.fdu.se.bean.AndroidRepoCommit;
-import edu.fdu.se.bean.AndroidRepoCommitWithBLOBs;
 import edu.fdu.se.bean.AndroidTag;
-import edu.fdu.se.mapper.AndroidRepoCommitMapper;
 import edu.fdu.se.mapper.AndroidTagMapper;
 
 public class AndroidTagDAO {

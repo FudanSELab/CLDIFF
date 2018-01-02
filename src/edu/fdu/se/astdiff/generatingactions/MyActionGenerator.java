@@ -28,7 +28,6 @@ import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.AbstractTree;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
-import com.github.gumtreediff.tree.TreeUtils;
 
 import edu.fdu.se.gumtree.MyTreeUtil;
 import gnu.trove.map.TIntObjectMap;

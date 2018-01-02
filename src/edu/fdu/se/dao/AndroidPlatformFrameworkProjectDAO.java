@@ -2,7 +2,6 @@ package edu.fdu.se.dao;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.io.Resources;

@@ -3,7 +3,6 @@ package edu.fdu.se.main.androidrepo.preprocessing;
 
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-import edu.fdu.se.git.CommitVisitorDB;
 import edu.fdu.se.git.JGitRepositoryCommand;
 import edu.fdu.se.git.RepoConstants;
 
@@ -23,8 +22,7 @@ public class LoadRepoCommitsToDb {
 	 */
 	private static void loadCommitsToDB(){
 		JGitRepositoryCommand cmd = new JGitRepositoryCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)+RepoConstants.platform_frameworks_base_+"/.git");
-		CommitVisitorDB cv = new CommitVisitorDB();
-		cmd.walkRepoFromBackwardsToDB(cv);
+		cmd.walkRepoFromBackwardsToDB();
 	}
 	
 }

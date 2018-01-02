@@ -14,11 +14,10 @@ import java.util.Scanner;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import edu.fdu.se.bean.AndroidTag;
-import edu.fdu.se.config.ProjectProperties;
-import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepoConstants;
+import edu.fdu.se.git.RepositoryHelper;
 
 public class SortTagByCommitTime {
 
@@ -28,9 +27,10 @@ public class SortTagByCommitTime {
 
 	public static void run() {
 		try {
-			JGitTagCommand tagCmd = new JGitTagCommand(
-					ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
-							+ RepoConstants.platform_frameworks_base_ + ".git");
+//			JGitTagCommand tagCmd = new JGitTagCommand(
+//					ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
+//							+ RepoConstants.platform_frameworks_base_ + ".git");
+			JGitTagCommand tagCmd = (JGitTagCommand)RepositoryHelper.getInstance1().myCmd;
 			FileInputStream fis = new FileInputStream(
 					new File("C:/Users/huangkaifeng/Desktop/12-14-Android-Repo/android_tags_v1_filter_wear_cts.txt"));
 			Scanner sc = new Scanner(fis);
@@ -68,10 +68,10 @@ public class SortTagByCommitTime {
 	}
 
 	public static void run2() {
-		JGitTagCommand tagCmd = new JGitTagCommand(
-				ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
-						+ RepoConstants.platform_frameworks_base_ + ".git");
-
+//		JGitTagCommand tagCmd = new JGitTagCommand(
+//				ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
+//						+ RepoConstants.platform_frameworks_base_ + ".git");
+		JGitTagCommand tagCmd = (JGitTagCommand)RepositoryHelper.getInstance1().myCmd;
 		AndroidTag at = AndroidTagDAO.selectTagByShortNameAndProjName("android-8.0.0_r1",
 				RepoConstants.platform_frameworks_base_);
 		RevCommit commit = tagCmd.revCommitOfTag(at.getTagShaId());

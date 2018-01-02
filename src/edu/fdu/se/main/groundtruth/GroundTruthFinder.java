@@ -25,6 +25,7 @@ import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.JGitRepositoryManager;
 import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepoConstants;
+import edu.fdu.se.git.RepositoryHelper;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
 import edu.fdu.se.javaparser.JavaParserFactory;
@@ -64,9 +65,10 @@ public class GroundTruthFinder {
 	private void addReleaseCommitByTagName(String tagName) {
 		AndroidTag mTag = AndroidTagDAO.selectTagByShortNameAndProjName(tagName,
 				RepoConstants.platform_frameworks_base_);
-		JGitTagCommand tagCmd = new JGitTagCommand(
-				ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
-						+ RepoConstants.platform_frameworks_base_ + ".git");
+//		JGitTagCommand tagCmd = new JGitTagCommand(
+//				ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
+//						+ RepoConstants.platform_frameworks_base_ + ".git");
+		JGitTagCommand tagCmd = (JGitTagCommand)RepositoryHelper.getInstance1().myCmd;
 		RevCommit revCommit = tagCmd.revCommitOfTag(mTag.getTagShaId());
 		System.out.println(tagName+" commit id: "+revCommit.getName());
 		this.commitAndTagMap.put(revCommit, tagName);

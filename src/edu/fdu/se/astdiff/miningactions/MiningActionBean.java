@@ -1,8 +1,6 @@
 package edu.fdu.se.astdiff.miningactions;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.matchers.MappingStore;

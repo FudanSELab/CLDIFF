@@ -7,8 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Map.Entry;
 
+import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -17,7 +17,6 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevTag;
-import org.eclipse.jgit.revwalk.RevWalk;
 
 import edu.fdu.se.bean.AndroidBranch;
 import edu.fdu.se.bean.AndroidPlatformFrameworkProject;
@@ -58,28 +57,27 @@ public class JGitTagCommand extends JGitCommand {
 		}
 		return null;
 	}
-	
-	
+
 	public RevCommit revCommitOfBranch(String branchId) {
 		try {
 			ObjectId commitId = ObjectId.fromString(branchId);
 			RevObject object;
 			object = revWalk.parseAny(commitId);
 			System.out.println(object.getClass().toString());
-//			if (object instanceof RevCommit) {
-//				// annotated
-//				RevTag tagObj = (RevTag) object;
-//				RevObject revObj = tagObj.getObject();
-//				if (revObj instanceof RevCommit) {
-//					RevCommit result = revWalk.parseCommit(revObj.getId());
-//					return (RevCommit) result;
-//				} else {
-//					System.err.println("ERR COmmit");
-//				}
-//			} else {
-//				// invalid
-//				System.err.println("invalid");
-//			}
+			// if (object instanceof RevCommit) {
+			// // annotated
+			// RevTag tagObj = (RevTag) object;
+			// RevObject revObj = tagObj.getObject();
+			// if (revObj instanceof RevCommit) {
+			// RevCommit result = revWalk.parseCommit(revObj.getId());
+			// return (RevCommit) result;
+			// } else {
+			// System.err.println("ERR COmmit");
+			// }
+			// } else {
+			// // invalid
+			// System.err.println("invalid");
+			// }
 			return null;
 		} catch (MissingObjectException e) {
 			e.printStackTrace();
@@ -88,9 +86,10 @@ public class JGitTagCommand extends JGitCommand {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * return revcommit
+	 * 
 	 * @param branchId
 	 * @return
 	 */
@@ -107,8 +106,10 @@ public class JGitTagCommand extends JGitCommand {
 		}
 		return null;
 	}
+
 	/**
 	 * list项目所有的tag，并存数据库
+	 * 
 	 * @param project
 	 * @return
 	 */
@@ -172,7 +173,7 @@ public class JGitTagCommand extends JGitCommand {
 				for (RevCommit item2 : parentCommits) {
 					RevCommit commit2 = revWalk.parseCommit(item2.getId());
 					commitQueue.offer(commit2);
-					
+
 				}
 			}
 			return res;
@@ -185,14 +186,14 @@ public class JGitTagCommand extends JGitCommand {
 		}
 		return false;
 	}
-	
-	public Ref getBranchByName(String branchName){
+
+	public Ref getBranchByName(String branchName) {
 		try {
 			List<Ref> branchList = this.git.branchList().call();
-			for(Ref ref :branchList){
+			for (Ref ref : branchList) {
 				String bName = ref.getName();
-				if(bName.equals(branchName)){
-					
+				if (bName.equals(branchName)) {
+
 					return ref;
 				}
 			}
@@ -202,21 +203,21 @@ public class JGitTagCommand extends JGitCommand {
 		}
 		return null;
 	}
-	
-	public List<Ref> getBranchesByShortNames(String[] branchNames){
+
+	public List<Ref> getBranchesByShortNames(String[] branchNames) {
 		try {
 			String prefix = "refs/heads/";
 			List<Ref> branchList = this.git.branchList().call();
 			List<Ref> result = new ArrayList<Ref>();
-			for(Ref ref :branchList){
+			for (Ref ref : branchList) {
 				String bName = ref.getName();
-				for(String item : branchNames){
-					if(bName.equals(prefix+item)){
+				for (String item : branchNames) {
+					if (bName.equals(prefix + item)) {
 						result.add(ref);
 						break;
 					}
 				}
-				
+
 			}
 			return result;
 		} catch (GitAPIException e) {
@@ -224,16 +225,16 @@ public class JGitTagCommand extends JGitCommand {
 		}
 		return null;
 	}
-	
-	public Ref getBranchByShortName(String branchName){
+
+	public Ref getBranchByShortName(String branchName) {
 		try {
 			String prefix = "refs/heads/";
 			List<Ref> branchList = this.git.branchList().call();
-			for(Ref ref :branchList){
+			for (Ref ref : branchList) {
 				String bName = ref.getName();
-					if(bName.equals(prefix+branchName)){
-						return ref;
-					}
+				if (bName.equals(prefix + branchName)) {
+					return ref;
+				}
 			}
 			return null;
 		} catch (GitAPIException e) {
@@ -241,9 +242,10 @@ public class JGitTagCommand extends JGitCommand {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * list项目所有的branch，并存数据库
+	 * 
 	 * @param project
 	 * @return
 	 */
@@ -271,15 +273,41 @@ public class JGitTagCommand extends JGitCommand {
 			} else {
 				System.err.println("invalid");
 			}
-			AndroidBranch ab = new AndroidBranch(0,branchName,branchShortName,commitSha,project.getProjectSubPath());
+			AndroidBranch ab = new AndroidBranch(0, branchName, branchShortName, commitSha,
+					project.getProjectSubPath());
 			AndroidBranchDAO.insert(ab);
 		}
 		return call.size();
 	}
-	
-	
-	
-	
-	
+
+	public void walkRepoFromBackwardsStartFromTag(String tagSHA) {
+		try {
+			RevCommit rc = this.revCommitOfTag(tagSHA);
+			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
+			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
+			commitQueue.offer(rc);
+			while (commitQueue.size() != 0) {
+				RevCommit queueCommitItem = commitQueue.poll();
+				RevCommit[] parentCommits = queueCommitItem.getParents();
+				if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
+					continue;
+				}
+//				System.out.println(queueCommitItem.getName());
+				isTraversed.put(queueCommitItem.getName(), true);
+				for (RevCommit item2 : parentCommits) {
+					RevCommit commit2 = revWalk.parseCommit(item2.getId());
+					commitQueue.offer(commit2);
+				}
+			}
+			System.out.println("CommitSum:" + isTraversed.size());
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 
 }

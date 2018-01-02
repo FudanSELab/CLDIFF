@@ -30,12 +30,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import edu.fdu.se.config.ProjectProperties;
-import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitCommand;
-import edu.fdu.se.git.JGitTagCommand;
-import edu.fdu.se.git.RepoConstants;
+import edu.fdu.se.git.RepositoryHelper;
 
 public class CommitViewer {
 
@@ -64,8 +61,9 @@ public class CommitViewer {
 	}
 
 	private void prepareGUI() {
-		myCmd = new JGitTagCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
-				+ RepoConstants.platform_frameworks_base_ + ".git");
+		myCmd = RepositoryHelper.getInstance1().myCmd;
+//		myCmd = new JGitTagCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
+//				+ RepoConstants.platform_frameworks_base_ + ".git");
 		mainFrame = new JFrame("Commit Viewer");
 		mainFrame.setSize(1024, 624);
 		mainFrame.setLayout(new FlowLayout());

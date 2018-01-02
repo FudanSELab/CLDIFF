@@ -441,7 +441,6 @@ public class JGitCommand {
 							FileHeader fileHeader = diffFormatter.toFileHeader(entry);
 							EditList editList = fileHeader.toEditList();
 							diffFormatter.format(entry);
-//							System.out.print(out.toString());
 							cci.addFileChangeEntry(parent, mOldPath, entry.getNewPath(), editList,out.toString());
 							out.reset();
 						}

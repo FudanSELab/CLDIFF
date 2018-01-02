@@ -6,8 +6,6 @@ import java.util.Map;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import edu.fdu.se.bean.AndroidSDKJavaFile;
-import edu.fdu.se.config.ProjectProperties;
-import edu.fdu.se.config.PropertyKeys;
 /**
  * SDKFile Path in, repository file out
  * @author huangkaifeng
