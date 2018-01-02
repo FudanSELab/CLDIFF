@@ -9,15 +9,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jgit.api.LogCommand;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.NoHeadException;
-import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevObject;
-import org.eclipse.jgit.revwalk.RevTag;
 
 import edu.fdu.se.bean.AndroidRepoCommitWithBLOBs;
 import edu.fdu.se.bean.AndroidTag;
@@ -94,37 +86,7 @@ public class CommitBetweenTwoTags {
 		
 	}	
 	
-	public static List<String> readTagList(){
-		FileInputStream fos;
-		List<String> mList = new ArrayList<String>();
-		try {
-			fos = new FileInputStream(new File("C:/Users/huangkaifeng/Desktop/12-14-Android-Repo/android_tags_filtered2"));
-			InputStreamReader inputReader = new InputStreamReader(fos);
-			BufferedReader br = new BufferedReader(inputReader);
-			String str = null;
-			while((str = br.readLine())!= null ){
-				String tagStr = str.substring(10);
-				mList.add(tagStr);
-			}
-			br.close();
-			return mList;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	public static void runTagList(){
-		List<String> tagList = readTagList();
-		for(int i =0;i<tagList.size()-1;i++){
-			String tagPrev = tagList.get(i);
-			String tagCurr = tagList.get(i+1);
-			run(tagPrev,tagCurr,true);
-			
-		}
-		System.out.println(count+":"+count2);
-	}
+
 	
 	public static void runTagPair(){
 		run("android-7.1.0_r1","android-7.1.0_r5",true);

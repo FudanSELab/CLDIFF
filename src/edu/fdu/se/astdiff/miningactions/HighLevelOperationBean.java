@@ -10,11 +10,14 @@ import com.github.gumtreediff.tree.ITree;
  *
  */
 public class HighLevelOperationBean {
+
+	public Action curAction;
+	public List<Action> actions;
+
+	
 	
 	public ITree curNode;
-	public Action curAction;
 	public String curNodeType;
-	public List<Action> actions;
 	//insert delete change
 	public String operationType;
 	// if 

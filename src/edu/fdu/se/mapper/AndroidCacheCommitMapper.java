@@ -52,5 +52,5 @@ public interface AndroidCacheCommitMapper {
 
 	List<AndroidCacheCommit> selectAll();
     
-    List<AndroidCacheCommit> selectByKey(@Param("key")String key);
+    List<AndroidCacheCommit> selectByKey(@Param("keyEntry")String key);
 }

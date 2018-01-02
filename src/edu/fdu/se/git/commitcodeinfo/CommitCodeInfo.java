@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.EditList;
 import org.eclipse.jgit.revwalk.RevCommit;
 

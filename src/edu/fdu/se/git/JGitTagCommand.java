@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -58,34 +57,7 @@ public class JGitTagCommand extends JGitCommand {
 		return null;
 	}
 
-	public RevCommit revCommitOfBranch(String branchId) {
-		try {
-			ObjectId commitId = ObjectId.fromString(branchId);
-			RevObject object;
-			object = revWalk.parseAny(commitId);
-			System.out.println(object.getClass().toString());
-			// if (object instanceof RevCommit) {
-			// // annotated
-			// RevTag tagObj = (RevTag) object;
-			// RevObject revObj = tagObj.getObject();
-			// if (revObj instanceof RevCommit) {
-			// RevCommit result = revWalk.parseCommit(revObj.getId());
-			// return (RevCommit) result;
-			// } else {
-			// System.err.println("ERR COmmit");
-			// }
-			// } else {
-			// // invalid
-			// System.err.println("invalid");
-			// }
-			return null;
-		} catch (MissingObjectException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+
 
 	/**
 	 * return revcommit
@@ -280,9 +252,19 @@ public class JGitTagCommand extends JGitCommand {
 		return call.size();
 	}
 
-	public void walkRepoFromBackwardsStartFromTag(String tagSHA) {
+	public void walkRepoBackwardsStartFromTag(String tagSHA) {
+		RevCommit rc = this.revCommitOfTag(tagSHA);
+		walkRepoBackwardsStartFromCommit(rc);
+	}
+	
+	public void walkRepoBackwardsStartFromCommit(String sha){
+		RevCommit rc = this.revCommitOfCommitId(sha);
+		walkRepoBackwardsStartFromCommit(rc);
+
+	}
+	
+	public void walkRepoBackwardsStartFromCommit(RevCommit rc) {
 		try {
-			RevCommit rc = this.revCommitOfTag(tagSHA);
 			Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
 			Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
 			commitQueue.offer(rc);

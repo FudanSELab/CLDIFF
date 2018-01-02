@@ -20,7 +20,6 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.treewalk.WorkingTreeOptions;
-import org.eclipse.jgit.util.io.AutoCRLFInputStream;
 
 public class FileUtil {
 	

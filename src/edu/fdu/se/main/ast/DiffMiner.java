@@ -52,8 +52,8 @@ public class DiffMiner {
 		System.out.println("Step2 Begin to find Pattern:-------------------");
 
 		MiningActionBean bean = new MiningActionBean(data,his.srcTC,his.dstTC,his.mapping);
-		FindPattern fp = new FindPattern(bean);
-		fp.find();
+//		FindPattern fp = new FindPattern(bean);
+//		fp.find();
 		
 	}
 //	ITree tmp = his.src.getChild(0).getChild(2).getChild(4).getChild(5).getChild(1).getChild(1).getChild(3);

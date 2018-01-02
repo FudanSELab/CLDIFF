@@ -217,7 +217,7 @@
   <select id="selectByKey" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from android_branch
-    where key=#{key,jdbcType=VARCHAR}
+    from android_cache_commit
+    where key_entry=#{keyEntry,jdbcType=VARCHAR}
     </select>
 </mapper>
