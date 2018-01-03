@@ -23,61 +23,35 @@ public class MatchIfElse {
 	 * @return
 	 */
 	public static HighLevelOperationBean matchIf(FindPattern f,Action a, String type) {
-		String ifOrElseif = "";
-		String operationType = "";
 		String operationEntity = "";
 		if (AstRelations.isFatherIfStatement(a, f.getDstTree())) {
-			ifOrElseif = "else if clause";
 			operationEntity = "ELSE_IF";
 		} else {
-			ifOrElseif = "if clause";
 			operationEntity = "IF";
 		}
-		String changeType = ActionConstants.getInstanceStringName(a);
 		
-		String summary = "[PATTERN] " + changeType + " " + ifOrElseif;
 
 		List<ITree> children = a.getNode().getChildren();
 		boolean ifNoBlockFlag = true;
 		for(ITree tmp:children) {
-			String labelType = f.getDstTreeContextTypeLabel(tmp);
+			String labelType = null;
+			if(a instanceof Insert){
+				labelType = f.getDstTreeContextTypeLabel(tmp);
+			}else{
+				labelType = f.getSrcTreeContextTypeLabel(tmp);
+			}
 			if(StatementConstants.BLOCK.equals(labelType)) {
 				ifNoBlockFlag = false;
 				break;
 			}
 		}
-		if(ifNoBlockFlag)
-			summary += "( no {} )";
 
 		List<Action> ifSubActions = new ArrayList<Action>();
 		int status  = MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
-		boolean nullCheck = AstRelations.isNullCheck(a.getNode(),f.getDstTree());
 		f.setActionTraversedMap(ifSubActions);
-		switch(status){
-		case MyTreeUtil.TYPE1:
-		case MyTreeUtil.TYPE2:
-		
-		}
-		if (status == MyTreeUtil.TYPE1) {
-			operationType = changeType+"--BODY";
-			summary += " and body";
-		} else if(status == MyTreeUtil.TYPE2){
-			
-		} else {
-			if (a instanceof Insert) {
-				summary += " wrapper[insert]";
-				operationType = changeType+"--WRAPPER";
-			} else if (a instanceof Delete) {
-				summary += " wrapper[delete]";
-				operationType = changeType+"--WRAPPER";
-			}
 
-		}
-		if (nullCheck) {
-			System.out.println("5.Adding a null checker." + summary);
-		}
 		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
-				a,type,ifSubActions,operationType,operationEntity,null,null);
+				a,type,ifSubActions,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}
 	
@@ -88,26 +62,18 @@ public class MatchIfElse {
 	 * @param a
 	 * @return
 	 */
-	public static int matchElse(FindPattern f,Action a) {
-		String changeType = ActionConstants.getInstanceStringName(a);
-		String summary = changeType + " else clause ";
+	public static HighLevelOperationBean matchElse(FindPattern f,Action a) {
+		String operationEntity = "ELSE";
 		String labelType = f.getDstTreeContextTypeLabel(a.getNode()) ;
-		if(!StatementConstants.BLOCK.equals(labelType))
-			summary += "(no {}) ";
-		Tree root = (Tree) a.getNode();
-		List<ITree> children = root.getChildren();
+		if(!StatementConstants.BLOCK.equals(labelType)){
+			String label = "(no {}) ";
+		}
 		List<Action> result = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, result);
-		switch(status){
-		case MyTreeUtil.TYPE1:
-		case MyTreeUtil.TYPE2:
-		case MyTreeUtil.TYPE4:
-		case MyTreeUtil.TYPE5:
-		default:
-			break;
-		}
 		f.setActionTraversedMap(result);
-		return result.size();
+		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+				a,StatementConstants.BLOCK,result,status,operationEntity,null,null);
+		return mHighLevelOperationBean;
 	}
 	
 	
@@ -141,7 +107,6 @@ public class MatchIfElse {
 			srcParent = fafafatherNode;
 		}
 		fp.setActionTraversedMap(allActions);
-//		this.mMiningActionBean.mapIfPredicateAndAction(srcParent, allActions);
 		return allActions.size();
 	}
 

@@ -104,20 +104,17 @@ public class AstRelations {
 	 * @return 返回fafafather
 	 */
 	public static ITree findFafafatherNode(ITree node, TreeContext treeContext) {
-		// if statement
 		String type = null;
-		ITree curNode = node.getParent();
-		String returnType = null;
+		ITree curNode = node;
 		while (!curNode.isRoot()) {
 			type = treeContext.getTypeLabel(curNode);
 			if (type.endsWith("Statement")) {
-				returnType = type;
 				break;
 			} else if (type.endsWith("Declaration")) {
-				returnType = type;
+				break;
+			} else if (type.equals("Block")) {
 				break;
 			} else if (type.endsWith("Javadoc")) {
-				returnType = type;
 				break;
 			} else {
 				curNode = curNode.getParent();

@@ -46,6 +46,8 @@ public class FindPattern {
 		return this.mMiningActionBean.mSrcTree.getTypeLabel(node);
 	}
 	
+	
+	
 	public void setActionTraversedMap(List<Action> actionList){
 		this.mMiningActionBean.setActionTraversedMap(actionList);
 	}
@@ -111,8 +113,6 @@ public class FindPattern {
 			String type = this.mMiningActionBean.mDstTree.getTypeLabel(insNode);
 			ITree fafafather = AstRelations.findFafafatherNode(insNode, this.mMiningActionBean.mDstTree);
 			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(fafafather);
-//			ITree father = insNode.getParent();
-//			String fatherType = this.mMiningActionBean.mDstTree.getTypeLabel(father);
 			String nextAction = ConsolePrint.getMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
 			System.out.print(nextAction);
 			if(StatementConstants.FIELDDECLARATION.equals(type)){
@@ -123,6 +123,7 @@ public class FindPattern {
 				MatchNewOrDeleteMethod.matchNewOrDeleteMethod(this,a);
 				continue;
 			} else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
+				System.out.println(insNode.getParent().getChildPosition(insNode));
 				MatchMethodSignatureChange.matchMethodSignatureChange(this,a, fafafather);
 			} else {
 				// 方法体

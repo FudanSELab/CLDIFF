@@ -19,13 +19,13 @@ public class HighLevelOperationBean {
 	public ITree curNode;
 	public String curNodeType;
 	//insert delete change
-	public String operationType;
+	public int operationType;
 	// if 
 	public String operationEntity;
 
 	public ITree fatherNode;
 	public String fatherNodeType;
-	public HighLevelOperationBean(Action curAction,String curNodeType,List<Action> actions,String operationType,String operationEntity,ITree fatherNode,String fatherNodeType){
+	public HighLevelOperationBean(Action curAction,String curNodeType,List<Action> actions,int operationType,String operationEntity,ITree fatherNode,String fatherNodeType){
 		this.curAction = curAction;
 		this.curNode = curAction.getNode();
 		this.curNodeType = curNodeType;
@@ -42,7 +42,7 @@ public class HighLevelOperationBean {
 	public List<Action> getActions() {
 		return actions;
 	}
-	public String getOperationType() {
+	public int getOperationType() {
 		return operationType;
 	}
 	public String getOperationEntity() {
