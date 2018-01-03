@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Delete;
+import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import edu.fdu.se.astdiff.miningactions.FindPattern;
 
 public class MyTreeUtil{
 	/**
@@ -152,26 +155,21 @@ public class MyTreeUtil{
     			actionTypes.add(aTmp.getClass().toString());
     		}
     	}
-    	if(isNullExist == true){
-    		return 0;
-    	}else{
-    		if(actionTypes.size() == 1){
-    			if(actionTypes.contains(ActionConstants.INSERT)){
-    				return TYPE1;// insert all
-    			}else if(actionTypes.contains(ActionConstants.DELETE)){
-    				return TYPE2;//delete all
-    			}
-    		} else if(actionTypes.size() == 2){
-    			if(actionTypes.contains(ActionConstants.INSERT)&&actionTypes.contains(ActionConstants.MOVE)){
-    				return TYPE4; //insert wrapper
-    			}else if(actionTypes.contains(ActionConstants.DELETE)&&actionTypes.contains(ActionConstants.MOVE)){
-    				return TYPE5;// delete wrapper
-    			}
-    		} else {
-    			return TYPE_UNKNOWN;
+    	if(action instanceof Insert){
+    		if(isNullExist){
+    			return TYPE4;
+    		}else{
+    			return TYPE1;
     		}
     	}
-    	return Integer.MAX_VALUE;
+    	if(action instanceof Delete){
+    		if(isNullExist||actionTypes.contains(ActionConstants.MOVE)){
+    			return TYPE5;
+    		}else{
+    			return TYPE2;
+    		}
+    	}
+    	return TYPE_UNKNOWN;
     }
     
 

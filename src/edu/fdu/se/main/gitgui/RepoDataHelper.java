@@ -16,6 +16,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 
 import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitCommand;
+import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepositoryHelper;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
@@ -32,8 +33,8 @@ public class RepoDataHelper {
 	}
 	public JGitCommand myCmd;
 	public RepoDataHelper(){
-		myCmd = RepositoryHelper.getInstance1().myCmd;
-//		myCmd = new JGitTagCommand("D:/Workspace/Android_Diff/android_framework_projects/platform/frameworks/base/.git");
+//		myCmd = RepositoryHelper.getInstance1().myCmd;
+		myCmd = new JGitTagCommand("D:/Workspace/Android_Diff/android_framework_projects/platform/frameworks/base/.git");
 	}
 	public void parserCommit(String commitId){
 		this.cci = myCmd.getCommitFileEditSummary(commitId, JGitCommand.JAVA_FILE);

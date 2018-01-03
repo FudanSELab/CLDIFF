@@ -38,6 +38,9 @@ public class TestJTextPane extends JFrame {
 
 	public static void main(String[] args) {
 		new TestJTextPane().setVisible(true);
+		
+		
+
 	}
 
 }

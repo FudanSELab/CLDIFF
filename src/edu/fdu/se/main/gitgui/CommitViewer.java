@@ -88,7 +88,7 @@ public class CommitViewer {
 		panel.setLayout(layout);
 		panel.add(new JLabel(" base/.git"));
 		uppperCommitInput = new JTextField(54);
-		uppperCommitInput.setText("a21d687c2431f6084e9eeaad8182c41c9ee3eb32");
+//		uppperCommitInput.setText("a21d687c2431f6084e9eeaad8182c41c9ee3eb32");
 		panel.add(uppperCommitInput);
 		JButton commitBtn = new JButton("commit");
 		JButton tagBtn = new JButton("tag");
