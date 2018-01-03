@@ -110,6 +110,24 @@ public class MyTreeUtil{
     final public static int TYPE_UNKNOWN = -1;
     
     
+    public static int getTypeCode(Action action,boolean isNullExist,Set<String> actionTypes){
+    	if(action instanceof Insert){
+    		if(isNullExist){
+    			return TYPE4;
+    		}else{
+    			return TYPE1;
+    		}
+    	}
+    	if(action instanceof Delete){
+    		if(isNullExist||actionTypes.contains(ActionConstants.MOVE)){
+    			return TYPE5;
+    		}else{
+    			return TYPE2;
+    		}
+    	}
+    	return TYPE_UNKNOWN;
+    }
+    
     /**
      * node为fafafather node的情况
      * @param node
@@ -136,7 +154,7 @@ public class MyTreeUtil{
     	}else{
     		System.err.println("ERROR");
     	}
-    	return 0;
+    	return TYPE_UNKNOWN;
     }
     
     public static int traverseNodeGetAllEditActions(Action action,List<Action> result){
@@ -155,22 +173,33 @@ public class MyTreeUtil{
     			actionTypes.add(aTmp.getClass().toString());
     		}
     	}
-    	if(action instanceof Insert){
-    		if(isNullExist){
-    			return TYPE4;
-    		}else{
-    			return TYPE1;
-    		}
-    	}
-    	if(action instanceof Delete){
-    		if(isNullExist||actionTypes.contains(ActionConstants.MOVE)){
-    			return TYPE5;
-    		}else{
-    			return TYPE2;
-    		}
-    	}
-    	return TYPE_UNKNOWN;
+    	return getTypeCode(action,isNullExist,actionTypes);
     }
+    
+    public static int traverseNodeGetAllEditActions(Action action,int startIndex,int endIndex,List<Action> result){
+    	boolean isNullExist = false;
+    	ITree node = action.getNode();
+    	Set<String> actionTypes = new HashSet<String>();
+    	List<ITree> children = node.getChildren();
+    	for(int i = startIndex;i<=endIndex;i++){
+    		ITree temp = children.get(i);
+    		for(ITree sub:temp.preOrder()){
+    			Tree myTree = (Tree) sub;
+        		if(myTree.getDoAction()==null) {
+        			isNullExist = true;
+        			continue;
+        		}
+        		List<Action> nodeActions = myTree.getDoAction();
+        		for(Action aTmp:nodeActions){
+        			result.add(aTmp);
+        			actionTypes.add(aTmp.getClass().toString());
+        		}
+    		}
+    	}
+    	return getTypeCode(action,isNullExist,actionTypes);
+    }
+    
+
     
 
 

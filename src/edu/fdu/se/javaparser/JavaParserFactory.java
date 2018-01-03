@@ -96,106 +96,54 @@ public class JavaParserFactory {
 		return changedMethod;
 	}
 
-	public static List<MethodDeclaration> parseFileGetAllMethodDeclaration(InputStream is, String className) {
-		CompilationUnit compilationUnit = JavaParser.parse(is);
-		Optional<ClassOrInterfaceDeclaration> classA = compilationUnit.getClassByName(className);
-		if (classA.isPresent()) {
-			ClassOrInterfaceDeclaration classAA = classA.get();
-			List<MethodDeclaration> mDeclaration = classAA.getMethods();
-			return mDeclaration;
-		} else {
-			return null;
-		}
-	}
+
 	/**
 	 * 方法声明，所有的，包括内部类
 	 * @param compilationUnit
 	 * @return
 	 */
-	public static List<MethodDeclaration> parseCompilationUnitGetAllMethodDeclaration(CompilationUnit compilationUnit){
+	public static List<Node> parseCompilationUnitGetAllMethodDeclaration(CompilationUnit compilationUnit){
 		assert compilationUnit.getTypes() != null;
 		assert compilationUnit.getTypes().size() == 1;
 		TypeDeclaration mType = compilationUnit.getType(0);
 		NodeList nodeList = mType.getMembers();
-		System.out.println(mType.getNameAsString());
-		List<MethodDeclaration> mMethodDeclarationList = new ArrayList<MethodDeclaration>();
+		List<Node> mMethodDeclarationList = new ArrayList<Node>();
 		for(int i  = 0; i < nodeList.size();i++){
 			Node node = nodeList.get(i);
 			if(node instanceof MethodDeclaration){
 				mMethodDeclarationList.add((MethodDeclaration)node);
 			}
 			if(node instanceof AnnotationDeclaration){
-				System.out.println(node.toString());
+//				System.out.println(node.toString());
 			}
 			if(node instanceof ClassOrInterfaceDeclaration){
-				System.out.println(node.toString());
 				ClassOrInterfaceDeclaration innerClass = (ClassOrInterfaceDeclaration)node;
-				List<MethodDelcaration>innerClass.getMethods()
-				
+				List<MethodDeclaration> tmpMethod = innerClass.getMethods();
+				List<ConstructorDeclaration> cList = innerClass.getConstructors();
+				mMethodDeclarationList.addAll(tmpMethod);
+				mMethodDeclarationList.addAll(cList);
 			}
 			if(node instanceof ConstructorDeclaration){
-				System.out.println(node.toString());
+				ConstructorDeclaration cd = (ConstructorDeclaration) node;
+				mMethodDeclarationList.add(cd);
+				
 			}
 		}
 		return mMethodDeclarationList;
-		
-		
 	}
 	
-	public static List<MethodDeclaration> parseFileGetAllMethodDeclaration(String filePath, String className) {
-		CompilationUnit compilationUnit = null;
-		try {
-			compilationUnit = JavaParser.parse(new File(filePath));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		Optional<ClassOrInterfaceDeclaration> classA = compilationUnit.getClassByName(className);
-		int a = 0;
-		if (compilationUnit.getTypes() != null) {
-			for (TypeDeclaration mType : compilationUnit.getTypes()) {
-				NodeList nodeList = mType.getMembers();
-				System.out.println(mType.getNameAsString());
-				for(int i  = 0; i < nodeList.size();i++){
-					Node node = nodeList.get(i);
-					if(node instanceof MethodDeclaration){
-						a ++;
-					}
-//					System.out.println(node.getClass().toString());
-					if(node instanceof AnnotationDeclaration){
-						System.out.println(node.toString());
-					}
-					if(node instanceof ClassOrInterfaceDeclaration){
-						System.out.println(node.toString());
-					}
-					if(node instanceof ConstructorDeclaration){
-						System.out.println(node.toString());
-					}
-					
-					
-				}
-				
-//				NodeList nodeList = mType.getMembers();
-
-//				 if (body instanceof MethodDeclaration){
-
-//				 }
-			}
-		}
-		System.out.println(a);
-		if (classA.isPresent()) {
-			ClassOrInterfaceDeclaration classAA = classA.get();
-			List<MethodDeclaration> mDeclaration = classAA.getMethods();
-			System.out.println(mDeclaration.size());
-			return mDeclaration;
-		} else {
-			return null;
-		}
+	public static List<Node> parseFileGetAllMethodDeclaration(String filePath) {
+		return parseCompilationUnitGetAllMethodDeclaration(getCompilationUnit(filePath));
+	}
+	
+	public static List<Node> parseFileGetAllMethodDeclaration(InputStream is) {
+		return parseCompilationUnitGetAllMethodDeclaration(getCompilationUnit(is));
 	}
 
 	public static void main(String args[]) {
 //		List<MethodDeclaration> contents = parseFileGetAllMethodDeclaration("D:/commit_curr",
 //				"InputMethodManagerService");
-		List<MethodDeclaration> contens = parseCompilationUnitGetAllMethodDeclaration(getCompilationUnit("D:/commit_curr"));
+		List<Node> contens = parseCompilationUnitGetAllMethodDeclaration(getCompilationUnit("D:/commit_curr"));
 		// for (MethodDeclaration item : contents) {
 		// System.out.println(item.getDeclarationAsString());
 		// System.out.println(item.getBody().get().toString());

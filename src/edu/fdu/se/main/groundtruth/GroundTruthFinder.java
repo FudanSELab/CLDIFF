@@ -15,6 +15,7 @@ import java.util.Set;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
 import edu.fdu.se.bean.AndroidCacheCommit;
@@ -113,11 +114,11 @@ public class GroundTruthFinder {
 					String fileName = getClassNameFromPath(oldPath);
 					// commit change的文件
 					System.out.println("\t" + oldPath);
-					Map<String, List<MethodDeclaration>> tagVersionMethods = this
+					Map<String, List<Node>> tagVersionMethods = this
 							.mappingTagStrToMethodDeclarationList(oldPath, fileName, candidate);
 
 					InputStream fileInputStream = tagCmd.extractAndReturnInputStream(oldPath, parent.getName());
-					Set<MethodDeclaration> buggyMethods = JavaParserFactory
+					Set<Node> buggyMethods = JavaParserFactory
 							.parseInputStreamGetOverlapMethodDeclarationList(fileInputStream, fileName, item2);
 					System.out.println("\tlinking:");
 					List<String> tagNameList = this.compareTwoSet(tagVersionMethods, buggyMethods);
@@ -204,13 +205,12 @@ public class GroundTruthFinder {
 		return matchedTagList;
 	}
 
-	private Map<String, List<MethodDeclaration>> mappingTagStrToMethodDeclarationList(String oldPath, String className,
+	private Map<String, List<Node>> mappingTagStrToMethodDeclarationList(String oldPath, String className,
 			List<RevCommit> candidate) {
-		Map<String, List<MethodDeclaration>> result = new HashMap<String, List<MethodDeclaration>>();
+		Map<String, List<Node>> result = new HashMap<String, List<Node>>();
 		for (int i = 0; i < candidate.size(); i++) {
 			InputStream fileInputStream = tagCmd.extractAndReturnInputStream(oldPath, candidate.get(i).getName());
-			List<MethodDeclaration> mList = JavaParserFactory.parseFileGetAllMethodDeclaration(fileInputStream,
-					className);
+			List<Node> mList = JavaParserFactory.parseFileGetAllMethodDeclaration(fileInputStream);
 			result.put(this.commitAndTagMap.get(candidate.get(i)), mList);
 		}
 		return result;

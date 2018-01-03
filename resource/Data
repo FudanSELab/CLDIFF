@@ -79,3 +79,5 @@ version 3-13 decompile no stub
 25 		7.1.0_rX
 26 		8.0.0_rX 
 
+1.if
+2.else 没有block的情况

@@ -52,6 +52,11 @@ public class FindPattern {
 		this.mMiningActionBean.setActionTraversedMap(actionList);
 	}
 	
+	public void setActionTraversedMap(Action action){
+		this.mMiningActionBean.setActionTraversedMap(action);
+	}
+	
+	
 	public ITree getMappedSrcOfDstNode(ITree dst){
 		return this.mMiningActionBean.mMapping.getSrc(dst);
 	}
@@ -136,13 +141,15 @@ public class FindPattern {
 						if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mDstTree)) {
 							// Pattern 1.2 Match else
 							MatchIfElse.matchElse(this,a);
-						}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionBean.mDstTree)) {
-							//同步语句块增加
-							MatchSynchronized.matchSynchronized(this,a);
+//						}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionBean.mDstTree)) {
+//							//同步语句块增加
+//							MatchSynchronized.matchSynchronized(this,a);
 						}else {
 							System.err.println("Other Condition");
+							this.setActionTraversedMap(a);
 							// TODO剩下的情况
 						}
+						
 						break;
 					case StatementConstants.TRYSTATEMENT:
 						MatchTry.matchTry(this,a);

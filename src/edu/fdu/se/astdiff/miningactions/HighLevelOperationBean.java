@@ -65,6 +65,12 @@ public class HighLevelOperationBean {
 		return curAction;
 	}
 	
+	@Override
+	public String toString(){
+		//TODO
+		return null;
+	}
+	
 	
 	
 	

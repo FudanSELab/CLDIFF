@@ -29,8 +29,6 @@ public class MatchIfElse {
 		} else {
 			operationEntity = "IF";
 		}
-		
-
 		List<ITree> children = a.getNode().getChildren();
 		boolean ifNoBlockFlag = true;
 		for(ITree tmp:children) {
@@ -45,11 +43,16 @@ public class MatchIfElse {
 				break;
 			}
 		}
-
 		List<Action> ifSubActions = new ArrayList<Action>();
-		int status  = MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
-		f.setActionTraversedMap(ifSubActions);
+		int status  = -2;
+		if(children.size()==2){
+			status  = MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
+		}else{
+			//size =3
+			status = MyTreeUtil.traverseNodeGetAllEditActions(a, 0, 1, ifSubActions);
+		}
 
+		f.setActionTraversedMap(ifSubActions);
 		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
 				a,type,ifSubActions,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
