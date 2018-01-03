@@ -113,6 +113,8 @@ public class JGitRepositoryCommand extends JGitCommand{
 //			mList.clear();
 //		}
 	}
+	public void test2(){
+	}
 	
 
 
@@ -121,6 +123,7 @@ public class JGitRepositoryCommand extends JGitCommand{
 				ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)+RepoConstants.platform_frameworks_base_ + ".git");
 //		cmd.getCommitParentMappedFileList2("cd97c0e935d13bbd29dce0417093ec694c3ddd76");
 //		CommitCodeInfo cci = cmd.getCommitFileEditSummary("c7f502947b5b80baca084101fb7a0aaa74db9974", JGitCommand.JAVA_FILE);
+		cmd.walkRepoFromBackwardsToDB();
 	}
 	public Map<String, Map<String, List<String>>> test(String commmitid) {
 		Map<String, Map<String, List<String>>> result = new HashMap<String, Map<String, List<String>>>();

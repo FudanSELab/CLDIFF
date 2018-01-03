@@ -21,9 +21,9 @@ import edu.fdu.se.git.RepositoryHelper;
 public class FindCommitNum {
 	
 	public static void main(String args[]){
-//		testMasterCommitNum();
+		testMasterCommitNum();
 //		testForward();
-		viewCommit();
+//		viewCommit();
 	}
 	
 	public static void testForward(){
@@ -35,14 +35,15 @@ public class FindCommitNum {
 	public static void testMasterCommitNum(){
 		JGitTagCommand cmd = (JGitTagCommand) RepositoryHelper.getInstance1().myCmd;
 		AndroidBranch ab = AndroidBranchDAO.selectBranchByShortNameAndProjName("master", RepoConstants.platform_frameworks_base_);
-		AndroidTag at = AndroidTagDAO.selectTagByShortNameAndProjName("android-4.0.3_r1", RepoConstants.platform_frameworks_base_);
+//		AndroidTag at = AndroidTagDAO.selectTagByShortNameAndProjName("android-4.0.3_r1", RepoConstants.platform_frameworks_base_);
 //		cmd.walkRepoBackwardsStartFromCommit(ab.getBranchCommitSha());
-		RevCommit rc2 = cmd.revCommitOfTag(at.getTagShaId());
+//		RevCommit rc2 = cmd.revCommitOfTag(at.getTagShaId());
 		RevCommit rc1 = cmd.revCommitOfCommitId(ab.getBranchCommitSha());
-		List<RevCommit> r = new ArrayList<RevCommit>();
-		boolean flag = cmd.walkRepoBackwardsStartWithCommitId(rc1,rc2, r);
-		System.out.println(flag);
-		System.out.println(r.size());
+//		List<RevCommit> r = new ArrayList<RevCommit>();
+		cmd.walkRepoBackwardsStartFromCommit(rc1);
+//		boolean flag = cmd.walkRepoBackwardsStartWithCommitId(rc1,rc2, r);
+//		System.out.println(flag);
+//		System.out.println(r.size());
 	}
 	public static void viewCommit(){
 		List<AndroidCacheCommit> mList = AndroidCacheCommitDAO.selectByKey("android-8.0.0_r1");

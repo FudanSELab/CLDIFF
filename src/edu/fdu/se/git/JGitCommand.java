@@ -473,7 +473,6 @@ public class JGitCommand {
 		RevCommit commit = null;
 		try {
 //			commit = revWalk.parseCommit(commitId);
-
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			DiffFormatter diffFormatter = new DiffFormatter(out);
 			diffFormatter.format(entry);

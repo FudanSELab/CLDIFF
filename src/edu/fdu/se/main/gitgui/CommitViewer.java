@@ -95,12 +95,15 @@ public class CommitViewer {
 		commitBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				tab2FileListDataModel.clear();
 				String commitId = uppperCommitInput.getText();
 				if (commitId.length() != 40) {
 					return;
 				}
 				RepoDataHelper.getInstance().parserCommit(commitId);
 				commitIdIndexOfJList = RepoDataHelper.getInstance().updateDataModel(tab2FileListDataModel);
+				
+				tab1CommitDetail.setText("");
 				tab1CommitDetail.setText(RepoDataHelper.getInstance().commitInfoSummary());
 			}
 		});

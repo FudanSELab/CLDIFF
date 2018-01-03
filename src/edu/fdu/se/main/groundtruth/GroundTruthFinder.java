@@ -16,6 +16,8 @@ import java.util.Set;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
 import edu.fdu.se.bean.AndroidCacheCommit;
@@ -85,11 +87,12 @@ public class GroundTruthFinder {
 	}
 
 	public void run() {
-		List<AndroidCacheCommit> mList = AndroidCacheCommitDAO.selectByKey("android-7.1.0_r1--bug");
+		List<AndroidCacheCommit> mList = AndroidCacheCommitDAO.selectByKey("android-7.1.0_r1--bug ");
 		String line;
 		int cnt = 0;
 		int size = 0;
-		for (AndroidCacheCommit entry : mList) {
+//		for (AndroidCacheCommit entry : mList) {
+		AndroidCacheCommit entry = mList.get(1);
 			line = entry.getCommitId();
 			line = line.trim();
 			System.out.println(line);
@@ -99,7 +102,7 @@ public class GroundTruthFinder {
 			List<RevCommit> candidate = this.chooseCandidateTag(commitTime);
 			if (candidate.size() == 0) {
 				System.out.println("early skip");
-				continue;
+//				continue;
 			}
 			CommitCodeInfo mCCI = tagCmd.getCommitFileEditSummary(line, JGitCommand.JAVA_FILE);
 			Map<RevCommit, List<FileChangeEditList>> mMap = mCCI.getFileDiffEntryMap();
@@ -114,11 +117,10 @@ public class GroundTruthFinder {
 					String fileName = getClassNameFromPath(oldPath);
 					// commit change的文件
 					System.out.println("\t" + oldPath);
-					Map<String, List<Node>> tagVersionMethods = this
+					Map<String, List<BodyDeclaration>> tagVersionMethods = this
 							.mappingTagStrToMethodDeclarationList(oldPath, fileName, candidate);
-
 					InputStream fileInputStream = tagCmd.extractAndReturnInputStream(oldPath, parent.getName());
-					Set<Node> buggyMethods = JavaParserFactory
+					Set<BodyDeclaration> buggyMethods = JavaParserFactory
 							.parseInputStreamGetOverlapMethodDeclarationList(fileInputStream, fileName, item2);
 					System.out.println("\tlinking:");
 					List<String> tagNameList = this.compareTwoSet(tagVersionMethods, buggyMethods);
@@ -141,7 +143,7 @@ public class GroundTruthFinder {
 					System.out.println("No Tag commit matched\n\n");
 				}
 
-			}
+//			}
 		}
 		System.out.println("\n\n最后统计mapped的buggy commit 数量：" + cnt + "/" + size);
 	}
@@ -151,31 +153,49 @@ public class GroundTruthFinder {
 		return fileName.substring(0, fileName.length() - 5);
 	}
 
-	public List<String> isMethodFromCommitMatchRelease(Map<String, List<MethodDeclaration>> releasedTagMethod,
-			MethodDeclaration m) {
+	public List<String> isMethodFromCommitMatchRelease(Map<String, List<BodyDeclaration>> releasedTagMethod,
+			BodyDeclaration m) {
 		List<String> result = new ArrayList<String>();
-		for (Entry<String, List<MethodDeclaration>> entry : releasedTagMethod.entrySet()) {
-			List<MethodDeclaration> mList2 = entry.getValue();
-			for (MethodDeclaration tagRelease : mList2) {
-				if (tagRelease.getDeclarationAsString().equals(m.getDeclarationAsString())) {
-					System.out.println("\t\tMatch Same method signature:" + m.getDeclarationAsString());
-					if (tagRelease.getBody().get().toString().equals(m.getBody().get().toString())) {
-						System.out.println("\t\tMatch Same method body:" + m.getDeclarationAsString());
-						result.add(entry.getKey());
+		boolean flag = m instanceof MethodDeclaration;
+		if(flag) 
+		for (Entry<String, List<BodyDeclaration>> entry : releasedTagMethod.entrySet()) {
+			
+			List<BodyDeclaration> mList2 = entry.getValue();
+			for (BodyDeclaration tagRelease : mList2) {
+				if(flag && (tagRelease instanceof MethodDeclaration)){
+					MethodDeclaration md = (MethodDeclaration)tagRelease;
+					if (md.getDeclarationAsString().equals(((MethodDeclaration)m).getDeclarationAsString())) {
+						System.out.println("\t\tMatch Same method signature:" + ((MethodDeclaration)m).getDeclarationAsString());
+						if (md.getBody().get().toString().equals(((MethodDeclaration)m).getBody().get().toString())) {
+							System.out.println("\t\tMatch Same method body:" + ((MethodDeclaration)m).getDeclarationAsString());
+							result.add(entry.getKey());
+						}
+						break;
 					}
-					break;
 				}
+				if(!flag && (tagRelease instanceof ConstructorDeclaration)){
+					ConstructorDeclaration cd = (ConstructorDeclaration)tagRelease;
+					if (cd.getDeclarationAsString().equals(((MethodDeclaration)m).getDeclarationAsString())) {
+						System.out.println("\t\tMatch Same method signature:" + ((MethodDeclaration)m).getDeclarationAsString());
+						if (cd.getBody().toString().equals(((MethodDeclaration)m).getBody().get().toString())) {
+							System.out.println("\t\tMatch Same method body:" + ((MethodDeclaration)m).getDeclarationAsString());
+							result.add(entry.getKey());
+						}
+						break;
+					}
+				}
+				
 			}
 		}
 		return result;
 	}
 
-	private List<String> compareTwoSet(Map<String, List<MethodDeclaration>> releasedTagMethod,
-			Set<MethodDeclaration> mList) {
+	private List<String> compareTwoSet(Map<String, List<BodyDeclaration>> releasedTagMethod,
+			Set<BodyDeclaration> mList) {
 		List<String> matchedTagList = null;
 		int cnt = 0;
 		int size = mList.size();
-		for (MethodDeclaration changeCode : mList) {
+		for (BodyDeclaration changeCode : mList) {
 			List<String> result = this.isMethodFromCommitMatchRelease(releasedTagMethod, changeCode);
 			if (result != null && result.size() != 0) {
 				cnt++;
@@ -205,12 +225,12 @@ public class GroundTruthFinder {
 		return matchedTagList;
 	}
 
-	private Map<String, List<Node>> mappingTagStrToMethodDeclarationList(String oldPath, String className,
+	private Map<String, List<BodyDeclaration>> mappingTagStrToMethodDeclarationList(String oldPath, String className,
 			List<RevCommit> candidate) {
-		Map<String, List<Node>> result = new HashMap<String, List<Node>>();
+		Map<String, List<BodyDeclaration>> result = new HashMap<String, List<BodyDeclaration>>();
 		for (int i = 0; i < candidate.size(); i++) {
 			InputStream fileInputStream = tagCmd.extractAndReturnInputStream(oldPath, candidate.get(i).getName());
-			List<Node> mList = JavaParserFactory.parseFileGetAllMethodDeclaration(fileInputStream);
+			List<BodyDeclaration> mList = JavaParserFactory.parseFileGetAllMethodDeclaration(fileInputStream);
 			result.put(this.commitAndTagMap.get(candidate.get(i)), mList);
 		}
 		return result;

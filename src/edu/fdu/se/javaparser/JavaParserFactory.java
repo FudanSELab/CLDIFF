@@ -49,23 +49,17 @@ public class JavaParserFactory {
 	}
 	/**
 	 * commit prev的代码 + edit list output： edit list所在的method
-	 * 
+	 * get buggy methods
 	 * @param is
 	 * @param className
 	 * @param fileChangeEditList
 	 * @return
 	 */
-	public static Set<MethodDeclaration> parseInputStreamGetOverlapMethodDeclarationList(InputStream is,
+	public static Set<BodyDeclaration> parseInputStreamGetOverlapMethodDeclarationList(InputStream is,
 			String className, FileChangeEditList fileChangeEditList) {
-		Set<MethodDeclaration> changedMethod = new HashSet<MethodDeclaration>();
+		Set<BodyDeclaration> changedMethod = new HashSet<BodyDeclaration>();
 		EditList editList = fileChangeEditList.getEditList();
-		CompilationUnit compilationUnit = JavaParser.parse(is);
-		Optional<ClassOrInterfaceDeclaration> classA = compilationUnit.getClassByName(className);
-		if (!classA.isPresent()) {
-			return null;
-		}
-		ClassOrInterfaceDeclaration classAA = classA.get();
-		List<MethodDeclaration> mDeclaration = classAA.getMethods();
+		List<BodyDeclaration> mDeclaration = parseCompilationUnitGetAllMethodDeclaration(getCompilationUnit(is));
 		for (Edit e : editList) {
 			int beginA = e.getBeginA();
 			int beginB = e.getBeginB();
@@ -78,19 +72,27 @@ public class JavaParserFactory {
 			} else {
 
 			}
-			for (MethodDeclaration item : mDeclaration) {
+			for (BodyDeclaration item : mDeclaration) {
 				int methodBegin = item.getBegin().get().line;
 				int methodEnd = item.getEnd().get().line;
 				if (beginA >= methodBegin && endA < methodEnd) {
 					// in method item 表示在方法中
-
 					changedMethod.add(item);
 					break;
 				}
 			}
 		}
-		for (MethodDeclaration item : changedMethod) {
-			System.out.println("\t\tBuggy Method:" + item.getDeclarationAsString());
+		for (BodyDeclaration item : changedMethod) {
+			if(item instanceof MethodDeclaration){
+				MethodDeclaration md = (MethodDeclaration) item;
+				System.out.println("\t\tBuggy Method:" + md.getDeclarationAsString());
+				
+			}else if(item instanceof ConstructorDeclaration){
+				ConstructorDeclaration cd = (ConstructorDeclaration) item;
+				System.out.println("\t\tBuggy Method:" + cd.getDeclarationAsString());
+			}else{
+				System.err.println("ERROR wrong");
+			}
 		}
 
 		return changedMethod;
@@ -102,12 +104,12 @@ public class JavaParserFactory {
 	 * @param compilationUnit
 	 * @return
 	 */
-	public static List<Node> parseCompilationUnitGetAllMethodDeclaration(CompilationUnit compilationUnit){
+	private static List<BodyDeclaration> parseCompilationUnitGetAllMethodDeclaration(CompilationUnit compilationUnit){
 		assert compilationUnit.getTypes() != null;
 		assert compilationUnit.getTypes().size() == 1;
 		TypeDeclaration mType = compilationUnit.getType(0);
 		NodeList nodeList = mType.getMembers();
-		List<Node> mMethodDeclarationList = new ArrayList<Node>();
+		List<BodyDeclaration> mMethodDeclarationList = new ArrayList<BodyDeclaration>();
 		for(int i  = 0; i < nodeList.size();i++){
 			Node node = nodeList.get(i);
 			if(node instanceof MethodDeclaration){
@@ -132,18 +134,18 @@ public class JavaParserFactory {
 		return mMethodDeclarationList;
 	}
 	
-	public static List<Node> parseFileGetAllMethodDeclaration(String filePath) {
+	public static List<BodyDeclaration> parseFileGetAllMethodDeclaration(String filePath) {
 		return parseCompilationUnitGetAllMethodDeclaration(getCompilationUnit(filePath));
 	}
 	
-	public static List<Node> parseFileGetAllMethodDeclaration(InputStream is) {
+	public static List<BodyDeclaration> parseFileGetAllMethodDeclaration(InputStream is) {
 		return parseCompilationUnitGetAllMethodDeclaration(getCompilationUnit(is));
 	}
 
 	public static void main(String args[]) {
 //		List<MethodDeclaration> contents = parseFileGetAllMethodDeclaration("D:/commit_curr",
 //				"InputMethodManagerService");
-		List<Node> contens = parseCompilationUnitGetAllMethodDeclaration(getCompilationUnit("D:/commit_curr"));
+		List<BodyDeclaration> contens = parseCompilationUnitGetAllMethodDeclaration(getCompilationUnit("D:/commit_curr"));
 		// for (MethodDeclaration item : contents) {
 		// System.out.println(item.getDeclarationAsString());
 		// System.out.println(item.getBody().get().toString());
