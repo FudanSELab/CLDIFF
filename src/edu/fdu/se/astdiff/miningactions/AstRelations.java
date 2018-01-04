@@ -110,11 +110,11 @@ public class AstRelations {
 			type = treeContext.getTypeLabel(curNode);
 			if (type.endsWith("Statement")) {
 				break;
-			} else if (type.endsWith("Declaration")) {
+			} else if (type.equals(StatementConstants.METHODDECLARATION)||type.equals(StatementConstants.FIELDDECLARATION)) {
 				break;
-			} else if (type.equals("Block")) {
+			} else if (type.equals(StatementConstants.BLOCK)) {
 				break;
-			} else if (type.endsWith("Javadoc")) {
+			} else if (type.equals(StatementConstants.JAVADOC)) {
 				break;
 			} else {
 				curNode = curNode.getParent();

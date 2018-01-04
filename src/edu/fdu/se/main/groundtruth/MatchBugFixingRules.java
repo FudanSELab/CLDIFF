@@ -34,7 +34,7 @@ public class MatchBugFixingRules {
 	
 	
 	/**
-	 * add anr ,fc,oom,exception
+	 * add anr ,fc,oom,exception,NPE空指针
 	 * @param msg
 	 * @param msgFull
 	 * @return
