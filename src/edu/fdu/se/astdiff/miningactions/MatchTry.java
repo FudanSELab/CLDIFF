@@ -18,22 +18,35 @@ public class MatchTry {
 	 * @param a
 	 * @return
 	 */
-	public static int matchTry(FindPattern fp,Action a) {
-		String summary = "[PATTERN] " + ActionConstants.getInstanceStringName(a);
+	public static HighLevelOperationBean matchTry(FindPattern fp,Action a,String nodeType) {
+		String operationEntity = "TRYSTATEMENT";
 		List<Action> tryAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, tryAction);
 
-		if (status == MyTreeUtil.TYPE1) {
-			summary += " try catch clause and body";
-		} else{
-			summary += " try catch clause wrapper";
-		}
 		fp.setActionTraversedMap(tryAction);
-		System.out.println(summary);
-		return tryAction.size();
+
+		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+				a,nodeType,tryAction,status,operationEntity,null,null);
+		return mHighLevelOperationBean;
 	}
 
-	public int matchTryPlus(FindPattern fp,Action a) {
+	public static HighLevelOperationBean matchThrowStatement(FindPattern fp,Action a,String nodeType) {
+		String operationEntity = "THROWSTATEMENT";
+		List<Action> throwAction = new ArrayList<Action>();
+		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, throwAction);
+		fp.setActionTraversedMap(throwAction);
+		ITree fatherNode;
+		if(a instanceof Insert)
+			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getDstTree());
+		else
+			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getSrcTree());
+		String fatherNodeType = fatherNode.getLabel();
+		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+				a,nodeType,throwAction,status,operationEntity,fatherNode,fatherNodeType);
+		return mHighLevelOperationBean;
+	}
+
+	public int matchCatchclause(FindPattern fp,Action a) {
 		String summary = "[PATTERN] " + ActionConstants.getInstanceStringName(a);
 		List<Action> tryAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, tryAction);

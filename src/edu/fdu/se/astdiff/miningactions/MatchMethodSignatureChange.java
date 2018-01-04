@@ -18,7 +18,8 @@ public class MatchMethodSignatureChange {
 	 * @param fafafather
 	 * @return
 	 */
-	public static int matchMethodSignatureChange(FindPattern fp,Action a, ITree fafafather) {
+	public static HighLevelOperationBean matchMethodSignatureChange(FindPattern fp,Action a, ITree fafafather) {
+		String operationEntity = "METHODSIGNATURE";
 		ITree srcfafafather = null;
 		ITree dstfafafather = null;
 		if (a instanceof Insert) {
@@ -35,11 +36,13 @@ public class MatchMethodSignatureChange {
 			}
 		}
 		List<Action> signatureChidlren = new ArrayList<Action>();
-		int insertCnt = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
-		MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
+		int status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
+//		MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
 //		this.mMiningActionBean.mapMethodSignatureAction(srcfafafather, signatureChidlren);
 		fp.setActionTraversedMap(signatureChidlren);
-		return insertCnt;
+		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+				a,StatementConstants.METHODDECLARATION,signatureChidlren,status,operationEntity,null,null);
+		return mHighLevelOperationBean;
 	}
 
 }

@@ -68,7 +68,32 @@ public class HighLevelOperationBean {
 	@Override
 	public String toString(){
 		//TODO
-		return null;
+		int type = getOperationType();
+		String operationTypeString = "";
+		switch (type){
+			case 1:
+				operationTypeString = "INSERT";
+				break;
+			case 2:
+				operationTypeString = "DELETE";
+				break;
+			case 4:
+				operationTypeString = "INSERT + MOVE";
+				break;
+			case 5:
+				operationTypeString = "DELETE + MOVE";
+				break;
+			case 0:
+				operationTypeString = "FAFATHERNODE";
+				break;
+			case -1:
+			default:
+				operationTypeString = "UNKNOWN";
+				break;
+		}
+		//System.out.print();
+		String result = "[Pattern] "+ operationTypeString + " " + getOperationEntity();
+		return result;
 	}
 	
 	

@@ -1,0 +1,345 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Run<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "com.github.gumtreediff.client.Run",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-InfoTree<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "com.github.gumtreediff.matchers.optimal.rted.InfoTree",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-ProjectProperties<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.config.ProjectProperties",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-CommitFilter<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.extractor.CommitFilter",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-CheckoutTaggedCommit<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.gitrepo.CheckoutTaggedCommit",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-CommitBetweenTwoTags<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.gitrepo.CommitBetweenTwoTags",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-GroudTruth<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.gitrepo.GroudTruth",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-ListTags<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.gitrepo.ListTags",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-LoadRepoTagToDb<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.gitrepo.LoadRepoTagToDb",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Test<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.gitrepo.Test",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-HandleFile<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.handlefile.HandleFile",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-PreprocessClassData<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.handlefile.PreprocessClassData",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Script<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.Script",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-AndroidRepoBranch<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.androidrepo.AndroidRepoBranch",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-BrowseAndroidRepo<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.androidrepo.BrowseAndroidRepo",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-BrowseSDKFile<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.androidrepo.BrowseSDKFile",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-CommitType<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.androidrepo.CommitType",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-CompareCommitTime<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.androidrepo.CompareCommitTime",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-DatabaseTable<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.androidrepo.DatabaseTable",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-ManualCheckCommitHelper<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.androidrepo.ManualCheckCommitHelper",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-DiffMiner<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.ast.DiffMiner",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-GenerateDiffCmd<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.popularsdkclasses.GenerateDiffCmd",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-GenerateDiffDirByVersions<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.popularsdkclasses.GenerateDiffDirByVersions",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-GenerateDiffDirs<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "edu.fdu.se.main.popularsdkclasses.GenerateDiffDirs",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-CloseCase<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "test.dstDir.CloseCase",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-addFieldDeclarationAndAssignment<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "test.dstDir.addFieldDeclarationAndAssignment",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-addVariableDeclarationAndAssignment<DiffMiner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "test.dstDir.addVariableDeclarationAndAssignment",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-CloseCase<DiffMiner>(1)",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "test.srcDir.CloseCase",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-addFieldDeclarationAndAssignment<DiffMiner>(1)",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "test.srcDir.addFieldDeclarationAndAssignment",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-addVariableDeclarationAndAssignment<DiffMiner>(1)",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "test.srcDir.addVariableDeclarationAndAssignment",
+            "projectName": "DiffMiner",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Attach)",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 0
+        }
+    ]
+}

@@ -8,6 +8,8 @@ public class StatementConstants {
 	
 	final public static String TRYSTATEMENT = "TryStatement";
 
+	final public static String THROWSTATEMENT = "ThrowStatement";
+
 	final public static String CATCHCLAUSE = "CatchClause";
 
 	final public static String VARIABLEDECLARATIONSTATEMENT = "VariableDeclarationStatement";

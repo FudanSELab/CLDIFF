@@ -54,23 +54,29 @@ public class MyTreeUtil{
     public static int traverseMethodSignatureChildrenWithoutBlock(Action a,ITree node,List<Action> allEditAction){
     	List<ITree> children = node.getChildren();
     	int len = children.size();
-    	int count = 0;
+//    	int count = 0;
+		boolean isNullExist = false;
+		Set<String> actionTypes = new HashSet<String>();
     	//默认最后一个节点为block
     	for(int i=0;i<len-1;i++){
     		ITree child = children.get(i);
     		for(ITree item : child.postOrder()){
     			Tree myTree = (Tree) item;
-    			if(myTree.getDoAction()==null) continue;
+    			if(myTree.getDoAction()==null) {
+					isNullExist = true;
+					continue;
+				}
     			List<Action> nodeActions = myTree.getDoAction();
         		for(Action aTmp:nodeActions){
-        			if(aTmp.getClass().equals(a.getClass())){        			
-        				count++;
-        			}
+//        			if(aTmp.getClass().equals(a.getClass())){
+//        				count++;
+//        			}
         			allEditAction.add(aTmp);
+					actionTypes.add(aTmp.getClass().toString());
         		}
     		}
     	}
-    	return count;
+		return getTypeCode(a,isNullExist,actionTypes);
     }
     
     
