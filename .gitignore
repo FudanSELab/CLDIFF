@@ -3,3 +3,4 @@
 /resource/config.properties
 /.idea/
 /.vscode/
+*.iml
