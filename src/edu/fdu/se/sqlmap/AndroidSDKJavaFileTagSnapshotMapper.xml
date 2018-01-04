@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.fdu.se.mapper.AndroidSDKJavaFileTagSnapshotMapper">
+
+  <resultMap id="BaseResultMap" type="edu.fdu.se.bean.AndroidSDKJavaFileTagSnapshot">
+      
+      <constructor>
+      <arg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="sdk_java_file_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="tag_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_checked" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="file_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="file_full_path" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="sdk_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="sub_category" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="sub_sub_category" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="sub_sub_category_path" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+      <!-- 
+      <id column="id" property="id"/>
+      <result column="sdk_java_file_id" property="sdkTblId"/>
+      <result column="tag_name" property="tagStr" />
+      <result column="is_checked" property="isChecked"/>
+      
+      
+       <association property="sdkJavaFile" javaType="edu.fdu.se.bean.AndroidSDKJavaFile">
+           <id column="sdk_java_file_id' property="id"/>
+           <result column="file_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      	   <result column="file_full_path" javaType="java.lang.String" jdbcType="VARCHAR" />
+           <result column="sdk_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
+           <result column="sub_category" javaType="java.lang.String" jdbcType="VARCHAR" />
+           <result column="sub_sub_category" javaType="java.lang.String" jdbcType="VARCHAR" />
+           <result column="sub_sub_category_path" javaType="java.lang.String" jdbcType="VARCHAR" />
+      </association>
+      -->
+  </resultMap>
+  
+
+	<select id="selectAll" resultMap="BaseResultMap">
+        select * from android_sdk_java_file_tag_snapshot as a,android_sdk_java_file as b where a.sdk_java_file_id=b.id;
+  	</select>
+
+</mapper>
