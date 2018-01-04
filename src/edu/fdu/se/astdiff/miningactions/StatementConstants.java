@@ -43,4 +43,6 @@ public class StatementConstants {
 	final public static String SWITCHSTATEMENT = "SwitchStatement";
 	
 	final public static String FIELDDECLARATION = "FieldDeclaration";
+	
+	final public static String JAVADOC = "Javadoc";
 }
