@@ -5,11 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jgit.revwalk.RevCommit;
+
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.bean.AndroidTag;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
 import edu.fdu.se.dao.AndroidTagDAO;
+import edu.fdu.se.git.JGitTagCommand;
 import edu.fdu.se.git.RepoConstants;
+import edu.fdu.se.git.RepositoryHelper;
 import edu.fdu.se.git.SDKFileToRepoFilePath;
 
 public class ExtractTagSnapshotIntoSDKFiles {
@@ -21,8 +25,11 @@ public class ExtractTagSnapshotIntoSDKFiles {
 		List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectAllFileBySDKVersion(versionNum);
 		List<String> wrongedFile = new ArrayList<String>();
 		List<String> diffFile = new ArrayList<String>();
+		JGitTagCommand jCmd = RepositoryHelper.getInstance1().myCmd;
+		RevCommit rc = jCmd.revCommitOfTag(tag.getTagShaId());
+		SDKFileToRepoFilePath ins = new SDKFileToRepoFilePath(rc.getName(),jCmd);
 		for (AndroidSDKJavaFile file : mList) {
-			String res = SDKFileToRepoFilePath.checkFileInRepo(file);
+			String res = ins.checkFileInRepo(file);
 			if("YES".equals(res)){
 				continue;
 			}else if("NO".equals(res)){
@@ -30,6 +37,7 @@ public class ExtractTagSnapshotIntoSDKFiles {
 			}else if("ERROR".equals(res)){
 				wrongedFile.add(file.getSubSubCategoryPath());
 			}
+			break;
 		}
 		System.out.println("-----------------------------------------");
 		System.out.println(mList.size());
