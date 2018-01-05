@@ -41,6 +41,17 @@ public class FileWriter {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void writeInAll(File file,byte[] content){
+		try {
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(content);
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
   
 	
 	public static void writeInAll(String filePath,InputStream is){
