@@ -34,24 +34,15 @@ public class RepositoryHelper {
 		}
 		return repositoryhelper;
 	}
-	
-	public static RepositoryHelper getInstance2(){
-		if(repositoryhelper == null){
-			repositoryhelper = new RepositoryHelper(2);
-		}
-		return repositoryhelper;
-	}
-	public int type;
-	public JGitCommand myCmd;
+	private int type;
+
+	public JGitTagCommand myCmd;
 	public RepositoryHelper(int type){
 		this.type = type;
 		if(type == 1)
 			myCmd = new JGitTagCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
 				+ RepoConstants.platform_frameworks_base_ + ".git");
-		else if(type == 2){
-			myCmd = new JGitRepositoryCommand(ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)
-					+ RepoConstants.platform_frameworks_base_ + ".git");
-		}
+
 		
 	}
 

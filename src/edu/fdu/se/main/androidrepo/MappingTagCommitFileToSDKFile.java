@@ -7,8 +7,10 @@ import java.util.Map;
 
 
 import edu.fdu.se.bean.AndroidSDKJavaFile;
+import edu.fdu.se.bean.AndroidSDKJavaFileTagSnapshot;
 import edu.fdu.se.bean.AndroidTag;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
+import edu.fdu.se.dao.AndroidSDKJavaFileTagSnapshotDAO;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.RepoConstants;
@@ -27,9 +29,9 @@ public class MappingTagCommitFileToSDKFile {
 		int versionNum = 26;
 		AndroidTag mTagList = AndroidTagDAO.selectTagByShortNameAndProjName(tagStr, RepoConstants.platform_frameworks_base_);
 		Map<String,String> tagMap = new HashMap<String,String>();
-		for(AndroidTag item :mTagList){
-			tagMap.put(item.getProjectName(), item.getTagShaId());
-		}
+//		for(AndroidTag item :mTagList){
+//			tagMap.put(item.getProjectName(), item.getTagShaId());
+//		}
 		SDKFileToRepoFilePath.tagMap = tagMap;
 		List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectAllFileBySDKVersion(versionNum);
 		List<String> wrongedFile = new ArrayList<String>();
@@ -52,7 +54,24 @@ public class MappingTagCommitFileToSDKFile {
 	}
 
 	public static void main(String args[]) {
-		run();
+//		run();
+		run2();
+	}
+	
+	public static void run2(){
+//		List<AndroidSDKJavaFile> mList = AndroidSDKJavaFileDAO.selectAllFileBySDKVersion(25);
+//		for(AndroidSDKJavaFile item:mList){
+//			AndroidSDKJavaFileTagSnapshot a = new AndroidSDKJavaFileTagSnapshot(0,item,"a","b");
+//			AndroidSDKJavaFileTagSnapshotDAO.insert(a);
+//			break;
+//		}
+		
+//		List<AndroidSDKJavaFileTagSnapshot> list =  AndroidSDKJavaFileTagSnapshotDAO.selectAll();
+//		for(AndroidSDKJavaFileTagSnapshot item :list){
+//			System.out.println(item.getIsChecked()+" "+item.getTagStr());
+//			System.out.println(item.getAndroidSDKJavaFile().getFileFullPath());
+//		}
+		
 	}
 
 }
