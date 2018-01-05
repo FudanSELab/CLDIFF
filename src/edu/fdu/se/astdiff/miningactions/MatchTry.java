@@ -46,6 +46,22 @@ public class MatchTry {
 		return mHighLevelOperationBean;
 	}
 
+	public static HighLevelOperationBean matchFinally(FindPattern fp,Action a,String nodeType,ITree ffFatherNode,String fatherNodeType) {
+		String operationEntity = "FINALLY";
+		List<Action> finallyAction = new ArrayList<Action>();
+		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, finallyAction);
+		fp.setActionTraversedMap(finallyAction);
+//		ITree fatherNode;
+//		if(a instanceof Insert)
+//			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getDstTree());
+//		else
+//			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getSrcTree());
+//		String fatherNodeType = fatherNode.getLabel();
+		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+				a,nodeType,finallyAction,status,operationEntity,ffFatherNode,fatherNodeType);
+		return mHighLevelOperationBean;
+	}
+
 	public int matchCatchclause(FindPattern fp,Action a) {
 		String summary = "[PATTERN] " + ActionConstants.getInstanceStringName(a);
 		List<Action> tryAction = new ArrayList<Action>();
