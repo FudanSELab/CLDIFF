@@ -142,12 +142,13 @@ public class FindPattern {
 					case StatementConstants.IFSTATEMENT:
 						// Pattern 1. Match If/else if
                         operationBean = MatchIfElse.matchIf(this,a, type);
+						System.out.println(operationBean.toString());
                         mHighLevelOperationBeanList.add(operationBean);
 						break;
 					case StatementConstants.BLOCK:
 						if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mDstTree)) {
 							// Pattern 1.2 Match else
-                            operationBean = MatchIfElse.matchElse(this,a,type);
+                            operationBean = MatchIfElse.matchElse(this,a,type,fafafather,fatherType);
                             mHighLevelOperationBeanList.add(operationBean);
 //						}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionBean.mDstTree)) {
 //							//同步语句块增加
@@ -165,7 +166,7 @@ public class FindPattern {
 						mHighLevelOperationBeanList.add(operationBean);
 						break;
 					case StatementConstants.THROWSTATEMENT:
-						operationBean = MatchTry.matchThrowStatement(this,a,type);
+						operationBean = MatchTry.matchThrowStatement(this,a,type,fafafather,fatherType);
 						System.out.println(operationBean.toString());
 						mHighLevelOperationBeanList.add(operationBean);
 						break;
@@ -177,12 +178,15 @@ public class FindPattern {
 					case StatementConstants.EXPRESSIONSTATEMENT:
 						if(AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mDstTree)) {
 							// Pattern 1.2 Match else
-							operationBean = MatchIfElse.matchElse(this, a,type);
+							operationBean = MatchIfElse.matchElse(this, a,type,fafafather,fatherType);
 							System.out.println(operationBean.toString());
 							mHighLevelOperationBeanList.add(operationBean);
 						}
-						else
-							MatchExpressionStatement.matchExpression(this,a);
+						else {
+							operationBean = MatchExpressionStatement.matchExpression(this, a,type,fafafather,fatherType);
+							System.out.println(operationBean.toString());
+							mHighLevelOperationBeanList.add(operationBean);
+						}
 						break;
 					case StatementConstants.SYNCHRONIZEDSTATEMENT:
 						//同步语句块增加
@@ -256,7 +260,7 @@ public class FindPattern {
 			}
 			if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
 				// 删除方法参数
-                operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(this,a, fafafather);
+                operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(this,a, type,fafafather);
 				System.out.println(operationBean.toString());
                 mHighLevelOperationBeanList.add(operationBean);
 			} else {
@@ -269,7 +273,7 @@ public class FindPattern {
 				case StatementConstants.BLOCK:
 					// Pattern 1.2 Match else
 					if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mSrcTree)) {
-                        operationBean = MatchIfElse.matchElse(this,a);
+                        operationBean = MatchIfElse.matchElse(this,a,type,fafafather,fatherType);
                         mHighLevelOperationBeanList.add(operationBean);
 //					}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionBean.mDstTree)) {
 //						//同步语句块增加
@@ -283,12 +287,17 @@ public class FindPattern {
 				case StatementConstants.EXPRESSIONSTATEMENT:
 					// Pattern 1.2 Match else
 					if (AstRelations.isFatherIfStatement(a, this.mMiningActionBean.mSrcTree))
-						MatchIfElse.matchElse(this,a);
+						MatchIfElse.matchElse(this,a,type,fafafather,fatherType);
 					else
-						MatchExpressionStatement.matchExpression(this,a);
+						MatchExpressionStatement.matchExpression(this,a,type,fafafather,fatherType);
 					break;
 				case StatementConstants.TRYSTATEMENT:
 					operationBean = MatchTry.matchTry(this,a,type);
+					System.out.println(operationBean.toString());
+					mHighLevelOperationBeanList.add(operationBean);
+					break;
+				case StatementConstants.THROWSTATEMENT:
+					operationBean = MatchTry.matchThrowStatement(this,a,type,fafafather,fatherType);
 					System.out.println(operationBean.toString());
 					mHighLevelOperationBeanList.add(operationBean);
 					break;
@@ -358,7 +367,7 @@ public class FindPattern {
 				if (StatementConstants.BLOCK.equals(type)) {
 					System.err.println("Not considered");
 				} else {
-					MatchMethodSignatureChange.matchMethodSignatureChange(this,a, fafafather);
+					MatchMethodSignatureChange.matchMethodSignatureChange(this,a, type,fafafather);
 				}
 			} else {
 				// 方法体

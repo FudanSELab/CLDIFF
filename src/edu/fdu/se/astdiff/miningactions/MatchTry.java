@@ -30,19 +30,19 @@ public class MatchTry {
 		return mHighLevelOperationBean;
 	}
 
-	public static HighLevelOperationBean matchThrowStatement(FindPattern fp,Action a,String nodeType) {
+	public static HighLevelOperationBean matchThrowStatement(FindPattern fp,Action a,String nodeType,ITree ffFatherNode,String fatherNodeType) {
 		String operationEntity = "THROWSTATEMENT";
 		List<Action> throwAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, throwAction);
 		fp.setActionTraversedMap(throwAction);
-		ITree fatherNode;
-		if(a instanceof Insert)
-			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getDstTree());
-		else
-			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getSrcTree());
-		String fatherNodeType = fatherNode.getLabel();
+//		ITree fatherNode;
+//		if(a instanceof Insert)
+//			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getDstTree());
+//		else
+//			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getSrcTree());
+//		String fatherNodeType = fatherNode.getLabel();
 		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
-				a,nodeType,throwAction,status,operationEntity,fatherNode,fatherNodeType);
+				a,nodeType,throwAction,status,operationEntity,ffFatherNode,fatherNodeType);
 		return mHighLevelOperationBean;
 	}
 
