@@ -12,26 +12,24 @@ import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSwitch {
 	
-	public static int matchSwitch(FindPattern fp,Action a){
-		String changeType = ActionConstants.getInstanceStringName(a);
-		String summary = "[PATTERN] " + changeType + " Switch ";
+	public static HighLevelOperationBean matchSwitch(FindPattern fp,Action a,String nodeType){
+		String operationEntity = "SWITCHSTATEMENT";
+		List<Action> subActions = new ArrayList<Action>();
+		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
+		fp.setActionTraversedMap(subActions);
+//		if (status == MyTreeUtil.TYPE1) {
+//			summary += " and body";
+//		} else {
+//			if (a instanceof Insert) {
+//				summary += " wrapper[insert]";
+//			} else if (a instanceof Delete) {
+//				summary += " wrapper[delete]";
+//			}
+//		}
 
-		List<Action> ifSubActions = new ArrayList<Action>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
-		fp.setActionTraversedMap(ifSubActions);
-		if (status == MyTreeUtil.TYPE1) {
-			summary += " and body";
-		} else {
-			if (a instanceof Insert) {
-				summary += " wrapper[insert]";
-			} else if (a instanceof Delete) {
-				summary += " wrapper[delete]";
-			}
-
-		}
-
-		System.out.println(summary);
-		return ifSubActions.size();
+		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+				a,nodeType,subActions,status,operationEntity,null,null);
+		return mHighLevelOperationBean;
 	}
 
 
