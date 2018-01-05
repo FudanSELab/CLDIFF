@@ -45,8 +45,8 @@ public class DiffMiner {
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstDir/dstTree.txt",his.getPrettyNewTreeString());
 		MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
 		ActionGeneratorBean data = gen.generate();
-		ConsolePrint.printMyActions(data.getDstTreeActions(),his.dstTC);
-		ConsolePrint.printMyActions(data.getSrcTreeActions(),his.srcTC);
+		ConsolePrint.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
+		
 //		MyActionClusterFinder finder = new MyActionClusterFinder(his.srcTC, his.dstTC,data);
 //		List<List<Action>> result = finder.clusteredActions();
 		System.out.println("Step2 Begin to find Pattern:-------------------");

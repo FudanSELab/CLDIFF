@@ -37,7 +37,9 @@ public class MappingTagCommitFileToSDKFile {
 		List<String> wrongedFile = new ArrayList<String>();
 		List<String> diffFile = new ArrayList<String>();
 		for (AndroidSDKJavaFile file : mList) {
-			String res = SDKFileToRepoFilePath.checkFileInRepo(file);
+//			String res = SDKFileToRepoFilePath.checkFileInRepo(file);
+			String res = null;
+			//TODO
 			if("YES".equals(res)){
 				continue;
 			}else if("NO".equals(res)){

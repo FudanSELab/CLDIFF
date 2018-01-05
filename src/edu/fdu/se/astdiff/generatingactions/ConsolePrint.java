@@ -76,10 +76,13 @@ public class ConsolePrint {
 
 	}
 
-	public static void printMyActions(List<Action> actions, TreeContext con) {
+	public static void printMyActions(List<Action> actions, TreeContext conD,TreeContext conS) {
 		System.out.println("ActionSize:" + actions.size());
 		for (Action a : actions) {
-			System.out.print(ConsolePrint.getMyOneActionString(a, 0, con));
+			if(a instanceof Insert)
+				System.out.print(ConsolePrint.getMyOneActionString(a, 0, conD));
+			else
+				System.out.println(ConsolePrint.getMyOneActionString(a, 0, conS));
 		}
 	}
 
