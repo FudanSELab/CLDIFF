@@ -73,13 +73,13 @@ public class JavaParserFactory {
 
 			}
 			for (BodyDeclaration item : mDeclaration) {
-				int methodBegin = item.getBegin().get().line;
-				int methodEnd = item.getEnd().get().line;
-				if (beginA >= methodBegin && endA < methodEnd) {
-					// in method item 表示在方法中
-					changedMethod.add(item);
-					break;
-				}
+//				int methodBegin = item.getBegin().get().line;
+//				int methodEnd = item.getEnd().get().line;
+//				if (beginA >= methodBegin && endA < methodEnd) {
+//					// in method item 表示在方法中
+//					changedMethod.add(item);
+//					break;
+//				}
 			}
 		}
 		for (BodyDeclaration item : changedMethod) {

@@ -65,7 +65,7 @@ public class MatchIfElse {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchElse(FindPattern f,Action a) {
+	public static HighLevelOperationBean matchElse(FindPattern f,Action a,String nodeType,ITree ffFatherNode,String ffFatherNodeType) {
 		String operationEntity = "ELSE";
 		String labelType = f.getDstTreeContextTypeLabel(a.getNode()) ;
 		if(!StatementConstants.BLOCK.equals(labelType)){
@@ -75,7 +75,7 @@ public class MatchIfElse {
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, result);
 		f.setActionTraversedMap(result);
 		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
-				a,StatementConstants.BLOCK,result,status,operationEntity,null,null);
+				a,nodeType,result,status,operationEntity,ffFatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;
 	}
 	

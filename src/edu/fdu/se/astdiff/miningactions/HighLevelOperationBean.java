@@ -23,16 +23,16 @@ public class HighLevelOperationBean {
 	// if 
 	public String operationEntity;
 
-	public ITree fatherNode;
+	public ITree fafafatherNode;
 	public String fatherNodeType;
-	public HighLevelOperationBean(Action curAction,String curNodeType,List<Action> actions,int operationType,String operationEntity,ITree fatherNode,String fatherNodeType){
+	public HighLevelOperationBean(Action curAction,String curNodeType,List<Action> actions,int operationType,String operationEntity,ITree fafafatherNode,String fatherNodeType){
 		this.curAction = curAction;
 		this.curNode = curAction.getNode();
 		this.curNodeType = curNodeType;
 		this.actions = actions;
 		this.operationType = operationType;
 		this.operationEntity = operationEntity;
-		this.fatherNode = fatherNode;
+		this.fafafatherNode = fafafatherNode;
 		this.fatherNodeType = fatherNodeType;
 	}
 	
@@ -54,7 +54,7 @@ public class HighLevelOperationBean {
 	}
 
 	public ITree getFatherNode() {
-		return fatherNode;
+		return fafafatherNode;
 	}
 
 	public String getFatherNodeType() {
@@ -92,7 +92,10 @@ public class HighLevelOperationBean {
 				break;
 		}
 		//System.out.print();
-		String result = "[Pattern] "+ operationTypeString + " " + getOperationEntity();
+		String result = "[Pattern] "+ operationTypeString + " " + getOperationEntity()+", [curNodeType] "+curNodeType;
+		if(!"".equals(fatherNodeType)) {
+			result += ", [fafafatherNodeType] " + fatherNodeType;
+		}
 		return result;
 	}
 	
