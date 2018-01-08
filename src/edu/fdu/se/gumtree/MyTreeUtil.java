@@ -155,12 +155,7 @@ public class MyTreeUtil{
     			actionTypes.add(aTmp.getClass().toString());
     		}
     	}
-    	if(isNullExist == true){
-    		return TYPE0;
-    	}else{
-    		System.err.println("ERROR");
-    	}
-    	return TYPE_UNKNOWN;
+    	return TYPE0;
     }
     
     public static int traverseNodeGetAllEditActions(Action action,List<Action> result){

@@ -37,6 +37,10 @@ public class StatementConstants {
 	final public static String INFIXEXPRESSION = "InfixExpression";
 	
 	final public static String FORSTATEMENT = "ForStatement";
+
+	final public static String WHILESTATEMENT = "WhileStatement";
+
+	final public static String DOSTATEMENT = "DoStatement";
 	
 	final public static String ENHANCEDFORSTATEMENT = "EnhancedForStatement";
 

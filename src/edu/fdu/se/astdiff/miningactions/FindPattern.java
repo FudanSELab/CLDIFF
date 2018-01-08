@@ -30,6 +30,11 @@ public class FindPattern {
 	}
 
 	private MiningActionBean mMiningActionBean;
+
+	public List<HighLevelOperationBean> getmHighLevelOperationBeanList() {
+		return mHighLevelOperationBeanList;
+	}
+
 	private List<HighLevelOperationBean> mHighLevelOperationBeanList;
 	
 	public TreeContext getDstTree(){
@@ -163,7 +168,30 @@ public class FindPattern {
 							this.setActionTraversedMap(a);
 							// TODO剩下的情况
 						}
-						
+						break;
+					case StatementConstants.FORSTATEMENT:
+						//增加for语句
+						operationBean = MatchForStatement.matchForStatement(this,a,type);
+						System.out.println(operationBean.toString());
+						mHighLevelOperationBeanList.add(operationBean);
+						break;
+					case StatementConstants.ENHANCEDFORSTATEMENT:
+						//增加for语句
+						operationBean = MatchForStatement.matchEnhancedForStatement(this,a,type);
+						System.out.println(operationBean.toString());
+						mHighLevelOperationBeanList.add(operationBean);
+						break;
+					case StatementConstants.WHILESTATEMENT:
+						//增加while语句
+						operationBean = MatchWhileStatement.matchWhileStatement(this,a,type);
+						System.out.println(operationBean.toString());
+						mHighLevelOperationBeanList.add(operationBean);
+						break;
+					case StatementConstants.DOSTATEMENT:
+						//增加do while语句
+						operationBean = MatchWhileStatement.matchDoStatement(this,a,type);
+						System.out.println(operationBean.toString());
+						mHighLevelOperationBeanList.add(operationBean);
 						break;
 					case StatementConstants.TRYSTATEMENT:
 						operationBean = MatchTry.matchTry(this,a,type);
@@ -205,6 +233,11 @@ public class FindPattern {
 						System.out.println(operationBean.toString());
 						mHighLevelOperationBeanList.add(operationBean);
 						break;
+					case StatementConstants.JAVADOC:
+						//增加javadoc
+						operationBean = MatchJavaDoc.matchJavaDoc(this,a,type);
+						System.out.println(operationBean.toString());
+						mHighLevelOperationBeanList.add(operationBean);
 					// 方法参数
 					case StatementConstants.SIMPLENAME:
 					case StatementConstants.STRINGLITERAL:
@@ -214,7 +247,7 @@ public class FindPattern {
 					case StatementConstants.BOOLEANLITERAL:
 					case StatementConstants.INFIXEXPRESSION:
 					case StatementConstants.METHODINVOCATION:
-						MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, this.mMiningActionBean.mDstTree);
+						MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, type,this.mMiningActionBean.mDstTree);
 						break;
 					default:
 						String operationEntity = "DEFAULT "+ ActionConstants.getInstanceStringName(a);
@@ -335,6 +368,11 @@ public class FindPattern {
 						System.out.println(operationBean.toString());
 						mHighLevelOperationBeanList.add(operationBean);
 						break;
+				case StatementConstants.JAVADOC:
+					//增加javadoc
+					operationBean = MatchJavaDoc.matchJavaDoc(this,a,type);
+					System.out.println(operationBean.toString());
+					mHighLevelOperationBeanList.add(operationBean);
 				// 方法参数
 				case StatementConstants.SIMPLENAME:
 				case StatementConstants.STRINGLITERAL:
@@ -344,7 +382,7 @@ public class FindPattern {
 				case StatementConstants.BOOLEANLITERAL:
 				case StatementConstants.INFIXEXPRESSION:
 				case StatementConstants.METHODINVOCATION:
-					MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, this.mMiningActionBean.mDstTree);
+					MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, type,this.mMiningActionBean.mDstTree);
 					break;
 
 				default:
@@ -394,7 +432,7 @@ public class FindPattern {
 				// 方法体
 				switch (type) {
 				case StatementConstants.SIMPLENAME:
-					MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, this.mMiningActionBean.mSrcTree);
+					MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, type,this.mMiningActionBean.mSrcTree);
 					break;
 				default:
 					break;

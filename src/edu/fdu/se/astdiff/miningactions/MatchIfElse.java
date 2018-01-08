@@ -87,30 +87,33 @@ public class MatchIfElse {
 	 * @param treeContext
 	 * @return
 	 */
-	public static int matchIfPredicate(FindPattern fp,Action a, TreeContext treeContext, ITree fafafatherNode) {
+	public static HighLevelOperationBean matchIfPredicate(FindPattern fp,Action a, String nodeType,ITree fafafatherNode,String ffFatherNodeType) {
 		// fafafatherNode是if 那么 第一个孩子是if里的内容
-		ITree srcParent = null;
+		String operationEntity  = "IFPREDICATE";
+//		ITree srcParent = null;
 		List<Action> allActions = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(fafafatherNode.getChild(0), allActions);
-		switch(status){
-		case MyTreeUtil.TYPE4:
-		case MyTreeUtil.TYPE5:
-		default:break;
-		}
-		if (a instanceof Insert) {
-			if (fp.getMappedSrcOfDstNode(fafafatherNode) != null) {
-				srcParent = fp.getMappedSrcOfDstNode(fafafatherNode);
-				List<Action> tmp = new ArrayList<Action>();
-				int status2 = MyTreeUtil.traverseNodeGetAllEditActions(srcParent, tmp);
-				allActions.addAll(tmp);
-			} else {
-				System.err.println("ERerererR");
-			}
-		} else {
-			srcParent = fafafatherNode;
-		}
+//		switch(status){
+//		case MyTreeUtil.TYPE4:
+//		case MyTreeUtil.TYPE5:
+//		default:break;
+//		}
+//		if (a instanceof Insert) {
+//			if (fp.getMappedSrcOfDstNode(fafafatherNode) != null) {
+//				srcParent = fp.getMappedSrcOfDstNode(fafafatherNode);
+//				List<Action> tmp = new ArrayList<Action>();
+//				int status2 = MyTreeUtil.traverseNodeGetAllEditActions(srcParent, tmp);
+//				allActions.addAll(tmp);
+//			} else {
+//				System.err.println("ERerererR");
+//			}
+//		} else {
+//			srcParent = fafafatherNode;
+//		}
 		fp.setActionTraversedMap(allActions);
-		return allActions.size();
+		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+				a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
+		return mHighLevelOperationBean;
 	}
 
 }

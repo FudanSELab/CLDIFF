@@ -11,38 +11,41 @@ import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSimpleNameOrLiteral {
-	
+	private static HighLevelOperationBean operationBean;
 	/**
 	 * level IV fafafather 为VariableDeclarationStatement ExpressionStatement
 	 * father为methodinvocation  按照fafafatherNode 为key，存所有相关的action,更细的情况放到map之后再做处理
 	 * 
+	 * @param fp
 	 * @param a
-	 * @param treeContext
+	 * @param nodeType
 	 * @return
 	 */
-	public static int matchExpressionStatementAndVariableDeclarationStatement(FindPattern fp,Action a, TreeContext treeContext,
-			ITree fafafatherNode) {
+	public static HighLevelOperationBean matchExpressionStatementAndVariableDeclarationStatement(FindPattern fp,Action a, String nodeType,ITree fafafatherNode,String ffFatherNodeType) {
+		String operationEntity  = "IFPREDICATE";
 		ITree srcParent = null;
 		List<Action> allActions = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(fafafatherNode, allActions);
 		// 如果为insert ，那么src树可能有别的标记
 		// 如果不是
-		if(a instanceof Insert){
-			ITree tmp = fp.getMappedSrcOfDstNode(fafafatherNode);
-			if(tmp!=null){
-				srcParent = tmp;
-				List<Action> tmpList = new ArrayList<Action>();
-				int status2 = MyTreeUtil.traverseNodeGetAllEditActions(srcParent, tmpList);
-				allActions.addAll(tmpList);
-			}else{
-				System.err.println("ERERERER");
-			}
-		}else{
-			srcParent = fafafatherNode;
-		}
+//		if(a instanceof Insert){
+//			ITree tmp = fp.getMappedSrcOfDstNode(fafafatherNode);
+//			if(tmp!=null){
+//				srcParent = tmp;
+//				List<Action> tmpList = new ArrayList<Action>();
+//				int status2 = MyTreeUtil.traverseNodeGetAllEditActions(srcParent, tmpList);
+//				allActions.addAll(tmpList);
+//			}else{
+//				System.err.println("ERERERER");
+//			}
+//		}else{
+//			srcParent = fafafatherNode;
+//		}
 		fp.setActionTraversedMap(allActions);
 //		this.mMiningActionBean.mapMethodInvocationAndActions(srcParent, allActions);
-		return 0;
+		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+				a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
+		return mHighLevelOperationBean;
 	}
 
 	/**
@@ -57,27 +60,33 @@ public class MatchSimpleNameOrLiteral {
 	 * @param a
 	 * @return
 	 */
-	public static int matchSimplenameOrLiteral(FindPattern fp,Action a, TreeContext curContext) {
+	public static int matchSimplenameOrLiteral(FindPattern fp,Action a, String nodeType,TreeContext curContext) {
 		// if predicate
 		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), curContext);
-		String fafafatherType = curContext.getTypeLabel(fafafatherNode);
+		String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
 		int returnVal = -1;
-		switch (fafafatherType) {
+		switch (ffFatherNodeType) {
 		case StatementConstants.IFSTATEMENT:
 			System.out.println("If predicate");
-			MatchIfElse.matchIfPredicate(fp,a, curContext, fafafatherNode);
+			operationBean = MatchIfElse.matchIfPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			System.out.println(operationBean.toString());
+			fp.getmHighLevelOperationBeanList().add(operationBean);
 			break;
 		case StatementConstants.FORSTATEMENT:
-			System.out.println("For predicate#TODO");
-			MatchForWhile.matchForPredicate(fp,a, curContext);
+			System.out.println("For predicate");
+			operationBean = MatchForWhile.matchForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			System.out.println(operationBean.toString());
+			fp.getmHighLevelOperationBeanList().add(operationBean);
 			break;
 		case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
 		case StatementConstants.EXPRESSIONSTATEMENT:
 			System.out.println("variable/expression");
-			matchExpressionStatementAndVariableDeclarationStatement(fp,a, curContext, fafafatherNode);
+			operationBean = matchExpressionStatementAndVariableDeclarationStatement(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			System.out.println(operationBean.toString());
+			fp.getmHighLevelOperationBeanList().add(operationBean);
 			break;
 		default:
-			System.err.println("Default:" + fafafatherType);
+			System.err.println("Default:" + ffFatherNodeType);
 			break;
 		}
 		return returnVal;
