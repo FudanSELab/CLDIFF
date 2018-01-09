@@ -70,20 +70,20 @@ public class MatchSimpleNameOrLiteral {
 			System.out.println("If predicate");
 			operationBean = MatchIfElse.matchIfPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			System.out.println(operationBean.toString());
-			fp.getmHighLevelOperationBeanList().add(operationBean);
+			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.FORSTATEMENT:
 			System.out.println("For predicate");
 			operationBean = MatchForWhile.matchForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			System.out.println(operationBean.toString());
-			fp.getmHighLevelOperationBeanList().add(operationBean);
+			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
 		case StatementConstants.EXPRESSIONSTATEMENT:
 			System.out.println("variable/expression");
 			operationBean = matchExpressionStatementAndVariableDeclarationStatement(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			System.out.println(operationBean.toString());
-			fp.getmHighLevelOperationBeanList().add(operationBean);
+			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		default:
 			System.err.println("Default:" + ffFatherNodeType);

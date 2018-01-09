@@ -31,11 +31,11 @@ public class FindPattern {
 
 	private MiningActionBean mMiningActionBean;
 
-	public List<HighLevelOperationBean> getmHighLevelOperationBeanList() {
-		return mHighLevelOperationBeanList;
-	}
-
 	private List<HighLevelOperationBean> mHighLevelOperationBeanList;
+
+	public void addHighLevelOperationBeanToList(HighLevelOperationBean mHighLevelOperationBean) {
+		this.mHighLevelOperationBeanList.add(mHighLevelOperationBean);
+	}
 	
 	public TreeContext getDstTree(){
 		return this.mMiningActionBean.mDstTree;
