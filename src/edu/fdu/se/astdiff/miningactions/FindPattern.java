@@ -128,10 +128,20 @@ public class FindPattern {
 			System.out.print(nextAction);
             HighLevelOperationBean operationBean;
 			if(StatementConstants.FIELDDECLARATION.equals(type)){
-				//
+				//insert FieldDeclaration
+				operationBean = MatchFieldDeclaration.matchFieldDeclaration(this,a,type);
+				System.out.println(operationBean.toString());
+				mHighLevelOperationBeanList.add(operationBean);
+				continue;
 			} else if(StatementConstants.FIELDDECLARATION.equals(fatherType)){
-				//
-			} else if (StatementConstants.METHODDECLARATION.equals(type)) {
+				//insert FieldDeclaration body
+				operationBean = MatchFieldDeclaration.matchFieldDeclarationByFather(this,a,type,fafafather,fatherType);
+				System.out.println(operationBean.toString());
+				mHighLevelOperationBeanList.add(operationBean);
+				continue;
+			}
+
+			if (StatementConstants.METHODDECLARATION.equals(type)) {
                 operationBean = MatchNewOrDeleteMethod.matchNewOrDeleteMethod(this,a,type);
                 System.out.println(operationBean.toString());
                 mHighLevelOperationBeanList.add(operationBean);
@@ -286,18 +296,26 @@ public class FindPattern {
 			System.out.print(nextAction);
             HighLevelOperationBean operationBean;
             if(StatementConstants.FIELDDECLARATION.equals(type)){
-                //
+                //delete FieldDeclaration
+				operationBean = MatchFieldDeclaration.matchFieldDeclaration(this,a,type);
+				System.out.println(operationBean.toString());
+				mHighLevelOperationBeanList.add(operationBean);
+				continue;
             } else if(StatementConstants.FIELDDECLARATION.equals(fatherType)){
-                //
-            }else if (StatementConstants.METHODDECLARATION.equals(type)) {
+                //delete FieldDeclaration body
+				operationBean = MatchFieldDeclaration.matchFieldDeclarationByFather(this,a,type,fafafather,fatherType);
+				System.out.println(operationBean.toString());
+				mHighLevelOperationBeanList.add(operationBean);
+				continue;
+            }
+
+            if (StatementConstants.METHODDECLARATION.equals(type)) {
 				// 删除方法体
 				//HighLevelOperationBean bean  = MatchNewOrDeleteMethod.matchNewOrDeleteMethod(this,a,type);
                 operationBean = MatchNewOrDeleteMethod.matchNewOrDeleteMethod(this,a,type);
 				System.out.println(operationBean.toString());
                 mHighLevelOperationBeanList.add(operationBean);
-				continue;
-			}
-			if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
+			}else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
 				// 删除方法参数
                 operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(this,a, type,fafafather);
 				System.out.println(operationBean.toString());
@@ -418,6 +436,15 @@ public class FindPattern {
 			ITree fafafather = AstRelations.findFafafatherNode(tmp, this.mMiningActionBean.mSrcTree);
 			String fatherType = this.mMiningActionBean.mSrcTree.getTypeLabel(fafafather);
 			System.out.print(nextAction);
+			HighLevelOperationBean operationBean;
+			if(StatementConstants.FIELDDECLARATION.equals(fatherType)){
+				//insert FieldDeclaration body
+				operationBean = MatchFieldDeclaration.matchFieldDeclarationByFather(this,a,type,fafafather,fatherType);
+				System.out.println(operationBean.toString());
+				mHighLevelOperationBeanList.add(operationBean);
+				continue;
+			}
+
 			if (StatementConstants.METHODDECLARATION.equals(type)) {
 				// 新增方法
 				System.err.println("Update 应该不会是method declaration");

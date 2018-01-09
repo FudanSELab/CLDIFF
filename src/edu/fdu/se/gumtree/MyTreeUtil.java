@@ -114,7 +114,34 @@ public class MyTreeUtil{
      * 位置
      */
     final public static int TYPE_UNKNOWN = -1;
-    
+
+	public static String getTypeById(int typeId) {
+		String operationTypeString = "";
+		switch (typeId){
+			case 1:
+				operationTypeString = "INSERT";
+				break;
+			case 2:
+				operationTypeString = "DELETE";
+				break;
+			case 4:
+				operationTypeString = "INSERT + MOVE";
+				break;
+			case 5:
+				operationTypeString = "DELETE + MOVE";
+				break;
+			case 0:
+				operationTypeString = "FAFATHERNODE";
+				break;
+			case -1:
+				operationTypeString = "UNKNOWN";
+				break;
+			default:
+				operationTypeString = "NULL, ERROR";
+				break;
+		}
+		return operationTypeString;
+	}
     
     public static int getTypeCode(Action action,boolean isNullExist,Set<String> actionTypes){
     	if(action instanceof Insert){
