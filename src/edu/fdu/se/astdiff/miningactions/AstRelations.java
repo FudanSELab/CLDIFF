@@ -18,6 +18,31 @@ public class AstRelations {
 		return false;
 	}
 
+	public static boolean isChildContainIfStatement(Action a, TreeContext treeContext) {
+		List<ITree> child = a.getNode().getChildren();
+		if (child.size() < 1) {
+			System.err.println("There is no child");
+			return false;
+		}
+		for (ITree tmp : child) {
+			Tree t = (Tree) tmp;
+			String type = treeContext.getTypeLabel(t);
+			if (type.equals(StatementConstants.IFSTATEMENT)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isFatherTryStatement(Action a, TreeContext treeContext) {
+		Tree t = (Tree) a.getNode();
+		String type = treeContext.getTypeLabel(t.getParent());
+		if (type.equals(StatementConstants.TRYSTATEMENT)) {
+			return true;
+		}
+		return false;
+	}
+
 	public static boolean isChildCotainSynchronizedStatement(Action a, TreeContext treeContext) {
 		// Tree t = (Tree) a.getNode();
 		List<ITree> child = a.getNode().getChildren();
