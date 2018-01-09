@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
+import edu.fdu.se.gumtree.MyTreeUtil;
+
 /**
  * 记录find时候找到的节点，以及对应的fafafather 节点，以及该节点下，所有的action
  * @author huangkaifeng
@@ -69,29 +71,7 @@ public class HighLevelOperationBean {
 	public String toString(){
 		//TODO
 		int type = getOperationType();
-		String operationTypeString = "";
-		switch (type){
-			case 1:
-				operationTypeString = "INSERT";
-				break;
-			case 2:
-				operationTypeString = "DELETE";
-				break;
-			case 4:
-				operationTypeString = "INSERT + MOVE";
-				break;
-			case 5:
-				operationTypeString = "DELETE + MOVE";
-				break;
-			case 0:
-				operationTypeString = "FAFATHERNODE";
-				break;
-			case -1:
-			default:
-				operationTypeString = "UNKNOWN";
-				break;
-		}
-		//System.out.print();
+		String operationTypeString = MyTreeUtil.getTypeById(type);
 		String result = "[Pattern] "+ operationTypeString + " " + getOperationEntity()+", [curNodeType] "+curNodeType;
 		if(!"".equals(fatherNodeType)) {
 			result += ", [fafafatherNodeType] " + fatherNodeType;
