@@ -8,16 +8,16 @@ import java.util.Set;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
+import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.miningactions.FindPattern;
 
 public class MyTreeUtil{
 	/**
      * Returns a list of every subtrees and the tree ordered using a breadth-first order.
-     * @param tree a Tree.
+     * @param root a Tree.
      */
     public static List<ITree> layeredBreadthFirst(ITree root,List<Integer> layerIndex) {
         List<ITree> trees = new ArrayList<>();
@@ -51,10 +51,11 @@ public class MyTreeUtil{
      * @param allEditAction
      * @return
      */
-    public static int traverseMethodSignatureChildrenWithoutBlock(Action a,ITree node,List<Action> allEditAction){
+    public static boolean traverseMethodSignatureChildrenWithoutBlock(Action a,ITree node,List<Action> allEditAction){
     	List<ITree> children = node.getChildren();
     	int len = children.size();
 //    	int count = 0;
+		boolean isAdded = false;
 		boolean isNullExist = false;
 		Set<String> actionTypes = new HashSet<String>();
     	//默认最后一个节点为block
@@ -72,72 +73,135 @@ public class MyTreeUtil{
 //        				count++;
 //        			}
         			allEditAction.add(aTmp);
+        			isAdded = true;
 					actionTypes.add(aTmp.getClass().toString());
         		}
     		}
     	}
-		return getTypeCode(a,isNullExist,actionTypes);
+    	if(isAdded){
+    		return TYPE_EXIST;
+		}else{
+    		return TYPE_NO_EXIST;
+		}
     }
     
-    
-    /**
-     * 
-     */
+
     
     /**
      * 传入参数为action，所有节点都标记了insert
      */
     final public static int TYPE1 = 1;
+    final public static String OP_INSERT = "INSERT";
     /**
      * 传入参数为action，所有节点都标记了delete
      */
     final public static int TYPE2 = 2;
+	final public static String OP_DELETE = "DELETE";
+	/**
+	 * 传入参数为action，节点标记为update
+	 */
+	final public static int TYPE3 = 3;
+	final public static String OP_UPDATE = "UPDATE";
+
+	/**
+	 * 传入参数为action，节点标记为update
+	 */
+	final public static int TYPE4 = 4;
+	final public static String OP_MOVE = "MOVE";
 //    /**
 //     * 传入参数为action，部分节点没有标记insert或者delete
 //     */
-//    final public static int TYPE3 = 3; 
+//    final public static int TYPE3 = 3;
     /**
      * 传入参数为action，节点标记为move+insert TODO Bug?
      */
-    final public static int TYPE4 = 4;
+    final public static int TYPE5 = 5;
+	final public static String OP_MOVE_INSERT = "INSERT + MOVE";
     /**
      * 传入参数为action，节点标记为move+delete TODO bug?
      */
-    final public static int TYPE5 = 5;
-    
+    final public static int TYPE6 = 6;
+	final public static String OP_MOVE_DELETE = "DELETE + MOVE";
+
     /**
      * 传入参数为fafathernode， 
      */
-    final public static int TYPE0 = 0;
-    
+    final public static int TYPE_FATHERNODE = 0;
+	final public static String OP_FATHERNODE = "FAFATHERNODE";
+
     /**
-     * 位置
+     * 未知
      */
     final public static int TYPE_UNKNOWN = -1;
+	final public static String OP_UNKNOWN = "UNKNOWN";
+
+	/**
+	 * 用于标记传入fatherNode时，遍历src、dst树，都有节点增加，isAdded，BOTHTREE
+	 */
+	final public static int TYPE_FATHERNODE_BOTH = -2;
+	final public static String OP_FATHERNODE_BOTH = "FAFATHERNODE_BOTH";
+
+	/**
+	 * 用于标记传入fatherNode时，遍历src、dst树，dst有节点增加，src没有，INSERT
+	 */
+	final public static int TYPE_FATHERNODE_INSERT= -3;
+	final public static String OP_FATHERNODE_INSERT = "FAFATHERNODE_INSERT";
+
+	/**
+	 * 用于标记传入fatherNode时，遍历src、dst树，src有节点增加，dst没有，非insert
+	 */
+	final public static int TYPE_FATHERNODE_NOINSERT = -4;
+	final public static String OP_FATHERNODE_NOINSERT = "FAFATHERNODE_NOINSERT";
+
+	/**
+	 * ERROR
+	 */
+	final public static String OP_ERROR = "NULL, ERROR";
+
+	/**
+	 * 标识是否两棵树都存在节点
+	 */
+	final public static boolean TYPE_EXIST = true;
+	final public static boolean TYPE_NO_EXIST = false;
 
 	public static String getTypeById(int typeId) {
-		String operationTypeString = "";
+		String operationTypeString;
 		switch (typeId){
 			case 1:
-				operationTypeString = "INSERT";
+				operationTypeString = OP_INSERT;
 				break;
 			case 2:
-				operationTypeString = "DELETE";
+				operationTypeString = OP_DELETE;
+				break;
+			case 3:
+				operationTypeString = OP_UPDATE;
 				break;
 			case 4:
-				operationTypeString = "INSERT + MOVE";
+				operationTypeString = OP_MOVE;
 				break;
 			case 5:
-				operationTypeString = "DELETE + MOVE";
+				operationTypeString = OP_MOVE_INSERT;
+				break;
+			case 6:
+				operationTypeString = OP_MOVE_DELETE;
 				break;
 			case 0:
-				operationTypeString = "FAFATHERNODE";
+				operationTypeString = OP_FATHERNODE;
 				break;
 			case -1:
-				operationTypeString = "UNKNOWN";
+				operationTypeString = OP_UNKNOWN;
+				break;
+			case -2:
+				operationTypeString = OP_FATHERNODE_BOTH;
+				break;
+			case -3:
+				operationTypeString = OP_FATHERNODE_INSERT;
+				break;
+			case -4:
+				operationTypeString = OP_FATHERNODE_NOINSERT;
 				break;
 			default:
-				operationTypeString = "NULL, ERROR";
+				operationTypeString = OP_ERROR;
 				break;
 		}
 		return operationTypeString;
@@ -146,18 +210,21 @@ public class MyTreeUtil{
     public static int getTypeCode(Action action,boolean isNullExist,Set<String> actionTypes){
     	if(action instanceof Insert){
     		if(isNullExist){
-    			return TYPE4;
+    			return TYPE5;
     		}else{
     			return TYPE1;
     		}
     	}
     	if(action instanceof Delete){
     		if(isNullExist||actionTypes.contains(ActionConstants.MOVE)){
-    			return TYPE5;
+    			return TYPE6;
     		}else{
     			return TYPE2;
     		}
     	}
+		if(action instanceof Update){
+			return TYPE3;
+		}
     	return TYPE_UNKNOWN;
     }
     
@@ -167,8 +234,9 @@ public class MyTreeUtil{
      * @param result
      * @return
      */
-    public static int traverseNodeGetAllEditActions(ITree node,List<Action> result){
+    public static boolean traverseNodeGetAllEditActions(ITree node,List<Action> result){
     	boolean isNullExist = false;
+		boolean isAdded = false;
     	Set<String> actionTypes = new HashSet<String>();
     	for(ITree tmp:node.preOrder()){
     		Tree myTree = (Tree) tmp;
@@ -179,11 +247,28 @@ public class MyTreeUtil{
     		List<Action> nodeActions = myTree.getDoAction();
     		for(Action aTmp:nodeActions){
     			result.add(aTmp);
+				isAdded = true;
     			actionTypes.add(aTmp.getClass().toString());
     		}
     	}
-    	return TYPE0;
+		if(isAdded){
+			return TYPE_EXIST;
+		}else{
+			return TYPE_NO_EXIST;
+		}
     }
+
+	public static int isSrcorDstAdded(boolean srcExist,boolean dstExist) {
+    	int status = TYPE_FATHERNODE;
+    	if(srcExist && dstExist)
+			status = TYPE_FATHERNODE_BOTH;
+    	else if(srcExist && !dstExist)
+			status =  TYPE_FATHERNODE_NOINSERT;
+    	else if(!srcExist && dstExist)
+			status =  TYPE_FATHERNODE_INSERT;
+
+    	return  status;
+	}
     
     public static int traverseNodeGetAllEditActions(Action action,List<Action> result){
     	boolean isNullExist = false;

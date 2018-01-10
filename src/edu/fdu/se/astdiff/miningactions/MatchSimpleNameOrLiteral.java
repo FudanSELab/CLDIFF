@@ -25,22 +25,26 @@ public class MatchSimpleNameOrLiteral {
 		String operationEntity  = "IFPREDICATE";
 		ITree srcParent = null;
 		List<Action> allActions = new ArrayList<Action>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(fafafatherNode, allActions);
-		// 如果为insert ，那么src树可能有别的标记
-		// 如果不是
-//		if(a instanceof Insert){
-//			ITree tmp = fp.getMappedSrcOfDstNode(fafafatherNode);
-//			if(tmp!=null){
-//				srcParent = tmp;
-//				List<Action> tmpList = new ArrayList<Action>();
-//				int status2 = MyTreeUtil.traverseNodeGetAllEditActions(srcParent, tmpList);
-//				allActions.addAll(tmpList);
-//			}else{
-//				System.err.println("ERERERER");
-//			}
-//		}else{
-//			srcParent = fafafatherNode;
-//		}
+
+		ITree srcfafafather = null;
+		ITree dstfafafather = null;
+		if (a instanceof Insert) {
+			dstfafafather = fafafatherNode;
+			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
+			if (srcfafafather == null) {
+				System.err.println("err null mapping");
+			}
+		} else {
+			srcfafafather = fafafatherNode;
+			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
+			if (dstfafafather == null) {
+				System.err.println("err null mapping");
+			}
+		}
+		boolean src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
+		boolean dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
+		int status = MyTreeUtil.isSrcorDstAdded(src_status,dst_status);
+
 		fp.setActionTraversedMap(allActions);
 //		this.mMiningActionBean.mapMethodInvocationAndActions(srcParent, allActions);
 		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
@@ -74,7 +78,7 @@ public class MatchSimpleNameOrLiteral {
 			break;
 		case StatementConstants.FORSTATEMENT:
 			System.out.println("For predicate");
-			operationBean = MatchForWhile.matchForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			operationBean = MatchForStatement.matchForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			System.out.println(operationBean.toString());
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;

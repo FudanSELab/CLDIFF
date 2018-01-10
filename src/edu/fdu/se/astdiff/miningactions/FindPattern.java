@@ -77,8 +77,9 @@ public class FindPattern {
 	public void find() {
 		// this.findMove();
 		this.findInsert();
-		this.findUpdate();
 		this.findDelete();
+		this.findUpdate();
+
 	}
 	
 	public void find2(){
@@ -148,7 +149,7 @@ public class FindPattern {
 				continue;
 			} else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
 				System.out.println(insNode.getParent().getChildPosition(insNode));
-                operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(this,a, type,fafafather);
+                operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(this,a, type,fafafather,fatherType);
 				System.out.println(operationBean.toString());
                 mHighLevelOperationBeanList.add(operationBean);
 			} else {
@@ -266,7 +267,6 @@ public class FindPattern {
 						break;
 				}
 			}
-
 		}
 	}
 
@@ -317,7 +317,7 @@ public class FindPattern {
                 mHighLevelOperationBeanList.add(operationBean);
 			}else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
 				// 删除方法参数
-                operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(this,a, type,fafafather);
+                operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(this,a, type,fafafather,fatherType);
 				System.out.println(operationBean.toString());
                 mHighLevelOperationBeanList.add(operationBean);
 			} else {
@@ -453,7 +453,9 @@ public class FindPattern {
 				if (StatementConstants.BLOCK.equals(type)) {
 					System.err.println("Not considered");
 				} else {
-					MatchMethodSignatureChange.matchMethodSignatureChange(this,a, type,fafafather);
+					operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(this,a, type,fafafather,fatherType);
+					System.out.println(operationBean.toString());
+					mHighLevelOperationBeanList.add(operationBean);
 				}
 			} else {
 				// 方法体
