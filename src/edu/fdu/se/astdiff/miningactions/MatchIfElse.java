@@ -7,6 +7,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
+import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchIfElse {
@@ -20,7 +21,13 @@ public class MatchIfElse {
 	 */
 	public static HighLevelOperationBean matchIf(FindPattern f,Action a, String type) {
 		String operationEntity = "";
-		if (AstRelations.isFatherIfStatement(a, f.getDstTree())) {
+		TreeContext treeContext;
+		if(a instanceof Insert)
+			treeContext = f.getDstTree();
+		else
+			treeContext = f.getSrcTree();
+
+		if (AstRelations.isFatherIfStatement(a, treeContext)) {
 			operationEntity = "ELSE_IF";
 		} else {
 			operationEntity = "IF";
