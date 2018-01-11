@@ -24,7 +24,7 @@ public class MatchExpressionStatement {
 		TreeContext con = null;
 		if (a instanceof Insert) {
 			con = fp.getDstTree();
-		} else if (a instanceof Delete) {
+		} else{
 			con = fp.getSrcTree();
 		}
 		//String summary = "[PATTERN]";

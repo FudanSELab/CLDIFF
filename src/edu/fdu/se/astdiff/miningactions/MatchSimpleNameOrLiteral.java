@@ -89,8 +89,13 @@ public class MatchSimpleNameOrLiteral {
 			System.out.println(operationBean.toString());
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
+		case StatementConstants.JAVADOC:
+			operationBean = MatchJavaDoc.matchJavaDoc(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			System.out.println(operationBean.toString());
+			fp.addHighLevelOperationBeanToList(operationBean);
+			break;
 		default:
-			System.err.println("Default:" + ffFatherNodeType);
+			System.out.println("Default:" + ffFatherNodeType);
 			break;
 		}
 		return returnVal;

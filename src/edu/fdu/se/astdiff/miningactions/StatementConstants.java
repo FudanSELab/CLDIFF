@@ -17,6 +17,9 @@ public class StatementConstants {
 	final public static String EXPRESSIONSTATEMENT = "ExpressionStatement";
 	
 	final public static String CLASSINSTANCECREATION= "ClassInstanceCreation";
+
+	final public static String CONDITIONALEXPRESSION= "ConditionalExpression";
+
 	/**
 	 * Parameter and literal
 	 */
@@ -44,11 +47,20 @@ public class StatementConstants {
 	
 	final public static String ENHANCEDFORSTATEMENT = "EnhancedForStatement";
 
+	final public static String BREAKSTATEMENT = "BreakStatement";
+
 	final public static String SYNCHRONIZEDSTATEMENT = "SynchronizedStatement";
 
 	final public static String SWITCHSTATEMENT = "SwitchStatement";
+
+	final public static String SWITCHCASE = "SwitchCase";
 	
 	final public static String FIELDDECLARATION = "FieldDeclaration";
 	
 	final public static String JAVADOC = "Javadoc";
+
+	final public static String TAGELEMENT = "TagElement";
+
+	final public static String TEXTELEMENT = "TextElement";
+
 }

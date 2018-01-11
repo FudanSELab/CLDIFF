@@ -20,7 +20,7 @@ public class MatchFieldDeclaration {
         return mHighLevelOperationBean;
     }
     public static HighLevelOperationBean matchFieldDeclarationByFather(FindPattern fp,Action a, String nodeType,ITree fafafatherNode, String ffFatherNodeType) {
-        String operationEntity  = "FIELDDECLARATION BODY";
+        String operationEntity  = "FIELDDECLARATION-BODY";
 
         List<Action> allActions = new ArrayList<Action>();
         ITree srcfafafather = null;
