@@ -17,6 +17,9 @@ public class StatementConstants {
 	final public static String EXPRESSIONSTATEMENT = "ExpressionStatement";
 	
 	final public static String CLASSINSTANCECREATION= "ClassInstanceCreation";
+
+	final public static String CONDITIONALEXPRESSION= "ConditionalExpression";
+
 	/**
 	 * Parameter and literal
 	 */
