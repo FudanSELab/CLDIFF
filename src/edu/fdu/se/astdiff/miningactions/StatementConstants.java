@@ -55,4 +55,9 @@ public class StatementConstants {
 	final public static String FIELDDECLARATION = "FieldDeclaration";
 	
 	final public static String JAVADOC = "Javadoc";
+
+	final public static String TAGELEMENT = "TagElement";
+
+	final public static String TEXTELEMENT = "TextElement";
+
 }

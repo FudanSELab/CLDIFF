@@ -35,7 +35,7 @@ public class MatchSwitch {
 	}
 
 	public static HighLevelOperationBean matchSwitchCase(FindPattern fp, Action a, String nodeType,ITree fafafatherNode,String ffFatherNodeType){
-		String operationEntity = "SWITCHCASE " +nodeType;
+		String operationEntity = "SWITCHCASE-" +nodeType;
 //		String fatherType;
 //		if (a instanceof Insert) {
 //			fatherType = fp.getDstTreeContextTypeLabel(a.getNode().getParent());

@@ -269,6 +269,10 @@ public class FindPattern {
 						operationBean = MatchJavaDoc.matchJavaDoc(this,a,type);
 						System.out.println(operationBean.toString());
 						mHighLevelOperationBeanList.add(operationBean);
+						break;
+					//JAVADOC参数
+					case StatementConstants.TAGELEMENT:
+					case StatementConstants.TEXTELEMENT:
 					// 方法参数
 					case StatementConstants.SIMPLENAME:
 					case StatementConstants.STRINGLITERAL:
@@ -284,6 +288,7 @@ public class FindPattern {
 						String operationEntity = "DEFAULT "+ ActionConstants.getInstanceStringName(a);
 						operationBean = new HighLevelOperationBean(a,type,null,-1,operationEntity,fafafather,fatherType);
 						System.out.println(operationBean.toString());
+						this.setActionTraversedMap(a);
 						break;
 				}
 			}
@@ -457,6 +462,10 @@ public class FindPattern {
 					operationBean = MatchJavaDoc.matchJavaDoc(this,a,type);
 					System.out.println(operationBean.toString());
 					mHighLevelOperationBeanList.add(operationBean);
+					break;
+				//JAVADOC参数
+				case StatementConstants.TAGELEMENT:
+				case StatementConstants.TEXTELEMENT:
 				// 方法参数
 				case StatementConstants.SIMPLENAME:
 				case StatementConstants.STRINGLITERAL:
@@ -468,11 +477,11 @@ public class FindPattern {
 				case StatementConstants.METHODINVOCATION:
 					MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, type,this.mMiningActionBean.mSrcTree);
 					break;
-
 				default:
 					String operationEntity = "DEFAULT "+ActionConstants.getInstanceStringName(a);
 					operationBean = new HighLevelOperationBean(a,type,null,-1,operationEntity,fafafather,fatherType);
 					System.out.println(operationBean.toString());
+					this.setActionTraversedMap(a);
 					break;
 				}
 			}
