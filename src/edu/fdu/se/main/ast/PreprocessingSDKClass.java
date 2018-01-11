@@ -18,299 +18,362 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.stmt.BlockStmt;
 
 import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.javaparser.JavaParserFactory;
+import javassist.compiler.ast.FieldDecl;
 
+/**
+ * 两个文件 预处理
+ * 删除一摸一样的方法
+ * 删除一摸一样的field
+ * 删除一摸一样的内部类
+ * 删除add method
+ * 删除remove method
+ * 删除内部类中的add / remove method
+ * 保留 remove field 和add field 因为需要识别是否是refactor
+ */
 public class PreprocessingSDKClass {
-	
-	public static void main(String args[]){
-//		new PreprocessingSDKClass().compareTwoSDKFile3("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java",
-//				"D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java");
-		new PreprocessingSDKClass().test("D:/test.java");
-	}
-	/*
-	 * 
-	 */
-	public static void compareTwoSDKFile(String prev,String curr){
-		
-		CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prev);
-		CompilationUnit cuCurr = JavaParserFactory.getCompilationUnit(curr);
-		FileWriter.writeInAll("D:/cuPrev.java", cuPrev.toString());
-		FileWriter.writeInAll("D:/cuCurr.java", cuCurr.toString());
-		List<BodyDeclaration> mListPrev = JavaParserFactory.parseCompilationUnitGetAllMethodDeclaration(cuPrev);
-		List<BodyDeclaration> mListCurr = JavaParserFactory.parseCompilationUnitGetAllMethodDeclaration(cuCurr);
-		Map<BodyDeclaration,Integer> prevMethodMapHash = new HashMap<BodyDeclaration,Integer>();
-		Map<BodyDeclaration,String> prevMethodMapName = new HashMap<BodyDeclaration,String>();
-		Map<BodyDeclaration,Integer> prevMethodMapIsVisited = new HashMap<BodyDeclaration,Integer>();
-		for(BodyDeclaration item:mListPrev){
-			prevMethodMapHash.put(item, item.hashCode());
-			if(item instanceof MethodDeclaration){
-				prevMethodMapName.put(item, ((MethodDeclaration)item).getNameAsString());
-			}else if(item instanceof ConstructorDeclaration){
-				prevMethodMapName.put(item, ((ConstructorDeclaration)item).getNameAsString());
-			}else if(item instanceof FieldDeclaration){
-			
-			}
-			
-			
-		}
-		for(BodyDeclaration item:mListCurr){
-			int v =item.hashCode();
-			Entry<BodyDeclaration,Integer> e = containsValue(prevMethodMapHash,v);
-			if(e != null){
-				// 完全相同
-				item.remove();
-				e.getKey().remove();
-			}else {
-				// 其他
-				if(item instanceof MethodDeclaration){
-					MethodDeclaration md = (MethodDeclaration)item;
-					System.out.println(md.getNameAsString());
-				}
-			}
-		}
-		
-		
-	}
-	
-	public static Entry<BodyDeclaration,Integer> containsValue(Map<BodyDeclaration,Integer> mMap,int v){
-		for(Entry<BodyDeclaration,Integer> item:mMap.entrySet()){
-			if(item.getValue().intValue() == v){
-				return item;
-			}
-		}
-		return null;
-	}
-	
-	
-	public static void compareTwoSDKFile2(String prev,String curr){
-		CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prev);
-		CompilationUnit cuCurr = JavaParserFactory.getCompilationUnit(curr);
-		
-		assert cuPrev.getTypes() != null;
-		assert cuPrev.getTypes().size() == 1;
-		assert cuCurr.getTypes() != null;
-		assert cuCurr.getTypes().size() == 1;
-		TypeDeclaration mTypePrev = cuPrev.getType(0);
-		TypeDeclaration mTypeCurr = cuCurr.getType(0);
-		NodeList nodeList = mTypeCurr.getMembers();
-		Set<String> m = new HashSet<String>();
-		
-//		List<BodyDeclaration> mMethodDeclarationList = new ArrayList<BodyDeclaration>();
-		for(int i  = 0; i < nodeList.size();i++){
-			Node node = nodeList.get(i);
-			m.add(node.getClass().toString());
-			if(node instanceof AnnotationDeclaration){
-//				System.out.println(node.toString());
-			}
-			if(node instanceof ConstructorDeclaration){
-//				ConstructorDeclaration cd = (ConstructorDeclaration) node;
-//				mMethodDeclarationList.add(cd);
-			}
-			if(node instanceof MethodDeclaration){
-				MethodDeclaration md = (MethodDeclaration) node;
-//				mMethodDeclarationList.add((MethodDeclaration)node);
-				mTypePrev.getMethodsBySignature(md.getNameAsString());
-			}
 
-			if(node instanceof ClassOrInterfaceDeclaration){
-				ClassOrInterfaceDeclaration innerClass = (ClassOrInterfaceDeclaration)node;
-//				List<MethodDeclaration> tmpMethod = innerClass.getMethods();
-//				List<ConstructorDeclaration> cList = innerClass.getConstructors();
-//				mMethodDeclarationList.addAll(tmpMethod);
-//				mMethodDeclarationList.addAll(cList);
-			}
+    public static void main(String args[]) {
+        new PreprocessingSDKClass().compareTwoSDKFile3("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java",
+                "D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java");
+//		new PreprocessingSDKClass().test("D:/test.java");
+    }
 
-		}
-		for(String a : m){
-			System.out.println(a);
-		}
-	}
-	
-	/**
-	 * prev的method，field 都到map里做标记
-	 * @param cu
-	 */
-	public void loadPrev(CompilationUnit cu){
-		bdMapPrev = new HashMap<String,BodyDeclaration>();
-		bdMapPrevMethodName = new HashMap<String,List<BodyDeclaration>>();
-		visitedPrevNode = new HashMap<BodyDeclaration,Integer>();
-		TypeDeclaration mTypePrev = cu.getType(0);
-		NodeList nodeList = mTypePrev.getMembers();
-		for(int i  = 0; i < nodeList.size();i++){
-			Node node = nodeList.get(i);
-			if(node instanceof AnnotationDeclaration){
-				//TODO
-				node.remove();
-			}
-			if(node instanceof ConstructorDeclaration){
-				ConstructorDeclaration cd = (ConstructorDeclaration) node;
-				cd.removeComment();
-				cd.removeJavaDocComment();
-				bdMapPrev.put(cd.getDeclarationAsString(),cd);
-				if(bdMapPrevMethodName.containsKey(cd.getNameAsString())){
-					List<BodyDeclaration> mList = bdMapPrevMethodName.get(cd.getNameAsString());
-					mList.add(cd);
-				}else{
-					List<BodyDeclaration> mList = new ArrayList<BodyDeclaration>();
-					mList.add(cd);
-					bdMapPrevMethodName.put(cd.getNameAsString(),mList);
-				}
-				
-			}
-			if(node instanceof MethodDeclaration){
-				MethodDeclaration md = (MethodDeclaration) node;
-				md.removeComment();
-				md.removeJavaDocComment();
-				bdMapPrev.put(md.getDeclarationAsString(),md);
-				if(bdMapPrevMethodName.containsKey(md.getNameAsString())){
-					List<BodyDeclaration> mList = bdMapPrevMethodName.get(md.getNameAsString());
-					mList.add(md);
-				}else{
-					List<BodyDeclaration> mList = new ArrayList<BodyDeclaration>();
-					mList.add(md);
-					bdMapPrevMethodName.put(md.getNameAsString(),mList);
-				}
-			}
-			if(node instanceof FieldDeclaration){
-				FieldDeclaration md = (FieldDeclaration) node;
-				md.removeJavaDocComment();
-				md.removeComment();
-				bdMapPrev.put(md.toString(),md);
-			}
+    /**
+     * prev的method，field 都到map里做标记
+     *
+     * @param cu
+     */
+    public void loadPrev(CompilationUnit cu) {
+        bdMapPrev = new HashMap<String, BodyDeclaration>();
+        bdMapPrevMethodName = new HashMap<String, List<BodyDeclaration>>();
+        visitedPrevNode = new HashMap<BodyDeclaration, Integer>();
+        TypeDeclaration mTypePrev = cu.getType(0);
+        NodeList nodeList = mTypePrev.getMembers();
+        for (int i = 0; i < nodeList.size(); i++) {
+            Node node = nodeList.get(i);
+            if (node instanceof AnnotationDeclaration) {
+                this.addToRemoveList((BodyDeclaration) node);
+            }
+            if (node instanceof ConstructorDeclaration) {
+                ConstructorDeclaration cd = (ConstructorDeclaration) node;
+                this.visitedPrevNode.put(cd, 0);
+                bdMapPrev.put(cd.getDeclarationAsString(), cd);
+                addToBdMapPrevMethodName(cd.getNameAsString(), cd);
+            }
+            if (node instanceof MethodDeclaration) {
+                MethodDeclaration md = (MethodDeclaration) node;
+                this.visitedPrevNode.put(md, 0);
+                bdMapPrev.put(md.getDeclarationAsString(), md);
+                addToBdMapPrevMethodName(md.getNameAsString(), md);
+            }
+            if (node instanceof FieldDeclaration) {
+                FieldDeclaration md = (FieldDeclaration) node;
+                this.visitedPrevNode.put(md, 0);
+                bdMapPrev.put(md.toString(), md);
+            }
 
-			if(node instanceof ClassOrInterfaceDeclaration){
-				ClassOrInterfaceDeclaration innerClass = (ClassOrInterfaceDeclaration)node;
-				NodeList innerList = innerClass.getMembers();
-				for(int j =0;j<innerList.size();j++){
-					Node item2 = innerList.get(j);
-					if(item2 instanceof ConstructorDeclaration){
-						ConstructorDeclaration cd2 = (ConstructorDeclaration) item2;
-						cd2.removeJavaDocComment();
-						cd2.removeComment();
-						bdMapPrev.put(innerClass.getNameAsString()+"."+cd2.getDeclarationAsString(),cd2);
-						String key = innerClass.getNameAsString()+"."+cd2.getNameAsString();
-						if(bdMapPrevMethodName.containsKey(key)){
-							List<BodyDeclaration> mList = bdMapPrevMethodName.get(key);
-							mList.add(cd2);
-						}else{
-							List<BodyDeclaration> mList = new ArrayList<BodyDeclaration>();
-							mList.add(cd2);
-							bdMapPrevMethodName.put(key,mList);
-						}
-					}
-					if(item2 instanceof MethodDeclaration){
-						MethodDeclaration md2 = (MethodDeclaration) item2;
-						md2.removeJavaDocComment();
-						md2.removeComment();
-						bdMapPrev.put(innerClass.getNameAsString()+"."+md2.getDeclarationAsString(),md2);
-						String key = innerClass.getNameAsString()+"."+md2.getNameAsString();
-						if(bdMapPrevMethodName.containsKey(key)){
-							List<BodyDeclaration> mList = bdMapPrevMethodName.get(key);
-							mList.add(md2);
-						}else{
-							List<BodyDeclaration> mList = new ArrayList<BodyDeclaration>();
-							mList.add(md2);
-							bdMapPrevMethodName.put(key,mList);
-						}
-					}
-					if(item2 instanceof FieldDeclaration){
-						FieldDeclaration md2 = (FieldDeclaration) item2;
-						md2.removeJavaDocComment();
-						md2.removeComment();
-						bdMapPrev.put(innerClass.getNameAsString()+"."+md2.toString(),md2);
-					}
-				}
-				bdMapPrev.put(innerClass.getNameAsString(),innerClass);
-			}
-		}
-	}
-	private Map<String,BodyDeclaration> bdMapPrev;
-	private Map<String,List<BodyDeclaration>> bdMapPrevMethodName;
-	private Map<BodyDeclaration,Integer> visitedPrevNode;
-	
-	public void compareTwoSDKFile3(String prev,String curr){
-		CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prev);
-		CompilationUnit cuCurr = JavaParserFactory.getCompilationUnit(curr);
-		
-		assert cuPrev.getTypes() != null;
-		assert cuPrev.getTypes().size() == 1;
-		assert cuCurr.getTypes() != null;
-		assert cuCurr.getTypes().size() == 1;
-		loadPrev(cuPrev);
-		TypeDeclaration mTypeCurr = cuCurr.getType(0);
-		NodeList nodeList = mTypeCurr.getMembers();
-		for(int i  = 0; i < nodeList.size();i++){
-			Node node = nodeList.get(i);
-			if(node instanceof AnnotationDeclaration){
-				node.remove();
-			}
-			if(node instanceof ConstructorDeclaration){
-				ConstructorDeclaration cd = (ConstructorDeclaration) node;
-				cd.removeComment();
-				cd.removeJavaDocComment();
-				if(this.bdMapPrev.containsKey(cd.getDeclarationAsString())){
-					BodyDeclaration prevNode = this.bdMapPrev.get(cd.getDeclarationAsString());
-					if(prevNode.hashCode() == cd.hashCode()){
-						prevNode.remove();
-						cd.remove();
-					}else{
-						System.out.println("Mapping pair not same");
-					}
-				}else if(this.bdMapPrevMethodName.containsKey(cd.getNameAsString())){
-					List<BodyDeclaration> mOverload = this.bdMapPrevMethodName.get(cd.getNameAsString());
-					// 可能为修改签名之后的方法，也可能为新增的方法
-				}else {
-					// new method
-				}
-			}
-			if(node instanceof MethodDeclaration){
-				MethodDeclaration md = (MethodDeclaration) node;
-				md.removeComment();
-				md.removeJavaDocComment();
-				if(this.bdMapPrev.containsKey(md.getDeclarationAsString())){
-					BodyDeclaration prevNode = this.bdMapPrev.get(md.getDeclarationAsString());
-					if(prevNode.hashCode() == md.hashCode()){
-						prevNode.remove();
-						md.remove();
-					}else{
-						System.out.println("Mapping pair not same");
-					}
-				}else if(this.bdMapPrevMethodName.containsKey(md.getNameAsString())){
-					List<BodyDeclaration> mOverload = this.bdMapPrevMethodName.get(md.getNameAsString());
-					// 可能为修改签名之后的方法，也可能为新增的方法
-				}else{
-					// new method
-				}
-			}
+            if (node instanceof ClassOrInterfaceDeclaration) {
+                ClassOrInterfaceDeclaration innerClass = (ClassOrInterfaceDeclaration) node;
+                NodeList innerList = innerClass.getMembers();
+                for (int j = 0; j < innerList.size(); j++) {
+                    Node item2 = innerList.get(j);
+                    if (item2 instanceof AnnotationDeclaration) {
+                        this.addToRemoveList((BodyDeclaration) item2);
+                    }
+                    if (item2 instanceof ConstructorDeclaration) {
+                        ConstructorDeclaration cd2 = (ConstructorDeclaration) item2;
+                        this.visitedPrevNode.put(cd2, 0);
+                        bdMapPrev.put(innerClass.getNameAsString() + "." + cd2.getDeclarationAsString(), cd2);
+                        String key = innerClass.getNameAsString() + "." + cd2.getNameAsString();
+                        addToBdMapPrevMethodName(key, cd2);
+                    }
+                    if (item2 instanceof MethodDeclaration) {
+                        MethodDeclaration md2 = (MethodDeclaration) item2;
+                        this.visitedPrevNode.put(md2, 0);
+                        bdMapPrev.put(innerClass.getNameAsString() + "." + md2.getDeclarationAsString(), md2);
+                        String key = innerClass.getNameAsString() + "." + md2.getNameAsString();
+                        addToBdMapPrevMethodName(key, md2);
+                    }
+                    if (item2 instanceof FieldDeclaration) {
+                        FieldDeclaration md2 = (FieldDeclaration) item2;
+                        this.visitedPrevNode.put(md2, 0);
+                        bdMapPrev.put(innerClass.getNameAsString() + "." + md2.toString(), md2);
+                    }
+                }
+                bdMapPrev.put(innerClass.getNameAsString(), innerClass);
+            }
+        }
+    }
 
-			if(node instanceof ClassOrInterfaceDeclaration){
-				ClassOrInterfaceDeclaration innerClass = (ClassOrInterfaceDeclaration)node;
-			}
+    private Map<String, BodyDeclaration> bdMapPrev;
+    private Map<String, List<BodyDeclaration>> bdMapPrevMethodName;
+    private Map<BodyDeclaration, Integer> visitedPrevNode;
+    private List<BodyDeclaration> newMethod;
+    private List<BodyDeclaration> deletedMethod;
 
-		}
-		for(Entry<BodyDeclaration,Integer> item:this.visitedPrevNode.entrySet()){
-			if(item.getValue()==1){
-				continue;
-			}
-			// 其他节点为删除节点
-		}
-	}
+    /**
+     * method name
+     *
+     * @param key
+     * @param bd
+     */
+    private void addToBdMapPrevMethodName(String key, BodyDeclaration bd) {
+        if (bdMapPrevMethodName.containsKey(key)) {
+            List<BodyDeclaration> mList = bdMapPrevMethodName.get(key);
+            mList.add(bd);
+        } else {
+            List<BodyDeclaration> mList = new ArrayList<BodyDeclaration>();
+            mList.add(bd);
+            bdMapPrevMethodName.put(key, mList);
+        }
+    }
 
-	public void test(String a){
-		CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(a);
-		TypeDeclaration mTypeCurr = cuPrev.getType(0);
-		NodeList nodeList = mTypeCurr.getMembers();
-		for(int i=0;i<nodeList.size();i++){
-			Node node = nodeList.get(i);
-			MethodDeclaration md = (MethodDeclaration)node;
-			md.removeComment();
-			System.out.println(md.getDeclarationAsString());
-			System.out.println(md.hashCode());
-			
-		}
-	}
+    /**
+     * curr的节点去prev的map里check
+     *
+     * @param bdMapPrevKey
+     * @param bdMapPrevMethodNameKey
+     * @param bd
+     */
+    private int checkCurrBodies(String bdMapPrevKey, String bdMapPrevMethodNameKey, BodyDeclaration bd) {
+        // signature 完全一摸一样的
+        if (this.bdMapPrev.containsKey(bdMapPrevKey)) {
+            this.visitedPrevNode.put(bd, 1);
+            BodyDeclaration prevNode = this.bdMapPrev.get(bdMapPrevKey);
+            this.visitedPrevNode.put(prevNode, 1);
+            if (prevNode.hashCode() == bd.hashCode()) {
+                this.addToRemoveList(prevNode);
+                this.addToRemoveList(bd);
+                return 1;
+            } else {
+                //不一样的pair
+//				if(bdMapPrevKey.equals("private void dispatchServiceConnected()")){
+                System.out.println(bdMapPrevKey);
+//				}
+                return 2;
+            }
+        } else {
+            if (bdMapPrevMethodNameKey == null) {
+                // field return
+//				newMethod.add(bd);//new field
+//				this.addToRemoveList(bd);
+                return 3;
+            }
+            if (this.bdMapPrevMethodName.containsKey(bdMapPrevMethodNameKey)) {
+                List<BodyDeclaration> mOverload = this.bdMapPrevMethodName.get(bdMapPrevMethodNameKey);
+                // 可能为修改签名之后的方法，也可能为新增的方法
+                for (BodyDeclaration mItem : mOverload) {
+                    this.visitedPrevNode.put(mItem, 1);
+                }
+                return 4;
+            } else {
+                //TODO new method/field
+                newMethod.add(bd);
+                this.addToRemoveList(bd);
+                return 5;
+            }
+        }
+    }
+
+    private void removeCommentss(Node n) {
+        List<Comment> mList = n.getAllContainedComments();
+        List<Comment> mList2 = n.getOrphanComments();
+        for (Comment m : mList) {
+//			n.removeOrphanComment(m);
+            m.remove();
+        }
+        for (Comment m : mList2) {
+            m.remove();
+        }
+    }
+
+    private CompilationUnit removeAllCommentsOfCompilationUnit(CompilationUnit cu) {
+        cu.removeComment();
+        NodeList imports = cu.getImports();
+        for (int i = imports.size() - 1; i >= 0; i--) {
+            Node n = imports.get(i);
+            n.remove();
+        }
+
+        assert cu.getTypes() != null;
+        assert cu.getTypes().size() == 1;
+        TypeDeclaration mTypeCurr = cu.getType(0);
+        ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) mTypeCurr;
+        cod.removeJavaDocComment();
+        cod.removeComment();
+        NodeList nodeList = mTypeCurr.getMembers();
+
+        for (int i = 0; i < nodeList.size(); i++) {
+            Node node = nodeList.get(i);
+            node.removeComment();
+            removeCommentss(node);
+            if (node instanceof AnnotationDeclaration) {
+                node.remove();
+            }
+
+            if (node instanceof ConstructorDeclaration) {
+                ConstructorDeclaration cd = (ConstructorDeclaration) node;
+                cd.removeJavaDocComment();
+            }
+            if (node instanceof MethodDeclaration) {
+                MethodDeclaration md = (MethodDeclaration) node;
+                md.removeJavaDocComment();
+            }
+            if (node instanceof FieldDeclaration) {
+                FieldDeclaration fd = (FieldDeclaration) node;
+                fd.removeJavaDocComment();
+            }
+            if (node instanceof ClassOrInterfaceDeclaration) {
+                ClassOrInterfaceDeclaration innerClass = (ClassOrInterfaceDeclaration) node;
+                NodeList innerList = innerClass.getMembers();
+                for (int j = 0; j < innerList.size(); j++) {
+                    Node item2 = innerList.get(j);
+                    item2.removeComment();
+                    removeCommentss(node);
+                    if (item2 instanceof AnnotationDeclaration) {
+                        item2.remove();
+                    }
+                    if (item2 instanceof ConstructorDeclaration) {
+                        ConstructorDeclaration cd2 = (ConstructorDeclaration) item2;
+                        cd2.removeJavaDocComment();
+                    }
+                    if (item2 instanceof MethodDeclaration) {
+                        MethodDeclaration md2 = (MethodDeclaration) item2;
+                        md2.removeJavaDocComment();
+                    }
+                    if (item2 instanceof FieldDeclaration) {
+                        FieldDeclaration fd2 = (FieldDeclaration) item2;
+                        fd2.removeJavaDocComment();
+                    }
+                }
+            }
+
+        }
+        return cu;
+    }
+
+    private List<BodyDeclaration> removalList;
+
+    private void addToRemoveList(BodyDeclaration bd) {
+        if (this.removalList == null) {
+            this.removalList = new ArrayList<>();
+        }
+        this.removalList.add(bd);
+    }
+
+    private void removeRemovalList() {
+        for (BodyDeclaration item : this.removalList) {
+            boolean s = item.remove();
+        }
+    }
+
+    public void compareTwoSDKFile3(String prev, String curr) {
+        CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prev);
+        CompilationUnit cuCurr = JavaParserFactory.getCompilationUnit(curr);
+        FileWriter.writeInAll("D:/cuPrev", cuPrev.toString());
+        FileWriter.writeInAll("D:/cuCurr", cuCurr.toString());
+        cuPrev = removeAllCommentsOfCompilationUnit(cuPrev);
+        cuCurr = removeAllCommentsOfCompilationUnit(cuCurr);
+
+        loadPrev(cuPrev);
+        TypeDeclaration mTypeCurr = cuCurr.getType(0);
+        ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) mTypeCurr;
+
+        NodeList nodeList = mTypeCurr.getMembers();
+        newMethod = new ArrayList<>();
+        deletedMethod = new ArrayList<>();
+
+        for (int i = nodeList.size() - 1; i >= 0; i--) {
+            Node node = nodeList.get(i);
+            if (node instanceof AnnotationDeclaration) {
+                this.addToRemoveList((AnnotationDeclaration) node);
+                continue;
+            }
+
+            if (node instanceof ConstructorDeclaration) {
+                ConstructorDeclaration cd = (ConstructorDeclaration) node;
+                checkCurrBodies(cd.getDeclarationAsString(), cd.getNameAsString(), (BodyDeclaration) node);
+                continue;
+            }
+            if (node instanceof MethodDeclaration) {
+                MethodDeclaration md = (MethodDeclaration) node;
+                checkCurrBodies(md.getDeclarationAsString(), md.getNameAsString(), (BodyDeclaration) node);
+                continue;
+            }
+            if (node instanceof FieldDeclaration) {
+                FieldDeclaration fd = (FieldDeclaration) node;
+                checkCurrBodies(fd.toString(), null, fd);
+                continue;
+            }
+
+            if (node instanceof ClassOrInterfaceDeclaration) {
+                ClassOrInterfaceDeclaration innerClass = (ClassOrInterfaceDeclaration) node;
+                NodeList innerList = innerClass.getMembers();
+                int status = checkCurrBodies(innerClass.getNameAsString(), null, innerClass);
+                if (status == 1) {
+                    continue;
+                }
+                for (int j = innerList.size() - 1; j >= 0; j--) {
+                    Node item2 = innerList.get(j);
+                    if (item2 instanceof AnnotationDeclaration) {
+                        this.addToRemoveList((BodyDeclaration) item2);
+                    }
+                    if (item2 instanceof ConstructorDeclaration) {
+                        ConstructorDeclaration cd2 = (ConstructorDeclaration) item2;
+                        String key = innerClass.getNameAsString() + "." + cd2.getDeclarationAsString();
+                        String key2 = innerClass.getNameAsString() + "." + cd2.getNameAsString();
+                        checkCurrBodies(key, key2, cd2);
+                    }
+                    if (item2 instanceof MethodDeclaration) {
+                        MethodDeclaration md2 = (MethodDeclaration) item2;
+                        String key = innerClass.getNameAsString() + "." + md2.getDeclarationAsString();
+                        String key2 = innerClass.getNameAsString() + "." + md2.getNameAsString();
+                        checkCurrBodies(key, key2, md2);
+                    }
+                    if (item2 instanceof FieldDeclaration) {
+                        FieldDeclaration fd2 = (FieldDeclaration) item2;
+                        checkCurrBodies(innerClass.getNameAsString() + "." + fd2.toString(), null, fd2);
+                    }
+                }
+            }
+
+        }
+        for (Entry<BodyDeclaration, Integer> item : this.visitedPrevNode.entrySet()) {
+            if (item.getValue() == 1) {
+                continue;
+            }
+            BodyDeclaration bd = item.getKey();
+            deletedMethod.add(bd);
+            this.addToRemoveList(bd);
+        }
+        this.removeRemovalList();
+        FileWriter.writeInAll("D:/cuPrev_m", cuPrev.toString());
+        FileWriter.writeInAll("D:/cuCurr_m", cuCurr.toString());
+
+    }
+
+    public void test(String a) {
+        CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(a);
+        cuPrev.removeComment();
+        cuPrev.removePackageDeclaration();
+        TypeDeclaration mTypeCurr = cuPrev.getType(0);
+        mTypeCurr.removeComment();
+        mTypeCurr.removeJavaDocComment();
+        NodeList nodeList = mTypeCurr.getMembers();
+        for (int i = 0; i < nodeList.size(); i++) {
+            Node node = nodeList.get(i);
+            MethodDeclaration md = (MethodDeclaration) node;
+            md.removeComment();
+            removeCommentss(node);
+            System.out.print("a");
+        }
+
+        System.out.print(cuPrev.toString());
+    }
 
 }
