@@ -91,6 +91,7 @@ public class LoadSDKFileToDb {
 			String browsePath = path+String.valueOf(i);
 			File ff = new File(browsePath);
 			browse(ff);
+			break;
 		}
 		List<AndroidSDKJavaFile> tempList=new ArrayList<AndroidSDKJavaFile>();
 		for(AndroidSDKJavaFile asjf:insertationList){

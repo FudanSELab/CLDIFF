@@ -54,6 +54,8 @@ public class DiffMiner {
 	}
 	private List<AndroidSDKJavaFile> prevList;
 	private List<AndroidSDKJavaFile> currList;
+
+
 	public void runBatch(){
 		int version = 26;
 		List<String> filePathList = readCompareList(version);
