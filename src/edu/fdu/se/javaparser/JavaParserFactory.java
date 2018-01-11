@@ -104,7 +104,7 @@ public class JavaParserFactory {
 	 * @param compilationUnit
 	 * @return
 	 */
-	private static List<BodyDeclaration> parseCompilationUnitGetAllMethodDeclaration(CompilationUnit compilationUnit){
+	public static List<BodyDeclaration> parseCompilationUnitGetAllMethodDeclaration(CompilationUnit compilationUnit){
 		assert compilationUnit.getTypes() != null;
 		assert compilationUnit.getTypes().size() == 1;
 		TypeDeclaration mType = compilationUnit.getType(0);

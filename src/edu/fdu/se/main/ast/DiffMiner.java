@@ -41,8 +41,8 @@ public class DiffMiner {
 		String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
 		GumTreeDiffParser his = new GumTreeDiffParser(file1,file2);
 		his.init();
-		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcDir/srcTree.txt",his.getPrettyOldTreeString());
-		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstDir/dstTree.txt",his.getPrettyNewTreeString());
+		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
+		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
 		MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
 		ActionGeneratorBean data = gen.generate();
 		ConsolePrint.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
