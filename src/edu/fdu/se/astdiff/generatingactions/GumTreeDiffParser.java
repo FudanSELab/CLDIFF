@@ -25,20 +25,12 @@ public class GumTreeDiffParser {
 	public TreeContext dstTC;
 	public ITree src;
 	public ITree dst;
-	public List<Action> actions;
 	public MappingStore mapping;
-	public ActionClusterFinder finder;
-	
-	public GumTreeDiffParser(String oldFileName, String newFileName){
-		this.oldFile = new File(oldFileName);
-		this.newFile = new File(newFileName);
-	}
-	public GumTreeDiffParser(File oldFile, File newFile){
-		this.oldFile = oldFile;
-		this.newFile = newFile;
-	}
-	
-	public void init(){
+
+	public GumTreeDiffParser(File prevFile, File currFile){
+		this.oldFile = prevFile;
+		this.newFile = currFile;
+
 		Run.initGenerators();
 		try {
 			JdtTreeGenerator parser1 = new JdtTreeGenerator(oldFile.getPath());
@@ -50,31 +42,36 @@ public class GumTreeDiffParser {
 			Matcher m = Matchers.getInstance().getMatcher(src, dst); // retrieve the default matcher
 			m.match();
 			mapping = m.getMappings();
-			ActionGenerator g = new ActionGenerator(src, dst, mapping);
-			g.generate();
-			actions = g.getActions();
-//			finder = new ActionClusterFinder(srcTC, dstTC, actions);
-//			finder.show();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	public void listStartNodes(){
-		for(Action a : finder.getStartNodes()){
-			System.out.println(a.toString());
+	public GumTreeDiffParser(String prevContent,String currContent){
+		Run.initGenerators();
+		try {
+			JdtTreeGenerator parser1 = new JdtTreeGenerator();
+			srcTC = parser1.generateFromString(prevContent);
+			src = srcTC.getRoot();
+			JdtTreeGenerator parser2 = new JdtTreeGenerator();
+			dstTC = parser2.generateFromString(currContent);
+			dst = dstTC.getRoot();
+			Matcher m = Matchers.getInstance().getMatcher(src, dst); // retrieve the default matcher
+			m.match();
+			mapping = m.getMappings();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
 	}
-	public List<Set<Action>> getCluster(){
-		return finder.getClusters();
-	}
-	public List<Action> getActions(){
-		return actions;
-	}
+
+
+
+
 	public MappingStore getMapping(){
 		return mapping;
 	}
 	
-	public String getPrettyOldTreeString(){
+	public String getPrettyOldTreeString() {
 		return ConsolePrint.getPrettyTreeString(srcTC, src);
 	}
 	public String getPrettyNewTreeString(){

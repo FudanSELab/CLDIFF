@@ -54,10 +54,14 @@ public interface AndroidSDKJavaFileMapper {
 			@Param("example") AndroidSDKJavaFileExample example);
 
 	int insertBatch(List<AndroidSDKJavaFile> androidsdkjavafile);
+
+	int insertTagSnapshotBatch(List<AndroidSDKJavaFile> androidSDKJavaFiles);
 	
 	List<AndroidSDKJavaFile> selectByFileName(@Param(value = "fileName") String fileName);
 	
 	List<AndroidSDKJavaFile> selectByFileNameAndFilterSupportPackage(@Param(value = "fileName")String fileName);
 	
 	List<AndroidSDKJavaFile> selectAllFileBySDKVersion(@Param(value = "versionId")int versionId);
+
+	List<AndroidSDKJavaFile> selectAllTagSnapshotFileBySDKVersion(@Param(value = "versionId")int versionId);
 }

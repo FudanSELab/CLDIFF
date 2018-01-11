@@ -115,8 +115,22 @@ public class PreprocessingSDKClass {
     private Map<BodyDeclaration, Integer> visitedPrevNode;
     private List<BodyDeclaration> newMethod;
     private List<BodyDeclaration> deletedMethod;
+    private CompilationUnit curCu;
+    private CompilationUnit preCu;
+    
+    
+    
 
-    /**
+
+    public CompilationUnit getCurCu() {
+		return curCu;
+	}
+
+	public CompilationUnit getPreCu() {
+		return preCu;
+	}
+
+	/**
      * method name
      *
      * @param key
@@ -153,7 +167,7 @@ public class PreprocessingSDKClass {
             } else {
                 //不一样的pair
 //				if(bdMapPrevKey.equals("private void dispatchServiceConnected()")){
-                System.out.println(bdMapPrevKey);
+//                System.out.println(bdMapPrevKey);
 //				}
                 return 2;
             }
@@ -194,6 +208,7 @@ public class PreprocessingSDKClass {
 
     private CompilationUnit removeAllCommentsOfCompilationUnit(CompilationUnit cu) {
         cu.removeComment();
+        cu.removePackageDeclaration();
         NodeList imports = cu.getImports();
         for (int i = imports.size() - 1; i >= 0; i--) {
             Node n = imports.get(i);
@@ -272,9 +287,10 @@ public class PreprocessingSDKClass {
         }
     }
 
-    public void compareTwoSDKFile3(String prev, String curr) {
+    public PreprocessingSDKClass compareTwoSDKFile3(String prev, String curr) {
         CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prev);
         CompilationUnit cuCurr = JavaParserFactory.getCompilationUnit(curr);
+
         FileWriter.writeInAll("D:/cuPrev", cuPrev.toString());
         FileWriter.writeInAll("D:/cuCurr", cuCurr.toString());
         cuPrev = removeAllCommentsOfCompilationUnit(cuPrev);
@@ -354,6 +370,9 @@ public class PreprocessingSDKClass {
         this.removeRemovalList();
         FileWriter.writeInAll("D:/cuPrev_m", cuPrev.toString());
         FileWriter.writeInAll("D:/cuCurr_m", cuCurr.toString());
+        this.curCu = cuPrev;
+        this.preCu = cuCurr;
+        return this;
 
     }
 

@@ -113,6 +113,7 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
     protected void popNode() {
         trees.pop();
     }
+
 //    private boolean isJdk(String s){
 //    	try {
 //    		String temp = s;

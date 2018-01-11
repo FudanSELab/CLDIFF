@@ -1,4 +1,4 @@
-package edu.fdu.se.main.androidrepo.preprocessing;
+package edu.fdu.se.main.preprocessing;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,7 +49,8 @@ public class LoadSDKFileToDb {
 				browse(f2);
 			}
 		}else{
-			filePathToDb(f.getAbsolutePath());
+			if(f.getAbsolutePath().endsWith("java"))
+				filePathToDb(f.getAbsolutePath());
 		}
 	}
 	/**
@@ -57,8 +58,12 @@ public class LoadSDKFileToDb {
 	 * @param args
 	 */
 	public static void main(String args[]){
-		String path = ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_SDK_PATH)+"\\sources\\android-";
-		int i=26;
+		insertTagSnapshot();
+	}
+
+	public static void insertOfficial(){
+		String path = ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_SDK_PATH)+"\\sources\\";
+		int i =0;
 		for(i=26;i<=26;i++){
 			sdkVersion = i;
 			rootDir = "android-"+String.valueOf(i);
@@ -68,17 +73,35 @@ public class LoadSDKFileToDb {
 		}
 		List<AndroidSDKJavaFile> tempList=new ArrayList<AndroidSDKJavaFile>();
 		for(AndroidSDKJavaFile asjf:insertationList){
-			
 			tempList.add(asjf);
 			if(tempList.size()>1000){
 				AndroidSDKJavaFileDAO.insertBatch(tempList);
 				tempList.clear();
 			}
-			
-			
 		}
 		AndroidSDKJavaFileDAO.insertBatch(tempList);
-		
+	}
+
+	public static void insertTagSnapshot(){
+		String path = "D:\\Workspace\\Android_Diff\\SDK_Files_15-26\\android-";
+		int i =0;
+		for(i=19;i<=26;i++){
+			sdkVersion = i;
+			rootDir = "android-"+String.valueOf(i);
+			String browsePath = path+String.valueOf(i);
+			File ff = new File(browsePath);
+			browse(ff);
+		}
+		List<AndroidSDKJavaFile> tempList=new ArrayList<AndroidSDKJavaFile>();
+		for(AndroidSDKJavaFile asjf:insertationList){
+			tempList.add(asjf);
+			if(tempList.size()>1000){
+				AndroidSDKJavaFileDAO.insertTagSnapshotBatch(tempList);
+				tempList.clear();
+			}
+		}
+		AndroidSDKJavaFileDAO.insertTagSnapshotBatch(tempList);
+
 	}
 
 }

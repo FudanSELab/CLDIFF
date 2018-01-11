@@ -1,10 +1,8 @@
-package edu.fdu.se.main.androidrepo.preprocessing;
+package edu.fdu.se.main.preprocessing;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 

@@ -39,6 +39,15 @@ public class AndroidSDKJavaFileDAO {
 		androidsdkjavafilemapper.insertBatch(androidsdkjavafile);
 		sqlSession.commit();
 	}
+
+	/**
+	 * aaaa
+	 * @param androidSDKJavaFiles
+     */
+	public static void insertTagSnapshotBatch(List<AndroidSDKJavaFile> androidSDKJavaFiles){
+		androidsdkjavafilemapper.insertTagSnapshotBatch(androidSDKJavaFiles);
+		sqlSession.commit();
+	}
 	public static List<AndroidSDKJavaFile> selectByFileName(String fileName){
 		return androidsdkjavafilemapper.selectByFileName(fileName);
 	}
@@ -54,6 +63,10 @@ public class AndroidSDKJavaFileDAO {
 	 */
 	public static List<AndroidSDKJavaFile> selectAllFileBySDKVersion(int versionId){
 		return androidsdkjavafilemapper.selectAllFileBySDKVersion(versionId);
+	}
+
+	public static List<AndroidSDKJavaFile> selectAllTagSnapshotFileBySDKVersion(int versionId){
+		return androidsdkjavafilemapper.selectAllTagSnapshotFileBySDKVersion(versionId);
 	}
 	
 }

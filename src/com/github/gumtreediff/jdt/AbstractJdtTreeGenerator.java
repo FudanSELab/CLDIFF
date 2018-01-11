@@ -65,10 +65,6 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
         pOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
         pOptions.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
         parser.setCompilerOptions(pOptions);
-//        parser.setEnvironment(null, null, null, true);
-//        parser.setUnitName(getUnit(fileName));//需要与代码文件的名称一致
-//        parser.setResolveBindings(true);
-//        parser.setBindingsRecovery(true);
         parser.setSource(readerToCharArray(r));
         AbstractJdtVisitor v = createVisitor();
         ASTNode temp = parser.createAST(null);

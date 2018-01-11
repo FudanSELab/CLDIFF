@@ -15,6 +15,15 @@
         </configuration>
       </plugin>
     </plugins>
+      <resources>
+          <resource>
+              <directory>src/edu/fdu/se/sqlmap</directory>
+              <includes>
+                  <include>**/*.xml</include>
+              </includes>
+              <filtering>true</filtering>
+          </resource>
+      </resources>
   </build>
   <repositories>
     <repository>
@@ -105,8 +114,6 @@
     <artifactId>javaparser-core</artifactId>
     <version>3.5.6</version>
 </dependency>
-
-
 
    </dependencies>
 </project>
