@@ -90,7 +90,7 @@ public class MatchSimpleNameOrLiteral {
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		default:
-			System.err.println("Default:" + ffFatherNodeType);
+			System.out.println("Default:" + ffFatherNodeType);
 			break;
 		}
 		return returnVal;

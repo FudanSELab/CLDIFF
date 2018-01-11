@@ -44,9 +44,13 @@ public class StatementConstants {
 	
 	final public static String ENHANCEDFORSTATEMENT = "EnhancedForStatement";
 
+	final public static String BREAKSTATEMENT = "BreakStatement";
+
 	final public static String SYNCHRONIZEDSTATEMENT = "SynchronizedStatement";
 
 	final public static String SWITCHSTATEMENT = "SwitchStatement";
+
+	final public static String SWITCHCASE = "SwitchCase";
 	
 	final public static String FIELDDECLARATION = "FieldDeclaration";
 	

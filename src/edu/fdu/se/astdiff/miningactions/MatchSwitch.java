@@ -8,6 +8,7 @@ import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -33,9 +34,17 @@ public class MatchSwitch {
 		return mHighLevelOperationBean;
 	}
 
-	public static HighLevelOperationBean matchSwitchCase(FindPattern fp, Action a, String nodeType){
-		String operationEntity = "SWITCHCASE";
-		ITree father = a.getNode().getParent();
+	public static HighLevelOperationBean matchSwitchCase(FindPattern fp, Action a, String nodeType,ITree fafafatherNode,String ffFatherNodeType){
+		String operationEntity = "SWITCHCASE " +nodeType;
+//		String fatherType;
+//		if (a instanceof Insert) {
+//			fatherType = fp.getDstTreeContextTypeLabel(a.getNode().getParent());
+//		} else{
+//			fatherType = fp.getSrcTreeContextTypeLabel(a.getNode().getParent());
+//		}
+//
+//        if(!"".equals(fatherType) && fatherType.equals(ffFatherNodeType))
+//			return null;
 
 		List<Action> subActions = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
@@ -51,7 +60,7 @@ public class MatchSwitch {
 //		}
 
 		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
-				a,nodeType,subActions,status,operationEntity,null,null);
+				a,nodeType,subActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;
 	}
 }

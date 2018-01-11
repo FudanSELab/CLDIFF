@@ -175,10 +175,23 @@ public class FindPattern {
 							operationBean = MatchTry.matchFinally(this,a,type,fafafather,fatherType);
 							System.out.println(operationBean.toString());
 							mHighLevelOperationBeanList.add(operationBean);
-						}else {
-							System.err.println("Other Condition");
+						}else if(AstRelations.isFatherSwitchStatement(a,this.mMiningActionBean.mDstTree)){
+							//Finally块增加
+							operationBean = MatchSwitch.matchSwitchCase(this,a,type,fafafather,fatherType);
+							System.out.println(operationBean.toString());
+							mHighLevelOperationBeanList.add(operationBean);
+						} else {
+							System.out.println("Other Condition");
 							this.setActionTraversedMap(a);
 							// TODO剩下的情况
+						}
+						break;
+					case StatementConstants.BREAKSTATEMENT:
+						if(AstRelations.isFatherSwitchStatement(a, this.mMiningActionBean.mDstTree)) {
+							//增加switch语句
+							operationBean = MatchSwitch.matchSwitchCase(this, a, type, fafafather, fatherType);
+							System.out.println(operationBean.toString());
+							mHighLevelOperationBeanList.add(operationBean);
 						}
 						break;
 					case StatementConstants.FORSTATEMENT:
@@ -245,6 +258,12 @@ public class FindPattern {
 						System.out.println(operationBean.toString());
 						mHighLevelOperationBeanList.add(operationBean);
 						break;
+					case StatementConstants.SWITCHCASE:
+						//增加switch语句
+						operationBean = MatchSwitch.matchSwitchCase(this,a,type,fafafather,fatherType);
+						System.out.println(operationBean.toString());
+						mHighLevelOperationBeanList.add(operationBean);
+						break;
 					case StatementConstants.JAVADOC:
 						//增加javadoc
 						operationBean = MatchJavaDoc.matchJavaDoc(this,a,type);
@@ -264,7 +283,7 @@ public class FindPattern {
 					default:
 						String operationEntity = "DEFAULT "+ ActionConstants.getInstanceStringName(a);
 						operationBean = new HighLevelOperationBean(a,type,null,-1,operationEntity,fafafather,fatherType);
-						System.err.println(operationBean.toString());
+						System.out.println(operationBean.toString());
 						break;
 				}
 			}
@@ -336,39 +355,52 @@ public class FindPattern {
 						System.out.println(operationBean.toString());
                         mHighLevelOperationBeanList.add(operationBean);
 //					}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionBean.mDstTree)) {
-//						//同步语句块增加
+//						//同步语句块
 //						MatchSynchronized.matchSynchronized(this,a);
-					}else if(AstRelations.isFatherTryStatement(a,this.mMiningActionBean.mDstTree)){
-						//Finally块增加
+					}else if(AstRelations.isFatherTryStatement(a,this.mMiningActionBean.mSrcTree)){
+						//Finally块
 						operationBean = MatchTry.matchFinally(this,a,type,fafafather,fatherType);
 						System.out.println(operationBean.toString());
 						mHighLevelOperationBeanList.add(operationBean);
+					}else if(AstRelations.isFatherSwitchStatement(a,this.mMiningActionBean.mSrcTree)){
+						//Finally块
+						operationBean = MatchSwitch.matchSwitchCase(this,a,type,fafafather,fatherType);
+						System.out.println(operationBean.toString());
+						mHighLevelOperationBeanList.add(operationBean);
 					} else {
-						System.err.println("Other Condition");
+						System.out.println("Other Condition");
                         this.setActionTraversedMap(a);
 						// TODO剩下的情况
 					}
 					break;
+				case StatementConstants.BREAKSTATEMENT:
+					if(AstRelations.isFatherSwitchStatement(a, this.mMiningActionBean.mSrcTree)) {
+						//删除switch语句
+						operationBean = MatchSwitch.matchSwitchCase(this, a, type, fafafather, fatherType);
+						System.out.println(operationBean.toString());
+						mHighLevelOperationBeanList.add(operationBean);
+					}
+					break;
 				case StatementConstants.FORSTATEMENT:
-					//增加for语句
+					//算出for语句
 					operationBean = MatchForStatement.matchForStatement(this,a,type);
 					System.out.println(operationBean.toString());
 					mHighLevelOperationBeanList.add(operationBean);
 					break;
 				case StatementConstants.ENHANCEDFORSTATEMENT:
-					//增加for语句
+					//删除for语句
 					operationBean = MatchForStatement.matchEnhancedForStatement(this,a,type);
 					System.out.println(operationBean.toString());
 					mHighLevelOperationBeanList.add(operationBean);
 					break;
 				case StatementConstants.WHILESTATEMENT:
-					//增加while语句
+					//删除while语句
 					operationBean = MatchWhileStatement.matchWhileStatement(this,a,type);
 					System.out.println(operationBean.toString());
 					mHighLevelOperationBeanList.add(operationBean);
 					break;
 				case StatementConstants.DOSTATEMENT:
-					//增加do while语句
+					//删除do while语句
 					operationBean = MatchWhileStatement.matchDoStatement(this,a,type);
 					System.out.println(operationBean.toString());
 					mHighLevelOperationBeanList.add(operationBean);
@@ -403,7 +435,7 @@ public class FindPattern {
 					break;
 
 				case StatementConstants.SYNCHRONIZEDSTATEMENT:
-					//同步语句块增加
+					//同步语句块删除
 					operationBean = MatchSynchronized.matchSynchronized(this,a,type);
 					System.out.println(operationBean.toString());
 					mHighLevelOperationBeanList.add(operationBean);
@@ -414,8 +446,14 @@ public class FindPattern {
 						System.out.println(operationBean.toString());
 						mHighLevelOperationBeanList.add(operationBean);
 						break;
+				case StatementConstants.SWITCHCASE:
+					//删除switchcase语句
+					operationBean = MatchSwitch.matchSwitchCase(this,a,type,fafafather,fatherType);
+					System.out.println(operationBean.toString());
+					mHighLevelOperationBeanList.add(operationBean);
+					break;
 				case StatementConstants.JAVADOC:
-					//增加javadoc
+					//删除javadoc
 					operationBean = MatchJavaDoc.matchJavaDoc(this,a,type);
 					System.out.println(operationBean.toString());
 					mHighLevelOperationBeanList.add(operationBean);
@@ -428,13 +466,13 @@ public class FindPattern {
 				case StatementConstants.BOOLEANLITERAL:
 				case StatementConstants.INFIXEXPRESSION:
 				case StatementConstants.METHODINVOCATION:
-					MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, type,this.mMiningActionBean.mDstTree);
+					MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(this,a, type,this.mMiningActionBean.mSrcTree);
 					break;
 
 				default:
 					String operationEntity = "DEFAULT "+ActionConstants.getInstanceStringName(a);
 					operationBean = new HighLevelOperationBean(a,type,null,-1,operationEntity,fafafather,fatherType);
-					System.err.println(operationBean.toString());
+					System.out.println(operationBean.toString());
 					break;
 				}
 			}
@@ -475,11 +513,11 @@ public class FindPattern {
 
 			if (StatementConstants.METHODDECLARATION.equals(type)) {
 				// 新增方法
-				System.err.println("Update 应该不会是method declaration");
+				System.out.println("Update 应该不会是method declaration");
 			} else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
 				// 方法签名update
 				if (StatementConstants.BLOCK.equals(type)) {
-					System.err.println("Not considered");
+					System.out.println("Not considered");
 				} else {
 					operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(this,a, type,fafafather,fatherType);
 					System.out.println(operationBean.toString());

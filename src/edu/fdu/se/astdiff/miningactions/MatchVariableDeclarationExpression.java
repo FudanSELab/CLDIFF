@@ -32,11 +32,10 @@ public class MatchVariableDeclarationExpression {
 		List<Action> subActions = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
 		fp.setActionTraversedMap(subActions);
-//		if (AstRelations.isClassCreation(subActions, con)) {
-//			summary += " object Initializing - variable declaration";
-//		} else {
-//			summary += " variable declaration";
-//		}
+		if (AstRelations.isClassCreation(subActions, con)) {
+			operationEntity += " OBJECT INITIALIZING";
+		}
+
 		ITree fatherNode;
 		fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),con);
 		String fatherNodeType = fatherNode.getLabel();

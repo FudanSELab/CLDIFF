@@ -43,6 +43,15 @@ public class AstRelations {
 		return false;
 	}
 
+	public static boolean isFatherSwitchStatement(Action a, TreeContext treeContext) {
+		Tree t = (Tree) a.getNode();
+		String type = treeContext.getTypeLabel(t.getParent());
+		if (type.equals(StatementConstants.SWITCHSTATEMENT)) {
+			return true;
+		}
+		return false;
+	}
+
 	public static boolean isChildCotainSynchronizedStatement(Action a, TreeContext treeContext) {
 		// Tree t = (Tree) a.getNode();
 		List<ITree> child = a.getNode().getChildren();
