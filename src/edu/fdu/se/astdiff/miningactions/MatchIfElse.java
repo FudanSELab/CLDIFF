@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Tree;
-import com.github.gumtreediff.tree.TreeContext;
 
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchIfElse {
@@ -24,7 +21,13 @@ public class MatchIfElse {
 	 */
 	public static HighLevelOperationBean matchIf(FindPattern f,Action a, String type) {
 		String operationEntity = "";
-		if (AstRelations.isFatherIfStatement(a, f.getDstTree())) {
+		TreeContext treeContext;
+		if(a instanceof Insert)
+			treeContext = f.getDstTree();
+		else
+			treeContext = f.getSrcTree();
+
+		if (AstRelations.isFatherIfStatement(a, treeContext)) {
 			operationEntity = "ELSE_IF";
 		} else {
 			operationEntity = "IF";
@@ -84,20 +87,16 @@ public class MatchIfElse {
 	 * level IV 因为往上找如果是if body那么匹配不是if statement 所以这部分应该就是predicate
 	 * 
 	 * @param a
-	 * @param treeContext
+	 * @param fp
 	 * @return
 	 */
 	public static HighLevelOperationBean matchIfPredicate(FindPattern fp,Action a, String nodeType,ITree fafafatherNode,String ffFatherNodeType) {
 		// fafafatherNode是if 那么 第一个孩子是if里的内容
 		String operationEntity  = "IFPREDICATE";
-//		ITree srcParent = null;
+		ITree srcParent = null;
 		List<Action> allActions = new ArrayList<Action>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(fafafatherNode.getChild(0), allActions);
-//		switch(status){
-//		case MyTreeUtil.TYPE4:
-//		case MyTreeUtil.TYPE5:
-//		default:break;
-//		}
+		ITree srcfafafather = null;
+		ITree dstfafafather = null;
 //		if (a instanceof Insert) {
 //			if (fp.getMappedSrcOfDstNode(fafafatherNode) != null) {
 //				srcParent = fp.getMappedSrcOfDstNode(fafafatherNode);
@@ -110,6 +109,24 @@ public class MatchIfElse {
 //		} else {
 //			srcParent = fafafatherNode;
 //		}
+		if (a instanceof Insert) {
+			dstfafafather = fafafatherNode;
+			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
+			if (srcfafafather == null) {
+				System.err.println("err null mapping");
+			}
+		} else {
+			srcfafafather = fafafatherNode;
+			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
+			if (dstfafafather == null) {
+				System.err.println("err null mapping");
+			}
+		}
+
+		boolean dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather.getChild(0), allActions);
+		boolean src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather.getChild(0), allActions);
+		int status = MyTreeUtil.isSrcorDstAdded(src_status,dst_status);
+
 		fp.setActionTraversedMap(allActions);
 		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
 				a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);

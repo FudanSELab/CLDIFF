@@ -18,9 +18,8 @@ public class MatchMethodSignatureChange {
 	 * @param fafafather
 	 * @return
 	 */
-	public static HighLevelOperationBean matchMethodSignatureChange(FindPattern fp,Action a,String nodeType,ITree fafafather) {
+	public static HighLevelOperationBean matchMethodSignatureChange(FindPattern fp,Action a,String nodeType,ITree fafafather,String fafafatherType) {
 		String operationEntity = "METHODSIGNATURE";
-		String fafafatherType = fafafather.getLabel();
 		if(!StatementConstants.METHODDECLARATION.equals(fafafatherType)) {
 			System.err.println(operationEntity+" CHANGE: "+"fafafatherType is not MethodDeclaration" );
 			return null;
@@ -41,10 +40,14 @@ public class MatchMethodSignatureChange {
 			}
 		}
 		List<Action> signatureChidlren = new ArrayList<Action>();
-		int status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
-//		MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
+		boolean dst_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
+		boolean src_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
+
+		int status = MyTreeUtil.isSrcorDstAdded(src_status,dst_status);
+
 //		this.mMiningActionBean.mapMethodSignatureAction(srcfafafather, signatureChidlren);
 		fp.setActionTraversedMap(signatureChidlren);
+
 		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
 				a,nodeType,signatureChidlren,status,operationEntity,fafafather,fafafatherType);
 		return mHighLevelOperationBean;
