@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class DiffMiner {
 	
-	public List<String> readCompareList(int version){
+	public List<String> readCompareList(int version,String prevPath,String currPath){
 		prevList = new ArrayList<>();
 		currList = new ArrayList<>();
 		List<String> fileSubPathList = new ArrayList<>();
@@ -45,7 +45,11 @@ public class DiffMiner {
 		for(AndroidSDKJavaFile item:prevList){
 			String filePath = item.getSubSubCategoryPath();
 			if(fileNameMap.containsKey(filePath)){
-				fileSubPathList.add(filePath);
+				File filePrevFull = new File(prevPath + filePath.replace("\\","/"));
+				File fileCurrFull = new File(currPath + filePath.replace("\\","/"));
+				if(filePrevFull.length() != fileCurrFull.length()){
+					fileSubPathList.add(filePath);
+				}
 			}
 		}
 		return fileSubPathList;
@@ -58,11 +62,11 @@ public class DiffMiner {
 
 	public void runBatch(){
 		int version = 26;
-		List<String> filePathList = readCompareList(version);
 		String fileRootPathPrev
 				= "D:/Workspace/Android_Diff/SDK_Files_15-26/android-"+String.valueOf(version);
 		String fileRootPathCurr
 				= "D:/Workspace/Android_Diff/SDK_Files_15-26/android-"+String.valueOf(version-1);
+		List<String> filePathList = readCompareList(version,fileRootPathPrev,fileRootPathCurr);
 		for(String subPath: filePathList){
 			System.out.println(subPath);
 			String subPath2 = subPath.replace("\\","/");
