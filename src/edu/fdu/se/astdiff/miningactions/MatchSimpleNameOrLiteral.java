@@ -8,6 +8,7 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
+import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSimpleNameOrLiteral {
@@ -64,41 +65,44 @@ public class MatchSimpleNameOrLiteral {
 	 * @param a
 	 * @return
 	 */
-	public static int matchSimplenameOrLiteral(FindPattern fp,Action a, String nodeType,TreeContext curContext) {
+	public static void matchSimplenameOrLiteral(FindPattern fp,Action a, String nodeType,TreeContext curContext) {
 		// if predicate
 		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), curContext);
 		String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
-		int returnVal = -1;
 		switch (ffFatherNodeType) {
 		case StatementConstants.IFSTATEMENT:
-			System.out.println("If predicate");
+//			System.out.println("If predicate");
 			operationBean = MatchIfElse.matchIfPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
-			System.out.println(operationBean.toString());
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.FORSTATEMENT:
-			System.out.println("For predicate");
+//			System.out.println("For predicate");
 			operationBean = MatchForStatement.matchForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			System.out.println(operationBean.toString());
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
 		case StatementConstants.EXPRESSIONSTATEMENT:
-			System.out.println("variable/expression");
+//			System.out.println("variable/expression");
 			operationBean = matchExpressionStatementAndVariableDeclarationStatement(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
-			System.out.println(operationBean.toString());
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.JAVADOC:
 			operationBean = MatchJavaDoc.matchJavaDoc(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
-			System.out.println(operationBean.toString());
+			fp.addHighLevelOperationBeanToList(operationBean);
+			break;
+		case StatementConstants.SWITCHCASE:
+			//switchcase
+			operationBean = MatchSwitch.matchSwitchCase(fp, a, nodeType, fafafatherNode, ffFatherNodeType);
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		default:
-			System.out.println("Default:" + ffFatherNodeType);
+			String nextAction = ConsolePrint.getMyOneActionString(a, 0, curContext);
+			System.out.print(nextAction);
+			System.out.println("Default, SimplenameOrLiteral: " + ffFatherNodeType +"\n");
+			fp.setActionTraversedMap(a);
 			break;
 		}
-		return returnVal;
 	}
 
 }

@@ -150,6 +150,10 @@ public class AstRelations {
 				break;
 			} else if (type.equals(StatementConstants.JAVADOC)) {
 				break;
+			} else if (type.equals(StatementConstants.INITIALIZER)) {
+				break;
+			} else if (type.equals(StatementConstants.SWITCHCASE)) {
+				break;
 			} else {
 				curNode = curNode.getParent();
 			}
