@@ -1,5 +1,6 @@
 package edu.fdu.se.main.ast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +22,8 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.stmt.BlockStmt;
 
+import edu.fdu.se.config.ProjectProperties;
+import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.javaparser.JavaParserFactory;
 import javassist.compiler.ast.FieldDecl;
@@ -39,7 +42,7 @@ public class PreprocessingSDKClass {
 
     public static void main(String args[]) {
         new PreprocessingSDKClass().compareTwoSDKFile3("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java",
-                "D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java");
+                "D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java","test_file");
 //		new PreprocessingSDKClass().test("D:/test.java");
     }
 
@@ -287,12 +290,21 @@ public class PreprocessingSDKClass {
         }
     }
 
-    public PreprocessingSDKClass compareTwoSDKFile3(String prev, String curr) {
+    public PreprocessingSDKClass compareTwoSDKFile3(String prev, String curr,String outputDirName) {
         CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prev);
         CompilationUnit cuCurr = JavaParserFactory.getCompilationUnit(curr);
+        String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
+        File dirFilePrev = new File(rootOutPath + "/"+ outputDirName+"/prev");
+        File dirFileCurr = new File(rootOutPath + "/"+ outputDirName+"/curr");
+        if(!dirFilePrev.exists()){
+            dirFilePrev.mkdirs();
+        }
+        if(!dirFileCurr.exists()){
+            dirFileCurr.mkdirs();
+        }
 
-        FileWriter.writeInAll("D:/cuPrev", cuPrev.toString());
-        FileWriter.writeInAll("D:/cuCurr", cuCurr.toString());
+        FileWriter.writeInAll( dirFilePrev.getAbsolutePath()+ "/cuPrev.java", cuPrev.toString());
+        FileWriter.writeInAll(dirFileCurr.getAbsolutePath()+ "/cuCurr.java", cuCurr.toString());
         cuPrev = removeAllCommentsOfCompilationUnit(cuPrev);
         cuCurr = removeAllCommentsOfCompilationUnit(cuCurr);
 
@@ -368,8 +380,8 @@ public class PreprocessingSDKClass {
             this.addToRemoveList(bd);
         }
         this.removeRemovalList();
-        FileWriter.writeInAll("D:/cuPrev_m", cuPrev.toString());
-        FileWriter.writeInAll("D:/cuCurr_m", cuCurr.toString());
+        FileWriter.writeInAll(dirFilePrev.getAbsolutePath() +"/cuPrev_m.java", cuPrev.toString());
+        FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/cuCurr_m.java", cuCurr.toString());
         this.curCu = cuPrev;
         this.preCu = cuCurr;
         return this;

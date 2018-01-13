@@ -63,16 +63,22 @@ public class DiffMiner {
 	public void runBatch(){
 		int version = 26;
 		String fileRootPathPrev
-				= "D:/Workspace/Android_Diff/SDK_Files_15-26/android-"+String.valueOf(version);
+				= ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR)+"/android-"+String.valueOf(version);
 		String fileRootPathCurr
-				= "D:/Workspace/Android_Diff/SDK_Files_15-26/android-"+String.valueOf(version-1);
+				= ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR)+"/android-"+String.valueOf(version-1);
 		List<String> filePathList = readCompareList(version,fileRootPathPrev,fileRootPathCurr);
+		int cnt = 0;
 		for(String subPath: filePathList){
+			cnt++;
+			if(cnt <= 0){
+				continue;
+			}
 			System.out.println(subPath);
 			String subPath2 = subPath.replace("\\","/");
+			String outputDirName = subPath.replace("\\","_").substring(1);
 			String fileFullPathPrev = fileRootPathPrev + subPath2;
 			String fileFullPathCurr = fileRootPathCurr + subPath2;
-			PreprocessingSDKClass psc =	new PreprocessingSDKClass().compareTwoSDKFile3(fileFullPathPrev,fileFullPathCurr);
+			PreprocessingSDKClass psc =	new PreprocessingSDKClass().compareTwoSDKFile3(fileFullPathPrev,fileFullPathCurr,outputDirName);
 			GumTreeDiffParser his = new GumTreeDiffParser(psc.getPreCu().toString(),psc.getCurCu().toString());
 			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
 			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
