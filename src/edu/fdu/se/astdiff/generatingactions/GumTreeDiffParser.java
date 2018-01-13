@@ -19,8 +19,7 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 public class GumTreeDiffParser {
-	File oldFile;
-	File newFile;
+
 	public TreeContext srcTC;
 	public TreeContext dstTC;
 	public ITree src;
@@ -28,8 +27,8 @@ public class GumTreeDiffParser {
 	public MappingStore mapping;
 
 	public GumTreeDiffParser(File prevFile, File currFile){
-		this.oldFile = prevFile;
-		this.newFile = currFile;
+		File oldFile = prevFile;
+		File newFile = currFile;
 
 		Run.initGenerators();
 		try {
