@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchExpressionStatement {
@@ -19,7 +18,7 @@ public class MatchExpressionStatement {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchExpression(FindPattern fp, Action a, String nodeType, ITree fafafather,String fafafatherType) {
+	public static HighLevelOperationBean matchExpression(FindPatternData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
 		String operationEntity = "EXPRESSIONSTATEMENT";
 		TreeContext con = null;
 		if (a instanceof Insert) {

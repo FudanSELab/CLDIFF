@@ -4,17 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
 
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSwitch {
 	
-	public static HighLevelOperationBean matchSwitch(FindPattern fp,Action a,String nodeType){
+	public static HighLevelOperationBean matchSwitch(FindPatternData fp, Action a, String nodeType){
 		String operationEntity = "SWITCHSTATEMENT";
 		List<Action> subActions = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
@@ -34,7 +31,7 @@ public class MatchSwitch {
 		return mHighLevelOperationBean;
 	}
 
-	public static HighLevelOperationBean matchSwitchCase(FindPattern fp, Action a, String nodeType,ITree fafafatherNode,String ffFatherNodeType){
+	public static HighLevelOperationBean matchSwitchCase(FindPatternData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType){
 		String operationEntity = "SWITCHCASE-" +nodeType;
 //		String fatherType;
 //		if (a instanceof Insert) {

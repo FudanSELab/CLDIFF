@@ -9,6 +9,7 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
+import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSimpleNameOrLiteral {
@@ -22,7 +23,7 @@ public class MatchSimpleNameOrLiteral {
 	 * @param nodeType
 	 * @return
 	 */
-	public static HighLevelOperationBean matchExpressionStatementAndVariableDeclarationStatement(FindPattern fp,Action a, String nodeType,ITree fafafatherNode,String ffFatherNodeType) {
+	public static HighLevelOperationBean matchExpressionStatementAndVariableDeclarationStatement(FindPatternData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
 		String operationEntity  = "IFPREDICATE";
 		ITree srcParent = null;
 		List<Action> allActions = new ArrayList<Action>();
@@ -65,7 +66,7 @@ public class MatchSimpleNameOrLiteral {
 	 * @param a
 	 * @return
 	 */
-	public static void matchSimplenameOrLiteral(FindPattern fp,Action a, String nodeType,TreeContext curContext) {
+	public static void matchSimplenameOrLiteral(FindPatternData fp, Action a, String nodeType, TreeContext curContext) {
 		// if predicate
 		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), curContext);
 		String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);

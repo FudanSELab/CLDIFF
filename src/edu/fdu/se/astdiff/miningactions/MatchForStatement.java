@@ -3,13 +3,14 @@ package edu.fdu.se.astdiff.miningactions;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
+import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MatchForStatement {
-    public static HighLevelOperationBean matchForStatement(FindPattern fp, Action a, String nodeType){
+    public static HighLevelOperationBean matchForStatement(FindPatternData fp, Action a, String nodeType){
         String operationEntity = "FORSTATEMENT";
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
@@ -20,7 +21,7 @@ public class MatchForStatement {
         return mHighLevelOperationBean;
     }
 
-    public static HighLevelOperationBean matchEnhancedForStatement(FindPattern fp, Action a, String nodeType){
+    public static HighLevelOperationBean matchEnhancedForStatement(FindPatternData fp, Action a, String nodeType){
         String operationEntity = "ENHANCEDFORSTATEMENT";
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
@@ -31,7 +32,7 @@ public class MatchForStatement {
         return mHighLevelOperationBean;
     }
 
-    public static HighLevelOperationBean matchForPredicate(FindPattern fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
+    public static HighLevelOperationBean matchForPredicate(FindPatternData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
         String operationEntity  = "FORPREDICATE";
 
         List<Action> allActions = new ArrayList<Action>();

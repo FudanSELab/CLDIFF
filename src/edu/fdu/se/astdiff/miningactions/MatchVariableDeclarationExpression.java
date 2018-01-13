@@ -9,7 +9,7 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchVariableDeclarationExpression {
@@ -19,7 +19,7 @@ public class MatchVariableDeclarationExpression {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchVariableDeclaration(FindPattern fp,Action a,String nodeType) {
+	public static HighLevelOperationBean matchVariableDeclaration(FindPatternData fp, Action a, String nodeType) {
 		TreeContext con = null;
 		if (a instanceof Insert) {
 			con = fp.getDstTree();

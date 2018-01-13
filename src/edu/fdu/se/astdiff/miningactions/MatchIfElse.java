@@ -8,6 +8,7 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
 import com.github.gumtreediff.tree.TreeContext;
+import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchIfElse {
@@ -19,7 +20,7 @@ public class MatchIfElse {
 	 * @param type
 	 * @return
 	 */
-	public static HighLevelOperationBean matchIf(FindPattern f,Action a, String type) {
+	public static HighLevelOperationBean matchIf(FindPatternData f, Action a, String type) {
 		String operationEntity = "";
 		TreeContext treeContext;
 		if(a instanceof Insert)
@@ -68,7 +69,7 @@ public class MatchIfElse {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchElse(FindPattern f,Action a,String nodeType,ITree ffFatherNode,String ffFatherNodeType) {
+	public static HighLevelOperationBean matchElse(FindPatternData f, Action a, String nodeType, ITree ffFatherNode, String ffFatherNodeType) {
 		String operationEntity = "ELSE";
 		String labelType = f.getDstTreeContextTypeLabel(a.getNode()) ;
 		if(!StatementConstants.BLOCK.equals(labelType)){
@@ -90,7 +91,7 @@ public class MatchIfElse {
 	 * @param fp
 	 * @return
 	 */
-	public static HighLevelOperationBean matchIfPredicate(FindPattern fp,Action a, String nodeType,ITree fafafatherNode,String ffFatherNodeType) {
+	public static HighLevelOperationBean matchIfPredicate(FindPatternData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
 		// fafafatherNode是if 那么 第一个孩子是if里的内容
 		String operationEntity  = "IFPREDICATE";
 		ITree srcParent = null;

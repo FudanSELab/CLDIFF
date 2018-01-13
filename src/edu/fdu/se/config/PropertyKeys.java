@@ -20,4 +20,7 @@ public class PropertyKeys {
 	
 	final public static String LOCAL_DESKTOP = "local_desktop";
 
+	final public static String DIFF_MINER_GUMTREE_OUTPUT_DIR = "diff_miner_gumtree_output_dir";
+
+	final public static String DIFF_MINER_NEW_SDK_DIR = "diff_miner_new_sdk_dir";
 }

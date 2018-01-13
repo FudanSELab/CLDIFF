@@ -3,13 +3,14 @@ package edu.fdu.se.astdiff.miningactions;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
+import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MatchFieldDeclaration {
-    public static HighLevelOperationBean matchFieldDeclaration(FindPattern fp,Action a, String nodeType) {
+    public static HighLevelOperationBean matchFieldDeclaration(FindPatternData fp, Action a, String nodeType) {
         String operationEntity  = "FIELDDECLARATION";
 
         List<Action> allActions = new ArrayList<Action>();
@@ -19,7 +20,7 @@ public class MatchFieldDeclaration {
                 a,nodeType,allActions,status,operationEntity,null,null);
         return mHighLevelOperationBean;
     }
-    public static HighLevelOperationBean matchFieldDeclarationByFather(FindPattern fp,Action a, String nodeType,ITree fafafatherNode, String ffFatherNodeType) {
+    public static HighLevelOperationBean matchFieldDeclarationByFather(FindPatternData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
         String operationEntity  = "FIELDDECLARATION-BODY";
 
         List<Action> allActions = new ArrayList<Action>();

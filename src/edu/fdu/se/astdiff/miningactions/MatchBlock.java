@@ -2,14 +2,13 @@ package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
+import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
 
 public class MatchBlock {
     private static HighLevelOperationBean operationBean;
-    public static void matchBlock(FindPattern fp, Action a, String nodeType, TreeContext curContext) {
+    public static void matchBlock(FindPatternData fp, Action a, String nodeType, TreeContext curContext) {
 //        ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(), curContext);
 //        String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
 
@@ -45,7 +44,7 @@ public class MatchBlock {
 //							MatchSynchronized.matchSynchronized(this,a);
 
     }
-    public static void matchBlockByChild(FindPattern fp, Action a, String nodeType, TreeContext curContext) {
+    public static void matchBlockByChild(FindPatternData fp, Action a, String nodeType, TreeContext curContext) {
 //        ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(), curContext);
 //        String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
 

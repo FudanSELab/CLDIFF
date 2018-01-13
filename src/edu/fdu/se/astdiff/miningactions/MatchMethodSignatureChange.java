@@ -7,6 +7,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
+import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchMethodSignatureChange {
@@ -18,7 +19,7 @@ public class MatchMethodSignatureChange {
 	 * @param fafafather
 	 * @return
 	 */
-	public static HighLevelOperationBean matchMethodSignatureChange(FindPattern fp,Action a,String nodeType,ITree fafafather,String fafafatherType) {
+	public static HighLevelOperationBean matchMethodSignatureChange(FindPatternData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
 		String operationEntity = "METHODSIGNATURE";
 		if(!StatementConstants.METHODDECLARATION.equals(fafafatherType)) {
 			System.err.println(operationEntity+" CHANGE: "+"fafafatherType is not MethodDeclaration" );

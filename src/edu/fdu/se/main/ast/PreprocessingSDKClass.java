@@ -294,8 +294,8 @@ public class PreprocessingSDKClass {
         CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prev);
         CompilationUnit cuCurr = JavaParserFactory.getCompilationUnit(curr);
         String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
-        File dirFilePrev = new File(rootOutPath + "/"+ outputDirName+"/prev");
-        File dirFileCurr = new File(rootOutPath + "/"+ outputDirName+"/curr");
+        File dirFilePrev = new File(rootOutPath +"/prev/"+outputDirName);
+        File dirFileCurr = new File(rootOutPath +"/curr/"+outputDirName);
         if(!dirFilePrev.exists()){
             dirFilePrev.mkdirs();
         }
@@ -303,8 +303,8 @@ public class PreprocessingSDKClass {
             dirFileCurr.mkdirs();
         }
 
-        FileWriter.writeInAll( dirFilePrev.getAbsolutePath()+ "/cuPrev.java", cuPrev.toString());
-        FileWriter.writeInAll(dirFileCurr.getAbsolutePath()+ "/cuCurr.java", cuCurr.toString());
+        FileWriter.writeInAll( dirFilePrev.getAbsolutePath()+ "/file_before_trim.java", cuPrev.toString());
+        FileWriter.writeInAll(dirFileCurr.getAbsolutePath()+ "/file_before_trim.java", cuCurr.toString());
         cuPrev = removeAllCommentsOfCompilationUnit(cuPrev);
         cuCurr = removeAllCommentsOfCompilationUnit(cuCurr);
 
@@ -380,10 +380,10 @@ public class PreprocessingSDKClass {
             this.addToRemoveList(bd);
         }
         this.removeRemovalList();
-        FileWriter.writeInAll(dirFilePrev.getAbsolutePath() +"/cuPrev_m.java", cuPrev.toString());
-        FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/cuCurr_m.java", cuCurr.toString());
-        this.curCu = cuPrev;
-        this.preCu = cuCurr;
+        FileWriter.writeInAll(dirFilePrev.getAbsolutePath() +"/file_after_trim.java", cuPrev.toString());
+        FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_after_trim.java", cuCurr.toString());
+        this.curCu = cuCurr;
+        this.preCu = cuPrev;
         return this;
 
     }

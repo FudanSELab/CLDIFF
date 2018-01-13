@@ -1,22 +1,18 @@
 package edu.fdu.se.main.ast;
 
 
-import com.github.gumtreediff.actions.ActionUtil;
-import com.github.gumtreediff.tree.TreeContext;
-
-import com.github.javaparser.ast.comments.Comment;
 import edu.fdu.se.astdiff.generatingactions.ActionGeneratorBean;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
-import edu.fdu.se.astdiff.miningactions.FindPattern;
+import edu.fdu.se.astdiff.miningactions.ClusterActions;
+import edu.fdu.se.astdiff.miningactions.FindPatternData;
 import edu.fdu.se.astdiff.miningactions.MiningActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.MiningOperation;
 import edu.fdu.se.bean.AndroidSDKJavaFile;
-import edu.fdu.se.bean.AndroidSDKJavaFileTagSnapshot;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
-import edu.fdu.se.dao.AndroidSDKJavaFileTagSnapshotDAO;
 import edu.fdu.se.fileutil.FileWriter;
 
 import java.io.File;
@@ -87,8 +83,9 @@ public class DiffMiner {
 			ConsolePrint.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
 			System.out.println("Step2 Begin to find Pattern:-------------------");
 			MiningActionBean bean = new MiningActionBean(data,his.srcTC,his.dstTC,his.mapping);
-			FindPattern fp = new FindPattern(bean);
-			fp.find();
+			FindPatternData fp = new FindPatternData(bean);
+			ClusterActions.doCluster(fp);
+			MiningOperation.printHighLevelOperationBeanList(fp,fp.getmHighLevelOperationBeanList());
 			break;
 		}
 
@@ -109,8 +106,8 @@ public class DiffMiner {
 		ConsolePrint.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
 		System.out.println("Step2 Begin to find Pattern:-------------------");
 		MiningActionBean bean = new MiningActionBean(data,his.srcTC,his.dstTC,his.mapping);
-		FindPattern fp = new FindPattern(bean);
-		fp.find();
+		FindPatternData fp = new FindPatternData(bean);
+		ClusterActions.doCluster(fp);
 
 	}
 
