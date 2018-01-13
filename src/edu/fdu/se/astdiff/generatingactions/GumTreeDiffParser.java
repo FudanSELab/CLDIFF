@@ -64,11 +64,6 @@ public class GumTreeDiffParser {
 	}
 
 
-
-
-	public MappingStore getMapping(){
-		return mapping;
-	}
 	
 	public String getPrettyOldTreeString() {
 		return ConsolePrint.getPrettyTreeString(srcTC, src);
