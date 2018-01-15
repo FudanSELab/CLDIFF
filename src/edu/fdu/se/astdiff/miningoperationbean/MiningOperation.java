@@ -13,11 +13,11 @@ import java.util.List;
 public class MiningOperation {
 
     public static void printHighLevelOperationBeanList(MiningActionData fp) {
-        List<HighLevelOperationBean> mHighLevelOperationBeanList =  fp.getmHighLevelOperationBeanList();
+        List<ClusteredActionBean> mHighLevelOperationBeanList =  fp.getmHighLevelOperationBeanList();
         if (mHighLevelOperationBeanList.isEmpty()) {
             System.out.println("HighLevelOperationBeanList is null!");
         }else {
-            for (HighLevelOperationBean operationBean : mHighLevelOperationBeanList) {
+            for (ClusteredActionBean operationBean : mHighLevelOperationBeanList) {
                 TreeContext treeContext;
                 if (operationBean.curAction instanceof Insert) {
                     treeContext = fp.getDstTree();
@@ -30,4 +30,5 @@ public class MiningOperation {
             }
         }
     }
+
 }

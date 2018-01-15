@@ -3,24 +3,25 @@ package edu.fdu.se.astdiff.miningactions;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MatchJavaDoc {
-    public static HighLevelOperationBean matchJavaDoc(MiningActionData fp, Action a, String nodeType){
+    public static ClusteredActionBean matchJavaDoc(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "JAVADOC";
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
 
-        HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,subActions,status,operationEntity,null,null);
         return mHighLevelOperationBean;
     }
-    public static HighLevelOperationBean matchJavaDoc(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType){
+    public static ClusteredActionBean matchJavaDoc(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType){
         String operationEntity = "FATHERNODE-JAVADOC";
         ITree srcParent = null;
         List<Action> allActions = new ArrayList<Action>();
@@ -41,14 +42,14 @@ public class MatchJavaDoc {
             }
         }
 
-        boolean dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
-        boolean src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
-        int status = MyTreeUtil.isSrcorDstAdded(src_status,dst_status);
+        Set<String> dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
+        Set<String> src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
+        int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 
         //int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(allActions);
 
-        HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;
     }

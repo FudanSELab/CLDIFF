@@ -6,12 +6,12 @@ import java.util.List;
 import com.github.gumtreediff.actions.model.Action;
 
 import com.github.gumtreediff.tree.ITree;
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSwitch {
 	
-	public static HighLevelOperationBean matchSwitch(MiningActionData fp, Action a, String nodeType){
+	public static ClusteredActionBean matchSwitch(MiningActionData fp, Action a, String nodeType){
 		String operationEntity = "SWITCHSTATEMENT";
 		List<Action> subActions = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
@@ -26,12 +26,12 @@ public class MatchSwitch {
 //			}
 //		}
 
-		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,subActions,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}
 
-	public static HighLevelOperationBean matchSwitchCase(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType){
+	public static ClusteredActionBean matchSwitchCase(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType){
 		String operationEntity = "SWITCHCASE-" +nodeType;
 //		String fatherType;
 //		if (a instanceof Insert) {
@@ -56,7 +56,7 @@ public class MatchSwitch {
 //			}
 //		}
 
-		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,subActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;
 	}

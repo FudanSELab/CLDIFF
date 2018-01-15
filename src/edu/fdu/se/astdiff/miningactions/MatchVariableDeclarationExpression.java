@@ -9,7 +9,7 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchVariableDeclarationExpression {
@@ -19,7 +19,7 @@ public class MatchVariableDeclarationExpression {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchVariableDeclaration(MiningActionData fp, Action a, String nodeType) {
+	public static ClusteredActionBean matchVariableDeclaration(MiningActionData fp, Action a, String nodeType) {
 		TreeContext con = null;
 		if (a instanceof Insert) {
 			con = fp.getDstTree();
@@ -40,7 +40,7 @@ public class MatchVariableDeclarationExpression {
 		fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),con);
 		String fatherNodeType = fatherNode.getLabel();
 
-		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,subActions,status,operationEntity,fatherNode,fatherNodeType);
 		return mHighLevelOperationBean;
 	}

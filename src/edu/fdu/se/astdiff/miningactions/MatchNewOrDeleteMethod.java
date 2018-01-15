@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
 
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchNewOrDeleteMethod {
@@ -17,7 +17,7 @@ public class MatchNewOrDeleteMethod {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchNewOrDeleteMethod(MiningActionData fp, Action a, String nodeType) {
+	public static ClusteredActionBean matchNewOrDeleteMethod(MiningActionData fp, Action a, String nodeType) {
 		String operationEntity = "NEWORDELETEMETHOD";
 		List<Action> subActions = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
@@ -30,7 +30,7 @@ public class MatchNewOrDeleteMethod {
 //		}
 		fp.setActionTraversedMap(subActions);
 
-		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,subActions,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}

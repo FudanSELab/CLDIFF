@@ -4,7 +4,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
  * Created by huangkaifeng on 2018/1/13.
@@ -36,7 +36,7 @@ public class ClusterInsert {
             String fatherType = fp.mDstTree.getTypeLabel(fafafather);
 //			String nextAction = ConsolePrint.getMyOneActionString(a, 0, this.mDstTree);
 //			System.out.print(nextAction);
-            HighLevelOperationBean operationBean;
+            ClusteredActionBean operationBean;
             if(StatementConstants.FIELDDECLARATION.equals(type)){
                 //insert FieldDeclaration
                 operationBean = MatchFieldDeclaration.matchFieldDeclaration(fp,a,type);
@@ -116,7 +116,7 @@ public class ClusterInsert {
                         break;
                     case StatementConstants.EXPRESSIONSTATEMENT:
                         if(AstRelations.isFatherIfStatement(a, fp.mDstTree)) {
-                            // Pattern 1.2 Match else
+                            // Pattenr 1.2 Match else
                             operationBean = MatchIfElse.matchElse(fp, a,type,fafafather,fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);
                         }
@@ -165,7 +165,7 @@ public class ClusterInsert {
                         break;
                     default:
                         String operationEntity = "DEFAULT: "+ ActionConstants.getInstanceStringName(a) + " " +type;
-                        operationBean = new HighLevelOperationBean(a,type,null,-1,operationEntity,fafafather,fatherType);
+                        operationBean = new ClusteredActionBean(a,type,null,-1,operationEntity,fafafather,fatherType);
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         fp.setActionTraversedMap(a);
                         break;

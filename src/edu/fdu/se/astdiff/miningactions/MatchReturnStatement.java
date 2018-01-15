@@ -4,7 +4,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 public class MatchReturnStatement {
     public static void matchReturnStatement(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
@@ -12,7 +12,7 @@ public class MatchReturnStatement {
         String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
         switch (ffFatherNodeType) {
             case StatementConstants.SWITCHSTATEMENT:
-                HighLevelOperationBean operationBean = MatchSwitch.matchSwitchCase(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+                ClusteredActionBean operationBean = MatchSwitch.matchSwitchCase(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
                 fp.addHighLevelOperationBeanToList(operationBean);
                 break;
             default:

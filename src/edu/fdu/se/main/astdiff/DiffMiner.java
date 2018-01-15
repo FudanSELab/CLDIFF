@@ -85,6 +85,7 @@ public class DiffMiner {
 			// package 2
 			System.out.println("Step2 Begin to find Pattern:-------------------");
 			MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
+
 			ClusterActions.doCluster(mMiningActionData);
 			// package 3
 			MiningOperation.printHighLevelOperationBeanList(mMiningActionData);
@@ -109,6 +110,7 @@ public class DiffMiner {
 		// package 2
 		System.out.println("Step2 Begin to cluster actions:-------------------");
 		MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
+
 		ClusterActions.doCluster(mMiningActionData);
 		// package 3
 		MiningOperation.printHighLevelOperationBeanList(mMiningActionData);
@@ -120,6 +122,7 @@ public class DiffMiner {
 		DiffMiner i = new DiffMiner();
 //		i.run();
 		i.runBatch();
+
 	}
 	
 

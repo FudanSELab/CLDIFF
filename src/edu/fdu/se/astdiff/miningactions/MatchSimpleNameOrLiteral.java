@@ -2,6 +2,7 @@ package edu.fdu.se.astdiff.miningactions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
@@ -9,11 +10,11 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSimpleNameOrLiteral {
-	private static HighLevelOperationBean operationBean;
+	private static ClusteredActionBean operationBean;
 	/**
 	 * level IV fafafather 为VariableDeclarationStatement ExpressionStatement
 	 * father为methodinvocation  按照fafafatherNode 为key，存所有相关的action,更细的情况放到map之后再做处理
@@ -23,7 +24,7 @@ public class MatchSimpleNameOrLiteral {
 	 * @param nodeType
 	 * @return
 	 */
-	public static HighLevelOperationBean matchExpressionStatementAndVariableDeclarationStatement(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
+	public static ClusteredActionBean matchExpressionStatementAndVariableDeclarationStatement(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
 		String operationEntity  = "IFPREDICATE";
 		ITree srcParent = null;
 		List<Action> allActions = new ArrayList<Action>();
@@ -43,13 +44,13 @@ public class MatchSimpleNameOrLiteral {
 				System.err.println("err null mapping");
 			}
 		}
-		boolean src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
-		boolean dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
-		int status = MyTreeUtil.isSrcorDstAdded(src_status,dst_status);
+		Set<String> src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
+		Set<String> dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
+		int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 
 		fp.setActionTraversedMap(allActions);
 //		this.mMiningActionData.mapMethodInvocationAndActions(srcParent, allActions);
-		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;
 	}

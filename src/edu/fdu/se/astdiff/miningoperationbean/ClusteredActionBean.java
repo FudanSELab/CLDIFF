@@ -11,13 +11,12 @@ import edu.fdu.se.gumtree.MyTreeUtil;
  * @author huangkaifeng
  *
  */
-public class HighLevelOperationBean {
+public class ClusteredActionBean {
 
 	public Action curAction;
 	public List<Action> actions;
 
-	
-	
+
 	public ITree curNode;
 	public String curNodeType;
 	//insert delete change
@@ -27,7 +26,7 @@ public class HighLevelOperationBean {
 
 	public ITree fafafatherNode;
 	public String fatherNodeType;
-	public HighLevelOperationBean(Action curAction,String curNodeType,List<Action> actions,int operationType,String operationEntity,ITree fafafatherNode,String fatherNodeType){
+	public ClusteredActionBean(Action curAction, String curNodeType, List<Action> actions, int operationType, String operationEntity, ITree fafafatherNode, String fatherNodeType){
 		this.curAction = curAction;
 		this.curNode = curAction.getNode();
 		this.curNodeType = curNodeType;
@@ -71,7 +70,7 @@ public class HighLevelOperationBean {
 	public String toString(){
 		//TODO
 		int type = getOperationType();
-		String operationTypeString = MyTreeUtil.getTypeById(type);
+		String operationTypeString = OperationTypeConstants.getKeyNameByValue(type);
 		String result = "[Pattern] "+ operationTypeString + " " + getOperationEntity()+", [curNodeType] "+curNodeType;
 		if(!"".equals(fatherNodeType)) {
 			result += ", [fafafatherNodeType] " + fatherNodeType;

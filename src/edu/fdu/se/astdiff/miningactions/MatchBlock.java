@@ -4,10 +4,10 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 public class MatchBlock {
-    private static HighLevelOperationBean operationBean;
+    private static ClusteredActionBean operationBean;
     public static void matchBlock(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
 //        ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(), curContext);
 //        String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);

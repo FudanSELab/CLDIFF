@@ -8,7 +8,7 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchExpressionStatement {
@@ -18,7 +18,7 @@ public class MatchExpressionStatement {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchExpression(MiningActionData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
+	public static ClusteredActionBean matchExpression(MiningActionData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
 		String operationEntity = "EXPRESSIONSTATEMENT";
 		TreeContext con = null;
 		if (a instanceof Insert) {
@@ -43,7 +43,7 @@ public class MatchExpressionStatement {
 //		}
 
 
-		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,subActions,status,operationEntity,fafafather,fafafatherType);
 		return mHighLevelOperationBean;
 	}

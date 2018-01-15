@@ -4,7 +4,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.tree.ITree;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
  * Created by huangkaifeng on 2018/1/13.
@@ -34,7 +34,7 @@ public class ClusterUpdate {
             ITree fafafather = AstRelations.findFafafatherNode(tmp, fp.mSrcTree);
             String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
 //			System.out.print(nextAction);
-            HighLevelOperationBean operationBean;
+            ClusteredActionBean operationBean;
             if(StatementConstants.FIELDDECLARATION.equals(fatherType)){
                 //insert FieldDeclaration body
                 operationBean = MatchFieldDeclaration.matchFieldDeclarationByFather(fp,a,type,fafafather,fatherType);

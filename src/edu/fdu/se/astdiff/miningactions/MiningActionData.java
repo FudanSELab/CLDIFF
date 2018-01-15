@@ -9,7 +9,7 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 public class MiningActionData {
 
@@ -20,7 +20,7 @@ public class MiningActionData {
 		this.mSrcTree = src;
 		this.mGeneratingActionsData.generateActionMap();
 
-		this.mHighLevelOperationBeanList = new ArrayList<HighLevelOperationBean>();
+		this.mHighLevelOperationBeanList = new ArrayList<ClusteredActionBean>();
 	}
 
 	public GeneratingActionsData mGeneratingActionsData;
@@ -32,7 +32,7 @@ public class MiningActionData {
 
 
 
-	protected List<HighLevelOperationBean> mHighLevelOperationBeanList;
+	protected List<ClusteredActionBean> mHighLevelOperationBeanList;
 
 
 	public void setActionTraversedMap(List<Action> mList) {
@@ -54,7 +54,7 @@ public class MiningActionData {
 	}
 
 
-	public void addHighLevelOperationBeanToList(HighLevelOperationBean mHighLevelOperationBean) {
+	public void addHighLevelOperationBeanToList(ClusteredActionBean mHighLevelOperationBean) {
 		this.mHighLevelOperationBeanList.add(mHighLevelOperationBean);
 	}
 
@@ -75,7 +75,7 @@ public class MiningActionData {
 
 
 
-	public List<HighLevelOperationBean> getmHighLevelOperationBeanList() {
+	public List<ClusteredActionBean> getmHighLevelOperationBeanList() {
 		return mHighLevelOperationBeanList;
 	}
 

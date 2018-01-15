@@ -2,12 +2,13 @@ package edu.fdu.se.astdiff.miningactions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchMethodSignatureChange {
@@ -19,7 +20,7 @@ public class MatchMethodSignatureChange {
 	 * @param fafafather
 	 * @return
 	 */
-	public static HighLevelOperationBean matchMethodSignatureChange(MiningActionData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
+	public static ClusteredActionBean matchMethodSignatureChange(MiningActionData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
 		String operationEntity = "METHODSIGNATURE";
 		if(!StatementConstants.METHODDECLARATION.equals(fafafatherType)) {
 			System.err.println(operationEntity+" CHANGE: "+"fafafatherType is not MethodDeclaration" );
@@ -41,15 +42,15 @@ public class MatchMethodSignatureChange {
 			}
 		}
 		List<Action> signatureChidlren = new ArrayList<Action>();
-		boolean dst_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
-		boolean src_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
+		Set<String> dst_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
+		Set<String> src_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
 
-		int status = MyTreeUtil.isSrcorDstAdded(src_status,dst_status);
+		int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 
 //		this.mMiningActionData.mapMethodSignatureAction(srcfafafather, signatureChidlren);
 		fp.setActionTraversedMap(signatureChidlren);
 
-		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,signatureChidlren,status,operationEntity,fafafather,fafafatherType);
 		return mHighLevelOperationBean;
 	}

@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchTry {
@@ -19,19 +17,19 @@ public class MatchTry {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchTry(MiningActionData fp, Action a, String nodeType) {
+	public static ClusteredActionBean matchTry(MiningActionData fp, Action a, String nodeType) {
 		String operationEntity = "TRYSTATEMENT";
 		List<Action> tryAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, tryAction);
 
 		fp.setActionTraversedMap(tryAction);
 
-		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,tryAction,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}
 
-	public static HighLevelOperationBean matchThrowStatement(MiningActionData fp, Action a, String nodeType, ITree ffFatherNode, String fatherNodeType) {
+	public static ClusteredActionBean matchThrowStatement(MiningActionData fp, Action a, String nodeType, ITree ffFatherNode, String fatherNodeType) {
 		String operationEntity = "THROWSTATEMENT";
 		List<Action> throwAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, throwAction);
@@ -42,12 +40,12 @@ public class MatchTry {
 //		else
 //			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getSrcTree());
 //		String fatherNodeType = fatherNode.getLabel();
-		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,throwAction,status,operationEntity,ffFatherNode,fatherNodeType);
 		return mHighLevelOperationBean;
 	}
 
-	public static HighLevelOperationBean matchFinally(MiningActionData fp, Action a, String nodeType, ITree ffFatherNode, String fatherNodeType) {
+	public static ClusteredActionBean matchFinally(MiningActionData fp, Action a, String nodeType, ITree ffFatherNode, String fatherNodeType) {
 		String operationEntity = "FINALLY";
 		List<Action> finallyAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, finallyAction);
@@ -58,28 +56,10 @@ public class MatchTry {
 //		else
 //			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getSrcTree());
 //		String fatherNodeType = fatherNode.getLabel();
-		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,finallyAction,status,operationEntity,ffFatherNode,fatherNodeType);
 		return mHighLevelOperationBean;
 	}
 
-	public int matchCatchclause(MiningActionData fp, Action a) {
-		String summary = "[PATTERN] " + ActionConstants.getInstanceStringName(a);
-		List<Action> tryAction = new ArrayList<Action>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, tryAction);
-		Insert ins = (Insert) a;
-		ITree insNode = ins.getNode();
-		ITree fafafatherCatchClause = AstRelations.findFafafatherNodeByStatementType(insNode, fp.getDstTree(),StatementConstants.CATCHCLAUSE);
-		String fatherCatchClauseType = fp.getDstTreeContextTypeLabel(fafafatherCatchClause);
-		
-		if (status == MyTreeUtil.TYPE1) {
-			summary += " try catch clause and body";
-		} else{
-			summary += " try catch clause wrapper";
-		}
-		fp.setActionTraversedMap(tryAction);
-		System.out.println(summary);
-		return tryAction.size();
-	}
 
 }

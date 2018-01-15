@@ -3,36 +3,37 @@ package edu.fdu.se.astdiff.miningactions;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
-import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MatchForStatement {
-    public static HighLevelOperationBean matchForStatement(MiningActionData fp, Action a, String nodeType){
+    public static ClusteredActionBean matchForStatement(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "FORSTATEMENT";
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
 
-        HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,subActions,status,operationEntity,null,null);
         return mHighLevelOperationBean;
     }
 
-    public static HighLevelOperationBean matchEnhancedForStatement(MiningActionData fp, Action a, String nodeType){
+    public static ClusteredActionBean matchEnhancedForStatement(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "ENHANCEDFORSTATEMENT";
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
 
-        HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,subActions,status,operationEntity,null,null);
         return mHighLevelOperationBean;
     }
 
-    public static HighLevelOperationBean matchForPredicate(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
+    public static ClusteredActionBean matchForPredicate(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
         String operationEntity  = "FORPREDICATE";
 
         List<Action> allActions = new ArrayList<Action>();
@@ -52,12 +53,12 @@ public class MatchForStatement {
             }
         }
 
-        boolean src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather.getChild(0), allActions);
-        boolean dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather.getChild(0), allActions);
-        int status = MyTreeUtil.isSrcorDstAdded(src_status,dst_status);
+        Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather.getChild(0), allActions);
+        Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather.getChild(0), allActions);
+        int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 
         fp.setActionTraversedMap(allActions);
-        HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
+        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;
     }

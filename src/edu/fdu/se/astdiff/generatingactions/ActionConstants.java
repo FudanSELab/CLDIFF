@@ -13,14 +13,7 @@ public class ActionConstants {
 	final public static String UPDATE = "UPDATE";
 	final public static String MOVE = "MOVE";
 	
-	final public static String METHODINVOCATION = "MethodInvocation";
-	// fafafather node 
-	//TODO 应该还有其他情况
-	final public static String IfPredicate = "IfStatement";
-	final public static String ForPredicate = "ForStatement";
-	final public static String ExpressionStatement = "ExpressionStatement";
-	final public static String VariableDelcarationStatement = "VariableDeclarationStatement";
-	
+	final public static String NULLACTION = "NULLACTION";
 	
 	public static String getInstanceStringName(Action a){
 		if(a instanceof Insert){
