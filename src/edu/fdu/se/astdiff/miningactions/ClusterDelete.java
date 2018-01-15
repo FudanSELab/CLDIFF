@@ -12,8 +12,8 @@ import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
  */
 public class ClusterDelete {
 
-    public static void findDelete(FindPatternData fp) {
-        int deleteActionCount = fp.mMiningActionBean.mActionGeneratorBean.getDeleteActions().size();
+    public static void findDelete(MiningActionData fp) {
+        int deleteActionCount = fp.mGeneratingActionsData.getDeleteActions().size();
         int index = 0;
         int count = 0;
         String resultStr = null;
@@ -21,22 +21,22 @@ public class ClusterDelete {
             if (index == deleteActionCount) {
                 break;
             }
-            Action a = fp.mMiningActionBean.mActionGeneratorBean.getDeleteActions().get(index);
+            Action a = fp.mGeneratingActionsData.getDeleteActions().get(index);
             index++;
-            if (fp.mMiningActionBean.mActionGeneratorBean.getAllActionMap().get(a) == 1) {
+            if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 continue;
             }
             Delete del = (Delete) a;
             ITree tmp = a.getNode();
-            String type = fp.mMiningActionBean.mSrcTree.getTypeLabel(tmp);
-            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mMiningActionBean.mSrcTree);
-            ITree fafafather = AstRelations.findFafafatherNode(tmp, fp.mMiningActionBean.mSrcTree);
+            String type = fp.mSrcTree.getTypeLabel(tmp);
+            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
+            ITree fafafather = AstRelations.findFafafatherNode(tmp, fp.mSrcTree);
             if(fafafather == null){
                 System.out.println("Father Null Condition: "+ ActionConstants.getInstanceStringName(a) + " " +type);
                 fp.setActionTraversedMap(a);
                 continue;
             }
-            String fatherType = fp.mMiningActionBean.mSrcTree.getTypeLabel(fafafather);
+            String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
 //			System.out.print(nextAction);
             HighLevelOperationBean operationBean;
             if(StatementConstants.FIELDDECLARATION.equals(type)){
@@ -68,10 +68,10 @@ public class ClusterDelete {
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     case StatementConstants.BLOCK:
-                        MatchBlock.matchBlock(fp,a, type,fp.mMiningActionBean.mDstTree);
+                        MatchBlock.matchBlock(fp,a, type,fp.mDstTree);
                         break;
                     case StatementConstants.BREAKSTATEMENT:
-                        if(AstRelations.isFatherSwitchStatement(a, fp.mMiningActionBean.mSrcTree)) {
+                        if(AstRelations.isFatherSwitchStatement(a, fp.mSrcTree)) {
                             //删除switch语句
                             operationBean = MatchSwitch.matchSwitchCase(fp, a, type, fafafather, fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);
@@ -82,7 +82,7 @@ public class ClusterDelete {
                         }
                         break;
                     case StatementConstants.RETURNSTATEMENT:
-                        MatchReturnStatement.matchReturnStatement(fp,a, type,fp.mMiningActionBean.mDstTree);
+                        MatchReturnStatement.matchReturnStatement(fp,a, type,fp.mDstTree);
                         break;
                     case StatementConstants.FORSTATEMENT:
                         //算出for语句
@@ -118,7 +118,7 @@ public class ClusterDelete {
                         break;
                     case StatementConstants.EXPRESSIONSTATEMENT:
                         // Pattern 1.2 Match else
-                        if (AstRelations.isFatherIfStatement(a, fp.mMiningActionBean.mSrcTree)) {
+                        if (AstRelations.isFatherIfStatement(a, fp.mSrcTree)) {
                             operationBean = MatchIfElse.matchElse(fp, a, type, fafafather, fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);
                         }
@@ -163,7 +163,7 @@ public class ClusterDelete {
                     case StatementConstants.BOOLEANLITERAL:
                     case StatementConstants.INFIXEXPRESSION:
                     case StatementConstants.METHODINVOCATION:
-                        MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mMiningActionBean.mSrcTree);
+                        MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mSrcTree);
                         break;
                     default:
                         String operationEntity = "DEFAULT: "+ActionConstants.getInstanceStringName(a) + " " +type;

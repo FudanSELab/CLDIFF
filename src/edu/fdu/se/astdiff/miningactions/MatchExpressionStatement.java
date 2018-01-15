@@ -18,7 +18,7 @@ public class MatchExpressionStatement {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchExpression(FindPatternData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
+	public static HighLevelOperationBean matchExpression(MiningActionData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
 		String operationEntity = "EXPRESSIONSTATEMENT";
 		TreeContext con = null;
 		if (a instanceof Insert) {

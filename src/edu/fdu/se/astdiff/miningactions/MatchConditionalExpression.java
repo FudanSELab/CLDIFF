@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchConditionalExpression {
-    public static HighLevelOperationBean matchConditionalExpression(FindPatternData fp, Action a, String nodeType){
+    public static HighLevelOperationBean matchConditionalExpression(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "ConditionalExpression";
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);

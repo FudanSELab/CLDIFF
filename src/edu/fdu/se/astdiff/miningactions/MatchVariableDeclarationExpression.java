@@ -19,7 +19,7 @@ public class MatchVariableDeclarationExpression {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchVariableDeclaration(FindPatternData fp, Action a, String nodeType) {
+	public static HighLevelOperationBean matchVariableDeclaration(MiningActionData fp, Action a, String nodeType) {
 		TreeContext con = null;
 		if (a instanceof Insert) {
 			con = fp.getDstTree();

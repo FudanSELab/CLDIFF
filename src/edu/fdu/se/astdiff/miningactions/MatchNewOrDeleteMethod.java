@@ -17,7 +17,7 @@ public class MatchNewOrDeleteMethod {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchNewOrDeleteMethod(FindPatternData fp, Action a, String nodeType) {
+	public static HighLevelOperationBean matchNewOrDeleteMethod(MiningActionData fp, Action a, String nodeType) {
 		String operationEntity = "NEWORDELETEMETHOD";
 		List<Action> subActions = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);

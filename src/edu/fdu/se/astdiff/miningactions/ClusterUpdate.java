@@ -14,25 +14,25 @@ public class ClusterUpdate {
     /**
      * Sub level-II
      */
-    public static void findUpdate(FindPatternData fp) {
-        int updateActionCount = fp.mMiningActionBean.mActionGeneratorBean.getUpdateActions().size();
+    public static void findUpdate(MiningActionData fp) {
+        int updateActionCount = fp.mGeneratingActionsData.getUpdateActions().size();
         int index = 0;
         while (true) {
             if (index == updateActionCount) {
                 break;
             }
-            Action a = fp.mMiningActionBean.mActionGeneratorBean.getUpdateActions().get(index);
+            Action a = fp.mGeneratingActionsData.getUpdateActions().get(index);
             index++;
-            if (fp.mMiningActionBean.mActionGeneratorBean.getAllActionMap().get(a) == 1) {
+            if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 // 标记过的 update action
                 continue;
             }
             Update up = (Update) a;
             ITree tmp = a.getNode();
-            String type = fp.mMiningActionBean.mSrcTree.getTypeLabel(tmp);
-            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mMiningActionBean.mSrcTree);
-            ITree fafafather = AstRelations.findFafafatherNode(tmp, fp.mMiningActionBean.mSrcTree);
-            String fatherType = fp.mMiningActionBean.mSrcTree.getTypeLabel(fafafather);
+            String type = fp.mSrcTree.getTypeLabel(tmp);
+            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
+            ITree fafafather = AstRelations.findFafafatherNode(tmp, fp.mSrcTree);
+            String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
 //			System.out.print(nextAction);
             HighLevelOperationBean operationBean;
             if(StatementConstants.FIELDDECLARATION.equals(fatherType)){
@@ -65,7 +65,7 @@ public class ClusterUpdate {
                     case StatementConstants.BOOLEANLITERAL:
                     case StatementConstants.INFIXEXPRESSION:
                     case StatementConstants.METHODINVOCATION:
-                        MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mMiningActionBean.mSrcTree);
+                        MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mSrcTree);
                         break;
                     default:
                         break;

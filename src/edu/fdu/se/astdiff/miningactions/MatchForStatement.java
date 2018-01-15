@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchForStatement {
-    public static HighLevelOperationBean matchForStatement(FindPatternData fp, Action a, String nodeType){
+    public static HighLevelOperationBean matchForStatement(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "FORSTATEMENT";
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
@@ -21,7 +21,7 @@ public class MatchForStatement {
         return mHighLevelOperationBean;
     }
 
-    public static HighLevelOperationBean matchEnhancedForStatement(FindPatternData fp, Action a, String nodeType){
+    public static HighLevelOperationBean matchEnhancedForStatement(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "ENHANCEDFORSTATEMENT";
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
@@ -32,7 +32,7 @@ public class MatchForStatement {
         return mHighLevelOperationBean;
     }
 
-    public static HighLevelOperationBean matchForPredicate(FindPatternData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
+    public static HighLevelOperationBean matchForPredicate(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
         String operationEntity  = "FORPREDICATE";
 
         List<Action> allActions = new ArrayList<Action>();

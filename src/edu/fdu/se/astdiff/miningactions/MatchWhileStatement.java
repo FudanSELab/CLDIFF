@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchWhileStatement {
-    public static HighLevelOperationBean matchWhileStatement(FindPatternData fp, Action a, String nodeType){
+    public static HighLevelOperationBean matchWhileStatement(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "WHILESTATEMENT";
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
@@ -19,7 +19,7 @@ public class MatchWhileStatement {
         return mHighLevelOperationBean;
     }
 
-    public static HighLevelOperationBean matchDoStatement(FindPatternData fp, Action a, String nodeType){
+    public static HighLevelOperationBean matchDoStatement(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "DOSTATEMENT";
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);

@@ -19,7 +19,7 @@ public class MatchTry {
 	 * @param a
 	 * @return
 	 */
-	public static HighLevelOperationBean matchTry(FindPatternData fp, Action a, String nodeType) {
+	public static HighLevelOperationBean matchTry(MiningActionData fp, Action a, String nodeType) {
 		String operationEntity = "TRYSTATEMENT";
 		List<Action> tryAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, tryAction);
@@ -31,7 +31,7 @@ public class MatchTry {
 		return mHighLevelOperationBean;
 	}
 
-	public static HighLevelOperationBean matchThrowStatement(FindPatternData fp, Action a, String nodeType, ITree ffFatherNode, String fatherNodeType) {
+	public static HighLevelOperationBean matchThrowStatement(MiningActionData fp, Action a, String nodeType, ITree ffFatherNode, String fatherNodeType) {
 		String operationEntity = "THROWSTATEMENT";
 		List<Action> throwAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, throwAction);
@@ -47,7 +47,7 @@ public class MatchTry {
 		return mHighLevelOperationBean;
 	}
 
-	public static HighLevelOperationBean matchFinally(FindPatternData fp, Action a, String nodeType, ITree ffFatherNode, String fatherNodeType) {
+	public static HighLevelOperationBean matchFinally(MiningActionData fp, Action a, String nodeType, ITree ffFatherNode, String fatherNodeType) {
 		String operationEntity = "FINALLY";
 		List<Action> finallyAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, finallyAction);
@@ -63,7 +63,7 @@ public class MatchTry {
 		return mHighLevelOperationBean;
 	}
 
-	public int matchCatchclause(FindPatternData fp, Action a) {
+	public int matchCatchclause(MiningActionData fp, Action a) {
 		String summary = "[PATTERN] " + ActionConstants.getInstanceStringName(a);
 		List<Action> tryAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, tryAction);

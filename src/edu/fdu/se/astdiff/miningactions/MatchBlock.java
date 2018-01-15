@@ -8,7 +8,7 @@ import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
 
 public class MatchBlock {
     private static HighLevelOperationBean operationBean;
-    public static void matchBlock(FindPatternData fp, Action a, String nodeType, TreeContext curContext) {
+    public static void matchBlock(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
 //        ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(), curContext);
 //        String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
 
@@ -39,12 +39,12 @@ public class MatchBlock {
         }
 
 
-//						}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionBean.mDstTree)) {
+//						}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionData.mDstTree)) {
 //							//同步语句块增加
 //							MatchSynchronized.matchSynchronized(this,a);
 
     }
-    public static void matchBlockByChild(FindPatternData fp, Action a, String nodeType, TreeContext curContext) {
+    public static void matchBlockByChild(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
 //        ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(), curContext);
 //        String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
 
@@ -75,7 +75,7 @@ public class MatchBlock {
         }
 
 
-//						}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionBean.mDstTree)) {
+//						}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionData.mDstTree)) {
 //							//同步语句块增加
 //							MatchSynchronized.matchSynchronized(this,a);
 

@@ -19,7 +19,7 @@ public class MatchMethodSignatureChange {
 	 * @param fafafather
 	 * @return
 	 */
-	public static HighLevelOperationBean matchMethodSignatureChange(FindPatternData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
+	public static HighLevelOperationBean matchMethodSignatureChange(MiningActionData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
 		String operationEntity = "METHODSIGNATURE";
 		if(!StatementConstants.METHODDECLARATION.equals(fafafatherType)) {
 			System.err.println(operationEntity+" CHANGE: "+"fafafatherType is not MethodDeclaration" );
@@ -46,7 +46,7 @@ public class MatchMethodSignatureChange {
 
 		int status = MyTreeUtil.isSrcorDstAdded(src_status,dst_status);
 
-//		this.mMiningActionBean.mapMethodSignatureAction(srcfafafather, signatureChidlren);
+//		this.mMiningActionData.mapMethodSignatureAction(srcfafafather, signatureChidlren);
 		fp.setActionTraversedMap(signatureChidlren);
 
 		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(

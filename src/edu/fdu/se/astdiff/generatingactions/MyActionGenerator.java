@@ -77,15 +77,15 @@ public class MyActionGenerator {
         for (Mapping m: mappings)
             this.origMappings.link(copySrcTrees.get(m.getFirst().getId()), m.getSecond());
         this.newMappings = origMappings.copy();
-        myAgbData = new ActionGeneratorBean();
+        myAgbData = new GeneratingActionsData();
     }
 
 
-    public ActionGeneratorBean myAgbData;
+    public GeneratingActionsData myAgbData;
     
     
-    public ActionGeneratorBean generate() {
-    	myAgbData = new ActionGeneratorBean();
+    public GeneratingActionsData generate() {
+    	myAgbData = new GeneratingActionsData();
         ITree srcFakeRoot = new AbstractTree.FakeTree(copySrc);
         ITree dstFakeRoot = new AbstractTree.FakeTree(origDst);
         copySrc.setParent(srcFakeRoot);

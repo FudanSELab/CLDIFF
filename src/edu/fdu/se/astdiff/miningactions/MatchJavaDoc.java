@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchJavaDoc {
-    public static HighLevelOperationBean matchJavaDoc(FindPatternData fp, Action a, String nodeType){
+    public static HighLevelOperationBean matchJavaDoc(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "JAVADOC";
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
@@ -20,7 +20,7 @@ public class MatchJavaDoc {
                 a,nodeType,subActions,status,operationEntity,null,null);
         return mHighLevelOperationBean;
     }
-    public static HighLevelOperationBean matchJavaDoc(FindPatternData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType){
+    public static HighLevelOperationBean matchJavaDoc(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType){
         String operationEntity = "FATHERNODE-JAVADOC";
         ITree srcParent = null;
         List<Action> allActions = new ArrayList<Action>();

@@ -7,13 +7,12 @@ import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
 
 public class MatchReturnStatement {
-    private static HighLevelOperationBean operationBean;
-    public static void matchReturnStatement(FindPatternData fp, Action a, String nodeType, TreeContext curContext) {
+    public static void matchReturnStatement(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
         ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(), curContext);
         String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
         switch (ffFatherNodeType) {
             case StatementConstants.SWITCHSTATEMENT:
-                operationBean = MatchSwitch.matchSwitchCase(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+                HighLevelOperationBean operationBean = MatchSwitch.matchSwitchCase(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
                 fp.addHighLevelOperationBeanToList(operationBean);
                 break;
             default:

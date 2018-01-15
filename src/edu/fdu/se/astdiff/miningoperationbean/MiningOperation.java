@@ -3,7 +3,7 @@ package edu.fdu.se.astdiff.miningoperationbean;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
-import edu.fdu.se.astdiff.miningactions.FindPatternData;
+import edu.fdu.se.astdiff.miningactions.MiningActionData;
 
 import java.util.List;
 
@@ -12,16 +12,17 @@ import java.util.List;
  */
 public class MiningOperation {
 
-    public static void printHighLevelOperationBeanList(FindPatternData fp,List<HighLevelOperationBean> mHighLevelOperationBeanList) {
+    public static void printHighLevelOperationBeanList(MiningActionData fp) {
+        List<HighLevelOperationBean> mHighLevelOperationBeanList =  fp.getmHighLevelOperationBeanList();
         if (mHighLevelOperationBeanList.isEmpty()) {
             System.out.println("HighLevelOperationBeanList is null!");
         }else {
             for (HighLevelOperationBean operationBean : mHighLevelOperationBeanList) {
                 TreeContext treeContext;
                 if (operationBean.curAction instanceof Insert) {
-                    treeContext = fp.getmMiningActionBean().mDstTree;
+                    treeContext = fp.getDstTree();
                 } else {
-                    treeContext = fp.getmMiningActionBean().mSrcTree;
+                    treeContext = fp.getSrcTree();
                 }
                 String nextAction = ConsolePrint.getMyOneActionString(operationBean.curAction, 0, treeContext);
                 System.out.print(nextAction);

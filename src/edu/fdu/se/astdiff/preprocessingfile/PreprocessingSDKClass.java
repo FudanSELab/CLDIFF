@@ -1,13 +1,11 @@
-package edu.fdu.se.main.ast;
+package edu.fdu.se.astdiff.preprocessingfile;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -20,13 +18,12 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.stmt.BlockStmt;
 
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.javaparser.JavaParserFactory;
-import javassist.compiler.ast.FieldDecl;
 
 /**
  * 两个文件 预处理
@@ -292,6 +289,7 @@ public class PreprocessingSDKClass {
 
     public PreprocessingSDKClass compareTwoSDKFile3(String prev, String curr,String outputDirName) {
         CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prev);
+
         CompilationUnit cuCurr = JavaParserFactory.getCompilationUnit(curr);
         String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
         File dirFilePrev = new File(rootOutPath +"/prev/"+outputDirName);
@@ -331,6 +329,7 @@ public class PreprocessingSDKClass {
             if (node instanceof MethodDeclaration) {
                 MethodDeclaration md = (MethodDeclaration) node;
                 checkCurrBodies(md.getDeclarationAsString(), md.getNameAsString(), (BodyDeclaration) node);
+
                 continue;
             }
             if (node instanceof FieldDeclaration) {

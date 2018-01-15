@@ -9,25 +9,25 @@ import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
  * Created by huangkaifeng on 2018/1/13.
  */
 public class ClusterMove {
-    public static void findMove(FindPatternData fp) {
-        int moveActionCount = fp.mMiningActionBean.mActionGeneratorBean.getMoveActions().size();
+    public static void findMove(MiningActionData fp) {
+        int moveActionCount = fp.mGeneratingActionsData.getMoveActions().size();
         int index = 0;
         while (true) {
             if (index == moveActionCount) {
                 break;
             }
-            Action a = fp.mMiningActionBean.mActionGeneratorBean.getMoveActions().get(index);
+            Action a = fp.mGeneratingActionsData.getMoveActions().get(index);
             index++;
-            if (fp.mMiningActionBean.mActionGeneratorBean.getAllActionMap().get(a) == 1) {
+            if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 // 标记过的 update action
                 continue;
             }
             Move up = (Move) a;
             ITree moveNode = a.getNode();
-            String type = fp.mMiningActionBean.mSrcTree.getTypeLabel(moveNode);
-            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mMiningActionBean.mSrcTree);
-            ITree fafafather = AstRelations.findFafafatherNode(moveNode, fp.mMiningActionBean.mSrcTree);
-            String fatherType = fp.mMiningActionBean.mSrcTree.getTypeLabel(fafafather);
+            String type = fp.mSrcTree.getTypeLabel(moveNode);
+            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
+            ITree fafafather = AstRelations.findFafafatherNode(moveNode, fp.mSrcTree);
+            String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
             System.out.print(nextAction+"\n");
             ITree dstNode = up.getParent();
 

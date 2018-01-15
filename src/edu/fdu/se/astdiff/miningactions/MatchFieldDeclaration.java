@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchFieldDeclaration {
-    public static HighLevelOperationBean matchFieldDeclaration(FindPatternData fp, Action a, String nodeType) {
+    public static HighLevelOperationBean matchFieldDeclaration(MiningActionData fp, Action a, String nodeType) {
         String operationEntity  = "FIELDDECLARATION";
 
         List<Action> allActions = new ArrayList<Action>();
@@ -20,7 +20,7 @@ public class MatchFieldDeclaration {
                 a,nodeType,allActions,status,operationEntity,null,null);
         return mHighLevelOperationBean;
     }
-    public static HighLevelOperationBean matchFieldDeclarationByFather(FindPatternData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
+    public static HighLevelOperationBean matchFieldDeclarationByFather(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
         String operationEntity  = "FIELDDECLARATION-BODY";
 
         List<Action> allActions = new ArrayList<Action>();

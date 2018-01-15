@@ -10,7 +10,7 @@ import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSynchronized {
 	
-	public static HighLevelOperationBean matchSynchronized(FindPatternData fp, Action a, String nodeType){
+	public static HighLevelOperationBean matchSynchronized(MiningActionData fp, Action a, String nodeType){
 
 		String operationEntity = "SYNCHRONIZED";
 		List<Action> subActions = new ArrayList<Action>();

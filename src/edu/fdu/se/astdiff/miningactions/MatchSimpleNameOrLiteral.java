@@ -23,7 +23,7 @@ public class MatchSimpleNameOrLiteral {
 	 * @param nodeType
 	 * @return
 	 */
-	public static HighLevelOperationBean matchExpressionStatementAndVariableDeclarationStatement(FindPatternData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
+	public static HighLevelOperationBean matchExpressionStatementAndVariableDeclarationStatement(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
 		String operationEntity  = "IFPREDICATE";
 		ITree srcParent = null;
 		List<Action> allActions = new ArrayList<Action>();
@@ -48,7 +48,7 @@ public class MatchSimpleNameOrLiteral {
 		int status = MyTreeUtil.isSrcorDstAdded(src_status,dst_status);
 
 		fp.setActionTraversedMap(allActions);
-//		this.mMiningActionBean.mapMethodInvocationAndActions(srcParent, allActions);
+//		this.mMiningActionData.mapMethodInvocationAndActions(srcParent, allActions);
 		HighLevelOperationBean mHighLevelOperationBean = new HighLevelOperationBean(
 				a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;
@@ -66,7 +66,7 @@ public class MatchSimpleNameOrLiteral {
 	 * @param a
 	 * @return
 	 */
-	public static void matchSimplenameOrLiteral(FindPatternData fp, Action a, String nodeType, TreeContext curContext) {
+	public static void matchSimplenameOrLiteral(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
 		// if predicate
 		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), curContext);
 		String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);

@@ -11,30 +11,30 @@ import edu.fdu.se.astdiff.miningoperationbean.HighLevelOperationBean;
  */
 public class ClusterInsert {
 
-    public static void findInsert(FindPatternData fp) {
-        int insertActionCount = fp.mMiningActionBean.mActionGeneratorBean.getInsertActions().size();
+    public static void findInsert(MiningActionData fp) {
+        int insertActionCount = fp.mGeneratingActionsData.getInsertActions().size();
         int insertActionIndex = 0;
         while (true) {
             if (insertActionIndex == insertActionCount) {
                 break;
             }
-            Action a = fp.mMiningActionBean.mActionGeneratorBean.getInsertActions().get(insertActionIndex);
+            Action a = fp.mGeneratingActionsData.getInsertActions().get(insertActionIndex);
             insertActionIndex++;
-            if (fp.mMiningActionBean.mActionGeneratorBean.getAllActionMap().get(a) == 1) {
+            if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 // 标记过的action
                 continue;
             }
             Insert ins = (Insert) a;
             ITree insNode = ins.getNode();
-            String type = fp.mMiningActionBean.mDstTree.getTypeLabel(insNode);
-            ITree fafafather = AstRelations.findFafafatherNode(insNode, fp.mMiningActionBean.mDstTree);
+            String type = fp.mDstTree.getTypeLabel(insNode);
+            ITree fafafather = AstRelations.findFafafatherNode(insNode, fp.mDstTree);
             if(fafafather == null){
                 System.out.println("Father Null Condition: "+ ActionConstants.getInstanceStringName(a) + " " +type);
                 fp.setActionTraversedMap(a);
                 continue;
             }
-            String fatherType = fp.mMiningActionBean.mDstTree.getTypeLabel(fafafather);
-//			String nextAction = ConsolePrint.getMyOneActionString(a, 0, this.mMiningActionBean.mDstTree);
+            String fatherType = fp.mDstTree.getTypeLabel(fafafather);
+//			String nextAction = ConsolePrint.getMyOneActionString(a, 0, this.mDstTree);
 //			System.out.print(nextAction);
             HighLevelOperationBean operationBean;
             if(StatementConstants.FIELDDECLARATION.equals(type)){
@@ -66,10 +66,10 @@ public class ClusterInsert {
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     case StatementConstants.BLOCK:
-                        MatchBlock.matchBlock(fp,a, type,fp.mMiningActionBean.mDstTree);
+                        MatchBlock.matchBlock(fp,a, type,fp.mDstTree);
                         break;
                     case StatementConstants.BREAKSTATEMENT:
-                        if(AstRelations.isFatherSwitchStatement(a, fp.mMiningActionBean.mDstTree)) {
+                        if(AstRelations.isFatherSwitchStatement(a, fp.mDstTree)) {
                             //增加switch语句
                             operationBean = MatchSwitch.matchSwitchCase(fp, a, type, fafafather, fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);
@@ -80,7 +80,7 @@ public class ClusterInsert {
                         }
                         break;
                     case StatementConstants.RETURNSTATEMENT:
-                        MatchReturnStatement.matchReturnStatement(fp,a, type,fp.mMiningActionBean.mDstTree);
+                        MatchReturnStatement.matchReturnStatement(fp,a, type,fp.mDstTree);
                         break;
                     case StatementConstants.FORSTATEMENT:
                         //增加for语句
@@ -115,7 +115,7 @@ public class ClusterInsert {
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     case StatementConstants.EXPRESSIONSTATEMENT:
-                        if(AstRelations.isFatherIfStatement(a, fp.mMiningActionBean.mDstTree)) {
+                        if(AstRelations.isFatherIfStatement(a, fp.mDstTree)) {
                             // Pattern 1.2 Match else
                             operationBean = MatchIfElse.matchElse(fp, a,type,fafafather,fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);
@@ -161,7 +161,7 @@ public class ClusterInsert {
                     case StatementConstants.BOOLEANLITERAL:
                     case StatementConstants.INFIXEXPRESSION:
                     case StatementConstants.METHODINVOCATION:
-                        MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mMiningActionBean.mDstTree);
+                        MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mDstTree);
                         break;
                     default:
                         String operationEntity = "DEFAULT: "+ ActionConstants.getInstanceStringName(a) + " " +type;
