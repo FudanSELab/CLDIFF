@@ -69,7 +69,7 @@ public class MyTreeUtil{
 //        				count++;
 //        			}
         			allEditAction.add(aTmp);
-					actionTypes.add(aTmp.getClass().toString());
+					actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
         		}
     		}
     	}
@@ -118,7 +118,7 @@ public class MyTreeUtil{
     		List<Action> nodeActions = myTree.getDoAction();
     		for(Action aTmp:nodeActions){
     			result.add(aTmp);
-    			actionTypes.add(aTmp.getClass().toString());
+    			actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
     		}
     	}
 		return actionTypes;
@@ -132,7 +132,7 @@ public class MyTreeUtil{
 		if(srcTypes.size()==1&&srcTypes.contains(ActionConstants.NULLACTION)){
 			//src tree为null
 			if(dstTypes.contains(ActionConstants.INSERT)){
-				return OperationTypeConstants.INSERT_STATEMENT_CONDITION;
+				return OperationTypeConstants.INSERT_STATEMENT_CONDITION_OR_DECLARATION;
 			}else{
 				return OperationTypeConstants.UNKNOWN;
 			}
@@ -142,16 +142,16 @@ public class MyTreeUtil{
 			if(srcTypes.contains(ActionConstants.NULLACTION)){
 				if(srcTypes.size()==2){
 					if(srcTypes.contains(ActionConstants.MOVE)) {
-						return OperationTypeConstants.MOVE_STATEMENT_CONDITION;
+						return OperationTypeConstants.MOVE_STATEMENT_CONDITION_OR_DECLARATION;
 					}else if(srcTypes.contains(ActionConstants.UPDATE)) {
-						return OperationTypeConstants.UPDATE_STATEMENT_CONDITION;
+						return OperationTypeConstants.UPDATE_STATEMENT_CONDITION_OR_DECLARATION;
 					}else if(srcTypes.contains(ActionConstants.DELETE)){
-						return OperationTypeConstants.DELETE_STATEMENT_CONDITION;
+						return OperationTypeConstants.DELETE_STATEMENT_CONDITION_OR_DECLARATION;
 					}else{
 						return OperationTypeConstants.UNKNOWN;
 					}
 				}else{
-					return OperationTypeConstants.STATEMENT_CONDITION_MISC;
+					return OperationTypeConstants.STATEMENT_CONDITION_OR_DECLARATION_MISC;
 				}
 			}else{
 				return OperationTypeConstants.UNKNOWN;
@@ -180,7 +180,7 @@ public class MyTreeUtil{
     		List<Action> nodeActions = myTree.getDoAction();
     		for(Action aTmp:nodeActions){
     			result.add(aTmp);
-    			actionTypes.add(aTmp.getClass().toString());
+    			actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
     		}
     	}
     	return getTypeCode(action,isNullExist,actionTypes);
@@ -210,7 +210,7 @@ public class MyTreeUtil{
         		List<Action> nodeActions = myTree.getDoAction();
         		for(Action aTmp:nodeActions){
         			result.add(aTmp);
-        			actionTypes.add(aTmp.getClass().toString());
+        			actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
         		}
     		}
     	}

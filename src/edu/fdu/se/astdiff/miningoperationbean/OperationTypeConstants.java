@@ -22,15 +22,15 @@ public class OperationTypeConstants {
 
     final public static int MOVE_STATEMENT_WRAPPER = 6;
 
-    final public static int INSERT_STATEMENT_CONDITION = 7;
+    final public static int INSERT_STATEMENT_CONDITION_OR_DECLARATION = 7;
 
-    final public static int DELETE_STATEMENT_CONDITION = 8;
+    final public static int DELETE_STATEMENT_CONDITION_OR_DECLARATION = 8;
 
-    final public static int UPDATE_STATEMENT_CONDITION = 9;
+    final public static int UPDATE_STATEMENT_CONDITION_OR_DECLARATION = 9;
 
-    final public static int MOVE_STATEMENT_CONDITION = 10;
+    final public static int MOVE_STATEMENT_CONDITION_OR_DECLARATION = 10;
 
-    final public static int STATEMENT_CONDITION_MISC = 11;
+    final public static int STATEMENT_CONDITION_OR_DECLARATION_MISC = 11;
 
     private static Map<Integer,String> constantName;
     static {
@@ -41,11 +41,11 @@ public class OperationTypeConstants {
         constantName.put(4,"INSERT_STATEMENT_WRAPPER");
         constantName.put(5,"DELETE_STATEMENT_WRAPPER");
         constantName.put(6,"MOVE_STATEMENT_WRAPPER");
-        constantName.put(7,"INSERT_STATEMENT_CONDITION");
-        constantName.put(8,"DELETE_STATEMENT_CONDITION");
-        constantName.put(9,"UPDATE_STATEMENT_CONDITION");
-        constantName.put(10,"MOVE_STATEMENT_CONDITION");
-        constantName.put(11,"STATEMENT_CONDITION_MISC");
+        constantName.put(7,"INSERT_STATEMENT_CONDITION_OR_DECLARATION");
+        constantName.put(8,"DELETE_STATEMENT_CONDITION_OR_DECLARATION");
+        constantName.put(9,"UPDATE_STATEMENT_CONDITION_OR_DECLARATION");
+        constantName.put(10,"MOVE_STATEMENT_CONDITION_OR_DECLARATION");
+        constantName.put(11,"STATEMENT_CONDITION_OR_DECLARATION_MISC");
         constantName.put(-1,"UNKNOWN");
 
     }
