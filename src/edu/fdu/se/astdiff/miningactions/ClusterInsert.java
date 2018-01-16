@@ -37,6 +37,7 @@ public class ClusterInsert {
 //			String nextAction = ConsolePrint.getMyOneActionString(a, 0, this.mDstTree);
 //			System.out.print(nextAction);
             ClusteredActionBean operationBean;
+
             if(StatementConstants.FIELDDECLARATION.equals(type)){
                 //insert FieldDeclaration
                 operationBean = MatchFieldDeclaration.matchFieldDeclaration(fp,a,type);
@@ -46,6 +47,12 @@ public class ClusterInsert {
                 //insert FieldDeclaration body
                 operationBean = MatchFieldDeclaration.matchFieldDeclarationByFather(fp,a,type,fafafather,fatherType);
                 fp.mHighLevelOperationBeanList.add(operationBean);
+                continue;
+            }
+
+            if(StatementConstants.INITIALIZER.equals(type) && StatementConstants.TYPEDECLARATION.equals(fp.mDstTree.getTypeLabel(a.getNode().getParent()))){
+                //insert INITIALIZER
+                MatchInitializerBlock.matchInitializerBlock(fp, a, type,fp.mDstTree);
                 continue;
             }
 
@@ -115,7 +122,7 @@ public class ClusterInsert {
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     case StatementConstants.EXPRESSIONSTATEMENT:
-                        if(AstRelations.isFatherIfStatement(a, fp.mDstTree)) {
+                        if(AstRelations.isFatherIfStatement(a, fp.mDstTree) && a.getNode().getParent().getChildPosition(a.getNode())== 2) {
                             // Pattenr 1.2 Match else
                             operationBean = MatchIfElse.matchElse(fp, a,type,fafafather,fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);

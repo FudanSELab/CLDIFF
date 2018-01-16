@@ -66,7 +66,7 @@ public class DiffMiner {
 		int cnt = 0;
 		for(String subPath: filePathList){
 			cnt++;
-			if(cnt <= 0){
+			if(cnt <= 1){
 				continue;
 			}
 			System.out.println(subPath);
@@ -120,8 +120,8 @@ public class DiffMiner {
 
 	public static void main(String args[]){
 		DiffMiner i = new DiffMiner();
-//		i.run();
-		i.runBatch();
+		i.run();
+//		i.runBatch();
 
 	}
 	

@@ -3,6 +3,7 @@ package edu.fdu.se.astdiff.miningactions;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.tree.ITree;
+import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
@@ -42,10 +43,7 @@ public class ClusterUpdate {
                 continue;
             }
 
-            if (StatementConstants.METHODDECLARATION.equals(type)) {
-                // 新增方法
-                System.out.println("Update 应该不会是method declaration");
-            } else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
+           if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
                 // 方法签名update
                 if (StatementConstants.BLOCK.equals(type)) {
                     System.out.print(nextAction);
@@ -68,7 +66,12 @@ public class ClusterUpdate {
                         MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mSrcTree);
                         break;
                     default:
+                        String operationEntity = "DEFAULT: "+ ActionConstants.getInstanceStringName(a) + " " +type;
+                        operationBean = new ClusteredActionBean(a,type,null,-1,operationEntity,fafafather,fatherType);
+                        fp.mHighLevelOperationBeanList.add(operationBean);
+                        fp.setActionTraversedMap(a);
                         break;
+
                 }
             }
         }

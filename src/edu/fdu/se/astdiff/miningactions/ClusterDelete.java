@@ -51,6 +51,12 @@ public class ClusterDelete {
                 continue;
             }
 
+            if(StatementConstants.INITIALIZER.equals(type) && StatementConstants.TYPEDECLARATION.equals(fp.mSrcTree.getTypeLabel(a.getNode().getParent()))){
+                //insert INITIALIZER
+                MatchInitializerBlock.matchInitializerBlock(fp, a,type,fp.mSrcTree);
+                continue;
+            }
+
             if (StatementConstants.METHODDECLARATION.equals(type)) {
                 // 删除方法体
                 //ClusteredActionBean bean  = MatchNewOrDeleteMethod.matchNewOrDeleteMethod(fp,a,type);
@@ -118,7 +124,7 @@ public class ClusterDelete {
                         break;
                     case StatementConstants.EXPRESSIONSTATEMENT:
                         // Pattern 1.2 Match else
-                        if (AstRelations.isFatherIfStatement(a, fp.mSrcTree)) {
+                        if (AstRelations.isFatherIfStatement(a, fp.mSrcTree) && a.getNode().getParent().getChildPosition(a.getNode())== 2) {
                             operationBean = MatchIfElse.matchElse(fp, a, type, fafafather, fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);
                         }

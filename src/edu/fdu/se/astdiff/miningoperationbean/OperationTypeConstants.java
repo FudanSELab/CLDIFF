@@ -1,5 +1,6 @@
 package edu.fdu.se.astdiff.miningoperationbean;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,6 +34,7 @@ public class OperationTypeConstants {
 
     private static Map<Integer,String> constantName;
     static {
+        constantName = new HashMap<>();
         constantName.put(1,"INSERT_STATEMENT_AND_BODY");
         constantName.put(2,"DELETE_STATEMENT_AND_BODY");
         constantName.put(3,"MOVE_STATEMENT_AND_BODY");
