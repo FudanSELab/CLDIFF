@@ -14,7 +14,6 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSimpleNameOrLiteral {
-	private static ClusteredActionBean operationBean;
 	/**
 	 * level IV fafafather 为VariableDeclarationStatement ExpressionStatement
 	 * father为methodinvocation  按照fafafatherNode 为key，存所有相关的action,更细的情况放到map之后再做处理
@@ -71,6 +70,7 @@ public class MatchSimpleNameOrLiteral {
 		// if predicate
 		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), curContext);
 		String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
+		ClusteredActionBean operationBean;
 		switch (ffFatherNodeType) {
 		case StatementConstants.IFSTATEMENT:
 //			System.out.println("If predicate");

@@ -33,7 +33,7 @@ public class MatchBlock {
             default:
                 String nextAction = ConsolePrint.getMyOneActionString(a, 0, curContext);
                 System.out.print(nextAction);
-                System.out.println("Default, Block: " + fatherNodeType +"\n");
+                System.out.println("Default, Block, curNodeType: "+nodeType+", "+"fatherNodeType: " + fatherNodeType +"\n");
                 fp.setActionTraversedMap(a);
                 break;
         }

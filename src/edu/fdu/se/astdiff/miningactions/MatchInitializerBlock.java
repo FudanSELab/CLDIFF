@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchInitializerBlock {
-    private static ClusteredActionBean operationBean;
-
     public static void matchInitializerBlock(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
         List<ITree> child = a.getNode().getChildren();
 
@@ -25,6 +23,7 @@ public class MatchInitializerBlock {
             secondChildType = curContext.getTypeLabel(child.get(1));
         }
 //        String secondChildType = curContext.getTypeLabel(secondChild);
+        ClusteredActionBean operationBean;
 
         if(StatementConstants.BLOCK.equals(firstChildType)){
             operationBean = matchStatementBlock(fp,a,nodeType);
