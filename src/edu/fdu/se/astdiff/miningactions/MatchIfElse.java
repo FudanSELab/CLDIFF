@@ -96,22 +96,11 @@ public class MatchIfElse {
 	public static ClusteredActionBean matchIfPredicate(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
 		// fafafatherNode是if 那么 第一个孩子是if里的内容
 		String operationEntity  = "IFPREDICATE";
-		ITree srcParent = null;
+
 		List<Action> allActions = new ArrayList<Action>();
+
 		ITree srcfafafather = null;
 		ITree dstfafafather = null;
-//		if (a instanceof Insert) {
-//			if (fp.getMappedSrcOfDstNode(fafafatherNode) != null) {
-//				srcParent = fp.getMappedSrcOfDstNode(fafafatherNode);
-//				List<Action> tmp = new ArrayList<Action>();
-//				int status2 = MyTreeUtil.traverseNodeGetAllEditActions(srcParent, tmp);
-//				allActions.addAll(tmp);
-//			} else {
-//				System.err.println("ERerererR");
-//			}
-//		} else {
-//			srcParent = fafafatherNode;
-//		}
 		if (a instanceof Insert) {
 			dstfafafather = fafafatherNode;
 			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);

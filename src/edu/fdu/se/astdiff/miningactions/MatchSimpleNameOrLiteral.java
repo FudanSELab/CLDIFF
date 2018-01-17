@@ -24,7 +24,7 @@ public class MatchSimpleNameOrLiteral {
 	 * @return
 	 */
 	public static ClusteredActionBean matchExpressionStatementAndVariableDeclarationStatement(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
-		String operationEntity  = "IFPREDICATE";
+		String operationEntity  = "EXPRESSIONSTATEMENTANDVARIABLEDECLARATIONSTATEMENT";
 		ITree srcParent = null;
 		List<Action> allActions = new ArrayList<Action>();
 
@@ -84,18 +84,26 @@ public class MatchSimpleNameOrLiteral {
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
+			operationBean = MatchVariableDeclarationExpression.matchVariableDeclarationByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			fp.addHighLevelOperationBeanToList(operationBean);
+			break;
 		case StatementConstants.EXPRESSIONSTATEMENT:
 //			System.out.println("variable/expression");
-			operationBean = matchExpressionStatementAndVariableDeclarationStatement(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			operationBean = MatchExpressionStatement.matchExpressionByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.JAVADOC:
-			operationBean = MatchJavaDoc.matchJavaDoc(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			operationBean = MatchJavaDoc.matchJavaDocByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.SWITCHCASE:
 			//switchcase
-			operationBean = MatchSwitch.matchSwitchCase(fp, a, nodeType, fafafatherNode, ffFatherNodeType);
+			operationBean = MatchSwitch.matchSwitchCaseByFather(fp, a, nodeType, fafafatherNode, ffFatherNodeType);
+			fp.addHighLevelOperationBeanToList(operationBean);
+			break;
+		case StatementConstants.RETURNSTATEMENT:
+			//return statement
+			operationBean = MatchReturnStatement.matchReturnStatentByFather(fp, a, nodeType, fafafatherNode,ffFatherNodeType);
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		default:

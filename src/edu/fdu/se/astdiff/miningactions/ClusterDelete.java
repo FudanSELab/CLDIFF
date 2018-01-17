@@ -79,7 +79,7 @@ public class ClusterDelete {
                     case StatementConstants.BREAKSTATEMENT:
                         if(AstRelations.isFatherSwitchStatement(a, fp.mSrcTree)) {
                             //删除switch语句
-                            operationBean = MatchSwitch.matchSwitchCase(fp, a, type, fafafather, fatherType);
+                            operationBean = MatchSwitch.matchSwitchCaseByFather(fp, a, type, fafafather, fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);
                         }else {
                             System.out.println("Other Condition"+ActionConstants.getInstanceStringName(a) + " " +type);
@@ -88,7 +88,8 @@ public class ClusterDelete {
                         }
                         break;
                     case StatementConstants.RETURNSTATEMENT:
-                        MatchReturnStatement.matchReturnStatement(fp,a, type,fp.mDstTree);
+                        operationBean = MatchReturnStatement.matchReturnStatement(fp,a,type);
+                        fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     case StatementConstants.FORSTATEMENT:
                         //算出for语句
@@ -129,7 +130,7 @@ public class ClusterDelete {
                             fp.mHighLevelOperationBeanList.add(operationBean);
                         }
                         else {
-                            operationBean = MatchExpressionStatement.matchExpression(fp, a, type, fafafather, fatherType);
+                            operationBean = MatchExpressionStatement.matchExpression(fp, a, type);
                             fp.mHighLevelOperationBeanList.add(operationBean);
                         }
                         break;
@@ -149,7 +150,7 @@ public class ClusterDelete {
                         break;
                     case StatementConstants.SWITCHCASE:
                         //删除switchcase语句
-                        operationBean = MatchSwitch.matchSwitchCase(fp,a,type,fafafather,fatherType);
+                        operationBean = MatchSwitch.matchSwitchCase(fp,a,type);
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     case StatementConstants.JAVADOC:

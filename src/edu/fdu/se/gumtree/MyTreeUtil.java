@@ -131,9 +131,9 @@ public class MyTreeUtil{
 	public static int isSrcOrDstAdded(Set<String> srcTypes,Set<String> dstTypes) {
 		if(srcTypes.size()==1&&srcTypes.contains(ActionConstants.NULLACTION)){
 			//src tree为null
-			if(dstTypes.contains(ActionConstants.INSERT)){
+			if(dstTypes.size() == 2 && dstTypes.contains(ActionConstants.INSERT)) {
 				return OperationTypeConstants.INSERT_STATEMENT_CONDITION_OR_DECLARATION;
-			}else{
+			} else{
 				return OperationTypeConstants.UNKNOWN;
 			}
 		}
@@ -158,7 +158,7 @@ public class MyTreeUtil{
 			}
 
 		}
-    	return  OperationTypeConstants.UNKNOWN;
+    	return  OperationTypeConstants.STATEMENT_CONDITION_OR_DECLARATION_MISC;
 	}
 
 	/**

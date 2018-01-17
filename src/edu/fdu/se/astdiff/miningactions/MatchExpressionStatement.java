@@ -2,6 +2,7 @@ package edu.fdu.se.astdiff.miningactions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
@@ -18,33 +19,44 @@ public class MatchExpressionStatement {
 	 * @param a
 	 * @return
 	 */
-	public static ClusteredActionBean matchExpression(MiningActionData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
+	public static ClusteredActionBean matchExpression(MiningActionData fp, Action a, String nodeType) {
 		String operationEntity = "EXPRESSIONSTATEMENT";
-		TreeContext con = null;
-		if (a instanceof Insert) {
-			con = fp.getDstTree();
-		} else{
-			con = fp.getSrcTree();
-		}
-		//String summary = "[PATTERN]";
-		//summary += ActionConstants.getInstanceStringName(a);
 		List<Action> subActions = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
 		fp.setActionTraversedMap(subActions);
-//		if(status == MyTreeUtil.TYPE1){
-//			summary += "insert";
-//		}else if(status == MyTreeUtil.TYPE2){
-//			summary += "delete";
-//		}
-//		if (AstRelations.isClassCreation(subActions, con)) {
-//			summary += " object Initializing - expression assignment";
-//		} else {
-//			summary += " expression assignment";
-//		}
-
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,subActions,status,operationEntity,fafafather,fafafatherType);
+				a,nodeType,subActions,status,operationEntity,null,null);
+		return mHighLevelOperationBean;
+	}
+	public static ClusteredActionBean matchExpressionByFather(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
+		String operationEntity = "FATHER-EXPRESSIONSTATEMENT";
+		List<Action> subActions = new ArrayList<Action>();
+
+		ITree srcfafafather = null;
+		ITree dstfafafather = null;
+		if (a instanceof Insert) {
+			dstfafafather = fafafatherNode;
+			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
+			if (srcfafafather == null) {
+				System.err.println("err null mapping");
+			}
+		} else {
+			srcfafafather = fafafatherNode;
+			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
+			if (dstfafafather == null) {
+				System.err.println("err null mapping");
+			}
+		}
+
+		Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
+		Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
+		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
+
+		fp.setActionTraversedMap(subActions);
+
+		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
+				a,nodeType,subActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;
 	}
 
