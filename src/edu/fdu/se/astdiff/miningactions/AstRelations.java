@@ -170,6 +170,8 @@ public class AstRelations {
 				break;
 			} else if (StatementConstants.SWITCHCASE.equals(type)) {
 				break;
+			} else if (StatementConstants.CONSTRUCTORINVOCATION.equals(type) || StatementConstants.SUPERCONSTRUCTORINVOCATION.equals(type)) {
+				break;
 			} else {
 				curNode = curNode.getParent();
 			}

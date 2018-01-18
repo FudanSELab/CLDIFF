@@ -22,6 +22,7 @@ public class ClusterDelete {
                 break;
             }
             Action a = fp.mGeneratingActionsData.getDeleteActions().get(index);
+            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
             index++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 continue;
@@ -29,7 +30,6 @@ public class ClusterDelete {
             Delete del = (Delete) a;
             ITree tmp = a.getNode();
             String type = fp.mSrcTree.getTypeLabel(tmp);
-            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
             ITree fafafather = AstRelations.findFafafatherNode(tmp, fp.mSrcTree);
             if(fafafather == null){
                 System.out.println("Father Null Condition: "+ ActionConstants.getInstanceStringName(a) + " " +type);
@@ -59,8 +59,8 @@ public class ClusterDelete {
 
             if (StatementConstants.METHODDECLARATION.equals(type)) {
                 // 删除方法体
-                //ClusteredActionBean bean  = MatchNewOrDeleteMethod.matchNewOrDeleteMethod(fp,a,type);
-                operationBean = MatchNewOrDeleteMethod.matchNewOrDeleteMethod(fp,a,type);
+                //ClusteredActionBean bean  = MatchMethod.matchNewOrDeleteMethod(fp,a,type);
+                operationBean = MatchMethod.matchNewOrDeleteMethod(fp,a,type);
                 fp.mHighLevelOperationBeanList.add(operationBean);
             }else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
                 // 删除方法参数
@@ -156,6 +156,16 @@ public class ClusterDelete {
                     case StatementConstants.JAVADOC:
                         //删除javadoc
                         operationBean = MatchJavaDoc.matchJavaDoc(fp,a,type);
+                        fp.mHighLevelOperationBeanList.add(operationBean);
+                        break;
+                    case StatementConstants.CONSTRUCTORINVOCATION:
+                        //构造方法this
+                        operationBean = MatchMethod.matchConstructorInvocation(fp,a,type);
+                        fp.mHighLevelOperationBeanList.add(operationBean);
+                        break;
+                    case StatementConstants.SUPERCONSTRUCTORINVOCATION:
+                        //构造方法super
+                        operationBean = MatchMethod.matchSuperConstructorInvocation(fp,a,type);
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     //JAVADOC参数

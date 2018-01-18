@@ -106,6 +106,16 @@ public class MatchSimpleNameOrLiteral {
 			operationBean = MatchReturnStatement.matchReturnStatentByFather(fp, a, nodeType, fafafatherNode,ffFatherNodeType);
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
+		case StatementConstants.CONSTRUCTORINVOCATION:
+			//构造方法this
+			operationBean = MatchMethod.matchConstructorInvocationByFather(fp,a,nodeType,fafafatherNode,ffFatherNodeType);
+			fp.mHighLevelOperationBeanList.add(operationBean);
+			break;
+		case StatementConstants.SUPERCONSTRUCTORINVOCATION:
+			//构造方法super
+			operationBean = MatchMethod.matchSuperConstructorInvocationByFather(fp,a,nodeType,fafafatherNode,ffFatherNodeType);
+			fp.mHighLevelOperationBeanList.add(operationBean);
+			break;
 		default:
 			String nextAction = ConsolePrint.getMyOneActionString(a, 0, curContext);
 			System.out.print(nextAction);

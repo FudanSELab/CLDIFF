@@ -1,7 +1,6 @@
 package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.ITree;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
@@ -19,6 +18,7 @@ public class ClusterMove {
                 break;
             }
             Action a = fp.mGeneratingActionsData.getMoveActions().get(index);
+            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
             index++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 // 标记过的 update action
@@ -27,7 +27,6 @@ public class ClusterMove {
           //  Move movNode = (Move) a;
             ITree moveNode = a.getNode();
             String type = fp.mSrcTree.getTypeLabel(moveNode);
-            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
             ITree fafafather = AstRelations.findFafafatherNode(moveNode, fp.mSrcTree);
             String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
 //            System.out.print(nextAction+"\n");
@@ -51,7 +50,7 @@ public class ClusterMove {
             }
 
             if (StatementConstants.METHODDECLARATION.equals(type)) {
-                operationBean = MatchNewOrDeleteMethod.matchNewOrDeleteMethod(fp,a,type);
+                operationBean = MatchMethod.matchNewOrDeleteMethod(fp,a,type);
                 fp.mHighLevelOperationBeanList.add(operationBean);
                 continue;
             } else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
@@ -149,6 +148,16 @@ public class ClusterMove {
                     case StatementConstants.JAVADOC:
                         //增加javadoc
                         operationBean = MatchJavaDoc.matchJavaDoc(fp,a,type);
+                        fp.mHighLevelOperationBeanList.add(operationBean);
+                        break;
+                    case StatementConstants.CONSTRUCTORINVOCATION:
+                        //构造方法this
+                        operationBean = MatchMethod.matchConstructorInvocation(fp,a,type);
+                        fp.mHighLevelOperationBeanList.add(operationBean);
+                        break;
+                    case StatementConstants.SUPERCONSTRUCTORINVOCATION:
+                        //构造方法super
+                        operationBean = MatchMethod.matchSuperConstructorInvocation(fp,a,type);
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     //JAVADOC参数

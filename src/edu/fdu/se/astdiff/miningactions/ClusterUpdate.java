@@ -23,6 +23,7 @@ public class ClusterUpdate {
                 break;
             }
             Action a = fp.mGeneratingActionsData.getUpdateActions().get(index);
+            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
             index++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 // 标记过的 update action
@@ -31,7 +32,6 @@ public class ClusterUpdate {
             Update up = (Update) a;
             ITree tmp = a.getNode();
             String type = fp.mSrcTree.getTypeLabel(tmp);
-            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
             ITree fafafather = AstRelations.findFafafatherNode(tmp, fp.mSrcTree);
             String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
 //			System.out.print(nextAction);

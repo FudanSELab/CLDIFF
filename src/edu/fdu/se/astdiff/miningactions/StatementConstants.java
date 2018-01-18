@@ -42,6 +42,10 @@ public class StatementConstants {
 
 	final public static String METHODDECLARATION = "MethodDeclaration";
 
+	final public static String CONSTRUCTORINVOCATION="ConstructorInvocation";
+
+	final public static String SUPERCONSTRUCTORINVOCATION="SuperConstructorInvocation";
+
 	final public static String INFIXEXPRESSION = "InfixExpression";
 
 	final public static String FORSTATEMENT = "ForStatement";
