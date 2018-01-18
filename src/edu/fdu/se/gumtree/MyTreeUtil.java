@@ -69,7 +69,7 @@ public class MyTreeUtil{
 //        				count++;
 //        			}
         			allEditAction.add(aTmp);
-					actionTypes.add(aTmp.getClass().toString());
+					actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
         		}
     		}
     	}
@@ -118,7 +118,7 @@ public class MyTreeUtil{
     		List<Action> nodeActions = myTree.getDoAction();
     		for(Action aTmp:nodeActions){
     			result.add(aTmp);
-    			actionTypes.add(aTmp.getClass().toString());
+    			actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
     		}
     	}
 		return actionTypes;
@@ -131,9 +131,9 @@ public class MyTreeUtil{
 	public static int isSrcOrDstAdded(Set<String> srcTypes,Set<String> dstTypes) {
 		if(srcTypes.size()==1&&srcTypes.contains(ActionConstants.NULLACTION)){
 			//src tree为null
-			if(dstTypes.contains(ActionConstants.INSERT)){
+			if(dstTypes.size() == 2 && dstTypes.contains(ActionConstants.INSERT)) {
 				return OperationTypeConstants.INSERT_STATEMENT_CONDITION;
-			}else{
+			} else{
 				return OperationTypeConstants.UNKNOWN;
 			}
 		}
@@ -151,14 +151,14 @@ public class MyTreeUtil{
 						return OperationTypeConstants.UNKNOWN;
 					}
 				}else{
-					return OperationTypeConstants.STATEMENT_CONDITION_MISC;
+					return OperationTypeConstants.STATEMENT_CONDITION_OR_DECLARATION_MISC;
 				}
 			}else{
 				return OperationTypeConstants.UNKNOWN;
 			}
 
 		}
-    	return  OperationTypeConstants.UNKNOWN;
+    	return  OperationTypeConstants.STATEMENT_CONDITION_OR_DECLARATION_MISC;
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class MyTreeUtil{
     		List<Action> nodeActions = myTree.getDoAction();
     		for(Action aTmp:nodeActions){
     			result.add(aTmp);
-    			actionTypes.add(aTmp.getClass().toString());
+    			actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
     		}
     	}
     	return getTypeCode(action,isNullExist,actionTypes);
@@ -210,7 +210,7 @@ public class MyTreeUtil{
         		List<Action> nodeActions = myTree.getDoAction();
         		for(Action aTmp:nodeActions){
         			result.add(aTmp);
-        			actionTypes.add(aTmp.getClass().toString());
+        			actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
         		}
     		}
     	}

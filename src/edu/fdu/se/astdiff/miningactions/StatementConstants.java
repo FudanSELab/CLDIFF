@@ -2,6 +2,8 @@ package edu.fdu.se.astdiff.miningactions;
 
 public class StatementConstants {
 
+	final public static String TYPEDECLARATION="TypeDeclaration";
+
 	final public static String IFSTATEMENT="IfStatement";
 
 	final public static String BLOCK = "Block";
@@ -67,4 +69,8 @@ public class StatementConstants {
 
 	final public static String TEXTELEMENT = "TextElement";
 
+	/**
+	 * keyword
+	 */
+	final public static String STATIC = "static";
 }

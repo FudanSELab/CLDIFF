@@ -14,7 +14,6 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSimpleNameOrLiteral {
-	private static ClusteredActionBean operationBean;
 	/**
 	 * level IV fafafather 为VariableDeclarationStatement ExpressionStatement
 	 * father为methodinvocation  按照fafafatherNode 为key，存所有相关的action,更细的情况放到map之后再做处理
@@ -25,7 +24,7 @@ public class MatchSimpleNameOrLiteral {
 	 * @return
 	 */
 	public static ClusteredActionBean matchExpressionStatementAndVariableDeclarationStatement(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
-		String operationEntity  = "IFPREDICATE";
+		String operationEntity  = "EXPRESSIONSTATEMENTANDVARIABLEDECLARATIONSTATEMENT";
 		ITree srcParent = null;
 		List<Action> allActions = new ArrayList<Action>();
 
@@ -71,6 +70,7 @@ public class MatchSimpleNameOrLiteral {
 		// if predicate
 		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), curContext);
 		String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
+		ClusteredActionBean operationBean;
 		switch (ffFatherNodeType) {
 		case StatementConstants.IFSTATEMENT:
 //			System.out.println("If predicate");
@@ -84,18 +84,26 @@ public class MatchSimpleNameOrLiteral {
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
+			operationBean = MatchVariableDeclarationExpression.matchVariableDeclarationByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			fp.addHighLevelOperationBeanToList(operationBean);
+			break;
 		case StatementConstants.EXPRESSIONSTATEMENT:
 //			System.out.println("variable/expression");
-			operationBean = matchExpressionStatementAndVariableDeclarationStatement(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			operationBean = MatchExpressionStatement.matchExpressionByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.JAVADOC:
-			operationBean = MatchJavaDoc.matchJavaDoc(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			operationBean = MatchJavaDoc.matchJavaDocByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.SWITCHCASE:
 			//switchcase
-			operationBean = MatchSwitch.matchSwitchCase(fp, a, nodeType, fafafatherNode, ffFatherNodeType);
+			operationBean = MatchSwitch.matchSwitchCaseByFather(fp, a, nodeType, fafafatherNode, ffFatherNodeType);
+			fp.addHighLevelOperationBeanToList(operationBean);
+			break;
+		case StatementConstants.RETURNSTATEMENT:
+			//return statement
+			operationBean = MatchReturnStatement.matchReturnStatentByFather(fp, a, nodeType, fafafatherNode,ffFatherNodeType);
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		default:

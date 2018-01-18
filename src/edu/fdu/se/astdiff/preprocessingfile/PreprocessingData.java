@@ -17,10 +17,11 @@ import java.util.Map;
  */
 public class PreprocessingData {
     /**
-     * prev file中 retain的body
+     * 操作之后的CompilationUnit
      */
-    private Map<BodyDeclaration,ClassOrInterfaceDeclaration> mMap;
-    private List<BodyDeclaration> mBodiesRetained;
+    private CompilationUnit currentCu;
+    private CompilationUnit previousCu;
+
 
     /**
      * curr 删除的added的body
@@ -31,31 +32,50 @@ public class PreprocessingData {
      */
     private List<BodyDeclaration> mBodiesDeleted;
 
-    private ClassOrInterfaceDeclaration mainClass;
+    /**
+     * prev 和curr 中都没被删除 保修下来在CompilationUnit的Body
+     */
+    private List<BodyDeclaration> mBodiesRetained;
 
-    private CompilationUnit currentCu;
-    private CompilationUnit previousCu;
+
+    /**
+     * Body 所述 的class
+     */
+    private Map<BodyDeclaration,ClassOrInterfaceDeclaration> mMap;
+
+
+
+
+    private List<ClassOrInterfaceDeclaration> classOrInterfaceDeclarationsList;
+
+
 
 
     public PreprocessingData(){
-        mMap = new HashMap<>();
-        mBodiesRetained = new ArrayList<>();
         mBodiesAdded = new ArrayList<>();
         mBodiesDeleted = new ArrayList<>();
+        mMap = new HashMap<>();
+        mBodiesRetained = new ArrayList<>();
+        classOrInterfaceDeclarationsList = new ArrayList<>();
     }
+
     private void addToMap(ClassOrInterfaceDeclaration cod,BodyDeclaration bd){
         mMap.put(bd,cod);
         mBodiesRetained.add(bd);
     }
 
 
-    public void processTrimedFilePair(String prevStr){
+    public void loadPrevRetainedBodies(String prevStr){
         CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prevStr);
         TypeDeclaration mTypeCurr = cuPrev.getType(0);
         ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) mTypeCurr;
+        traverseClassOrInterfaceMapRetainedBody(cod);
+    }
 
-        NodeList nodeList = mTypeCurr.getMembers();
-        this.mainClass = cod;
+
+    public void traverseClassOrInterfaceMapRetainedBody(ClassOrInterfaceDeclaration cod){
+        classOrInterfaceDeclarationsList.add(cod);
+        NodeList nodeList = cod.getMembers();
         for (int i = nodeList.size() - 1; i >= 0; i--) {
             Node node = nodeList.get(i);
             if (node instanceof AnnotationDeclaration) {
@@ -65,21 +85,9 @@ public class PreprocessingData {
                 addToMap(cod,(BodyDeclaration)node);
                 continue;
             }
-
-
             if (node instanceof ClassOrInterfaceDeclaration) {
                 ClassOrInterfaceDeclaration innerClass = (ClassOrInterfaceDeclaration) node;
-                NodeList innerList = innerClass.getMembers();
-                for (int j = innerList.size() - 1; j >= 0; j--) {
-                    Node item2 = innerList.get(j);
-                    if (item2 instanceof AnnotationDeclaration) {
-                        continue;
-                    }
-                    if (item2 instanceof ConstructorDeclaration||item2 instanceof MethodDeclaration||item2 instanceof FieldDeclaration) {
-                        addToMap(innerClass,(BodyDeclaration)node);
-                        continue;
-                    }
-                }
+                traverseClassOrInterfaceMapRetainedBody(innerClass);
             }
 
         }
@@ -106,13 +114,13 @@ public class PreprocessingData {
         return currentCu;
     }
 
-    public List<BodyDeclaration> getmBodiesDeleted() {
-        return mBodiesDeleted;
+    public void addBodiesAdded(BodyDeclaration bodyDeclaration){
+        this.mBodiesAdded.add(bodyDeclaration);
+    }
+    public void addBodiesDeleted(BodyDeclaration bodyDeclaration){
+        this.mBodiesDeleted.add(bodyDeclaration);
     }
 
-    public List<BodyDeclaration> getmBodiesAdded() {
-        return mBodiesAdded;
-    }
 
     public void setCurrentCu(CompilationUnit currentCu) {
         this.currentCu = currentCu;
@@ -120,5 +128,15 @@ public class PreprocessingData {
 
     public void setPreviousCu(CompilationUnit previousCu) {
         this.previousCu = previousCu;
+    }
+
+    public void printAddedRemovedBodies(){
+        for(BodyDeclaration item:this.mBodiesAdded){
+            System.out.println(item.toString());
+        }
+        System.out.print("---------------------------\n");
+        for(BodyDeclaration item:this.mBodiesDeleted){
+            System.out.println(item.toString());
+        }
     }
 }

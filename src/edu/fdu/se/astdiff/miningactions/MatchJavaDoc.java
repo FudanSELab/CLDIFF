@@ -21,8 +21,8 @@ public class MatchJavaDoc {
                 a,nodeType,subActions,status,operationEntity,null,null);
         return mHighLevelOperationBean;
     }
-    public static ClusteredActionBean matchJavaDoc(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType){
-        String operationEntity = "FATHERNODE-JAVADOC";
+    public static ClusteredActionBean matchJavaDocByFather(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType){
+        String operationEntity = "FATHER-JAVADOC";
         ITree srcParent = null;
         List<Action> allActions = new ArrayList<Action>();
         ITree srcfafafather = null;
@@ -46,7 +46,6 @@ public class MatchJavaDoc {
         Set<String> src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
         int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 
-        //int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(allActions);
 
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(

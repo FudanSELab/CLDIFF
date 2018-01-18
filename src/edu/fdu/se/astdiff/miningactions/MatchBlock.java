@@ -17,7 +17,7 @@ public class MatchBlock {
 
         switch (fatherNodeType) {
             case StatementConstants.SWITCHSTATEMENT:
-                operationBean = MatchSwitch.matchSwitchCase(fp,a,nodeType, fatherNode, fatherNodeType);
+                operationBean = MatchSwitch.matchSwitchCaseByFather(fp,a,nodeType, fatherNode, fatherNodeType);
                 fp.addHighLevelOperationBeanToList(operationBean);
                 break;
             case StatementConstants.IFSTATEMENT:
@@ -33,7 +33,7 @@ public class MatchBlock {
             default:
                 String nextAction = ConsolePrint.getMyOneActionString(a, 0, curContext);
                 System.out.print(nextAction);
-                System.out.println("Default, Block: " + fatherNodeType +"\n");
+                System.out.println("Default, Block, curNodeType: "+nodeType+", "+"fatherNodeType: " + fatherNodeType +"\n");
                 fp.setActionTraversedMap(a);
                 break;
         }
@@ -53,7 +53,7 @@ public class MatchBlock {
 
         switch (fatherNodeType) {
             case StatementConstants.SWITCHSTATEMENT:
-                operationBean = MatchSwitch.matchSwitchCase(fp,a,nodeType, fatherNode, fatherNodeType);
+                operationBean = MatchSwitch.matchSwitchCaseByFather(fp,a,nodeType, fatherNode, fatherNodeType);
                 fp.addHighLevelOperationBeanToList(operationBean);
                 break;
             case StatementConstants.IFSTATEMENT:
