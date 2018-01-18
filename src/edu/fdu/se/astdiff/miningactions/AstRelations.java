@@ -12,7 +12,7 @@ public class AstRelations {
 	public static boolean isFatherIfStatement(Action a, TreeContext treeContext) {
 		Tree t = (Tree) a.getNode();
 		String type = treeContext.getTypeLabel(t.getParent());
-		if (type.equals(StatementConstants.IFSTATEMENT)) {
+		if (StatementConstants.IFSTATEMENT.equals(type)) {
 			return true;
 		}
 		return false;
@@ -27,17 +27,33 @@ public class AstRelations {
 		for (ITree tmp : child) {
 			Tree t = (Tree) tmp;
 			String type = treeContext.getTypeLabel(t);
-			if (type.equals(StatementConstants.IFSTATEMENT)) {
+			if (StatementConstants.IFSTATEMENT.equals(type)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+	public static ITree isChildContainVariableDeclarationFragment(ITree node, TreeContext treeContext) {
+		List<ITree> child = node.getChildren();
+		if (child.size() < 1) {
+			System.err.println("There is no child");
+			return null;
+		}
+		for (ITree tmp : child) {
+			Tree t = (Tree) tmp;
+			String type = treeContext.getTypeLabel(t);
+			if (StatementConstants.VARIABLEDECLARATIONFRAGMENT.equals(type)) {
+				return tmp;
+			}
+		}
+		return null;
+	}
+
 	public static boolean isFatherTryStatement(Action a, TreeContext treeContext) {
 		Tree t = (Tree) a.getNode();
 		String type = treeContext.getTypeLabel(t.getParent());
-		if (type.equals(StatementConstants.TRYSTATEMENT)) {
+		if (StatementConstants.TRYSTATEMENT.equals(type)) {
 			return true;
 		}
 		return false;
@@ -46,7 +62,7 @@ public class AstRelations {
 	public static boolean isFatherSwitchStatement(Action a, TreeContext treeContext) {
 		Tree t = (Tree) a.getNode();
 		String type = treeContext.getTypeLabel(t.getParent());
-		if (type.equals(StatementConstants.SWITCHSTATEMENT)) {
+		if (StatementConstants.SWITCHSTATEMENT.equals(type)) {
 			return true;
 		}
 		return false;
@@ -62,7 +78,7 @@ public class AstRelations {
 		for (ITree tmp : child) {
 			Tree t = (Tree) tmp;
 			String type = treeContext.getTypeLabel(t);
-			if (type.equals(StatementConstants.SYNCHRONIZEDSTATEMENT)) {
+			if (StatementConstants.SYNCHRONIZEDSTATEMENT.equals(type)) {
 				return true;
 			}
 		}
@@ -144,15 +160,17 @@ public class AstRelations {
 			type = treeContext.getTypeLabel(curNode);
 			if (type.endsWith("Statement")) {
 				break;
-			} else if (type.equals(StatementConstants.METHODDECLARATION)||type.equals(StatementConstants.FIELDDECLARATION)) {
+			} else if (StatementConstants.METHODDECLARATION.equals(type)||StatementConstants.FIELDDECLARATION.equals(type)) {
 				break;
-			} else if (type.equals(StatementConstants.BLOCK)) {
+			} else if (StatementConstants.BLOCK.equals(type)) {
 				break;
-			} else if (type.equals(StatementConstants.JAVADOC)) {
+			} else if (StatementConstants.JAVADOC.equals(type)) {
 				break;
-			} else if (type.equals(StatementConstants.INITIALIZER)) {
+			} else if (StatementConstants.INITIALIZER.equals(type)) {
 				break;
-			} else if (type.equals(StatementConstants.SWITCHCASE)) {
+			} else if (StatementConstants.SWITCHCASE.equals(type)) {
+				break;
+			} else if (StatementConstants.CONSTRUCTORINVOCATION.equals(type) || StatementConstants.SUPERCONSTRUCTORINVOCATION.equals(type)) {
 				break;
 			} else {
 				curNode = curNode.getParent();

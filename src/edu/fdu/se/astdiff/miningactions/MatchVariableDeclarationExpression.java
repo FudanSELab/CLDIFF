@@ -32,8 +32,13 @@ public class MatchVariableDeclarationExpression {
 		List<Action> subActions = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
 		fp.setActionTraversedMap(subActions);
-		if (AstRelations.isClassCreation(subActions, con)) {
-			operationEntity += " OBJECT INITIALIZING";
+
+		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(a.getNode(), con);
+		if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
+			operationEntity += "-OBJECT-INITIALIZING";
+			if (AstRelations.isClassCreation(subActions, con)) {
+				operationEntity += "-NEW";
+			}
 		}
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
@@ -42,12 +47,6 @@ public class MatchVariableDeclarationExpression {
 	}
 
 	public static ClusteredActionBean matchVariableDeclarationByFather(MiningActionData fp, Action a, String nodeType,ITree fafafatherNode, String ffFatherNodeType) {
-		TreeContext con = null;
-		if (a instanceof Insert) {
-			con = fp.getDstTree();
-		} else if (a instanceof Delete) {
-			con = fp.getSrcTree();
-		}
 		String operationEntity = "FATHER-VARIABLEDECLARATION";
 
 		List<Action> subActions = new ArrayList<Action>();
@@ -73,8 +72,19 @@ public class MatchVariableDeclarationExpression {
 		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 
 		fp.setActionTraversedMap(subActions);
-		if (AstRelations.isClassCreation(subActions, con)) {
+
+		TreeContext con = null;
+		if (a instanceof Insert) {
+			con = fp.getDstTree();
+		} else if (a instanceof Delete) {
+			con = fp.getSrcTree();
+		}
+		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(fafafatherNode, con);
+		if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
 			operationEntity += "-OBJECT-INITIALIZING";
+			if (AstRelations.isClassCreation(subActions, con)) {
+				operationEntity += "-NEW";
+			}
 		}
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(

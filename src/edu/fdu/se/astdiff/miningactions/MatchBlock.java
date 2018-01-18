@@ -7,10 +7,8 @@ import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 public class MatchBlock {
-    private static ClusteredActionBean operationBean;
     public static void matchBlock(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
-//        ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(), curContext);
-//        String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
+        ClusteredActionBean operationBean;
 
         ITree fatherNode = a.getNode().getParent();
         String fatherNodeType = curContext.getTypeLabel(fatherNode);
@@ -45,8 +43,7 @@ public class MatchBlock {
 
     }
     public static void matchBlockByChild(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
-//        ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(), curContext);
-//        String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
+        ClusteredActionBean operationBean;
 
         ITree fatherNode = a.getNode().getParent();
         String fatherNodeType = curContext.getTypeLabel(fatherNode);
@@ -78,8 +75,6 @@ public class MatchBlock {
 //						}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionData.mDstTree)) {
 //							//同步语句块增加
 //							MatchSynchronized.matchSynchronized(this,a);
-
-
 
     }
 }

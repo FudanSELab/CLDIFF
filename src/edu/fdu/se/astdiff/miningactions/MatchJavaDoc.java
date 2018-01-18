@@ -42,8 +42,8 @@ public class MatchJavaDoc {
             }
         }
 
-        Set<String> dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
         Set<String> src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
+        Set<String> dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
         int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 
         fp.setActionTraversedMap(allActions);

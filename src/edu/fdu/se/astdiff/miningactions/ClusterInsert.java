@@ -20,6 +20,7 @@ public class ClusterInsert {
                 break;
             }
             Action a = fp.mGeneratingActionsData.getInsertActions().get(insertActionIndex);
+            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mDstTree);
             insertActionIndex++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 // 标记过的action
@@ -35,10 +36,9 @@ public class ClusterInsert {
                 continue;
             }
             String fatherType = fp.mDstTree.getTypeLabel(fafafather);
-			String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mDstTree);
+
 //			System.out.print(nextAction);
             ClusteredActionBean operationBean;
-
             if(StatementConstants.FIELDDECLARATION.equals(type)){
                 //insert FieldDeclaration
                 operationBean = MatchFieldDeclaration.matchFieldDeclaration(fp,a,type);
@@ -58,11 +58,11 @@ public class ClusterInsert {
             }
 
             if (StatementConstants.METHODDECLARATION.equals(type)) {
-                operationBean = MatchNewOrDeleteMethod.matchNewOrDeleteMethod(fp,a,type);
+                operationBean = MatchMethod.matchNewOrDeleteMethod(fp,a,type);
                 fp.mHighLevelOperationBeanList.add(operationBean);
                 continue;
             } else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
-                System.out.println(insNode.getParent().getChildPosition(insNode));
+//                System.out.println(insNode.getParent().getChildPosition(insNode));
                 operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(fp,a, type,fafafather,fatherType);
                 fp.mHighLevelOperationBeanList.add(operationBean);
             } else {
@@ -158,6 +158,16 @@ public class ClusterInsert {
                         operationBean = MatchJavaDoc.matchJavaDoc(fp,a,type);
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
+                    case StatementConstants.CONSTRUCTORINVOCATION:
+                        //构造方法this
+                        operationBean = MatchMethod.matchConstructorInvocation(fp,a,type);
+                        fp.mHighLevelOperationBeanList.add(operationBean);
+                        break;
+                    case StatementConstants.SUPERCONSTRUCTORINVOCATION:
+                        //构造方法super
+                        operationBean = MatchMethod.matchSuperConstructorInvocation(fp,a,type);
+                        fp.mHighLevelOperationBeanList.add(operationBean);
+                        break;
                     //JAVADOC参数
                     case StatementConstants.TAGELEMENT:
                     case StatementConstants.TEXTELEMENT:
@@ -170,6 +180,7 @@ public class ClusterInsert {
                     case StatementConstants.BOOLEANLITERAL:
                     case StatementConstants.INFIXEXPRESSION:
                     case StatementConstants.METHODINVOCATION:
+                    case StatementConstants.QUALIFIEDNAME:
                         MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mDstTree);
                         break;
                     default:
