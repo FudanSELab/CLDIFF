@@ -7,19 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.sun.org.apache.xml.internal.security.Init;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
@@ -38,9 +34,15 @@ import edu.fdu.se.javaparser.JavaParserFactory;
 public class PreprocessingSDKClass {
 
     public static void main(String args[]) {
-        new PreprocessingSDKClass().compareTwoSDKFile3("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java",
-                "D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java","test_file");
-//		new PreprocessingSDKClass().test("D:/test.java");
+//        new PreprocessingSDKClass().compareTwoSDKFile3("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java",
+//                "D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java","test_file");
+		new PreprocessingSDKClass().test("D:/test.java");
+    }
+    public PreprocessingSDKClass(){
+        preprocessingData = new PreprocessingData();
+        bdMapPrev = new HashMap<>();
+        bdMapPrevMethodName = new HashMap<>();
+        visitedPrevNode = new HashMap<>();
     }
 
     /**
@@ -49,9 +51,8 @@ public class PreprocessingSDKClass {
      * @param cu
      */
     public void loadPrev(CompilationUnit cu) {
-        bdMapPrev = new HashMap<String, BodyDeclaration>();
-        bdMapPrevMethodName = new HashMap<String, List<BodyDeclaration>>();
-        visitedPrevNode = new HashMap<BodyDeclaration, Integer>();
+
+
         TypeDeclaration mTypePrev = cu.getType(0);
         NodeList nodeList = mTypePrev.getMembers();
         for (int i = 0; i < nodeList.size(); i++) {
@@ -110,25 +111,17 @@ public class PreprocessingSDKClass {
         }
     }
 
+    private PreprocessingData preprocessingData;
     private Map<String, BodyDeclaration> bdMapPrev;
     private Map<String, List<BodyDeclaration>> bdMapPrevMethodName;
     private Map<BodyDeclaration, Integer> visitedPrevNode;
-    private List<BodyDeclaration> newMethod;
-    private List<BodyDeclaration> deletedMethod;
-    private CompilationUnit curCu;
-    private CompilationUnit preCu;
-    
-    
+
+    /**
+     * list of comments to be removed
+     */
+    private List<BodyDeclaration> removalList;
     
 
-
-    public CompilationUnit getCurCu() {
-		return curCu;
-	}
-
-	public CompilationUnit getPreCu() {
-		return preCu;
-	}
 
 	/**
      * method name
@@ -154,7 +147,7 @@ public class PreprocessingSDKClass {
      * @param bdMapPrevMethodNameKey
      * @param bd
      */
-    private int checkCurrBodies(String bdMapPrevKey, String bdMapPrevMethodNameKey, BodyDeclaration bd) {
+    private int checkCurrBodies(ClassOrInterfaceDeclaration cod,String bdMapPrevKey, String bdMapPrevMethodNameKey, BodyDeclaration bd) {
         // signature 完全一摸一样的
         if (this.bdMapPrev.containsKey(bdMapPrevKey)) {
             this.visitedPrevNode.put(bd, 1);
@@ -166,9 +159,6 @@ public class PreprocessingSDKClass {
                 return 1;
             } else {
                 //不一样的pair
-//				if(bdMapPrevKey.equals("private void dispatchServiceConnected()")){
-//                System.out.println(bdMapPrevKey);
-//				}
                 return 2;
             }
         } else {
@@ -187,7 +177,7 @@ public class PreprocessingSDKClass {
                 return 4;
             } else {
                 //TODO new method/field
-                newMethod.add(bd);
+                this.preprocessingData.getmBodiesAdded().add(bd);
                 this.addToRemoveList(bd);
                 return 5;
             }
@@ -272,7 +262,7 @@ public class PreprocessingSDKClass {
         return cu;
     }
 
-    private List<BodyDeclaration> removalList;
+
 
     private void addToRemoveList(BodyDeclaration bd) {
         if (this.removalList == null) {
@@ -311,8 +301,6 @@ public class PreprocessingSDKClass {
         ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) mTypeCurr;
 
         NodeList nodeList = mTypeCurr.getMembers();
-        newMethod = new ArrayList<>();
-        deletedMethod = new ArrayList<>();
 
         for (int i = nodeList.size() - 1; i >= 0; i--) {
             Node node = nodeList.get(i);
@@ -320,28 +308,33 @@ public class PreprocessingSDKClass {
                 this.addToRemoveList((AnnotationDeclaration) node);
                 continue;
             }
+            if( node instanceof InitializerDeclaration){
+//                this.
+                InitializerDeclaration id = (InitializerDeclaration) node;
+
+            }
 
             if (node instanceof ConstructorDeclaration) {
                 ConstructorDeclaration cd = (ConstructorDeclaration) node;
-                checkCurrBodies(cd.getDeclarationAsString(), cd.getNameAsString(), (BodyDeclaration) node);
+                checkCurrBodies(cod,cd.getDeclarationAsString(), cd.getNameAsString(), (BodyDeclaration) node);
                 continue;
             }
             if (node instanceof MethodDeclaration) {
                 MethodDeclaration md = (MethodDeclaration) node;
-                checkCurrBodies(md.getDeclarationAsString(), md.getNameAsString(), (BodyDeclaration) node);
+                checkCurrBodies(cod,md.getDeclarationAsString(), md.getNameAsString(), (BodyDeclaration) node);
 
                 continue;
             }
             if (node instanceof FieldDeclaration) {
                 FieldDeclaration fd = (FieldDeclaration) node;
-                checkCurrBodies(fd.toString(), null, fd);
+                checkCurrBodies(cod,fd.toString(), null, fd);
                 continue;
             }
 
             if (node instanceof ClassOrInterfaceDeclaration) {
                 ClassOrInterfaceDeclaration innerClass = (ClassOrInterfaceDeclaration) node;
                 NodeList innerList = innerClass.getMembers();
-                int status = checkCurrBodies(innerClass.getNameAsString(), null, innerClass);
+                int status = checkCurrBodies(innerClass,innerClass.getNameAsString(), null, innerClass);
                 if (status == 1) {
                     continue;
                 }
@@ -354,17 +347,17 @@ public class PreprocessingSDKClass {
                         ConstructorDeclaration cd2 = (ConstructorDeclaration) item2;
                         String key = innerClass.getNameAsString() + "." + cd2.getDeclarationAsString();
                         String key2 = innerClass.getNameAsString() + "." + cd2.getNameAsString();
-                        checkCurrBodies(key, key2, cd2);
+                        checkCurrBodies(innerClass,key, key2, cd2);
                     }
                     if (item2 instanceof MethodDeclaration) {
                         MethodDeclaration md2 = (MethodDeclaration) item2;
                         String key = innerClass.getNameAsString() + "." + md2.getDeclarationAsString();
                         String key2 = innerClass.getNameAsString() + "." + md2.getNameAsString();
-                        checkCurrBodies(key, key2, md2);
+                        checkCurrBodies(innerClass,key, key2, md2);
                     }
                     if (item2 instanceof FieldDeclaration) {
                         FieldDeclaration fd2 = (FieldDeclaration) item2;
-                        checkCurrBodies(innerClass.getNameAsString() + "." + fd2.toString(), null, fd2);
+                        checkCurrBodies(innerClass,innerClass.getNameAsString() + "." + fd2.toString(), null, fd2);
                     }
                 }
             }
@@ -375,14 +368,14 @@ public class PreprocessingSDKClass {
                 continue;
             }
             BodyDeclaration bd = item.getKey();
-            deletedMethod.add(bd);
+            this.preprocessingData.getmBodiesDeleted().add(bd);
             this.addToRemoveList(bd);
         }
         this.removeRemovalList();
         FileWriter.writeInAll(dirFilePrev.getAbsolutePath() +"/file_after_trim.java", cuPrev.toString());
         FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_after_trim.java", cuCurr.toString());
-        this.curCu = cuCurr;
-        this.preCu = cuPrev;
+        this.preprocessingData.setCurrentCu(cuCurr);
+        this.preprocessingData.setPreviousCu(cuPrev);
         return this;
 
     }
@@ -392,18 +385,24 @@ public class PreprocessingSDKClass {
         cuPrev.removeComment();
         cuPrev.removePackageDeclaration();
         TypeDeclaration mTypeCurr = cuPrev.getType(0);
+        NodeList nodeList = mTypeCurr.getMembers();
+
         mTypeCurr.removeComment();
         mTypeCurr.removeJavaDocComment();
-        NodeList nodeList = mTypeCurr.getMembers();
         for (int i = 0; i < nodeList.size(); i++) {
             Node node = nodeList.get(i);
-            MethodDeclaration md = (MethodDeclaration) node;
-            md.removeComment();
-            removeCommentss(node);
-            System.out.print("a");
+//            MethodDeclaration md = (MethodDeclaration) node;
+//            md.removeComment();
+//            removeCommentss(node);
+            System.out.println(node.getClass().toString());
         }
 
-        System.out.print(cuPrev.toString());
+
+//        System.out.print(cuPrev.toString());
     }
 
+
+    public PreprocessingData getPreprocessingData() {
+        return preprocessingData;
+    }
 }

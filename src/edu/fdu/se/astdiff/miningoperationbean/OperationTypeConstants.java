@@ -1,5 +1,6 @@
 package edu.fdu.se.astdiff.miningoperationbean;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,8 +32,17 @@ public class OperationTypeConstants {
 
     final public static int STATEMENT_CONDITION_MISC = 11;
 
+    final public static int INSERT_FIELD_DECLARARION = 100;
+    final public static int DELETE_FIELD_DECLARATION = 101;
+    final public static int UPDATE_FIELD_DECLARATION = 102;
+
+    final public static int INSERT_METHOD_DECLARARION = 103;
+    final public static int DELETE_METHOD_DECLARATION = 104;
+    final public static int UPDATE_METHOD_DECLARATION = 105;
+
     private static Map<Integer,String> constantName;
     static {
+        constantName = new HashMap<>();
         constantName.put(1,"INSERT_STATEMENT_AND_BODY");
         constantName.put(2,"DELETE_STATEMENT_AND_BODY");
         constantName.put(3,"MOVE_STATEMENT_AND_BODY");
@@ -44,6 +54,13 @@ public class OperationTypeConstants {
         constantName.put(9,"UPDATE_STATEMENT_CONDITION");
         constantName.put(10,"MOVE_STATEMENT_CONDITION");
         constantName.put(11,"STATEMENT_CONDITION_MISC");
+
+        constantName.put(100,"INSERT_FIELD_DECLARARION");
+        constantName.put(101,"DELETE_FIELD_DECLARATION");
+        constantName.put(102,"UPDATE_FIELD_DECLARATION");
+        constantName.put(103,"INSERT_METHOD_DECLARARION");
+        constantName.put(104,"DELETE_METHOD_DECLARATION");
+        constantName.put(105,"UPDATE_METHOD_DECLARATION");
         constantName.put(-1,"UNKNOWN");
 
     }

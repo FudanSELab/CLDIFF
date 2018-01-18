@@ -8,6 +8,7 @@ import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
 import edu.fdu.se.astdiff.miningactions.ClusterActions;
 import edu.fdu.se.astdiff.miningactions.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.MiningOperation;
+import edu.fdu.se.astdiff.preprocessingfile.PreprocessingData;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessingSDKClass;
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.config.ProjectProperties;
@@ -75,7 +76,8 @@ public class DiffMiner {
 			String fileFullPathPrev = fileRootPathPrev + subPath2;
 			String fileFullPathCurr = fileRootPathCurr + subPath2;
 			PreprocessingSDKClass psc =	new PreprocessingSDKClass().compareTwoSDKFile3(fileFullPathPrev,fileFullPathCurr,outputDirName);
-			GumTreeDiffParser his = new GumTreeDiffParser(psc.getPreCu().toString(),psc.getCurCu().toString());
+			PreprocessingData pData = psc.getPreprocessingData();
+			GumTreeDiffParser his = new GumTreeDiffParser(pData.getPreviousCu().toString(),pData.getCurrentCu().toString());
 			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
 			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
 			// package 1
@@ -88,7 +90,8 @@ public class DiffMiner {
 
 			ClusterActions.doCluster(mMiningActionData);
 			// package 3
-			MiningOperation.printHighLevelOperationBeanList(mMiningActionData);
+			MiningOperation mo = new MiningOperation(pData);
+			mo.printHighLevelOperationBeanList(mMiningActionData);
 			break;
 		}
 	}
@@ -100,12 +103,14 @@ public class DiffMiner {
 		System.out.println("Step1 Generating Diff Actions:----------------------");
 		String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
 		String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
+
 		GumTreeDiffParser his = new GumTreeDiffParser(new File(file1),new File(file2));
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
 		// package 1
 		MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
 		GeneratingActionsData data = gen.generate();
+
 		ConsolePrint.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
 		// package 2
 		System.out.println("Step2 Begin to cluster actions:-------------------");
@@ -113,9 +118,10 @@ public class DiffMiner {
 
 		ClusterActions.doCluster(mMiningActionData);
 		// package 3
-		MiningOperation.printHighLevelOperationBeanList(mMiningActionData);
+		new MiningOperation().printHighLevelOperationBeanList(mMiningActionData);
 
 	}
+
 
 
 	public static void main(String args[]){

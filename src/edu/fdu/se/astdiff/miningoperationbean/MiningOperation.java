@@ -4,6 +4,7 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningactions.MiningActionData;
+import edu.fdu.se.astdiff.preprocessingfile.PreprocessingData;
 
 import java.util.List;
 
@@ -12,7 +13,17 @@ import java.util.List;
  */
 public class MiningOperation {
 
-    public static void printHighLevelOperationBeanList(MiningActionData fp) {
+    private PreprocessingData preprocessingData;
+
+    public MiningOperation(PreprocessingData pd){
+        this.preprocessingData = pd;
+    }
+    public MiningOperation(){
+
+    }
+
+
+    public void printHighLevelOperationBeanList(MiningActionData fp) {
         List<ClusteredActionBean> mHighLevelOperationBeanList =  fp.getmHighLevelOperationBeanList();
         if (mHighLevelOperationBeanList.isEmpty()) {
             System.out.println("HighLevelOperationBeanList is null!");

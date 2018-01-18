@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
+import com.github.javaparser.ast.body.BodyDeclaration;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 /**
@@ -65,6 +66,18 @@ public class ClusteredActionBean {
 	public Action getCurAction() {
 		return curAction;
 	}
+
+
+	private String nameOfClass;
+
+	public void setClassName(String name){
+		this.nameOfClass = name;
+	}
+	BodyDeclaration bodyDeclaration;
+	public void bindMethod(BodyDeclaration bd){
+		this.bodyDeclaration = bd;
+	}
+
 	
 	@Override
 	public String toString(){
