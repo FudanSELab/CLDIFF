@@ -116,7 +116,7 @@ public class MatchIfElse {
 		}
 
 		Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather.getChild(0), allActions);
-		Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather.getChild(0), allActions);
+		Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather.getChild(0), allActions);
 		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 
 		fp.setActionTraversedMap(allActions);

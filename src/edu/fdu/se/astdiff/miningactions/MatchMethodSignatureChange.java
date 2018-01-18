@@ -42,8 +42,8 @@ public class MatchMethodSignatureChange {
 			}
 		}
 		List<Action> signatureChidlren = new ArrayList<Action>();
-		Set<String> dst_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
 		Set<String> src_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
+		Set<String> dst_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
 
 		int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 

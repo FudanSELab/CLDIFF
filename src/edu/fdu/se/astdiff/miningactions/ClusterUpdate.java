@@ -63,6 +63,7 @@ public class ClusterUpdate {
                     case StatementConstants.BOOLEANLITERAL:
                     case StatementConstants.INFIXEXPRESSION:
                     case StatementConstants.METHODINVOCATION:
+                    case StatementConstants.QUALIFIEDNAME:
                         MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mSrcTree);
                         break;
                     default:

@@ -33,6 +33,7 @@ public class StatementConstants {
 	final public static String BOOLEANLITERAL = "BooleanLiteral";
 	final public static String CHARACTERLITERAL = "CharacterLiteral";
 	final public static String NULLLITERAL = "NullLiteral";
+	final public static String QUALIFIEDNAME = "QualifiedName";
 
 	final public static String METHODINVOCATION = "MethodInvocation";
 

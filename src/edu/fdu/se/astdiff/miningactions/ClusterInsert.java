@@ -62,7 +62,7 @@ public class ClusterInsert {
                 fp.mHighLevelOperationBeanList.add(operationBean);
                 continue;
             } else if (StatementConstants.METHODDECLARATION.equals(fatherType)) {
-                System.out.println(insNode.getParent().getChildPosition(insNode));
+//                System.out.println(insNode.getParent().getChildPosition(insNode));
                 operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(fp,a, type,fafafather,fatherType);
                 fp.mHighLevelOperationBeanList.add(operationBean);
             } else {
@@ -170,6 +170,7 @@ public class ClusterInsert {
                     case StatementConstants.BOOLEANLITERAL:
                     case StatementConstants.INFIXEXPRESSION:
                     case StatementConstants.METHODINVOCATION:
+                    case StatementConstants.QUALIFIEDNAME:
                         MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mDstTree);
                         break;
                     default:

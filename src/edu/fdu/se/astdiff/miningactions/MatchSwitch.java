@@ -55,8 +55,8 @@ public class MatchSwitch {
 				System.err.println("err null mapping");
 			}
 		}
-		Set<String> dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, subActions);
 		Set<String> src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
+		Set<String> dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, subActions);
 
 		int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 		fp.setActionTraversedMap(subActions);
