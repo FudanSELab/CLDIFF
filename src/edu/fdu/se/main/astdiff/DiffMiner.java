@@ -65,9 +65,9 @@ public class DiffMiner {
 				= ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR)+"/android-"+String.valueOf(version-1);
 		List<String> filePathList = readCompareList(version,fileRootPathPrev,fileRootPathCurr);
 		int cnt = 0;
-		int candidataIndex = 0;
+		int candidateIndex = 0;
 		for(String subPath: filePathList){
-			if(cnt < candidataIndex){
+			if(cnt < candidateIndex){
 				cnt++;
 				continue;
 			}

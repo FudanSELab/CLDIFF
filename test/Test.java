@@ -7,7 +7,7 @@ public class Test {
         String b = "aaa";
         String c = a+b;
         if(c.equals(b)){
-            System.out.print("a");
+            System.err.print("a");
         }
     }
 }

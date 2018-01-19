@@ -57,13 +57,31 @@ public class PreprocessingSDKClass {
      * visited
      *
      */
+    FieldDeclaration fd1;
+    FieldDeclaration fd2;
     private int checkCurrBodies(FieldDeclaration fd, String prefix) {
+
+
         if (preprocessingTempData.bodyMapPrev.containsKey(prefix+fd.toString())) {
             BodyDeclaration prevBd = preprocessingTempData.bodyMapPrev.get(prefix+fd.toString());
+            if(fd.toString().startsWith("private int mConnectionId")){
+                System.out.print("a");
+                if(fd1==null) fd1 = (FieldDeclaration) prevBd;
+                else {
+                    fd2 = (FieldDeclaration)prevBd;
+                    if(fd1 !=fd2){
+                        if(fd1.hashCode()==fd2.hashCode()){
+                            System.out.print("ab");
+                        }
+                        System.out.print("a");
+                    }
+                }
+            }
             if (prevBd.hashCode() == fd.hashCode()) {
                 preprocessingTempData.addToRemoveList(fd);
                 // prev node 默认删除
-                preprocessingTempData.noRemovePrevNode.put(prevBd,0);
+                preprocessingTempData.setBodyPrevNodeMap(prevBd,PreprocessingTempData.BODY_SAME_REMOVE);
+
                 return 1;
             } else {
                 // impossible
@@ -79,7 +97,9 @@ public class PreprocessingSDKClass {
                     List<BodyDeclaration> mOverload = preprocessingTempData.bodyMapPrevMethodOrFieldName.get(prefix+vd.getName());
                     for (BodyDeclaration mItem : mOverload) {
                         // variable相同， 设置为不删除
-                        preprocessingTempData.noRemovePrevNode.put(mItem, 1);
+                        if(PreprocessingTempData.BODY_SAME_REMOVE != preprocessingTempData.prevNodeVisitingMap.get(mItem)){
+                            preprocessingTempData.setBodyPrevNodeMap(mItem,PreprocessingTempData.BODY_DIFFERENT_RETAIN);
+                        }
                     }
                 } else {
                     //new field
@@ -98,11 +118,11 @@ public class PreprocessingSDKClass {
             if (prevNode.hashCode() == cod.hashCode()) {
                 // prev node 默认为0 设置删除，则其他在map的节点设置为 1 不删除（即不做操作）
                 preprocessingTempData.addToRemoveList(cod);
-                preprocessingTempData.noRemovePrevNode.put(prevNode,0);
+                preprocessingTempData.setBodyPrevNodeMap(prevNode,PreprocessingTempData.BODY_SAME_REMOVE);
                 traverseClassOrInterfaceDeclarationSetVisited((ClassOrInterfaceDeclaration) prevNode);
                 return 1;
             } else {
-                preprocessingTempData.noRemovePrevNode.put(prevNode,1); //设置不删除
+                preprocessingTempData.setBodyPrevNodeMap(prevNode,PreprocessingTempData.BODY_DIFFERENT_RETAIN);
                 return 2;
             }
         }
@@ -117,13 +137,11 @@ public class PreprocessingSDKClass {
         if (preprocessingTempData.bodyMapPrev.containsKey(bdMapPrevKey)) {
             BodyDeclaration prevNode = preprocessingTempData.bodyMapPrev.get(bdMapPrevKey);
             if (prevNode.hashCode() == bd.hashCode()) {
-                // same [method / field / constructor /initializer]
-                preprocessingTempData.noRemovePrevNode.put(prevNode,1);
+                preprocessingTempData.setBodyPrevNodeMap(prevNode,PreprocessingTempData.BODY_SAME_REMOVE);
                 preprocessingTempData.addToRemoveList(bd);
                 return 1;
             } else {
-                preprocessingTempData.noRemovePrevNode.put(prevNode,0);
-                // different [method/constructor,initializer]
+                preprocessingTempData.setBodyPrevNodeMap(prevNode,PreprocessingTempData.BODY_DIFFERENT_RETAIN);
                 return 2;
             }
         } else {
@@ -132,7 +150,7 @@ public class PreprocessingSDKClass {
                 List<BodyDeclaration> mOverload = preprocessingTempData.bodyMapPrevMethodOrFieldName.get(bdMapPrevMethodNameKey);
                 // 可能为修改签名之后的方法，也可能为新增的方法
                 for (BodyDeclaration mItem : mOverload) {
-                    preprocessingTempData.noRemovePrevNode.put(mItem, 1);
+                    preprocessingTempData.setBodyPrevNodeMap(mItem,PreprocessingTempData.BODY_DIFFERENT_RETAIN);
                 }
                 return 4;
             } else {
@@ -189,26 +207,32 @@ public class PreprocessingSDKClass {
         FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_before_trim.java", cuCurr.toString());
         removeAllCommentsOfCompilationUnit(cuPrev);
         removeAllCommentsOfCompilationUnit(cuCurr);
-
         initPreprocessingDataFromPrev(cuPrev);
-        TypeDeclaration mTypeCurr = cuCurr.getType(0);
-        ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) mTypeCurr;
-        traverseClassOrInterfaceDeclarationCmpCurr(cod, "");
-
-        for (Entry<BodyDeclaration, Integer> item : preprocessingTempData.noRemovePrevNode.entrySet()) {
-            if (item.getValue() == 1) {
-                continue;
-            }
+        preprocessingTempData.removeRemovalList();
+        traverseClassOrInterfaceDeclarationCmpCurr((ClassOrInterfaceDeclaration) cuCurr.getType(0), "");
+        preprocessingTempData.removeRemovalList();
+        for (Entry<BodyDeclaration, Integer> item : preprocessingTempData.prevNodeVisitingMap.entrySet()) {
             BodyDeclaration bd = item.getKey();
-            this.preprocessingData.addBodiesDeleted(bd);
-            preprocessingTempData.addToRemoveList(bd);
+            switch(item.getValue()){
+                case PreprocessingTempData.BODY_DIFFERENT_RETAIN:
+                case PreprocessingTempData.BODY_FATHERNODE_REMOVE:
+                    break;
+                case PreprocessingTempData.BODY_INITIALIZED_VALUE:
+                    this.preprocessingData.addBodiesDeleted(bd);
+                    preprocessingTempData.addToRemoveList(bd);
+                    break;
+                case PreprocessingTempData.BODY_SAME_REMOVE:
+                    preprocessingTempData.addToRemoveList(bd);
+                    break;
+            }
         }
         preprocessingTempData.removeRemovalList();
+
         FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_after_trim.java", cuPrev.toString());
         FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_after_trim.java", cuCurr.toString());
         this.preprocessingData.setCurrentCu(cuCurr);
         this.preprocessingData.setPreviousCu(cuPrev);
-        this.preprocessingData.printAddedRemovedBodies();
+//        this.preprocessingData.printAddedRemovedBodies();
         return this;
 
     }
@@ -230,7 +254,7 @@ public class PreprocessingSDKClass {
                 ClassOrInterfaceDeclaration cod2 = (ClassOrInterfaceDeclaration) node;
                 int status = checkCurrBodies(cod2);
                 if (status != 1) {
-                    traverseClassOrInterfaceDeclarationCmpCurr((ClassOrInterfaceDeclaration) node, prefixClassName + cod2.getNameAsString() + ".");
+                    traverseClassOrInterfaceDeclarationCmpCurr(cod2, prefixClassName + cod2.getNameAsString() + ".");
                 }
                 continue;
             }
@@ -265,7 +289,7 @@ public class PreprocessingSDKClass {
             if (node instanceof FieldDeclaration) {
                 FieldDeclaration fd = (FieldDeclaration) node;
                 checkCurrBodies(fd,prefixClassName);
-//                if("private static final SparseArray<CapabilityInfo> sAvailableCapabilityInfos = new SparseArray<CapabilityInfo>();".equals(fd.toString())){
+
             }
         }
     }
@@ -312,7 +336,7 @@ public class PreprocessingSDKClass {
         NodeList tmpList = cod.getMembers();
         for (int m = tmpList.size() - 1; m >= 0; m--) {
             Node n = tmpList.get(m);
-            this.preprocessingTempData.noRemovePrevNode.put((BodyDeclaration) n, 1);
+            this.preprocessingTempData.setBodyPrevNodeMap((BodyDeclaration)n,preprocessingTempData.BODY_FATHERNODE_REMOVE);
             if (n instanceof ClassOrInterfaceDeclaration) {
                 traverseClassOrInterfaceDeclarationSetVisited((ClassOrInterfaceDeclaration) n);
             }
@@ -329,49 +353,57 @@ public class PreprocessingSDKClass {
         NodeList nodeList = cod.getMembers();
         for (int i = nodeList.size() - 1; i >= 0; i--) {
             Node node = nodeList.get(i);
-            if (node instanceof ClassOrInterfaceDeclaration) {
-                ClassOrInterfaceDeclaration cod2 = (ClassOrInterfaceDeclaration) node;
-                traverseClassOrInterfaceDeclarationInitPrevData(cod2, prefixClassName + cod2.getNameAsString() + ".");
-                preprocessingTempData.bodyMapPrev.put(cod2.getNameAsString(), cod2);
-                continue;
-            }
-            if (node instanceof AnnotationDeclaration) {
-                preprocessingTempData.addToRemoveList((BodyDeclaration) node);
-            }
-            if (node instanceof ConstructorDeclaration) {
-                ConstructorDeclaration cd = (ConstructorDeclaration) node;
-                preprocessingTempData.noRemovePrevNode.put(cd, 0);
-                preprocessingTempData.bodyMapPrev.put(prefixClassName + cd.getDeclarationAsString(), cd);
-                preprocessingTempData.addToBodyMapPrevMethodNameOrFieldName(prefixClassName + cd.getNameAsString(), cd);
-            }
-            if (node instanceof MethodDeclaration) {
-                MethodDeclaration md = (MethodDeclaration) node;
-                preprocessingTempData.noRemovePrevNode.put(md, 0);
-                preprocessingTempData.bodyMapPrev.put(prefixClassName + md.getDeclarationAsString(), md);
-                preprocessingTempData.addToBodyMapPrevMethodNameOrFieldName(prefixClassName + md.getNameAsString(), md);
-            }
-            if (node instanceof FieldDeclaration) {
-                FieldDeclaration fd = (FieldDeclaration) node;
-                preprocessingTempData.noRemovePrevNode.put(fd, 0);
-                preprocessingTempData.bodyMapPrev.put(prefixClassName + fd.toString(), fd);
-                NodeList<VariableDeclarator> fdc = fd.getVariables();
-                for (int iii = 0; iii < fdc.size(); iii++) {
-                    Node nod = fdc.get(iii);
-                    VariableDeclarator vd = (VariableDeclarator) nod;
-                    preprocessingTempData.addToBodyMapPrevMethodNameOrFieldName(prefixClassName + vd.getName(), fd);
+            if(node instanceof BodyDeclaration){
+                BodyDeclaration bd = (BodyDeclaration)node;
+                if(bd instanceof AnnotationDeclaration){
+                    continue;
+                }
+                preprocessingTempData.initBodyPrevNodeMap(bd);
+
+                if (node instanceof ClassOrInterfaceDeclaration) {
+                    ClassOrInterfaceDeclaration cod2 = (ClassOrInterfaceDeclaration) node;
+                    traverseClassOrInterfaceDeclarationInitPrevData(cod2, prefixClassName + cod2.getNameAsString() + ".");
+                    preprocessingTempData.addToMapBodyDeclaration(cod2,prefixClassName+cod2.getNameAsString());
+                    continue;
+                }
+                if (node instanceof ConstructorDeclaration) {
+                    ConstructorDeclaration cd = (ConstructorDeclaration) node;
+                    preprocessingTempData.addToMapBodyDeclaration(cd,prefixClassName+cd.getDeclarationAsString());
+                    preprocessingTempData.addToMapBodyName(cd,prefixClassName + cd.getNameAsString());
+                    continue;
+                }
+                if (node instanceof MethodDeclaration) {
+                    MethodDeclaration md = (MethodDeclaration) node;
+                    preprocessingTempData.addToMapBodyDeclaration(md,prefixClassName+md.getDeclarationAsString());
+                    preprocessingTempData.addToMapBodyName(md,prefixClassName + md.getNameAsString());
+                    continue;
+                }
+                if (node instanceof FieldDeclaration) {
+                    FieldDeclaration fd = (FieldDeclaration) node;
+                    preprocessingTempData.initBodyPrevNodeMap(fd);
+                    preprocessingTempData.addToMapBodyDeclaration(fd,prefixClassName + fd.toString());
+                    NodeList<VariableDeclarator> fdc = fd.getVariables();
+                    for (int iii = 0; iii < fdc.size(); iii++) {
+                        Node nod = fdc.get(iii);
+                        VariableDeclarator vd = (VariableDeclarator) nod;
+                        preprocessingTempData.addToMapBodyName(fd,prefixClassName + vd.getName());
+                    }
+                    continue;
+                }
+                if (node instanceof InitializerDeclaration) {
+                    //内部类不会有static
+                    InitializerDeclaration idd = (InitializerDeclaration) node;
+                    String iddStr;
+                    if (idd.isStatic()) {
+                        iddStr = "static";
+                    } else {
+                        iddStr = "{";
+                    }
+                    preprocessingTempData.addToMapBodyDeclaration(idd,prefixClassName+iddStr);
+                    preprocessingTempData.addToMapBodyName(idd,prefixClassName + iddStr);
                 }
             }
-            if (node instanceof InitializerDeclaration) {
-                //内部类不会有static
-                InitializerDeclaration idd = (InitializerDeclaration) node;
-                String iddStr;
-                if (idd.isStatic()) {
-                    iddStr = "static";
-                } else {
-                    iddStr = "{";
-                }
-                preprocessingTempData.bodyMapPrev.put(iddStr, idd);
-            }
+
         }
     }
 
