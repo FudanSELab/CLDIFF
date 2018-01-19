@@ -22,9 +22,9 @@ public class PreprocessingTempData {
     public PreprocessingTempData(){
         bodyMapPrev = new HashMap<>();
         bodyMapPrevMethodOrFieldName = new HashMap<>();
-        prevNodeVisitingMap = new HashMap<>();
+        prevNodeVisitingMap1 = new HashMap<>();
+        prevNodeVisitingMap2 = new HashMap<>();
         this.removalList = new ArrayList<>();
-
     }
 
     protected Map<String, BodyDeclaration> bodyMapPrev;
@@ -32,7 +32,8 @@ public class PreprocessingTempData {
     /**
      * 0 初始化之后的值  1 遍历到了之后 需要保留的different  2 遍历到了之后 需要删除的same   3 prev中有，curr没有，change：deleted
      */
-    protected Map<BodyDeclaration, Integer> prevNodeVisitingMap;
+    protected Map<Integer,Integer> prevNodeVisitingMap1;
+    protected Map<Integer,BodyDeclaration> prevNodeVisitingMap2;
 
     /**
      * list of comments to be removed
@@ -57,7 +58,7 @@ public class PreprocessingTempData {
             List<BodyDeclaration> mList = this.bodyMapPrevMethodOrFieldName.get(name);
             mList.add(bd);
         } else {
-            List<BodyDeclaration> mList = new ArrayList<BodyDeclaration>();
+            List<BodyDeclaration> mList = new ArrayList<>();
             mList.add(bd);
             this.bodyMapPrevMethodOrFieldName.put(name, mList);
         }
@@ -86,12 +87,19 @@ public class PreprocessingTempData {
         this.removalList.clear();
     }
 
-    public void initBodyPrevNodeMap(BodyDeclaration bd){
-        this.prevNodeVisitingMap.put(bd,BODY_INITIALIZED_VALUE);
+    public void initBodyPrevNodeMap(BodyDeclaration bd,String classPrefix){
+        Integer hashCode = bd.hashCode() + classPrefix.hashCode();
+        this.prevNodeVisitingMap1.put(hashCode.hashCode(),BODY_INITIALIZED_VALUE);
+        this.prevNodeVisitingMap2.put(hashCode.hashCode(),bd);
     }
 
-    public void setBodyPrevNodeMap(BodyDeclaration bd,int v){
-        this.prevNodeVisitingMap.put(bd,v);
+    public void setBodyPrevNodeMap(BodyDeclaration bd,String classPrefix,int v){
+        Integer hashCode = bd.hashCode() + classPrefix.hashCode();
+        this.prevNodeVisitingMap1.put(hashCode.hashCode(),v);
+    }
+
+    public int getNodeMapValue(int hashKey){
+        return this.prevNodeVisitingMap1.get(hashKey);
     }
 
 

@@ -3,11 +3,10 @@
  */
 public class Test {
     public static void main(String args[]){
-        String a ="";
+        String a = new String("aaa");
         String b = "aaa";
-        String c = a+b;
-        if(c.equals(b)){
-            System.err.print("a");
-        }
+        System.out.println(a.hashCode());
+        System.out.println(b.hashCode());
+        System.out.print(a.equals(b));
     }
 }
