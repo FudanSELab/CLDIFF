@@ -117,6 +117,7 @@ public class PreprocessingData {
     public void addBodiesAdded(BodyDeclaration bodyDeclaration){
         this.mBodiesAdded.add(bodyDeclaration);
     }
+
     public void addBodiesDeleted(BodyDeclaration bodyDeclaration){
         this.mBodiesDeleted.add(bodyDeclaration);
     }
