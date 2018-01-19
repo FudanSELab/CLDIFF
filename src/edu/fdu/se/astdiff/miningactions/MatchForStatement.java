@@ -13,23 +13,13 @@ import java.util.Set;
 public class MatchForStatement {
     public static ClusteredActionBean matchForStatement(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "FORSTATEMENT";
-        List<Action> subActions = new ArrayList<Action>();
-        int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
-        fp.setActionTraversedMap(subActions);
-
-        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-                a,nodeType,subActions,status,operationEntity,null,null);
+        ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByNode(fp,a,nodeType,operationEntity);
         return mHighLevelOperationBean;
     }
 
     public static ClusteredActionBean matchEnhancedForStatement(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "ENHANCEDFORSTATEMENT";
-        List<Action> subActions = new ArrayList<Action>();
-        int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
-        fp.setActionTraversedMap(subActions);
-
-        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-                a,nodeType,subActions,status,operationEntity,null,null);
+        ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByNode(fp,a,nodeType,operationEntity);
         return mHighLevelOperationBean;
     }
 

@@ -33,6 +33,11 @@ public class ClusterUpdate {
             ITree tmp = a.getNode();
             String type = fp.mSrcTree.getTypeLabel(tmp);
             ITree fafafather = AstRelations.findFafafatherNode(tmp, fp.mSrcTree);
+            if(fafafather == null){
+                System.out.println("Father Null Condition: "+ ActionConstants.getInstanceStringName(a) + " " +type);
+                fp.setActionTraversedMap(a);
+                continue;
+            }
             String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
 //			System.out.print(nextAction);
             ClusteredActionBean operationBean;
@@ -55,7 +60,12 @@ public class ClusterUpdate {
             } else {
                 // 方法体
                 switch (type) {
+                    //JAVADOC参数
+                    case StatementConstants.TAGELEMENT:
+                    case StatementConstants.TEXTELEMENT:
+                        //参数
                     case StatementConstants.SIMPLENAME:
+                    case StatementConstants.SIMPLETYPE:
                     case StatementConstants.STRINGLITERAL:
                     case StatementConstants.NULLLITERAL:
                     case StatementConstants.CHARACTERLITERAL:

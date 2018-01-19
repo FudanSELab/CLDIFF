@@ -173,6 +173,7 @@ public class ClusterDelete {
                     case StatementConstants.TEXTELEMENT:
                         // 方法参数
                     case StatementConstants.SIMPLENAME:
+                    case StatementConstants.SIMPLETYPE:
                     case StatementConstants.STRINGLITERAL:
                     case StatementConstants.NULLLITERAL:
                     case StatementConstants.CHARACTERLITERAL:

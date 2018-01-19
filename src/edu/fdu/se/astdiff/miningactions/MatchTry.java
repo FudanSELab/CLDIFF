@@ -19,13 +19,7 @@ public class MatchTry {
 	 */
 	public static ClusteredActionBean matchTry(MiningActionData fp, Action a, String nodeType) {
 		String operationEntity = "TRYSTATEMENT";
-		List<Action> tryAction = new ArrayList<Action>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, tryAction);
-
-		fp.setActionTraversedMap(tryAction);
-
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,tryAction,status,operationEntity,null,null);
+		ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByNode(fp,a,nodeType,operationEntity);
 		return mHighLevelOperationBean;
 	}
 

@@ -22,95 +22,31 @@ public class MatchMethod {
 	 */
 	public static ClusteredActionBean matchNewOrDeleteMethod(MiningActionData fp, Action a, String nodeType) {
 		String operationEntity = "NEWORDELETEMETHOD";
-		List<Action> subActions = new ArrayList<Action>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
-		fp.setActionTraversedMap(subActions);
-
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,subActions,status,operationEntity,null,null);
+		ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByNode(fp,a,nodeType,operationEntity);
 		return mHighLevelOperationBean;
 	}
 
 	public static ClusteredActionBean matchConstructorInvocation(MiningActionData fp, Action a, String nodeType) {
 		String operationEntity = "CONSTRUCTORINVOCATION-THIS()";
-		List<Action> subActions = new ArrayList<Action>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
-		fp.setActionTraversedMap(subActions);
-
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,subActions,status,operationEntity,null,null);
+		ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByNode(fp,a,nodeType,operationEntity);
 		return mHighLevelOperationBean;
 	}
 
 	public static ClusteredActionBean matchConstructorInvocationByFather(MiningActionData fp, Action a, String nodeType,ITree fafafatherNode, String ffFatherNodeType) {
 		String operationEntity = "FATHER-CONSTRUCTORINVOCATION-THIS()";
-		List<Action> subActions = new ArrayList<Action>();
-		ITree srcfafafather = null;
-		ITree dstfafafather = null;
-
-		if (a instanceof Insert) {
-			dstfafafather = fafafatherNode;
-			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
-			if (srcfafafather == null) {
-				System.err.println("err null mapping");
-			}
-		} else {
-			srcfafafather = fafafatherNode;
-			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
-			if (dstfafafather == null) {
-				System.err.println("err null mapping");
-			}
-		}
-
-		Set<String> src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
-		Set<String> dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, subActions);
-		int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
-
-		fp.setActionTraversedMap(subActions);
-
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,subActions,status,operationEntity,null,null);
+		ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByFafafatherNode(fp,a,nodeType,operationEntity,fafafatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;
 	}
 
 	public static ClusteredActionBean matchSuperConstructorInvocation(MiningActionData fp, Action a, String nodeType) {
 		String operationEntity = "SUPERCONSTRUCTORINVOCATION-SUPER()";
-		List<Action> subActions = new ArrayList<Action>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
-		fp.setActionTraversedMap(subActions);
-
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,subActions,status,operationEntity,null,null);
+		ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByNode(fp,a,nodeType,operationEntity);
 		return mHighLevelOperationBean;
 	}
 
 	public static ClusteredActionBean matchSuperConstructorInvocationByFather(MiningActionData fp, Action a, String nodeType,ITree fafafatherNode, String ffFatherNodeType) {
 		String operationEntity = "FATHER-SUPERCONSTRUCTORINVOCATION-SUPER()";
-		List<Action> subActions = new ArrayList<Action>();
-		ITree srcfafafather = null;
-		ITree dstfafafather = null;
-
-		if (a instanceof Insert) {
-			dstfafafather = fafafatherNode;
-			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
-			if (srcfafafather == null) {
-				System.err.println("err null mapping");
-			}
-		} else {
-			srcfafafather = fafafatherNode;
-			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
-			if (dstfafafather == null) {
-				System.err.println("err null mapping");
-			}
-		}
-
-		Set<String> src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
-		Set<String> dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, subActions);
-		int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
-		fp.setActionTraversedMap(subActions);
-
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,subActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
+		ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByFafafatherNode(fp,a,nodeType,operationEntity,fafafatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;
 	}
 

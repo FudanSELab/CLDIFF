@@ -28,6 +28,11 @@ public class ClusterMove {
             ITree moveNode = a.getNode();
             String type = fp.mSrcTree.getTypeLabel(moveNode);
             ITree fafafather = AstRelations.findFafafatherNode(moveNode, fp.mSrcTree);
+            if(fafafather == null){
+                System.out.println("Father Null Condition: "+ ActionConstants.getInstanceStringName(a) + " " +type);
+                fp.setActionTraversedMap(a);
+                continue;
+            }
             String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
 //            System.out.print(nextAction+"\n");
             ClusteredActionBean operationBean;
@@ -165,6 +170,7 @@ public class ClusterMove {
                     case StatementConstants.TEXTELEMENT:
                         // 方法参数
                     case StatementConstants.SIMPLENAME:
+                    case StatementConstants.SIMPLETYPE:
                     case StatementConstants.STRINGLITERAL:
                     case StatementConstants.NULLLITERAL:
                     case StatementConstants.CHARACTERLITERAL:

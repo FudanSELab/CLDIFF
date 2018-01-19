@@ -1,13 +1,58 @@
 package edu.fdu.se.astdiff.miningactions;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class AstRelations {
+    public static ClusteredActionBean matchByNode(MiningActionData fp, Action a, String nodeType,String operationEntity){
+        List<Action> subActions = new ArrayList<Action>();
+        int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
+        fp.setActionTraversedMap(subActions);
+
+        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
+                a,nodeType,subActions,status,operationEntity,null,null);
+        return mHighLevelOperationBean;
+    }
+
+    public static ClusteredActionBean matchByFafafatherNode(MiningActionData fp, Action a, String nodeType,String operationEntity, ITree fafafatherNode, String ffFatherNodeType){
+        ITree srcParent = null;
+        List<Action> allActions = new ArrayList<Action>();
+        ITree srcfafafather = null;
+        ITree dstfafafather = null;
+
+        if (a instanceof Insert) {
+            dstfafafather = fafafatherNode;
+            srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
+            if (srcfafafather == null) {
+                System.err.println("err null mapping");
+            }
+        } else {
+            srcfafafather = fafafatherNode;
+            dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
+            if (dstfafafather == null) {
+                System.err.println("err null mapping");
+            }
+        }
+
+        Set<String> src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
+        Set<String> dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
+        int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
+
+        fp.setActionTraversedMap(allActions);
+
+        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
+                a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
+        return mHighLevelOperationBean;
+    }
 
 	public static boolean isFatherIfStatement(Action a, TreeContext treeContext) {
 		Tree t = (Tree) a.getNode();

@@ -28,6 +28,7 @@ public class StatementConstants {
 	 * Parameter and literal
 	 */
 	final public static String SIMPLENAME = "SimpleName";
+	final public static String SIMPLETYPE = "SimpleType";
 	final public static String STRINGLITERAL = "StringLiteral";
 	final public static String NUMBERLITERAL = "NumberLiteral";
 	final public static String BOOLEANLITERAL = "BooleanLiteral";

@@ -21,7 +21,7 @@ public class MatchImportOrPackage {
     }
     public static ClusteredActionBean matchImportDeclarationByFather(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
         String operationEntity  = "FATHER-IMPORTDECLARATION";
-        ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByFatherNode(fp,a,nodeType,operationEntity,fafafatherNode,ffFatherNodeType);
+        ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByFafafatherNode(fp,a,nodeType,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;
     }
 
@@ -32,7 +32,7 @@ public class MatchImportOrPackage {
     }
     public static ClusteredActionBean matchPackageDeclarationByFather(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
         String operationEntity  = "FATHER-PACKAGEDECLARATION";
-        ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByFatherNode(fp,a,nodeType,operationEntity,fafafatherNode,ffFatherNodeType);
+        ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByFafafatherNode(fp,a,nodeType,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;
     }
 

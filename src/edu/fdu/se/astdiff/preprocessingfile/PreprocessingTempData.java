@@ -23,6 +23,8 @@ public class PreprocessingTempData {
         bodyMapPrev = new HashMap<>();
         bodyMapPrevMethodOrFieldName = new HashMap<>();
         prevNodeVisitingMap = new HashMap<>();
+        this.removalList = new ArrayList<>();
+
     }
 
     protected Map<String, BodyDeclaration> bodyMapPrev;
@@ -66,9 +68,7 @@ public class PreprocessingTempData {
      * @param bd
      */
     public void addToRemoveList(BodyDeclaration bd) {
-        if (this.removalList == null) {
-            this.removalList = new ArrayList<>();
-        }
+
         this.removalList.add(bd);
     }
 
