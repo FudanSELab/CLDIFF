@@ -56,7 +56,10 @@ public class PreprocessingData {
         mBodiesRetained.add(bd);
     }
 
-
+    /**
+     * 删除之后的prev的string 作为输入，解析，load Retain的body
+     * @param prevStr
+     */
     public void loadPrevRetainedBodies(String prevStr){
         CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prevStr);
         TypeDeclaration mTypeCurr = cuPrev.getType(0);

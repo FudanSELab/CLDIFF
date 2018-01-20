@@ -50,7 +50,7 @@ public class PreprocessingSDKClass {
     private void initPreprocessingDataFromPrev(CompilationUnit cu) {
         TypeDeclaration mTypePrev = cu.getType(0);
         ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) mTypePrev;
-        traverseClassOrInterfaceDeclarationInitPrevData(cod, "");
+        traverseClassOrInterfaceDeclarationInitPrevData(cod, cod.getNameAsString());
     }
 
     /**
@@ -219,7 +219,8 @@ public class PreprocessingSDKClass {
         removeAllCommentsOfCompilationUnit(cuCurr);
         initPreprocessingDataFromPrev(cuPrev);
         preprocessingTempData.removeRemovalList();
-        traverseClassOrInterfaceDeclarationCmpCurr((ClassOrInterfaceDeclaration) cuCurr.getType(0), "");
+        ClassOrInterfaceDeclaration codMain = (ClassOrInterfaceDeclaration)cuCurr.getType(0);
+        traverseClassOrInterfaceDeclarationCmpCurr((ClassOrInterfaceDeclaration) cuCurr.getType(0), codMain.getNameAsString());
         preprocessingTempData.removeRemovalList();
         for (Entry<Integer, BodyDeclaration> item : preprocessingTempData.prevNodeVisitingMap2.entrySet()) {
             Integer key = item.getKey();
