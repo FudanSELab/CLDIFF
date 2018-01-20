@@ -78,21 +78,21 @@ public class DiffMiner {
 			String fileFullPathCurr = fileRootPathCurr + subPath2;
 			PreprocessingSDKClass psc =	new PreprocessingSDKClass().compareTwoFile(fileFullPathPrev,fileFullPathCurr,outputDirName);
 			PreprocessingData pData = psc.getPreprocessingData();
-			GumTreeDiffParser his = new GumTreeDiffParser(pData.getPreviousCu().toString(),pData.getCurrentCu().toString());
-			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
-			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
-			// package 1
-			MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
-			GeneratingActionsData data = gen.generate();
-			ConsolePrint.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
-			// package 2
-			System.out.println("Step2 Begin to find Pattern:-------------------");
-			MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
-
-			ClusterActions.doCluster(mMiningActionData);
-			// package 3
-			MiningOperation mo = new MiningOperation(pData);
-			mo.printHighLevelOperationBeanList(mMiningActionData);
+//			GumTreeDiffParser his = new GumTreeDiffParser(pData.getPreviousCu().toString(),pData.getCurrentCu().toString());
+//			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
+//			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
+//			// package 1
+//			MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
+//			GeneratingActionsData data = gen.generate();
+//			ConsolePrint.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
+//			// package 2
+//			System.out.println("Step2 Begin to find Pattern:-------------------");
+//			MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
+//
+//			ClusterActions.doCluster(mMiningActionData);
+//			// package 3
+//			MiningOperation mo = new MiningOperation(pData);
+//			mo.printHighLevelOperationBeanList(mMiningActionData);
 			break;
 		}
 	}

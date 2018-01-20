@@ -22,7 +22,6 @@ public class PreprocessingData {
     private CompilationUnit currentCu;
     private CompilationUnit previousCu;
 
-
     /**
      * curr 删除的added的body
      */
@@ -37,19 +36,12 @@ public class PreprocessingData {
      */
     private List<BodyDeclaration> mBodiesRetained;
 
-
     /**
      * Body 所述 的class
      */
     private Map<BodyDeclaration,ClassOrInterfaceDeclaration> mMap;
 
-
-
-
     private List<ClassOrInterfaceDeclaration> classOrInterfaceDeclarationsList;
-
-
-
 
     public PreprocessingData(){
         mBodiesAdded = new ArrayList<>();

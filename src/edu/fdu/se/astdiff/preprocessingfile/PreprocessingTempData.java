@@ -12,10 +12,18 @@ import java.util.Map;
  */
 public class PreprocessingTempData {
 
-
+    /**
+     * 已经设置为same remove有可能被 overload遍历到，设置为retain，需要加check
+     */
     final static public int BODY_SAME_REMOVE = 10;
+    /**
+     * 已经为retain ，如果遍历到发现是same remove 则可以re- set 为remove
+     */
     final static public int BODY_DIFFERENT_RETAIN = 11;
     final static public int BODY_INITIALIZED_VALUE = 12;
+    /**
+     * 已经设置为remove的，表示curr中cod已经被删除，所以不会再revisit到
+     */
     final static public int BODY_FATHERNODE_REMOVE = 13;
 
 
@@ -75,9 +83,6 @@ public class PreprocessingTempData {
 
     public void removeRemovalList() {
         for (BodyDeclaration item : this.removalList) {
-            if(item.toString().startsWith("private int mConnectionId")){
-                System.out.println("aaa");
-            }
             boolean s = item.remove();
             if(!s){
                 System.err.println("error: removing return false");
@@ -88,14 +93,20 @@ public class PreprocessingTempData {
     }
 
     public void initBodyPrevNodeMap(BodyDeclaration bd,String classPrefix){
-        Integer hashCode = bd.hashCode() + classPrefix.hashCode();
-        this.prevNodeVisitingMap1.put(hashCode.hashCode(),BODY_INITIALIZED_VALUE);
-        this.prevNodeVisitingMap2.put(hashCode.hashCode(),bd);
+        String hashCodeStr = String.valueOf(bd.hashCode()) + String.valueOf(classPrefix.hashCode());
+        this.prevNodeVisitingMap1.put(hashCodeStr.hashCode(),BODY_INITIALIZED_VALUE);
+        this.prevNodeVisitingMap2.put(hashCodeStr.hashCode(),bd);
     }
 
+    /**
+     *
+     * @param bd node
+     * @param classPrefix node 所在的class prefix
+     * @param v
+     */
     public void setBodyPrevNodeMap(BodyDeclaration bd,String classPrefix,int v){
-        Integer hashCode = bd.hashCode() + classPrefix.hashCode();
-        this.prevNodeVisitingMap1.put(hashCode.hashCode(),v);
+        String hashCodeStr = String.valueOf(bd.hashCode()) + String.valueOf(classPrefix.hashCode());
+        this.prevNodeVisitingMap1.put(hashCodeStr.hashCode(),v);
     }
 
     public int getNodeMapValue(int hashKey){

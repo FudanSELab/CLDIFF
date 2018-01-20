@@ -57,24 +57,12 @@ public class PreprocessingSDKClass {
      * visited
      *
      */
-    FieldDeclaration fd1;
-    FieldDeclaration fd2;
     private int checkCurrBodies(FieldDeclaration fd, String prefix) {
         if (preprocessingTempData.bodyMapPrev.containsKey(prefix+fd.toString())) {
             BodyDeclaration prevBd = preprocessingTempData.bodyMapPrev.get(prefix+fd.toString());
-            if(fd.toString().startsWith("private int mConnectionId")){
-                System.out.print("a");
-                if(fd1==null) fd1 = (FieldDeclaration) prevBd;
-                else {
-                    fd2 = (FieldDeclaration)prevBd;
-
-                }
-            }
             if (prevBd.hashCode() == fd.hashCode()) {
                 preprocessingTempData.addToRemoveList(fd);
-                // prev node 默认删除
                 preprocessingTempData.setBodyPrevNodeMap(prevBd,prefix,PreprocessingTempData.BODY_SAME_REMOVE);
-
                 return 1;
             } else {
                 // impossible
@@ -82,16 +70,13 @@ public class PreprocessingSDKClass {
                 return 2;
             }
         } else {
-            NodeList<VariableDeclarator> vlist = fd.getVariables();
-            for (int t = 0; t < vlist.size(); t++) {
-                Node nnn = vlist.get(t);
-                VariableDeclarator vd = (VariableDeclarator) nnn;
+            for(VariableDeclarator vd:fd.getVariables()){
                 if (preprocessingTempData.bodyMapPrevMethodOrFieldName.containsKey(prefix+vd.getName())) {
                     List<BodyDeclaration> mOverload = preprocessingTempData.bodyMapPrevMethodOrFieldName.get(prefix+vd.getName());
                     for (BodyDeclaration mItem : mOverload) {
                         // variable相同， 设置为不删除
-                        Integer hashCode = mItem.hashCode() + prefix.hashCode();
-                        if(PreprocessingTempData.BODY_SAME_REMOVE != preprocessingTempData.getNodeMapValue(hashCode)){
+                        String hashCode = String.valueOf(mItem.hashCode()) + String.valueOf(prefix.hashCode());
+                        if(PreprocessingTempData.BODY_SAME_REMOVE != preprocessingTempData.getNodeMapValue(hashCode.hashCode())){
                             preprocessingTempData.setBodyPrevNodeMap(mItem,prefix,PreprocessingTempData.BODY_DIFFERENT_RETAIN);
                         }
                     }
@@ -105,15 +90,20 @@ public class PreprocessingSDKClass {
         return 33;
     }
 
+    /**
+     *
+     * @param cod 内部类
+     * @param prefixClassName classname到cod的name前一个为止
+     * @return  1 2
+     */
     private int checkCurrBodies(ClassOrInterfaceDeclaration cod,String prefixClassName) {
-        String name = cod.getNameAsString();
-        if (preprocessingTempData.bodyMapPrev.containsKey(name)) {
-            BodyDeclaration prevNode = preprocessingTempData.bodyMapPrev.get(name);
+        String key = prefixClassName + cod.getNameAsString()+".";
+        if (preprocessingTempData.bodyMapPrev.containsKey(key)) {
+            BodyDeclaration prevNode = preprocessingTempData.bodyMapPrev.get(key);
             if (prevNode.hashCode() == cod.hashCode()) {
-                // prev node 默认为0 设置删除，则其他在map的节点设置为 1 不删除（即不做操作）
                 preprocessingTempData.addToRemoveList(cod);
                 preprocessingTempData.setBodyPrevNodeMap(prevNode,prefixClassName,PreprocessingTempData.BODY_SAME_REMOVE);
-                traverseClassOrInterfaceDeclarationSetVisited((ClassOrInterfaceDeclaration) prevNode,prefixClassName + cod.getNameAsString());
+                traverseClassOrInterfaceDeclarationSetVisited((ClassOrInterfaceDeclaration) prevNode,prefixClassName);
                 return 1;
             } else {
                 preprocessingTempData.setBodyPrevNodeMap(prevNode,prefixClassName,PreprocessingTempData.BODY_DIFFERENT_RETAIN);
@@ -167,7 +157,10 @@ public class PreprocessingSDKClass {
                 List<BodyDeclaration> mOverload = preprocessingTempData.bodyMapPrevMethodOrFieldName.get(bdMapPrevMethodNameKey);
                 // 可能为修改签名之后的方法，也可能为新增的方法
                 for (BodyDeclaration mItem : mOverload) {
-                    preprocessingTempData.setBodyPrevNodeMap(mItem,prefixClassName,PreprocessingTempData.BODY_DIFFERENT_RETAIN);
+                    String hashStr = String.valueOf(mItem.hashCode()) + String.valueOf(prefixClassName.hashCode());
+                    if(PreprocessingTempData.BODY_SAME_REMOVE != preprocessingTempData.getNodeMapValue(hashStr.hashCode())) {
+                        preprocessingTempData.setBodyPrevNodeMap(mItem, prefixClassName, PreprocessingTempData.BODY_DIFFERENT_RETAIN);
+                    }
                 }
                 return 4;
             } else {
@@ -232,7 +225,7 @@ public class PreprocessingSDKClass {
             Integer key = item.getKey();
             BodyDeclaration bd = item.getValue();
             Integer status = this.preprocessingTempData.prevNodeVisitingMap1.get(key);
-            switch(status.intValue()){
+            switch(status){
                 case PreprocessingTempData.BODY_DIFFERENT_RETAIN:
                 case PreprocessingTempData.BODY_FATHERNODE_REMOVE:
                     break;
@@ -262,8 +255,8 @@ public class PreprocessingSDKClass {
 
     /**
      * curr
-     *
-     * @param cod class name
+     * @param cod class 节点
+     * @param prefixClassName class 节点为止的prefix ， root节点的class prefix 为“”
      */
     public void traverseClassOrInterfaceDeclarationCmpCurr(ClassOrInterfaceDeclaration cod, String prefixClassName) {
         NodeList nodeList = cod.getMembers();
@@ -296,7 +289,6 @@ public class PreprocessingSDKClass {
 
     /**
      * prev + curr
-     *
      * @param cod class name
      */
     public void traverseClassOrInterfaceDeclarationRemoveComment(ClassOrInterfaceDeclaration cod) {
@@ -332,16 +324,21 @@ public class PreprocessingSDKClass {
         }
     }
 
+    /**
+     * 设置该cod下的孩子节点为访问，因为father已经被remove了，所以不需要remove
+     * @param cod 该节点
+     * @param prefixClassName  该节点为止的preix ClassName
+     */
     public void traverseClassOrInterfaceDeclarationSetVisited(ClassOrInterfaceDeclaration cod,String prefixClassName) {
         NodeList tmpList = cod.getMembers();
+        String childrenClassPrefix = prefixClassName + cod.getNameAsString()+".";
         for (int m = tmpList.size() - 1; m >= 0; m--) {
             Node n = tmpList.get(m);
-            this.preprocessingTempData.setBodyPrevNodeMap((BodyDeclaration)n,prefixClassName,PreprocessingTempData.BODY_FATHERNODE_REMOVE);
+            this.preprocessingTempData.setBodyPrevNodeMap((BodyDeclaration)n,childrenClassPrefix,PreprocessingTempData.BODY_FATHERNODE_REMOVE);
             if (n instanceof ClassOrInterfaceDeclaration) {
                 ClassOrInterfaceDeclaration next = (ClassOrInterfaceDeclaration) n;
-                traverseClassOrInterfaceDeclarationSetVisited(next,prefixClassName+next.getNameAsString());
+                traverseClassOrInterfaceDeclarationSetVisited(next,childrenClassPrefix);
             }
-
         }
     }
 
@@ -364,8 +361,9 @@ public class PreprocessingSDKClass {
 
                 if (node instanceof ClassOrInterfaceDeclaration) {
                     ClassOrInterfaceDeclaration cod2 = (ClassOrInterfaceDeclaration) node;
-                    traverseClassOrInterfaceDeclarationInitPrevData(cod2, prefixClassName + cod2.getNameAsString() + ".");
-                    preprocessingTempData.addToMapBodyDeclaration(cod2,prefixClassName+cod2.getNameAsString());
+                    String subCodName = prefixClassName + cod2.getNameAsString() +".";
+                    traverseClassOrInterfaceDeclarationInitPrevData(cod2, subCodName);
+                    preprocessingTempData.addToMapBodyDeclaration(cod2,subCodName);
                     continue;
                 }
                 if (node instanceof ConstructorDeclaration) {
@@ -383,10 +381,7 @@ public class PreprocessingSDKClass {
                 if (node instanceof FieldDeclaration) {
                     FieldDeclaration fd = (FieldDeclaration) node;
                     preprocessingTempData.addToMapBodyDeclaration(fd,prefixClassName + fd.toString());
-                    NodeList<VariableDeclarator> fdc = fd.getVariables();
-                    for (int iii = 0; iii < fdc.size(); iii++) {
-                        Node nod = fdc.get(iii);
-                        VariableDeclarator vd = (VariableDeclarator) nod;
+                    for(VariableDeclarator vd:fd.getVariables()){
                         preprocessingTempData.addToMapBodyName(fd,prefixClassName + vd.getName());
                     }
                     continue;
@@ -407,15 +402,4 @@ public class PreprocessingSDKClass {
 
         }
     }
-
-
-    public void test(String a) {
-        CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(a);
-        cuPrev.removeComment();
-        cuPrev.removePackageDeclaration();
-        TypeDeclaration mTypeCurr = cuPrev.getType(0);
-        traverseClassOrInterfaceDeclarationRemoveComment((ClassOrInterfaceDeclaration) mTypeCurr);
-        System.out.print(cuPrev.toString());
-    }
-
 }
