@@ -50,7 +50,7 @@ public class PreprocessingSDKClass {
     private void initPreprocessingDataFromPrev(CompilationUnit cu) {
         TypeDeclaration mTypePrev = cu.getType(0);
         ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) mTypePrev;
-        traverseClassOrInterfaceDeclarationInitPrevData(cod, cod.getNameAsString());
+        traverseClassOrInterfaceDeclarationInitPrevData(cod, cod.getNameAsString()+".");
     }
 
     /**
@@ -220,7 +220,7 @@ public class PreprocessingSDKClass {
         initPreprocessingDataFromPrev(cuPrev);
         preprocessingTempData.removeRemovalList();
         ClassOrInterfaceDeclaration codMain = (ClassOrInterfaceDeclaration)cuCurr.getType(0);
-        traverseClassOrInterfaceDeclarationCmpCurr((ClassOrInterfaceDeclaration) cuCurr.getType(0), codMain.getNameAsString());
+        traverseClassOrInterfaceDeclarationCmpCurr((ClassOrInterfaceDeclaration) cuCurr.getType(0), codMain.getNameAsString()+".");
         preprocessingTempData.removeRemovalList();
         for (Entry<Integer, BodyDeclaration> item : preprocessingTempData.prevNodeVisitingMap2.entrySet()) {
             Integer key = item.getKey();
@@ -245,7 +245,7 @@ public class PreprocessingSDKClass {
         FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_after_trim.java", cuCurr.toString());
         this.preprocessingData.setCurrentCu(cuCurr);
         this.preprocessingData.setPreviousCu(cuPrev);
-//        this.preprocessingData.printAddedRemovedBodies();
+        this.preprocessingData.printAddedRemovedBodies();
         return this;
 
     }
@@ -356,6 +356,7 @@ public class PreprocessingSDKClass {
             if(node instanceof BodyDeclaration){
                 BodyDeclaration bd = (BodyDeclaration)node;
                 if(bd instanceof AnnotationDeclaration){
+                    //todo index 5 AccountManager
                     continue;
                 }
                 preprocessingTempData.initBodyPrevNodeMap(bd,prefixClassName);
@@ -382,6 +383,7 @@ public class PreprocessingSDKClass {
                 if (node instanceof FieldDeclaration) {
                     FieldDeclaration fd = (FieldDeclaration) node;
                     preprocessingTempData.addToMapBodyDeclaration(fd,prefixClassName + fd.toString());
+
                     for(VariableDeclarator vd:fd.getVariables()){
                         preprocessingTempData.addToMapBodyName(fd,prefixClassName + vd.getName());
                     }
