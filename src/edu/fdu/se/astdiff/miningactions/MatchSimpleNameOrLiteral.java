@@ -15,46 +15,6 @@ import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSimpleNameOrLiteral {
 	/**
-	 * level IV fafafather 为VariableDeclarationStatement ExpressionStatement
-	 * father为methodinvocation  按照fafafatherNode 为key，存所有相关的action,更细的情况放到map之后再做处理
-	 * 
-	 * @param fp
-	 * @param a
-	 * @param nodeType
-	 * @return
-	 */
-	public static ClusteredActionBean matchExpressionStatementAndVariableDeclarationStatement(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
-		String operationEntity  = "EXPRESSIONSTATEMENTANDVARIABLEDECLARATIONSTATEMENT";
-		ITree srcParent = null;
-		List<Action> allActions = new ArrayList<Action>();
-
-		ITree srcfafafather = null;
-		ITree dstfafafather = null;
-		if (a instanceof Insert) {
-			dstfafafather = fafafatherNode;
-			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
-			if (srcfafafather == null) {
-				System.err.println("err null mapping");
-			}
-		} else {
-			srcfafafather = fafafatherNode;
-			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
-			if (dstfafafather == null) {
-				System.err.println("err null mapping");
-			}
-		}
-		Set<String> src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
-		Set<String> dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
-		int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
-
-		fp.setActionTraversedMap(allActions);
-//		this.mMiningActionData.mapMethodInvocationAndActions(srcParent, allActions);
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
-		return mHighLevelOperationBean;
-	}
-
-	/**
 	 * Sub sub level-III 访问到simple name节点或者literal 节点分两种情况，一种是father
 	 * 为ifStatement 另一种是father不是ifstatement type 为simple name action可以为update
 	 * 可以为insert match 之后标记action为已读 ， 目前思路： 按照parent为key存储map，insert update

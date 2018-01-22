@@ -9,6 +9,7 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
 import com.github.gumtreediff.tree.TreeContext;
+import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -18,18 +19,18 @@ public class MatchIfElse {
 	 * insert 可能 新增if/else if + body是否也是新 2*2 = 4种情况 null 目前没有找到反例
 	 * 
 	 * @param a
-	 * @param type
+	 * @param nodeType
 	 * @return
 	 */
-	public static ClusteredActionBean matchIf(MiningActionData f, Action a, String type) {
+	public static ClusteredActionBean matchIf(MiningActionData f, Action a, String nodeType) {
 		String operationEntity = "";
-		TreeContext treeContext;
+		TreeContext con;
 		if(a instanceof Insert)
-			treeContext = f.getDstTree();
+			con = f.getDstTree();
 		else
-			treeContext = f.getSrcTree();
+			con = f.getSrcTree();
 
-		if (AstRelations.isFatherIfStatement(a, treeContext)) {
+		if (AstRelations.isFatherIfStatement(a, con)) {
 			operationEntity = "ELSE_IF";
 		} else {
 			operationEntity = "IF";
@@ -58,8 +59,9 @@ public class MatchIfElse {
 		}
 
 		f.setActionTraversedMap(ifSubActions);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,type,ifSubActions,status,operationEntity,null,null);
+				a,nodeType,ifSubActions,nodeLinePosition,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}
 	
@@ -72,6 +74,11 @@ public class MatchIfElse {
 	 */
 	public static ClusteredActionBean matchElse(MiningActionData f, Action a, String nodeType, ITree ffFatherNode, String ffFatherNodeType) {
 		String operationEntity = "ELSE";
+		TreeContext con;
+		if(a instanceof Insert)
+			con = f.getDstTree();
+		else
+			con = f.getSrcTree();
 //		a.getNode().getParent().getChildPosition(a.getNode()) == 2
 		String labelType = f.getDstTreeContextTypeLabel(a.getNode()) ;
 		if(!StatementConstants.BLOCK.equals(labelType)){
@@ -80,8 +87,10 @@ public class MatchIfElse {
 		List<Action> result = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, result);
 		f.setActionTraversedMap(result);
+
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,result,status,operationEntity,ffFatherNode,ffFatherNodeType);
+				a,nodeType,result,nodeLinePosition,status,operationEntity,ffFatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;
 	}
 	
@@ -101,13 +110,17 @@ public class MatchIfElse {
 
 		ITree srcfafafather = null;
 		ITree dstfafafather = null;
+		TreeContext con;
+
 		if (a instanceof Insert) {
+			con = fp.getDstTree();
 			dstfafafather = fafafatherNode;
 			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
 			if (srcfafafather == null) {
 				System.err.println("err null mapping");
 			}
 		} else {
+			con = fp.getSrcTree();
 			srcfafafather = fafafatherNode;
 			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
 			if (dstfafafather == null) {
@@ -120,8 +133,10 @@ public class MatchIfElse {
 		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 
 		fp.setActionTraversedMap(allActions);
+
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
+				a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;
 	}
 

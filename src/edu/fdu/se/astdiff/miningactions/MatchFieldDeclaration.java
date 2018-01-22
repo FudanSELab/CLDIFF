@@ -5,6 +5,7 @@ import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
+import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -33,9 +34,9 @@ public class MatchFieldDeclaration {
                 operationEntity += "-NEW";
             }
         }
-
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-                a,nodeType,allActions,status,operationEntity,null,null);
+                a,nodeType,allActions,nodeLinePosition,status,operationEntity,null,null);
         return mHighLevelOperationBean;
     }
     public static ClusteredActionBean matchFieldDeclarationByFather(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
@@ -44,13 +45,16 @@ public class MatchFieldDeclaration {
         List<Action> allActions = new ArrayList<Action>();
         ITree srcfafafather = null;
         ITree dstfafafather = null;
+        TreeContext con = null;
         if (a instanceof Insert) {
+            con = fp.getDstTree();
             dstfafafather = fafafatherNode;
             srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
             if (srcfafafather == null) {
                 System.err.println("err null mapping");
             }
         } else {
+            con = fp.getSrcTree();
             srcfafafather = fafafatherNode;
             dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
             if (dstfafafather == null) {
@@ -63,12 +67,6 @@ public class MatchFieldDeclaration {
         int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
         fp.setActionTraversedMap(allActions);
 
-        TreeContext con = null;
-        if (a instanceof Insert) {
-            con = fp.getDstTree();
-        } else if (a instanceof Delete) {
-            con = fp.getSrcTree();
-        }
         ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(fafafatherNode, con);
         if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
             operationEntity += "-OBJECT-INITIALIZING";
@@ -76,9 +74,9 @@ public class MatchFieldDeclaration {
                 operationEntity += "-NEW";
             }
         }
-
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-                a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
+                a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;
     }
 }

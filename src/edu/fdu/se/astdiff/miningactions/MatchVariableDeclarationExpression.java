@@ -10,6 +10,7 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
+import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -41,8 +42,10 @@ public class MatchVariableDeclarationExpression {
 			}
 		}
 
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,subActions,status,operationEntity,null,null);
+				a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}
 
@@ -53,13 +56,16 @@ public class MatchVariableDeclarationExpression {
 
 		ITree srcfafafather = null;
 		ITree dstfafafather = null;
+		TreeContext con = null;
 		if (a instanceof Insert) {
+			con = fp.getDstTree();
 			dstfafafather = fafafatherNode;
 			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
 			if (srcfafafather == null) {
 				System.err.println("err null mapping");
 			}
 		} else {
+			con = fp.getSrcTree();
 			srcfafafather = fafafatherNode;
 			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
 			if (dstfafafather == null) {
@@ -73,12 +79,6 @@ public class MatchVariableDeclarationExpression {
 
 		fp.setActionTraversedMap(subActions);
 
-		TreeContext con = null;
-		if (a instanceof Insert) {
-			con = fp.getDstTree();
-		} else if (a instanceof Delete) {
-			con = fp.getSrcTree();
-		}
 		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(fafafatherNode, con);
 		if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
 			operationEntity += "-OBJECT-INITIALIZING";
@@ -87,8 +87,10 @@ public class MatchVariableDeclarationExpression {
 			}
 		}
 
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,subActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
+				a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}
 }

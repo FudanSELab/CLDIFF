@@ -245,7 +245,7 @@ public class PreprocessingSDKClass {
         FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_after_trim.java", cuCurr.toString());
         this.preprocessingData.setCurrentCu(cuCurr);
         this.preprocessingData.setPreviousCu(cuPrev);
-        this.preprocessingData.printAddedRemovedBodies();
+//        this.preprocessingData.printAddedRemovedBodies();
         return this;
 
     }

@@ -3,6 +3,7 @@ package edu.fdu.se.astdiff.miningactions;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
+import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
@@ -37,8 +38,16 @@ public class ClusterInsert {
             }
             String fatherType = fp.mDstTree.getTypeLabel(fafafather);
 
-//			System.out.print(nextAction);
             ClusteredActionBean operationBean;
+            //类签名状态
+            if(StatementConstants.TYPEDECLARATION.equals(fatherType)){
+                //insert FieldDeclaration body
+                operationBean = MatchFieldDeclaration.matchFieldDeclarationByFather(fp,a,type,fafafather,fatherType);
+                fp.mHighLevelOperationBeanList.add(operationBean);
+                continue;
+            }
+
+
             if(StatementConstants.FIELDDECLARATION.equals(type)){
                 //insert FieldDeclaration
                 operationBean = MatchFieldDeclaration.matchFieldDeclaration(fp,a,type);
@@ -186,7 +195,8 @@ public class ClusterInsert {
                         break;
                     default:
                         String operationEntity = "DEFAULT: "+ ActionConstants.getInstanceStringName(a) + " " +type;
-                        operationBean = new ClusteredActionBean(a,type,null,-1,operationEntity,fafafather,fatherType);
+                        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,fp.mDstTree);
+                        operationBean = new ClusteredActionBean(a,type,null,nodeLinePosition,-1,operationEntity,fafafather,fatherType);
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         fp.setActionTraversedMap(a);
                         break;
