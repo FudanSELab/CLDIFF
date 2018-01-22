@@ -3,6 +3,8 @@ package edu.fdu.se.astdiff.miningactions;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeContext;
+import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -29,13 +31,16 @@ public class MatchForStatement {
         List<Action> allActions = new ArrayList<Action>();
         ITree srcfafafather = null;
         ITree dstfafafather = null;
+        TreeContext con = null;
         if (a instanceof Insert) {
+            con = fp.getDstTree();
             dstfafafather = fafafatherNode;
             srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
             if (srcfafafather == null) {
                 System.err.println("err null mapping");
             }
         } else {
+            con = fp.getSrcTree();
             srcfafafather = fafafatherNode;
             dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
             if (dstfafafather == null) {
@@ -48,8 +53,10 @@ public class MatchForStatement {
         int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 
         fp.setActionTraversedMap(allActions);
+
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-                a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
+                a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;
     }
 }

@@ -3,8 +3,13 @@ package edu.fdu.se.astdiff.miningoperationbean;
 import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.TreeContext;
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 /**
@@ -27,7 +32,10 @@ public class ClusteredActionBean {
 
 	public ITree fafafatherNode;
 	public String fatherNodeType;
-	public ClusteredActionBean(Action curAction, String curNodeType, List<Action> actions, int operationType, String operationEntity, ITree fafafatherNode, String fatherNodeType){
+
+	Range nodeLinePosition;
+
+	public ClusteredActionBean(Action curAction, String curNodeType, List<Action> actions, Range nodeLinePosition, int operationType, String operationEntity, ITree fafafatherNode, String fatherNodeType){
 		this.curAction = curAction;
 		this.curNode = curAction.getNode();
 		this.curNodeType = curNodeType;
@@ -36,8 +44,15 @@ public class ClusteredActionBean {
 		this.operationEntity = operationEntity;
 		this.fafafatherNode = fafafatherNode;
 		this.fatherNodeType = fatherNodeType;
+		this.nodeLinePosition = nodeLinePosition;
 	}
-	
+	public Range getNodeLinePosition() {
+		return nodeLinePosition;
+	}
+
+	public void setNodeLinePosition(Range nodeLinePosition) {
+		this.nodeLinePosition = nodeLinePosition;
+	}
 	public ITree getCurNode() {
 		return curNode;
 	}

@@ -1,9 +1,11 @@
 package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
+import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
@@ -43,9 +45,16 @@ public class MatchInitializerBlock {
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
+        TreeContext con = null;
+        if (a instanceof Insert) {
+            con = fp.getDstTree();
+        } else{
+            con = fp.getSrcTree();
+        }
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
 
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-                a,nodeType,subActions,status,operationEntity,null,null);
+                a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
         return mHighLevelOperationBean;
     }
     public static ClusteredActionBean matchStatementBlock(MiningActionData fp, Action a, String nodeType){
@@ -53,9 +62,16 @@ public class MatchInitializerBlock {
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
+        TreeContext con = null;
+        if (a instanceof Insert) {
+            con = fp.getDstTree();
+        } else{
+            con = fp.getSrcTree();
+        }
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
 
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-                a,nodeType,subActions,status,operationEntity,null,null);
+                a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
         return mHighLevelOperationBean;
     }
 }

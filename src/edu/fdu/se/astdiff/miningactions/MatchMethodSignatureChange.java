@@ -8,6 +8,8 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
+import com.github.gumtreediff.tree.TreeContext;
+import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -28,13 +30,16 @@ public class MatchMethodSignatureChange {
 		}
 		ITree srcfafafather = null;
 		ITree dstfafafather = null;
+		TreeContext con = null;
 		if (a instanceof Insert) {
+			con = fp.getDstTree();
 			dstfafafather = fafafather;
 			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
 			if (srcfafafather == null) {
 				System.err.println("err null mapping");
 			}
 		} else {
+			con = fp.getSrcTree();
 			srcfafafather = fafafather;
 			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
 			if (dstfafafather == null) {
@@ -50,8 +55,10 @@ public class MatchMethodSignatureChange {
 //		this.mMiningActionData.mapMethodSignatureAction(srcfafafather, signatureChidlren);
 		fp.setActionTraversedMap(signatureChidlren);
 
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,signatureChidlren,status,operationEntity,fafafather,fafafatherType);
+				a,nodeType,signatureChidlren,nodeLinePosition,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}
 

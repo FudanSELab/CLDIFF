@@ -2,6 +2,7 @@ package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
+import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
@@ -183,7 +184,8 @@ public class ClusterMove {
                         break;
                     default:
                         String operationEntity = "DEFAULT: "+ ActionConstants.getInstanceStringName(a) + " " +type;
-                        operationBean = new ClusteredActionBean(a,type,null,-1,operationEntity,fafafather,fatherType);
+                        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,fp.mSrcTree);
+                        operationBean = new ClusteredActionBean(a,type,null,nodeLinePosition,-1,operationEntity,fafafather,fatherType);
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         fp.setActionTraversedMap(a);
                         break;

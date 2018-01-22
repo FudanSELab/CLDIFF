@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Delete;
+import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
+import com.github.gumtreediff.tree.TreeContext;
+import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -28,14 +32,17 @@ public class MatchTry {
 		List<Action> throwAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, throwAction);
 		fp.setActionTraversedMap(throwAction);
-//		ITree fatherNode;
-//		if(a instanceof Insert)
-//			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getDstTree());
-//		else
-//			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getSrcTree());
-//		String fatherNodeType = fatherNode.getLabel();
+		TreeContext con = null;
+		if (a instanceof Insert) {
+			con = fp.getDstTree();
+		} else if (a instanceof Delete) {
+			con = fp.getSrcTree();
+		}
+
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,throwAction,status,operationEntity,ffFatherNode,fatherNodeType);
+				a,nodeType,throwAction,nodeLinePosition,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}
 
@@ -44,14 +51,18 @@ public class MatchTry {
 		List<Action> finallyAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, finallyAction);
 		fp.setActionTraversedMap(finallyAction);
-//		ITree fatherNode;
-//		if(a instanceof Insert)
-//			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getDstTree());
-//		else
-//			fatherNode = AstRelations.findFafafatherNode(a.getNode().getParent(),fp.getSrcTree());
-//		String fatherNodeType = fatherNode.getLabel();
+
+		TreeContext con = null;
+		if (a instanceof Insert) {
+			con = fp.getDstTree();
+		} else if (a instanceof Delete) {
+			con = fp.getSrcTree();
+		}
+
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,finallyAction,status,operationEntity,ffFatherNode,fatherNodeType);
+				a,nodeType,finallyAction,nodeLinePosition,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}
 

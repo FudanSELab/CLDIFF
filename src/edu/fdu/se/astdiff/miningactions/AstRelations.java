@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -17,9 +21,15 @@ public class AstRelations {
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
-
+		TreeContext con = null;
+		if (a instanceof Insert) {
+			con = fp.getDstTree();
+		} else{
+			con = fp.getSrcTree();
+		}
+		Range nodeLinePosition = getnodeLinePosition(a,con);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-                a,nodeType,subActions,status,operationEntity,null,null);
+                a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
         return mHighLevelOperationBean;
     }
 
@@ -28,14 +38,17 @@ public class AstRelations {
         List<Action> allActions = new ArrayList<Action>();
         ITree srcfafafather = null;
         ITree dstfafafather = null;
+		TreeContext con = null;
 
         if (a instanceof Insert) {
+			con = fp.getDstTree();
             dstfafafather = fafafatherNode;
             srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
             if (srcfafafather == null) {
                 System.err.println("err null mapping");
             }
         } else {
+			con = fp.getSrcTree();
             srcfafafather = fafafatherNode;
             dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
             if (dstfafafather == null) {
@@ -49,10 +62,18 @@ public class AstRelations {
 
         fp.setActionTraversedMap(allActions);
 
+		Range nodeLinePosition = getnodeLinePosition(a,con);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-                a,nodeType,allActions,status,operationEntity,fafafatherNode,ffFatherNodeType);
+                a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;
     }
+
+    public static Range getnodeLinePosition(Action a, TreeContext treeContext){
+		int startLineNum = ConsolePrint.getStartLineNum(treeContext, a.getNode());
+		int endLineNum = ConsolePrint.getEndLineNum(treeContext, a.getNode());
+		Range linePosition = new Range(new Position(startLineNum,1),new Position(endLineNum,1));
+		return linePosition;
+	}
 
 	public static boolean isFatherIfStatement(Action a, TreeContext treeContext) {
 		Tree t = (Tree) a.getNode();
@@ -205,20 +226,30 @@ public class AstRelations {
 			type = treeContext.getTypeLabel(curNode);
 			if (type.endsWith("Statement")) {
 				break;
-			} else if (StatementConstants.METHODDECLARATION.equals(type)||StatementConstants.FIELDDECLARATION.equals(type)) {
-				break;
-			} else if (StatementConstants.BLOCK.equals(type)) {
-				break;
-			} else if (StatementConstants.JAVADOC.equals(type)) {
-				break;
-			} else if (StatementConstants.INITIALIZER.equals(type)) {
-				break;
-			} else if (StatementConstants.SWITCHCASE.equals(type)) {
-				break;
-			} else if (StatementConstants.CONSTRUCTORINVOCATION.equals(type) || StatementConstants.SUPERCONSTRUCTORINVOCATION.equals(type)) {
-				break;
-			} else {
-				curNode = curNode.getParent();
+			} else{
+				boolean isEnd = false;
+				switch(type) {
+					    //declaration
+					case StatementConstants.METHODDECLARATION:
+					case StatementConstants.FIELDDECLARATION:
+					case StatementConstants.TYPEDECLARATION:
+						//
+					case StatementConstants.BLOCK:
+					case StatementConstants.JAVADOC:
+					case StatementConstants.INITIALIZER:
+					case StatementConstants.SWITCHCASE:
+						//this(),super()
+					case StatementConstants.CONSTRUCTORINVOCATION:
+					case StatementConstants.SUPERCONSTRUCTORINVOCATION:
+						isEnd = true;
+						break;
+					default:
+						curNode = curNode.getParent();
+						break;
+				}
+				if(isEnd) {
+					break;
+				}
 			}
 		}
 		if (curNode.isRoot())
