@@ -72,9 +72,7 @@ public class ConsolePrint {
 		return con.getCu().getLineNumber(n.getStartPosition() + n.getLength() - 1);
 	}
 
-	public static void printAllActions(List<Action> mList) {
 
-	}
 
 	public static void printMyActions(List<Action> actions, TreeContext conD,TreeContext conS) {
 		System.out.println("ActionSize:" + actions.size());

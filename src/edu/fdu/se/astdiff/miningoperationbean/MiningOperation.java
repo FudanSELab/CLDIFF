@@ -4,8 +4,10 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningactions.MiningActionData;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessingData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,11 +17,19 @@ public class MiningOperation {
 
     private PreprocessingData preprocessingData;
 
+    private List<ChangeEntity> mChangeEntityAll;
+
     public MiningOperation(PreprocessingData pd){
         this.preprocessingData = pd;
+        this.mChangeEntityAll = new ArrayList<>();
+        initChangeEntityList();
     }
     public MiningOperation(){
 
+    }
+
+    public void initChangeEntityList(){
+//        this.preprocessingData
     }
 
 

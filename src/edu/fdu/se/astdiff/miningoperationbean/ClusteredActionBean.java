@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -37,7 +39,7 @@ public class ClusteredActionBean {
 		this.fafafatherNode = fafafatherNode;
 		this.fatherNodeType = fatherNodeType;
 	}
-	
+
 	public ITree getCurNode() {
 		return curNode;
 	}

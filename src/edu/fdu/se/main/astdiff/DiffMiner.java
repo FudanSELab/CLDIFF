@@ -1,6 +1,7 @@
 package edu.fdu.se.main.astdiff;
 
 
+import com.github.javaparser.ast.CompilationUnit;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
@@ -15,6 +16,7 @@ import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
 import edu.fdu.se.fileutil.FileWriter;
+import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,12 +67,13 @@ public class DiffMiner {
 				= ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR)+"/android-"+String.valueOf(version-1);
 		List<String> filePathList = readCompareList(version,fileRootPathPrev,fileRootPathCurr);
 		int cnt = 0;
-		int candidateIndex = 8;
+		int candidateIndex = 10;
 		for(String subPath: filePathList){
 			if(cnt < candidateIndex){
 				cnt++;
 				continue;
 			}
+
 			System.out.println(subPath);
 			String subPath2 = subPath.replace("\\","/");
 			String outputDirName = subPath.replace("\\","_").substring(1);
@@ -78,16 +81,16 @@ public class DiffMiner {
 			String fileFullPathCurr = fileRootPathCurr + subPath2;
 			PreprocessingSDKClass psc =	new PreprocessingSDKClass().compareTwoFile(fileFullPathPrev,fileFullPathCurr,outputDirName);
 			PreprocessingData pData = psc.getPreprocessingData();
-//			GumTreeDiffParser his = new GumTreeDiffParser(pData.getPreviousCu().toString(),pData.getCurrentCu().toString());
-//			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
-//			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
-//			MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
-//			GeneratingActionsData data = gen.generate();
-//			ConsolePrint.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
-//			MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
-//			ClusterActions.doCluster(mMiningActionData);
-//			MiningOperation mo = new MiningOperation(pData);
-//			mo.printHighLevelOperationBeanList(mMiningActionData);
+			GumTreeDiffParser his = new GumTreeDiffParser(pData.getPreviousCu().toString(),pData.getCurrentCu().toString());
+			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
+			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
+			MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
+			GeneratingActionsData data = gen.generate();
+			ConsolePrint.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
+			MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
+			ClusterActions.doCluster(mMiningActionData);
+			MiningOperation mo = new MiningOperation(pData);
+			mo.printHighLevelOperationBeanList(mMiningActionData);
 			break;
 		}
 	}
@@ -99,7 +102,6 @@ public class DiffMiner {
 		System.out.println("Step1 Generating Diff Actions:----------------------");
 		String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
 		String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
-
 		GumTreeDiffParser his = new GumTreeDiffParser(new File(file1),new File(file2));
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
@@ -122,10 +124,13 @@ public class DiffMiner {
 
 	public static void main(String args[]){
 		DiffMiner i = new DiffMiner();
-//		i.run();
-		i.runBatch();
+		i.run();
+//		i.runBatch();
 
 	}
+
+	//todo preprocessing 和gumtree的ast处理统一
+	// 二次compile目的是整理line number，设法不二次compile整理
 	
 
 }

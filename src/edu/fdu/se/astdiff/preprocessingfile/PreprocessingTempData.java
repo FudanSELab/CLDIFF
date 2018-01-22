@@ -28,20 +28,18 @@ public class PreprocessingTempData {
 
 
     public PreprocessingTempData(){
-        bodyMapPrev = new HashMap<>();
-        bodyMapPrevMethodOrFieldName = new HashMap<>();
-        prevNodeVisitingMap1 = new HashMap<>();
-        prevNodeVisitingMap2 = new HashMap<>();
+        prevNodeBodyDeclarationMap = new HashMap<>();
+        prevNodeBodyNameMap = new HashMap<>();
+        prevNodeVisitingMap = new HashMap<>();
         this.removalList = new ArrayList<>();
     }
 
-    protected Map<String, BodyDeclaration> bodyMapPrev;
-    protected Map<String, List<BodyDeclaration>> bodyMapPrevMethodOrFieldName;
+    protected Map<String, BodyDeclarationPair> prevNodeBodyDeclarationMap;
+    protected Map<String, List<BodyDeclarationPair>> prevNodeBodyNameMap;
     /**
      * 0 初始化之后的值  1 遍历到了之后 需要保留的different  2 遍历到了之后 需要删除的same   3 prev中有，curr没有，change：deleted
      */
-    protected Map<Integer,Integer> prevNodeVisitingMap1;
-    protected Map<Integer,BodyDeclaration> prevNodeVisitingMap2;
+    public Map<BodyDeclarationPair,Integer> prevNodeVisitingMap;
 
     /**
      * list of comments to be removed
@@ -52,8 +50,8 @@ public class PreprocessingTempData {
      * method name
      *
      */
-    public void addToMapBodyDeclaration(BodyDeclaration bd,String fullDeclaration) {
-        this.bodyMapPrev.put(fullDeclaration, bd);
+    public void addToMapBodyDeclaration(BodyDeclarationPair bd,String fullDeclaration) {
+        this.prevNodeBodyDeclarationMap.put(fullDeclaration, bd);
 
     }
 
@@ -61,14 +59,14 @@ public class PreprocessingTempData {
      * method name
      *
      */
-    public void addToMapBodyName(BodyDeclaration bd,String name) {
-        if (this.bodyMapPrevMethodOrFieldName.containsKey(name)) {
-            List<BodyDeclaration> mList = this.bodyMapPrevMethodOrFieldName.get(name);
+    public void addToMapBodyName(BodyDeclarationPair bd,String name) {
+        if (this.prevNodeBodyNameMap.containsKey(name)) {
+            List<BodyDeclarationPair> mList = this.prevNodeBodyNameMap.get(name);
             mList.add(bd);
         } else {
-            List<BodyDeclaration> mList = new ArrayList<>();
+            List<BodyDeclarationPair> mList = new ArrayList<>();
             mList.add(bd);
-            this.bodyMapPrevMethodOrFieldName.put(name, mList);
+            this.prevNodeBodyNameMap.put(name, mList);
         }
     }
 
@@ -77,7 +75,6 @@ public class PreprocessingTempData {
      * @param bd
      */
     public void addToRemoveList(BodyDeclaration bd) {
-
         this.removalList.add(bd);
     }
 
@@ -93,24 +90,19 @@ public class PreprocessingTempData {
     }
 
     public void initBodyPrevNodeMap(BodyDeclaration bd,String classPrefix){
-        String hashCodeStr = String.valueOf(bd.hashCode()) + String.valueOf(classPrefix.hashCode());
-        this.prevNodeVisitingMap1.put(hashCodeStr.hashCode(),BODY_INITIALIZED_VALUE);
-        this.prevNodeVisitingMap2.put(hashCodeStr.hashCode(),bd);
+        this.prevNodeVisitingMap.put(new BodyDeclarationPair(bd,classPrefix),BODY_INITIALIZED_VALUE);
     }
 
     /**
      *
-     * @param bd node
-     * @param classPrefix node 所在的class prefix
      * @param v
      */
-    public void setBodyPrevNodeMap(BodyDeclaration bd,String classPrefix,int v){
-        String hashCodeStr = String.valueOf(bd.hashCode()) + String.valueOf(classPrefix.hashCode());
-        this.prevNodeVisitingMap1.put(hashCodeStr.hashCode(),v);
+    public void setBodyPrevNodeMap(BodyDeclarationPair bdp,int v){
+        this.prevNodeVisitingMap.put(bdp,v);
     }
 
-    public int getNodeMapValue(int hashKey){
-        return this.prevNodeVisitingMap1.get(hashKey);
+    public int getNodeMapValue(BodyDeclarationPair bodyDeclarationPair){
+        return this.prevNodeVisitingMap.get(bodyDeclarationPair);
     }
 
 

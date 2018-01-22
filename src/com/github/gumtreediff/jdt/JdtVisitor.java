@@ -50,29 +50,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
 
         return "";
     }
-//    @Override
-//    public boolean visit(MethodInvocation md) {
-//        System.out.println("******************************************************************************************");
-//        IMethodBinding mb = md.resolveMethodBinding();
-//        //如果binding有效，且通过对象或类名调用
-//        if(mb!=null&&md.getExpression()!=null){
-//        	System.out.println(md.getExpression().resolveTypeBinding().getQualifiedName());
-//            System.out.println(mb.getName());
-//            System.out.println(mb.getReturnType().getQualifiedName()); 
-//            System.out.println(mb.getDeclaringClass().getQualifiedName());
-//            ITypeBinding[] list = mb.getParameterTypes();
-//            for(int i = 0; i < list.length; i++){
-//            	System.out.println("->"+list[i].getQualifiedName());
-//            }
-//        }else{
-//        	if(mb==null)
-//        		System.out.println(md.getName()+" is null.");
-//        	if(md.getExpression()==null)
-//        		System.out.println(md.getName()+" is local method.");
-//        }
-//        System.out.println("******************************************************************************************");
-//        return true;
-//    }
+
 //  @Override
 //  public boolean visit(FieldDeclaration md) {
 //      System.out.println("******************************************************************************************");
