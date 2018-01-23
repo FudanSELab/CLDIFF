@@ -35,7 +35,7 @@ public class MatchTry {
 		TreeContext con = null;
 		if (a instanceof Insert) {
 			con = fp.getDstTree();
-		} else if (a instanceof Delete) {
+		} else{
 			con = fp.getSrcTree();
 		}
 
@@ -55,7 +55,7 @@ public class MatchTry {
 		TreeContext con = null;
 		if (a instanceof Insert) {
 			con = fp.getDstTree();
-		} else if (a instanceof Delete) {
+		} else {
 			con = fp.getSrcTree();
 		}
 
