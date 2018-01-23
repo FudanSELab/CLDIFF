@@ -24,7 +24,7 @@ public class MatchFieldDeclaration {
         TreeContext con = null;
         if (a instanceof Insert) {
             con = fp.getDstTree();
-        } else if (a instanceof Delete) {
+        } else {
             con = fp.getSrcTree();
         }
         ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(a.getNode(), con);

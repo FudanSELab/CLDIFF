@@ -25,7 +25,7 @@ public class MatchVariableDeclarationExpression {
 		TreeContext con = null;
 		if (a instanceof Insert) {
 			con = fp.getDstTree();
-		} else if (a instanceof Delete) {
+		} else {
 			con = fp.getSrcTree();
 		}
 		String operationEntity = "VARIABLEDECLARATION";
