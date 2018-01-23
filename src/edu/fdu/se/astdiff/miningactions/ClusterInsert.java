@@ -3,15 +3,16 @@ package edu.fdu.se.astdiff.miningactions;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
  * Created by huangkaifeng on 2018/1/13.
  */
-public class ClusterInsert {
+public class ClusterInsert{
 
     public static void findInsert(MiningActionData fp) {
         int insertActionCount = fp.mGeneratingActionsData.getInsertActions().size();
@@ -21,22 +22,22 @@ public class ClusterInsert {
                 break;
             }
             Action a = fp.mGeneratingActionsData.getInsertActions().get(insertActionIndex);
-            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mDstTree);
+            String nextAction = ActionPrinter.getMyOneActionString(a, 0, fp.mDstTree);
             insertActionIndex++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 // 标记过的action
                 continue;
             }
             Insert ins = (Insert) a;
-            ITree insNode = ins.getNode();
-            String type = fp.mDstTree.getTypeLabel(insNode);
-            ITree fafafather = AstRelations.findFafafatherNode(insNode, fp.mDstTree);
+            Tree insNode = (Tree)ins.getNode();
+            String type = insNode.getAstClass().getSimpleName();
+            Tree fafafather = AstRelations.findFafafatherNode(insNode);
             if(fafafather == null){
                 System.out.println("Father Null Condition: "+ ActionConstants.getInstanceStringName(a) + " " +type);
                 fp.setActionTraversedMap(a);
                 continue;
             }
-            String fatherType = fp.mDstTree.getTypeLabel(fafafather);
+            String fatherType = fafafather.getAstClass().getSimpleName();
 
             ClusteredActionBean operationBean;
             //类签名状态
@@ -60,9 +61,9 @@ public class ClusterInsert {
                 continue;
             }
 
-            if(StatementConstants.INITIALIZER.equals(type) && StatementConstants.TYPEDECLARATION.equals(fp.mDstTree.getTypeLabel(a.getNode().getParent()))){
+            if(StatementConstants.INITIALIZER.equals(type) && StatementConstants.TYPEDECLARATION.equals( ((Tree)a.getNode().getParent()).getAstClass().getSimpleName())){
                 //insert INITIALIZER
-                MatchInitializerBlock.matchInitializerBlock(fp, a, type,fp.mDstTree);
+                MatchInitializerBlock.matchInitializerBlock(fp, a, type);
                 continue;
             }
 
@@ -86,7 +87,7 @@ public class ClusterInsert {
                         MatchBlock.matchBlock(fp,a, type,fp.mDstTree);
                         break;
                     case StatementConstants.BREAKSTATEMENT:
-                        if(AstRelations.isFatherSwitchStatement(a, fp.mDstTree)) {
+                        if(AstRelations.isFatherSwitchStatement(a)) {
                             //增加switch语句
                             operationBean = MatchSwitch.matchSwitchCaseByFather(fp, a, type, fafafather, fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);
@@ -133,7 +134,7 @@ public class ClusterInsert {
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     case StatementConstants.EXPRESSIONSTATEMENT:
-                        if(AstRelations.isFatherIfStatement(a, fp.mDstTree) && a.getNode().getParent().getChildPosition(a.getNode())== 2) {
+                        if(AstRelations.isFatherIfStatement(a) && a.getNode().getParent().getChildPosition(a.getNode())== 2) {
                             // Pattenr 1.2 Match else
                             operationBean = MatchIfElse.matchElse(fp, a,type,fafafather,fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);

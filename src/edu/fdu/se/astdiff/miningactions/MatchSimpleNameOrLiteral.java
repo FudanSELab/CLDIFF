@@ -1,17 +1,12 @@
 package edu.fdu.se.astdiff.miningactions;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchSimpleNameOrLiteral {
 	/**
@@ -28,8 +23,9 @@ public class MatchSimpleNameOrLiteral {
 	 */
 	public static void matchSimplenameOrLiteral(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
 		// if predicate
-		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), curContext);
-		String ffFatherNodeType = curContext.getTypeLabel(fafafatherNode);
+		Tree fafafatherNode = AstRelations.findFafafatherNode(a.getNode());
+
+		String ffFatherNodeType = fafafatherNode.getAstClass().getSimpleName();
 		ClusteredActionBean operationBean;
 		switch (ffFatherNodeType) {
 		case StatementConstants.IFSTATEMENT:
@@ -86,7 +82,7 @@ public class MatchSimpleNameOrLiteral {
 			fp.mHighLevelOperationBeanList.add(operationBean);
 			break;
 		default:
-			String nextAction = ConsolePrint.getMyOneActionString(a, 0, curContext);
+			String nextAction = ActionPrinter.getMyOneActionString(a, 0, curContext);
 			System.out.print(nextAction);
 			System.out.println("Default, SimplenameOrLiteral: " + ffFatherNodeType +"\n");
 			fp.setActionTraversedMap(a);

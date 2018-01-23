@@ -27,10 +27,10 @@ public class MatchFieldDeclaration {
         } else {
             con = fp.getSrcTree();
         }
-        ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(a.getNode(), con);
+        ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(a.getNode());
         if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
             operationEntity += "-OBJECT-INITIALIZING";
-            if (AstRelations.isClassCreation(allActions, con)) {
+            if (AstRelations.isClassCreation(allActions)) {
                 operationEntity += "-NEW";
             }
         }
@@ -67,10 +67,10 @@ public class MatchFieldDeclaration {
         int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
         fp.setActionTraversedMap(allActions);
 
-        ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(fafafatherNode, con);
+        ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(fafafatherNode);
         if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
             operationEntity += "-OBJECT-INITIALIZING";
-            if (AstRelations.isClassCreation(allActions, con)) {
+            if (AstRelations.isClassCreation(allActions)) {
                 operationEntity += "-NEW";
             }
         }

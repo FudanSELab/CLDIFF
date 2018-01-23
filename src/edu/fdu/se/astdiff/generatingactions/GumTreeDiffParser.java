@@ -2,14 +2,8 @@ package edu.fdu.se.astdiff.generatingactions;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
 
 
-
-import com.github.gumtreediff.actions.ActionClusterFinder;
-import com.github.gumtreediff.actions.ActionGenerator;
-import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.client.Run;
 import com.github.gumtreediff.jdt.JdtTreeGenerator;
 import com.github.gumtreediff.matchers.MappingStore;
@@ -63,13 +57,33 @@ public class GumTreeDiffParser {
 
 	}
 
+	public GumTreeDiffParser(File prevFile, File currFile,int a){
+		File oldFile = prevFile;
+		File newFile = currFile;
+
+		Run.initGenerators();
+		try {
+			JdtTreeGenerator parser1 = new JdtTreeGenerator(oldFile.getPath());
+			srcTC = parser1.generateFromFile(oldFile);
+			src = srcTC.getRoot();
+			JdtTreeGenerator parser2 = new JdtTreeGenerator(newFile.getPath());
+			dstTC = parser2.generateFromFile(newFile);
+			dst = dstTC.getRoot();
+			Matcher m = Matchers.getInstance().getMatcher(src, dst); // retrieve the default matcher
+			m.match();
+			mapping = m.getMappings();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	
 	public String getPrettyOldTreeString() {
-		return ConsolePrint.getPrettyTreeString(srcTC, src);
+		return ActionPrinter.getPrettyTreeString(srcTC, src);
 	}
 	public String getPrettyNewTreeString(){
-		return ConsolePrint.getPrettyTreeString(dstTC, dst);
+		return ActionPrinter.getPrettyTreeString(dstTC, dst);
 	}
 
 }

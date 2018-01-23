@@ -3,7 +3,7 @@ package edu.fdu.se.astdiff.miningoperationbean;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.ast.body.*;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.miningactions.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.model.*;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
@@ -21,18 +21,25 @@ public class MiningOperation {
 
     private List<ChangeEntity> mChangeEntityAll;
 
+
     public MiningOperation(PreprocessingData pd){
         this.preprocessingData = pd;
         this.mChangeEntityAll = new ArrayList<>();
-        initChangeEntityList();
+        initPreprocessChangeEntityList();
+        initDiffMinerChangeEntityList();
     }
+
     public MiningOperation(){
+    }
+
+    public void initDiffMinerChangeEntityList(){
 
     }
 
 
 
-    public void initChangeEntityList(){
+
+    public void initPreprocessChangeEntityList(){
         for(BodyDeclarationPair item:this.preprocessingData.getmBodiesAdded()){
             addOneBody(item,OperationTypeConstants.INSERT_BODYDECLARATION);
         }
@@ -72,7 +79,7 @@ public class MiningOperation {
                 } else {
                     treeContext = fp.getSrcTree();
                 }
-                String nextAction = ConsolePrint.getMyOneActionString(operationBean.curAction, 0, treeContext);
+                String nextAction = ActionPrinter.getMyOneActionString(operationBean.curAction, 0, treeContext);
                 System.out.print(nextAction);
                 System.out.println(operationBean.toString()+"\n");
             }

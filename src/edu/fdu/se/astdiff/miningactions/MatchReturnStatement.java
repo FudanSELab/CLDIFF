@@ -1,16 +1,8 @@
 package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.gumtree.MyTreeUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 public class MatchReturnStatement {
     public static ClusteredActionBean matchReturnStatement(MiningActionData fp, Action a, String nodeType) {
@@ -36,7 +28,7 @@ public class MatchReturnStatement {
 //            operationBean = matchMethodReturn(fp, a, nodeType, fafafatherNode, ffFatherNodeType);
 //            fp.addHighLevelOperationBeanToList(operationBean);
 //        }else {
-//            String nextAction = ConsolePrint.getMyOneActionString(a, 0, curContext);
+//            String nextAction = ActionPrinter.getMyOneActionString(a, 0, curContext);
 //            System.out.print(nextAction);
 //            System.out.println("Default, ReturnStatement, curNodeType: "+ nodeType+ ", ffFatherNodeType: "+ ffFatherNodeType + "\n");
 //            fp.setActionTraversedMap(a);

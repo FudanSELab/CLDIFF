@@ -3,14 +3,9 @@ package edu.fdu.se.astdiff.miningoperationbean;
 import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.BodyDeclaration;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
-import edu.fdu.se.gumtree.MyTreeUtil;
 
 /**
  * 记录find时候找到的节点，以及对应的fafafather 节点，以及该节点下，所有的action

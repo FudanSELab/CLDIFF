@@ -24,6 +24,7 @@ import com.github.gumtreediff.gen.Register;
 import com.github.gumtreediff.gen.TreeGenerator;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeContext.MetadataSerializers;
 import com.github.gumtreediff.tree.TreeContext.MetadataUnserializers;
@@ -364,7 +365,7 @@ public final class TreeIoUtils {
             writer.writeAttribute("type", Integer.toString(tree.getType()));
             if (tree.hasLabel()) writer.writeAttribute("label", tree.getLabel());
             if (context.hasLabelFor(tree.getType()))
-                writer.writeAttribute("typeLabel", context.getTypeLabel(tree.getType()));
+                writer.writeAttribute("typeLabel",((Tree)tree).getAstClass().getSimpleName());
             if (ITree.NO_VALUE != tree.getPos()) {
                 writer.writeAttribute("pos", Integer.toString(tree.getPos()));
                 writer.writeAttribute("length", Integer.toString(tree.getLength()));
@@ -433,9 +434,9 @@ public final class TreeIoUtils {
         @Override
         public void startTree(ITree tree) throws XMLStreamException {
             if (tree.getChildren().size() == 0)
-                writer.writeEmptyElement(context.getTypeLabel(tree.getType()));
+                writer.writeEmptyElement(((Tree)tree).getAstClass().getSimpleName());
             else
-                writer.writeStartElement(context.getTypeLabel(tree.getType()));
+                writer.writeStartElement(((Tree)tree).getAstClass().getSimpleName());
             if (tree.hasLabel())
                 writer.writeAttribute("label", tree.getLabel());
         }
@@ -474,7 +475,7 @@ public final class TreeIoUtils {
                     tree.getPos(), tree.getLength()));
 
             writer.write(String.format("(%d %s %s (%s",
-                            tree.getType(), protect(context.getTypeLabel(tree)), protect(tree.getLabel()), pos));
+                            tree.getType(), protect(((Tree)tree).getAstClass().getSimpleName()), protect(tree.getLabel()), pos));
         }
 
         @Override
@@ -554,7 +555,7 @@ public final class TreeIoUtils {
             writer.beginObject();
             writer.name("type").value(Integer.toString(t.getType()));
             if (t.hasLabel()) writer.name("label").value(t.getLabel());
-            if (context.hasLabelFor(t.getType())) writer.name("typeLabel").value(context.getTypeLabel(t.getType()));
+            if (context.hasLabelFor(t.getType())) writer.name("typeLabel").value(((Tree)t).getAstClass().getSimpleName());
             if (ITree.NO_VALUE != t.getPos()) {
                 writer.name("pos").value(Integer.toString(t.getPos()));
                 writer.name("length").value(Integer.toString(t.getLength()));

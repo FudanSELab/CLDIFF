@@ -8,6 +8,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
@@ -30,7 +31,7 @@ public class MatchIfElse {
 		else
 			con = f.getSrcTree();
 
-		if (AstRelations.isFatherIfStatement(a, con)) {
+		if (AstRelations.isFatherIfStatement(a)) {
 			operationEntity = "ELSE_IF";
 		} else {
 			operationEntity = "IF";
@@ -38,12 +39,9 @@ public class MatchIfElse {
 		List<ITree> children = a.getNode().getChildren();
 		boolean ifNoBlockFlag = true;
 		for(ITree tmp:children) {
+			Tree tTmp = (Tree) tmp;
 			String labelType = null;
-			if(a instanceof Insert){
-				labelType = f.getDstTreeContextTypeLabel(tmp);
-			}else{
-				labelType = f.getSrcTreeContextTypeLabel(tmp);
-			}
+			labelType = tTmp.getAstClass().getSimpleName();
 			if(StatementConstants.BLOCK.equals(labelType)) {
 				ifNoBlockFlag = false;
 				break;
@@ -80,7 +78,8 @@ public class MatchIfElse {
 		else
 			con = f.getSrcTree();
 //		a.getNode().getParent().getChildPosition(a.getNode()) == 2
-		String labelType = f.getDstTreeContextTypeLabel(a.getNode()) ;
+		Tree t = (Tree) a.getNode();
+		String labelType = t.getAstClass().getSimpleName();
 		if(!StatementConstants.BLOCK.equals(labelType)){
 			String label = "(no {}) ";
 		}

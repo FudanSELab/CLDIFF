@@ -2,9 +2,10 @@ package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
@@ -19,22 +20,22 @@ public class ClusterMove {
                 break;
             }
             Action a = fp.mGeneratingActionsData.getMoveActions().get(index);
-            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
+            String nextAction = ActionPrinter.getMyOneActionString(a, 0, fp.mSrcTree);
             index++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 // 标记过的 update action
                 continue;
             }
           //  Move movNode = (Move) a;
-            ITree moveNode = a.getNode();
-            String type = fp.mSrcTree.getTypeLabel(moveNode);
-            ITree fafafather = AstRelations.findFafafatherNode(moveNode, fp.mSrcTree);
+            Tree moveNode = (Tree)a.getNode();
+            String type = moveNode.getAstClass().getSimpleName();
+            Tree fafafather = AstRelations.findFafafatherNode(moveNode);
             if(fafafather == null){
                 System.out.println("Father Null Condition: "+ ActionConstants.getInstanceStringName(a) + " " +type);
                 fp.setActionTraversedMap(a);
                 continue;
             }
-            String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
+            String fatherType =fafafather.getAstClass().getSimpleName();
 //            System.out.print(nextAction+"\n");
             ClusteredActionBean operationBean;
             //类签名状态
@@ -57,9 +58,9 @@ public class ClusterMove {
                 continue;
             }
 
-            if(StatementConstants.INITIALIZER.equals(type) && StatementConstants.TYPEDECLARATION.equals(fp.mSrcTree.getTypeLabel(a.getNode().getParent()))){
+            if(StatementConstants.INITIALIZER.equals(type) && StatementConstants.TYPEDECLARATION.equals(((Tree)a.getNode().getParent()).getAstClass().getSimpleName())){
                 //insert INITIALIZER
-                MatchInitializerBlock.matchInitializerBlock(fp, a, type,fp.mSrcTree);
+                MatchInitializerBlock.matchInitializerBlock(fp, a, type);
                 continue;
             }
 
@@ -83,7 +84,7 @@ public class ClusterMove {
                         MatchBlock.matchBlock(fp,a, type,fp.mSrcTree);
                         break;
                     case StatementConstants.BREAKSTATEMENT:
-                        if(AstRelations.isFatherSwitchStatement(a, fp.mSrcTree)) {
+                        if(AstRelations.isFatherSwitchStatement(a)) {
                             //增加switch语句
                             operationBean = MatchSwitch.matchSwitchCaseByFather(fp, a, type, fafafather, fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);
@@ -130,7 +131,7 @@ public class ClusterMove {
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     case StatementConstants.EXPRESSIONSTATEMENT:
-                        if(AstRelations.isFatherIfStatement(a, fp.mSrcTree) && a.getNode().getParent().getChildPosition(a.getNode())== 2) {
+                        if(AstRelations.isFatherIfStatement(a) && a.getNode().getParent().getChildPosition(a.getNode())== 2) {
                             // Pattenr 1.2 Match else
                             operationBean = MatchIfElse.matchElse(fp, a,type,fafafather,fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);

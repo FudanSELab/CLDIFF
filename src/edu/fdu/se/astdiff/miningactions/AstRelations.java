@@ -5,18 +5,19 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class AstRelations {
+
+
     public static ClusteredActionBean matchByNode(MiningActionData fp, Action a, String nodeType,String operationEntity){
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
@@ -69,22 +70,22 @@ public class AstRelations {
     }
 
     public static Range getnodeLinePosition(Action a, TreeContext treeContext){
-		int startLineNum = ConsolePrint.getStartLineNum(treeContext, a.getNode());
-		int endLineNum = ConsolePrint.getEndLineNum(treeContext, a.getNode());
+		int startLineNum = ActionPrinter.getStartLineNum(treeContext, a.getNode());
+		int endLineNum = ActionPrinter.getEndLineNum(treeContext, a.getNode());
 		Range linePosition = new Range(new Position(startLineNum,1),new Position(endLineNum,1));
 		return linePosition;
 	}
 
-	public static boolean isFatherIfStatement(Action a, TreeContext treeContext) {
-		Tree t = (Tree) a.getNode();
-		String type = treeContext.getTypeLabel(t.getParent());
+	public static boolean isFatherIfStatement(Action a) {
+		Tree parentTree = (Tree) a.getNode().getParent();
+		String type = parentTree.getAstClass().getSimpleName();
 		if (StatementConstants.IFSTATEMENT.equals(type)) {
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean isChildContainIfStatement(Action a, TreeContext treeContext) {
+	public static boolean isChildContainIfStatement(Action a) {
 		List<ITree> child = a.getNode().getChildren();
 		if (child.size() < 1) {
 			System.err.println("There is no child");
@@ -92,7 +93,7 @@ public class AstRelations {
 		}
 		for (ITree tmp : child) {
 			Tree t = (Tree) tmp;
-			String type = treeContext.getTypeLabel(t);
+			String type = t.getAstClass().getSimpleName();
 			if (StatementConstants.IFSTATEMENT.equals(type)) {
 				return true;
 			}
@@ -100,7 +101,7 @@ public class AstRelations {
 		return false;
 	}
 
-	public static ITree isChildContainVariableDeclarationFragment(ITree node, TreeContext treeContext) {
+	public static ITree isChildContainVariableDeclarationFragment(ITree node) {
 		List<ITree> child = node.getChildren();
 		if (child.size() < 1) {
 			System.err.println("There is no child");
@@ -108,7 +109,7 @@ public class AstRelations {
 		}
 		for (ITree tmp : child) {
 			Tree t = (Tree) tmp;
-			String type = treeContext.getTypeLabel(t);
+			String type = t.getAstClass().getSimpleName();
 			if (StatementConstants.VARIABLEDECLARATIONFRAGMENT.equals(type)) {
 				return tmp;
 			}
@@ -116,25 +117,26 @@ public class AstRelations {
 		return null;
 	}
 
-	public static boolean isFatherTryStatement(Action a, TreeContext treeContext) {
-		Tree t = (Tree) a.getNode();
-		String type = treeContext.getTypeLabel(t.getParent());
+	public static boolean isFatherTryStatement(Action a) {
+		Tree t = (Tree) a.getNode().getParent();
+		String type = t.getAstClass().getSimpleName();
 		if (StatementConstants.TRYSTATEMENT.equals(type)) {
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean isFatherSwitchStatement(Action a, TreeContext treeContext) {
-		Tree t = (Tree) a.getNode();
-		String type = treeContext.getTypeLabel(t.getParent());
+	public static boolean isFatherSwitchStatement(Action a) {
+		Tree t = (Tree) a.getNode().getParent();
+
+		String type = t.getAstClass().getSimpleName();
 		if (StatementConstants.SWITCHSTATEMENT.equals(type)) {
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean isChildCotainSynchronizedStatement(Action a, TreeContext treeContext) {
+	public static boolean isChildCotainSynchronizedStatement(Action a) {
 		// Tree t = (Tree) a.getNode();
 		List<ITree> child = a.getNode().getChildren();
 		if (child.size() < 1) {
@@ -143,7 +145,7 @@ public class AstRelations {
 		}
 		for (ITree tmp : child) {
 			Tree t = (Tree) tmp;
-			String type = treeContext.getTypeLabel(t);
+			String type = t.getAstClass().getSimpleName();
 			if (StatementConstants.SYNCHRONIZEDSTATEMENT.equals(type)) {
 				return true;
 			}
@@ -151,9 +153,9 @@ public class AstRelations {
 		return false;
 	}
 
-	public static boolean ifFatherNodeTypeSameAs(Action a, TreeContext treeContext, String statementConstants) {
-		Tree t = (Tree) a.getNode();
-		String type = treeContext.getTypeLabel(t.getParent());
+	public static boolean ifFatherNodeTypeSameAs(Action a, String statementConstants) {
+		Tree t = (Tree) a.getNode().getParent();
+		String type = t.getAstClass().getSimpleName();
 
 		if (type.equals(statementConstants)) {
 			return true;
@@ -161,9 +163,9 @@ public class AstRelations {
 		return false;
 	}
 
-	public static String fatherStatement(Action a, TreeContext con) {
-		Tree t = (Tree) a.getNode();
-		String type = con.getTypeLabel(t.getParent());
+	public static String fatherStatement(Action a) {
+		Tree t = (Tree) a.getNode().getParent();
+		String type = t.getAstClass().getSimpleName();
 		return type;
 	}
 
@@ -183,9 +185,10 @@ public class AstRelations {
 	// return allNewChildren;
 	// }
 
-	public static boolean isClassCreation(List<Action> list, TreeContext treeContext) {
+	public static boolean isClassCreation(List<Action> list) {
 		for (Action a : list) {
-			String str = treeContext.getTypeLabel(a.getNode());
+			Tree t = (Tree) a.getNode();
+			String str = t.getAstClass().getSimpleName();
 			if (StatementConstants.CLASSINSTANCECREATION.equals(str)) {
 				return true;
 			}
@@ -193,14 +196,15 @@ public class AstRelations {
 		return false;
 	}
 
-	public static boolean isNullCheck(ITree ifStatementNode, TreeContext treeContext) {
+	public static boolean isNullCheck(ITree ifStatementNode) {
 		if (ifStatementNode.getChildren().size() == 2) {
 			Tree c1 = (Tree) ifStatementNode.getChild(0);
 			Tree c2 = (Tree) ifStatementNode.getChild(1);
-			String type = treeContext.getTypeLabel(c2);
+			String type = c2.getAstClass().getSimpleName();
 			if (StatementConstants.BLOCK.equals(type)) {
 				for (ITree tmp : c1.postOrder()) {
-					if (StatementConstants.NULLLITERAL.equals(treeContext.getTypeLabel(tmp))) {
+					Tree tmp2 = (Tree) tmp;
+					if (StatementConstants.NULLLITERAL.equals(tmp2.getAstClass().getSimpleName())) {
 						return true;
 					}
 				}
@@ -216,14 +220,13 @@ public class AstRelations {
 	 * 找当前节点的父节点 XXXStatement XXXDelclaration JavaDoc CatchClause
 	 * 
 	 * @param node
-	 * @param treeContext
 	 * @return 返回fafafather
 	 */
-	public static ITree findFafafatherNode(ITree node, TreeContext treeContext) {
+	public static Tree findFafafatherNode(ITree node) {
 		String type = null;
-		ITree curNode = node;
+		Tree curNode = (Tree)node;
 		while (!curNode.isRoot()) {
-			type = treeContext.getTypeLabel(curNode);
+			type = curNode.getAstClass().getSimpleName();
 			if (type.endsWith("Statement")) {
 				break;
 			} else{
@@ -244,7 +247,7 @@ public class AstRelations {
 						isEnd = true;
 						break;
 					default:
-						curNode = curNode.getParent();
+						curNode = (Tree)curNode.getParent();
 						break;
 				}
 				if(isEnd) {
@@ -262,21 +265,20 @@ public class AstRelations {
 	 * 根据所传statementType的值，找符合条件的父节点并返回
 	 * 
 	 * @param node
-	 * @param treeContext
 	 * @return 返回fafafather
 	 */
-	public static ITree findFafafatherNodeByStatementType(ITree node, TreeContext treeContext, String statementType) {
+	public static ITree findFafafatherNodeByStatementType(ITree node, String statementType) {
 		// CatchClause
 		String type = null;
-		ITree curNode = node;
+		Tree curNode = (Tree) node;
 		String returnType = null;
 		while (true) {
-			type = treeContext.getTypeLabel(curNode);
+			type = curNode.getAstClass().getSimpleName();
 			if (type.endsWith(statementType)) {
 				returnType = type;
 				break;
 			} else {
-				curNode = curNode.getParent();
+				curNode = (Tree)curNode.getParent();
 			}
 		}
 		return curNode;

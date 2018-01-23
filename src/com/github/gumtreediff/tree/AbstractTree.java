@@ -257,10 +257,11 @@ public abstract class AbstractTree implements ITree {
 
     @Override
     public String toPrettyString(TreeContext ctx) {
+        Tree t = (Tree) this;
         if (hasLabel())
-            return ctx.getTypeLabel(this) + ": " + getLabel();
+            return t.getAstClass().getSimpleName() + ": " + getLabel();
         else
-            return ctx.getTypeLabel(this);
+            return t.getAstClass().getSimpleName();
     }
 
     public static class FakeTree extends AbstractTree {
