@@ -14,7 +14,7 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeUtils;
 
-public class ConsolePrint {
+public class ActionPrinter {
 	public static String tabs(int tabNum) {
 		String res = "";
 		for (int i = 0; i < tabNum; i++) {
@@ -58,7 +58,7 @@ public class ConsolePrint {
 	}
 
 	public static String prettyString(TreeContext con, ITree node) {
-		return node.getId() + ". " + con.getTypeLabel(node) + ":" + node.getLabel() + "(" + getStartLineNum(con, node)
+		return node.getId() + ". " + ((Tree)node).getAstClass().getSimpleName() + ":" + node.getLabel() + "(" + getStartLineNum(con, node)
 				+ "-" + getEndLineNum(con, node) + ")";
 	}
 
@@ -78,9 +78,9 @@ public class ConsolePrint {
 		System.out.println("ActionSize:" + actions.size());
 		for (Action a : actions) {
 			if(a instanceof Insert)
-				System.out.print(ConsolePrint.getMyOneActionString(a, 0, conD));
+				System.out.print(getMyOneActionString(a, 0, conD));
 			else
-				System.out.print(ConsolePrint.getMyOneActionString(a, 0, conS));
+				System.out.print(getMyOneActionString(a, 0, conS));
 		}
 	}
 

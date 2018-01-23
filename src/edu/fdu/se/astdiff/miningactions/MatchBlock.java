@@ -2,17 +2,17 @@ package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 public class MatchBlock {
     public static void matchBlock(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
         ClusteredActionBean operationBean;
 
-        ITree fatherNode = a.getNode().getParent();
-        String fatherNodeType = curContext.getTypeLabel(fatherNode);
-
+        Tree fatherNode = (Tree)a.getNode().getParent();
+        String fatherNodeType = fatherNode.getAstClass().getSimpleName();
         switch (fatherNodeType) {
             case StatementConstants.SWITCHSTATEMENT:
                 operationBean = MatchSwitch.matchSwitchCaseByFather(fp,a,nodeType, fatherNode, fatherNodeType);
@@ -29,7 +29,7 @@ public class MatchBlock {
                 fp.addHighLevelOperationBeanToList(operationBean);
                 break;
             default:
-                String nextAction = ConsolePrint.getMyOneActionString(a, 0, curContext);
+                String nextAction = ActionPrinter.getMyOneActionString(a, 0, curContext);
                 System.out.print(nextAction);
                 System.out.println("Default, Block, curNodeType: "+nodeType+", "+"fatherNodeType: " + fatherNodeType +"\n");
                 fp.setActionTraversedMap(a);
@@ -45,8 +45,8 @@ public class MatchBlock {
     public static void matchBlockByChild(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
         ClusteredActionBean operationBean;
 
-        ITree fatherNode = a.getNode().getParent();
-        String fatherNodeType = curContext.getTypeLabel(fatherNode);
+        Tree fatherNode = (Tree)a.getNode().getParent();
+        String fatherNodeType = fatherNode.getAstClass().getSimpleName();
 
         switch (fatherNodeType) {
             case StatementConstants.SWITCHSTATEMENT:
@@ -64,7 +64,7 @@ public class MatchBlock {
                 fp.addHighLevelOperationBeanToList(operationBean);
                 break;
             default:
-                String nextAction = ConsolePrint.getMyOneActionString(a, 0, curContext);
+                String nextAction = ActionPrinter.getMyOneActionString(a, 0, curContext);
                 System.out.print(nextAction);
                 System.out.println("Default, Block: " + fatherNodeType +"\n");
                 fp.setActionTraversedMap(a);

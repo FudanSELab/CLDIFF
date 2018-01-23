@@ -34,10 +34,10 @@ public class MatchVariableDeclarationExpression {
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
 		fp.setActionTraversedMap(subActions);
 
-		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(a.getNode(), con);
+		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(a.getNode());
 		if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
 			operationEntity += "-OBJECT-INITIALIZING";
-			if (AstRelations.isClassCreation(subActions, con)) {
+			if (AstRelations.isClassCreation(subActions)) {
 				operationEntity += "-NEW";
 			}
 		}
@@ -79,10 +79,10 @@ public class MatchVariableDeclarationExpression {
 
 		fp.setActionTraversedMap(subActions);
 
-		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(fafafatherNode, con);
+		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(fafafatherNode);
 		if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
 			operationEntity += "-OBJECT-INITIALIZING";
-			if (AstRelations.isClassCreation(subActions, con)) {
+			if (AstRelations.isClassCreation(subActions)) {
 				operationEntity += "-NEW";
 			}
 		}

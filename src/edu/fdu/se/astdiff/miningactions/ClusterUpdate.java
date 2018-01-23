@@ -3,9 +3,10 @@ package edu.fdu.se.astdiff.miningactions;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
@@ -24,22 +25,22 @@ public class ClusterUpdate {
                 break;
             }
             Action a = fp.mGeneratingActionsData.getUpdateActions().get(index);
-            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
+            String nextAction = ActionPrinter.getMyOneActionString(a, 0, fp.mSrcTree);
             index++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 // 标记过的 update action
                 continue;
             }
             Update up = (Update) a;
-            ITree tmp = a.getNode();
-            String type = fp.mSrcTree.getTypeLabel(tmp);
-            ITree fafafather = AstRelations.findFafafatherNode(tmp, fp.mSrcTree);
+            Tree tmp = (Tree)a.getNode();
+            String type = tmp.getAstClass().getSimpleName();
+            Tree fafafather = AstRelations.findFafafatherNode(tmp);
             if(fafafather == null){
                 System.out.println("Father Null Condition: "+ ActionConstants.getInstanceStringName(a) + " " +type);
                 fp.setActionTraversedMap(a);
                 continue;
             }
-            String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
+            String fatherType = fafafather.getAstClass().getSimpleName();
 //			System.out.print(nextAction);
             ClusteredActionBean operationBean;
             if(StatementConstants.FIELDDECLARATION.equals(fatherType)){

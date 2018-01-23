@@ -3,9 +3,10 @@ package edu.fdu.se.astdiff.miningactions;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
@@ -23,21 +24,21 @@ public class ClusterDelete {
                 break;
             }
             Action a = fp.mGeneratingActionsData.getDeleteActions().get(index);
-            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mSrcTree);
+            String nextAction = ActionPrinter.getMyOneActionString(a, 0, fp.mSrcTree);
             index++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 continue;
             }
             Delete del = (Delete) a;
-            ITree tmp = a.getNode();
-            String type = fp.mSrcTree.getTypeLabel(tmp);
-            ITree fafafather = AstRelations.findFafafatherNode(tmp, fp.mSrcTree);
+            Tree tmp = (Tree)a.getNode();
+            String type = tmp.getAstClass().getSimpleName();
+            Tree fafafather = (Tree)AstRelations.findFafafatherNode(tmp);
             if(fafafather == null){
                 System.out.println("Father Null Condition: "+ ActionConstants.getInstanceStringName(a) + " " +type);
                 fp.setActionTraversedMap(a);
                 continue;
             }
-            String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
+            String fatherType = fafafather.getAstClass().getSimpleName();
 //			System.out.print(nextAction);
             ClusteredActionBean operationBean;
             if(StatementConstants.FIELDDECLARATION.equals(type)){
@@ -52,9 +53,9 @@ public class ClusterDelete {
                 continue;
             }
 
-            if(StatementConstants.INITIALIZER.equals(type) && StatementConstants.TYPEDECLARATION.equals(fp.mSrcTree.getTypeLabel(a.getNode().getParent()))){
+            if(StatementConstants.INITIALIZER.equals(type) && StatementConstants.TYPEDECLARATION.equals(((Tree)a.getNode().getParent()).getAstClass().getSimpleName())){
                 //insert INITIALIZER
-                MatchInitializerBlock.matchInitializerBlock(fp, a,type,fp.mSrcTree);
+                MatchInitializerBlock.matchInitializerBlock(fp, a,type);
                 continue;
             }
 
@@ -78,7 +79,7 @@ public class ClusterDelete {
                         MatchBlock.matchBlock(fp,a, type,fp.mDstTree);
                         break;
                     case StatementConstants.BREAKSTATEMENT:
-                        if(AstRelations.isFatherSwitchStatement(a, fp.mSrcTree)) {
+                        if(AstRelations.isFatherSwitchStatement(a)) {
                             //删除switch语句
                             operationBean = MatchSwitch.matchSwitchCaseByFather(fp, a, type, fafafather, fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);
@@ -126,7 +127,7 @@ public class ClusterDelete {
                         break;
                     case StatementConstants.EXPRESSIONSTATEMENT:
                         // Pattern 1.2 Match else
-                        if (AstRelations.isFatherIfStatement(a, fp.mSrcTree) && a.getNode().getParent().getChildPosition(a.getNode())== 2) {
+                        if (AstRelations.isFatherIfStatement(a) && a.getNode().getParent().getChildPosition(a.getNode())== 2) {
                             operationBean = MatchIfElse.matchElse(fp, a, type, fafafather, fatherType);
                             fp.mHighLevelOperationBeanList.add(operationBean);
                         }

@@ -1,15 +1,5 @@
 package edu.fdu.se.astdiff.miningactions;
 
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.tree.ITree;
-import com.github.javaparser.Range;
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-
-import java.util.List;
-
 /**
  * Created by huangkaifeng on 2018/1/23.
  */
@@ -30,7 +20,7 @@ public class ClusterInsertOrDelete <T>{
 //                break;
 //            }
 //            T a = this.actionList.get(insertActionIndex);
-//            String nextAction = ConsolePrint.getMyOneActionString(a, 0, fp.mDstTree);
+//            String nextAction = ActionPrinter.getMyOneActionString(a, 0, fp.mDstTree);
 //            insertActionIndex++;
 //            if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
 //                // 标记过的action

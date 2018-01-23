@@ -5,7 +5,7 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -82,10 +82,10 @@ public class JavaParserTreeGenerator {
     }
 
     public String getPrettyOldTreeString() {
-        return ConsolePrint.getPrettyTreeString(srcTC, src);
+        return ActionPrinter.getPrettyTreeString(srcTC, src);
     }
     public String getPrettyNewTreeString(){
-        return ConsolePrint.getPrettyTreeString(dstTC, dst);
+        return ActionPrinter.getPrettyTreeString(dstTC, dst);
     }
 
 }

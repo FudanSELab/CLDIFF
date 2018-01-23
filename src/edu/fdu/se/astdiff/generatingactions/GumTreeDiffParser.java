@@ -2,14 +2,8 @@ package edu.fdu.se.astdiff.generatingactions;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
 
 
-
-import com.github.gumtreediff.actions.ActionClusterFinder;
-import com.github.gumtreediff.actions.ActionGenerator;
-import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.client.Run;
 import com.github.gumtreediff.jdt.JdtTreeGenerator;
 import com.github.gumtreediff.matchers.MappingStore;
@@ -86,10 +80,10 @@ public class GumTreeDiffParser {
 
 	
 	public String getPrettyOldTreeString() {
-		return ConsolePrint.getPrettyTreeString(srcTC, src);
+		return ActionPrinter.getPrettyTreeString(srcTC, src);
 	}
 	public String getPrettyNewTreeString(){
-		return ConsolePrint.getPrettyTreeString(dstTC, dst);
+		return ActionPrinter.getPrettyTreeString(dstTC, dst);
 	}
 
 }

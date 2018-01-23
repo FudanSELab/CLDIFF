@@ -7,7 +7,6 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -15,14 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchInitializerBlock {
-    public static void matchInitializerBlock(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
+    public static void matchInitializerBlock(MiningActionData fp, Action a, String nodeType) {
         List<ITree> child = a.getNode().getChildren();
+        Tree child0 = (Tree)child.get(0);
 
-        String firstChildType = curContext.getTypeLabel(child.get(0));
+        String firstChildType = child0.getAstClass().getSimpleName();
 
         String secondChildType = "";
         if(child.size()>1) {
-            secondChildType = curContext.getTypeLabel(child.get(1));
+            Tree child1 = (Tree) child.get(1);
+            secondChildType = child1.getAstClass().getSimpleName();
         }
 //        String secondChildType = curContext.getTypeLabel(secondChild);
         ClusteredActionBean operationBean;

@@ -54,8 +54,10 @@ public class Tree extends AbstractTree implements ITree {
      * added by hkf
      */
     private Class astClass;
-    
-	public Tree(int type, String label, ASTNode n) {
+
+
+
+    public Tree(int type, String label, ASTNode n) {
         this.type = type;
         this.label = (label == null) ? NO_LABEL : label.intern();
         this.id = NO_ID;
@@ -240,7 +242,9 @@ public class Tree extends AbstractTree implements ITree {
 		}
 		this.doActions.add(doAction);
 	}
-   
+    public Class getAstClass() {
+        return astClass;
+    }
 //    public JdtMethodCall getMethodCall() {
 //		return methodCall;
 //	}
