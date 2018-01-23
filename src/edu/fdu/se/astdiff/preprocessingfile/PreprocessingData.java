@@ -39,13 +39,24 @@ public class PreprocessingData {
 
 
 
-    private List<ClassOrInterfaceDeclaration> classOrInterfaceDeclarationsList;
+    private Map<String,List<ClassOrInterfaceDeclaration>> classOrInterfaceDeclarationsList;
 
     public PreprocessingData(){
         mBodiesAdded = new ArrayList<>();
         mBodiesDeleted = new ArrayList<>();
         mBodiesRetained = new ArrayList<>();
-        classOrInterfaceDeclarationsList = new ArrayList<>();
+        classOrInterfaceDeclarationsList = new HashMap<>();
+    }
+
+    public void addClassOrInterfaceDeclaration(String prefix,ClassOrInterfaceDeclaration a){
+        if(this.classOrInterfaceDeclarationsList.containsKey(prefix)){
+            List<ClassOrInterfaceDeclaration> mList = this.classOrInterfaceDeclarationsList.get(prefix);
+            mList.add(a);
+        }else{
+            List<ClassOrInterfaceDeclaration> mList = new ArrayList<>();
+            mList.add(a);
+            this.classOrInterfaceDeclarationsList.put(prefix,mList);
+        }
     }
 
 
@@ -108,5 +119,13 @@ public class PreprocessingData {
 //            System.out.println(item.getBodyDeclaration().toString()+"  "+item.getLocationClassString());
             System.out.println(item.getBodyDeclaration().toString());
         }
+    }
+
+    public List<BodyDeclarationPair> getmBodiesAdded() {
+        return mBodiesAdded;
+    }
+
+    public List<BodyDeclarationPair> getmBodiesDeleted() {
+        return mBodiesDeleted;
     }
 }

@@ -14,13 +14,13 @@
         </environment>
     </environments>
       <mappers>
-		<mapper resource="edu/fdu/se/sqlmap/AndroidSDKJavaFileMapper.xml"/>
-		<mapper resource="edu/fdu/se/sqlmap/AndroidRepoCommitMapper.xml"/>
-		<mapper resource="edu/fdu/se/sqlmap/AndroidPlatformFrameworkProjectMapper.xml"/>
-		<mapper resource="edu/fdu/se/sqlmap/AndroidTagMapper.xml"/>
-		<mapper resource="edu/fdu/se/sqlmap/AndroidBranchMapper.xml"/>
-		<mapper resource="edu/fdu/se/sqlmap/AndroidCacheCommitMapper.xml"/>
-		<mapper resource="edu/fdu/se/sqlmap/AndroidSDKJavaFileTagSnapshotMapper.xml"/>
+		<mapper resource="sqlmap/AndroidSDKJavaFileMapper.xml"/>
+		<mapper resource="sqlmap/AndroidRepoCommitMapper.xml"/>
+		<mapper resource="sqlmap/AndroidPlatformFrameworkProjectMapper.xml"/>
+		<mapper resource="sqlmap/AndroidTagMapper.xml"/>
+		<mapper resource="sqlmap/AndroidBranchMapper.xml"/>
+		<mapper resource="sqlmap/AndroidCacheCommitMapper.xml"/>
+		<mapper resource="sqlmap/AndroidSDKJavaFileTagSnapshotMapper.xml"/>
      </mappers>
     
 </configuration>

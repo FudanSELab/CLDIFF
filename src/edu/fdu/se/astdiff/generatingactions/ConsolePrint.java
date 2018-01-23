@@ -80,7 +80,7 @@ public class ConsolePrint {
 			if(a instanceof Insert)
 				System.out.print(ConsolePrint.getMyOneActionString(a, 0, conD));
 			else
-				System.out.println(ConsolePrint.getMyOneActionString(a, 0, conS));
+				System.out.print(ConsolePrint.getMyOneActionString(a, 0, conS));
 		}
 	}
 

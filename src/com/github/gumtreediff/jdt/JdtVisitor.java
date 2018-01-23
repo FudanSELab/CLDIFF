@@ -51,15 +51,7 @@ public class JdtVisitor  extends AbstractJdtVisitor {
         return "";
     }
 
-//  @Override
-//  public boolean visit(FieldDeclaration md) {
-//      System.out.println("******************************************************************************************");
-//      System.out.println(md.toString());
-//      System.out.println(md.getType().resolveBinding().getQualifiedName());
-//      System.out.println(((VariableDeclarationFragment)md.fragments().get(0)).getName().toString());
-//      System.out.println("******************************************************************************************");
-//      return true;
-//  }
+
     @Override
     public boolean visit(TagElement e) {
         return true;

@@ -67,30 +67,31 @@ public class DiffMiner {
 				= ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR)+"/android-"+String.valueOf(version-1);
 		List<String> filePathList = readCompareList(version,fileRootPathPrev,fileRootPathCurr);
 		int cnt = 0;
-		int candidateIndex = 10;
+		int candidateIndex = 5;
 		for(String subPath: filePathList){
 			if(cnt < candidateIndex){
-				cnt++;
-				continue;
-			}
+			cnt++;
+			continue;
+		}
 
-			System.out.println(subPath);
-			String subPath2 = subPath.replace("\\","/");
-			String outputDirName = subPath.replace("\\","_").substring(1);
-			String fileFullPathPrev = fileRootPathPrev + subPath2;
-			String fileFullPathCurr = fileRootPathCurr + subPath2;
-			PreprocessingSDKClass psc =	new PreprocessingSDKClass().compareTwoFile(fileFullPathPrev,fileFullPathCurr,outputDirName);
-			PreprocessingData pData = psc.getPreprocessingData();
-			GumTreeDiffParser his = new GumTreeDiffParser(pData.getPreviousCu().toString(),pData.getCurrentCu().toString());
-			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
-			FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
-			MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
-			GeneratingActionsData data = gen.generate();
-			ConsolePrint.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
-			MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
-			ClusterActions.doCluster(mMiningActionData);
-			MiningOperation mo = new MiningOperation(pData);
-			mo.printHighLevelOperationBeanList(mMiningActionData);
+		System.out.println(subPath);
+		String subPath2 = subPath.replace("\\","/");
+		String outputDirName = subPath.replace("\\","_").substring(1);
+		String fileFullPathPrev = fileRootPathPrev + subPath2;
+		String fileFullPathCurr = fileRootPathCurr + subPath2;
+		PreprocessingSDKClass psc =	new PreprocessingSDKClass().compareTwoFile(fileFullPathPrev,fileFullPathCurr,outputDirName);
+		PreprocessingData pData = psc.getPreprocessingData();
+		//todo toString 变成CompilationUnit直接输入
+		GumTreeDiffParser his = new GumTreeDiffParser(pData.getPreviousCu().toString(),pData.getCurrentCu().toString());
+		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
+		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
+		MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
+		GeneratingActionsData data = gen.generate();
+		ConsolePrint.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
+		MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
+		ClusterActions.doCluster(mMiningActionData);
+		MiningOperation mo = new MiningOperation(pData);
+		mo.printHighLevelOperationBeanList(mMiningActionData);
 			break;
 		}
 	}
@@ -124,8 +125,8 @@ public class DiffMiner {
 
 	public static void main(String args[]){
 		DiffMiner i = new DiffMiner();
-		i.run();
-//		i.runBatch();
+//		i.run();
+		i.runBatch();
 
 	}
 

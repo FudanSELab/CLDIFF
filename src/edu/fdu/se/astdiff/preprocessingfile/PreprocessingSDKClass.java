@@ -1,6 +1,8 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -246,6 +248,11 @@ public class PreprocessingSDKClass {
         this.preprocessingData.setCurrentCu(cuCurr);
         this.preprocessingData.setPreviousCu(cuPrev);
 //        this.preprocessingData.printAddedRemovedBodies();
+//        String tmp = cuPrev.toString();
+//        InputStream   in_nocode   =   new ByteArrayInputStream(tmp.getBytes());
+//        CompilationUnit cuPrev2 = JavaParserFactory.getCompilationUnit(in_nocode);
+//        System.out.println("a");
+
         return this;
 
     }
@@ -257,9 +264,10 @@ public class PreprocessingSDKClass {
     /**
      * curr
      * @param cod class 节点
-     * @param prefixClassName class 节点为止的prefix ， root节点的class prefix 为“”
+     * @param prefixClassName class 节点为止的prefix ， root节点的class prefix 为classname
      */
     public void traverseClassOrInterfaceDeclarationCmpCurr(ClassOrInterfaceDeclaration cod, String prefixClassName) {
+        this.preprocessingData.addClassOrInterfaceDeclaration(prefixClassName,cod);
         NodeList nodeList = cod.getMembers();
         for (int i = nodeList.size() - 1; i >= 0; i--) {
             Node node = nodeList.get(i);
@@ -354,6 +362,7 @@ public class PreprocessingSDKClass {
      * @param prefixClassName prefix name
      */
     public void traverseClassOrInterfaceDeclarationInitPrevData(ClassOrInterfaceDeclaration cod, String prefixClassName) {
+        this.preprocessingData.addClassOrInterfaceDeclaration(prefixClassName,cod);
         NodeList nodeList = cod.getMembers();
         for (int i = nodeList.size() - 1; i >= 0; i--) {
             Node node = nodeList.get(i);
@@ -410,4 +419,5 @@ public class PreprocessingSDKClass {
 
         }
     }
+
 }

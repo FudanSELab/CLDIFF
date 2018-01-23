@@ -4,6 +4,7 @@ package edu.fdu.se.astdiff.miningoperationbean.model;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 
 /**
  * Created by huangkaifeng on 2018/1/22.
@@ -14,9 +15,11 @@ public class InitializerChangeEntity extends ChangeEntity{
         super(bean);
     }
 
-    public InitializerChangeEntity(InitializerDeclaration fd, int changeType){
-        this.lineRange = fd.getRange().get();
+    public InitializerChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType){
+        InitializerDeclaration iid = (InitializerDeclaration) bodyDeclarationPair.getBodyDeclaration();
+        this.lineRange = iid.getRange().get();
         this.changeEntity = "InitializerDeclaration";
         this.changeType = changeType;
+        this.location = bodyDeclarationPair.getLocationClassString();
     }
 }

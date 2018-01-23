@@ -42,6 +42,9 @@ public class OperationTypeConstants {
     final public static int UPDATE_METHOD_DECLARATION = 106;
     final public static int MOVE_METHOD_DECLARATION = 107;
 
+    final public static int INSERT_BODYDECLARATION = 108;
+    final public static int DELETE_BODYDECLARATION = 109;
+
     private static Map<Integer,String> constantName;
     static {
         constantName = new HashMap<>();
@@ -65,6 +68,8 @@ public class OperationTypeConstants {
         constantName.put(105,"DELETE_METHOD_DECLARATION");
         constantName.put(106,"UPDATE_METHOD_DECLARATION");
         constantName.put(107,"MOVE_METHOD_DECLARATION");
+        constantName.put(108,"INSERT");
+        constantName.put(109,"DELETE");
         constantName.put(-1,"UNKNOWN");
 
     }
