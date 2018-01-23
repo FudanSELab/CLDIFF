@@ -50,6 +50,10 @@ public class Tree extends AbstractTree implements ITree {
     
 //    private String actionType;
     private List<Action> doActions;
+    /**
+     * added by hkf
+     */
+    private Class astClass;
     
 	public Tree(int type, String label, ASTNode n) {
         this.type = type;
@@ -64,14 +68,12 @@ public class Tree extends AbstractTree implements ITree {
         this.length = NO_VALUE;
         this.children = new ArrayList<>();
         this.astNode = n;
+        this.astClass = n.getClass();
     }
     public ASTNode getAstNode(){
     	return astNode;
     }
-    public void setAstNode(ASTNode astNode){
-    	this.astNode = astNode;
-    	
-    }
+
     
     /**
      * Constructs a new node. If you need type labels corresponding to the integer

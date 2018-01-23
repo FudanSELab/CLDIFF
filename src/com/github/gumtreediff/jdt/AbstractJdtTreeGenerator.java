@@ -66,11 +66,11 @@ public abstract class AbstractJdtTreeGenerator extends TreeGenerator {
         pOptions.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
         parser.setCompilerOptions(pOptions);
         parser.setSource(readerToCharArray(r));
-        AbstractJdtVisitor v = createVisitor();
+        AbstractJdtVisitor visitor = createVisitor();
         ASTNode temp = parser.createAST(null);
-        temp.accept(v);
-        v.getTreeContext().setCu((CompilationUnit)temp);
-        return v.getTreeContext();
+        temp.accept(visitor);
+        visitor.getTreeContext().setCu((CompilationUnit)temp);
+        return visitor.getTreeContext();
     }
 	
 	public String getUnit(String s){

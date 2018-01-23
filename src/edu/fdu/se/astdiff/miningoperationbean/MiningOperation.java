@@ -21,18 +21,25 @@ public class MiningOperation {
 
     private List<ChangeEntity> mChangeEntityAll;
 
+
     public MiningOperation(PreprocessingData pd){
         this.preprocessingData = pd;
         this.mChangeEntityAll = new ArrayList<>();
-        initChangeEntityList();
+        initPreprocessChangeEntityList();
+        initDiffMinerChangeEntityList();
     }
+
     public MiningOperation(){
+    }
+
+    public void initDiffMinerChangeEntityList(){
 
     }
 
 
 
-    public void initChangeEntityList(){
+
+    public void initPreprocessChangeEntityList(){
         for(BodyDeclarationPair item:this.preprocessingData.getmBodiesAdded()){
             addOneBody(item,OperationTypeConstants.INSERT_BODYDECLARATION);
         }

@@ -3,22 +3,21 @@
  */
 public class Test {
 	
-	class B{
-		public B(String aa,String bb){
-			a = aa;
-			b = bb;
-		}
-		String a;
-		String b;
-	}
+
     public static void main(String args[]){
     	new Test().run();
     }
     public void run(){
-    	B b1 = new B("aa","bb");
-    	B b2 = new B("aa","bb");
-        System.out.println(b1.hashCode());
-        System.out.println(b2.hashCode());
-        System.out.print(b1.equals(b2));
+    	Class a = Boolean.class;
+		Class b = String.class;
+		String aa ="String";
+		String bb = "Boolean";
+//		System.out.println(a.equals(b));
+		long  t1 = System.currentTimeMillis();
+		for(int i=0;i<100000;i++){
+			boolean c= a.equals(b);
+		}
+		long t2 = System.currentTimeMillis();
+		System.out.println(t2-t1);
     }
 }

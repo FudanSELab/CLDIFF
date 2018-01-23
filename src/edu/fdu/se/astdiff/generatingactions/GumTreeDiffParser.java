@@ -63,6 +63,26 @@ public class GumTreeDiffParser {
 
 	}
 
+	public GumTreeDiffParser(File prevFile, File currFile,int a){
+		File oldFile = prevFile;
+		File newFile = currFile;
+
+		Run.initGenerators();
+		try {
+			JdtTreeGenerator parser1 = new JdtTreeGenerator(oldFile.getPath());
+			srcTC = parser1.generateFromFile(oldFile);
+			src = srcTC.getRoot();
+			JdtTreeGenerator parser2 = new JdtTreeGenerator(newFile.getPath());
+			dstTC = parser2.generateFromFile(newFile);
+			dst = dstTC.getRoot();
+			Matcher m = Matchers.getInstance().getMatcher(src, dst); // retrieve the default matcher
+			m.match();
+			mapping = m.getMappings();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	
 	public String getPrettyOldTreeString() {

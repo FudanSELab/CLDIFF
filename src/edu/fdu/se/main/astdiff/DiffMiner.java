@@ -11,6 +11,7 @@ import edu.fdu.se.astdiff.miningactions.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.MiningOperation;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessingData;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessingSDKClass;
+import edu.fdu.se.astdiff.treegenerator.JavaParserTreeGenerator;
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
@@ -99,7 +100,7 @@ public class DiffMiner {
 	/**
 	 * test 单个文件
 	 */
-	public void run(){
+	public void runGumTree(){
 		System.out.println("Step1 Generating Diff Actions:----------------------");
 		String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
 		String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
@@ -120,13 +121,34 @@ public class DiffMiner {
 		new MiningOperation().printHighLevelOperationBeanList(mMiningActionData);
 
 	}
+	public void run2(){
+		System.out.println("Step1 Generating Diff Actions:----------------------");
+		String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
+		String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
+		JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(new File(file1),new File(file2));
+		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",jtg.getPrettyOldTreeString());
+		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",jtg.getPrettyNewTreeString());
+		// package 1
+		MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);
+		GeneratingActionsData data = gen.generate();
+		ConsolePrint.printMyActions(data.getAllActions(),jtg.dstTC,jtg.srcTC);
+		// package 2
+		System.out.println("Step2 Begin to cluster actions:-------------------");
+		MiningActionData mMiningActionData = new MiningActionData(data,jtg.srcTC,jtg.dstTC,jtg.mapping);
+
+		ClusterActions.doCluster(mMiningActionData);
+		// package 3
+		new MiningOperation().printHighLevelOperationBeanList(mMiningActionData);
+
+	}
 
 
 
 	public static void main(String args[]){
 		DiffMiner i = new DiffMiner();
-//		i.run();
-		i.runBatch();
+		i.run2();
+//		i.runGumTree();
+//		i.runBatch();
 
 	}
 

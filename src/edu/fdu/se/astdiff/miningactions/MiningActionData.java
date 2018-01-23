@@ -65,8 +65,9 @@ public class MiningActionData {
 	public TreeContext getSrcTree(){
 		return this.mSrcTree;
 	}
+
 	public String getDstTreeContextTypeLabel(ITree node){
-		return this.mDstTree.getTypeLabel(node);
+			return this.mDstTree.getTypeLabel(node);
 	}
 
 	public String getSrcTreeContextTypeLabel(ITree node){

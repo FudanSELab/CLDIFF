@@ -8,10 +8,12 @@ import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
+import java.util.List;
+
 /**
  * Created by huangkaifeng on 2018/1/13.
  */
-public class ClusterInsert {
+public class ClusterInsert{
 
     public static void findInsert(MiningActionData fp) {
         int insertActionCount = fp.mGeneratingActionsData.getInsertActions().size();
