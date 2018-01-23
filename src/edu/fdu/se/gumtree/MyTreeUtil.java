@@ -9,7 +9,9 @@ import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
+import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import edu.fdu.se.astdiff.miningactions.StatementConstants;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 
 public class MyTreeUtil{
@@ -75,6 +77,53 @@ public class MyTreeUtil{
     	}
     	return actionTypes;
     }
+
+	public static Set<String> traverseClassSignatureChildren(Action a, ITree node, TreeContext con, List<Action> allEditAction){
+		List<ITree> children = node.getChildren();
+//		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), con);
+//		String ffFatherNodeType = con.getTypeLabel(fafafatherNode);
+
+//		int len = children.size();
+		int position = 0;
+		boolean isContinue = true;
+		while (isContinue && ( position < children.size() )){
+			String nodeType = con.getTypeLabel(children.get(position));
+			switch (nodeType){
+				case StatementConstants.MODIFIER:
+				case StatementConstants.SIMPLENAME:
+				case StatementConstants.MARKERANNOTATION:
+				case StatementConstants.NORMALANNOTATION:
+				case StatementConstants.SINGLEMEMBERANNOTATION:
+					position++;
+					break;
+				default:
+					isContinue = false;
+					break;
+			}
+		}
+
+		Set<String> actionTypes = new HashSet<String>();
+
+		for(int i=0;i<position;i++){
+			ITree child = children.get(i);
+			for(ITree item : child.postOrder()){
+				Tree myTree = (Tree) item;
+				if(myTree.getDoAction()==null) {
+					actionTypes.add(ActionConstants.NULLACTION);
+					continue;
+				}
+				List<Action> nodeActions = myTree.getDoAction();
+				for(Action aTmp:nodeActions){
+//        			if(aTmp.getClass().equals(a.getClass())){
+//        				count++;
+//        			}
+					allEditAction.add(aTmp);
+					actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
+				}
+			}
+		}
+		return actionTypes;
+	}
 
     public static int getTypeCode(Action action,boolean isNullExist,Set<String> actionTypes){
     	if(action instanceof Insert){

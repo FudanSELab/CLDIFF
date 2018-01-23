@@ -5,6 +5,7 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.generatingactions.ConsolePrint;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MatchClassSignature {
+
     public static ClusteredActionBean matchClassSignature(MiningActionData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
         String operationEntity = "CLASSSIGNATURE";
         TreeContext con = null;
@@ -35,8 +37,8 @@ public class MatchClassSignature {
             }
         }
         List<Action> signatureChidlren = new ArrayList<Action>();
-        Set<String> src_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
-        Set<String> dst_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
+        Set<String> src_status = MyTreeUtil.traverseClassSignatureChildren(a, srcfafafather,con, signatureChidlren);
+        Set<String> dst_status = MyTreeUtil.traverseClassSignatureChildren(a, dstfafafather,con, signatureChidlren);
 
         int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 

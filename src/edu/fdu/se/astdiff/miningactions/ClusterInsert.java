@@ -41,8 +41,8 @@ public class ClusterInsert {
             ClusteredActionBean operationBean;
             //类签名状态
             if(StatementConstants.TYPEDECLARATION.equals(fatherType)){
-                //insert FieldDeclaration body
-                operationBean = MatchFieldDeclaration.matchFieldDeclarationByFather(fp,a,type,fafafather,fatherType);
+                //class signature
+                operationBean = MatchClassSignature.matchClassSignature(fp,a,type,fafafather,fatherType);
                 fp.mHighLevelOperationBeanList.add(operationBean);
                 continue;
             }
@@ -191,6 +191,10 @@ public class ClusterInsert {
                     case StatementConstants.INFIXEXPRESSION:
                     case StatementConstants.METHODINVOCATION:
                     case StatementConstants.QUALIFIEDNAME:
+                    case StatementConstants.MODIFIER:
+                    case StatementConstants.MARKERANNOTATION:
+                    case StatementConstants.NORMALANNOTATION:
+                    case StatementConstants.SINGLEMEMBERANNOTATION:
                         MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mDstTree);
                         break;
                     default:

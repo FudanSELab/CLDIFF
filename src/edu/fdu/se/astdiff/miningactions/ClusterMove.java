@@ -37,6 +37,14 @@ public class ClusterMove {
             String fatherType = fp.mSrcTree.getTypeLabel(fafafather);
 //            System.out.print(nextAction+"\n");
             ClusteredActionBean operationBean;
+            //类签名状态
+            if(StatementConstants.TYPEDECLARATION.equals(fatherType)){
+                //class signature
+                operationBean = MatchClassSignature.matchClassSignature(fp,a,type,fafafather,fatherType);
+                fp.mHighLevelOperationBeanList.add(operationBean);
+                continue;
+            }
+
             if(StatementConstants.FIELDDECLARATION.equals(type)){
                 //insert FieldDeclaration
                 operationBean = MatchFieldDeclaration.matchFieldDeclaration(fp,a,type);
@@ -180,6 +188,10 @@ public class ClusterMove {
                     case StatementConstants.INFIXEXPRESSION:
                     case StatementConstants.METHODINVOCATION:
                     case StatementConstants.QUALIFIEDNAME:
+                    case StatementConstants.MODIFIER:
+                    case StatementConstants.MARKERANNOTATION:
+                    case StatementConstants.NORMALANNOTATION:
+                    case StatementConstants.SINGLEMEMBERANNOTATION:
                         MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mSrcTree);
                         break;
                     default:
