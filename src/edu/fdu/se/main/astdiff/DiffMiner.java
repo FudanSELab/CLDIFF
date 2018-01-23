@@ -2,8 +2,8 @@ package edu.fdu.se.main.astdiff;
 
 
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
-import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
 import edu.fdu.se.astdiff.miningactions.ClusterActions;
 import edu.fdu.se.astdiff.miningactions.MiningActionData;
@@ -61,12 +61,12 @@ public class DiffMiner {
 	public void runBatch(){
 		int version = 26;
 		String fileRootPathPrev
-				= ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR)+"/android-"+String.valueOf(version);
-		String fileRootPathCurr
 				= ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR)+"/android-"+String.valueOf(version-1);
+		String fileRootPathCurr
+				= ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR)+"/android-"+String.valueOf(version);
 		List<String> filePathList = readCompareList(version,fileRootPathPrev,fileRootPathCurr);
 		int cnt = 0;
-		int candidateIndex = 5;
+		int candidateIndex = 8;
 		for(String subPath: filePathList){
 			if(cnt < candidateIndex){
 			cnt++;
@@ -87,6 +87,7 @@ public class DiffMiner {
 		MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
 		GeneratingActionsData data = gen.generate();
 		ActionPrinter.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
+		System.out.println("Step2 Begin to cluster actions:-------------------");
 		MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
 		ClusterActions.doCluster(mMiningActionData);
 		MiningOperation mo = new MiningOperation(pData);
