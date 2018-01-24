@@ -1,5 +1,6 @@
 package edu.fdu.se.astdiff.miningactions;
 
+import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 
 /**
@@ -9,9 +10,8 @@ public class ClusterActions {
 
 
     public static void doCluster(MiningActionData fpd){
-//        ClusterInsert.findInsert(fpd);
-//        ClusterDelete.findDelete(fpd);
-        new ClusterInsertOrDelete<Insert>(fpd);
+        new ClusterInsertOrDelete(Insert.class,fpd).doCluster();
+        new ClusterInsertOrDelete(Delete.class,fpd).doCluster();
         ClusterUpdate.findUpdate(fpd);
         ClusterMove.findMove(fpd);
     }

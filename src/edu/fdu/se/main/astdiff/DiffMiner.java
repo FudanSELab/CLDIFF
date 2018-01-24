@@ -82,7 +82,7 @@ public class DiffMiner {
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
 		MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
-		GeneratingActionsData data = gen.generate();;
+		GeneratingActionsData data = gen.generate();
 		SimpleActionPrinter.printMyActions(data.getAllActions());
 		System.out.println("Step2 Begin to cluster actions:-------------------");
 		MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
