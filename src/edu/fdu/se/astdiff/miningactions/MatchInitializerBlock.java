@@ -45,12 +45,6 @@ public class MatchInitializerBlock {
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
-        TreeContext con = null;
-        if (a instanceof Insert) {
-            con = fp.getDstTree();
-        } else{
-            con = fp.getSrcTree();
-        }
         Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
@@ -62,12 +56,6 @@ public class MatchInitializerBlock {
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
-        TreeContext con = null;
-        if (a instanceof Insert) {
-            con = fp.getDstTree();
-        } else{
-            con = fp.getSrcTree();
-        }
         Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(

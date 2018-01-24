@@ -31,16 +31,13 @@ public class MatchForStatement {
         List<Action> allActions = new ArrayList<Action>();
         ITree srcfafafather = null;
         ITree dstfafafather = null;
-        TreeContext con = null;
         if (a instanceof Insert) {
-            con = fp.getDstTree();
             dstfafafather = fafafatherNode;
             srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
             if (srcfafafather == null) {
                 System.err.println("err null mapping");
             }
         } else {
-            con = fp.getSrcTree();
             srcfafafather = fafafatherNode;
             dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
             if (dstfafafather == null) {
@@ -66,16 +63,13 @@ public class MatchForStatement {
         List<Action> allActions = new ArrayList<Action>();
         ITree srcfafafather = null;
         ITree dstfafafather = null;
-        TreeContext con = null;
         if (a instanceof Insert) {
-            con = fp.getDstTree();
             dstfafafather = fafafatherNode;
             srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
             if (srcfafafather == null) {
                 System.err.println("err null mapping");
             }
         } else {
-            con = fp.getSrcTree();
             srcfafafather = fafafatherNode;
             dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
             if (dstfafafather == null) {

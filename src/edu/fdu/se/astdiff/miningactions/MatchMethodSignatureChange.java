@@ -30,16 +30,13 @@ public class MatchMethodSignatureChange {
 		}
 		ITree srcfafafather = null;
 		ITree dstfafafather = null;
-		TreeContext con = null;
 		if (a instanceof Insert) {
-			con = fp.getDstTree();
 			dstfafafather = fafafather;
 			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
 			if (srcfafafather == null) {
 				System.err.println("err null mapping");
 			}
 		} else {
-			con = fp.getSrcTree();
 			srcfafafather = fafafather;
 			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
 			if (dstfafafather == null) {

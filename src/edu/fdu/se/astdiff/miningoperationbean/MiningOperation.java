@@ -4,6 +4,7 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.ast.body.*;
 import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
+import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.astdiff.miningactions.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.model.*;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
@@ -73,13 +74,7 @@ public class MiningOperation {
             System.out.println("HighLevelOperationBeanList is null!");
         }else {
             for (ClusteredActionBean operationBean : mHighLevelOperationBeanList) {
-                TreeContext treeContext;
-                if (operationBean.curAction instanceof Insert) {
-                    treeContext = fp.getDstTree();
-                } else {
-                    treeContext = fp.getSrcTree();
-                }
-                String nextAction = ActionPrinter.getMyOneActionString(operationBean.curAction, 0, treeContext);
+                String nextAction = SimpleActionPrinter.getMyOneActionString(operationBean.curAction);
                 System.out.print(nextAction);
                 System.out.println(operationBean.toString()+"\n");
             }

@@ -25,12 +25,6 @@ public class MatchIfElse {
 	 */
 	public static ClusteredActionBean matchIf(MiningActionData f, Action a, String nodeType) {
 		String operationEntity = "";
-		TreeContext con;
-		if(a instanceof Insert)
-			con = f.getDstTree();
-		else
-			con = f.getSrcTree();
-
 		if (AstRelations.isFatherIfStatement(a)) {
 			operationEntity = "ELSE_IF";
 		} else {
@@ -72,11 +66,6 @@ public class MatchIfElse {
 	 */
 	public static ClusteredActionBean matchElse(MiningActionData f, Action a, String nodeType, ITree ffFatherNode, String ffFatherNodeType) {
 		String operationEntity = "ELSE";
-		TreeContext con;
-		if(a instanceof Insert)
-			con = f.getDstTree();
-		else
-			con = f.getSrcTree();
 //		a.getNode().getParent().getChildPosition(a.getNode()) == 2
 		Tree t = (Tree) a.getNode();
 		String labelType = t.getAstClass().getSimpleName();
@@ -109,18 +98,13 @@ public class MatchIfElse {
 
 		ITree srcfafafather = null;
 		ITree dstfafafather = null;
-		TreeContext con;
-
 		if (a instanceof Insert) {
-			con = fp.getDstTree();
 			dstfafafather = fafafatherNode;
 			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
 			if (srcfafafather == null) {
 				System.err.println("err null mapping");
 			}
 		} else {
-			con = fp.getSrcTree();
-			srcfafafather = fafafatherNode;
 			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
 			if (dstfafafather == null) {
 				System.err.println("err null mapping");

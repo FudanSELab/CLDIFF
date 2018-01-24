@@ -21,14 +21,12 @@ public class MatchClassSignature {
         ITree srcfafafather = null;
         ITree dstfafafather = null;
         if (a instanceof Insert) {
-            con = fp.getDstTree();
             dstfafafather = fafafather;
             srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
             if (srcfafafather == null) {
                 System.err.println("err null mapping");
             }
         } else {
-            con = fp.getSrcTree();
             srcfafafather = fafafather;
             dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
             if (dstfafafather == null) {
