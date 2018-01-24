@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MatchClassSignature {
+
     public static ClusteredActionBean matchClassSignature(MiningActionData fp, Action a, String nodeType, ITree fafafather, String fafafatherType) {
         String operationEntity = "CLASSSIGNATURE";
         TreeContext con = null;
@@ -35,8 +36,8 @@ public class MatchClassSignature {
             }
         }
         List<Action> signatureChidlren = new ArrayList<Action>();
-        Set<String> src_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
-        Set<String> dst_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
+        Set<String> src_status = MyTreeUtil.traverseClassSignatureChildren(a, srcfafafather, signatureChidlren);
+        Set<String> dst_status = MyTreeUtil.traverseClassSignatureChildren(a, dstfafafather, signatureChidlren);
 
         int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 

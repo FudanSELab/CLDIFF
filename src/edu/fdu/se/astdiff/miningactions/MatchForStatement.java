@@ -20,7 +20,7 @@ public class MatchForStatement {
     }
 
     public static ClusteredActionBean matchEnhancedForStatement(MiningActionData fp, Action a, String nodeType){
-        String operationEntity = "ENHANCEDFORSTATEMENT";
+        String operationEntity = "ENHANCED-FORSTATEMENT";
         ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByNode(fp,a,nodeType,operationEntity);
         return mHighLevelOperationBean;
     }
@@ -48,8 +48,43 @@ public class MatchForStatement {
             }
         }
 
-        Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather.getChild(0), allActions);
-        Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather.getChild(0), allActions);
+        Set<String> srcT = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a,srcfafafather, allActions);
+        Set<String> dstT = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a,dstfafafather, allActions);
+        int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
+
+        fp.setActionTraversedMap(allActions);
+
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
+        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
+                a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
+        return mHighLevelOperationBean;
+    }
+
+    public static ClusteredActionBean matchEnhancedForPredicate(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
+        String operationEntity  = "ENHANCED-FORPREDICATE";
+
+        List<Action> allActions = new ArrayList<Action>();
+        ITree srcfafafather = null;
+        ITree dstfafafather = null;
+        TreeContext con = null;
+        if (a instanceof Insert) {
+            con = fp.getDstTree();
+            dstfafafather = fafafatherNode;
+            srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
+            if (srcfafafather == null) {
+                System.err.println("err null mapping");
+            }
+        } else {
+            con = fp.getSrcTree();
+            srcfafafather = fafafatherNode;
+            dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
+            if (dstfafafather == null) {
+                System.err.println("err null mapping");
+            }
+        }
+
+        Set<String> srcT = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a,srcfafafather, allActions);
+        Set<String> dstT = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a,dstfafafather, allActions);
         int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 
         fp.setActionTraversedMap(allActions);

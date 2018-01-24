@@ -37,7 +37,11 @@ public class MatchSimpleNameOrLiteral {
 		case StatementConstants.FORSTATEMENT:
 //			System.out.println("For predicate");
 			operationBean = MatchForStatement.matchForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
-			System.out.println(operationBean.toString());
+			fp.addHighLevelOperationBeanToList(operationBean);
+			break;
+		case StatementConstants.ENHANCEDFORSTATEMENT:
+//			System.out.println("Enhanced For predicate");
+			operationBean = MatchForStatement.matchEnhancedForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
@@ -71,6 +75,11 @@ public class MatchSimpleNameOrLiteral {
 		case StatementConstants.SUPERCONSTRUCTORINVOCATION:
 			//构造方法super
 			operationBean = MatchMethod.matchSuperConstructorInvocationByFather(fp,a,nodeType,fafafatherNode,ffFatherNodeType);
+			fp.mHighLevelOperationBeanList.add(operationBean);
+			break;
+		case StatementConstants.TYPEDECLARATION:
+			//classs signiture
+			operationBean = MatchClassSignature.matchClassSignature(fp,a,nodeType,fafafatherNode,ffFatherNodeType);
 			fp.mHighLevelOperationBeanList.add(operationBean);
 			break;
 		default:

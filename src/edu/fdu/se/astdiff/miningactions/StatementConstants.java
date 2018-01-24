@@ -25,6 +25,15 @@ public class StatementConstants {
 	final public static String INITIALIZER= "Initializer";
 
 	/**
+	 * Annotation
+	 */
+	final public static String MARKERANNOTATION= "MarkerAnnotation";
+
+	final public static String NORMALANNOTATION= "NormalAnnotation";
+
+	final public static String SINGLEMEMBERANNOTATION= "SingleMemberAnnotation";
+
+	/**
 	 * Parameter and literal
 	 */
 	final public static String SIMPLENAME = "SimpleName";
@@ -35,6 +44,9 @@ public class StatementConstants {
 	final public static String CHARACTERLITERAL = "CharacterLiteral";
 	final public static String NULLLITERAL = "NullLiteral";
 	final public static String QUALIFIEDNAME = "QualifiedName";
+
+	final public static String MODIFIER = "Modifier";
+
 
 	final public static String METHODINVOCATION = "MethodInvocation";
 

@@ -86,6 +86,7 @@ public class DiffMiner {
 		GeneratingActionsData data = gen.generate();
 //			ActionPrinter.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
 		SimpleActionPrinter.printMyActions(data.getAllActions());
+		System.out.println("Step2 Begin to cluster actions:-------------------");
 		MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
 		ClusterActions.doCluster(mMiningActionData);
 		MiningOperation mo = new MiningOperation(pData);
@@ -118,7 +119,6 @@ public class DiffMiner {
 		new MiningOperation().printHighLevelOperationBeanList(mMiningActionData);
 
 	}
-
 	public void run2(){
 		System.out.println("Step1 Generating Diff Actions:----------------------");
 		String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
