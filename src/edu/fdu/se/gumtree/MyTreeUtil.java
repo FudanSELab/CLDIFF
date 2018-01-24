@@ -52,31 +52,64 @@ public class MyTreeUtil{
      * @return
      */
     public static Set<String> traverseMethodSignatureChildrenWithoutBlock(Action a,ITree node,List<Action> allEditAction){
-    	List<ITree> children = node.getChildren();
-    	int len = children.size();
-//    	int count = 0;
+		List<ITree> children = node.getChildren();
+		int len = children.size();
+
 		Set<String> actionTypes = new HashSet<String>();
-    	//默认最后一个节点为block
-    	for(int i=0;i<len-1;i++){
-    		ITree child = children.get(i);
-    		for(ITree item : child.postOrder()){
-    			Tree myTree = (Tree) item;
-    			if(myTree.getDoAction()==null) {
+
+		Tree nodeTree = (Tree)node;
+		if(nodeTree.getDoAction()==null) {
+			actionTypes.add(ActionConstants.NULLACTION);
+		}
+		//默认最后一个节点为block
+		for(int i=0;i<len-1;i++){
+			ITree child = children.get(i);
+			for(ITree item : child.postOrder()){
+				Tree myTree = (Tree) item;
+				if(myTree.getDoAction()==null) {
 					actionTypes.add(ActionConstants.NULLACTION);
 					continue;
 				}
-    			List<Action> nodeActions = myTree.getDoAction();
-        		for(Action aTmp:nodeActions){
+				List<Action> nodeActions = myTree.getDoAction();
+				for(Action aTmp:nodeActions){
 //        			if(aTmp.getClass().equals(a.getClass())){
 //        				count++;
 //        			}
-        			allEditAction.add(aTmp);
+					allEditAction.add(aTmp);
 					actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
-        		}
-    		}
-    	}
-    	return actionTypes;
-    }
+				}
+			}
+		}
+		return actionTypes;
+	}
+
+	public static Set<String> traverseFirstChildren(ITree node,List<Action> allEditAction){
+		List<ITree> children = node.getChildren();
+
+		Set<String> actionTypes = new HashSet<String>();
+
+		Tree nodeTree = (Tree)node;
+		if(nodeTree.getDoAction()==null) {
+			actionTypes.add(ActionConstants.NULLACTION);
+		}
+		//仅遍历第一个孩子节点
+		for(int i=0;i<1;i++){
+			ITree child = children.get(i);
+			for(ITree item : child.postOrder()){
+				Tree myTree = (Tree) item;
+				if(myTree.getDoAction()==null) {
+					actionTypes.add(ActionConstants.NULLACTION);
+					continue;
+				}
+				List<Action> nodeActions = myTree.getDoAction();
+				for(Action aTmp:nodeActions){
+					allEditAction.add(aTmp);
+					actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
+				}
+			}
+		}
+		return actionTypes;
+	}
 
 	public static Set<String> traverseClassSignatureChildren(Action a, ITree node, List<Action> allEditAction){
 		List<ITree> children = node.getChildren();
@@ -105,6 +138,10 @@ public class MyTreeUtil{
 		}
 
 		Set<String> actionTypes = new HashSet<String>();
+		Tree nodeTree = (Tree)node;
+		if(nodeTree.getDoAction()==null) {
+			actionTypes.add(ActionConstants.NULLACTION);
+		}
 
 		for(int i=0;i<position;i++){
 			ITree child = children.get(i);

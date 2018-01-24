@@ -105,14 +105,15 @@ public class MatchIfElse {
 				System.err.println("err null mapping");
 			}
 		} else {
+			srcfafafather = fafafatherNode;
 			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
 			if (dstfafafather == null) {
 				System.err.println("err null mapping");
 			}
 		}
 
-		Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather.getChild(0), allActions);
-		Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather.getChild(0), allActions);
+		Set<String> srcT = MyTreeUtil.traverseFirstChildren(srcfafafather, allActions);
+		Set<String> dstT = MyTreeUtil.traverseFirstChildren(dstfafafather, allActions);
 		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 
 		fp.setActionTraversedMap(allActions);
