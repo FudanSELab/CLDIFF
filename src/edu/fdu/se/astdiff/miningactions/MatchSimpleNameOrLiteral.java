@@ -6,6 +6,7 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
+import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 public class MatchSimpleNameOrLiteral {
@@ -21,7 +22,7 @@ public class MatchSimpleNameOrLiteral {
 	 * @param a
 	 * @return
 	 */
-	public static void matchSimplenameOrLiteral(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
+	public static void matchSimplenameOrLiteral(MiningActionData fp, Action a, String nodeType) {
 		// if predicate
 		Tree fafafatherNode = AstRelations.findFafafatherNode(a.getNode());
 
@@ -82,7 +83,7 @@ public class MatchSimpleNameOrLiteral {
 			fp.mHighLevelOperationBeanList.add(operationBean);
 			break;
 		default:
-			String nextAction = ActionPrinter.getMyOneActionString(a, 0, curContext);
+			String nextAction = SimpleActionPrinter.getMyOneActionString(a);
 			System.out.print(nextAction);
 			System.out.println("Default, SimplenameOrLiteral: " + ffFatherNodeType +"\n");
 			fp.setActionTraversedMap(a);

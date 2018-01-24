@@ -32,14 +32,7 @@ public class MatchTry {
 		List<Action> throwAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, throwAction);
 		fp.setActionTraversedMap(throwAction);
-		TreeContext con = null;
-		if (a instanceof Insert) {
-			con = fp.getDstTree();
-		} else{
-			con = fp.getSrcTree();
-		}
-
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,throwAction,nodeLinePosition,status,operationEntity,null,null);
@@ -51,15 +44,7 @@ public class MatchTry {
 		List<Action> finallyAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, finallyAction);
 		fp.setActionTraversedMap(finallyAction);
-
-		TreeContext con = null;
-		if (a instanceof Insert) {
-			con = fp.getDstTree();
-		} else {
-			con = fp.getSrcTree();
-		}
-
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,finallyAction,nodeLinePosition,status,operationEntity,null,null);

@@ -78,7 +78,7 @@ public class MyTreeUtil{
     	return actionTypes;
     }
 
-	public static Set<String> traverseClassSignatureChildren(Action a, ITree node, TreeContext con, List<Action> allEditAction){
+	public static Set<String> traverseClassSignatureChildren(Action a, ITree node, List<Action> allEditAction){
 		List<ITree> children = node.getChildren();
 //		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), con);
 //		String ffFatherNodeType = con.getTypeLabel(fafafatherNode);

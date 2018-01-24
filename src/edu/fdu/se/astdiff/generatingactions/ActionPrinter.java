@@ -74,7 +74,7 @@ public class ActionPrinter {
 
 
 
-	public static void printMyActions(List<Action> actions, TreeContext conD,TreeContext conS) {
+	private static void printMyActions(List<Action> actions, TreeContext conD,TreeContext conS) {
 		System.out.println("ActionSize:" + actions.size());
 		for (Action a : actions) {
 			if(a instanceof Insert)

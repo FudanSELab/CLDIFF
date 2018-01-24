@@ -22,12 +22,6 @@ public class MatchVariableDeclarationExpression {
 	 * @return
 	 */
 	public static ClusteredActionBean matchVariableDeclaration(MiningActionData fp, Action a, String nodeType) {
-		TreeContext con = null;
-		if (a instanceof Insert) {
-			con = fp.getDstTree();
-		} else {
-			con = fp.getSrcTree();
-		}
 		String operationEntity = "VARIABLEDECLARATION";
 
 		List<Action> subActions = new ArrayList<Action>();
@@ -42,7 +36,7 @@ public class MatchVariableDeclarationExpression {
 			}
 		}
 
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
@@ -56,16 +50,13 @@ public class MatchVariableDeclarationExpression {
 
 		ITree srcfafafather = null;
 		ITree dstfafafather = null;
-		TreeContext con = null;
 		if (a instanceof Insert) {
-			con = fp.getDstTree();
 			dstfafafather = fafafatherNode;
 			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
 			if (srcfafafather == null) {
 				System.err.println("err null mapping");
 			}
 		} else {
-			con = fp.getSrcTree();
 			srcfafafather = fafafatherNode;
 			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
 			if (dstfafafather == null) {
@@ -87,7 +78,7 @@ public class MatchVariableDeclarationExpression {
 			}
 		}
 
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);

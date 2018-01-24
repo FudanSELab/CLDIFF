@@ -105,6 +105,11 @@ public class TreeContext {
 //        registerTypeLabel(type, typeLabel);
         return new Tree(type, label, node);
     }
+    // add by hkf
+    public ITree createTree(int type, String label, ASTNode node){
+        Integer[] range = {this.cu.getLineNumber(node.getStartPosition()),this.cu.getLineNumber(node.getStartPosition()+node.getLength()-1)};
+        return new Tree(type,label,node,range);
+    }
     
     public ITree createTree(ITree... trees) {
         return new AbstractTree.FakeTree(trees);

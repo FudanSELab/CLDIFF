@@ -21,12 +21,6 @@ public class MatchFieldDeclaration {
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, allActions);
         fp.setActionTraversedMap(allActions);
 
-        TreeContext con = null;
-        if (a instanceof Insert) {
-            con = fp.getDstTree();
-        } else {
-            con = fp.getSrcTree();
-        }
         ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(a.getNode());
         if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
             operationEntity += "-OBJECT-INITIALIZING";
@@ -34,7 +28,7 @@ public class MatchFieldDeclaration {
                 operationEntity += "-NEW";
             }
         }
-        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,allActions,nodeLinePosition,status,operationEntity,null,null);
         return mHighLevelOperationBean;
@@ -45,16 +39,13 @@ public class MatchFieldDeclaration {
         List<Action> allActions = new ArrayList<Action>();
         ITree srcfafafather = null;
         ITree dstfafafather = null;
-        TreeContext con = null;
         if (a instanceof Insert) {
-            con = fp.getDstTree();
             dstfafafather = fafafatherNode;
             srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
             if (srcfafafather == null) {
                 System.err.println("err null mapping");
             }
         } else {
-            con = fp.getSrcTree();
             srcfafafather = fafafatherNode;
             dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
             if (dstfafafather == null) {
@@ -74,7 +65,7 @@ public class MatchFieldDeclaration {
                 operationEntity += "-NEW";
             }
         }
-        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;

@@ -55,7 +55,7 @@ public class Tree extends AbstractTree implements ITree {
      */
     private Class astClass;
 
-
+    private Integer[] lineRange;
 
     public Tree(int type, String label, ASTNode n) {
         this.type = type;
@@ -72,11 +72,34 @@ public class Tree extends AbstractTree implements ITree {
         this.astNode = n;
         this.astClass = n.getClass();
     }
+
+    public Tree(int type, String label, ASTNode n,Integer[] linerange) {
+        this.type = type;
+        this.label = (label == null) ? NO_LABEL : label.intern();
+        this.id = NO_ID;
+        this.depth = NO_VALUE;
+        this.hash = NO_VALUE;
+        this.height = NO_VALUE;
+        this.depth = NO_VALUE;
+        this.size = NO_VALUE;
+        this.pos = NO_VALUE;
+        this.length = NO_VALUE;
+        this.children = new ArrayList<>();
+        this.astNode = n;
+        this.astClass = n.getClass();
+        this.lineRange = linerange;
+    }
+
     public ASTNode getAstNode(){
     	return astNode;
     }
 
-    
+    public String getRangeString(){
+        return "("+this.lineRange[0]+","+this.lineRange[1]+")";
+    }
+    public Integer[] getRange(){
+        return this.lineRange;
+    }
     /**
      * Constructs a new node. If you need type labels corresponding to the integer
      * @see TreeContext#createTree(int, String, String)

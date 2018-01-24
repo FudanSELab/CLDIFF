@@ -7,6 +7,7 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
+import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
@@ -22,7 +23,7 @@ public class ClusterInsert{
                 break;
             }
             Action a = fp.mGeneratingActionsData.getInsertActions().get(insertActionIndex);
-            String nextAction = ActionPrinter.getMyOneActionString(a, 0, fp.mDstTree);
+            String nextAction = SimpleActionPrinter.getMyOneActionString(a);
             insertActionIndex++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 // 标记过的action
@@ -84,7 +85,7 @@ public class ClusterInsert{
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     case StatementConstants.BLOCK:
-                        MatchBlock.matchBlock(fp,a, type,fp.mDstTree);
+                        MatchBlock.matchBlock(fp,a, type);
                         break;
                     case StatementConstants.BREAKSTATEMENT:
                         if(AstRelations.isFatherSwitchStatement(a)) {
@@ -196,11 +197,11 @@ public class ClusterInsert{
                     case StatementConstants.MARKERANNOTATION:
                     case StatementConstants.NORMALANNOTATION:
                     case StatementConstants.SINGLEMEMBERANNOTATION:
-                        MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mDstTree);
+                        MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type);
                         break;
                     default:
                         String operationEntity = "DEFAULT: "+ ActionConstants.getInstanceStringName(a) + " " +type;
-                        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,fp.mDstTree);
+                        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
                         operationBean = new ClusteredActionBean(a,type,null,nodeLinePosition,-1,operationEntity,fafafather,fatherType);
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         fp.setActionTraversedMap(a);

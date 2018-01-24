@@ -22,13 +22,7 @@ public class AstRelations {
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
-		TreeContext con = null;
-		if (a instanceof Insert) {
-			con = fp.getDstTree();
-		} else{
-			con = fp.getSrcTree();
-		}
-		Range nodeLinePosition = getnodeLinePosition(a,con);
+		Range nodeLinePosition = getnodeLinePosition(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
         return mHighLevelOperationBean;
@@ -42,14 +36,12 @@ public class AstRelations {
 		TreeContext con = null;
 
         if (a instanceof Insert) {
-			con = fp.getDstTree();
             dstfafafather = fafafatherNode;
             srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
             if (srcfafafather == null) {
                 System.err.println("err null mapping");
             }
         } else {
-			con = fp.getSrcTree();
             srcfafafather = fafafatherNode;
             dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
             if (dstfafafather == null) {
@@ -63,27 +55,20 @@ public class AstRelations {
 
         fp.setActionTraversedMap(allActions);
 
-		Range nodeLinePosition = getnodeLinePosition(a,con);
+		Range nodeLinePosition = getnodeLinePosition(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;
     }
 
-    public static Range getnodeLinePosition(Action a, TreeContext treeContext){
-		int startLineNum = ActionPrinter.getStartLineNum(treeContext, a.getNode());
-		int endLineNum = ActionPrinter.getEndLineNum(treeContext, a.getNode());
-		Range linePosition = new Range(new Position(startLineNum,1),new Position(endLineNum,1));
+    public static Range getnodeLinePosition(Action a){
+		Tree t = (Tree)a.getNode();
+		Integer [] i = t.getRange();
+		Range linePosition = new Range(new Position(i[0],1),new Position(i[1],1));
 		return linePosition;
 	}
 
-	public static boolean isFatherIfStatement(Action a) {
-		Tree parentTree = (Tree) a.getNode().getParent();
-		String type = parentTree.getAstClass().getSimpleName();
-		if (StatementConstants.IFSTATEMENT.equals(type)) {
-			return true;
-		}
-		return false;
-	}
+
 
 	public static boolean isChildContainIfStatement(Action a) {
 		List<ITree> child = a.getNode().getChildren();
@@ -117,6 +102,15 @@ public class AstRelations {
 		return null;
 	}
 
+	public static boolean isFatherIfStatement(Action a) {
+		Tree parentTree = (Tree) a.getNode().getParent();
+		String type = parentTree.getAstClass().getSimpleName();
+		if (StatementConstants.IFSTATEMENT.equals(type)) {
+			return true;
+		}
+		return false;
+	}
+
 	public static boolean isFatherTryStatement(Action a) {
 		Tree t = (Tree) a.getNode().getParent();
 		String type = t.getAstClass().getSimpleName();
@@ -128,9 +122,17 @@ public class AstRelations {
 
 	public static boolean isFatherSwitchStatement(Action a) {
 		Tree t = (Tree) a.getNode().getParent();
-
 		String type = t.getAstClass().getSimpleName();
 		if (StatementConstants.SWITCHSTATEMENT.equals(type)) {
+			return true;
+		}
+		return false;
+	}
+	public static boolean ifFatherNodeTypeEquals(Action a, String statementConstants) {
+		Tree t = (Tree) a.getNode().getParent();
+		String type = t.getAstClass().getSimpleName();
+
+		if (type.equals(statementConstants)) {
 			return true;
 		}
 		return false;
@@ -153,15 +155,7 @@ public class AstRelations {
 		return false;
 	}
 
-	public static boolean ifFatherNodeTypeSameAs(Action a, String statementConstants) {
-		Tree t = (Tree) a.getNode().getParent();
-		String type = t.getAstClass().getSimpleName();
 
-		if (type.equals(statementConstants)) {
-			return true;
-		}
-		return false;
-	}
 
 	public static String fatherStatement(Action a) {
 		Tree t = (Tree) a.getNode().getParent();

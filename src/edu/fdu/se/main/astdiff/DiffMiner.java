@@ -1,10 +1,7 @@
 package edu.fdu.se.main.astdiff;
 
 
-import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
-import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
-import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
-import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
+import edu.fdu.se.astdiff.generatingactions.*;
 import edu.fdu.se.astdiff.miningactions.ClusterActions;
 import edu.fdu.se.astdiff.miningactions.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.MiningOperation;
@@ -35,7 +32,7 @@ public class DiffMiner {
 		currList = new ArrayList<>();
 		List<String> fileSubPathList = new ArrayList<>();
 		currList = AndroidSDKJavaFileDAO.selectAllTagSnapshotFileBySDKVersion(version);
-		Map<String,Integer> fileNameMap = new HashMap<String,Integer>();
+		Map<String,Integer> fileNameMap = new HashMap<>();
 		for(AndroidSDKJavaFile item:currList){
 			fileNameMap.put(item.getSubSubCategoryPath(),1);
 		}
@@ -66,7 +63,7 @@ public class DiffMiner {
 				= ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR)+"/android-"+String.valueOf(version);
 		List<String> filePathList = readCompareList(version,fileRootPathPrev,fileRootPathCurr);
 		int cnt = 0;
-		int candidateIndex = 8;
+		int candidateIndex = 0;
 		for(String subPath: filePathList){
 			if(cnt < candidateIndex){
 			cnt++;
@@ -81,12 +78,12 @@ public class DiffMiner {
 		PreprocessingSDKClass psc =	new PreprocessingSDKClass().compareTwoFile(fileFullPathPrev,fileFullPathCurr,outputDirName);
 		PreprocessingData pData = psc.getPreprocessingData();
 		//todo toString 变成CompilationUnit直接输入
-		GumTreeDiffParser his = new GumTreeDiffParser(pData.getPreviousCu().toString(),pData.getCurrentCu().toString());
+ 		JavaParserTreeGenerator his = new JavaParserTreeGenerator(pData.getPreviousCu().toString(),pData.getCurrentCu().toString());
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/srcTree.txt",his.getPrettyOldTreeString());
 		FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR)+"/dstTree.txt",his.getPrettyNewTreeString());
 		MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
-		GeneratingActionsData data = gen.generate();
-		ActionPrinter.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
+		GeneratingActionsData data = gen.generate();;
+		SimpleActionPrinter.printMyActions(data.getAllActions());
 		System.out.println("Step2 Begin to cluster actions:-------------------");
 		MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
 		ClusterActions.doCluster(mMiningActionData);
@@ -110,11 +107,10 @@ public class DiffMiner {
 		MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
 		GeneratingActionsData data = gen.generate();
 
-		ActionPrinter.printMyActions(data.getAllActions(),his.dstTC,his.srcTC);
+		SimpleActionPrinter.printMyActions(data.getAllActions());
 		// package 2
 		System.out.println("Step2 Begin to cluster actions:-------------------");
 		MiningActionData mMiningActionData = new MiningActionData(data,his.srcTC,his.dstTC,his.mapping);
-
 		ClusterActions.doCluster(mMiningActionData);
 		// package 3
 		new MiningOperation().printHighLevelOperationBeanList(mMiningActionData);
@@ -130,7 +126,7 @@ public class DiffMiner {
 		// package 1
 		MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);
 		GeneratingActionsData data = gen.generate();
-		ActionPrinter.printMyActions(data.getAllActions(),jtg.dstTC,jtg.srcTC);
+		SimpleActionPrinter.printMyActions(data.getAllActions());
 		// package 2
 		System.out.println("Step2 Begin to cluster actions:-------------------");
 		MiningActionData mMiningActionData = new MiningActionData(data,jtg.srcTC,jtg.dstTC,jtg.mapping);
@@ -145,9 +141,9 @@ public class DiffMiner {
 
 	public static void main(String args[]){
 		DiffMiner i = new DiffMiner();
-		i.run2();
+//		i.run2();
 //		i.runGumTree();
-//		i.runBatch();
+		i.runBatch();
 
 	}
 

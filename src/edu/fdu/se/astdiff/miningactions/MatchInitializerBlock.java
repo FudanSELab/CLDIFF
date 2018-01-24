@@ -25,7 +25,6 @@ public class MatchInitializerBlock {
             Tree child1 = (Tree) child.get(1);
             secondChildType = child1.getAstClass().getSimpleName();
         }
-//        String secondChildType = curContext.getTypeLabel(secondChild);
         ClusteredActionBean operationBean;
 
         if(StatementConstants.BLOCK.equals(firstChildType)){
@@ -46,13 +45,7 @@ public class MatchInitializerBlock {
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
-        TreeContext con = null;
-        if (a instanceof Insert) {
-            con = fp.getDstTree();
-        } else{
-            con = fp.getSrcTree();
-        }
-        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
@@ -63,13 +56,7 @@ public class MatchInitializerBlock {
         List<Action> subActions = new ArrayList<Action>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
-        TreeContext con = null;
-        if (a instanceof Insert) {
-            con = fp.getDstTree();
-        } else{
-            con = fp.getSrcTree();
-        }
-        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);

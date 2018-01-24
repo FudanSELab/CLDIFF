@@ -21,14 +21,12 @@ public class MatchClassSignature {
         ITree srcfafafather = null;
         ITree dstfafafather = null;
         if (a instanceof Insert) {
-            con = fp.getDstTree();
             dstfafafather = fafafather;
             srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
             if (srcfafafather == null) {
                 System.err.println("err null mapping");
             }
         } else {
-            con = fp.getSrcTree();
             srcfafafather = fafafather;
             dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
             if (dstfafafather == null) {
@@ -36,13 +34,13 @@ public class MatchClassSignature {
             }
         }
         List<Action> signatureChidlren = new ArrayList<Action>();
-        Set<String> src_status = MyTreeUtil.traverseClassSignatureChildren(a, srcfafafather,con, signatureChidlren);
-        Set<String> dst_status = MyTreeUtil.traverseClassSignatureChildren(a, dstfafafather,con, signatureChidlren);
+        Set<String> src_status = MyTreeUtil.traverseClassSignatureChildren(a, srcfafafather, signatureChidlren);
+        Set<String> dst_status = MyTreeUtil.traverseClassSignatureChildren(a, dstfafafather, signatureChidlren);
 
         int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 
         fp.setActionTraversedMap(signatureChidlren);
-        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,signatureChidlren,nodeLinePosition,status,operationEntity,fafafather,fafafatherType);
         return mHighLevelOperationBean;
