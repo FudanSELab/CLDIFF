@@ -65,7 +65,7 @@ public class MatchVariableDeclarationExpression {
 		}
 
 		Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
-		Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
+		Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, subActions);
 		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 
 		fp.setActionTraversedMap(subActions);
