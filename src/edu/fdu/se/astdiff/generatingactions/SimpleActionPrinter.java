@@ -49,7 +49,7 @@ public class SimpleActionPrinter {
 
 	public static void printMyActions(List<Action> actions) {
 		System.out.println("ActionSize:" + actions.size());
-		actions.forEach(action -> System.out.println(getMyOneActionString(action)));
+		actions.forEach(action -> System.out.print(getMyOneActionString(action)));
 	}
 
 	/**

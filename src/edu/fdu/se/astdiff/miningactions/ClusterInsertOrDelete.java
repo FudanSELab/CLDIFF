@@ -1,11 +1,11 @@
 package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 import java.util.List;
@@ -13,13 +13,19 @@ import java.util.List;
 /**
  * Created by huangkaifeng on 2018/1/23.
  */
-public class ClusterInsertOrDelete <T>{
+public class ClusterInsertOrDelete {
 
     private List<Action> actionList;
     private MiningActionData fp;
-    private T clazz;
-    public ClusterInsertOrDelete(MiningActionData mminingActionData) {
+    private Class clazz;
+    public ClusterInsertOrDelete(Class mClazz,MiningActionData mminingActionData) {
         this.fp = mminingActionData;
+        this.clazz = mClazz;
+        if(Insert.class.equals(clazz)){
+            this.actionList = mminingActionData.mGeneratingActionsData.getInsertActions();
+        }else if(Delete.class.equals(clazz)){
+            this.actionList = mminingActionData.mGeneratingActionsData.getDeleteActions();
+        }
     }
 
 
@@ -31,14 +37,12 @@ public class ClusterInsertOrDelete <T>{
                 break;
             }
             Action a = this.actionList.get(insertActionIndex);
-            String nextAction = SimpleActionPrinter.getMyOneActionString(a);
             insertActionIndex++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 // 标记过的action
                 continue;
             }
-            Insert ins = (Insert) a;
-            Tree insNode = (Tree)ins.getNode();
+            Tree insNode = (Tree)a.getNode();
             String type =  insNode.getAstClass().getSimpleName();
             Tree fafafather = AstRelations.findFafafatherNode(insNode);
             if(fafafather == null){
