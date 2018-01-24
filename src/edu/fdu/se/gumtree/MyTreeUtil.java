@@ -87,7 +87,9 @@ public class MyTreeUtil{
 		int position = 0;
 		boolean isContinue = true;
 		while (isContinue && ( position < children.size() )){
-			String nodeType = con.getTypeLabel(children.get(position));
+//			String nodeType = con.getTypeLabel(children.get(position));
+			Tree childNode = (Tree)children.get(position);
+			String nodeType = childNode.getAstClass().getSimpleName();
 			switch (nodeType){
 				case StatementConstants.MODIFIER:
 				case StatementConstants.SIMPLENAME:
