@@ -18,6 +18,7 @@ public class TestJava {
 
 		}
 	}
-	public String a,b;
+	static {
 
+	}
 }

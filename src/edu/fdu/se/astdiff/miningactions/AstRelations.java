@@ -11,7 +11,6 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
-import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
@@ -19,7 +18,7 @@ public class AstRelations {
 
 
     public static ClusteredActionBean matchByNode(MiningActionData fp, Action a, String nodeType,String operationEntity){
-        List<Action> subActions = new ArrayList<Action>();
+        List<Action> subActions = new ArrayList<>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
 		Range nodeLinePosition = getnodeLinePosition(a);
@@ -33,8 +32,6 @@ public class AstRelations {
         List<Action> allActions = new ArrayList<Action>();
         ITree srcfafafather = null;
         ITree dstfafafather = null;
-		TreeContext con = null;
-
         if (a instanceof Insert) {
             dstfafafather = fafafatherNode;
             srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);

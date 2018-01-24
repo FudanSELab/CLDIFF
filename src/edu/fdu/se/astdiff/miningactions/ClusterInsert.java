@@ -12,10 +12,11 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
  * Created by huangkaifeng on 2018/1/13.
+ * @Deprecated
  */
 public class ClusterInsert{
 
-    public static void findInsert(MiningActionData fp) {
+    private static void findInsert(MiningActionData fp) {
         int insertActionCount = fp.mGeneratingActionsData.getInsertActions().size();
         int insertActionIndex = 0;
         while (true) {

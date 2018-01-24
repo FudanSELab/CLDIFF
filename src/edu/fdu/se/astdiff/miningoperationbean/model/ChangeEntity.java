@@ -5,6 +5,7 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
  * Created by huangkaifeng on 2018/1/16.
+ * 父类 其他的Entity都继承于此Entity
  */
 public class ChangeEntity {
     ClusteredActionBean clusteredActionBean;

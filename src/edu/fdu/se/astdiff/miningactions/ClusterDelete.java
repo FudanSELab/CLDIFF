@@ -11,6 +11,7 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
  * Created by huangkaifeng on 2018/1/13.
+ * @Deprecated
  */
 public class ClusterDelete {
 
