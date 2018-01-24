@@ -71,7 +71,7 @@ public class JavaParserVisitor  extends ASTVisitor {
     }
 
     private void push(int type, String typeName, String label, int startPosition, int length,ASTNode node) {
-        ITree t = context.createTree(type, label, typeName, node);
+        ITree t = context.createTree(type, label, node);
         t.setPos(startPosition);
         t.setLength(length);
         if (trees.isEmpty())

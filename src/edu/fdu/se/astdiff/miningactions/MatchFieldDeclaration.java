@@ -34,7 +34,7 @@ public class MatchFieldDeclaration {
                 operationEntity += "-NEW";
             }
         }
-        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,allActions,nodeLinePosition,status,operationEntity,null,null);
         return mHighLevelOperationBean;
@@ -74,7 +74,7 @@ public class MatchFieldDeclaration {
                 operationEntity += "-NEW";
             }
         }
-        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;

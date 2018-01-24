@@ -5,10 +5,11 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
+import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 public class MatchBlock {
-    public static void matchBlock(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
+    public static void matchBlock(MiningActionData fp, Action a, String nodeType) {
         ClusteredActionBean operationBean;
 
         Tree fatherNode = (Tree)a.getNode().getParent();
@@ -29,7 +30,7 @@ public class MatchBlock {
                 fp.addHighLevelOperationBeanToList(operationBean);
                 break;
             default:
-                String nextAction = ActionPrinter.getMyOneActionString(a, 0, curContext);
+                String nextAction = SimpleActionPrinter.getMyOneActionString(a);
                 System.out.print(nextAction);
                 System.out.println("Default, Block, curNodeType: "+nodeType+", "+"fatherNodeType: " + fatherNodeType +"\n");
                 fp.setActionTraversedMap(a);

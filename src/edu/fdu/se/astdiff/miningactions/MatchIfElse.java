@@ -57,7 +57,7 @@ public class MatchIfElse {
 		}
 
 		f.setActionTraversedMap(ifSubActions);
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,ifSubActions,nodeLinePosition,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
@@ -87,7 +87,7 @@ public class MatchIfElse {
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, result);
 		f.setActionTraversedMap(result);
 
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,result,nodeLinePosition,status,operationEntity,ffFatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;
@@ -133,7 +133,7 @@ public class MatchIfElse {
 
 		fp.setActionTraversedMap(allActions);
 
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
 		return mHighLevelOperationBean;

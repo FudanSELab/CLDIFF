@@ -76,7 +76,7 @@ public class ClusterDelete {
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         break;
                     case StatementConstants.BLOCK:
-                        MatchBlock.matchBlock(fp,a, type,fp.mDstTree);
+                        MatchBlock.matchBlock(fp,a, type);
                         break;
                     case StatementConstants.BREAKSTATEMENT:
                         if(AstRelations.isFatherSwitchStatement(a)) {
@@ -184,11 +184,11 @@ public class ClusterDelete {
                     case StatementConstants.INFIXEXPRESSION:
                     case StatementConstants.METHODINVOCATION:
                     case StatementConstants.QUALIFIEDNAME:
-                        MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type,fp.mSrcTree);
+                        MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type);
                         break;
                     default:
                         String operationEntity = "DEFAULT: "+ActionConstants.getInstanceStringName(a) + " " +type;
-                        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,fp.mSrcTree);
+                        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
                         operationBean = new ClusteredActionBean(a,type,null,nodeLinePosition,-1,operationEntity,fafafather,fatherType);
                         fp.mHighLevelOperationBeanList.add(operationBean);
                         fp.setActionTraversedMap(a);

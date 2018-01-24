@@ -54,7 +54,7 @@ public class MatchForStatement {
 
         fp.setActionTraversedMap(allActions);
 
-        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;

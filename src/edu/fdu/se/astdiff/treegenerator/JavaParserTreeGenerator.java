@@ -6,6 +6,7 @@ import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
+import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -41,6 +42,20 @@ public class JavaParserTreeGenerator {
         }
     }
 
+    public JavaParserTreeGenerator(String prevContent,String currContent) {
+        try {
+            srcTC = generateFromString(prevContent);
+            src = srcTC.getRoot();
+            dstTC = generateFromString(currContent);
+            dst = dstTC.getRoot();
+            Matcher m = Matchers.getInstance().getMatcher(src, dst);
+            m.match();
+            mapping = m.getMappings();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public TreeContext generate(Reader r) throws IOException {
         ASTParser parser = ASTParser.newParser(AST.JLS8);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -53,8 +68,8 @@ public class JavaParserTreeGenerator {
         parser.setSource(readerToCharArray(r));
         JavaParserVisitor visitor = new JavaParserVisitor();
         ASTNode temp = parser.createAST(null);
-        temp.accept(visitor);
         visitor.getTreeContext().setCu((CompilationUnit)temp);
+        temp.accept(visitor);
         return visitor.getTreeContext();
     }
 
@@ -80,12 +95,15 @@ public class JavaParserTreeGenerator {
     public TreeContext generateFromFile(File file) throws IOException {
         return generateFromReader(new FileReader(file));
     }
+    public TreeContext generateFromString(String content) throws IOException {
+        return generateFromReader(new StringReader(content));
+    }
 
     public String getPrettyOldTreeString() {
-        return ActionPrinter.getPrettyTreeString(srcTC, src);
+        return SimpleActionPrinter.getPrettyTreeString(src);
     }
     public String getPrettyNewTreeString(){
-        return ActionPrinter.getPrettyTreeString(dstTC, dst);
+        return SimpleActionPrinter.getPrettyTreeString(dst);
     }
 
 }

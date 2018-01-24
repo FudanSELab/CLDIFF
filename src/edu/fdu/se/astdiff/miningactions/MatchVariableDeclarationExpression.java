@@ -42,7 +42,7 @@ public class MatchVariableDeclarationExpression {
 			}
 		}
 
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
@@ -87,7 +87,7 @@ public class MatchVariableDeclarationExpression {
 			}
 		}
 
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);

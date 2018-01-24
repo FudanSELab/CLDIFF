@@ -39,7 +39,7 @@ public class MatchTry {
 			con = fp.getSrcTree();
 		}
 
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,throwAction,nodeLinePosition,status,operationEntity,null,null);
@@ -59,7 +59,7 @@ public class MatchTry {
 			con = fp.getSrcTree();
 		}
 
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,finallyAction,nodeLinePosition,status,operationEntity,null,null);

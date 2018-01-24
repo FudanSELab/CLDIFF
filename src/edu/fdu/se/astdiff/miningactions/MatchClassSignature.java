@@ -41,7 +41,7 @@ public class MatchClassSignature {
         int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 
         fp.setActionTraversedMap(signatureChidlren);
-        Range nodeLinePosition = AstRelations.getnodeLinePosition(a,con);
+        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,signatureChidlren,nodeLinePosition,status,operationEntity,fafafather,fafafatherType);
         return mHighLevelOperationBean;
