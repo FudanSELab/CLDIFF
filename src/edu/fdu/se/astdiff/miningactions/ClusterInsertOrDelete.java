@@ -6,6 +6,7 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class ClusterInsertOrDelete {
                 // 标记过的action
                 continue;
             }
+            String curAction = ActionPrinter.getMyOneActionString(a, 0, fp.mSrcTree);
             Tree insNode = (Tree) a.getNode();
             String type = insNode.getAstClass().getSimpleName();
             Tree fafafather = AstRelations.findFafafatherNode(insNode);
@@ -179,12 +181,18 @@ public class ClusterInsertOrDelete {
                 case StatementConstants.SIMPLETYPE:
                 case StatementConstants.STRINGLITERAL:
                 case StatementConstants.NULLLITERAL:
+                case StatementConstants.PREFIXEXPRESSION:
                 case StatementConstants.CHARACTERLITERAL:
                 case StatementConstants.NUMBERLITERAL:
                 case StatementConstants.BOOLEANLITERAL:
                 case StatementConstants.INFIXEXPRESSION:
                 case StatementConstants.METHODINVOCATION:
                 case StatementConstants.QUALIFIEDNAME:
+                case StatementConstants.MODIFIER:
+                case StatementConstants.MARKERANNOTATION:
+                case StatementConstants.NORMALANNOTATION:
+                case StatementConstants.SINGLEMEMBERANNOTATION:
+                case StatementConstants.ASSIGNMENT:
                     MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp, a, type);
                     break;
                 default:

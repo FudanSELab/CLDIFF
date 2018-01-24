@@ -78,6 +78,7 @@ public class ClusterUpdate {
                     case StatementConstants.SIMPLETYPE:
                     case StatementConstants.STRINGLITERAL:
                     case StatementConstants.NULLLITERAL:
+                    case StatementConstants.PREFIXEXPRESSION:
                     case StatementConstants.CHARACTERLITERAL:
                     case StatementConstants.NUMBERLITERAL:
                     case StatementConstants.BOOLEANLITERAL:
@@ -88,6 +89,7 @@ public class ClusterUpdate {
                     case StatementConstants.MARKERANNOTATION:
                     case StatementConstants.NORMALANNOTATION:
                     case StatementConstants.SINGLEMEMBERANNOTATION:
+                    case StatementConstants.ASSIGNMENT:
                         MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp,a, type);
                         break;
                     default:

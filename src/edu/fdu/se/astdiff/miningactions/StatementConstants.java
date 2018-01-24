@@ -44,6 +44,8 @@ public class StatementConstants {
 	final public static String CHARACTERLITERAL = "CharacterLiteral";
 	final public static String NULLLITERAL = "NullLiteral";
 	final public static String QUALIFIEDNAME = "QualifiedName";
+	final public static String PREFIXEXPRESSION = "PrefixExpression";
+	final public static String ASSIGNMENT = "Assignment";
 
 	final public static String MODIFIER = "Modifier";
 
