@@ -8,10 +8,8 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
-import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchMethodSignatureChange {
 	
@@ -43,20 +41,16 @@ public class MatchMethodSignatureChange {
 				System.err.println("err null mapping");
 			}
 		}
-		List<Action> signatureChidlren = new ArrayList<Action>();
-		Set<String> src_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
-		Set<String> dst_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
+		List<Action> signatureChidlren = new ArrayList<>();
+		Set<String> src_status = MatchTry.MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, srcfafafather, signatureChidlren);
+		Set<String> dst_status = MatchTry.MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(a, dstfafafather, signatureChidlren);
 
-		int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
-
-//		this.mMiningActionData.mapMethodSignatureAction(srcfafafather, signatureChidlren);
+		int status = MatchTry.MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
 		fp.setActionTraversedMap(signatureChidlren);
-
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
-
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
+		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
+		ClusteredActionBean mBean = new ClusteredActionBean(
 				a,nodeType,signatureChidlren,nodeLinePosition,status,operationEntity,null,null);
-		return mHighLevelOperationBean;
+		return mBean;
 	}
 
 }

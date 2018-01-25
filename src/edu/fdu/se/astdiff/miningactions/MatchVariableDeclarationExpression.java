@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
 
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.gumtree.MyTreeUtil;
+import edu.fdu.se.astdiff.miningoperationbean.statementplus.VariableChangeEntity;
 
 public class MatchVariableDeclarationExpression {
 	/**
@@ -22,10 +20,10 @@ public class MatchVariableDeclarationExpression {
 	 * @return
 	 */
 	public static ClusteredActionBean matchVariableDeclaration(MiningActionData fp, Action a, String nodeType) {
-		String operationEntity = "VARIABLEDECLARATION";
+		String operationEntity = VariableChangeEntity.VARIABLEDECLARATION;
 
-		List<Action> subActions = new ArrayList<Action>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
+		List<Action> subActions = new ArrayList<>();
+		int status = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
 		fp.setActionTraversedMap(subActions);
 
 		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(a.getNode());
@@ -36,17 +34,16 @@ public class MatchVariableDeclarationExpression {
 			}
 		}
 
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
+		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}
 
-	public static ClusteredActionBean matchVariableDeclarationByFather(MiningActionData fp, Action a, String nodeType,ITree fafafatherNode, String ffFatherNodeType) {
-		String operationEntity = "FATHER-VARIABLEDECLARATION";
-
-		List<Action> subActions = new ArrayList<Action>();
+	public static void matchVariableDeclarationByFather(MiningActionData fp, Action a, String nodeType,ITree fafafatherNode, String ffFatherNodeType) {
+		String operationEntity = VariableChangeEntity.VARIABLEDECLARATION;
+		List<Action> subActions = new ArrayList<>();
 
 		ITree srcfafafather = null;
 		ITree dstfafafather = null;
@@ -64,9 +61,9 @@ public class MatchVariableDeclarationExpression {
 			}
 		}
 
-		Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
-		Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, subActions);
-		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
+		Set<String> srcT = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
+		Set<String> dstT = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, subActions);
+		int status = MatchTry.MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 
 		fp.setActionTraversedMap(subActions);
 
@@ -78,10 +75,9 @@ public class MatchVariableDeclarationExpression {
 			}
 		}
 
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
+		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
-		return mHighLevelOperationBean;
 	}
 }

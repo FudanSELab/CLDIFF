@@ -8,12 +8,14 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
  * 父类 其他的Entity都继承于此Entity
  */
 public class ChangeEntity {
-    ClusteredActionBean clusteredActionBean;
+    public ClusteredActionBean clusteredActionBean;
 
     protected Range lineRange;
 
     protected int changeType;
     protected String changeEntity;
+
+    public String outputDesc;
     /**
      * 因为存在复杂的内部类
      * String为A.B.c的形式

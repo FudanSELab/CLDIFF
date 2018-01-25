@@ -1,16 +1,9 @@
 package edu.fdu.se.astdiff.miningactions;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchExpressionStatement {
 	/**

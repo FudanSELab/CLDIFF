@@ -2,6 +2,9 @@ package edu.fdu.se.astdiff.miningactions;
 
 public class StatementConstants {
 
+	final public static String UP_DOWN = "UP_DOWN";
+	final public static String DOWN_UP = "DOWN_UP";
+
 	final public static String TYPEDECLARATION="TypeDeclaration";
 
 	final public static String IFSTATEMENT="IfStatement";

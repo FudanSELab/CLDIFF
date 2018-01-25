@@ -9,6 +9,7 @@ import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 public class MatchBlock {
+
     public static void matchBlock(MiningActionData fp, Action a, String nodeType) {
         Tree fatherNode = (Tree)a.getNode().getParent();
         String fatherNodeType = fatherNode.getAstClass().getSimpleName();

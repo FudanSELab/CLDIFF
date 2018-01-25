@@ -59,13 +59,13 @@ public class ClusterInsertOrDelete {
                 case StatementConstants.TYPEDECLARATION:
                     break;
                 case StatementConstants.FIELDDECLARATION:
-                    MatchFieldDeclaration.matchFieldDeclaration(fp, a, type);
+                    MatchFieldDeclaration.matchFieldDeclaration(fp, a);
                     break;
                 case StatementConstants.INITIALIZER:
                     MatchInitializerBlock.matchInitializerBlock(fp, a, type);
                     break;
                 case StatementConstants.METHODDECLARATION:
-                    MatchMethod.matchNewOrDeleteMethod(fp, a, type);
+                    MatchMethod.matchNewOrDeleteMethod(fp, a);
                     break;
                 default:
                     isBody = false;
@@ -101,7 +101,7 @@ public class ClusterInsertOrDelete {
                     MatchBlock.matchBlock(fp, a, type);
                     break;
                 case StatementConstants.BREAKSTATEMENT:
-                    if (AstRelations.isFatherSwitchStatement(a)) {
+                    if (AstRelations.isFatherXXXStatement(a,StatementConstants.SWITCHSTATEMENT)) {
                         //增加switch语句
                         MatchSwitch.matchSwitchCaseByFather(fp, a, type, fafafather, fatherType);
                     } else {
@@ -166,7 +166,7 @@ public class ClusterInsertOrDelete {
                     break;
                 case StatementConstants.CONSTRUCTORINVOCATION:
                     //构造方法this
-                    MatchMethod.matchConstructorInvocation(fp, a, type);
+                    MatchMethod.matchConstructorInvocation(fp, a);
                     break;
                 case StatementConstants.SUPERCONSTRUCTORINVOCATION:
                     //构造方法super
@@ -188,8 +188,8 @@ public class ClusterInsertOrDelete {
                     break;
                 default:
                     String operationEntity = "DEFAULT: " + ActionConstants.getInstanceStringName(a) + " " + type;
-                    Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
-                    new ClusteredActionBean(a, type, null, nodeLinePosition, -1, operationEntity, fafafather, fatherType);
+                    Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
+//                    new ClusteredActionBean(a, type, null, nodeLinePosition, -1, operationEntity, fafafather, fatherType);
                     fp.setActionTraversedMap(a);
                     break;
             }

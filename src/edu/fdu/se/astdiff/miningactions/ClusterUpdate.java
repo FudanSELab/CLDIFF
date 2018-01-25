@@ -89,9 +89,9 @@ public class ClusterUpdate {
                         break;
                     default:
                         String operationEntity = "DEFAULT: "+ ActionConstants.getInstanceStringName(a) + " " +type;
-                        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
-                        operationBean = new ClusteredActionBean(a,type,null,nodeLinePosition,-1,operationEntity,fafafather,fatherType);
-                        fp.setActionTraversedMap(a);
+                        Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
+//                        operationBean = new ClusteredActionBean(a,type,null,nodeLinePosition,-1,operationEntity,fafafather,fatherType);
+//                        fp.setActionTraversedMap(a);
                         break;
 
                 }

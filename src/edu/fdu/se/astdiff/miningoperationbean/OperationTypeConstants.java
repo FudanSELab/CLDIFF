@@ -68,11 +68,39 @@ public class OperationTypeConstants {
         constantName.put(105,"DELETE_METHOD_DECLARATION");
         constantName.put(106,"UPDATE_METHOD_DECLARATION");
         constantName.put(107,"MOVE_METHOD_DECLARATION");
-        constantName.put(108,"INSERT");
         constantName.put(109,"DELETE");
         constantName.put(-1,"UNKNOWN");
 
+        constantName.put(10000,"INSERT");
+        constantName.put(10001,"DELETE");
+        constantName.put(10002,"MOVE");
+        constantName.put(10003,"UPDATE");
+
     }
+
+
+    final public static int INSERT = 0x10001;
+    final public static int DELETE = 0x10001;
+    final public static int MOVE = 0x10002;
+    final public static int UPDATE = 0x10003;
+    final public static int MULTIPLE_EDIT = 0x10004;
+
+
+    final public static int ENTITY_CLASS = 0x11004;
+    final public static int ENTITY_INTERFACE = 0x11005;
+    final public static int ENTITY_ANNOTATION = 0x11006;
+    final public static int ENTITY_METHOD = 0x11007;
+    final public static int ENTITY_FIELD = 0x11008;
+    final public static int ENTITY_CONSTRUCTOR = 0x11009;
+    final public static int ENTITY_STATEMENT = 0x11010;
+
+
+    final public static int SUB_ENTITY_WHOLE = 0x11005;
+    final public static int SUB_ENTITY_CONDITION = 0x11006;
+    final public static int SUB_ENTITY_SIGNATURE = 0x11007;
+    final public static int SUB_ENTITY_
+
+
 
     public static String getKeyNameByValue(int v){
         return constantName.get(v);

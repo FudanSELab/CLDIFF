@@ -14,8 +14,7 @@ public class ClusterActions {
         new ClusterInsertOrDelete(Insert.class,fpd).doCluster();
         new ClusterInsertOrDelete(Delete.class,fpd).doCluster();
         new ClusterInsertOrDelete(Move.class,fpd).doCluster();
-//        ClusterMove.findMove(fpd);
-        ClusterUpdate.findUpdate(fpd);
+//        ClusterUpdate.findUpdate(fpd);
 
     }
     //		ITree tree = a.getNode();

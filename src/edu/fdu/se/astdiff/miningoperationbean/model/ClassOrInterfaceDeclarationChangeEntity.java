@@ -17,7 +17,6 @@ public class ClassOrInterfaceDeclarationChangeEntity extends ChangeEntity{
      */
     public ClassOrInterfaceDeclarationChangeEntity(ClusteredActionBean bean){
         super(bean);
-        Range a;
     }
 
     /**
@@ -29,6 +28,13 @@ public class ClassOrInterfaceDeclarationChangeEntity extends ChangeEntity{
         this.changeEntity = "ClassOrInterfaceDeclaration";
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-
+        
     }
+
+    @Override
+    public String toString(){
+        return this.outputDesc;
+    }
+
+
 }

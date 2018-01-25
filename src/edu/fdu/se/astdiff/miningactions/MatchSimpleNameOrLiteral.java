@@ -31,22 +31,22 @@ public class MatchSimpleNameOrLiteral {
 		switch (ffFatherNodeType) {
 		case StatementConstants.IFSTATEMENT:
 //			System.out.println("If predicate");
-			operationBean = MatchIfElse.matchIfPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			MatchIfElse.matchIfPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			break;
 		case StatementConstants.FORSTATEMENT:
 //			System.out.println("For predicate");
-			operationBean = MatchForStatement.matchForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			MatchForStatement.matchForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			break;
 		case StatementConstants.ENHANCEDFORSTATEMENT:
 //			System.out.println("Enhanced For predicate");
-			operationBean = MatchForStatement.matchEnhancedForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			MatchForStatement.matchEnhancedForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			break;
 		case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
-			operationBean = MatchVariableDeclarationExpression.matchVariableDeclarationByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			MatchVariableDeclarationExpression.matchVariableDeclarationByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			break;
 		case StatementConstants.EXPRESSIONSTATEMENT:
 //			System.out.println("variable/expression");
-			operationBean = MatchExpressionStatement.matchExpressionByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			MatchExpressionStatement.matchExpressionByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
 			break;
 		case StatementConstants.JAVADOC:
 			operationBean = MatchJavaDoc.matchJavaDocByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);

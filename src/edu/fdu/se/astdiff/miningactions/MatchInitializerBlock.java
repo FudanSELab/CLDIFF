@@ -1,14 +1,11 @@
 package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
-import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.gumtree.MyTreeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +38,9 @@ public class MatchInitializerBlock {
     public static ClusteredActionBean matchStaticBlock(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "INITIALIZER-STATICBLOCK";
         List<Action> subActions = new ArrayList<Action>();
-        int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
+        int status = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
-        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
+        Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
@@ -51,10 +48,10 @@ public class MatchInitializerBlock {
     }
     public static ClusteredActionBean matchStatementBlock(MiningActionData fp, Action a, String nodeType){
         String operationEntity = "INITIALIZER-ONLYBLOCK";
-        List<Action> subActions = new ArrayList<Action>();
-        int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
+        List<Action> subActions = new ArrayList<>();
+        int status = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
-        Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
+        Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);

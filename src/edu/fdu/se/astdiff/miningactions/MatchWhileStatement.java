@@ -2,10 +2,6 @@ package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.gumtree.MyTreeUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MatchWhileStatement {
     public static ClusteredActionBean matchWhileStatement(MiningActionData fp, Action a, String nodeType){

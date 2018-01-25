@@ -1,17 +1,21 @@
 package edu.fdu.se.astdiff.miningactions;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
+import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.ITree;
 
-import com.github.gumtreediff.tree.TreeContext;
+import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.gumtree.MyTreeUtil;
+import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 
 public class MatchTry {
 	
@@ -32,7 +36,7 @@ public class MatchTry {
 		List<Action> throwAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, throwAction);
 		fp.setActionTraversedMap(throwAction);
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
+		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,throwAction,nodeLinePosition,status,operationEntity,null,null);
@@ -41,15 +45,16 @@ public class MatchTry {
 
 	public static ClusteredActionBean matchFinally(MiningActionData fp, Action a, String nodeType, ITree ffFatherNode, String fatherNodeType) {
 		String operationEntity = "FINALLY";
-		List<Action> finallyAction = new ArrayList<Action>();
+		List<Action> finallyAction = new ArrayList<>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, finallyAction);
 		fp.setActionTraversedMap(finallyAction);
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
+		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,finallyAction,nodeLinePosition,status,operationEntity,null,null);
 		return mHighLevelOperationBean;
 	}
+
 
 
 }

@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import edu.fdu.se.astdiff.miningactions.ChangePacket;
 
 /**
  * 记录find时候找到的节点，以及对应的fafafather 节点，以及该节点下，所有的action
@@ -14,91 +16,84 @@ import com.github.javaparser.ast.body.BodyDeclaration;
  */
 public class ClusteredActionBean {
 
+	/**
+	 * 1 up-down   2 down-up
+	 */
+	public int traverseType;
+
 	public Action curAction;
 	public List<Action> actions;
 
+	/**
+	 * operation type / entity / sub entity
+	 */
+	public ChangePacket changePacket;
 
-	public ITree curNode;
-	public String curNodeType;
-	//insert delete change
-	public int operationType;
-	// if 
-	public String operationEntity;
 
-	public ITree fafafatherNode;
-	public String fatherNodeType;
+	public static final int TRAVERSE_UP_DOWN = 1;
+	public static final int TRAVERSE_DOWN_UP = 2;
 
-	Range nodeLinePosition;
+	public Range nodeLinePosition;
 
-	public ClusteredActionBean(Action curAction, String curNodeType, List<Action> actions, Range nodeLinePosition, int operationType, String operationEntity, ITree fafafatherNode, String fatherNodeType){
+
+	public Tree fafatherNode;
+
+
+	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions,ChangePacket changePacket,Range nodeLine){
+		this.traverseType = traverseType;
 		this.curAction = curAction;
-		this.curNode = curAction.getNode();
-		this.curNodeType = curNodeType;
 		this.actions = actions;
-		this.operationType = operationType;
-		this.operationEntity = operationEntity;
-		this.fafafatherNode = fafafatherNode;
-		this.fatherNodeType = fatherNodeType;
-		this.nodeLinePosition = nodeLinePosition;
+		this.changePacket = changePacket;
+		this.nodeLinePosition = nodeLine;
+	}
+	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions, ChangePacket changePacket,Range nodeLine,Tree fafather){
+		this.traverseType = traverseType;
+		this.curAction = curAction;
+		this.actions = actions;
+		this.changePacket = changePacket;
+		this.nodeLinePosition = nodeLine;
+		this.fafatherNode = fafather;
 	}
 	public Range getNodeLinePosition() {
 		return nodeLinePosition;
+	}
+	public String getNodePositionAsString(){
+		return this.nodeLinePosition.toString();
 	}
 
 	public void setNodeLinePosition(Range nodeLinePosition) {
 		this.nodeLinePosition = nodeLinePosition;
 	}
-	public ITree getCurNode() {
-		return curNode;
-	}
+
 	public List<Action> getActions() {
 		return actions;
 	}
-	public int getOperationType() {
-		return operationType;
-	}
-	public String getOperationEntity() {
-		return operationEntity;
-	}
-
-	public String getCurNodeType() {
-		return curNodeType;
-	}
 
 	public ITree getFatherNode() {
-		return fafafatherNode;
+		return fafatherNode;
 	}
 
-	public String getFatherNodeType() {
-		return fatherNodeType;
-	}
 
 	public Action getCurAction() {
 		return curAction;
 	}
 
 
-	private String nameOfClass;
 
-	public void setClassName(String name){
-		this.nameOfClass = name;
-	}
-	BodyDeclaration bodyDeclaration;
-	public void bindMethod(BodyDeclaration bd){
-		this.bodyDeclaration = bd;
+
+	public int getTraverseType() {
+		return traverseType;
 	}
 
-	
 	@Override
 	public String toString(){
 		//TODO
-		int type = getOperationType();
-		String operationTypeString = OperationTypeConstants.getKeyNameByValue(type);
-		String result = "[Pattern] "+ operationTypeString + " " + getOperationEntity()+", [curNodeType] "+curNodeType;
-		if(!"".equals(fatherNodeType)) {
-			result += ", [fafafatherNodeType] " + fatherNodeType;
-		}
-		return result;
+//		String operationTypeString = OperationTypeConstants.getKeyNameByValue(type);
+//		String result = "[Pattern] "+ operationTypeString + " " + getOperationEntity()+", [curNodeType] ";
+//		if(!"".equals(fatherNodeType)) {
+//			result += ", [fafafatherNodeType] " + fatherNodeType;
+//		}
+		return null;
 	}
 	
 	

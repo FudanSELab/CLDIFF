@@ -7,6 +7,8 @@ import edu.fdu.se.astdiff.miningoperationbean.model.StatementPlusChangeEntity;
  * Created by huangkaifeng on 2018/1/23.
  */
 public class VariableChangeEntity extends StatementPlusChangeEntity {
+
+    final static public String VARIABLEDECLARATION = "VariableDeclartion";
     public VariableChangeEntity(ClusteredActionBean bean) {
         super(bean);
     }

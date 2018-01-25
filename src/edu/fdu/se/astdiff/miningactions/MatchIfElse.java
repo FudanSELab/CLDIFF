@@ -8,12 +8,9 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
-import com.github.gumtreediff.tree.Tree;
-import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.IfChangeEntity;
-import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchIfElse {
 	/**
@@ -27,25 +24,25 @@ public class MatchIfElse {
 	public static void matchIf(MiningActionData f, Action a, String nodeType) {
 		String operationEntity = "";
 		if (AstRelations.isFatherXXXStatement(a,StatementConstants.IFSTATEMENT)) {
-			operationEntity = "ELSE_IF";
+			operationEntity = IfChangeEntity.ELSE_IF;
 		} else {
-			operationEntity = "IF";
+			operationEntity = IfChangeEntity.IF;
 		}
 		List<ITree> children = a.getNode().getChildren();
 		List<Action> ifSubActions = new ArrayList<>();
 		int status;
 		if(children.size()==2){
-			status  = MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
+			status  = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
 		}else{
 			//size =3
-			status = MyTreeUtil.traverseNodeGetAllEditActions(a, 0, 1, ifSubActions);
+			status = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(a, 0, 1, ifSubActions);
 		}
-
 		f.setActionTraversedMap(ifSubActions);
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
+		Range nodeLinePosition =  AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,ifSubActions,nodeLinePosition,status,operationEntity,null,null);
 		IfChangeEntity ifChangeEntity = new IfChangeEntity(mHighLevelOperationBean);
+		System.out.println(ifChangeEntity.toString());
 		f.addOneChangeEntity(ifChangeEntity);
 	}
 	
@@ -54,20 +51,16 @@ public class MatchIfElse {
 	 * level III precondition father 是 if statement
 	 * 
 	 */
-	public static ClusteredActionBean matchElse(MiningActionData f, Action a, String nodeType, ITree ffFatherNode, String ffFatherNodeType) {
-		String operationEntity = "ELSE";
-		Tree t = (Tree) a.getNode();
-		String labelType = t.getAstClass().getSimpleName();
-		if(!StatementConstants.BLOCK.equals(labelType)){
-			String label = "(no {}) ";
-		}
+	public static void matchElse(MiningActionData f, Action a, String nodeType, ITree ffFatherNode, String ffFatherNodeType) {
+		String operationEntity = IfChangeEntity.ELSE;
 		List<Action> result = new ArrayList<>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, result);
+		int status = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(a, result);
 		f.setActionTraversedMap(result);
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
+		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,result,nodeLinePosition,status,operationEntity,ffFatherNode,ffFatherNodeType);
-		return mHighLevelOperationBean;
+		IfChangeEntity elseChangeEntity = new IfChangeEntity(mHighLevelOperationBean);
+		f.addOneChangeEntity(elseChangeEntity);
 	}
 	
 	
@@ -75,37 +68,40 @@ public class MatchIfElse {
 	 * level IV 因为往上找如果是if body那么匹配不是if statement 所以这部分应该就是predicate
 	 * 
 	 */
-	public static ClusteredActionBean matchIfPredicate(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
+	public static void matchIfPredicate(MiningActionData fp, Action a, String nodeType, ITree fafatherNode, String fFatherNodeType) {
 		// fafafatherNode是if 那么 第一个孩子是if里的内容
-		String operationEntity  = "IFPREDICATE";
+		String operationEntity = "";
+		if (AstRelations.isFatherXXXStatement(a,StatementConstants.IFSTATEMENT)) {
+			operationEntity = IfChangeEntity.ELSE_IF;
+		} else {
+			operationEntity = IfChangeEntity.IF;
+		}
 
-		List<Action> allActions = new ArrayList<Action>();
-
-		ITree srcfafafather = null;
-		ITree dstfafafather = null;
+		ITree srcfafather = null;
+		ITree dstfafather = null;
 		if (a instanceof Insert) {
-			dstfafafather = fafafatherNode;
-			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
-			if (srcfafafather == null) {
+			dstfafather = fafatherNode;
+			srcfafather = fp.getMappedSrcOfDstNode(dstfafather);
+			if (srcfafather == null) {
 				System.err.println("err null mapping");
 			}
 		} else {
-			srcfafafather = fafafatherNode;
-			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
-			if (dstfafafather == null) {
+			srcfafather = fafatherNode;
+			dstfafather = fp.getMappedDstOfSrcNode(srcfafather);
+			if (dstfafather == null) {
 				System.err.println("err null mapping");
 			}
 		}
-
-		Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather.getChild(0), allActions);
-		Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather.getChild(0), allActions);
-		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
-
+		List<Action> allActions = new ArrayList<>();
+		Set<String> srcT = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(srcfafather.getChild(0), allActions);
+		Set<String> dstT = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(dstfafather.getChild(0), allActions);
+		int status = MatchTry.MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 		fp.setActionTraversedMap(allActions);
-		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
+		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
-		return mHighLevelOperationBean;
+				a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafatherNode,fFatherNodeType);
+		IfChangeEntity elseChangeEntity = new IfChangeEntity(mHighLevelOperationBean);
+		fp.addOneChangeEntity(elseChangeEntity);
 	}
 
 }
