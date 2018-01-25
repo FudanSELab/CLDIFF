@@ -15,19 +15,6 @@ public class ActionConstants {
 	
 	final public static String NULLACTION = "NULLACTION";
 	
-	public static String getInstanceStringName(Action a){
-		if(a instanceof Insert){
-			return ActionConstants.INSERT;
-		}else if( a instanceof Update){
-			return ActionConstants.UPDATE;
-		}else if( a instanceof Delete){
-			return ActionConstants.DELETE;
-		}else if( a instanceof Move){
-			return ActionConstants.MOVE;
-			
-		}else{
-			return null;
-		}
-	}
+
 
 }

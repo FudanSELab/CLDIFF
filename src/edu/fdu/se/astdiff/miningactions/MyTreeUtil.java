@@ -73,57 +73,32 @@ public class MyTreeUtil {
                 List<Action> nodeActions = myTree.getDoAction();
                 for (Action aTmp : nodeActions) {
                     allEditAction.add(aTmp);
-                    actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
+                    actionTypes.add(aTmp.getClass().getSimpleName());
                 }
             }
         }
         return actionTypes;
     }
 
-    public static Set<String> traverseClassSignatureChildren(Action a, ITree node, List<Action> allEditAction) {
+    public static Set<String> traverseClassSignatureChildren(ITree node, List<Action> allEditAction) {
         List<ITree> children = node.getChildren();
-        //		ITree fafafatherNode = AstRelations.findFafafatherNode(a.getNode(), con);
-        //		String ffFatherNodeType = con.getTypeLabel(fafafatherNode);
-
-        //		int len = children.size();
-        int position = 0;
-        boolean isContinue = true;
-        while (isContinue && (position < children.size())) {
-            //			String nodeType = con.getTypeLabel(children.get(position));
-            Tree childNode = (Tree) children.get(position);
-            String nodeType = childNode.getAstClass().getSimpleName();
-            switch (nodeType) {
-                case StatementConstants.MODIFIER:
-                case StatementConstants.SIMPLENAME:
-                case StatementConstants.MARKERANNOTATION:
-                case StatementConstants.NORMALANNOTATION:
-                case StatementConstants.SINGLEMEMBERANNOTATION:
-                    position++;
-                    break;
-                default:
-                    isContinue = false;
-                    break;
-            }
-        }
-
-        Set<String> actionTypes = new HashSet<String>();
-
-        for (int i = 0; i < position; i++) {
-            ITree child = children.get(i);
-            for (ITree item : child.postOrder()) {
-                Tree myTree = (Tree) item;
-                if (myTree.getDoAction() == null) {
-                    actionTypes.add(ActionConstants.NULLACTION);
-                    continue;
+        Set<String> actionTypes = new HashSet<>();
+        for(ITree t : children){
+            Tree tree = (Tree) t;
+            if(!tree.getAstClass().getSimpleName().endsWith("Declaration")){
+                for (ITree item : tree.postOrder()) {
+                    Tree myTree = (Tree) item;
+                    if (myTree.getDoAction() == null) {
+                        actionTypes.add(ActionConstants.NULLACTION);
+                        continue;
+                    }
+                    List<Action> nodeActions = myTree.getDoAction();
+                    for (Action aTmp : nodeActions) {
+                        allEditAction.add(aTmp);
+                        actionTypes.add(aTmp.getClass().getSimpleName());
+                    }
                 }
-                List<Action> nodeActions = myTree.getDoAction();
-                for (Action aTmp : nodeActions) {
-                    //        			if(aTmp.getClass().equals(a.getClass())){
-                    //        				count++;
-                    //        			}
-                    allEditAction.add(aTmp);
-                    actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
-                }
+
             }
         }
         return actionTypes;
@@ -172,7 +147,7 @@ public class MyTreeUtil {
             List<Action> nodeActions = myTree.getDoAction();
             for (Action aTmp : nodeActions) {
                 result.add(aTmp);
-                actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
+                actionTypes.add(aTmp.getClass().getSimpleName());
             }
         }
         return actionTypes;
@@ -236,7 +211,7 @@ public class MyTreeUtil {
             List<Action> nodeActions = myTree.getDoAction();
             for (Action aTmp : nodeActions) {
                 result.add(aTmp);
-                actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
+                actionTypes.add(aTmp.getClass().getSimpleName());
             }
         }
         return getTypeCode(action, isNullExist, actionTypes);
@@ -267,7 +242,7 @@ public class MyTreeUtil {
                 List<Action> nodeActions = myTree.getDoAction();
                 for (Action aTmp : nodeActions) {
                     result.add(aTmp);
-                    actionTypes.add(ActionConstants.getInstanceStringName(aTmp));
+                    actionTypes.add(aTmp.getClass().getSimpleName());
                 }
             }
         }

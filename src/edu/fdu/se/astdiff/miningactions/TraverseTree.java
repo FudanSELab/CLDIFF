@@ -19,7 +19,7 @@ public class TraverseTree {
 
     public static ClusteredActionBean traverseNodeUpDown(MiningActionData fp, Action a,ChangePacket changePacket){
         List<Action> subActions = new ArrayList<>();
-        int status = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
+        int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
         fp.setActionTraversedMap(subActions);
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,range,status,operationEntity,operationSubEntity);
@@ -43,9 +43,9 @@ public class TraverseTree {
                 System.err.println("err null mapping");
             }
         }
-        Set<String> src_status = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
-        Set<String> dst_status = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
-        int status = MatchTry.MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
+        Set<String> src_status = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
+        Set<String> dst_status = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
+        int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
         fp.setActionTraversedMap(allActions);
         Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
@@ -70,9 +70,9 @@ public class TraverseTree {
                 System.err.println("err null mapping");
             }
         }
-        Set<String> src_status = MatchTry.MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(srcfafafather, allActions);
-        Set<String> dst_status = MatchTry.MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(dstfafafather, allActions);
-        int status = MatchTry.MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
+        Set<String> src_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(srcfafafather, allActions);
+        Set<String> dst_status = MyTreeUtil.traverseMethodSignatureChildrenWithoutBlock(dstfafafather, allActions);
+        int status = MyTreeUtil.isSrcOrDstAdded(src_status,dst_status);
         fp.setActionTraversedMap(allActions);
         Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
@@ -126,6 +126,20 @@ public class TraverseTree {
             return null;
         else
             return curNode;
+    }
+
+    public static ITree[] getMappedFafatherNode(MiningActionData fp, Action a,ITree fafather){
+        ITree srcFafather = null;
+        ITree dstFafather = null;
+        if (a instanceof Insert) {
+            dstFafather = fafather;
+            srcFafather = fp.getMappedSrcOfDstNode(dstFafather);
+        } else {
+            srcFafather = fafather;
+            dstFafather = fp.getMappedDstOfSrcNode(srcFafather);
+        }
+        ITree [] result = {srcFafather,dstFafather};
+        return result;
     }
 
 

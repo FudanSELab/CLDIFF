@@ -98,7 +98,6 @@ public class OperationTypeConstants {
     final public static int SUB_ENTITY_WHOLE = 0x11005;
     final public static int SUB_ENTITY_CONDITION = 0x11006;
     final public static int SUB_ENTITY_SIGNATURE = 0x11007;
-    final public static int SUB_ENTITY_
 
 
 

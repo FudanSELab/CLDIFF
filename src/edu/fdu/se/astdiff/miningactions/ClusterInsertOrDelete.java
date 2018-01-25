@@ -1,19 +1,16 @@
 package edu.fdu.se.astdiff.miningactions;
 
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/1/23.
- *
  */
 public class ClusterInsertOrDelete {
 
@@ -28,8 +25,10 @@ public class ClusterInsertOrDelete {
             this.actionList = mminingActionData.mGeneratingActionsData.getInsertActions();
         } else if (Delete.class.equals(clazz)) {
             this.actionList = mminingActionData.mGeneratingActionsData.getDeleteActions();
-        } else if (Move.class.equals(clazz)){
+        } else if (Move.class.equals(clazz)) {
             this.actionList = mminingActionData.mGeneratingActionsData.getMoveActions();
+        } else {
+            this.actionList = mminingActionData.mGeneratingActionsData.getUpdateActions();
         }
     }
 
@@ -48,7 +47,7 @@ public class ClusterInsertOrDelete {
             String type = insNode.getAstClass().getSimpleName();
             Tree fafafather = AstRelations.findFafafatherNode(insNode);
             if (fafafather == null) {
-                System.out.println("Father Null Condition: " + ActionConstants.getInstanceStringName(a) + " " + type);
+                System.err.println("Father Null Condition: " + a.getClass().getSimpleName() + " " + type);
                 fp.setActionTraversedMap(a);
                 continue;
             }
@@ -92,20 +91,20 @@ public class ClusterInsertOrDelete {
             if (isSignature)
                 continue;
 
-            // body 内部
+            // BodyDeclaration body 内部
             switch (type) {
                 case StatementConstants.IFSTATEMENT:
-                    MatchIfElse.matchIf(fp, a, type);
+                    MatchIfElse.matchIf(fp, a ,type);
                     break;
                 case StatementConstants.BLOCK:
-                    MatchBlock.matchBlock(fp, a, type);
+                    MatchBlock.matchBlock(fp, a ,type);
                     break;
                 case StatementConstants.BREAKSTATEMENT:
-                    if (AstRelations.isFatherXXXStatement(a,StatementConstants.SWITCHSTATEMENT)) {
+                    if (AstRelations.isFatherXXXStatement(a, StatementConstants.SWITCHSTATEMENT)) {
                         //增加switch语句
-                        MatchSwitch.matchSwitchCaseByFather(fp, a, type, fafafather, fatherType);
+                        MatchSwitch.matchSwitchCaseByFather(fp, a, fafafather);
                     } else {
-                        System.out.println("Other Condition" + ActionConstants.getInstanceStringName(a) + " " + type);
+                        System.out.println("Other Condition" + a.getClass().getSimpleName() + " " + type);
                         fp.setActionTraversedMap(a);
                     }
                     break;
@@ -138,16 +137,16 @@ public class ClusterInsertOrDelete {
                     MatchVariableDeclarationExpression.matchVariableDeclaration(fp, a, type);
                     break;
                 case StatementConstants.EXPRESSIONSTATEMENT:
-                    if (AstRelations.isFatherXXXStatement(a,StatementConstants.IFSTATEMENT) && a.getNode().getParent().getChildPosition(a.getNode()) == 2) {
+                    if (AstRelations.isFatherXXXStatement(a, StatementConstants.IFSTATEMENT) && a.getNode().getParent().getChildPosition(a.getNode()) == 2) {
                         // Pattenr 1.2 Match else
                         MatchIfElse.matchElse(fp, a, type, fafafather, fatherType);
                     } else {
                         MatchExpressionStatement.matchExpression(fp, a, type);
                     }
                     break;
-                case StatementConstants.CONDITIONALEXPRESSION:
-                    MatchConditionalExpression.matchConditionalExpression(fp, a, type);
-                    break;
+//                case StatementConstants.CONDITIONALEXPRESSION:
+//                    MatchConditionalExpression.matchConditionalExpression(fp, a, type);
+//                    break;
                 case StatementConstants.SYNCHRONIZEDSTATEMENT:
                     //同步语句块增加
                     MatchSynchronized.matchSynchronized(fp, a, type);
@@ -184,15 +183,59 @@ public class ClusterInsertOrDelete {
                 case StatementConstants.INFIXEXPRESSION:
                 case StatementConstants.METHODINVOCATION:
                 case StatementConstants.QUALIFIEDNAME:
-                    MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp, a, type);
+                    MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp, a,fafafather);
                     break;
                 default:
-                    String operationEntity = "DEFAULT: " + ActionConstants.getInstanceStringName(a) + " " + type;
-                    Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
+//                    String operationEntity = "DEFAULT: " + a.getClass().getSimpleName() + " " + type;
+//                    Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 //                    new ClusteredActionBean(a, type, null, nodeLinePosition, -1, operationEntity, fafafather, fatherType);
-                    fp.setActionTraversedMap(a);
+//                    fp.setActionTraversedMap(a);
                     break;
             }
         }
     }
+
+
+    public void doClusterUpdate() {
+        int updateActionCount = this.actionList.size();
+        int index = 0;
+        while (index != updateActionCount) {
+            Action a = this.actionList.get(index);
+            index++;
+            if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
+                continue;
+            }
+            Tree tmp = (Tree) a.getNode();
+            String type = tmp.getAstClass().getSimpleName();
+            Tree fafafather = AstRelations.findFafafatherNode(tmp);
+            if (fafafather == null) {
+                System.out.println("Father Null Condition: " + a.getClass().getSimpleName() + " " + type);
+                fp.setActionTraversedMap(a);
+                continue;
+            }
+            switch (type) {
+                case StatementConstants.TAGELEMENT:
+                case StatementConstants.TEXTELEMENT:
+                case StatementConstants.SIMPLENAME:
+                case StatementConstants.SIMPLETYPE:
+                case StatementConstants.STRINGLITERAL:
+                case StatementConstants.NULLLITERAL:
+                case StatementConstants.CHARACTERLITERAL:
+                case StatementConstants.NUMBERLITERAL:
+                case StatementConstants.BOOLEANLITERAL:
+                case StatementConstants.INFIXEXPRESSION:
+                case StatementConstants.METHODINVOCATION:
+                case StatementConstants.QUALIFIEDNAME:
+                case StatementConstants.MODIFIER:
+                case StatementConstants.MARKERANNOTATION:
+                case StatementConstants.NORMALANNOTATION:
+                case StatementConstants.SINGLEMEMBERANNOTATION:
+                    MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp, a ,fafafather);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
 }

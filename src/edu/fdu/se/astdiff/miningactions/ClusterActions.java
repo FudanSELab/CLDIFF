@@ -3,6 +3,7 @@ package edu.fdu.se.astdiff.miningactions;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.actions.model.Update;
 
 /**
  * Created by huangkaifeng on 2018/1/13.
@@ -14,7 +15,7 @@ public class ClusterActions {
         new ClusterInsertOrDelete(Insert.class,fpd).doCluster();
         new ClusterInsertOrDelete(Delete.class,fpd).doCluster();
         new ClusterInsertOrDelete(Move.class,fpd).doCluster();
-//        ClusterUpdate.findUpdate(fpd);
+        new ClusterInsertOrDelete(Update.class,fpd).doClusterUpdate();
 
     }
     //		ITree tree = a.getNode();

@@ -30,6 +30,7 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
 import edu.fdu.se.astdiff.miningactions.MatchTry;
+import edu.fdu.se.astdiff.miningactions.MyTreeUtil;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
@@ -98,7 +99,7 @@ public class MyActionGenerator {
         newMappings.link(srcFakeRoot, dstFakeRoot);
 
 //        List<ITree> bfsDst = TreeUtils.breadthFirst(origDst);
-        List<ITree> bfsDst = MatchTry.MyTreeUtil.layeredBreadthFirst(origDst, myAgbData.getDstLayerLastNodeIndex());
+        List<ITree> bfsDst = MyTreeUtil.layeredBreadthFirst(origDst, myAgbData.getDstLayerLastNodeIndex());
         for (int i=1;i<=bfsDst.size();i++){
         	ITree dstItem = bfsDst.get(i-1);
             ITree w = null;

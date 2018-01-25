@@ -22,31 +22,29 @@ public class MatchSimpleNameOrLiteral {
 	 * @param a
 	 * @return
 	 */
-	public static void matchSimplenameOrLiteral(MiningActionData fp, Action a, String nodeType) {
+	public static void matchSimplenameOrLiteral(MiningActionData fp, Action a, Tree fafather) {
 		// if predicate
-		Tree fafafatherNode = AstRelations.findFafafatherNode(a.getNode());
 
-		String ffFatherNodeType = fafafatherNode.getAstClass().getSimpleName();
-		ClusteredActionBean operationBean;
-		switch (ffFatherNodeType) {
+		String faFatherType = fafather.getAstClass().getSimpleName();
+		switch (faFatherType) {
 		case StatementConstants.IFSTATEMENT:
 //			System.out.println("If predicate");
-			MatchIfElse.matchIfPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			MatchIfElse.matchIfPredicate(fp,a,faFatherType, fafafatherNode, ffFatherNodeType);
 			break;
 		case StatementConstants.FORSTATEMENT:
 //			System.out.println("For predicate");
-			MatchForStatement.matchForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			MatchForStatement.matchForPredicate(fp,a,faFatherType, fafafatherNode, ffFatherNodeType);
 			break;
 		case StatementConstants.ENHANCEDFORSTATEMENT:
 //			System.out.println("Enhanced For predicate");
-			MatchForStatement.matchEnhancedForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			MatchForStatement.matchEnhancedForPredicate(fp,a,faFatherType, fafafatherNode, ffFatherNodeType);
 			break;
 		case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
-			MatchVariableDeclarationExpression.matchVariableDeclarationByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			MatchVariableDeclarationExpression.matchVariableDeclarationByFather(fp,a,faFatherType, fafafatherNode, ffFatherNodeType);
 			break;
 		case StatementConstants.EXPRESSIONSTATEMENT:
 //			System.out.println("variable/expression");
-			MatchExpressionStatement.matchExpressionByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+			MatchExpressionStatement.matchExpressionByFather(fp,a,faFatherType, fafafatherNode, ffFatherNodeType);
 			break;
 		case StatementConstants.JAVADOC:
 			operationBean = MatchJavaDoc.matchJavaDocByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
@@ -71,10 +69,23 @@ public class MatchSimpleNameOrLiteral {
 			//classs signiture
 			operationBean = MatchClassSignature.matchClassSignature(fp,a,nodeType,fafafatherNode,ffFatherNodeType);
 			break;
+		case StatementConstants.TYPEDECLARATION:
+			MatchClassSignature.matchClassSignature(fp, a, fafafather);
+			break;
+		case StatementConstants.FIELDDECLARATION:
+			MatchFieldDeclaration.matchFieldDeclarationByFather(fp, a, type, fafafather, fatherType);
+			break;
+		case StatementConstants.INITIALIZER:
+			break;
+		case StatementConstants.METHODDECLARATION:
+			if (!StatementConstants.BLOCK.equals(type)) {
+				MatchMethodSignatureChange.matchMethodSignatureChange(fp, a, type, fafafather, fatherType);
+			}
+			break;
 		default:
 			String nextAction = SimpleActionPrinter.getMyOneActionString(a);
-			System.out.print(nextAction);
-			System.out.println("Default, SimplenameOrLiteral: " + ffFatherNodeType +"\n");
+			System.err.print(nextAction);
+			System.err.println("Default, SimplenameOrLiteral: " + faFatherType +"\n");
 			fp.setActionTraversedMap(a);
 			break;
 		}

@@ -15,7 +15,7 @@ public class MatchBlock {
         String fatherNodeType = fatherNode.getAstClass().getSimpleName();
         switch (fatherNodeType) {
             case StatementConstants.SWITCHSTATEMENT:
-                MatchSwitch.matchSwitchCaseByFather(fp,a,nodeType, fatherNode, fatherNodeType);
+                MatchSwitch.matchSwitchCaseByFather(fp,a, fatherNode);
                 break;
             case StatementConstants.IFSTATEMENT:
                 //Pattern 1.2 Match else
@@ -32,34 +32,31 @@ public class MatchBlock {
                 fp.setActionTraversedMap(a);
                 break;
         }
-
-
-
     }
-    public static void matchBlockByChild(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
-        ClusteredActionBean operationBean;
-
-        Tree fatherNode = (Tree)a.getNode().getParent();
-        String fatherNodeType = fatherNode.getAstClass().getSimpleName();
-
-        switch (fatherNodeType) {
-            case StatementConstants.SWITCHSTATEMENT:
-                MatchSwitch.matchSwitchCaseByFather(fp,a,nodeType, fatherNode, fatherNodeType);
-                break;
-            case StatementConstants.IFSTATEMENT:
-                //Pattern 1.2 Match else
-                MatchIfElse.matchElse(fp, a, nodeType, fatherNode, fatherNodeType);
-                break;
-            case StatementConstants.TRYSTATEMENT:
-                ////Finally块
-                MatchTry.matchFinally(fp, a, nodeType, fatherNode, fatherNodeType);
-                break;
-            default:
-                String nextAction = ActionPrinter.getMyOneActionString(a, 0, curContext);
-                System.out.print(nextAction);
-                System.out.println("Default, Block: " + fatherNodeType +"\n");
-                fp.setActionTraversedMap(a);
-                break;
-        }
-    }
+//    public static void matchBlockByChild(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
+//        ClusteredActionBean operationBean;
+//
+//        Tree fatherNode = (Tree)a.getNode().getParent();
+//        String fatherNodeType = fatherNode.getAstClass().getSimpleName();
+//
+//        switch (fatherNodeType) {
+//            case StatementConstants.SWITCHSTATEMENT:
+//                MatchSwitch.matchSwitchCaseByFather(fp,a,nodeType, fatherNode, fatherNodeType);
+//                break;
+//            case StatementConstants.IFSTATEMENT:
+//                //Pattern 1.2 Match else
+//                MatchIfElse.matchElse(fp, a, nodeType, fatherNode, fatherNodeType);
+//                break;
+//            case StatementConstants.TRYSTATEMENT:
+//                ////Finally块
+//                MatchTry.matchFinally(fp, a, nodeType, fatherNode, fatherNodeType);
+//                break;
+//            default:
+//                String nextAction = ActionPrinter.getMyOneActionString(a, 0, curContext);
+//                System.out.print(nextAction);
+//                System.out.println("Default, Block: " + fatherNodeType +"\n");
+//                fp.setActionTraversedMap(a);
+//                break;
+//        }
+//    }
 }
