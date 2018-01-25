@@ -8,8 +8,10 @@ import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
+import com.github.javaparser.printer.lexicalpreservation.changes.Change;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 
 public class MiningActionData {
 
@@ -19,8 +21,7 @@ public class MiningActionData {
 		this.mDstTree = dst;
 		this.mSrcTree = src;
 		this.mGeneratingActionsData.generateActionMap();
-
-		this.mHighLevelOperationBeanList = new ArrayList<ClusteredActionBean>();
+		this.mChangeEntityList = new ArrayList<>();
 	}
 
 	public GeneratingActionsData mGeneratingActionsData;
@@ -32,7 +33,7 @@ public class MiningActionData {
 
 
 
-	protected List<ClusteredActionBean> mHighLevelOperationBeanList;
+	protected List<ChangeEntity> mChangeEntityList;
 
 
 	public void setActionTraversedMap(List<Action> mList) {
@@ -54,24 +55,18 @@ public class MiningActionData {
 	}
 
 
-	public void addHighLevelOperationBeanToList(ClusteredActionBean mHighLevelOperationBean) {
-		this.mHighLevelOperationBeanList.add(mHighLevelOperationBean);
-	}
 
-	public TreeContext getDstTree(){
-		return this.mDstTree;
-	}
+	/**
+	 * todo 增加之后 duplicate的check
+	 */
+	public void addOneChangeEntity(ChangeEntity changeEntity){
+		this.mChangeEntityList.add(changeEntity);
 
-	public TreeContext getSrcTree(){
-		return this.mSrcTree;
 	}
 
 
-
-
-
-	public List<ClusteredActionBean> getmHighLevelOperationBeanList() {
-		return mHighLevelOperationBeanList;
+	public List<ChangeEntity> getChangeEntityList() {
+		return this.mChangeEntityList;
 	}
 
 

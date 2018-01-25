@@ -52,9 +52,9 @@ public class AstRelations {
 
         fp.setActionTraversedMap(allActions);
 
-		Range nodeLinePosition = getnodeLinePosition(a);
+//		Range nodeLinePosition = getnodeLinePosition(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-                a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
+                a,nodeType,allActions,null,status,operationEntity,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;
     }
 
@@ -99,10 +99,10 @@ public class AstRelations {
 		return null;
 	}
 
-	public static boolean isFatherIfStatement(Action a) {
+	public static boolean isFatherXXXStatement(Action a,String stmt) {
 		Tree parentTree = (Tree) a.getNode().getParent();
 		String type = parentTree.getAstClass().getSimpleName();
-		if (StatementConstants.IFSTATEMENT.equals(type)) {
+		if (stmt.equals(type)) {
 			return true;
 		}
 		return false;

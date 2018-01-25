@@ -29,10 +29,8 @@ public class MatchInitializerBlock {
 
         if(StatementConstants.BLOCK.equals(firstChildType)){
             operationBean = matchStatementBlock(fp,a,nodeType);
-            fp.addHighLevelOperationBeanToList(operationBean);
         }else if(StatementConstants.BLOCK.equals(secondChildType) && StatementConstants.STATIC.equals(child.get(0).getLabel())){
             operationBean = matchStaticBlock(fp,a,nodeType);
-            fp.addHighLevelOperationBeanToList(operationBean);
         }else{
             System.out.println("Other Condition"+ ActionConstants.getInstanceStringName(a) + " " +nodeType);
             fp.setActionTraversedMap(a);

@@ -10,24 +10,19 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 public class MatchBlock {
     public static void matchBlock(MiningActionData fp, Action a, String nodeType) {
-        ClusteredActionBean operationBean;
-
         Tree fatherNode = (Tree)a.getNode().getParent();
         String fatherNodeType = fatherNode.getAstClass().getSimpleName();
         switch (fatherNodeType) {
             case StatementConstants.SWITCHSTATEMENT:
-                operationBean = MatchSwitch.matchSwitchCaseByFather(fp,a,nodeType, fatherNode, fatherNodeType);
-                fp.addHighLevelOperationBeanToList(operationBean);
+                MatchSwitch.matchSwitchCaseByFather(fp,a,nodeType, fatherNode, fatherNodeType);
                 break;
             case StatementConstants.IFSTATEMENT:
                 //Pattern 1.2 Match else
-                operationBean = MatchIfElse.matchElse(fp, a, nodeType, fatherNode, fatherNodeType);
-                fp.addHighLevelOperationBeanToList(operationBean);
+                MatchIfElse.matchElse(fp, a, nodeType, fatherNode, fatherNodeType);
                 break;
             case StatementConstants.TRYSTATEMENT:
                 ////Finally块
-                operationBean = MatchTry.matchFinally(fp, a, nodeType, fatherNode, fatherNodeType);
-                fp.addHighLevelOperationBeanToList(operationBean);
+                MatchTry.matchFinally(fp, a, nodeType, fatherNode, fatherNodeType);
                 break;
             default:
                 String nextAction = SimpleActionPrinter.getMyOneActionString(a);
@@ -38,9 +33,6 @@ public class MatchBlock {
         }
 
 
-//						}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionData.mDstTree)) {
-//							//同步语句块增加
-//							MatchSynchronized.matchSynchronized(this,a);
 
     }
     public static void matchBlockByChild(MiningActionData fp, Action a, String nodeType, TreeContext curContext) {
@@ -51,18 +43,15 @@ public class MatchBlock {
 
         switch (fatherNodeType) {
             case StatementConstants.SWITCHSTATEMENT:
-                operationBean = MatchSwitch.matchSwitchCaseByFather(fp,a,nodeType, fatherNode, fatherNodeType);
-                fp.addHighLevelOperationBeanToList(operationBean);
+                MatchSwitch.matchSwitchCaseByFather(fp,a,nodeType, fatherNode, fatherNodeType);
                 break;
             case StatementConstants.IFSTATEMENT:
                 //Pattern 1.2 Match else
-                operationBean = MatchIfElse.matchElse(fp, a, nodeType, fatherNode, fatherNodeType);
-                fp.addHighLevelOperationBeanToList(operationBean);
+                MatchIfElse.matchElse(fp, a, nodeType, fatherNode, fatherNodeType);
                 break;
             case StatementConstants.TRYSTATEMENT:
                 ////Finally块
-                operationBean = MatchTry.matchFinally(fp, a, nodeType, fatherNode, fatherNodeType);
-                fp.addHighLevelOperationBeanToList(operationBean);
+                MatchTry.matchFinally(fp, a, nodeType, fatherNode, fatherNodeType);
                 break;
             default:
                 String nextAction = ActionPrinter.getMyOneActionString(a, 0, curContext);
@@ -71,11 +60,5 @@ public class MatchBlock {
                 fp.setActionTraversedMap(a);
                 break;
         }
-
-
-//						}else if(AstRelations.isChildCotainSynchronizedStatement(a,this.mMiningActionData.mDstTree)) {
-//							//同步语句块增加
-//							MatchSynchronized.matchSynchronized(this,a);
-
     }
 }

@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Set;
 
 public class MatchFieldDeclaration {
-    public static ClusteredActionBean matchFieldDeclaration(MiningActionData fp, Action a, String nodeType) {
+    public static void matchFieldDeclaration(MiningActionData fp, Action a, String nodeType) {
         String operationEntity  = "FIELDDECLARATION";
 
-        List<Action> allActions = new ArrayList<Action>();
+        List<Action> allActions = new ArrayList<>();
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, allActions);
         fp.setActionTraversedMap(allActions);
 
@@ -31,12 +31,12 @@ public class MatchFieldDeclaration {
         Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
                 a,nodeType,allActions,nodeLinePosition,status,operationEntity,null,null);
-        return mHighLevelOperationBean;
+        //todo
     }
     public static ClusteredActionBean matchFieldDeclarationByFather(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
         String operationEntity  = "FATHER-FIELDDECLARATION";
 
-        List<Action> allActions = new ArrayList<Action>();
+        List<Action> allActions = new ArrayList<>();
         ITree srcfafafather = null;
         ITree dstfafafather = null;
         if (a instanceof Insert) {
@@ -57,7 +57,6 @@ public class MatchFieldDeclaration {
         Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
         int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
         fp.setActionTraversedMap(allActions);
-
         ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(fafafatherNode);
         if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
             operationEntity += "-OBJECT-INITIALIZING";

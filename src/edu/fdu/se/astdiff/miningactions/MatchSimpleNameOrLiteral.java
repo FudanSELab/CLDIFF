@@ -32,55 +32,44 @@ public class MatchSimpleNameOrLiteral {
 		case StatementConstants.IFSTATEMENT:
 //			System.out.println("If predicate");
 			operationBean = MatchIfElse.matchIfPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
-			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.FORSTATEMENT:
 //			System.out.println("For predicate");
 			operationBean = MatchForStatement.matchForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
-			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.ENHANCEDFORSTATEMENT:
 //			System.out.println("Enhanced For predicate");
 			operationBean = MatchForStatement.matchEnhancedForPredicate(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
-			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
 			operationBean = MatchVariableDeclarationExpression.matchVariableDeclarationByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
-			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.EXPRESSIONSTATEMENT:
 //			System.out.println("variable/expression");
 			operationBean = MatchExpressionStatement.matchExpressionByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
-			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.JAVADOC:
 			operationBean = MatchJavaDoc.matchJavaDocByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
-			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.SWITCHCASE:
 			//switchcase
 			operationBean = MatchSwitch.matchSwitchCaseByFather(fp, a, nodeType, fafafatherNode, ffFatherNodeType);
-			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.RETURNSTATEMENT:
 			//return statement
 			operationBean = MatchReturnStatement.matchReturnStatentByFather(fp, a, nodeType, fafafatherNode,ffFatherNodeType);
-			fp.addHighLevelOperationBeanToList(operationBean);
 			break;
 		case StatementConstants.CONSTRUCTORINVOCATION:
 			//构造方法this
 			operationBean = MatchMethod.matchConstructorInvocationByFather(fp,a,nodeType,fafafatherNode,ffFatherNodeType);
-			fp.mHighLevelOperationBeanList.add(operationBean);
 			break;
 		case StatementConstants.SUPERCONSTRUCTORINVOCATION:
 			//构造方法super
 			operationBean = MatchMethod.matchSuperConstructorInvocationByFather(fp,a,nodeType,fafafatherNode,ffFatherNodeType);
-			fp.mHighLevelOperationBeanList.add(operationBean);
 			break;
 		case StatementConstants.TYPEDECLARATION:
 			//classs signiture
 			operationBean = MatchClassSignature.matchClassSignature(fp,a,nodeType,fafafatherNode,ffFatherNodeType);
-			fp.mHighLevelOperationBeanList.add(operationBean);
 			break;
 		default:
 			String nextAction = SimpleActionPrinter.getMyOneActionString(a);

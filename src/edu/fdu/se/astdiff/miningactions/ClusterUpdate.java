@@ -47,14 +47,12 @@ public class ClusterUpdate {
             if(StatementConstants.TYPEDECLARATION.equals(fatherType)){
                 //class signature
                 operationBean = MatchClassSignature.matchClassSignature(fp,a,type,fafafather,fatherType);
-                fp.mHighLevelOperationBeanList.add(operationBean);
                 continue;
             }
 
             if(StatementConstants.FIELDDECLARATION.equals(fatherType)){
                 //insert FieldDeclaration body
                 operationBean = MatchFieldDeclaration.matchFieldDeclarationByFather(fp,a,type,fafafather,fatherType);
-                fp.mHighLevelOperationBeanList.add(operationBean);
                 continue;
             }
 
@@ -65,7 +63,6 @@ public class ClusterUpdate {
                     System.out.println("Not considered\n");
                 } else {
                     operationBean = MatchMethodSignatureChange.matchMethodSignatureChange(fp,a, type,fafafather,fatherType);
-                    fp.mHighLevelOperationBeanList.add(operationBean);
                 }
             } else {
                 // 方法体
@@ -94,7 +91,6 @@ public class ClusterUpdate {
                         String operationEntity = "DEFAULT: "+ ActionConstants.getInstanceStringName(a) + " " +type;
                         Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
                         operationBean = new ClusteredActionBean(a,type,null,nodeLinePosition,-1,operationEntity,fafafather,fatherType);
-                        fp.mHighLevelOperationBeanList.add(operationBean);
                         fp.setActionTraversedMap(a);
                         break;
 

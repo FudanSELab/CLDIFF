@@ -12,6 +12,7 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.statementplus.IfChangeEntity;
 import edu.fdu.se.gumtree.MyTreeUtil;
 
 public class MatchIfElse {
@@ -23,26 +24,16 @@ public class MatchIfElse {
 	 * @param nodeType
 	 * @return
 	 */
-	public static ClusteredActionBean matchIf(MiningActionData f, Action a, String nodeType) {
+	public static void matchIf(MiningActionData f, Action a, String nodeType) {
 		String operationEntity = "";
-		if (AstRelations.isFatherIfStatement(a)) {
+		if (AstRelations.isFatherXXXStatement(a,StatementConstants.IFSTATEMENT)) {
 			operationEntity = "ELSE_IF";
 		} else {
 			operationEntity = "IF";
 		}
 		List<ITree> children = a.getNode().getChildren();
-		boolean ifNoBlockFlag = true;
-		for(ITree tmp:children) {
-			Tree tTmp = (Tree) tmp;
-			String labelType = null;
-			labelType = tTmp.getAstClass().getSimpleName();
-			if(StatementConstants.BLOCK.equals(labelType)) {
-				ifNoBlockFlag = false;
-				break;
-			}
-		}
 		List<Action> ifSubActions = new ArrayList<>();
-		int status  = -2;
+		int status;
 		if(children.size()==2){
 			status  = MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
 		}else{
@@ -54,28 +45,25 @@ public class MatchIfElse {
 		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,ifSubActions,nodeLinePosition,status,operationEntity,null,null);
-		return mHighLevelOperationBean;
+		IfChangeEntity ifChangeEntity = new IfChangeEntity(mHighLevelOperationBean);
+		f.addOneChangeEntity(ifChangeEntity);
 	}
 	
 
 	/**
 	 * level III precondition father 是 if statement
 	 * 
-	 * @param a
-	 * @return
 	 */
 	public static ClusteredActionBean matchElse(MiningActionData f, Action a, String nodeType, ITree ffFatherNode, String ffFatherNodeType) {
 		String operationEntity = "ELSE";
-//		a.getNode().getParent().getChildPosition(a.getNode()) == 2
 		Tree t = (Tree) a.getNode();
 		String labelType = t.getAstClass().getSimpleName();
 		if(!StatementConstants.BLOCK.equals(labelType)){
 			String label = "(no {}) ";
 		}
-		List<Action> result = new ArrayList<Action>();
+		List<Action> result = new ArrayList<>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, result);
 		f.setActionTraversedMap(result);
-
 		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,result,nodeLinePosition,status,operationEntity,ffFatherNode,ffFatherNodeType);
@@ -86,9 +74,6 @@ public class MatchIfElse {
 	/**
 	 * level IV 因为往上找如果是if body那么匹配不是if statement 所以这部分应该就是predicate
 	 * 
-	 * @param a
-	 * @param fp
-	 * @return
 	 */
 	public static ClusteredActionBean matchIfPredicate(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
 		// fafafatherNode是if 那么 第一个孩子是if里的内容
@@ -105,6 +90,7 @@ public class MatchIfElse {
 				System.err.println("err null mapping");
 			}
 		} else {
+			srcfafafather = fafafatherNode;
 			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
 			if (dstfafafather == null) {
 				System.err.println("err null mapping");
@@ -116,7 +102,6 @@ public class MatchIfElse {
 		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 
 		fp.setActionTraversedMap(allActions);
-
 		Range nodeLinePosition = AstRelations.getnodeLinePosition(a);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
 				a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);

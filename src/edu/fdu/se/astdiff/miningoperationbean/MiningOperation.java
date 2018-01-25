@@ -69,16 +69,8 @@ public class MiningOperation {
 
 
     public void printHighLevelOperationBeanList(MiningActionData fp) {
-        List<ClusteredActionBean> mHighLevelOperationBeanList =  fp.getmHighLevelOperationBeanList();
-        if (mHighLevelOperationBeanList.isEmpty()) {
-            System.out.println("HighLevelOperationBeanList is null!");
-        }else {
-            for (ClusteredActionBean operationBean : mHighLevelOperationBeanList) {
-                String nextAction = SimpleActionPrinter.getMyOneActionString(operationBean.curAction);
-                System.out.print(nextAction);
-                System.out.println(operationBean.toString()+"\n");
-            }
-        }
+        List<ChangeEntity> mChangeEntityList =  fp.getChangeEntityList();
+        mChangeEntityList.forEach(a -> System.out.print(a.toString()));
     }
 
 }

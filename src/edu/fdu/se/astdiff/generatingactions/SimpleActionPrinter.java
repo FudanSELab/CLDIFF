@@ -40,7 +40,7 @@ public class SimpleActionPrinter {
 	}
 
 	public static String prettyString(Tree node) {
-		return node.getId() + ". " + node.getAstClass().getSimpleName() + ":" + node.getLabel()+node.getRangeString();
+		return node.getId() + ". " + node.getAstClass().getSimpleName() + ":" + node.getLabel();//+node.getRangeString();
 	}
 
 

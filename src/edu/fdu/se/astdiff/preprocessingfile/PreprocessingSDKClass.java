@@ -238,23 +238,14 @@ public class PreprocessingSDKClass {
                 case PreprocessingTempData.BODY_SAME_REMOVE:
                     preprocessingTempData.addToRemoveList(bd.getBodyDeclaration());
                     break;
-
             }
         }
         preprocessingTempData.removeRemovalList();
-
         FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_after_trim.java", cuPrev.toString());
         FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_after_trim.java", cuCurr.toString());
         this.preprocessingData.setCurrentCu(cuCurr);
         this.preprocessingData.setPreviousCu(cuPrev);
-//        this.preprocessingData.printAddedRemovedBodies();
-//        String tmp = cuPrev.toString();
-//        InputStream   in_nocode   =   new ByteArrayInputStream(tmp.getBytes());
-//        CompilationUnit cuPrev2 = JavaParserFactory.getCompilationUnit(in_nocode);
-//        System.out.println("a");
-
         return this;
-
     }
 
     public PreprocessingData getPreprocessingData() {
