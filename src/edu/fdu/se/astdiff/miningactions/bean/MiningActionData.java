@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.miningactions;
+package edu.fdu.se.astdiff.miningactions.bean;
 
 import java.util.ArrayList;
 import java.util.List;

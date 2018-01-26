@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.miningactions;
+package edu.fdu.se.astdiff.miningactions.util;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
@@ -16,6 +16,7 @@ import java.util.Set;
 
 /**
  * Created by huangkaifeng on 2018/1/25.
+ *
  */
 public class MyTreeUtil {
     /**
@@ -47,38 +48,7 @@ public class MyTreeUtil {
         return trees;
     }
 
-    /**
-     * 遍历从MethodDeclaration 遍历下来的节点 添加有doAction引用的节点
-     * 遍历node下的所有的孩子，把所有有action引用的添加到alleditaction ，返回值表示与action a相同修改类型的个数
-     *
-     * @param a
-     * @param node
-     * @param allEditAction
-     * @return
-     */
-    public static Set<String> traverseMethodSignatureChildrenWithoutBlock(Action a, ITree node, List<Action> allEditAction) {
-        List<ITree> children = node.getChildren();
-        int len = children.size();
-        //    	int count = 0;
-        Set<String> actionTypes = new HashSet<String>();
-        //默认最后一个节点为block
-        for (int i = 0; i < len - 1; i++) {
-            ITree child = children.get(i);
-            for (ITree item : child.postOrder()) {
-                Tree myTree = (Tree) item;
-                if (myTree.getDoAction() == null) {
-                    actionTypes.add(ActionConstants.NULLACTION);
-                    continue;
-                }
-                List<Action> nodeActions = myTree.getDoAction();
-                for (Action aTmp : nodeActions) {
-                    allEditAction.add(aTmp);
-                    actionTypes.add(aTmp.getClass().getSimpleName());
-                }
-            }
-        }
-        return actionTypes;
-    }
+
 
     public static Set<String> traverseClassSignatureChildren(ITree node, List<Action> allEditAction) {
         List<ITree> children = node.getChildren();
@@ -136,8 +106,8 @@ public class MyTreeUtil {
      * @param result
      * @return
      */
-    public static Set<String> traverseNodeGetAllEditActions(ITree node, List<Action> result) {
-        Set<String> actionTypes = new HashSet<String>();
+    public static Set<String> traverseNodeGetAllEditActions(ITree node,List<Action> result) {
+        Set<String> actionTypes = new HashSet<>();
         for (ITree tmp : node.preOrder()) {
             Tree myTree = (Tree) tmp;
             if (myTree.getDoAction() == null) {
@@ -186,68 +156,15 @@ public class MyTreeUtil {
             } else {
                 return OperationTypeConstants.UNKNOWN;
             }
-
         }
         return OperationTypeConstants.STATEMENT_CONDITION_OR_DECLARATION_MISC;
     }
 
-    /**
-     * statement节点
-     *
-     * @param action
-     * @param result
-     * @return
-     */
-    public static int traverseNodeGetAllEditActions(Action action, List<Action> result) {
-        boolean isNullExist = false;
-        ITree node = action.getNode();
-        Set<String> actionTypes = new HashSet<>();
-        for (ITree tmp : node.preOrder()) {
-            Tree myTree = (Tree) tmp;
-            if (myTree.getDoAction() == null) {
-                isNullExist = true;
-                continue;
-            }
-            List<Action> nodeActions = myTree.getDoAction();
-            for (Action aTmp : nodeActions) {
-                result.add(aTmp);
-                actionTypes.add(aTmp.getClass().getSimpleName());
-            }
-        }
-        return getTypeCode(action, isNullExist, actionTypes);
-    }
 
-    /**
-     * statment 节点
-     *
-     * @param action
-     * @param startIndex
-     * @param endIndex
-     * @param result
-     * @return
-     */
-    public static int traverseNodeGetAllEditActions(Action action, int startIndex, int endIndex, List<Action> result) {
-        boolean isNullExist = false;
-        ITree node = action.getNode();
-        Set<String> actionTypes = new HashSet<String>();
-        List<ITree> children = node.getChildren();
-        for (int i = startIndex; i <= endIndex; i++) {
-            ITree temp = children.get(i);
-            for (ITree sub : temp.preOrder()) {
-                Tree myTree = (Tree) sub;
-                if (myTree.getDoAction() == null) {
-                    isNullExist = true;
-                    continue;
-                }
-                List<Action> nodeActions = myTree.getDoAction();
-                for (Action aTmp : nodeActions) {
-                    result.add(aTmp);
-                    actionTypes.add(aTmp.getClass().getSimpleName());
-                }
-            }
-        }
-        return getTypeCode(action, isNullExist, actionTypes);
-    }
+
+
+
+
 
 
 }

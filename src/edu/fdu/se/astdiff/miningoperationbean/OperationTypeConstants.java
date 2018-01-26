@@ -85,7 +85,12 @@ public class OperationTypeConstants {
     final public static int UPDATE = 0x10003;
     final public static int MULTIPLE_EDIT = 0x10004;
 
-
+    // insert  class  whole
+    // insert class signature
+    // delete class whole
+    // delete class signature
+    // insert statement whole
+    // insert statement
     final public static int ENTITY_CLASS = 0x11004;
     final public static int ENTITY_INTERFACE = 0x11005;
     final public static int ENTITY_ANNOTATION = 0x11006;
@@ -93,6 +98,11 @@ public class OperationTypeConstants {
     final public static int ENTITY_FIELD = 0x11008;
     final public static int ENTITY_CONSTRUCTOR = 0x11009;
     final public static int ENTITY_STATEMENT = 0x11010;
+    final public static int STATEMENT_DETAIL_IF = 0x11011;
+    final public static int STATEMENT_DETAIL_FOR = 0x11012;
+    final public static int STATEMENT_DETAIL_ELSE_IF = 0x11013;
+    final public static int STATEMENT_DETIAL_ELSE = 0x11014;
+    final public static int STATEMENT_DETIAL_EXPRESSION = 0x11015;
 
 
     final public static int SUB_ENTITY_WHOLE = 0x11005;

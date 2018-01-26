@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.miningactions;
+package edu.fdu.se.astdiff.miningactions.util;
 
 public class StatementConstants {
 

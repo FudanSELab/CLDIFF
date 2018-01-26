@@ -3,7 +3,7 @@ package edu.fdu.se.main.astdiff;
 
 import edu.fdu.se.astdiff.generatingactions.*;
 import edu.fdu.se.astdiff.miningactions.ClusterActions;
-import edu.fdu.se.astdiff.miningactions.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.MiningOperation;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessingData;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessingSDKClass;

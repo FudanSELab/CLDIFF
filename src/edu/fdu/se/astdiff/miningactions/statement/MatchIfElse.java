@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.miningactions;
+package edu.fdu.se.astdiff.miningactions.statement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,10 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.util.MyTreeUtil;
+import edu.fdu.se.astdiff.miningactions.util.StatementConstants;
+import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.IfChangeEntity;
 
@@ -23,7 +27,7 @@ public class MatchIfElse {
 	 */
 	public static void matchIf(MiningActionData f, Action a, String nodeType) {
 		String operationEntity = "";
-		if (AstRelations.isFatherXXXStatement(a,StatementConstants.IFSTATEMENT)) {
+		if (AstRelations.isFatherXXXStatement(a, StatementConstants.IFSTATEMENT)) {
 			operationEntity = IfChangeEntity.ELSE_IF;
 		} else {
 			operationEntity = IfChangeEntity.IF;
@@ -32,10 +36,10 @@ public class MatchIfElse {
 		List<Action> ifSubActions = new ArrayList<>();
 		int status;
 		if(children.size()==2){
-			status  = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
+			status  = MyTreeUtil.traverseNodeGetAllEditActions(a, ifSubActions);
 		}else{
 			//size =3
-			status = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(a, 0, 1, ifSubActions);
+			status = MyTreeUtil.traverseNodeGetAllEditActions(a, 0, 1, ifSubActions);
 		}
 		f.setActionTraversedMap(ifSubActions);
 		Range nodeLinePosition =  AstRelations.getRangeOfAstNode(a);
@@ -54,7 +58,7 @@ public class MatchIfElse {
 	public static void matchElse(MiningActionData f, Action a, String nodeType, ITree ffFatherNode, String ffFatherNodeType) {
 		String operationEntity = IfChangeEntity.ELSE;
 		List<Action> result = new ArrayList<>();
-		int status = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(a, result);
+		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, result);
 		f.setActionTraversedMap(result);
 		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
@@ -93,9 +97,9 @@ public class MatchIfElse {
 			}
 		}
 		List<Action> allActions = new ArrayList<>();
-		Set<String> srcT = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(srcfafather.getChild(0), allActions);
-		Set<String> dstT = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(dstfafather.getChild(0), allActions);
-		int status = MatchTry.MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
+		Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafather.getChild(0), allActions);
+		Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafather.getChild(0), allActions);
+		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 		fp.setActionTraversedMap(allActions);
 		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(

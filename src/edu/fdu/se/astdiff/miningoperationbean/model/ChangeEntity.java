@@ -29,8 +29,6 @@ public class ChangeEntity {
 
     public ChangeEntity(ClusteredActionBean bean){
         this.clusteredActionBean = bean;
-        this.changeType = bean.operationType;
-        this.changeEntity = bean.getOperationEntity();
     }
 
 

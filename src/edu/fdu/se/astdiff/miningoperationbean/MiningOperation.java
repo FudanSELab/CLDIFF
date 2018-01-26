@@ -1,11 +1,7 @@
 package edu.fdu.se.astdiff.miningoperationbean;
 
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.tree.TreeContext;
 import com.github.javaparser.ast.body.*;
-import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
-import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
-import edu.fdu.se.astdiff.miningactions.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.model.*;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessingData;

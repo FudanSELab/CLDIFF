@@ -1,9 +1,14 @@
-package edu.fdu.se.astdiff.miningactions;
+package edu.fdu.se.astdiff.miningactions.Body;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.miningactions.util.MatchUtil;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.util.MyTreeUtil;
+import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
+import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 
@@ -54,9 +59,9 @@ public class MatchFieldDeclaration {
             }
         }
 
-        Set<String> srcT = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
-        Set<String> dstT = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
-        int status = MatchTry.MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
+        Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, allActions);
+        Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, allActions);
+        int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
         fp.setActionTraversedMap(allActions);
         ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(fafafatherNode);
         if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {

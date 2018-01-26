@@ -1,6 +1,8 @@
-package edu.fdu.se.astdiff.miningactions;
+package edu.fdu.se.astdiff.miningactions.statement;
 
 import com.github.gumtreediff.actions.model.Action;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 public class MatchWhileStatement {

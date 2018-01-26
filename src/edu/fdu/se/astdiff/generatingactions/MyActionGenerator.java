@@ -29,8 +29,7 @@ import com.github.gumtreediff.tree.AbstractTree;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
-import edu.fdu.se.astdiff.miningactions.MatchTry;
-import edu.fdu.se.astdiff.miningactions.MyTreeUtil;
+import edu.fdu.se.astdiff.miningactions.util.MyTreeUtil;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 

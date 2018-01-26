@@ -10,8 +10,6 @@ public class StatementPlusChangeEntity extends ChangeEntity{
 
     public StatementPlusChangeEntity(ClusteredActionBean bean){
         super(bean);
-        this.changeType = bean.operationType;
-        this.changeEntity = bean.operationEntity;
     }
 
 

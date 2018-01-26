@@ -1,12 +1,13 @@
-package edu.fdu.se.astdiff.miningactions;
+package edu.fdu.se.astdiff.miningactions.Body;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
-import com.github.gumtreediff.tree.TreeContext;
-import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.statement.MatchIfElse;
+import edu.fdu.se.astdiff.miningactions.statement.MatchSwitch;
+import edu.fdu.se.astdiff.miningactions.statement.MatchTry;
+import edu.fdu.se.astdiff.miningactions.util.StatementConstants;
 
 public class MatchBlock {
 

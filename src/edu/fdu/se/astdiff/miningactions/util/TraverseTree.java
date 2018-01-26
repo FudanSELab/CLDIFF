@@ -1,11 +1,16 @@
-package edu.fdu.se.astdiff.miningactions;
+package edu.fdu.se.astdiff.miningactions.util;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +18,50 @@ import java.util.Set;
 
 /**
  * Created by huangkaifeng on 2018/1/25.
+ *
  */
 public class TraverseTree {
 
+    public static ClusteredActionBean traverseMainEntrace(MiningActionData fp, Action a, ChangePacket changePacket){
 
-    public static ClusteredActionBean traverseNodeUpDown(MiningActionData fp, Action a,ChangePacket changePacket){
+    }
+
+    public static ClusteredActionBean traverseNodeUpDown(MiningActionData fp, Action a, ChangePacket changePacket){
         List<Action> subActions = new ArrayList<>();
-        int status = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
+        Set<String> changeTypes = MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
+        if(changeTypes.size()==1 && changeTypes.contains(ActionConstants.INSERT)){
+            changePacket.setOperationType(OperationTypeConstants.INSERT);
+        }else if(changeTypes.size()==1 && changeTypes.contains(ActionConstants.DELETE)){
+            changePacket.setOperationType(OperationTypeConstants.DELETE);
+        }else if(changeTypes.size()==1 && changeTypes.contains(ActionConstants.MOVE)){
+            changePacket.setOperationType(OperationTypeConstants.MOVE);
+        }
         fp.setActionTraversedMap(subActions);
         Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,range,status,operationEntity,operationSubEntity);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,range);
         return mBean;
     }
+
+    private static ClusteredActionBean traverseNodeUpDownDstTree(MiningActionData fp,Action a,ChangePacket changePacket){
+        List<Action> subActions = new ArrayList<>();
+        Set<String> changeTypes = MyTreeUtil.traverseDstNodeGetAllEditActions(a, subActions);
+        changePacket.setOperationType(OperationTypeConstants.INSERT);
+        fp.setActionTraversedMap(subActions);
+        Range range = AstRelations.getRangeOfAstNode(a);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,range);
+        return mBean;
+    }
+    private static ClusteredActionBean traverNodeUpDownSrcTree(MiningActionData fp,Action a,ChangePacket changePacket){
+        List<Action> subActions = new ArrayList<>();
+        Set<String> actionTypes = MyTreeUtil.traverseSrcNodeGetAllEditActions(a, subActions);
+        fp.setActionTraversedMap(subActions);
+        Range range = AstRelations.getRangeOfAstNode(a);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,range);
+        return mBean;
+    }
+
+
+
 
     public static ClusteredActionBean traverseNodeUpdownNodePair(MiningActionData fp, Action a, ITree fafafatherNode, String ffFatherNodeType){
         List<Action> allActions = new ArrayList<>();
@@ -49,7 +86,7 @@ public class TraverseTree {
         fp.setActionTraversedMap(allActions);
         Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-                a,nodeType,allActions,nodeLinePosition,status,operationEntity,fafafatherNode,ffFatherNodeType);
+                a,nodeType,allActions,nodeLinePosition,status,fafafatherNode,ffFatherNodeType);
         return mHighLevelOperationBean;
     }
 

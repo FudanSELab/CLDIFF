@@ -2,15 +2,17 @@ package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.Tree;
-import com.github.javaparser.Range;
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningactions.Body.*;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.statement.*;
+import edu.fdu.se.astdiff.miningactions.util.AstRelations;
+import edu.fdu.se.astdiff.miningactions.util.StatementConstants;
 
 import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/1/23.
+ *
  */
 public class ClusterInsertOrDelete {
 
@@ -58,14 +60,11 @@ public class ClusterInsertOrDelete {
                 case StatementConstants.TYPEDECLARATION:
                     break;
                 case StatementConstants.FIELDDECLARATION:
-                    MatchFieldDeclaration.matchFieldDeclaration(fp, a);
-                    break;
+                    MatchFieldDeclaration.matchFieldDeclaration(fp, a);break;
                 case StatementConstants.INITIALIZER:
-                    MatchInitializerBlock.matchInitializerBlock(fp, a, type);
-                    break;
+                    MatchInitializerBlock.matchInitializerBlock(fp, a, type);break;
                 case StatementConstants.METHODDECLARATION:
-                    MatchMethod.matchNewOrDeleteMethod(fp, a);
-                    break;
+                    MatchMethod.matchNewOrDeleteMethod(fp, a);break;
                 default:
                     isBody = false;
             }
@@ -75,16 +74,12 @@ public class ClusterInsertOrDelete {
 
             switch (fatherType) {
                 case StatementConstants.TYPEDECLARATION:
-                    MatchFieldDeclaration.matchFieldDeclarationByFather(fp, a, type, fafafather, fatherType);
-                    break;
+                    MatchFieldDeclaration.matchFieldDeclarationByFather(fp, a, type, fafafather, fatherType);break;
                 case StatementConstants.FIELDDECLARATION:
-                    MatchFieldDeclaration.matchFieldDeclarationByFather(fp, a, type, fafafather, fatherType);
-                    break;
-                case StatementConstants.INITIALIZER:
-                    break;
+                    MatchFieldDeclaration.matchFieldDeclarationByFather(fp, a, type, fafafather, fatherType);break;
+                case StatementConstants.INITIALIZER:break;
                 case StatementConstants.METHODDECLARATION:
-                    MatchMethodSignatureChange.matchMethodSignatureChange(fp, a, type, fafafather, fatherType);
-                    break;
+                    MatchMethodSignatureChange.matchMethodSignatureChange(fp, a, type, fafafather, fatherType);break;
                 default:
                     isSignature = false;
             }
@@ -141,7 +136,7 @@ public class ClusterInsertOrDelete {
                         // Pattenr 1.2 Match else
                         MatchIfElse.matchElse(fp, a, type, fafafather, fatherType);
                     } else {
-                        MatchExpressionStatement.matchExpression(fp, a, type);
+                        MatchExpressionStatement.matchExpression(fp, a);
                     }
                     break;
 //                case StatementConstants.CONDITIONALEXPRESSION:

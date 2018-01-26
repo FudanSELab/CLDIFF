@@ -4,6 +4,7 @@ import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.actions.model.Update;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 
 /**
  * Created by huangkaifeng on 2018/1/13.

@@ -1,16 +1,12 @@
-package edu.fdu.se.astdiff.miningactions;
+package edu.fdu.se.astdiff.miningactions.util;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 public class AstRelations {
 	/**

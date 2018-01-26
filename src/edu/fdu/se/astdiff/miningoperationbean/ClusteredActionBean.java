@@ -6,8 +6,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import edu.fdu.se.astdiff.miningactions.ChangePacket;
+import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 
 /**
  * 记录find时候找到的节点，以及对应的fafafather 节点，以及该节点下，所有的action

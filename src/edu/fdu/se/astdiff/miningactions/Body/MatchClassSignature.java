@@ -1,10 +1,15 @@
-package edu.fdu.se.astdiff.miningactions;
+package edu.fdu.se.astdiff.miningactions.Body;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.miningactions.util.MatchUtil;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.util.MyTreeUtil;
+import edu.fdu.se.astdiff.miningactions.util.TraverseTree;
+import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
+import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.model.ClassOrInterfaceDeclarationChangeEntity;
@@ -14,13 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MatchClassSignature {
-    /**
-     * 类的signature的变化
-     * @param fp
-     * @param a
-     * @param fafather
-     * @return
-     */
+
     public static void matchClassSignature(MiningActionData fp, Action a, ITree fafather) {
         ChangePacket changePacket = new ChangePacket();
         List<Action> signatureChidlren = new ArrayList<>();

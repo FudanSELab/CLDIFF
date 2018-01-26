@@ -1,7 +1,7 @@
-package edu.fdu.se.astdiff.miningactions;
+package edu.fdu.se.astdiff.miningactions.Body;
 
 import com.github.gumtreediff.actions.model.Action;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 
 /**
  * todo
