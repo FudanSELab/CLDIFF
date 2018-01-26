@@ -2,11 +2,18 @@ package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.Tree;
+<<<<<<< HEAD
 import edu.fdu.se.astdiff.miningactions.Body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningactions.util.StatementConstants;
+=======
+import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+>>>>>>> branch 'master' of https://github.com/calvinhkf/DiffMiner.git
 
 import java.util.List;
 
@@ -45,6 +52,7 @@ public class ClusterInsertOrDelete {
                 // 标记过的action
                 continue;
             }
+            String curAction = ActionPrinter.getMyOneActionString(a, 0, fp.mSrcTree);
             Tree insNode = (Tree) a.getNode();
             String type = insNode.getAstClass().getSimpleName();
             Tree fafafather = AstRelations.findFafafatherNode(insNode);
@@ -173,13 +181,23 @@ public class ClusterInsertOrDelete {
                 case StatementConstants.SIMPLETYPE:
                 case StatementConstants.STRINGLITERAL:
                 case StatementConstants.NULLLITERAL:
+                case StatementConstants.PREFIXEXPRESSION:
                 case StatementConstants.CHARACTERLITERAL:
                 case StatementConstants.NUMBERLITERAL:
                 case StatementConstants.BOOLEANLITERAL:
                 case StatementConstants.INFIXEXPRESSION:
                 case StatementConstants.METHODINVOCATION:
                 case StatementConstants.QUALIFIEDNAME:
+<<<<<<< HEAD
                     MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp, a,fafafather);
+=======
+                case StatementConstants.MODIFIER:
+                case StatementConstants.MARKERANNOTATION:
+                case StatementConstants.NORMALANNOTATION:
+                case StatementConstants.SINGLEMEMBERANNOTATION:
+                case StatementConstants.ASSIGNMENT:
+                    MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp, a, type);
+>>>>>>> branch 'master' of https://github.com/calvinhkf/DiffMiner.git
                     break;
                 default:
 //                    String operationEntity = "DEFAULT: " + a.getClass().getSimpleName() + " " + type;
