@@ -20,11 +20,14 @@ public class MatchFieldDeclaration {
 
 
     public static void matchFieldDeclaration(MiningActionData fp, Action a) {
+        // insert field declaration
+        // remove field declaration
         ChangePacket changePacket = new ChangePacket();
-        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_FIELD);
-        changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_WHOLE);
-        MatchUtil.setChangePacketOperationType(a,changePacket);
         List<Action> allActions = new ArrayList<>();
+        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_FIELD);
+        Set<String> treeStatus = 
+
+        MatchUtil.setChangePacketOperationType(a,changePacket);
         int status = MyTreeUtil.traverseNodeGetAllEditActions(a, allActions);
         fp.setActionTraversedMap(allActions);
 

@@ -8,15 +8,5 @@ public class TestJava {
 		System.out.println(aa);
 		
 	}
-	public void a(B b){
-		b = new B(1,2);
-	}
-	class B{
-		int a;
-		int b;
-		public B(int aa,int bb){
-			this.a = aa;
-			this.b = bb;
-		}
-	}
+
 }

@@ -8,6 +8,7 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -48,7 +49,7 @@ public class MyTreeUtil {
         return trees;
     }
 
-
+    ASTNode a;
 
     public static Set<String> traverseClassSignatureChildren(ITree node, List<Action> allEditAction) {
         List<ITree> children = node.getChildren();

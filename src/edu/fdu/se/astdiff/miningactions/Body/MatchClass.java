@@ -4,12 +4,9 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
-import edu.fdu.se.astdiff.miningactions.util.MatchUtil;
+import edu.fdu.se.astdiff.miningactions.util.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
-import edu.fdu.se.astdiff.miningactions.util.MyTreeUtil;
-import edu.fdu.se.astdiff.miningactions.util.TraverseTree;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
-import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.model.ClassOrInterfaceDeclarationChangeEntity;
@@ -18,9 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class MatchClassSignature {
+/**
+ *
+ */
+public class MatchClass {
 
     public static void matchClassSignature(MiningActionData fp, Action a, ITree fafather) {
+        // 遍历 src dst 两颗树下， 非declaration 节点
+        // insert/delete class signature paramter
+        // insert/delete class modifier
+        // update class modifier / primitive type
         ChangePacket changePacket = new ChangePacket();
         List<Action> signatureChidlren = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
@@ -37,4 +41,6 @@ public class MatchClassSignature {
         ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
         fp.addOneChangeEntity(code);
     }
+
+
 }

@@ -58,6 +58,7 @@ public class ClusterInsertOrDelete {
             boolean isBody = true;
             switch (type) {
                 case StatementConstants.TYPEDECLARATION:
+                    MatchClass.matchClassSignature(fp,a,fafafather);
                     break;
                 case StatementConstants.FIELDDECLARATION:
                     MatchFieldDeclaration.matchFieldDeclaration(fp, a);break;

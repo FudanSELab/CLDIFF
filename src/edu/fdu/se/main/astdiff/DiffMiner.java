@@ -122,15 +122,15 @@ public class DiffMiner {
         MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);
         GeneratingActionsData data = gen.generate();
         SimpleActionPrinter.printMyActions(data.getAllActions());
-        System.out.println("Step2 Begin to cluster actions:-------------------");
-        MiningActionData mMiningActionData = new MiningActionData(data, jtg.srcTC, jtg.dstTC, jtg.mapping);
-        ClusterActions.doCluster(mMiningActionData);
-        MiningOperation mo = new MiningOperation(pData);
-        mo.printHighLevelOperationBeanList(mMiningActionData);
+//        System.out.println("Step2 Begin to cluster actions:-------------------");
+//        MiningActionData mMiningActionData = new MiningActionData(data, jtg.srcTC, jtg.dstTC, jtg.mapping);
+//        ClusterActions.doCluster(mMiningActionData);
+//        MiningOperation mo = new MiningOperation(pData);
+//        mo.printHighLevelOperationBeanList(mMiningActionData);
     }
 
 
-    public static void main(String args[]) {
+    public static void main(String []args) {
         DiffMiner i = new DiffMiner();
 		i.runSingleFilePair();
 //		i.runGumTree();

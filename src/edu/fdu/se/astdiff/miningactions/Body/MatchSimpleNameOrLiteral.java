@@ -4,7 +4,6 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.Tree;
 
 import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
-import edu.fdu.se.astdiff.miningactions.Body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.StatementConstants;
@@ -65,10 +64,10 @@ public class MatchSimpleNameOrLiteral {
 			break;
 		case StatementConstants.TYPEDECLARATION:
 			//classs signiture
-			operationBean = MatchClassSignature.matchClassSignature(fp,a,nodeType,fafafatherNode,ffFatherNodeType);
+			operationBean = MatchClass.matchClassSignature(fp,a,nodeType,fafafatherNode,ffFatherNodeType);
 			break;
 		case StatementConstants.TYPEDECLARATION:
-			MatchClassSignature.matchClassSignature(fp, a, fafafather);
+			MatchClass.matchClassSignature(fp, a, fafafather);
 			break;
 		case StatementConstants.FIELDDECLARATION:
 			MatchFieldDeclaration.matchFieldDeclarationByFather(fp, a, type, fafafather, fatherType);
