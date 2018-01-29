@@ -4,6 +4,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningactions.util.MatchUtil;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.util.MyTreeUtil;
@@ -11,6 +12,8 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.model.ClassOrInterfaceDeclarationChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.model.FieldChangeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,28 +23,18 @@ public class MatchFieldDeclaration {
 
 
     public static void matchFieldDeclaration(MiningActionData fp, Action a) {
-        // insert field declaration
-        // remove field declaration
         ChangePacket changePacket = new ChangePacket();
-        List<Action> allActions = new ArrayList<>();
+        List<Action> subActions = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_FIELD);
-        Set<String> treeStatus = 
-
-        MatchUtil.setChangePacketOperationType(a,changePacket);
-        int status = MyTreeUtil.traverseNodeGetAllEditActions(a, allActions);
-        fp.setActionTraversedMap(allActions);
-
-//        ITree nodeContainVariableDeclarationFragment = AstRelations.isSubChildContainXXXStatement(a,StatementConstants.VARIABLEDECLARATIONFRAGMENT);
-//        if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
-//            operationEntity += "-OBJECT-INITIALIZING";
-//            if (AstRelations.isClassCreation(allActions)) {
-//                operationEntity += "-NEW";
-//            }
-//        }
-        Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(
-                a,allActions,nodeLinePosition,status,operationEntity);
+        DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+        Range range = AstRelations.getRangeOfAstNode(a);
+        fp.setActionTraversedMap(subActions);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+        FieldChangeEntity code = new FieldChangeEntity(mBean);
+        fp.addOneChangeEntity(code);
     }
+
+
     public static ClusteredActionBean matchFieldDeclarationByFather(MiningActionData fp, Action a, String nodeType, ITree fafafatherNode, String ffFatherNodeType) {
         String operationEntity  = "FATHER-FIELDDECLARATION";
 

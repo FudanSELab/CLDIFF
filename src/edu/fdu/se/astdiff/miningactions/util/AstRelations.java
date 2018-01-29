@@ -9,50 +9,6 @@ import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 
 public class AstRelations {
-	/**
-	 * 找当前节点的父节点 XXXStatement XXXDelclaration JavaDoc CatchClause
-	 *
-	 * @param node aa
-	 * @return 返回fafafather
-	 */
-	public static Tree findFafafatherNode(ITree node) {
-		String type = null;
-		Tree curNode = (Tree)node;
-		while (!curNode.isRoot()) {
-			type = curNode.getAstClass().getSimpleName();
-			if (type.endsWith("Statement")) {
-				break;
-			} else{
-				boolean isEnd = false;
-				switch(type) {
-					//declaration
-					case StatementConstants.METHODDECLARATION:
-					case StatementConstants.FIELDDECLARATION:
-					case StatementConstants.TYPEDECLARATION:
-						//
-					case StatementConstants.BLOCK:
-					case StatementConstants.JAVADOC:
-					case StatementConstants.INITIALIZER:
-					case StatementConstants.SWITCHCASE:
-						//this(),super()
-					case StatementConstants.CONSTRUCTORINVOCATION:
-					case StatementConstants.SUPERCONSTRUCTORINVOCATION:
-						isEnd = true;
-						break;
-					default:
-						curNode = (Tree)curNode.getParent();
-						break;
-				}
-				if(isEnd) {
-					break;
-				}
-			}
-		}
-		if (curNode.isRoot())
-			return null;
-		else
-			return curNode;
-	}
 
 	public static Range getRangeOfAstNode(Action a){
 		Integer[] range = ((Tree)a.getNode()).getRange();
@@ -222,6 +178,51 @@ public class AstRelations {
 //			}
 //		}
 //		return false;
+//	}
+
+//	/**
+	 //	 * 找当前节点的父节点 XXXStatement XXXDelclaration JavaDoc CatchClause
+	 //	 *
+	 //	 * @param node aa
+	 //	 * @return 返回fafafather
+	 //	 */
+//	public static Tree findFafafatherNode(ITree node) {
+//		String type = null;
+//		Tree curNode = (Tree)node;
+//		while (!curNode.isRoot()) {
+//			type = curNode.getAstClass().getSimpleName();
+//			if (type.endsWith("Statement")) {
+//				break;
+//			} else{
+//				boolean isEnd = false;
+//				switch(type) {
+//					//declaration
+//					case StatementConstants.METHODDECLARATION:
+//					case StatementConstants.FIELDDECLARATION:
+//					case StatementConstants.TYPEDECLARATION:
+//						//
+//					case StatementConstants.BLOCK:
+//					case StatementConstants.JAVADOC:
+//					case StatementConstants.INITIALIZER:
+//					case StatementConstants.SWITCHCASE:
+//						//this(),super()
+//					case StatementConstants.CONSTRUCTORINVOCATION:
+//					case StatementConstants.SUPERCONSTRUCTORINVOCATION:
+//						isEnd = true;
+//						break;
+//					default:
+//						curNode = (Tree)curNode.getParent();
+//						break;
+//				}
+//				if(isEnd) {
+//					break;
+//				}
+//			}
+//		}
+//		if (curNode.isRoot())
+//			return null;
+//		else
+//			return curNode;
 //	}
 
 

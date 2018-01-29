@@ -49,31 +49,7 @@ public class MyTreeUtil {
         return trees;
     }
 
-    ASTNode a;
 
-    public static Set<String> traverseClassSignatureChildren(ITree node, List<Action> allEditAction) {
-        List<ITree> children = node.getChildren();
-        Set<String> actionTypes = new HashSet<>();
-        for(ITree t : children){
-            Tree tree = (Tree) t;
-            if(!tree.getAstClass().getSimpleName().endsWith("Declaration")){
-                for (ITree item : tree.postOrder()) {
-                    Tree myTree = (Tree) item;
-                    if (myTree.getDoAction() == null) {
-                        actionTypes.add(ActionConstants.NULLACTION);
-                        continue;
-                    }
-                    List<Action> nodeActions = myTree.getDoAction();
-                    for (Action aTmp : nodeActions) {
-                        allEditAction.add(aTmp);
-                        actionTypes.add(aTmp.getClass().getSimpleName());
-                    }
-                }
-
-            }
-        }
-        return actionTypes;
-    }
 
     public static int getTypeCode(Action action, boolean isNullExist, Set<String> actionTypes) {
         if (action instanceof Insert) {
@@ -100,66 +76,8 @@ public class MyTreeUtil {
         return OperationTypeConstants.UNKNOWN;
     }
 
-    /**
-     * node为fafafather node的情况
-     *
-     * @param node
-     * @param result
-     * @return
-     */
-    public static Set<String> traverseNodeGetAllEditActions(ITree node,List<Action> result) {
-        Set<String> actionTypes = new HashSet<>();
-        for (ITree tmp : node.preOrder()) {
-            Tree myTree = (Tree) tmp;
-            if (myTree.getDoAction() == null) {
-                actionTypes.add(ActionConstants.NULLACTION);
-                continue;
-            }
-            List<Action> nodeActions = myTree.getDoAction();
-            for (Action aTmp : nodeActions) {
-                result.add(aTmp);
-                actionTypes.add(aTmp.getClass().getSimpleName());
-            }
-        }
-        return actionTypes;
-    }
 
-    /**
-     * statement 节点
-     *
-     * @return
-     */
-    public static int isSrcOrDstAdded(Set<String> srcTypes, Set<String> dstTypes) {
-        if (srcTypes.size() == 1 && srcTypes.contains(ActionConstants.NULLACTION)) {
-            //src tree为null
-            if (dstTypes.size() == 2 && dstTypes.contains(ActionConstants.INSERT)) {
-                return OperationTypeConstants.INSERT_STATEMENT_CONDITION;
-            } else {
-                return OperationTypeConstants.UNKNOWN;
-            }
-        }
-        if (dstTypes.size() == 1 && dstTypes.contains(ActionConstants.NULLACTION)) {
-            //dst 为空
-            if (srcTypes.contains(ActionConstants.NULLACTION)) {
-                if (srcTypes.size() == 2) {
-                    if (srcTypes.contains(ActionConstants.MOVE)) {
-                        return OperationTypeConstants.MOVE_STATEMENT_CONDITION;
-                    } else if (srcTypes.contains(ActionConstants.UPDATE)) {
-                        return OperationTypeConstants.UPDATE_STATEMENT_CONDITION;
-                    } else if (srcTypes.contains(ActionConstants.DELETE)) {
-                        return OperationTypeConstants.DELETE_STATEMENT_CONDITION;
-                    } else {
-                        return OperationTypeConstants.UNKNOWN;
-                    }
-                } else {
-                    return OperationTypeConstants.STATEMENT_CONDITION_OR_DECLARATION_MISC;
-                }
-            } else {
-                return OperationTypeConstants.UNKNOWN;
-            }
-        }
-        return OperationTypeConstants.STATEMENT_CONDITION_OR_DECLARATION_MISC;
-    }
+
 
 
 

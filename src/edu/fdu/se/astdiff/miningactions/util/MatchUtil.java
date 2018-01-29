@@ -1,5 +1,6 @@
 package edu.fdu.se.astdiff.miningactions.util;
 
+import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
@@ -15,104 +16,93 @@ import java.util.Set;
  */
 public class MatchUtil {
 
-    public static void setChangePacket(ChangePacket changePacket, Set<String> types){
-        if(types.contains(ActionConstants.INSERT)){
-            if(types.contains(ActionConstants.NULLACTION)){
-                changePacket.setOperationType(OperationTypeConstants.INSERT);
-            }else{
-                changePacket.setOperationType(OperationTypeConstants.INSERT);
+    public static void setChangePacket(ChangePacket changePacket, Set<String> types1,Set<String> types2){
+        if(types1.contains(ActionConstants.INSERT)){
+            changePacket.setOperationType(OperationTypeConstants.INSERT);
+            if(types1.size() ==1 && types2.size()==1 &&types2.contains(ActionConstants.INSERT)){
+                // ins + ins
+                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_WHOLE);
+            }else if(types1.size() ==1 && types2.size()==1 &&types2.contains(ActionConstants.NULLACTION)){
+                // ins + null
+//                changePacket.setOperationSubEntity();
+            }else if(types1.size() ==1 && types2.size()==2){
+                // ins + ins_null
+            }else if(types1.size() == 2 && types2.size()==1 && types2.contains(ActionConstants.INSERT)){
+                // ins_null + ins
+            }else if(types1.size() == 2 && types2.size()==1 && types2.contains(ActionConstants.NULLACTION)){
+                // ins_null + null
+            }else if(types1.size() == 2 && types2.size()== 2){
+                // ins_null + ins_null
             }
-        } else{
-
-        }
-        if(a instanceof Insert){
-        }else if(a instanceof Delete){
+        }else if(types1.contains(ActionConstants.DELETE)){
             changePacket.setOperationType(OperationTypeConstants.DELETE);
-        }else if(a instanceof Move){
+            if(types1.size() ==1 && types2.size()==1 &&types2.contains(ActionConstants.DELETE)){
+                // del + del
+                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_WHOLE);
+            }else if(types1.size() ==1 && types2.size()==1 &&types2.contains(ActionConstants.NULLACTION)){
+                // del + null
+            }else if(types1.size() ==1 && types2.size()==2){
+                // del + del_null
+            }else if(types1.size() == 2 && types2.size()==1 && types2.contains(ActionConstants.DELETE)){
+                // del_null + del
+            }else if(types1.size() == 2 && types2.size()==1 && types2.contains(ActionConstants.NULLACTION)){
+                // del_null + null
+            }else if(types1.size() == 2 && types2.size()== 2){
+                // del_null + del_null
+            }
+
+        }else if(types1.contains(ActionConstants.MOVE)){
             changePacket.setOperationType(OperationTypeConstants.MOVE);
-        }else {
-            changePacket.setOperationType(OperationTypeConstants.UPDATE);
+            if(types1.size()==2 && types1.contains(ActionConstants.NULLACTION) && types2.size() ==1 && types2.contains(ActionConstants.NULLACTION)){
+                // move_null + null
+            }else if(types1.size() ==3 && types2.size() ==1 && types2.contains(ActionConstants.NULLACTION)){
+                // move_null_ + null
+            }else if(types1.size() == 3){
+                //
+            }
         }
+
 
     }
 
-    /**
-     * down up
-     * @param changePacket
-     * @param srcTypes
-     * @param dstTypes
-     */
-    public static void setChangePackgeDownUpOperationType(ChangePacket changePacket,Set<String> srcTypes,Set<String> dstTypes){
-        if (srcTypes.size() == 1 && srcTypes.contains(ActionConstants.NULLACTION)) {
-            //src tree为null
-            if (dstTypes.size() == 2 && dstTypes.contains(ActionConstants.INSERT)) {
-                changePacket.setOperationType(OperationTypeConstants.INSERT);
-            } else {
-                changePacket.setOperationType(OperationTypeConstants.UNKNOWN);
-            }
-            return;
-        }
-        if (dstTypes.size() == 1 && dstTypes.contains(ActionConstants.NULLACTION)) {
-            //dst 为空
-            if (srcTypes.contains(ActionConstants.NULLACTION)) {
-                if (srcTypes.size() == 2) {
-                    if (srcTypes.contains(ActionConstants.MOVE)) {
-                        changePacket.setOperationType(OperationTypeConstants.MOVE);
-                    } else if (srcTypes.contains(ActionConstants.UPDATE)) {
-                        changePacket.setOperationType(OperationTypeConstants.UPDATE);
-                    } else if (srcTypes.contains(ActionConstants.DELETE)) {
-                        changePacket.setOperationType(OperationTypeConstants.DELETE);
-                    }
-                    return;
-                } else {
-                    changePacket.setOperationType(OperationTypeConstants.MULTIPLE_EDIT);
-                }
-            } else {
-                changePacket.setOperationType(OperationTypeConstants.UNKNOWN);
-            }
-            return;
 
+    public static void setChangePacket(ChangePacket changePacket, Set<String> types1){
+        if(types1.contains(ActionConstants.INSERT)){
+            changePacket.setOperationType(OperationTypeConstants.INSERT);
+            if(types1.size() ==1){
+                // ins
+                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_WHOLE);
+                // ins + ins_null
+            }else if(types1.size() == 2) {
+                // ins_null + ins
+
+            }
+        }else if(types1.contains(ActionConstants.DELETE)){
+            changePacket.setOperationType(OperationTypeConstants.DELETE);
+            if(types1.size() ==1){
+                // ins
+                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_WHOLE);
+                // ins + ins_null
+            }else if(types1.size() == 2) {
+                // ins_null + ins
+
+            }
+        }else if(types1.contains(ActionConstants.MOVE)){
+            changePacket.setOperationType(OperationTypeConstants.MOVE);
+            if(types1.size() ==1){
+                // ins
+                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_WHOLE);
+                // ins + ins_null
+            }else if(types1.size() == 2) {
+                // ins_null + ins
+
+            }
         }
-        changePacket.setOperationType(OperationTypeConstants.MULTIPLE_EDIT);
-        return ;
+
 
     }
 
-    public static void setChangePackgeUpDownOperationType(ChangePacket changePacket,Set<String> actionTypes){
-        if (srcTypes.size() == 1 && srcTypes.contains(ActionConstants.NULLACTION)) {
-            //src tree为null
-            if (dstTypes.size() == 2 && dstTypes.contains(ActionConstants.INSERT)) {
-                changePacket.setOperationType(OperationTypeConstants.INSERT);
-            } else {
-                changePacket.setOperationType(OperationTypeConstants.UNKNOWN);
-            }
-            return;
-        }
-        if (dstTypes.size() == 1 && dstTypes.contains(ActionConstants.NULLACTION)) {
-            //dst 为空
-            if (srcTypes.contains(ActionConstants.NULLACTION)) {
-                if (srcTypes.size() == 2) {
-                    if (srcTypes.contains(ActionConstants.MOVE)) {
-                        changePacket.setOperationType(OperationTypeConstants.MOVE);
-                    } else if (srcTypes.contains(ActionConstants.UPDATE)) {
-                        changePacket.setOperationType(OperationTypeConstants.UPDATE);
-                    } else if (srcTypes.contains(ActionConstants.DELETE)) {
-                        changePacket.setOperationType(OperationTypeConstants.DELETE);
-                    }
-                    return;
-                } else {
-                    changePacket.setOperationType(OperationTypeConstants.MULTIPLE_EDIT);
-                }
-            } else {
-                changePacket.setOperationType(OperationTypeConstants.UNKNOWN);
-            }
-            return;
 
-        }
-        changePacket.setOperationType(OperationTypeConstants.MULTIPLE_EDIT);
-        return;
-
-    }
 
 
 

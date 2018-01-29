@@ -18,7 +18,7 @@ import com.github.gumtreediff.actions.model.Update;
 
 public class GeneratingActionsData {
 
-	private List<Integer> dstLayerLastNodeIndex;
+//	private List<Integer> dstLayerLastNodeIndex;
 
 	private List<Action> insertActions;
 	private List<Action> updateActions;
@@ -30,13 +30,13 @@ public class GeneratingActionsData {
 
 	public GeneratingActionsData() {
 		super();
-		this.dstLayerLastNodeIndex = new ArrayList<Integer>();
+//		this.dstLayerLastNodeIndex = new ArrayList<Integer>();
 		this.insertActions = new ArrayList<Action>();
 		this.moveActions = new ArrayList<Action>();
 		this.updateActions = new ArrayList<Action>();
 		this.deleteActions = new ArrayList<Action>(); 
 		this.allActions = new ArrayList<Action>();
-		this.startNodes = new ArrayList<>();
+//		this.startNodes = new ArrayList<>();
 		this.allActionMap = new HashMap<Action,Integer>();
 	}
 
@@ -54,12 +54,12 @@ public class GeneratingActionsData {
 	}
 
 
-	public List<Integer> getDstLayerLastNodeIndex() {
-		return dstLayerLastNodeIndex;
-	}
+//	public List<Integer> getDstLayerLastNodeIndex() {
+//		return dstLayerLastNodeIndex;
+//	}
 
 
-	public List<Action> startNodes;
+//	public List<Action> startNodes;
 
 
 
@@ -67,34 +67,22 @@ public class GeneratingActionsData {
 		return insertActions;
 	}
 
-	public void setInsertActions(List<Action> insertActions) {
-		this.insertActions = insertActions;
-	}
 
 	public List<Action> getUpdateActions() {
 		return updateActions;
 	}
 
-	public void setUpdateActions(List<Action> updateActions) {
-		this.updateActions = updateActions;
-	}
 
 	public List<Action> getMoveActions() {
 		return moveActions;
 	}
 
-	public void setMoveActions(List<Action> moveActions) {
-		this.moveActions = moveActions;
-	}
 
 	public List<Action> getDeleteActions() {
 		return deleteActions;
 	}
 
-	public void setDeleteActions(List<Action> deleteActions) {
-		this.deleteActions = deleteActions;
-	}
-	
+
 
 	
 
