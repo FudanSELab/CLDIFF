@@ -57,11 +57,20 @@ public class MiningActionData {
 
 
 	/**
-	 * todo 增加之后 duplicate的check
+	 * todo 增加之后 duplicate的outer relation check
 	 */
 	public void addOneChangeEntity(ChangeEntity changeEntity){
 		this.mChangeEntityList.add(changeEntity);
 
+	}
+
+	public static ChangeEntity getEntityByNode(MiningActionData fp,ITree tree){
+		for(ChangeEntity changeEntity:fp.getChangeEntityList()){
+			if(changeEntity.clusteredActionBean.fafather ==tree){
+				return changeEntity;
+			}
+		}
+		return null;
 	}
 
 

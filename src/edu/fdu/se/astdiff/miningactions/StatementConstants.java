@@ -1,5 +1,7 @@
 package edu.fdu.se.astdiff.miningactions;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+
 public class StatementConstants {
 
 	final public static String TYPEDECLARATION="TypeDeclaration";

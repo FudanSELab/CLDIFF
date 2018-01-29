@@ -35,7 +35,7 @@ public class ClusteredActionBean {
 	public Range nodeLinePosition;
 
 
-	public Tree fafatherNode;
+	public Tree fafather;
 
 
 	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions,ChangePacket changePacket,Range nodeLine){
@@ -44,6 +44,7 @@ public class ClusteredActionBean {
 		this.actions = actions;
 		this.changePacket = changePacket;
 		this.nodeLinePosition = nodeLine;
+		this.fafather = (Tree) curAction.getNode();
 	}
 	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions, ChangePacket changePacket,Range nodeLine,Tree fafather){
 		this.traverseType = traverseType;
@@ -51,7 +52,7 @@ public class ClusteredActionBean {
 		this.actions = actions;
 		this.changePacket = changePacket;
 		this.nodeLinePosition = nodeLine;
-		this.fafatherNode = fafather;
+		this.fafather = fafather;
 	}
 	public Range getNodeLinePosition() {
 		return nodeLinePosition;
@@ -69,7 +70,7 @@ public class ClusteredActionBean {
 	}
 
 	public ITree getFatherNode() {
-		return fafatherNode;
+		return fafather;
 	}
 
 

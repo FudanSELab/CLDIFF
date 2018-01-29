@@ -2,96 +2,96 @@ package edu.fdu.se.astdiff.miningactions.util;
 
 public class StatementConstants {
 
-	final public static String UP_DOWN = "UP_DOWN";
-	final public static String DOWN_UP = "DOWN_UP";
+	final private static String UP_DOWN = "UP_DOWN";
+	final private static String DOWN_UP = "DOWN_UP";
 
-	final public static String TYPEDECLARATION="TypeDeclaration";
+	final private static String TYPEDECLARATION="TypeDeclaration";
 
-	final public static String IFSTATEMENT="IfStatement";
+	final private static String IFSTATEMENT="IfStatement";
 
-	final public static String BLOCK = "Block";
+	final private static String BLOCK = "Block";
 
-	final public static String TRYSTATEMENT = "TryStatement";
+	final private static String TRYSTATEMENT = "TryStatement";
 
-	final public static String THROWSTATEMENT = "ThrowStatement";
+	final private static String THROWSTATEMENT = "ThrowStatement";
 
-	final public static String CATCHCLAUSE = "CatchClause";
+	final private static String CATCHCLAUSE = "CatchClause";
 
-	final public static String VARIABLEDECLARATIONSTATEMENT = "VariableDeclarationStatement";
+	final private static String VARIABLEDECLARATIONSTATEMENT = "VariableDeclarationStatement";
 
-	final public static String EXPRESSIONSTATEMENT = "ExpressionStatement";
+	final private static String EXPRESSIONSTATEMENT = "ExpressionStatement";
 
-	final public static String CLASSINSTANCECREATION= "ClassInstanceCreation";
+	final private static String CLASSINSTANCECREATION= "ClassInstanceCreation";
 
-	final public static String CONDITIONALEXPRESSION= "ConditionalExpression";
+	final private static String CONDITIONALEXPRESSION= "ConditionalExpression";
 
-	final public static String INITIALIZER= "Initializer";
+	final private static String INITIALIZER= "Initializer";
 
 	/**
 	 * Annotation
 	 */
-	final public static String MARKERANNOTATION= "MarkerAnnotation";
+	final private static String MARKERANNOTATION= "MarkerAnnotation";
 
-	final public static String NORMALANNOTATION= "NormalAnnotation";
+	final private static String NORMALANNOTATION= "NormalAnnotation";
 
-	final public static String SINGLEMEMBERANNOTATION= "SingleMemberAnnotation";
+	final private static String SINGLEMEMBERANNOTATION= "SingleMemberAnnotation";
 
 	/**
 	 * Parameter and literal
 	 */
-	final public static String SIMPLENAME = "SimpleName";
-	final public static String SIMPLETYPE = "SimpleType";
-	final public static String STRINGLITERAL = "StringLiteral";
-	final public static String NUMBERLITERAL = "NumberLiteral";
-	final public static String BOOLEANLITERAL = "BooleanLiteral";
-	final public static String CHARACTERLITERAL = "CharacterLiteral";
-	final public static String NULLLITERAL = "NullLiteral";
-	final public static String QUALIFIEDNAME = "QualifiedName";
+	final private static String SIMPLENAME = "SimpleName";
+	final private static String SIMPLETYPE = "SimpleType";
+	final private static String STRINGLITERAL = "StringLiteral";
+	final private static String NUMBERLITERAL = "NumberLiteral";
+	final private static String BOOLEANLITERAL = "BooleanLiteral";
+	final private static String CHARACTERLITERAL = "CharacterLiteral";
+	final private static String NULLLITERAL = "NullLiteral";
+	final private static String QUALIFIEDNAME = "QualifiedName";
 
-	final public static String MODIFIER = "Modifier";
-
-
-	final public static String METHODINVOCATION = "MethodInvocation";
-
-	final public static String VARIABLEDECLARATIONFRAGMENT = "VariableDeclarationFragment";
+	final private static String MODIFIER = "Modifier";
 
 
-	final public static String METHODDECLARATION = "MethodDeclaration";
+	final private static String METHODINVOCATION = "MethodInvocation";
 
-	final public static String CONSTRUCTORINVOCATION="ConstructorInvocation";
+	final private static String VARIABLEDECLARATIONFRAGMENT = "VariableDeclarationFragment";
 
-	final public static String SUPERCONSTRUCTORINVOCATION="SuperConstructorInvocation";
 
-	final public static String INFIXEXPRESSION = "InfixExpression";
+	final private static String METHODDECLARATION = "MethodDeclaration";
 
-	final public static String FORSTATEMENT = "ForStatement";
+	final private static String CONSTRUCTORINVOCATION="ConstructorInvocation";
 
-	final public static String WHILESTATEMENT = "WhileStatement";
+	final private static String SUPERCONSTRUCTORINVOCATION="SuperConstructorInvocation";
 
-	final public static String DOSTATEMENT = "DoStatement";
+	final private static String INFIXEXPRESSION = "InfixExpression";
 
-	final public static String ENHANCEDFORSTATEMENT = "EnhancedForStatement";
+	final private static String FORSTATEMENT = "ForStatement";
 
-	final public static String BREAKSTATEMENT = "BreakStatement";
+	final private static String WHILESTATEMENT = "WhileStatement";
 
-	final public static String RETURNSTATEMENT = "ReturnStatement";
+	final private static String DOSTATEMENT = "DoStatement";
 
-	final public static String SYNCHRONIZEDSTATEMENT = "SynchronizedStatement";
+	final private static String ENHANCEDFORSTATEMENT = "EnhancedForStatement";
 
-	final public static String SWITCHSTATEMENT = "SwitchStatement";
+	final private static String BREAKSTATEMENT = "BreakStatement";
 
-	final public static String SWITCHCASE = "SwitchCase";
+	final private static String RETURNSTATEMENT = "ReturnStatement";
 
-	final public static String FIELDDECLARATION = "FieldDeclaration";
+	final private static String SYNCHRONIZEDSTATEMENT = "SynchronizedStatement";
 
-	final public static String JAVADOC = "Javadoc";
+	final private static String SWITCHSTATEMENT = "SwitchStatement";
 
-	final public static String TAGELEMENT = "TagElement";
+	final private static String SWITCHCASE = "SwitchCase";
 
-	final public static String TEXTELEMENT = "TextElement";
+	final private static String FIELDDECLARATION = "FieldDeclaration";
+
+	final private static String JAVADOC = "Javadoc";
+
+	final private static String TAGELEMENT = "TagElement";
+
+	final private static String TEXTELEMENT = "TextElement";
 
 	/**
 	 * keyword
 	 */
-	final public static String STATIC = "static";
+	final private static String STATIC = "static";
 }

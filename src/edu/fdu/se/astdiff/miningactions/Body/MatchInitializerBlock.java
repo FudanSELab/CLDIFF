@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchInitializerBlock {
-    public static void matchInitializerBlock(MiningActionData fp, Action a, String nodeType) {
+    public static void matchInitializerBlock(MiningActionData fp, Action a) {
         List<ITree> child = a.getNode().getChildren();
         Tree child0 = (Tree)child.get(0);
 

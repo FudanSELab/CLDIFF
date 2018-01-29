@@ -10,6 +10,7 @@ import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.model.ClassOrInterfaceDeclarationChangeEntity;
 
 import java.util.ArrayList;
@@ -33,16 +34,23 @@ public class MatchClass {
         fp.addOneChangeEntity(code);
     }
 
-    public static void matchClassSignature(MiningActionData fp, Action a, ITree fafather) {
+    public static void matchClassSignature(MiningActionData fp, Action a, ITree fafather, ChangeEntity changeEntity) {
         // insert/delete class signature paramter
         // insert/delete class modifier
         // update class modifier / primitive type
-        ChangePacket changePacket = new ChangePacket();
-        List<Action> signatureChidlren = new ArrayList<>();
-        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
+        ChangePacket changePacket = null;
+        List<Action> signatureChidlren = null;
+        if(changeEntity == null) {
+            changePacket = new ChangePacket();
+            signatureChidlren = new ArrayList<>();
+            changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
+        }else{
+            changePacket = changeEntity.clusteredActionBean.changePacket;
+            signatureChidlren = changeEntity.clusteredActionBean.actions;
+        }
+
+
         ITree[] res = TraverseTree.getMappedFafatherNode(fp,a,fafathers);
-        ITree srcFafather = res[0];
-        ITree dstFafather = res[1];
         //todo
         fp.setActionTraversedMap(signatureChidlren);
         Range range = AstRelations.getRangeOfAstNode(a);

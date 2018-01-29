@@ -1,10 +1,13 @@
 package edu.fdu.se.astdiff.miningactions.util;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.HashSet;
 import java.util.List;
@@ -58,25 +61,23 @@ public class BasicTreeTraversal {
      * @return 返回fafafather
      */
     public static Tree findFafatherNode(ITree node) {
-        String type = null;
+        int type = 0;
+        String simpleName =null;
         Tree curNode = (Tree)node;
         while (!curNode.isRoot()) {
-            type = curNode.getAstClass().getSimpleName();
-            if (type.endsWith("Statement")) {
+            type = curNode.getAstNode().getNodeType();
+            simpleName = curNode.getAstClass().getSimpleName();
+            if (simpleName.endsWith("Statement") ||simpleName.endsWith("Declaration")) {
                 break;
             } else{
                 boolean isEnd = false;
                 switch(type) {
                     //declaration
-                    case StatementConstants.METHODDECLARATION:
-                    case StatementConstants.FIELDDECLARATION:
-                    case StatementConstants.TYPEDECLARATION:
-                    case StatementConstants.BLOCK:
-                    case StatementConstants.JAVADOC:
-                    case StatementConstants.INITIALIZER:
-                    case StatementConstants.SWITCHCASE:
-                    case StatementConstants.CONSTRUCTORINVOCATION:
-                    case StatementConstants.SUPERCONSTRUCTORINVOCATION:
+                    case ASTNode.BLOCK:
+                    case ASTNode.INITIALIZER:
+                    case ASTNode.SWITCH_CASE:
+                    case ASTNode.CONSTRUCTOR_INVOCATION:
+                    case ASTNode.SUPER_CONSTRUCTOR_INVOCATION:
                         isEnd = true;
                         break;
                     default:
@@ -93,6 +94,21 @@ public class BasicTreeTraversal {
         else
             return curNode;
     }
+
+    public static ITree[] getMappedFafatherNode(MiningActionData fp, Action a, ITree fafather){
+        ITree srcFafather = null;
+        ITree dstFafather = null;
+        if (a instanceof Insert) {
+            dstFafather = fafather;
+            srcFafather = fp.getMappedSrcOfDstNode(dstFafather);
+        } else {
+            srcFafather = fafather;
+            dstFafather = fp.getMappedDstOfSrcNode(srcFafather);
+        }
+        ITree [] result = {srcFafather,dstFafather};
+        return result;
+    }
+
 
 
 

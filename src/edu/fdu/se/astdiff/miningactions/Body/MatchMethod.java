@@ -10,7 +10,6 @@ import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.MatchTry;
 import edu.fdu.se.astdiff.miningactions.util.StatementConstants;
-import edu.fdu.se.astdiff.miningactions.util.TraverseTree;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;

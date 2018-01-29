@@ -102,7 +102,7 @@ public class MyActionGenerator {
 //        List<ITree> bfsDst = MyTreeUtil.layeredBreadthFirst(origDst, myAgbData.getDstLayerLastNodeIndex());
         for (int i=1;i<=bfsDst.size();i++){
         	ITree dstItem = bfsDst.get(i-1);
-            ITree w = null;
+            ITree mappedSrcNode = null;
             ITree parentDst = dstItem.getParent();
             ITree parentSrc = newMappings.getSrc(parentDst);
 
@@ -110,8 +110,8 @@ public class MyActionGenerator {
             	//item is not in src
                 int k = findPos(dstItem);
                 // Insertion case : insert new node.
-                w = new AbstractTree.FakeTree();
-                w.setId(newId());
+                mappedSrcNode = new AbstractTree.FakeTree();
+                mappedSrcNode.setId(newId());
                 // In order to use the real nodes from the second tree, we
                 // furnish x instead of w and fake that x has the newly
                 // generated ID.
@@ -121,45 +121,45 @@ public class MyActionGenerator {
                 tmp.setDoAction(ins);
                 myAgbData.addAction(ins, i);
                 
-                origSrcTrees.put(w.getId(), dstItem);
-                newMappings.link(w, dstItem);
-                parentSrc.getChildren().add(k, w);
-                w.setParent(parentSrc);
+                origSrcTrees.put(mappedSrcNode.getId(), dstItem);
+                newMappings.link(mappedSrcNode, dstItem);
+                parentSrc.getChildren().add(k, mappedSrcNode);
+                mappedSrcNode.setParent(parentSrc);
             } else {
             	//in 
             	// 有mapping
-                w = newMappings.getSrc(dstItem);
+                mappedSrcNode = newMappings.getSrc(dstItem);
                 if (!dstItem.equals(origDst)) { // TODO => x != origDst // Case of the root
-                    ITree v = w.getParent();
-                    if (!w.getLabel().equals(dstItem.getLabel())) {
-                    	Update upd = new Update(origSrcTrees.get(w.getId()), dstItem.getLabel());
+                    ITree v = mappedSrcNode.getParent();
+                    if (!mappedSrcNode.getLabel().equals(dstItem.getLabel())) {
+                    	Update upd = new Update(origSrcTrees.get(mappedSrcNode.getId()), dstItem.getLabel());
                     	myAgbData.addAction(upd, i);
 //                        Tree tmp = (Tree) dstItem;
-                        ITree srcNode = origSrcTrees.get(w.getId());
+                        ITree srcNode = origSrcTrees.get(mappedSrcNode.getId());
                         Tree srcTree = (Tree) srcNode;
                         srcTree.setDoAction(upd);
-                        
-                        w.setLabel(dstItem.getLabel());
+
+                        mappedSrcNode.setLabel(dstItem.getLabel());
                     }
                     if (!parentSrc.equals(v)) {
                         int k = findPos(dstItem);
-                        Action mv = new Move(origSrcTrees.get(w.getId()), origSrcTrees.get(parentSrc.getId()), k);
-                        Tree tmp = (Tree) origSrcTrees.get(w.getId());
+                        Action mv = new Move(origSrcTrees.get(mappedSrcNode.getId()), origSrcTrees.get(parentSrc.getId()), k);
+                        Tree tmp = (Tree) origSrcTrees.get(mappedSrcNode.getId());
                         tmp.setDoAction(mv);
                         myAgbData.addAction(mv, i);
 
-                        int oldk = w.positionInParent();
-                        parentSrc.getChildren().add(k, w);
-                        w.getParent().getChildren().remove(oldk);
-                        w.setParent(parentSrc);
+                        int oldk = mappedSrcNode.positionInParent();
+                        parentSrc.getChildren().add(k, mappedSrcNode);
+                        mappedSrcNode.getParent().getChildren().remove(oldk);
+                        mappedSrcNode.setParent(parentSrc);
                     }
                 }
             }
 
             //FIXME not sure why :D
-            srcInOrder.add(w);
+            srcInOrder.add(mappedSrcNode);
             dstInOrder.add(dstItem);
-            alignChildren(w, dstItem,i);
+            alignChildren(mappedSrcNode, dstItem,i);
         }
 //        for (ITree w : copySrc.postOrder()) {
         for(ITree w :copySrc.breadthFirst()){

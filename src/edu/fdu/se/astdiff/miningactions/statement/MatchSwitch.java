@@ -22,7 +22,7 @@ public class MatchSwitch {
 		return mHighLevelOperationBean;
 	}
 
-	public static ClusteredActionBean matchSwitchCaseByFather(MiningActionData fp, Action a,ITree fafafatherNode){
+	public static ClusteredActionBean matchSwitchCaseByFather(MiningActionData fp, Action a){
 		String operationEntity = "FATHER-SWITCHCASE-" +nodeType;
 
 		ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByFafafatherNode(fp,a,nodeType,operationEntity,fafafatherNode,ffFatherNodeType);

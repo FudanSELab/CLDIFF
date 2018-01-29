@@ -3,6 +3,7 @@ package edu.fdu.se.astdiff.miningactions.util;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
+import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 
@@ -16,25 +17,23 @@ import java.util.Set;
  */
 public class DefaultDownUpTraversal extends BasicTreeTraversal{
 
-//    public static void traverseClass(Action a, List<Action> result1, ChangePacket changePacket,Set<String> changeType1,Set<String> changeType2S){
-//        ITree node = a.getNode();
-//        result1.add(a);
-//        List<ITree> children = node.getChildren();
-//        int i=0;
-//        for(;i<children.size();i++){
-//            Tree t = (Tree) children.get(i);
-//            if(t.getAstClass().getSimpleName().endsWith("Block")){
-//                break;
-//            }
-//        }
-//        Set<String> type1 = new HashSet<>();
-//        Set<String> type2 = new HashSet<>();
-//        type1.add(a.getClass().getSimpleName());
-//        traverseNodeInRange(node,0,i-1,result1,type1);
-//        traverseNodeInRange(node,i,children.size()-1,result1,type2);
-//        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
-//        MatchUtil.setChangePacket(changePacket,type1,type2);
-//    }
+    public static int traverseFafather(Action a,Tree node, List<Action> result1){
+        int flag = 1;
+        for(ITree t:node.preOrder()){
+            Tree tt = (Tree) t;
+            if(tt.getDoAction()==null){
+                flag = 0;
+                continue;
+            }
+            List<Action> actions = tt.getDoAction();
+            for(Action tmp:actions){
+                if(a.getClass().equals(tmp.getClass())){
+                    result1.add(tmp);
+                }
+            }
+        }
+        return flag;
+    }
 
 
 }

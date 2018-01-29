@@ -24,9 +24,15 @@ public class ClusterActions {
 //		int pos = tree.getParent().getChildPosition(tree);
 
     public static void doCluster(MiningActionData fpd) {
-        new ClusterActions(Insert.class, fpd).doCluster();
-        new ClusterActions(Delete.class, fpd).doCluster();
-        new ClusterActions(Move.class, fpd).doCluster();
+
+        //big
+        new ClusterActions(Insert.class, fpd).doClusterBig();
+        new ClusterActions(Delete.class, fpd).doClusterBig();
+        new ClusterActions(Move.class, fpd).doClusterBig();
+        //small
+        new ClusterActions(Insert.class, fpd).doClusterSmall();
+        new ClusterActions(Delete.class, fpd).doClusterSmall();
+        new ClusterActions(Move.class, fpd).doClusterSmall();
         new ClusterActions(Update.class, fpd).doClusterUpdate();
 
     }
@@ -38,7 +44,6 @@ public class ClusterActions {
     public ClusterActions(Class mClazz, MiningActionData mminingActionData) {
         this.fp = mminingActionData;
         Class clazz = mClazz;
-//        this.clazz = mClazz;
         if (Insert.class.equals(clazz)) {
             this.actionList = mminingActionData.mGeneratingActionsData.getInsertActions();
         } else if (Delete.class.equals(clazz)) {
@@ -75,9 +80,8 @@ public class ClusterActions {
                 MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp, a);
                 break;
             default:
-                res= 1 ;
+                res= 1;
                 break;
-
         }
         return res;
 
@@ -94,12 +98,11 @@ public class ClusterActions {
                 MatchFieldDeclaration.matchFieldDeclaration(fp, a);
                 break;
             case StatementConstants.INITIALIZER:
-                MatchInitializerBlock.matchInitializerBlock(fp, a, type);
+                MatchInitializerBlock.matchInitializerBlock(fp, a);
                 break;
             case StatementConstants.METHODDECLARATION:
                 MatchMethod.matchNewOrDeleteMethod(fp, a);
                 break;
-
 
             // 里面
             case StatementConstants.IFSTATEMENT:
@@ -140,7 +143,7 @@ public class ClusterActions {
                 MatchTry.matchTry(fp, a, type);
                 break;
             case StatementConstants.THROWSTATEMENT:
-                MatchTry.matchThrowStatement(fp, a, type);
+                MatchTry.matchThrowStatement(fp, a);
                 break;
             case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
                 MatchVariableDeclarationExpression.matchVariableDeclaration(fp, a, type);
@@ -148,7 +151,7 @@ public class ClusterActions {
             case StatementConstants.EXPRESSIONSTATEMENT:
                 if (AstRelations.isFatherXXXStatement(a, StatementConstants.IFSTATEMENT) && a.getNode().getParent().getChildPosition(a.getNode()) == 2) {
                     // Pattenr 1.2 Match else
-                    MatchIfElse.matchElse(fp, a, type);
+                    MatchIfElse.matchElse(fp, a);
                 } else {
                     MatchExpressionStatement.matchExpression(fp, a);
                 }
@@ -187,30 +190,40 @@ public class ClusterActions {
         return  res;
     }
 
-    public void doCluster() {
+    public void doClusterBig() {
         int actionCnt = this.actionList.size();
-        int index = 0;
-        while (index != actionCnt) {
+        for(int index =0; index!=actionCnt;index++){
             Action a = this.actionList.get(index);
-            index++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 continue;
             }
             Tree insNode = (Tree) a.getNode();
             String type = insNode.getAstClass().getSimpleName();
             if(processBigAction(a,type)==1) {
-                if(processSmallAction(a,type)==1) {
-                    System.err.println(SimpleActionPrinter.getMyOneActionString(a));
-                }
+
+            }
+        }
+    }
+
+    public void doClusterSmall() {
+        int actionCnt = this.actionList.size();
+        for(int index =0; index!=actionCnt;index++){
+            Action a = this.actionList.get(index);
+            if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
+                continue;
+            }
+            Tree insNode = (Tree) a.getNode();
+            String type = insNode.getAstClass().getSimpleName();
+            if(processSmallAction(a,type)==1) {
+                System.err.println(SimpleActionPrinter.getMyOneActionString(a));
             }
         }
     }
 
 
     public void doClusterUpdate() {
-        int updateActionCount = this.actionList.size();
-        int index = 0;
-        while (index != updateActionCount) {
+        int actionCnt = this.actionList.size();
+        for(int index =0; index!=actionCnt;index++){
             Action a = this.actionList.get(index);
             index++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
@@ -218,27 +231,8 @@ public class ClusterActions {
             }
             Tree tmp = (Tree) a.getNode();
             String type = tmp.getAstClass().getSimpleName();
-            switch (type) {
-                case StatementConstants.TAGELEMENT:
-                case StatementConstants.TEXTELEMENT:
-                case StatementConstants.SIMPLENAME:
-                case StatementConstants.SIMPLETYPE:
-                case StatementConstants.STRINGLITERAL:
-                case StatementConstants.NULLLITERAL:
-                case StatementConstants.CHARACTERLITERAL:
-                case StatementConstants.NUMBERLITERAL:
-                case StatementConstants.BOOLEANLITERAL:
-                case StatementConstants.INFIXEXPRESSION:
-                case StatementConstants.METHODINVOCATION:
-                case StatementConstants.QUALIFIEDNAME:
-                case StatementConstants.MODIFIER:
-                case StatementConstants.MARKERANNOTATION:
-                case StatementConstants.NORMALANNOTATION:
-                case StatementConstants.SINGLEMEMBERANNOTATION:
-                    MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp, a);
-                    break;
-                default:
-                    break;
+            if(processSmallAction(a,type)==1){
+                System.out.println(SimpleActionPrinter.getMyOneActionString(a));
             }
         }
     }

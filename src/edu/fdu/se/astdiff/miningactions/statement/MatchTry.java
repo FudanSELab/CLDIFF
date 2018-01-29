@@ -26,7 +26,7 @@ public class MatchTry {
 		return mHighLevelOperationBean;
 	}
 
-	public static ClusteredActionBean matchThrowStatement(MiningActionData fp, Action a, String nodeType, ITree ffFatherNode, String fatherNodeType) {
+	public static ClusteredActionBean matchThrowStatement(MiningActionData fp, Action a) {
 		String operationEntity = "THROWSTATEMENT";
 		List<Action> throwAction = new ArrayList<Action>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, throwAction);

@@ -5,7 +5,6 @@ import com.github.gumtreediff.tree.ITree;
 
 import edu.fdu.se.astdiff.miningactions.util.MatchUtil;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
-import edu.fdu.se.astdiff.miningactions.util.TraverseTree;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;

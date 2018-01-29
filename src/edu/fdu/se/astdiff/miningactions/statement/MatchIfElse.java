@@ -55,7 +55,7 @@ public class MatchIfElse {
 	 * level III precondition father 是 if statement
 	 * 
 	 */
-	public static void matchElse(MiningActionData f, Action a, String nodeType, ITree ffFatherNode, String ffFatherNodeType) {
+	public static void matchElse(MiningActionData f, Action a) {
 		String operationEntity = IfChangeEntity.ELSE;
 		List<Action> result = new ArrayList<>();
 		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, result);

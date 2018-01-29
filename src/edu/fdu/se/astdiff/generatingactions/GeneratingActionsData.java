@@ -18,8 +18,6 @@ import com.github.gumtreediff.actions.model.Update;
 
 public class GeneratingActionsData {
 
-//	private List<Integer> dstLayerLastNodeIndex;
-
 	private List<Action> insertActions;
 	private List<Action> updateActions;
 	private List<Action> moveActions;
@@ -30,13 +28,11 @@ public class GeneratingActionsData {
 
 	public GeneratingActionsData() {
 		super();
-//		this.dstLayerLastNodeIndex = new ArrayList<Integer>();
 		this.insertActions = new ArrayList<>();
 		this.moveActions = new ArrayList<>();
 		this.updateActions = new ArrayList<>();
 		this.deleteActions = new ArrayList<>();
 		this.allActions = new ArrayList<>();
-//		this.startNodes = new ArrayList<>();
 		this.allActionMap = new HashMap<>();
 	}
 
@@ -52,16 +48,6 @@ public class GeneratingActionsData {
 		}
 		this.allActions.add(action);
 	}
-
-
-//	public List<Integer> getDstLayerLastNodeIndex() {
-//		return dstLayerLastNodeIndex;
-//	}
-
-
-//	public List<Action> startNodes;
-
-
 
 	public List<Action> getInsertActions() {
 		return insertActions;
@@ -90,9 +76,6 @@ public class GeneratingActionsData {
 		return allActions;
 	}
 
-	public void setAllActions(List<Action> allActions) {
-		this.allActions = allActions;
-	}
 
 	public void generateActionMap() {
 		for (Action tmp : this.insertActions) {
