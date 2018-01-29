@@ -2,6 +2,7 @@ package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.Tree;
+import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.astdiff.miningactions.Body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
@@ -197,9 +198,9 @@ public class ClusterActions {
             }
             Tree insNode = (Tree) a.getNode();
             String type = insNode.getAstClass().getSimpleName();
-
             if(processBigAction(a,type)==1) {
                 if(processSmallAction(a,type)==1) {
+                    System.err.println(SimpleActionPrinter.getMyOneActionString(a));
                 }
             }
         }
