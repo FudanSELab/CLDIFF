@@ -6,6 +6,7 @@ import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
+import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
 import edu.fdu.se.astdiff.miningactions.util.StatementConstants;
 
 public class MatchSimpleNameOrLiteral {
@@ -21,7 +22,13 @@ public class MatchSimpleNameOrLiteral {
 	 * @param a
 	 * @return
 	 */
-	public static void matchSimplenameOrLiteral(MiningActionData fp, Action a, Tree fafather) {
+	public static void matchSimplenameOrLiteral(MiningActionData fp, Action a) {
+		Tree fafather = BasicTreeTraversal.findFafatherNode(a.getNode());
+		if (fafather == null) {
+			System.err.println("Father Null Condition: " + a.getClass().getSimpleName() );
+			fp.setActionTraversedMap(a);
+			return;
+		}
 		String faFatherType = fafather.getAstClass().getSimpleName();
 		switch (faFatherType) {
 		case StatementConstants.IFSTATEMENT:
@@ -43,9 +50,9 @@ public class MatchSimpleNameOrLiteral {
 //			System.out.println("variable/expression");
 			MatchExpressionStatement.matchExpressionByFather(fp,a,faFatherType, fafafatherNode, ffFatherNodeType);
 			break;
-		case StatementConstants.JAVADOC:
-			operationBean = MatchJavaDoc.matchJavaDocByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
-			break;
+//		case StatementConstants.JAVADOC:
+//			operationBean = MatchJavaDoc.matchJavaDocByFather(fp,a,nodeType, fafafatherNode, ffFatherNodeType);
+//			break;
 		case StatementConstants.SWITCHCASE:
 			//switchcase
 			operationBean = MatchSwitch.matchSwitchCaseByFather(fp, a, nodeType, fafafatherNode, ffFatherNodeType);
@@ -76,14 +83,10 @@ public class MatchSimpleNameOrLiteral {
 			break;
 		case StatementConstants.METHODDECLARATION:
 			if (!StatementConstants.BLOCK.equals(type)) {
-				MatchMethodSignatureChange.matchMethodSignatureChange(fp, a, type, fafafather, fatherType);
+				MatchMethod.matchMethodSignatureChange(fp, a, type, fafafather, fatherType);
 			}
 			break;
 		default:
-			String nextAction = SimpleActionPrinter.getMyOneActionString(a);
-			System.err.print(nextAction);
-			System.err.println("Default, SimplenameOrLiteral: " + faFatherType +"\n");
-			fp.setActionTraversedMap(a);
 			break;
 		}
 	}

@@ -35,7 +35,6 @@ public class MyTreeUtil {
         while (currents.size() > 0) {
             queueCounter++;
             currentLayerCountDown--;
-
             ITree c = currents.remove(0);
             nextLayerChildrenSum += c.getChildren().size();
             if (currentLayerCountDown == 0) {
@@ -48,42 +47,5 @@ public class MyTreeUtil {
         }
         return trees;
     }
-
-
-
-    public static int getTypeCode(Action action, boolean isNullExist, Set<String> actionTypes) {
-        if (action instanceof Insert) {
-            if (isNullExist) {
-                return OperationTypeConstants.INSERT_STATEMENT_WRAPPER;
-            } else {
-                return OperationTypeConstants.INSERT_STATEMENT_AND_BODY;
-            }
-        }
-        if (action instanceof Delete) {
-            if (isNullExist || actionTypes.contains(ActionConstants.MOVE)) {
-                return OperationTypeConstants.DELETE_STATEMENT_WRAPPER;
-            } else {
-                return OperationTypeConstants.DELETE_STATEMENT_AND_BODY;
-            }
-        }
-        if (action instanceof Move) {
-            if (isNullExist) {
-                return OperationTypeConstants.MOVE_STATEMENT_WRAPPER;
-            } else {
-                return OperationTypeConstants.MOVE_STATEMENT_AND_BODY;
-            }
-        }
-        return OperationTypeConstants.UNKNOWN;
-    }
-
-
-
-
-
-
-
-
-
-
 
 }

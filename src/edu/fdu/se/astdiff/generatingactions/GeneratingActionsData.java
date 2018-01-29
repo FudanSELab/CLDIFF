@@ -31,13 +31,13 @@ public class GeneratingActionsData {
 	public GeneratingActionsData() {
 		super();
 //		this.dstLayerLastNodeIndex = new ArrayList<Integer>();
-		this.insertActions = new ArrayList<Action>();
-		this.moveActions = new ArrayList<Action>();
-		this.updateActions = new ArrayList<Action>();
-		this.deleteActions = new ArrayList<Action>(); 
-		this.allActions = new ArrayList<Action>();
+		this.insertActions = new ArrayList<>();
+		this.moveActions = new ArrayList<>();
+		this.updateActions = new ArrayList<>();
+		this.deleteActions = new ArrayList<>();
+		this.allActions = new ArrayList<>();
 //		this.startNodes = new ArrayList<>();
-		this.allActionMap = new HashMap<Action,Integer>();
+		this.allActionMap = new HashMap<>();
 	}
 
 	public void addAction(Action action, int actionIndex) {

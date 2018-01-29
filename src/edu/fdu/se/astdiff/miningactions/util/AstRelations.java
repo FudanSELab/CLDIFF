@@ -16,8 +16,6 @@ public class AstRelations {
 		return linePosition;
 	}
 
-
-
 	public static boolean isSubChildContainXXX(Action a,String stmt) {
 		List<ITree> child = a.getNode().getChildren();
 		if (child.size() < 1) {

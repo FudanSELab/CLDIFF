@@ -2,18 +2,12 @@ package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.Tree;
-<<<<<<< HEAD
 import edu.fdu.se.astdiff.miningactions.Body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningactions.util.StatementConstants;
-=======
-import com.github.javaparser.Range;
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
->>>>>>> branch 'master' of https://github.com/calvinhkf/DiffMiner.git
+
 
 import java.util.List;
 
@@ -88,7 +82,7 @@ public class ClusterInsertOrDelete {
                     MatchFieldDeclaration.matchFieldDeclarationByFather(fp, a, type, fafafather, fatherType);break;
                 case StatementConstants.INITIALIZER:break;
                 case StatementConstants.METHODDECLARATION:
-                    MatchMethodSignatureChange.matchMethodSignatureChange(fp, a, type, fafafather, fatherType);break;
+                    MatchMethod.matchMethodSignatureChange(fp, a, type, fafafather, fatherType);break;
                 default:
                     isSignature = false;
             }
@@ -188,16 +182,12 @@ public class ClusterInsertOrDelete {
                 case StatementConstants.INFIXEXPRESSION:
                 case StatementConstants.METHODINVOCATION:
                 case StatementConstants.QUALIFIEDNAME:
-<<<<<<< HEAD
-                    MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp, a,fafafather);
-=======
                 case StatementConstants.MODIFIER:
                 case StatementConstants.MARKERANNOTATION:
                 case StatementConstants.NORMALANNOTATION:
                 case StatementConstants.SINGLEMEMBERANNOTATION:
                 case StatementConstants.ASSIGNMENT:
                     MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp, a, type);
->>>>>>> branch 'master' of https://github.com/calvinhkf/DiffMiner.git
                     break;
                 default:
 //                    String operationEntity = "DEFAULT: " + a.getClass().getSimpleName() + " " + type;
