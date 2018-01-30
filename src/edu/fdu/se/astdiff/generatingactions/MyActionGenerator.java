@@ -119,7 +119,7 @@ public class MyActionGenerator {
                 Action ins = new Insert(dstItem, origSrcTrees.get(parentSrc.getId()), k);
                 Tree tmp = (Tree) dstItem;
                 tmp.setDoAction(ins);
-                myAgbData.addAction(ins, i);
+                myAgbData.addAction(ins);
                 
                 origSrcTrees.put(mappedSrcNode.getId(), dstItem);
                 newMappings.link(mappedSrcNode, dstItem);
@@ -133,7 +133,7 @@ public class MyActionGenerator {
                     ITree v = mappedSrcNode.getParent();
                     if (!mappedSrcNode.getLabel().equals(dstItem.getLabel())) {
                     	Update upd = new Update(origSrcTrees.get(mappedSrcNode.getId()), dstItem.getLabel());
-                    	myAgbData.addAction(upd, i);
+                    	myAgbData.addAction(upd);
 //                        Tree tmp = (Tree) dstItem;
                         ITree srcNode = origSrcTrees.get(mappedSrcNode.getId());
                         Tree srcTree = (Tree) srcNode;
@@ -146,7 +146,7 @@ public class MyActionGenerator {
                         Action mv = new Move(origSrcTrees.get(mappedSrcNode.getId()), origSrcTrees.get(parentSrc.getId()), k);
                         Tree tmp = (Tree) origSrcTrees.get(mappedSrcNode.getId());
                         tmp.setDoAction(mv);
-                        myAgbData.addAction(mv, i);
+                        myAgbData.addAction(mv);
 
                         int oldk = mappedSrcNode.positionInParent();
                         parentSrc.getChildren().add(k, mappedSrcNode);
@@ -167,7 +167,7 @@ public class MyActionGenerator {
             	Delete del = new Delete(origSrcTrees.get(w.getId()));
             	Tree tmp = (Tree) origSrcTrees.get(w.getId());
             	tmp.setDoAction(del);
-        		myAgbData.addAction(del, 0);
+        		myAgbData.addAction(del);
             	}
                 //w.getParent().getChildren().remove(w);
 //            }
@@ -205,7 +205,7 @@ public class MyActionGenerator {
                     if (!lcs.contains(new Mapping(a, b))) {
                         int k = findPos(b);
                         Action mv = new Move(origSrcTrees.get(a.getId()), origSrcTrees.get(w.getId()), k);
-                        myAgbData.addAction(mv, nodeIndex);
+                        myAgbData.addAction(mv);
                         //System.out.println(mv);
                         int oldk = a.positionInParent();
                         w.getChildren().add(k, a);

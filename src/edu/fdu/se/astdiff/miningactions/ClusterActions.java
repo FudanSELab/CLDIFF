@@ -77,7 +77,7 @@ public class ClusterActions {
             case StatementConstants.NORMALANNOTATION:
             case StatementConstants.SINGLEMEMBERANNOTATION:
             case StatementConstants.ASSIGNMENT:
-                MatchSimpleNameOrLiteral.matchSimplenameOrLiteral(fp, a);
+                MatchSimpleNameOrLiteral.matchSimpleNameOrLiteral(fp, a);
                 break;
             default:
                 res= 1;
@@ -92,7 +92,7 @@ public class ClusterActions {
         switch (type) {
             // 外面
             case StatementConstants.TYPEDECLARATION:
-                MatchClass.matchClassAddOrDelete(fp, a);
+                MatchClass.matchClassDeclaration(fp, a);
                 break;
             case StatementConstants.FIELDDECLARATION:
                 MatchFieldDeclaration.matchFieldDeclaration(fp, a);
@@ -101,7 +101,7 @@ public class ClusterActions {
                 MatchInitializerBlock.matchInitializerBlock(fp, a);
                 break;
             case StatementConstants.METHODDECLARATION:
-                MatchMethod.matchNewOrDeleteMethod(fp, a);
+                MatchMethod.matchMethdDeclaration(fp, a);
                 break;
 
             // 里面
@@ -109,7 +109,7 @@ public class ClusterActions {
                 MatchIfElse.matchIf(fp, a, type);
                 break;
             case StatementConstants.BLOCK:
-                MatchBlock.matchBlock(fp, a, type);
+                MatchBlock.matchBlock(fp, a);
                 break;
             case StatementConstants.BREAKSTATEMENT:
                 if (AstRelations.isFatherXXXStatement(a, StatementConstants.SWITCHSTATEMENT)) {

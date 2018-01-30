@@ -64,9 +64,9 @@ public class MatchVariableDeclarationExpression {
 			}
 		}
 
-		Set<String> srcT = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
-		Set<String> dstT = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, subActions);
-		int status = MatchTry.MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
+		Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
+		Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, subActions);
+		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
 
 		fp.setActionTraversedMap(subActions);
 

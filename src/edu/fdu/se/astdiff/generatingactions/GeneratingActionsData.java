@@ -36,7 +36,7 @@ public class GeneratingActionsData {
 		this.allActionMap = new HashMap<>();
 	}
 
-	public void addAction(Action action, int actionIndex) {
+	public void addAction(Action action) {
 		if (action instanceof Insert) {
 			this.insertActions.add(action);
 		} else if (action instanceof Update) {

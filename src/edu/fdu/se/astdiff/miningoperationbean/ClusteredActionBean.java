@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.miningoperationbean;
 
 import java.util.List;
+import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
@@ -36,6 +37,9 @@ public class ClusteredActionBean {
 
 
 	public Tree fafather;
+
+	public Set<String> changeTypes1;
+	public Set<String> changeTypes2;
 
 
 	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions,ChangePacket changePacket,Range nodeLine){

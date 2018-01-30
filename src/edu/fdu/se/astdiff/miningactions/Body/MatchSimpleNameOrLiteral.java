@@ -9,6 +9,7 @@ import com.github.gumtreediff.tree.Tree;
 
 import com.github.gumtreediff.utils.Pair;
 import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
+import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
@@ -23,7 +24,7 @@ import java.util.List;
 public class MatchSimpleNameOrLiteral {
 
 
-    public static void matchSimplenameOrLiteral(MiningActionData fp, Action a) {
+    public static void matchSimpleNameOrLiteral(MiningActionData fp, Action a) {
         Tree fafather = BasicTreeTraversal.findFafatherNode(a.getNode());
         ITree[] fatherPair = BasicTreeTraversal.getMappedFafatherNode(fp, a, fafather);
         Tree srcFafather = (Tree) fatherPair[0];
@@ -40,45 +41,58 @@ public class MatchSimpleNameOrLiteral {
         List<Action> sameEditAction = new ArrayList<>();
         DefaultDownUpTraversal.traverseFafather(a,fafather,sameEditAction);
 
-        int nodeType = fafather.getAstNode().getNodeType();
+        if(changeEntity==null){
+            matchNodeNewEntity(fp,a,queryFather,sameEditAction);
+        }else{
+            matchXXXChangeCurEntity(fp,a,changeEntity,sameEditAction);
+        }
+
+
+
+    }
+
+
+    public static void matchNodeNewEntity(MiningActionData fp,Action a,ITree fafather,List<Action> sameEdits){
+        int nodeType = ((Tree)fafather).getAstNode().getNodeType();
         switch (nodeType) {
             case  ASTNode.TYPE_DECLARATION:
-                MatchClass.matchClassSignature(fp, a, fafather);
+                MatchClass.matchClassSignatureNewEntity(fp, a, fafather,sameEdits);
                 break;
             case ASTNode.FIELD_DECLARATION:
-                MatchFieldDeclaration.matchFieldDeclarationByFather(fp, a, fafather);
+                MatchFieldDeclaration.matchFieldDeclarationChangeNewEntity(fp, a, fafather,sameEdits);
                 break;
             case ASTNode.INITIALIZER:
                 break;
             case ASTNode.METHOD_DECLARATION:
                 if (((Tree)a.getNode()).getAstNode().getNodeType()!=ASTNode.BLOCK) {
-                    MatchMethod.matchMethodSignatureChange(fp, a, fafather);
+                    MatchMethod.matchMethodSignatureChangeNewEntity(fp, a, fafather,sameEdits);
                 }
                 break;
             case ASTNode.IF_STATEMENT:
 //			System.out.println("If predicate");
-                MatchIfElse.matchIfPredicate(fp, a, fafather, changeEntity);break;
+                MatchIfElse.matchIfPredicate(fp, a, fafather,sameEdits);
+                break;
             case ASTNode.FOR_STATEMENT:
 //			System.out.println("For predicate");
-                MatchForStatement.matchForPredicate(fp, a, fafather, changeEntity);
+                MatchForStatement.matchForPredicate(fp, a, fafather,sameEdits);
                 break;
             case ASTNode.ENHANCED_FOR_STATEMENT:
 //			System.out.println("Enhanced For predicate");
-                MatchForStatement.matchEnhancedForPredicate(fp, a, fafather, changeEntity);
+                MatchForStatement.matchEnhancedForPredicate(fp, a, fafather,sameEdits);
                 break;
             case ASTNode.VARIABLE_DECLARATION_STATEMENT:
-                MatchVariableDeclarationExpression.matchVariableDeclarationByFather(fp, a, fafather, changeEntity);
+                MatchVariableDeclarationExpression.matchVariableDeclarationByFather(fp, a, fafather);
                 break;
             case ASTNode.EXPRESSION_STATEMENT:
 //			System.out.println("variable/expression");
-                MatchExpressionStatement.matchExpressionByFather(fp, a, fafather, changeEntity);
+                MatchExpressionStatement.matchExpressionByFather(fp, a, fafather);
                 break;
 //		case StatementConstants.JAVADOC:
 //			operationBean = MatchJavaDoc.matchJavaDocByFather(fp,a,nodeType, fafafatherNode);
 //			break;
             case ASTNode.SWITCH_CASE:
                 //switchcase
-                MatchSwitch.matchSwitchCaseByFather(fp, a, fafather, changeEntity);
+                MatchSwitch.matchSwitchCaseByFather(fp, a, fafather);
                 break;
             case ASTNode.RETURN_STATEMENT:
                 //return statement
@@ -95,6 +109,20 @@ public class MatchSimpleNameOrLiteral {
             default:
                 break;
         }
+
+    }
+
+    public static void matchXXXChangeCurEntity(MiningActionData fp, Action a,ChangeEntity changeEntity,List<Action> sameEditActions) {
+        ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
+        List<Action> signatureChildren = changeEntity.clusteredActionBean.actions;
+        for(Action tmp:sameEditActions){
+            if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
+                continue;
+            }
+            signatureChildren.add(tmp);
+        }
+        fp.setActionTraversedMap(sameEditActions);
+
     }
 
 }

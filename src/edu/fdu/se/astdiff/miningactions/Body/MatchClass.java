@@ -23,7 +23,7 @@ import java.util.Set;
 public class MatchClass {
 
 
-    public static void matchClassAddOrDelete(MiningActionData fp,Action a){
+    public static void matchClassDeclaration(MiningActionData fp,Action a){
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
@@ -34,29 +34,27 @@ public class MatchClass {
         fp.addOneChangeEntity(code);
     }
 
-    public static void matchClassSignature(MiningActionData fp, Action a, ITree fafather, ChangeEntity changeEntity) {
-        // insert/delete class signature paramter
-        // insert/delete class modifier
-        // update class modifier / primitive type
-        ChangePacket changePacket = null;
-        List<Action> signatureChidlren = null;
-        if(changeEntity == null) {
-            changePacket = new ChangePacket();
-            signatureChidlren = new ArrayList<>();
-            changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
-        }else{
-            changePacket = changeEntity.clusteredActionBean.changePacket;
-            signatureChidlren = changeEntity.clusteredActionBean.actions;
-        }
-
-
-        ITree[] res = TraverseTree.getMappedFafatherNode(fp,a,fafathers);
-        //todo
-        fp.setActionTraversedMap(signatureChidlren);
+    public static void matchClassSignatureNewEntity(MiningActionData fp, Action a, ITree fafather,List<Action> sameEditActions ) {
+        ChangePacket changePacket = new ChangePacket();
+        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
+        fp.setActionTraversedMap(sameEditActions);
         Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,signatureChidlren,changePacket,range,(Tree)srcFafather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEditActions,changePacket,range,(Tree)fafather);
         ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
         fp.addOneChangeEntity(code);
+    }
+
+    public static void matchClassSignatureCurEntity(MiningActionData fp, Action a,ChangeEntity changeEntity,List<Action> sameEditActions) {
+        ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
+        List<Action> signatureChildren = changeEntity.clusteredActionBean.actions;
+        for(Action tmp:sameEditActions){
+            if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
+                continue;
+            }
+            signatureChildren.add(tmp);
+        }
+        fp.setActionTraversedMap(sameEditActions);
+
     }
 
 
