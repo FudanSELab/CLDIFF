@@ -36,7 +36,7 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         type1.add(a.getClass().getSimpleName());
         traverseNodeInRange(node,0,i-1,result1,type1);
         traverseNodeInRange(node,i,children.size()-1,result1,type2);
-        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
+        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
         MatchUtil.setChangePacket(changePacket,type1,type2);
     }
 
@@ -63,7 +63,7 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         type1.add(a.getClass().getSimpleName());
         traverseNodeInRange(node,0,i-1,result1,type1);
         traverseNodeInRange(node,i,children.size()-1,result1,type2);
-        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
+        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
         MatchUtil.setChangePacket(changePacket,type1,type2);
     }
     public static void traverseConstructor(Action a,List<Action> result1,ChangePacket changePacket){
@@ -82,7 +82,7 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         type1.add(a.getClass().getSimpleName());
         traverseNodeInRange(node,0,i-1,result1,type1);
         traverseNodeInRange(node,i,children.size()-1,result1,type2);
-        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
+        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
         MatchUtil.setChangePacket(changePacket,type1,type2);
     }
 

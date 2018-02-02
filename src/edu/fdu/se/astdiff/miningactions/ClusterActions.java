@@ -7,6 +7,7 @@ import edu.fdu.se.astdiff.miningactions.Body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
+import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.List;
 
@@ -55,28 +56,27 @@ public class ClusterActions {
         }
     }
 
-
-    public int processSmallAction(Action a,String type) {
+    public int processSmallAction(Action a,int type) {
         int res = 0;
         switch(type){
-            case StatementConstants.TAGELEMENT:
-            case StatementConstants.TEXTELEMENT:
-            case StatementConstants.SIMPLENAME:
-            case StatementConstants.SIMPLETYPE:
-            case StatementConstants.STRINGLITERAL:
-            case StatementConstants.NULLLITERAL:
-            case StatementConstants.PREFIXEXPRESSION:
-            case StatementConstants.CHARACTERLITERAL:
-            case StatementConstants.NUMBERLITERAL:
-            case StatementConstants.BOOLEANLITERAL:
-            case StatementConstants.INFIXEXPRESSION:
-            case StatementConstants.METHODINVOCATION:
-            case StatementConstants.QUALIFIEDNAME:
-            case StatementConstants.MODIFIER:
-            case StatementConstants.MARKERANNOTATION:
-            case StatementConstants.NORMALANNOTATION:
-            case StatementConstants.SINGLEMEMBERANNOTATION:
-            case StatementConstants.ASSIGNMENT:
+            case ASTNode.TAG_ELEMENT:
+            case ASTNode.TEXT_ELEMENT:
+            case ASTNode.SIMPLE_NAME:
+            case ASTNode.SIMPLE_TYPE:
+            case ASTNode.STRING_LITERAL:
+            case ASTNode.NULL_LITERAL:
+            case ASTNode.PREFIX_EXPRESSION:
+            case ASTNode.CHARACTER_LITERAL:
+            case ASTNode.NUMBER_LITERAL:
+            case ASTNode.BOOLEAN_LITERAL:
+            case ASTNode.INFIX_EXPRESSION:
+            case ASTNode.METHOD_INVOCATION:
+            case ASTNode.QUALIFIED_NAME:
+            case ASTNode.MODIFIER:
+            case ASTNode.MARKER_ANNOTATION:
+            case ASTNode.NORMAL_ANNOTATION:
+            case ASTNode.SINGLE_MEMBER_ANNOTATION:
+            case ASTNode.ASSIGNMENT:
                 MatchSimpleNameOrLiteral.matchSimpleNameOrLiteral(fp, a);
                 break;
             default:
@@ -87,32 +87,32 @@ public class ClusterActions {
 
     }
 
-    public int processBigAction(Action a,String type) {
+    public int processBigAction(Action a,int type) {
         int res = 0;
         switch (type) {
             // 外面
-            case StatementConstants.TYPEDECLARATION:
+            case ASTNode.TYPE_DECLARATION:
                 MatchClass.matchClassDeclaration(fp, a);
                 break;
-            case StatementConstants.FIELDDECLARATION:
+            case ASTNode.FIELD_DECLARATION:
                 MatchFieldDeclaration.matchFieldDeclaration(fp, a);
                 break;
-            case StatementConstants.INITIALIZER:
+            case ASTNode.INITIALIZER:
                 MatchInitializerBlock.matchInitializerBlock(fp, a);
                 break;
-            case StatementConstants.METHODDECLARATION:
+            case ASTNode.METHOD_DECLARATION:
                 MatchMethod.matchMethdDeclaration(fp, a);
                 break;
 
             // 里面
-            case StatementConstants.IFSTATEMENT:
+            case ASTNode.IF_STATEMENT:
                 MatchIfElse.matchIf(fp, a, type);
                 break;
-            case StatementConstants.BLOCK:
+            case ASTNode.BLOCK:
                 MatchBlock.matchBlock(fp, a);
                 break;
-            case StatementConstants.BREAKSTATEMENT:
-                if (AstRelations.isFatherXXXStatement(a, StatementConstants.SWITCHSTATEMENT)) {
+            case ASTNode.BREAK_STATEMENT:
+                if (AstRelations.isFatherXXXStatement(a, ASTNode.SWITCH_STATEMENT)) {
                     //增加switch语句
                     MatchSwitch.matchSwitchCaseByFather(fp, a);
                 } else {
@@ -120,66 +120,66 @@ public class ClusterActions {
                     fp.setActionTraversedMap(a);
                 }
                 break;
-            case StatementConstants.RETURNSTATEMENT:
+            case ASTNode.RETURN_STATEMENT:
                 MatchReturnStatement.matchReturnStatement(fp, a, type);
                 break;
-            case StatementConstants.FORSTATEMENT:
+            case ASTNode.FOR_STATEMENT:
                 //增加for语句
-                MatchForStatement.matchForStatement(fp, a, type);
+                MatchForStatement.matchForStatement(fp, a);
                 break;
-            case StatementConstants.ENHANCEDFORSTATEMENT:
+            case ASTNode.ENHANCED_FOR_STATEMENT:
                 //增加for语句
-                MatchForStatement.matchEnhancedForStatement(fp, a, type);
+                MatchForStatement.matchEnhancedForStatement(fp, a);
                 break;
-            case StatementConstants.WHILESTATEMENT:
+            case ASTNode.WHILE_STATEMENT:
                 //增加while语句
                 MatchWhileStatement.matchWhileStatement(fp, a, type);
                 break;
-            case StatementConstants.DOSTATEMENT:
+            case ASTNode.DO_STATEMENT:
                 //增加do while语句
                 MatchWhileStatement.matchDoStatement(fp, a, type);
                 break;
-            case StatementConstants.TRYSTATEMENT:
+            case ASTNode.TRY_STATEMENT:
                 MatchTry.matchTry(fp, a, type);
                 break;
-            case StatementConstants.THROWSTATEMENT:
+            case ASTNode.THROW_STATEMENT:
                 MatchTry.matchThrowStatement(fp, a);
                 break;
-            case StatementConstants.VARIABLEDECLARATIONSTATEMENT:
+            case ASTNode.VARIABLE_DECLARATION_STATEMENT:
                 MatchVariableDeclarationExpression.matchVariableDeclaration(fp, a, type);
                 break;
-            case StatementConstants.EXPRESSIONSTATEMENT:
-                if (AstRelations.isFatherXXXStatement(a, StatementConstants.IFSTATEMENT) && a.getNode().getParent().getChildPosition(a.getNode()) == 2) {
+            case ASTNode.EXPRESSION_STATEMENT:
+                if (AstRelations.isFatherXXXStatement(a, ASTNode.IF_STATEMENT) && a.getNode().getParent().getChildPosition(a.getNode()) == 2) {
                     // Pattenr 1.2 Match else
                     MatchIfElse.matchElse(fp, a);
                 } else {
                     MatchExpressionStatement.matchExpression(fp, a);
                 }
                 break;
-//                case StatementConstants.CONDITIONALEXPRESSION:
+//                case ASTNode.CONDITIONALEXPRESSION:
 //                    MatchConditionalExpression.matchConditionalExpression(fp, a, type);
 //                    break;
-            case StatementConstants.SYNCHRONIZEDSTATEMENT:
+            case ASTNode.SYNCHRONIZED_STATEMENT:
                 //同步语句块增加
                 MatchSynchronized.matchSynchronized(fp, a, type);
                 break;
-            case StatementConstants.SWITCHSTATEMENT:
+            case ASTNode.SWITCH_STATEMENT:
                 //增加switch语句
-                MatchSwitch.matchSwitch(fp, a, type);
+                MatchSwitch.matchSwitch(fp, a);
                 break;
-            case StatementConstants.SWITCHCASE:
+            case ASTNode.SWITCH_CASE:
                 //增加switch语句
                 MatchSwitch.matchSwitchCase(fp, a, type);
                 break;
-//            case StatementConstants.JAVADOC:
+//            case ASTNode.JAVADOC:
 //                //增加javadoc
 //                MatchJavaDoc.matchJavaDoc(fp, a, type);
 //                break;
-//            case StatementConstants.CONSTRUCTORINVOCATION:
+//            case ASTNode.CONSTRUCTORINVOCATION:
 //                //构造方法this
 //                MatchMethod.matchConstructorInvocation(fp, a);
 //                break;
-//            case StatementConstants.SUPERCONSTRUCTORINVOCATION:
+//            case ASTNode.SUPERCONSTRUCTORINVOCATION:
 //                //构造方法super
 //                MatchMethod.matchSuperConstructorInvocation(fp, a, type);
 //                break;
@@ -198,8 +198,7 @@ public class ClusterActions {
                 continue;
             }
             Tree insNode = (Tree) a.getNode();
-            String type = insNode.getAstClass().getSimpleName();
-            if(processBigAction(a,type)==1) {
+            if(processBigAction(a,insNode.getAstNode().getNodeType())==1) {
 
             }
         }
@@ -213,8 +212,7 @@ public class ClusterActions {
                 continue;
             }
             Tree insNode = (Tree) a.getNode();
-            String type = insNode.getAstClass().getSimpleName();
-            if(processSmallAction(a,type)==1) {
+            if(processSmallAction(a,insNode.getAstNode().getNodeType())==1) {
                 System.err.println(SimpleActionPrinter.getMyOneActionString(a));
             }
         }
@@ -230,8 +228,7 @@ public class ClusterActions {
                 continue;
             }
             Tree tmp = (Tree) a.getNode();
-            String type = tmp.getAstClass().getSimpleName();
-            if(processSmallAction(a,type)==1){
+            if(processSmallAction(a,tmp.getAstNode().getNodeType())==1){
                 System.out.println(SimpleActionPrinter.getMyOneActionString(a));
             }
         }

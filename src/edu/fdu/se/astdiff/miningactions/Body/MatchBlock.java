@@ -17,15 +17,15 @@ public class MatchBlock {
         int type = fatherNode.getAstNode().getNodeType();
         switch (type) {
             case ASTNode.SWITCH_STATEMENT:
-                MatchSwitch.matchSwitchCaseByFather(fp,a, fatherNode);
+                MatchSwitch.matchSwitchCaseByFather(fp,a);
                 break;
             case ASTNode.IF_STATEMENT:
                 //Pattern 1.2 Match else
-                MatchIfElse.matchElse(fp, a, fatherNode);
+                MatchIfElse.matchElse(fp, a);
                 break;
             case ASTNode.TRY_STATEMENT:
                 ////Finally块
-                MatchTry.matchFinally(fp, a, fatherNode);
+                MatchTry.matchFinally(fp, a);
                 break;
             default:
                 break;

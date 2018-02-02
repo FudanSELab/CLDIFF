@@ -33,10 +33,10 @@ public class AstRelations {
 	}
 
 
-	public static boolean isFatherXXXStatement(Action a,String stmt) {
+	public static boolean isFatherXXXStatement(Action a,int astNodeType) {
 		Tree parentTree = (Tree) a.getNode().getParent();
-		String type = parentTree.getAstClass().getSimpleName();
-		if (stmt.equals(type)) {
+		int type = parentTree.getAstNode().getNodeType();
+		if (astNodeType == type) {
 			return true;
 		}
 		return false;

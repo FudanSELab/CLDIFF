@@ -8,79 +8,46 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 
+import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.MatchTry;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
+import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.statementplus.ExpressionChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.statementplus.ReturnChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.VariableChangeEntity;
 
 public class MatchVariableDeclarationExpression {
-	/**
-	 * level III VARIABLEDECLARATIONSTATEMENT
-	 * 
-	 * @param a
-	 * @return
-	 */
-	public static ClusteredActionBean matchVariableDeclaration(MiningActionData fp, Action a, String nodeType) {
-		String operationEntity = VariableChangeEntity.VARIABLEDECLARATION;
 
+	public static void matchVariableDeclaration(MiningActionData fp, Action a, int nodeType) {
+		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
-		int status = MatchTry.MyTreeUtil.traverseNodeGetAllEditActions(a, subActions);
+		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
+		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
+		Range range = AstRelations.getRangeOfAstNode(a);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		VariableChangeEntity code = new VariableChangeEntity(mBean);
+		fp.addOneChangeEntity(code);
+//		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(a.getNode());
 
-		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(a.getNode());
-		if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
-			operationEntity += "-OBJECT-INITIALIZING";
-			if (AstRelations.isClassCreation(subActions)) {
-				operationEntity += "-NEW";
-			}
-		}
-
-		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
-
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
-		return mHighLevelOperationBean;
 	}
 
-	public static void matchVariableDeclarationByFather(MiningActionData fp, Action a, String nodeType,ITree fafafatherNode, String ffFatherNodeType) {
-		String operationEntity = VariableChangeEntity.VARIABLEDECLARATION;
+	public static void matchVariableDeclarationByFather(MiningActionData fp, Action a, Tree fafather, List<Action> sameEditActions) {
+		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
-
-		ITree srcfafafather = null;
-		ITree dstfafafather = null;
-		if (a instanceof Insert) {
-			dstfafafather = fafafatherNode;
-			srcfafafather = fp.getMappedSrcOfDstNode(dstfafafather);
-			if (srcfafafather == null) {
-				System.err.println("err null mapping");
-			}
-		} else {
-			srcfafafather = fafafatherNode;
-			dstfafafather = fp.getMappedDstOfSrcNode(srcfafafather);
-			if (dstfafafather == null) {
-				System.err.println("err null mapping");
-			}
-		}
-
-		Set<String> srcT = MyTreeUtil.traverseNodeGetAllEditActions(srcfafafather, subActions);
-		Set<String> dstT = MyTreeUtil.traverseNodeGetAllEditActions(dstfafafather, subActions);
-		int status = MyTreeUtil.isSrcOrDstAdded(srcT,dstT);
-
+		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
+		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
+		Range range = AstRelations.getRangeOfAstNode(a);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range);
+		ExpressionChangeEntity code = new ExpressionChangeEntity(mBean);
+		fp.addOneChangeEntity(code);
 
-		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(fafafatherNode);
-		if (nodeContainVariableDeclarationFragment != null && nodeContainVariableDeclarationFragment.getChildren().size()>1) {
-			operationEntity += "-OBJECT-INITIALIZING";
-			if (AstRelations.isClassCreation(subActions)) {
-				operationEntity += "-NEW";
-			}
-		}
-
-		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
-
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,subActions,nodeLinePosition,status,operationEntity,null,null);
+//		String operationEntity = VariableChangeEntity.VARIABLEDECLARATION;
 	}
 }

@@ -52,7 +52,7 @@ public class MatchSimpleNameOrLiteral {
     }
 
 
-    public static void matchNodeNewEntity(MiningActionData fp,Action a,ITree fafather,List<Action> sameEdits){
+    public static void matchNodeNewEntity(MiningActionData fp,Action a,Tree fafather,List<Action> sameEdits){
         int nodeType = ((Tree)fafather).getAstNode().getNodeType();
         switch (nodeType) {
             case  ASTNode.TYPE_DECLARATION:
@@ -70,7 +70,7 @@ public class MatchSimpleNameOrLiteral {
                 break;
             case ASTNode.IF_STATEMENT:
 //			System.out.println("If predicate");
-                MatchIfElse.matchIfPredicate(fp, a, fafather,sameEdits);
+                MatchIfElse.matchIfPredicateChangeNewEntity(fp, a, fafather,sameEdits);
                 break;
             case ASTNode.FOR_STATEMENT:
 //			System.out.println("For predicate");
@@ -81,31 +81,31 @@ public class MatchSimpleNameOrLiteral {
                 MatchForStatement.matchEnhancedForPredicate(fp, a, fafather,sameEdits);
                 break;
             case ASTNode.VARIABLE_DECLARATION_STATEMENT:
-                MatchVariableDeclarationExpression.matchVariableDeclarationByFather(fp, a, fafather);
+                MatchVariableDeclarationExpression.matchVariableDeclarationByFather(fp, a, fafather,sameEdits);
                 break;
             case ASTNode.EXPRESSION_STATEMENT:
 //			System.out.println("variable/expression");
-                MatchExpressionStatement.matchExpressionByFather(fp, a, fafather);
+                MatchExpressionStatement.matchExpressionByFather(fp, a, fafather,sameEdits);
                 break;
 //		case StatementConstants.JAVADOC:
 //			operationBean = MatchJavaDoc.matchJavaDocByFather(fp,a,nodeType, fafafatherNode);
 //			break;
             case ASTNode.SWITCH_CASE:
                 //switchcase
-                MatchSwitch.matchSwitchCaseByFather(fp, a, fafather);
+                MatchSwitch.matchSwitchCaseByFather(fp, a);
                 break;
             case ASTNode.RETURN_STATEMENT:
                 //return statement
-                MatchReturnStatement.matchReturnStatentByFather(fp, a, fafather);
+                MatchReturnStatement.matchReturnStatentByFather(fp, a, fafather,sameEdits);
                 break;
-            case ASTNode.CONSTRUCTOR_INVOCATION:
-                //构造方法this
-                MatchMethod.matchConstructorInvocationByFather(fp, a, fafather);
-                break;
-            case ASTNode.SUPER_CONSTRUCTOR_INVOCATION:
-                //构造方法super
-                MatchMethod.matchSuperConstructorInvocationByFather(fp, a, fafather);
-                break;
+//            case ASTNode.CONSTRUCTOR_INVOCATION:
+//                //构造方法this
+//                MatchMethod.matchConstructorInvocationByFather(fp, a, fafather);
+//                break;
+//            case ASTNode.SUPER_CONSTRUCTOR_INVOCATION:
+//                //构造方法super
+//                MatchMethod.matchSuperConstructorInvocationByFather(fp, a, fafather);
+//                break;
             default:
                 break;
         }

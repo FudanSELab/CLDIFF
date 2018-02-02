@@ -26,20 +26,21 @@ public class MatchClass {
     public static void matchClassDeclaration(MiningActionData fp,Action a){
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
-        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
+        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
         DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+        fp.setActionTraversedMap(subActions);
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
         ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
         fp.addOneChangeEntity(code);
     }
 
-    public static void matchClassSignatureNewEntity(MiningActionData fp, Action a, ITree fafather,List<Action> sameEditActions ) {
+    public static void matchClassSignatureNewEntity(MiningActionData fp, Action a, Tree fafather,List<Action> sameEditActions ) {
         ChangePacket changePacket = new ChangePacket();
-        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_CLASS);
+        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
         fp.setActionTraversedMap(sameEditActions);
         Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEditActions,changePacket,range,(Tree)fafather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEditActions,changePacket,range,fafather);
         ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
         fp.addOneChangeEntity(code);
     }

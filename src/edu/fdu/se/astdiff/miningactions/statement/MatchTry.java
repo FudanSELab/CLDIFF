@@ -6,11 +6,17 @@ import java.util.List;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 
+import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningactions.util.MyTreeUtil;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.model.ClassOrInterfaceDeclarationChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.statementplus.SwitchChangeEntity;
 
 public class MatchTry {
 	
@@ -20,34 +26,45 @@ public class MatchTry {
 	 * @param a
 	 * @return
 	 */
-	public static ClusteredActionBean matchTry(MiningActionData fp, Action a, String nodeType) {
-		String operationEntity = "TRYSTATEMENT";
-		ClusteredActionBean mHighLevelOperationBean = AstRelations.matchByNode(fp,a,nodeType,operationEntity);
-		return mHighLevelOperationBean;
+	public static void matchTry(MiningActionData fp, Action a, int nodeType) {
+		ChangePacket changePacket = new ChangePacket();
+		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
+		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		fp.setActionTraversedMap(subActions);
+		Range range = AstRelations.getRangeOfAstNode(a);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
+		fp.addOneChangeEntity(code);
+
+		String operationEntity = "trySTATEMENT";
 	}
 
-	public static ClusteredActionBean matchThrowStatement(MiningActionData fp, Action a) {
+	public static void matchThrowStatement(MiningActionData fp, Action a) {
+		ChangePacket changePacket = new ChangePacket();
+		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
+		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		fp.setActionTraversedMap(subActions);
+		Range range = AstRelations.getRangeOfAstNode(a);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
+		fp.addOneChangeEntity(code);
+
 		String operationEntity = "THROWSTATEMENT";
-		List<Action> throwAction = new ArrayList<Action>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, throwAction);
-		fp.setActionTraversedMap(throwAction);
-		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
 
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,throwAction,nodeLinePosition,status,operationEntity,null,null);
-		return mHighLevelOperationBean;
 	}
 
-	public static ClusteredActionBean matchFinally(MiningActionData fp, Action a, String nodeType, ITree ffFatherNode, String fatherNodeType) {
+	public static void matchFinally(MiningActionData fp, Action a) {
+		ChangePacket changePacket = new ChangePacket();
+		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
+		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		Range range = AstRelations.getRangeOfAstNode(a);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
+		fp.addOneChangeEntity(code);
 		String operationEntity = "FINALLY";
-		List<Action> finallyAction = new ArrayList<>();
-		int status = MyTreeUtil.traverseNodeGetAllEditActions(a, finallyAction);
-		fp.setActionTraversedMap(finallyAction);
-		Range nodeLinePosition = AstRelations.getRangeOfAstNode(a);
-
-		ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(
-				a,nodeType,finallyAction,nodeLinePosition,status,operationEntity,null,null);
-		return mHighLevelOperationBean;
 	}
 
 
