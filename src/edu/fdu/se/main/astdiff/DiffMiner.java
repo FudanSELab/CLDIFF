@@ -125,8 +125,9 @@ public class DiffMiner {
 //        System.out.println("Step2 Begin to cluster actions:-------------------");
 //        MiningActionData mMiningActionData = new MiningActionData(data, jtg.srcTC, jtg.dstTC, jtg.mapping);
 //        ClusterActions.doCluster(mMiningActionData);
-//        MiningOperation mo = new MiningOperation(pData);
+        MiningOperation mo = new MiningOperation(pData);
 //        mo.printHighLevelOperationBeanList(mMiningActionData);
+        mo.printHighLevelOperationBeanList();
     }
 
 

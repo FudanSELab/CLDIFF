@@ -11,4 +11,6 @@ public class WhileChangeEntity extends StatementPlusChangeEntity {
     public WhileChangeEntity(ClusteredActionBean bean) {
         super(bean);
     }
+
+    public String xxx;
 }

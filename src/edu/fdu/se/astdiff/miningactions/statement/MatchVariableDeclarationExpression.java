@@ -47,6 +47,6 @@ public class MatchVariableDeclarationExpression {
 		ExpressionChangeEntity code = new ExpressionChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 
-//		String operationEntity = VariableChangeEntity.VARIABLEDECLARATION;
+
 	}
 }

@@ -4,11 +4,13 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import org.eclipse.jdt.core.dom.IfStatement;
 
 /**
  * Created by huangkaifeng on 2018/1/23.
+ *
  */
 public class ClassOrInterfaceDeclarationChangeEntity extends ChangeEntity{
     /**
@@ -24,11 +26,22 @@ public class ClassOrInterfaceDeclarationChangeEntity extends ChangeEntity{
      */
     public ClassOrInterfaceDeclarationChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType){
         ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration)bodyDeclarationPair.getBodyDeclaration();
+
         this.lineRange = cod.getRange().get();
-        this.changeEntity = "ClassOrInterfaceDeclaration";
+        String classOrInterface;
+        if(cod.isInterface()){
+            classOrInterface = "interface";
+        }else{
+            classOrInterface = "class";
+        }
+        String isStatic = "";
+        if(cod.isStatic()){
+            isStatic = "static";
+        }
+        this.changeEntity = classOrInterface;
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +" " + isStatic +" "+classOrInterface + " "+ cod.getNameAsString();
     }
 
     @Override

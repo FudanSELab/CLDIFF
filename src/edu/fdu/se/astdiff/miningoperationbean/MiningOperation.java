@@ -38,10 +38,10 @@ public class MiningOperation {
 
     public void initPreprocessChangeEntityList(){
         for(BodyDeclarationPair item:this.preprocessingData.getmBodiesAdded()){
-            addOneBody(item,OperationTypeConstants.INSERT_BODYDECLARATION);
+            addOneBody(item,OperationTypeConstants.INSERT);
         }
         for(BodyDeclarationPair item:this.preprocessingData.getmBodiesDeleted()){
-            addOneBody(item,OperationTypeConstants.DELETE_BODYDECLARATION);
+            addOneBody(item,OperationTypeConstants.DELETE);
         }
     }
 
@@ -68,5 +68,12 @@ public class MiningOperation {
         List<ChangeEntity> mChangeEntityList =  fp.getChangeEntityList();
         mChangeEntityList.forEach(a -> System.out.print(a.toString()));
     }
+
+
+    public void printHighLevelOperationBeanList() {
+        List<ChangeEntity> mChangeEntityList =  this.mChangeEntityAll;
+        mChangeEntityList.forEach(a -> System.out.println(a.toString()));
+    }
+
 
 }

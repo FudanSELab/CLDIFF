@@ -57,7 +57,6 @@ public class MatchForStatement {
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
 
-        String operationEntity  = ForChangeEntity.FOR;
     }
 
     public static void matchEnhancedForPredicate(MiningActionData fp, Action a, Tree fafather,List<Action> sameEdits) {
@@ -70,7 +69,6 @@ public class MatchForStatement {
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
 
-        String operationEntity  = ForChangeEntity.FOR;
 
     }
 }
