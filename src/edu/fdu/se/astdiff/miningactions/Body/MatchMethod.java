@@ -29,7 +29,8 @@ public class MatchMethod {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
-		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
+		DefaultUpDownTraversal.traverseMethod(a,subActions,changePacket);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);

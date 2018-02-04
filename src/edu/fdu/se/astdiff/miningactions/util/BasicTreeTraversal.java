@@ -50,7 +50,7 @@ public class BasicTreeTraversal {
     public static void traverseOneType(Action a,List<Action> result1,ChangePacket changePacket){
         Set<String> type1 = new HashSet<>();
         traverseNode(a.getNode(),result1,type1);
-        MatchUtil.setChangePacket(changePacket,type1);
+        changePacket.changeSet1 = type1;
     }
 
 

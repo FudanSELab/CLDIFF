@@ -26,22 +26,23 @@ import org.eclipse.jdt.core.dom.ASTNode;
 public class MatchIfElse {
 
 
-	public static void matchIf(MiningActionData fp, Action a, int nodeType) {
+	public static void matchIf(MiningActionData fp, Action a) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
-		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		DefaultUpDownTraversal.traverseTypeIIStatements(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		IfChangeEntity code = new IfChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 
-		String operationEntity = "";
 		if (AstRelations.isFatherXXXStatement(a, ASTNode.IF_STATEMENT)) {
-			operationEntity = IfChangeEntity.ELSE_IF;
+			code.xxx = IfChangeEntity.ELSE_IF;
+			changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_UPGRADE);
 		} else {
-			operationEntity = IfChangeEntity.IF;
+			code.xxx = IfChangeEntity.IF;
+			changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
 		}
 	}
 	
@@ -50,14 +51,15 @@ public class MatchIfElse {
 	public static void matchElse(MiningActionData fp, Action a) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
-		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		DefaultUpDownTraversal.traverseTypeIIStatements(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		IfChangeEntity code = new IfChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
-		String operationEntity = IfChangeEntity.ELSE;
+		code.xxx = IfChangeEntity.ELSE;
 	}
 	
 	
@@ -68,7 +70,8 @@ public class MatchIfElse {
 	public static void matchIfPredicateChangeNewEntity(MiningActionData fp, Action a, Tree fafather, List<Action> sameEdits) {
 
 		ChangePacket changePacket = new ChangePacket();
-		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
+		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
 		fp.setActionTraversedMap(sameEdits);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,fafather);

@@ -23,17 +23,16 @@ import edu.fdu.se.astdiff.miningoperationbean.statementplus.VariableChangeEntity
 
 public class MatchVariableDeclarationExpression {
 
-	public static void matchVariableDeclaration(MiningActionData fp, Action a, int nodeType) {
+	public static void matchVariableDeclaration(MiningActionData fp, Action a) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
-		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		VariableChangeEntity code = new VariableChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
-//		ITree nodeContainVariableDeclarationFragment = AstRelations.isChildContainVariableDeclarationFragment(a.getNode());
 
 	}
 

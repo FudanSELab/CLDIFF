@@ -1,5 +1,7 @@
 package edu.fdu.se.astdiff.miningoperationbean;
 
+import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Insert;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.HashMap;
@@ -73,9 +75,10 @@ public class OperationTypeConstants {
 
 
     // 整个BodyDeclaration Statement的增删
-    final public static int SUB_ENTITY_TYPE_WHOLE = 0x12000;
-    final public static int SUB_ENTITY_TYPE_REFURNISH = 0x12001;
-    final public static int SUB_ENTITY_TYPE_UPGRADE = 0x12001;
+    // structure
+    final public static int SUB_ENTITY_STRUCTURE_WHOLE = 0x12000;
+    final public static int SUB_ENTITY_STRUCTURE_REFURNISH = 0x12001;
+    final public static int SUB_ENTITY_STRUCTURE_UPGRADE = 0x12001;
 
 
 
@@ -85,7 +88,27 @@ public class OperationTypeConstants {
 
 
 
+    public static int getEditTypeIntCode(Action a){
+        switch (a.getClass().getSimpleName()){
+            case "Insert":return INSERT;
+            case "Move":return MOVE;
+            case "Update":return UPDATE;
+            case "Delete":return DELETE;
+        }
+        return UNKNOWN;
+    }
 
+
+    public static int getEditTypeIntCode(String a){
+        switch (a){
+            case "Insert":return INSERT;
+            case "Move":return MOVE;
+            case "Update":return UPDATE;
+            case "Delete":return DELETE;
+        }
+        return UNKNOWN;
+
+    }
 // 最小变化单位为Statement 变化包括 INS,MOV,UPD,MULTI_EDITS
     // 多个单位如果连续 而且变化相同，组合成cluster
 

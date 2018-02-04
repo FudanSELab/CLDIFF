@@ -21,7 +21,7 @@ public class MatchUtil {
             changePacket.setOperationType(OperationTypeConstants.INSERT);
             if(types1.size() ==1 && types2.size()==1 &&types2.contains(ActionConstants.INSERT)){
                 // ins + ins
-                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_TYPE_WHOLE);
+                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
             }else if(types1.size() ==1 && types2.size()==1 &&types2.contains(ActionConstants.NULLACTION)){
                 // ins + null
 //                changePacket.setOperationSubEntity();
@@ -38,7 +38,7 @@ public class MatchUtil {
             changePacket.setOperationType(OperationTypeConstants.DELETE);
             if(types1.size() ==1 && types2.size()==1 &&types2.contains(ActionConstants.DELETE)){
                 // del + del
-                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_TYPE_WHOLE);
+                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
             }else if(types1.size() ==1 && types2.size()==1 &&types2.contains(ActionConstants.NULLACTION)){
                 // del + null
             }else if(types1.size() ==1 && types2.size()==2){
@@ -71,7 +71,7 @@ public class MatchUtil {
             changePacket.setOperationType(OperationTypeConstants.INSERT);
             if(types1.size() ==1){
                 // ins
-                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_TYPE_WHOLE);
+                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
                 // ins + ins_null
             }else if(types1.size() == 2) {
                 // ins_null + ins
@@ -81,7 +81,7 @@ public class MatchUtil {
             changePacket.setOperationType(OperationTypeConstants.DELETE);
             if(types1.size() ==1){
                 // ins
-                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_TYPE_WHOLE);
+                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
                 // ins + ins_null
             }else if(types1.size() == 2) {
                 // ins_null + ins
@@ -91,7 +91,7 @@ public class MatchUtil {
             changePacket.setOperationType(OperationTypeConstants.MOVE);
             if(types1.size() ==1){
                 // ins
-                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_TYPE_WHOLE);
+                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
                 // ins + ins_null
             }else if(types1.size() == 2) {
                 // ins_null + ins

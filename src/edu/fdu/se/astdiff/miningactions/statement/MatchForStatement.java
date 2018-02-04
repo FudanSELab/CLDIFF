@@ -23,6 +23,7 @@ public class MatchForStatement {
     public static void matchForStatement(MiningActionData fp, Action a){
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
+        changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
         DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
         fp.setActionTraversedMap(subActions);
@@ -36,6 +37,7 @@ public class MatchForStatement {
     public static void matchEnhancedForStatement(MiningActionData fp, Action a){
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
+        changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
         DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
         fp.setActionTraversedMap(subActions);
@@ -47,7 +49,8 @@ public class MatchForStatement {
 
     public static void matchForPredicate(MiningActionData fp, Action a,Tree fafather, List<Action> sameEdits) {
         ChangePacket changePacket = new ChangePacket();
-        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
+        changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
+        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
         fp.setActionTraversedMap(sameEdits);
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,fafather);
@@ -59,7 +62,8 @@ public class MatchForStatement {
 
     public static void matchEnhancedForPredicate(MiningActionData fp, Action a, Tree fafather,List<Action> sameEdits) {
         ChangePacket changePacket = new ChangePacket();
-        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
+        changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
+        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
         fp.setActionTraversedMap(sameEdits);
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,fafather);

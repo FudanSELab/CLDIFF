@@ -22,36 +22,34 @@ public class MatchSwitch {
 	public static void matchSwitch(MiningActionData fp, Action a){
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
-		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		DefaultUpDownTraversal.traverseSwitchStatements(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
-
-
-		String operationEntity = "SWITCHSTATEMENT";
 	}
 
-	public static void matchSwitchCase(MiningActionData fp, Action a, int nodeType){
+	public static void matchSwitchCase(MiningActionData fp, Action a){
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
-		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		DefaultUpDownTraversal.traverseSwtichCase(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
-
-		String operationEntity = "SWITCHCASE";
-
+		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_UPGRADE);
 	}
 
 	public static void matchSwitchCaseByFather(MiningActionData fp, Action a){
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
 		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);

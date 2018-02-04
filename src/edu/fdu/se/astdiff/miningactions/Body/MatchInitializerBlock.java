@@ -23,22 +23,9 @@ import java.util.List;
 public class MatchInitializerBlock {
 
     public static void matchInitializerBlock(MiningActionData fp, Action a) {
-        Tree tt = (Tree) a.getNode();
-        if(tt.getChildren().size()==1){
-            Tree child = (Tree)tt.getChild(0);
-            if(child.getAstNode().getNodeType()== ASTNode.BLOCK){
-
-            }
-        }else if(tt.getChildren().size()==2){
-            Tree child1 = (Tree)tt.getChild(0);
-            Tree child2 = (Tree)tt.getChild(1);
-            if(child1.getAstNode().getNodeType()==ASTNode.MODIFIER && child2.getAstNode().getNodeType()==ASTNode.BLOCK
-                    &&child1.getLabel()=="static"){
-
-            }
-        }
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
+        changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
         DefaultUpDownTraversal.traverseInitializer(a,subActions,changePacket);
         Range range = AstRelations.getRangeOfAstNode(a);
@@ -46,6 +33,21 @@ public class MatchInitializerBlock {
         InitializerChangeEntity code = new InitializerChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         fp.setActionTraversedMap(subActions);
+
+        Tree tt = (Tree) a.getNode();
+        if(tt.getChildren().size()==1){
+            Tree child = (Tree)tt.getChild(0);
+            if(child.getAstNode().getNodeType()== ASTNode.BLOCK){
+                code.staticOrNonStatic = "Non-static";
+            }
+        }else if(tt.getChildren().size()==2){
+            Tree child1 = (Tree)tt.getChild(0);
+            Tree child2 = (Tree)tt.getChild(1);
+            if(child1.getAstNode().getNodeType()==ASTNode.MODIFIER && child2.getAstNode().getNodeType()==ASTNode.BLOCK
+                    &&child1.getLabel()=="static"){
+                code.staticOrNonStatic = "static";
+            }
+        }
     }
 
 }

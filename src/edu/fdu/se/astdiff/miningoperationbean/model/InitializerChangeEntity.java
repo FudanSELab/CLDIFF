@@ -22,4 +22,5 @@ public class InitializerChangeEntity extends ChangeEntity{
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
     }
+    public String staticOrNonStatic;
 }

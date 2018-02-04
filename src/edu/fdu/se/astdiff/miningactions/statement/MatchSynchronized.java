@@ -17,19 +17,16 @@ import java.util.List;
 
 public class MatchSynchronized {
 	
-	public static void matchSynchronized(MiningActionData fp, Action a, int nodeType){
+	public static void matchSynchronized(MiningActionData fp, Action a){
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
-		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		DefaultUpDownTraversal.traverseTypeIIStatements(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		SynchronizedChangeEntity code = new SynchronizedChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
-
-
-		String operationEntity = "SYNCHRONIZED";
 	}
 
 

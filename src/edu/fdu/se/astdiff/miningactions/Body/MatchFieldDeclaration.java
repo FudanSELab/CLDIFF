@@ -27,8 +27,9 @@ public class MatchFieldDeclaration {
     public static void matchFieldDeclaration(MiningActionData fp, Action a) {
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
+        changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
-        DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+        DefaultUpDownTraversal.traverseField(a,subActions,changePacket);
         Range range = AstRelations.getRangeOfAstNode(a);
         fp.setActionTraversedMap(subActions);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);

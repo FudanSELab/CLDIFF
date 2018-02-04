@@ -26,9 +26,10 @@ public class MatchTry {
 	 * @param a
 	 * @return
 	 */
-	public static void matchTry(MiningActionData fp, Action a, int nodeType) {
+	public static void matchTry(MiningActionData fp, Action a) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
 		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
@@ -36,8 +37,6 @@ public class MatchTry {
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
-
-		String operationEntity = "trySTATEMENT";
 	}
 
 	public static void matchThrowStatement(MiningActionData fp, Action a) {

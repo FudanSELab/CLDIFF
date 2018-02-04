@@ -29,7 +29,7 @@ public class MatchWhileStatement {
         String operationEntity = "WHILESTATEMENT";
     }
 
-    public static void matchDoStatement(MiningActionData fp, Action a, int nodeType){
+    public static void matchDoStatement(MiningActionData fp, Action a){
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);

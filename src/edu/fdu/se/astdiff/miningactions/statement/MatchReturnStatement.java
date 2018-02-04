@@ -17,17 +17,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchReturnStatement {
-    public static void matchReturnStatement(MiningActionData fp, Action a, int nodeType) {
+    public static void matchReturnStatement(MiningActionData fp, Action a) {
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
-        DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+        changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
+        DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
         fp.setActionTraversedMap(subActions);
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
         ReturnChangeEntity code = new ReturnChangeEntity(mBean);
         fp.addOneChangeEntity(code);
-        String operationEntity = "RETURNSTATEMENT";
     }
 
     public static void matchReturnStatentByFather(MiningActionData fp, Action a, Tree fafatherNode, List<Action> sameEditActions){

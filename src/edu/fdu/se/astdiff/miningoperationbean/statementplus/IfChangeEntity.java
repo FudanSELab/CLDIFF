@@ -18,5 +18,6 @@ public class IfChangeEntity extends StatementPlusChangeEntity{
         super(bean);
     }
 
+    public String xxx;
 
 }

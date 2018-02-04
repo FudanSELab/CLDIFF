@@ -110,7 +110,7 @@ public class DiffMiner {
         String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
         String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
         String outputDir = "test";
-        doo(file2, file1, outputDir);
+        doo(file1, file2, outputDir);
     }
 
     private void doo(String filePrev, String fileCurr, String outputDirName) {
