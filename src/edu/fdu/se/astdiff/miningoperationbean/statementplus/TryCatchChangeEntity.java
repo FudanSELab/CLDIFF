@@ -10,6 +10,8 @@ public class TryCatchChangeEntity extends StatementPlusChangeEntity {
     public TryCatchChangeEntity(ClusteredActionBean bean) {
         super(bean);
     }
+
+
     public void generateDesc(){
 
     }

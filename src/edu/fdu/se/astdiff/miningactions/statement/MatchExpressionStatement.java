@@ -25,8 +25,8 @@ public class MatchExpressionStatement {
 
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
-		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
 		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
+		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
 		DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);

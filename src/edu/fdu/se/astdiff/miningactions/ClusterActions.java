@@ -8,6 +8,7 @@ import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.model.StatementPlusChangeEntity;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class ClusterActions {
         new ClusterBig(Insert.class, fpd).doClusterBig();
         new ClusterBig(Delete.class, fpd).doClusterBig();
         new ClusterBig(Move.class, fpd).doClusterBig();
+        iterateChangeEntityListSetChangePacket(fpd);
         //small
 //        new ClusterSmall(Insert.class, fpd).doClusterSmall();
 //        new ClusterSmall(Delete.class, fpd).doClusterSmall();
@@ -40,10 +42,14 @@ public class ClusterActions {
     }
 
 
-    public void iterateChangeEntityListSetChangePacket(MiningActionData mad){
+    public static void iterateChangeEntityListSetChangePacket(MiningActionData mad){
         List<ChangeEntity> mList = mad.getChangeEntityList();
         for(ChangeEntity c :mList){
-
+            System.out.println(c.getClass().getSimpleName());
+            if(c instanceof StatementPlusChangeEntity){
+                StatementPlusChangeEntity s = ((StatementPlusChangeEntity)c);
+                s.generateDesc();
+            }
         }
     }
 

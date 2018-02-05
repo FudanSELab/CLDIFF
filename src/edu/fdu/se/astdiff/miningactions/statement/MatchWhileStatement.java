@@ -25,7 +25,8 @@ public class MatchWhileStatement {
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
         WhileChangeEntity code = new WhileChangeEntity(mBean);
         fp.addOneChangeEntity(code);
-        code.xxx = "while {...}";
+        code.changeEntity = WhileChangeEntity.WHILE;
+
     }
 
     public static void matchDoStatement(MiningActionData fp, Action a){
@@ -38,6 +39,6 @@ public class MatchWhileStatement {
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
         WhileChangeEntity code = new WhileChangeEntity(mBean);
         fp.addOneChangeEntity(code);
-        code.xxx = "do ... while";
+        code.changeEntity = WhileChangeEntity.DO_WHILE;
     }
 }

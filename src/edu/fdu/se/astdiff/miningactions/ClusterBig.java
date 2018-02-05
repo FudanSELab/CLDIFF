@@ -55,6 +55,9 @@ public class ClusterBig extends AbstractCluster{
                 break;
 
             // 里面
+            case ASTNode.ASSERT_STATEMENT:
+                MatchAssert.matchAssert(fp,a);
+                break;
             case ASTNode.IF_STATEMENT:
                 MatchIfElse.matchIf(fp, a);
                 break;

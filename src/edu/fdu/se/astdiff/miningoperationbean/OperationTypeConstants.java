@@ -37,6 +37,10 @@ public class OperationTypeConstants {
         constantName.put(0x12001,"SUB_ENTITY_STRUCTURE_REFURNISH");
         constantName.put(0x12002,"SUB_ENTITY_STRUCTURE_UPGRADE");
 
+        constantName.put(0x10005,"INSERT_M");
+        constantName.put(0x10006,"DELETE_M");
+        constantName.put(0x10007,"MOVE_M");
+
     }
 
     // 操作类型，操作entity，操作子entity
@@ -45,6 +49,11 @@ public class OperationTypeConstants {
     final public static int DELETE = 0x10001;
     final public static int MOVE = 0x10002;
     final public static int UPDATE = 0x10003;
+
+    final public static int INSERT_M = 0x10005;
+    final public static int DELETE_M = 0x10006;
+    final public static int MOVE_M = 0x10007;
+
     final public static int MULTIPLE_EDIT = 0x10004;
 
 

@@ -31,6 +31,7 @@ public class MatchForStatement {
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
+        code.changeEntity = ForChangeEntity.FOR;
 
     }
 
@@ -45,6 +46,7 @@ public class MatchForStatement {
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
+        code.changeEntity = ForChangeEntity.FOR_EACH;
     }
 
     public static void matchForPredicate(MiningActionData fp, Action a,Tree fafather, List<Action> sameEdits) {

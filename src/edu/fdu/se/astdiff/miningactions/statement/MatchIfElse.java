@@ -29,6 +29,7 @@ public class MatchIfElse {
 	public static void matchIf(MiningActionData fp, Action a) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
 		DefaultUpDownTraversal.traverseTypeIIStatements(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
@@ -77,12 +78,10 @@ public class MatchIfElse {
 		IfChangeEntity code = new IfChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 
-		// fafafatherNode是if 那么 第一个孩子是if里的内容
-		String operationEntity = "";
 		if (AstRelations.isFatherXXXStatement(a,ASTNode.IF_STATEMENT)) {
-			operationEntity = IfChangeEntity.ELSE_IF;
+			code.changeEntity = IfChangeEntity.ELSE_IF;
 		} else {
-			operationEntity = IfChangeEntity.IF;
+			code.changeEntity = IfChangeEntity.IF;
 		}
 
 	}

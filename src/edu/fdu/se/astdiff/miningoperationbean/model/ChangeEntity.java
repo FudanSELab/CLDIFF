@@ -11,6 +11,7 @@ public abstract class ChangeEntity {
     public ClusteredActionBean clusteredActionBean;
 
     public Range lineRange;
+    public String lineRangeStr;
 
     public int changeType;
     public String changeEntity;
@@ -29,6 +30,9 @@ public abstract class ChangeEntity {
 
     public ChangeEntity(ClusteredActionBean bean){
         this.clusteredActionBean = bean;
+        Range range = bean.nodeLinePosition;
+        this.lineRangeStr ="("+range.begin.line+","+range.end.line+")";
+        this.changeType = bean.changePacket.getOperationType();
     }
 
 

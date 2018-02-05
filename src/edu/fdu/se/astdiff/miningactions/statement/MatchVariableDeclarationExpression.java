@@ -26,6 +26,7 @@ public class MatchVariableDeclarationExpression {
 	public static void matchVariableDeclaration(MiningActionData fp, Action a) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
 		DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);

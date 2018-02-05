@@ -37,8 +37,6 @@ public class ClusteredActionBean {
 
 	public Tree fafather;
 
-	public Set<String> changeTypes1;
-	public Set<String> changeTypes2;
 
 
 	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions,ChangePacket changePacket,Range nodeLine){
@@ -57,16 +55,9 @@ public class ClusteredActionBean {
 		this.nodeLinePosition = nodeLine;
 		this.fafather = fafather;
 	}
-	public Range getNodeLinePosition() {
-		return nodeLinePosition;
-	}
-	public String getNodePositionAsString(){
-		return this.nodeLinePosition.toString();
-	}
 
-	public void setNodeLinePosition(Range nodeLinePosition) {
-		this.nodeLinePosition = nodeLinePosition;
-	}
+
+
 
 	public List<Action> getActions() {
 		return actions;
@@ -81,21 +72,7 @@ public class ClusteredActionBean {
 		return curAction;
 	}
 
-	public void setChangeTypes1(Set<String> changeTypes1) {
-		this.changeTypes1 = changeTypes1;
-	}
 
-	public void setChangeTypes2(Set<String> changeTypes2) {
-		this.changeTypes2 = changeTypes2;
-	}
-
-	public Set<String> getChangeTypes1() {
-		return changeTypes1;
-	}
-
-	public Set<String> getChangeTypes2() {
-		return changeTypes2;
-	}
 
 	public int getTraverseType() {
 		return traverseType;

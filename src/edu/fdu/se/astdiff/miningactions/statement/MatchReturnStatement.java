@@ -20,6 +20,7 @@ public class MatchReturnStatement {
     public static void matchReturnStatement(MiningActionData fp, Action a) {
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
+        changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
         changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);

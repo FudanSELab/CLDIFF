@@ -68,7 +68,7 @@ public class MiningOperation {
 
     public void printListDiffMiner() {
         List<ChangeEntity> mChangeEntityList =  this.mad.getChangeEntityList();
-        mChangeEntityList.forEach(a -> System.out.print(a.toString()));
+        mChangeEntityList.forEach(a -> System.out.println(a.toString()));
     }
 
 

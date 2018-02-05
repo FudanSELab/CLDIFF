@@ -1,6 +1,8 @@
 package edu.fdu.se.astdiff.miningoperationbean.statementplus;
 
+import edu.fdu.se.astdiff.miningactions.util.UpDownMatchUtil;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.model.StatementPlusChangeEntity;
 
 /**
@@ -12,6 +14,9 @@ public class ReturnChangeEntity extends StatementPlusChangeEntity {
     }
 
     public void generateDesc(){
+        UpDownMatchUtil.setChangePacket(this.clusteredActionBean);
+        this.changeType = this.clusteredActionBean.changePacket.getOperationType();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) + " "+ this.changeEntity+" "+this.lineRangeStr;
 
     }
 
