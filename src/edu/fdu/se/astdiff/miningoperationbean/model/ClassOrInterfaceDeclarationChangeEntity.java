@@ -41,7 +41,7 @@ public class ClassOrInterfaceDeclarationChangeEntity extends ChangeEntity{
         this.changeEntity = classOrInterface;
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +" " + isStatic +classOrInterface + " "+ cod.getNameAsString();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.spiltter + isStatic +classOrInterface + ChangeEntity.spiltter+ cod.getNameAsString();
     }
 
     @Override

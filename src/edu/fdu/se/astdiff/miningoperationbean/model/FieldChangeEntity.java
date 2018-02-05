@@ -37,7 +37,7 @@ public class FieldChangeEntity extends ChangeEntity {
         }
         NodeList list = fd.getVariables();
 
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +" " + isStatic + this.changeEntity+" "+ fieldDeclarationPair.getLocationClassString() + list.toString();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.spiltter + isStatic + this.changeEntity+ChangeEntity.spiltter+ fieldDeclarationPair.getLocationClassString() + list.toString();
     }
 
 

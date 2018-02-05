@@ -28,7 +28,7 @@ public class MethodChangeEntity extends ChangeEntity {
         if(md.isStatic()){
             isStatic = "static ";
         }
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +" " + isStatic + this.changeEntity+" "+md.getDeclarationAsString();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.spiltter + isStatic + this.changeEntity+ChangeEntity.spiltter+md.getDeclarationAsString();
     }
 
     @Override

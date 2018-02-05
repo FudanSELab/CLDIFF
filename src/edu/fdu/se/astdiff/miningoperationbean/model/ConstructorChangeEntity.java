@@ -28,7 +28,7 @@ public class ConstructorChangeEntity extends ChangeEntity {
         this.changeEntity = "Constructor";
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +" " + this.changeEntity + " " + cd.getDeclarationAsString();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.spiltter + this.changeEntity + ChangeEntity.spiltter + cd.getDeclarationAsString();
     }
 
     @Override

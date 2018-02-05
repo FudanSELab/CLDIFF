@@ -8,6 +8,8 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
  * 父类 其他的Entity都继承于此Entity
  */
 public abstract class ChangeEntity {
+
+    final public static String spiltter = "\t";
     public ClusteredActionBean clusteredActionBean;
 
     public Range lineRange;

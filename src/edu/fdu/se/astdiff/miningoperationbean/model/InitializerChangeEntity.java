@@ -26,7 +26,7 @@ public class InitializerChangeEntity extends ChangeEntity{
         this.changeEntity = "Initializer";
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +" " + isStatic + this.changeEntity;
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.spiltter + isStatic + this.changeEntity;
     }
     public String staticOrNonStatic;
 
