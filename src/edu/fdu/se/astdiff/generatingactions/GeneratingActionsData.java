@@ -16,6 +16,12 @@ import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.actions.model.Update;
 
+/**
+ * GumTree现存问题
+ * Move的误识别
+ * 和block相搭配后很容易出现误识别
+ *
+ * */
 public class GeneratingActionsData {
 
 	private List<Action> insertActions;

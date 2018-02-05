@@ -86,7 +86,7 @@ public class ClusterBig extends AbstractCluster{
                 break;
             case ASTNode.WHILE_STATEMENT:
                 //增加while语句
-                MatchWhileStatement.matchWhileStatement(fp, a, type);
+                MatchWhileStatement.matchWhileStatement(fp, a);
                 break;
             case ASTNode.DO_STATEMENT:
                 //增加do while语句
@@ -103,7 +103,6 @@ public class ClusterBig extends AbstractCluster{
                 break;
             case ASTNode.EXPRESSION_STATEMENT:
                 if (AstRelations.isFatherXXXStatement(a, ASTNode.IF_STATEMENT) && a.getNode().getParent().getChildPosition(a.getNode()) == 2) {
-                    // Pattenr 1.2 Match else
                     MatchIfElse.matchElse(fp, a);
                 } else {
                     MatchExpressionStatement.matchExpression(fp, a);

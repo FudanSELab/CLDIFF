@@ -45,7 +45,7 @@ public class ClusterActions {
     public static void iterateChangeEntityListSetChangePacket(MiningActionData mad){
         List<ChangeEntity> mList = mad.getChangeEntityList();
         for(ChangeEntity c :mList){
-            System.out.println(c.getClass().getSimpleName());
+//            System.out.println(c.getClass().getSimpleName());
             if(c instanceof StatementPlusChangeEntity){
                 StatementPlusChangeEntity s = ((StatementPlusChangeEntity)c);
                 s.generateDesc();

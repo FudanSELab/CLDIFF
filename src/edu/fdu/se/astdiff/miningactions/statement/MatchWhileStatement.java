@@ -15,11 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchWhileStatement {
-    public static void matchWhileStatement(MiningActionData fp, Action a, int nodeType){
+    public static void matchWhileStatement(MiningActionData fp, Action a){
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
+        changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
-        DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+        DefaultUpDownTraversal.traverseTypeIIStatements(a,subActions,changePacket);
         fp.setActionTraversedMap(subActions);
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
@@ -32,6 +33,7 @@ public class MatchWhileStatement {
     public static void matchDoStatement(MiningActionData fp, Action a){
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
+        changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
         DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
         fp.setActionTraversedMap(subActions);
