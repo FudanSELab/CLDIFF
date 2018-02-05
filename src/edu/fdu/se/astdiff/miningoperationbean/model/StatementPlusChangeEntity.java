@@ -1,6 +1,6 @@
 package edu.fdu.se.astdiff.miningoperationbean.model;
 
-import com.github.javaparser.ast.body.MethodDeclaration;
+
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
@@ -8,11 +8,13 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
  *
  *
  */
-public class StatementPlusChangeEntity extends ChangeEntity{
+public abstract class StatementPlusChangeEntity extends ChangeEntity{
 
     public StatementPlusChangeEntity(ClusteredActionBean bean){
         super(bean);
     }
+
+    abstract public void generateDesc();
 
 
 

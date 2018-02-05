@@ -30,18 +30,18 @@ public class ClassOrInterfaceDeclarationChangeEntity extends ChangeEntity{
         this.lineRange = cod.getRange().get();
         String classOrInterface;
         if(cod.isInterface()){
-            classOrInterface = "interface";
+            classOrInterface = "Interface";
         }else{
-            classOrInterface = "class";
+            classOrInterface = "Class";
         }
         String isStatic = "";
         if(cod.isStatic()){
-            isStatic = "static";
+            isStatic = "static ";
         }
         this.changeEntity = classOrInterface;
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +" " + isStatic +" "+classOrInterface + " "+ cod.getNameAsString();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +" " + isStatic +classOrInterface + " "+ cod.getNameAsString();
     }
 
     @Override

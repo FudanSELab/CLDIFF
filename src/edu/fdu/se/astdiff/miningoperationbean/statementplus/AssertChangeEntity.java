@@ -10,4 +10,14 @@ public class AssertChangeEntity extends StatementPlusChangeEntity{
     public AssertChangeEntity(ClusteredActionBean bean) {
         super(bean);
     }
+
+
+    public void generateDesc(){
+
+    }
+
+    @Override
+    public String toString(){
+        return this.outputDesc;
+    }
 }

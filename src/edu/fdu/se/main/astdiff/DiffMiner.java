@@ -5,6 +5,7 @@ import edu.fdu.se.astdiff.generatingactions.*;
 import edu.fdu.se.astdiff.miningactions.ClusterActions;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.MiningOperation;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessingData;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessingSDKClass;
 import edu.fdu.se.astdiff.treegenerator.JavaParserTreeGenerator;
@@ -99,7 +100,10 @@ public class DiffMiner {
         MiningActionData mMiningActionData = new MiningActionData(data, his.srcTC, his.dstTC, his.mapping);
         ClusterActions.doCluster(mMiningActionData);
         // package 3
-        new MiningOperation().printHighLevelOperationBeanList(mMiningActionData);
+        List<ChangeEntity> mlist = mMiningActionData.getChangeEntityList();
+        mlist.forEach(a-> {
+            System.out.println(a.toString());
+        });
 
     }
 
@@ -122,12 +126,10 @@ public class DiffMiner {
         MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);
         GeneratingActionsData data = gen.generate();
         SimpleActionPrinter.printMyActions(data.getAllActions());
-//        System.out.println("Step2 Begin to cluster actions:-------------------");
-//        MiningActionData mMiningActionData = new MiningActionData(data, jtg.srcTC, jtg.dstTC, jtg.mapping);
-//        ClusterActions.doCluster(mMiningActionData);
-        MiningOperation mo = new MiningOperation(pData);
-//        mo.printHighLevelOperationBeanList(mMiningActionData);
-        mo.printHighLevelOperationBeanList();
+        MiningActionData mMiningActionData = new MiningActionData(data, jtg.srcTC, jtg.dstTC, jtg.mapping);
+        ClusterActions.doCluster(mMiningActionData);
+        MiningOperation mo = new MiningOperation(pData,mMiningActionData);
+        mo.printListDiffMiner();
     }
 
 

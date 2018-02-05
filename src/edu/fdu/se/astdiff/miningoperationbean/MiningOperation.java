@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/1/13.
+ *
  */
 public class MiningOperation {
 
@@ -18,12 +19,13 @@ public class MiningOperation {
 
     private List<ChangeEntity> mChangeEntityAll;
 
-
-    public MiningOperation(PreprocessingData pd){
+    private MiningActionData mad;
+    public MiningOperation(PreprocessingData pd,MiningActionData mad){
         this.preprocessingData = pd;
         this.mChangeEntityAll = new ArrayList<>();
         initPreprocessChangeEntityList();
         initDiffMinerChangeEntityList();
+        this.mad = mad;
     }
 
     public MiningOperation(){
@@ -64,13 +66,13 @@ public class MiningOperation {
     }
 
 
-    public void printHighLevelOperationBeanList(MiningActionData fp) {
-        List<ChangeEntity> mChangeEntityList =  fp.getChangeEntityList();
+    public void printListDiffMiner() {
+        List<ChangeEntity> mChangeEntityList =  this.mad.getChangeEntityList();
         mChangeEntityList.forEach(a -> System.out.print(a.toString()));
     }
 
 
-    public void printHighLevelOperationBeanList() {
+    public void printListPreprocess() {
         List<ChangeEntity> mChangeEntityList =  this.mChangeEntityAll;
         mChangeEntityList.forEach(a -> System.out.println(a.toString()));
     }

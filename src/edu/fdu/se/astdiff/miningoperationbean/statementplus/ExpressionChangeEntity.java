@@ -10,4 +10,8 @@ public class ExpressionChangeEntity extends StatementPlusChangeEntity{
     public ExpressionChangeEntity(ClusteredActionBean bean) {
         super(bean);
     }
+
+    public void generateDesc(){
+
+    }
 }

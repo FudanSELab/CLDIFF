@@ -10,4 +10,13 @@ public class SwitchChangeEntity extends StatementPlusChangeEntity {
     public SwitchChangeEntity(ClusteredActionBean bean) {
         super(bean);
     }
+
+    public void generateDesc(){
+
+    }
+
+    @Override
+    public String toString(){
+        return this.outputDesc;
+    }
 }

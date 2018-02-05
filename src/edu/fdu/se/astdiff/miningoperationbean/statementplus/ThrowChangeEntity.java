@@ -11,4 +11,13 @@ public class ThrowChangeEntity extends StatementPlusChangeEntity{
         super(mbean);
     }
 
+    public void generateDesc(){
+
+    }
+
+    @Override
+    public String toString(){
+        return this.outputDesc;
+    }
+
 }

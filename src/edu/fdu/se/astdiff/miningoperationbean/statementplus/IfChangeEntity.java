@@ -10,14 +10,26 @@ import edu.fdu.se.astdiff.miningoperationbean.model.StatementPlusChangeEntity;
  */
 public class IfChangeEntity extends StatementPlusChangeEntity{
 
-    final public static String IF = "IF";
-    final public static String ELSE = "ELSE";
-    final public static String ELSE_IF = "ELSE_IF";
+    final public static String IF = "if";
+    final public static String ELSE = "else";
+    final public static String ELSE_IF = "else if";
 
     public IfChangeEntity(ClusteredActionBean bean) {
         super(bean);
+
     }
 
-    public String xxx;
+//    public String xxx;
+
+    public void generateDesc(){
+        this.clusteredActionBean.getChangeTypes1();
+
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType);
+    }
+
+    @Override
+    public String toString(){
+        return this.outputDesc;
+    }
 
 }

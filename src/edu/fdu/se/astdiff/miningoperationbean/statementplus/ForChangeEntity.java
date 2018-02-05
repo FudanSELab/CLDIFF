@@ -16,5 +16,14 @@ public class ForChangeEntity extends StatementPlusChangeEntity {
         super(bean);
     }
 
+    public void generateDesc(){
+
+    }
+
+    @Override
+    public String toString(){
+        return this.outputDesc;
+    }
+
 
 }

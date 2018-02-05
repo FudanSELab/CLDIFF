@@ -112,7 +112,7 @@ public class PreprocessingSDKClass {
                 return 2;
             }
         }
-        return 2;
+        return 3;
     }
 
     /**
@@ -225,19 +225,43 @@ public class PreprocessingSDKClass {
         traverseClassOrInterfaceDeclarationCmpCurr((ClassOrInterfaceDeclaration) cuCurr.getType(0), codMain.getNameAsString()+".");
         preprocessingTempData.removeRemovalList();
         for (Entry<BodyDeclarationPair, Integer> item : preprocessingTempData.prevNodeVisitingMap.entrySet()) {
-            BodyDeclarationPair bd = item.getKey();
+            BodyDeclarationPair bdp = item.getKey();
             int value = item.getValue();
-            switch(value){
-                case PreprocessingTempData.BODY_DIFFERENT_RETAIN:
-                case PreprocessingTempData.BODY_FATHERNODE_REMOVE:
-                    break;
-                case PreprocessingTempData.BODY_INITIALIZED_VALUE:
-                    this.preprocessingData.addBodiesDeleted(bd);
-                    preprocessingTempData.addToRemoveList(bd.getBodyDeclaration());
-                    break;
-                case PreprocessingTempData.BODY_SAME_REMOVE:
-                    preprocessingTempData.addToRemoveList(bd.getBodyDeclaration());
-                    break;
+            BodyDeclaration bd = bdp.getBodyDeclaration();
+            if(bd instanceof ClassOrInterfaceDeclaration){
+                switch(value){
+//                    case PreprocessingTempData.BODY_DIFFERENT_RETAIN:
+//                    case PreprocessingTempData.BODY_FATHERNODE_REMOVE:
+//                        break;
+                    case PreprocessingTempData.BODY_INITIALIZED_VALUE:
+                        this.preprocessingData.addBodiesDeleted(bdp);
+                        this.preprocessingTempData.addToRemoveList(bd);
+                        traverseClassOrInterfaceDeclarationSetVisited((ClassOrInterfaceDeclaration) bd,bdp.getLocationClassString());
+                        break;
+                    case PreprocessingTempData.BODY_SAME_REMOVE:
+                        this.preprocessingTempData.addToRemoveList(bd);
+                        break;
+                }
+            }
+
+        }
+        for (Entry<BodyDeclarationPair, Integer> item : preprocessingTempData.prevNodeVisitingMap.entrySet()) {
+            BodyDeclarationPair bdp = item.getKey();
+            int value = item.getValue();
+            BodyDeclaration bd = bdp.getBodyDeclaration();
+            if(! (bd instanceof ClassOrInterfaceDeclaration)){
+                switch (value) {
+                    case PreprocessingTempData.BODY_DIFFERENT_RETAIN:
+                    case PreprocessingTempData.BODY_FATHERNODE_REMOVE:
+                        break;
+                    case PreprocessingTempData.BODY_INITIALIZED_VALUE:
+                        this.preprocessingData.addBodiesDeleted(bdp);
+                        preprocessingTempData.addToRemoveList(bd);
+                        break;
+                    case PreprocessingTempData.BODY_SAME_REMOVE:
+                        preprocessingTempData.addToRemoveList(bd);
+                        break;
+                }
             }
         }
         preprocessingTempData.removeRemovalList();
@@ -265,7 +289,10 @@ public class PreprocessingSDKClass {
             if (node instanceof ClassOrInterfaceDeclaration) {
                 ClassOrInterfaceDeclaration cod2 = (ClassOrInterfaceDeclaration) node;
                 int status = checkCurrBodies(cod2,prefixClassName);
-                if (status != 1) {
+                if(status == 3){
+                    this.preprocessingData.addBodiesAdded(cod2,prefixClassName);
+                    this.preprocessingTempData.addToRemoveList(cod2);
+                } else if (status != 1) {
                     traverseClassOrInterfaceDeclarationCmpCurr(cod2, prefixClassName + cod2.getNameAsString() + ".");
                 }
                 continue;
@@ -331,7 +358,6 @@ public class PreprocessingSDKClass {
      */
     public void traverseClassOrInterfaceDeclarationSetVisited(ClassOrInterfaceDeclaration cod,String prefixClassName) {
         NodeList tmpList = cod.getMembers();
-        cod.getFields();
         String childrenClassPrefix = prefixClassName + cod.getNameAsString()+".";
         for (int m = tmpList.size() - 1; m >= 0; m--) {
             Node n = tmpList.get(m);

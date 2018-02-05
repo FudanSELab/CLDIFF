@@ -10,4 +10,13 @@ public class ReturnChangeEntity extends StatementPlusChangeEntity {
     public ReturnChangeEntity(ClusteredActionBean bean) {
         super(bean);
     }
+
+    public void generateDesc(){
+
+    }
+
+    @Override
+    public String toString(){
+        return this.outputDesc;
+    }
 }

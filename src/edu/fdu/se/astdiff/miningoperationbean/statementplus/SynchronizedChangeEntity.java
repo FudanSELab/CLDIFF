@@ -10,4 +10,13 @@ public class SynchronizedChangeEntity extends StatementPlusChangeEntity {
     public SynchronizedChangeEntity(ClusteredActionBean bean) {
         super(bean);
     }
+
+    public void generateDesc(){
+
+    }
+
+    @Override
+    public String toString(){
+        return this.outputDesc;
+    }
 }

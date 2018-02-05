@@ -86,7 +86,6 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         traverseNodeInRange(node,0,i-1,result1,type1);
         traverseNodeInRange(node,i,children.size()-1,result1,type2);
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
-        MatchUtil.setChangePacket(changePacket,type1,type2);
     }
 
 

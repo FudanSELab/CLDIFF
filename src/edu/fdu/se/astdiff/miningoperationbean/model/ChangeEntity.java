@@ -7,13 +7,13 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
  * Created by huangkaifeng on 2018/1/16.
  * 父类 其他的Entity都继承于此Entity
  */
-public class ChangeEntity {
+public abstract class ChangeEntity {
     public ClusteredActionBean clusteredActionBean;
 
-    protected Range lineRange;
+    public Range lineRange;
 
-    protected int changeType;
-    protected String changeEntity;
+    public int changeType;
+    public String changeEntity;
 
     public String outputDesc;
     /**
@@ -21,7 +21,7 @@ public class ChangeEntity {
      * String为A.B.c的形式
      *
      */
-    protected String location;
+    public String location;
 
     public ChangeEntity(){
 
@@ -30,6 +30,8 @@ public class ChangeEntity {
     public ChangeEntity(ClusteredActionBean bean){
         this.clusteredActionBean = bean;
     }
+
+
 
 
 

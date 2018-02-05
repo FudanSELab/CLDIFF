@@ -36,12 +36,11 @@ public class MatchIfElse {
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		IfChangeEntity code = new IfChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
-
 		if (AstRelations.isFatherXXXStatement(a, ASTNode.IF_STATEMENT)) {
-			code.xxx = IfChangeEntity.ELSE_IF;
+			code.changeEntity = IfChangeEntity.ELSE_IF;
 			changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_UPGRADE);
 		} else {
-			code.xxx = IfChangeEntity.IF;
+			code.changeEntity = IfChangeEntity.IF;
 			changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
 		}
 	}
@@ -59,7 +58,7 @@ public class MatchIfElse {
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		IfChangeEntity code = new IfChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
-		code.xxx = IfChangeEntity.ELSE;
+		code.changeEntity = IfChangeEntity.ELSE;
 	}
 	
 	

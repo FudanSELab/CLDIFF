@@ -12,4 +12,13 @@ public class VariableChangeEntity extends StatementPlusChangeEntity {
     public VariableChangeEntity(ClusteredActionBean bean) {
         super(bean);
     }
+    public void generateDesc(){
+
+    }
+
+    @Override
+    public String toString(){
+        return this.outputDesc;
+    }
+
 }
