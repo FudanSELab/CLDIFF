@@ -4,7 +4,7 @@ import com.github.javaparser.ast.body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.model.*;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
-import edu.fdu.se.astdiff.preprocessingfile.PreprocessingData;
+import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +15,13 @@ import java.util.List;
  */
 public class MiningOperation {
 
-    private PreprocessingData preprocessingData;
+    private PreprocessedData preprocessedData;
 
     private List<ChangeEntity> mChangeEntityAll;
 
     private MiningActionData mad;
-    public MiningOperation(PreprocessingData pd,MiningActionData mad){
-        this.preprocessingData = pd;
+    public MiningOperation(PreprocessedData pd, MiningActionData mad){
+        this.preprocessedData = pd;
         this.mChangeEntityAll = new ArrayList<>();
         initPreprocessChangeEntityList();
         initDiffMinerChangeEntityList();
@@ -39,10 +39,10 @@ public class MiningOperation {
 
 
     public void initPreprocessChangeEntityList(){
-        for(BodyDeclarationPair item:this.preprocessingData.getmBodiesAdded()){
+        for(BodyDeclarationPair item:this.preprocessedData.getmBodiesAdded()){
             addOneBody(item,OperationTypeConstants.INSERT);
         }
-        for(BodyDeclarationPair item:this.preprocessingData.getmBodiesDeleted()){
+        for(BodyDeclarationPair item:this.preprocessedData.getmBodiesDeleted()){
             addOneBody(item,OperationTypeConstants.DELETE);
         }
     }

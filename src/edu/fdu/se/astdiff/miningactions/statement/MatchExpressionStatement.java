@@ -1,18 +1,15 @@
 package edu.fdu.se.astdiff.miningactions.statement;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.tree.ITree;
 
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
-import edu.fdu.se.astdiff.miningactions.util.MatchUtil;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.model.ClassOrInterfaceDeclarationChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.ExpressionChangeEntity;
 
 import java.util.ArrayList;

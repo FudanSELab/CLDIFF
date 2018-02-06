@@ -1,6 +1,6 @@
 package edu.fdu.se.astdiff.miningactions.util;
 
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
@@ -22,27 +22,24 @@ public class UpDownMatchUtil {
     }
 
     public static void setChangePacket(ChangePacket changePacket, Set<String> types1, Set<String> types2){
-//        if(types1.size() == 1){
-//            if(types1.contains(ActionConstants.INSERT)||types1.contains(ActionConstants.DELETE)){
-//                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
-//            }
-//        }else if(types1.size()==2){
-//            if(types1.contains(ActionConstants.MOVE)&&types1.contains(ActionConstants.NULLACTION)){
-//                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
-//            }
-//        }
-
+        if(BaseMatchUtil.oneItemInsert(types1)&& BaseMatchUtil.oneItemInsert(types2)){
+            changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
+        }else if(BaseMatchUtil.oneItemDelete(types1)&& BaseMatchUtil.oneItemDelete(types2)){
+            changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
+        }else if(BaseMatchUtil.oneItemMoveOrTwoItemMoveAndNullAction(types1)&& BaseMatchUtil.oneItemNullAction(types2)){
+            changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
+        }else if(BaseMatchUtil.oneItemInsert(types1)&& BaseMatchUtil.oneItemNullAction(types2)){
+            changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_WRAPPER);
+        }else if(BaseMatchUtil.oneItemDelete(types1)&& BaseMatchUtil.oneItemMoveOrTwoItemMoveAndNullAction(types2)){
+            changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_WRAPPER);
+        }
     }
 
     public static void setChangePacket(ChangePacket changePacket, Set<String> types1){
-        if(types1.size() == 1){
-            if(types1.contains(ActionConstants.INSERT)||types1.contains(ActionConstants.DELETE)){
-                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
-            }
-        }else if(types1.size()==2){
-            if(types1.contains(ActionConstants.MOVE)&&types1.contains(ActionConstants.NULLACTION)){
-                changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
-            }
+        if(BaseMatchUtil.oneItemInsert(types1)|| BaseMatchUtil.oneItemDelete(types1)){
+            changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
+        }else if(BaseMatchUtil.oneItemMoveOrTwoItemMoveAndNullAction(types1)){
+            changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
         }
 
     }

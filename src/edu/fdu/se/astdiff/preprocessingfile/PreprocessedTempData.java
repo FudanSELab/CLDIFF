@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by huangkaifeng on 2018/1/18.
  */
-public class PreprocessingTempData {
+public class PreprocessedTempData {
 
     /**
      * 已经设置为same remove有可能被 overload遍历到，设置为retain，需要加check
@@ -27,7 +27,7 @@ public class PreprocessingTempData {
     final static public int BODY_FATHERNODE_REMOVE = 13;
 
 
-    public PreprocessingTempData(){
+    public PreprocessedTempData(){
         prevNodeBodyDeclarationMap = new HashMap<>();
         prevNodeBodyNameMap = new HashMap<>();
         prevNodeVisitingMap = new HashMap<>();

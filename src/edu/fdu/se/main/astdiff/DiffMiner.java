@@ -6,8 +6,8 @@ import edu.fdu.se.astdiff.miningactions.ClusterActions;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.MiningOperation;
 import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
-import edu.fdu.se.astdiff.preprocessingfile.PreprocessingData;
-import edu.fdu.se.astdiff.preprocessingfile.PreprocessingSDKClass;
+import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
+import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
 import edu.fdu.se.astdiff.treegenerator.JavaParserTreeGenerator;
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.config.ProjectProperties;
@@ -118,8 +118,9 @@ public class DiffMiner {
     }
 
     private void doo(String filePrev, String fileCurr, String outputDirName) {
-        PreprocessingSDKClass psc = new PreprocessingSDKClass().compareTwoFile(filePrev, fileCurr, outputDirName);
-        PreprocessingData pData = psc.getPreprocessingData();
+        FilePairPreDiff psc = new FilePairPreDiff().compareTwoFile(filePrev, fileCurr, outputDirName);
+        PreprocessedData preData = psc.getPreprocessedData();
+        DiffMiner.preprocessedData = preData;
         JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(new File(filePrev), new File(fileCurr));
         FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", jtg.getPrettyOldTreeString());
         FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", jtg.getPrettyNewTreeString());
@@ -128,9 +129,11 @@ public class DiffMiner {
         SimpleActionPrinter.printMyActions(data.getAllActions());
         MiningActionData mMiningActionData = new MiningActionData(data, jtg.srcTC, jtg.dstTC, jtg.mapping);
         ClusterActions.doCluster(mMiningActionData);
-        MiningOperation mo = new MiningOperation(pData,mMiningActionData);
+        MiningOperation mo = new MiningOperation(preData,mMiningActionData);
         mo.printListDiffMiner();
     }
+
+    public static PreprocessedData preprocessedData;
 
 
     public static void main(String []args) {

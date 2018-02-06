@@ -123,10 +123,7 @@ public class ClusterBig extends AbstractCluster{
                 //增加switch语句
                 MatchSwitch.matchSwitchCase(fp, a);
                 break;
-//            case ASTNode.JAVADOC:
-//                //增加javadoc
-//                MatchJavaDoc.matchJavaDoc(fp, a, type);
-//                break;
+
 //            case ASTNode.CONSTRUCTORINVOCATION:
 //                //构造方法this
 //                MatchMethod.matchConstructorInvocation(fp, a);

@@ -42,7 +42,7 @@ public class MatchIfElse {
 			changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_UPGRADE);
 		} else {
 			code.changeEntity = IfChangeEntity.IF;
-			changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE);
+			changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
 		}
 	}
 	

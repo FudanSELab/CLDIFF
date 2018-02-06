@@ -37,7 +37,10 @@ public abstract class ChangeEntity {
         this.changeType = bean.changePacket.getOperationType();
     }
 
-
+    @Override
+    public String toString(){
+        return this.outputDesc;
+    }
 
 
 

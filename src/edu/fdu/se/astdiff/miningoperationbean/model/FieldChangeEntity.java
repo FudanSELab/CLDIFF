@@ -39,9 +39,6 @@ public class FieldChangeEntity extends ChangeEntity {
 
 
 
-    @Override
-    public String toString(){
-        return this.outputDesc;
-    }
+
 
 }

@@ -29,8 +29,5 @@ public class ConstructorChangeEntity extends ChangeEntity {
         this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + this.changeEntity + ChangeEntity.SPLITTER + cd.getDeclarationAsString();
     }
 
-    @Override
-    public String toString(){
-        return this.outputDesc;
-    }
+
 }

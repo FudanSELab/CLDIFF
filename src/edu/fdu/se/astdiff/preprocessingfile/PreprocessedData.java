@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by huangkaifeng on 2018/1/16.
  */
-public class PreprocessingData {
+public class PreprocessedData {
     /**
      * 操作之后的CompilationUnit
      */
@@ -41,7 +41,7 @@ public class PreprocessingData {
 
     private Map<String,List<ClassOrInterfaceDeclaration>> classOrInterfaceDeclarationsList;
 
-    public PreprocessingData(){
+    public PreprocessedData(){
         mBodiesAdded = new ArrayList<>();
         mBodiesDeleted = new ArrayList<>();
         mBodiesRetained = new ArrayList<>();

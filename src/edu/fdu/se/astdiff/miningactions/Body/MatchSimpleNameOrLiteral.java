@@ -87,9 +87,7 @@ public class MatchSimpleNameOrLiteral {
 //			System.out.println("variable/expression");
                 MatchExpressionStatement.matchExpressionByFather(fp, a, fafather,sameEdits);
                 break;
-//		case StatementConstants.JAVADOC:
-//			operationBean = MatchJavaDoc.matchJavaDocByFather(fp,a,nodeType, fafafatherNode);
-//			break;
+
             case ASTNode.SWITCH_CASE:
                 //switchcase
                 MatchSwitch.matchSwitchCaseByFather(fp, a);

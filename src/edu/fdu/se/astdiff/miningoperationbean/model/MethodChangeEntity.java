@@ -12,6 +12,11 @@ public class MethodChangeEntity extends ChangeEntity {
 
     public MethodChangeEntity(ClusteredActionBean bean){
         super(bean);
+        this.lineRange = bean.nodeLinePosition;
+        this.changeEntity = "Method";
+        this.changeType = bean.changePacket.getOperationType();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + this.changeEntity +ChangeEntity.SPLITTER;
+
 
     }
 
@@ -28,9 +33,6 @@ public class MethodChangeEntity extends ChangeEntity {
         this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + isStatic + this.changeEntity+ChangeEntity.SPLITTER +md.getDeclarationAsString();
     }
 
-    @Override
-    public String toString(){
-        return this.outputDesc;
-    }
+
 
 }
