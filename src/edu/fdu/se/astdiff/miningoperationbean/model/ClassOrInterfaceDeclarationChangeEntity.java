@@ -1,12 +1,9 @@
 package edu.fdu.se.astdiff.miningoperationbean.model;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
-import org.eclipse.jdt.core.dom.IfStatement;
 
 /**
  * Created by huangkaifeng on 2018/1/23.
@@ -41,7 +38,7 @@ public class ClassOrInterfaceDeclarationChangeEntity extends ChangeEntity{
         this.changeEntity = classOrInterface;
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.spiltter + isStatic +classOrInterface + ChangeEntity.spiltter+ cod.getNameAsString();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + isStatic +classOrInterface + ChangeEntity.SPLITTER + cod.getNameAsString();
     }
 
     @Override

@@ -28,6 +28,7 @@ public class MatchReturnStatement {
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
         ReturnChangeEntity code = new ReturnChangeEntity(mBean);
+
         fp.addOneChangeEntity(code);
     }
 

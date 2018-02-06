@@ -17,7 +17,14 @@ public abstract class StatementPlusChangeEntity extends ChangeEntity{
     abstract public void generateDesc();
 
 
-
+    @Override
+    public String toString(){
+        if(this.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
+            return "BIG_BLOCK_CHANGE" + ChangeEntity.SPLITTER + this.outputDesc;
+        }else {
+            return "SMALL_NODE_CHANGE" +ChangeEntity.SPLITTER + this.outputDesc;
+        }
+    }
 
 
 }

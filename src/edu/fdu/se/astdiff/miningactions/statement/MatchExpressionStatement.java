@@ -22,7 +22,6 @@ public class MatchExpressionStatement {
 
 
 	public static void matchExpression(MiningActionData fp, Action a) {
-
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
 		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));

@@ -10,18 +10,17 @@ import edu.fdu.se.astdiff.miningoperationbean.model.StatementPlusChangeEntity;
  * Created by huangkaifeng on 2018/1/23.
  */
 public class SynchronizedChangeEntity extends StatementPlusChangeEntity {
+    final static public String synchronizedStr = "synchronized";
     public SynchronizedChangeEntity(ClusteredActionBean bean) {
         super(bean);
+        this.changeEntity = synchronizedStr;
     }
 
     public void generateDesc(){
         UpDownMatchUtil.setChangePacket(this.clusteredActionBean);
         this.changeType = this.clusteredActionBean.changePacket.getOperationType();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) + ChangeEntity.spiltter+ this.changeEntity+ChangeEntity.spiltter+this.lineRangeStr;
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) + ChangeEntity.SPLITTER + this.changeEntity+ChangeEntity.SPLITTER +this.lineRangeStr;
     }
 
-    @Override
-    public String toString(){
-        return this.outputDesc;
-    }
+
 }

@@ -1,8 +1,6 @@
 package edu.fdu.se.astdiff.miningoperationbean.model;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
@@ -28,7 +26,7 @@ public class ConstructorChangeEntity extends ChangeEntity {
         this.changeEntity = "Constructor";
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.spiltter + this.changeEntity + ChangeEntity.spiltter + cd.getDeclarationAsString();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + this.changeEntity + ChangeEntity.SPLITTER + cd.getDeclarationAsString();
     }
 
     @Override

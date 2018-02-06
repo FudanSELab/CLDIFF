@@ -29,6 +29,7 @@ public class MatchSwitch {
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
+		code.changeEntity = SwitchChangeEntity.switchStatement;
 		fp.addOneChangeEntity(code);
 	}
 
@@ -42,6 +43,7 @@ public class MatchSwitch {
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
+		code.changeEntity = SwitchChangeEntity.switchCase;
 		fp.addOneChangeEntity(code);
 		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_UPGRADE);
 	}

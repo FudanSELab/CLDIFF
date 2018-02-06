@@ -1,7 +1,6 @@
 package edu.fdu.se.astdiff.miningoperationbean.model;
 
 
-import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
@@ -26,7 +25,7 @@ public class InitializerChangeEntity extends ChangeEntity{
         this.changeEntity = "Initializer";
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.spiltter + isStatic + this.changeEntity;
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + isStatic + this.changeEntity;
     }
     public String staticOrNonStatic;
 

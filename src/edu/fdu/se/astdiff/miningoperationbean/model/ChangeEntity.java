@@ -9,7 +9,7 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
  */
 public abstract class ChangeEntity {
 
-    final public static String spiltter = "\t";
+    final public static String SPLITTER = "\t";
     public ClusteredActionBean clusteredActionBean;
 
     public Range lineRange;

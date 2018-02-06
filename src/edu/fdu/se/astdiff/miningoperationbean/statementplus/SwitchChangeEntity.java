@@ -8,8 +8,12 @@ import edu.fdu.se.astdiff.miningoperationbean.model.StatementPlusChangeEntity;
 
 /**
  * Created by huangkaifeng on 2018/1/23.
+ *
  */
 public class SwitchChangeEntity extends StatementPlusChangeEntity {
+    final static public String switchStatement = "Switch";
+    final static public String switchCase = "Switch_Case";
+
     public SwitchChangeEntity(ClusteredActionBean bean) {
         super(bean);
     }
@@ -17,11 +21,8 @@ public class SwitchChangeEntity extends StatementPlusChangeEntity {
     public void generateDesc(){
         UpDownMatchUtil.setChangePacket(this.clusteredActionBean);
         this.changeType = this.clusteredActionBean.changePacket.getOperationType();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) + ChangeEntity.spiltter+ this.changeEntity+ChangeEntity.spiltter+this.lineRangeStr;
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) + ChangeEntity.SPLITTER + this.changeEntity+ChangeEntity.SPLITTER +this.lineRangeStr;
     }
 
-    @Override
-    public String toString(){
-        return this.outputDesc;
-    }
+
 }

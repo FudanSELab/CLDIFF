@@ -15,15 +15,10 @@ public class TryCatchChangeEntity extends StatementPlusChangeEntity {
     }
 
 
-    public void generateDesc(){
+    public void generateDesc() {
         UpDownMatchUtil.setChangePacket(this.clusteredActionBean);
         this.changeType = this.clusteredActionBean.changePacket.getOperationType();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) + ChangeEntity.spiltter+ this.changeEntity+ ChangeEntity.spiltter+this.lineRangeStr;
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) + ChangeEntity.SPLITTER + this.changeEntity + ChangeEntity.SPLITTER + this.lineRangeStr;
     }
 
-
-    @Override
-    public String toString(){
-        return this.outputDesc;
-    }
 }

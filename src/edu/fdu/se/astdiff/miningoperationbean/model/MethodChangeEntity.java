@@ -1,12 +1,9 @@
 package edu.fdu.se.astdiff.miningoperationbean.model;
 
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
-import edu.fdu.se.handlefile.Method;
 
 /**
  * Created by huangkaifeng on 2018/1/22.
@@ -28,7 +25,7 @@ public class MethodChangeEntity extends ChangeEntity {
         if(md.isStatic()){
             isStatic = "static ";
         }
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.spiltter + isStatic + this.changeEntity+ChangeEntity.spiltter+md.getDeclarationAsString();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + isStatic + this.changeEntity+ChangeEntity.SPLITTER +md.getDeclarationAsString();
     }
 
     @Override

@@ -1,13 +1,10 @@
 package edu.fdu.se.astdiff.miningoperationbean.model;
 
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
-import javassist.compiler.ast.FieldDecl;
-import javassist.compiler.ast.Variable;
 
 /**
  * Created by huangkaifeng on 2018/1/16.
@@ -37,7 +34,7 @@ public class FieldChangeEntity extends ChangeEntity {
         }
         NodeList list = fd.getVariables();
 
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.spiltter + isStatic + this.changeEntity+ChangeEntity.spiltter+ fieldDeclarationPair.getLocationClassString() + list.toString();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + isStatic + this.changeEntity+ChangeEntity.SPLITTER + fieldDeclarationPair.getLocationClassString() + list.toString();
     }
 
 

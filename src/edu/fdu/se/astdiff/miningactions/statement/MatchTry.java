@@ -20,12 +20,7 @@ import edu.fdu.se.astdiff.miningoperationbean.statementplus.SwitchChangeEntity;
 
 public class MatchTry {
 	
-	/**
-	 * level III
-	 * 
-	 * @param a
-	 * @return
-	 */
+
 	public static void matchTry(MiningActionData fp, Action a) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
