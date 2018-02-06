@@ -10,15 +10,15 @@ import edu.fdu.se.astdiff.miningoperationbean.model.StatementPlusChangeEntity;
  * Created by huangkaifeng on 2018/1/23.
  */
 public class TryCatchChangeEntity extends StatementPlusChangeEntity {
+    final public static String tryCatch = "Try_Catch";
+    final public static String catchclause = "Catch";
+    final public static String finallyClause = "Finally";
+    final public static String throwStatement = "Throw";
     public TryCatchChangeEntity(ClusteredActionBean bean) {
         super(bean);
+
     }
 
 
-    public void generateDesc() {
-        UpDownMatchUtil.setChangePacket(this.clusteredActionBean);
-        this.changeType = this.clusteredActionBean.changePacket.getOperationType();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) + ChangeEntity.SPLITTER + this.changeEntity + ChangeEntity.SPLITTER + this.lineRangeStr;
-    }
 
 }

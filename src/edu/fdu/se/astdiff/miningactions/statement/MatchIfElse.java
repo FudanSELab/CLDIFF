@@ -62,11 +62,10 @@ public class MatchIfElse {
 		code.changeEntity = IfChangeEntity.ELSE;
 	}
 	
-	
-	/**
-	 * level IV 因为往上找如果是if body那么匹配不是if statement 所以这部分应该就是predicate
-	 * 
-	 */
+
+
+
+
 	public static void matchIfPredicateChangeNewEntity(MiningActionData fp, Action a, Tree fafather, List<Action> sameEdits) {
 
 		ChangePacket changePacket = new ChangePacket();

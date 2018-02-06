@@ -17,6 +17,7 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.model.ClassOrInterfaceDeclarationChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.SwitchChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.statementplus.TryCatchChangeEntity;
 
 public class MatchTry {
 	
@@ -30,7 +31,8 @@ public class MatchTry {
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
-		ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
+		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
+		code.changeEntity = TryCatchChangeEntity.tryCatch;
 		fp.addOneChangeEntity(code);
 	}
 
