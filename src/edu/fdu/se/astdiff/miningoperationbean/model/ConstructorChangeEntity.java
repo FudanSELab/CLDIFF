@@ -17,6 +17,10 @@ public class ConstructorChangeEntity extends ChangeEntity {
      */
     public ConstructorChangeEntity(ClusteredActionBean bean){
         super(bean);
+        this.lineRange = bean.nodeLinePosition;
+        this.changeEntity = "Constructor - AnonymousClass";
+        this.changeType = bean.changePacket.getOperationType();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + this.changeEntity +ChangeEntity.SPLITTER;
     }
 
 
@@ -26,7 +30,11 @@ public class ConstructorChangeEntity extends ChangeEntity {
         this.changeEntity = "Constructor";
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + this.changeEntity + ChangeEntity.SPLITTER + cd.getDeclarationAsString();
+        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
+        this.outputStringList.add("PRE_DIFF");
+        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
+        this.outputStringList.add(this.changeEntity);
+        this.outputStringList.add(cd.getNameAsString());
     }
 
 

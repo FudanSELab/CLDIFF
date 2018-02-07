@@ -16,7 +16,6 @@ public class TryCatchChangeEntity extends StatementPlusChangeEntity {
     final public static String throwStatement = "Throw";
     public TryCatchChangeEntity(ClusteredActionBean bean) {
         super(bean);
-
     }
 
 

@@ -17,34 +17,36 @@ public class ClassOrInterfaceDeclarationChangeEntity extends ChangeEntity{
     public ClassOrInterfaceDeclarationChangeEntity(ClusteredActionBean bean){
         super(bean);
     }
+    final public static String CLASS_STR = "Class";
+    final public static String INTERFACE_STR = "Interface";
 
     /**
      * 预处理 识别的
      */
     public ClassOrInterfaceDeclarationChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType){
+        super();
         ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration)bodyDeclarationPair.getBodyDeclaration();
-
         this.lineRange = cod.getRange().get();
-        String classOrInterface;
         if(cod.isInterface()){
-            classOrInterface = "Interface";
+            this.changeEntity = INTERFACE_STR;
         }else{
-            classOrInterface = "Class";
+            this.changeEntity = CLASS_STR;
         }
-        String isStatic = "";
-        if(cod.isStatic()){
-            isStatic = "static ";
-        }
-        this.changeEntity = classOrInterface;
+//        String isStatic = "";
+//        if(cod.isStatic()){
+//            isStatic = "static ";
+//        }
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + isStatic +classOrInterface + ChangeEntity.SPLITTER + cod.getNameAsString();
+        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
+        this.outputStringList.add("PRE_DIFF");
+        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
+//        this.outputStringList.add(isStatic);
+        this.outputStringList.add(this.changeEntity);
+        this.outputStringList.add(cod.getNameAsString());
     }
 
-    @Override
-    public String toString(){
-        return this.outputDesc;
-    }
+
 
 
 }

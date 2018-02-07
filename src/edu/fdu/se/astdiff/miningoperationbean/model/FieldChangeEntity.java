@@ -16,6 +16,10 @@ public class FieldChangeEntity extends ChangeEntity {
      */
     public FieldChangeEntity(ClusteredActionBean bean){
         super(bean);
+        this.lineRange = bean.nodeLinePosition;
+        this.changeEntity = "Field - AnonymousClass";
+        this.changeType = bean.changePacket.getOperationType();
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + this.changeEntity +ChangeEntity.SPLITTER;
     }
 
 
@@ -28,13 +32,16 @@ public class FieldChangeEntity extends ChangeEntity {
         this.location = fieldDeclarationPair.getLocationClassString();
         this.changeEntity = "Field";
         this.changeType = changeType;
-        String isStatic = "";
-        if(fd.isStatic()){
-            isStatic = "static ";
-        }
+//        String isStatic = "";
+//        if(fd.isStatic()){
+//            isStatic = "static ";
+//        }
+        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
+        this.outputStringList.add("PRE_DIFF");
+        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
+        this.outputStringList.add(this.changeEntity);
         NodeList list = fd.getVariables();
-
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + isStatic + this.changeEntity+ChangeEntity.SPLITTER + fieldDeclarationPair.getLocationClassString() + list.toString();
+        this.outputStringList.add(fieldDeclarationPair.getLocationClassString() + list.toString());
     }
 
 

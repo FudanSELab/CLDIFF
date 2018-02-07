@@ -28,9 +28,9 @@ public class OperationTypeConstants {
         constantName.put(10003,"UPDATE");
         constantName.put(10004,"MULTIPLE_EDIT");
 
-        constantName.put(11000,"ENTITY_MEMBER");
-        constantName.put(11001,"ENTITY_STATEMENT_TYPE_I");
-        constantName.put(11002,"ENTITY_STATEMENT_TYPE_II");
+        constantName.put(11000,"MEMBER");
+        constantName.put(11001,"STATEMENT_I");
+        constantName.put(11002,"STATEMENT_II");
 
         constantName.put(12000,"WHOLE_STRUCTURE");
         constantName.put(12001,"WHOLE_WRAPPER");

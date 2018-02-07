@@ -13,7 +13,7 @@ public class MethodChangeEntity extends ChangeEntity {
     public MethodChangeEntity(ClusteredActionBean bean){
         super(bean);
         this.lineRange = bean.nodeLinePosition;
-        this.changeEntity = "Method";
+        this.changeEntity = "Method - AnonymousClass";
         this.changeType = bean.changePacket.getOperationType();
         this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + this.changeEntity +ChangeEntity.SPLITTER;
 
@@ -26,11 +26,15 @@ public class MethodChangeEntity extends ChangeEntity {
         this.changeEntity = "Method";
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        String isStatic = "";
-        if(md.isStatic()){
-            isStatic = "static ";
-        }
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + isStatic + this.changeEntity+ChangeEntity.SPLITTER +md.getDeclarationAsString();
+//        String isStatic = "";
+//        if(md.isStatic()){
+//            isStatic = "static ";
+//        }
+        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
+        this.outputStringList.add("PRE_DIFF");
+        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
+        this.outputStringList.add(this.changeEntity);
+        this.outputStringList.add(md.getDeclarationAsString());
     }
 
 

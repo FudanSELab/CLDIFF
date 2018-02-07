@@ -19,14 +19,18 @@ public class InitializerChangeEntity extends ChangeEntity{
     public InitializerChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType){
         InitializerDeclaration iid = (InitializerDeclaration) bodyDeclarationPair.getBodyDeclaration();
         this.lineRange = iid.getRange().get();
-        String isStatic = "";
-        if(iid.isStatic()){
-            isStatic = "static ";
-        }
+//        String isStatic = "";
+//        if(iid.isStatic()){
+//            isStatic = "static ";
+//        }
         this.changeEntity = "Initializer";
-        this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + isStatic + this.changeEntity;
+        this.changeType = changeType;
+        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
+        this.outputStringList.add("PRE_DIFF");
+        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
+        this.outputStringList.add(this.changeEntity);
+
     }
     public String staticOrNonStatic;
 

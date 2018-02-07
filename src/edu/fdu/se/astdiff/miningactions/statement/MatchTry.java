@@ -36,31 +36,50 @@ public class MatchTry {
 		fp.addOneChangeEntity(code);
 	}
 
-	public static void matchThrowStatement(MiningActionData fp, Action a) {
+	public static void matchCatchClause(MiningActionData fp,Action a){
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
-		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
-		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
+		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
+		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_UPGRADE);
+		DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
-		ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
+		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
+		code.changeEntity = TryCatchChangeEntity.catchclause;
 		fp.addOneChangeEntity(code);
+	}
 
-		String operationEntity = "THROWSTATEMENT";
+	public static void matchThrowStatement(MiningActionData fp, Action a) {
+		ChangePacket changePacket = new ChangePacket();
+		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
+		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
+		DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
+		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_UPGRADE);
+		Range range = AstRelations.getRangeOfAstNode(a);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
+		fp.addOneChangeEntity(code);
+		code.changeEntity = TryCatchChangeEntity.throwStatement;
+		fp.setActionTraversedMap(subActions);
 
 	}
 
 	public static void matchFinally(MiningActionData fp, Action a) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
-		DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+		DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
+		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_UPGRADE);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
-		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
+		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
-		String operationEntity = "FINALLY";
+		code.changeEntity = TryCatchChangeEntity.finallyClause;
+		fp.setActionTraversedMap(subActions);
 	}
 
 

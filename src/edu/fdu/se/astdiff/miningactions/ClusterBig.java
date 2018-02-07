@@ -65,14 +65,10 @@ public class ClusterBig extends AbstractCluster{
                 MatchBlock.matchBlock(fp, a);
                 break;
             case ASTNode.BREAK_STATEMENT:
-                if (AstRelations.isFatherXXXStatement(a, ASTNode.SWITCH_STATEMENT)) {
-                    //增加switch语句
-                    MatchSwitch.matchSwitchCaseByFather(fp, a);
-                } else {
-                    System.out.println("Other Condition" + a.getClass().getSimpleName() + " " + type);
-                    fp.setActionTraversedMap(a);
-                }
+                MatchControlStatements.matchBreakStatements(fp,a);
                 break;
+            case ASTNode.CONTINUE_STATEMENT:
+                MatchControlStatements.matchContinueStatements(fp,a);
             case ASTNode.RETURN_STATEMENT:
                 MatchReturnStatement.matchReturnStatement(fp, a);
                 break;
@@ -97,6 +93,9 @@ public class ClusterBig extends AbstractCluster{
                 break;
             case ASTNode.THROW_STATEMENT:
                 MatchTry.matchThrowStatement(fp, a);
+                break;
+            case ASTNode.CATCH_CLAUSE:
+                MatchTry.matchCatchClause(fp,a);
                 break;
             case ASTNode.VARIABLE_DECLARATION_STATEMENT:
                 MatchVariableDeclarationExpression.matchVariableDeclaration(fp, a);
@@ -123,7 +122,6 @@ public class ClusterBig extends AbstractCluster{
                 //增加switch语句
                 MatchSwitch.matchSwitchCase(fp, a);
                 break;
-
 //            case ASTNode.CONSTRUCTORINVOCATION:
 //                //构造方法this
 //                MatchMethod.matchConstructorInvocation(fp, a);

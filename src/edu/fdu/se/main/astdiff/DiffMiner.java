@@ -121,7 +121,7 @@ public class DiffMiner {
         FilePairPreDiff psc = new FilePairPreDiff().compareTwoFile(filePrev, fileCurr, outputDirName);
         PreprocessedData preData = psc.getPreprocessedData();
         DiffMiner.preprocessedData = preData;
-        JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(new File(filePrev), new File(fileCurr));
+        JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getPreviousCu().toString(),preData.getCurrentCu().toString());
         FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", jtg.getPrettyOldTreeString());
         FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", jtg.getPrettyNewTreeString());
         MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);
@@ -131,6 +131,7 @@ public class DiffMiner {
         ClusterActions.doCluster(mMiningActionData);
         MiningOperation mo = new MiningOperation(preData,mMiningActionData);
         mo.printListDiffMiner();
+        mo.printListPreprocess();
     }
 
     public static PreprocessedData preprocessedData;

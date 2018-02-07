@@ -13,6 +13,7 @@ import edu.fdu.se.astdiff.miningoperationbean.model.StatementPlusChangeEntity;
 public class SwitchChangeEntity extends StatementPlusChangeEntity {
     final static public String switchStatement = "Switch";
     final static public String switchCase = "Switch_Case";
+    final static public String defaultBlock = "Default";
 
     public SwitchChangeEntity(ClusteredActionBean bean) {
         super(bean);

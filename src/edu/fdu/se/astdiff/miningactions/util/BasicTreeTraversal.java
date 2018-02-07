@@ -19,14 +19,28 @@ import java.util.Set;
  */
 public class BasicTreeTraversal {
 
-    /**
-     * traverseNode
-     * @param tree
-     * @param resultActions
-     * @param resultTypes
-     */
     public static void traverseNode(ITree tree, List<Action> resultActions, Set<String> resultTypes){
         for(ITree node:tree.preOrder()){
+            Tree tmp = (Tree)node;
+            if(tmp.getDoAction()==null){
+                resultTypes.add(ActionConstants.NULLACTION);
+            }else{
+                tmp.getDoAction().forEach(a -> {
+                    resultActions.add(a);
+                    resultTypes.add(a.getClass().getSimpleName());
+                });
+            }
+        }
+    }
+
+    public static void traverseNodeChildren(ITree tree, List<Action> resultActions, Set<String> resultTypes){
+        boolean flag = true;
+        for(ITree node:tree.preOrder()){
+            if(flag){
+                flag = false;
+                continue;
+            }
+
             Tree tmp = (Tree)node;
             if(tmp.getDoAction()==null){
                 resultTypes.add(ActionConstants.NULLACTION);
