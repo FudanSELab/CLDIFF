@@ -20,8 +20,9 @@ public class MatchSynchronized {
 	public static void matchSynchronized(MiningActionData fp, Action a){
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
+		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
-		DefaultUpDownTraversal.traverseTypeIIStatements(a,subActions,changePacket);
+		DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);

@@ -9,6 +9,7 @@ import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.HashSet;
 import java.util.List;
@@ -174,7 +175,28 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
 
     }
 
-    public static void traverseSwtichCase(Action a,List<Action> result1,ChangePacket changePacket){
+    public static void traverseSwitchCase(Action a,List<Action> result1,ChangePacket changePacket){
+        Set<String> type1 = new HashSet<>();
+        Tree switchCase = (Tree) a.getNode();
+        Tree switchParent = (Tree) switchCase.getParent();
+        result1.add(a);
+        int pos = switchParent.getChildPosition(switchCase);
+        int len = switchParent.getChildren().size();
+        int i=pos+1;
+        for(;i<=len-1;i++){
+            Tree tmp = (Tree)switchParent.getChild(i);
+            if(tmp.getAstNode().getNodeType() == ASTNode.SWITCH_CASE){
+                break;
+            }
+
+        }
+        if(i>len){
+            traverseNodeInRange(switchParent,pos,len,result1,type1);
+
+        }else{
+            traverseNodeInRange(switchParent,pos,i-1,result1,type1);
+        }
+        changePacket.changeSet1 = type1;
 
     }
 

@@ -22,13 +22,11 @@ public class MatchReturnStatement {
         List<Action> subActions = new ArrayList<>();
         changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
-        changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
         fp.setActionTraversedMap(subActions);
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
         ReturnChangeEntity code = new ReturnChangeEntity(mBean);
-
         fp.addOneChangeEntity(code);
     }
 

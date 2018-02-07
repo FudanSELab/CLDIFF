@@ -40,7 +40,6 @@ public class MatchSimpleNameOrLiteral {
         ChangeEntity changeEntity = MiningActionData.getEntityByNode(fp, queryFather);
         List<Action> sameEditAction = new ArrayList<>();
         DefaultDownUpTraversal.traverseFafather(a,fafather,sameEditAction);
-
         if(changeEntity==null){
             matchNodeNewEntity(fp,a,queryFather,sameEditAction);
         }else{
@@ -53,7 +52,7 @@ public class MatchSimpleNameOrLiteral {
 
 
     public static void matchNodeNewEntity(MiningActionData fp,Action a,Tree fafather,List<Action> sameEdits){
-        int nodeType = ((Tree)fafather).getAstNode().getNodeType();
+        int nodeType = fafather.getAstNode().getNodeType();
         switch (nodeType) {
             case  ASTNode.TYPE_DECLARATION:
                 MatchClass.matchClassSignatureNewEntity(fp, a, fafather,sameEdits);

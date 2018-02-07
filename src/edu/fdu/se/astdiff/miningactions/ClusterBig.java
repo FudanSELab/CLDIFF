@@ -111,15 +111,12 @@ public class ClusterBig extends AbstractCluster{
 //                    MatchConditionalExpression.matchConditionalExpression(fp, a, type);
 //                    break;
             case ASTNode.SYNCHRONIZED_STATEMENT:
-                //同步语句块增加
                 MatchSynchronized.matchSynchronized(fp, a);
                 break;
             case ASTNode.SWITCH_STATEMENT:
-                //增加switch语句
                 MatchSwitch.matchSwitch(fp, a);
                 break;
             case ASTNode.SWITCH_CASE:
-                //增加switch语句
                 MatchSwitch.matchSwitchCase(fp, a);
                 break;
 //            case ASTNode.CONSTRUCTORINVOCATION:

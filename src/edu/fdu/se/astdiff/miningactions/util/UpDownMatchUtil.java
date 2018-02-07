@@ -21,7 +21,7 @@ public class UpDownMatchUtil {
         }
     }
 
-    public static void setChangePacket(ChangePacket changePacket, Set<String> types1, Set<String> types2){
+    private static void setChangePacket(ChangePacket changePacket, Set<String> types1, Set<String> types2){
         if(BaseMatchUtil.oneItemInsert(types1)&& BaseMatchUtil.oneItemInsert(types2)){
             changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
         }else if(BaseMatchUtil.oneItemDelete(types1)&& BaseMatchUtil.oneItemDelete(types2)){
@@ -35,8 +35,10 @@ public class UpDownMatchUtil {
         }
     }
 
-    public static void setChangePacket(ChangePacket changePacket, Set<String> types1){
+    private static void setChangePacket(ChangePacket changePacket, Set<String> types1){
         if(BaseMatchUtil.oneItemInsert(types1)|| BaseMatchUtil.oneItemDelete(types1)){
+            changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
+        }else if(BaseMatchUtil.oneItemMoveOrTwoItemMoveAndNullAction(types1)){
             changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
         }else if(BaseMatchUtil.oneItemMoveOrTwoItemMoveAndNullAction(types1)){
             changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
