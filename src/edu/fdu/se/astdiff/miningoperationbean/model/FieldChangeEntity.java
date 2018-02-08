@@ -9,7 +9,7 @@ import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 /**
  * Created by huangkaifeng on 2018/1/16.
  */
-public class FieldChangeEntity extends ChangeEntity {
+public class FieldChangeEntity extends MemberPlusChangeEntity {
     /**
      * gumtree 识别的
      * @param bean

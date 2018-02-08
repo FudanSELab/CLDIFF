@@ -52,14 +52,13 @@ public class ClusterUpdate extends AbstractCluster {
         int actionCnt = this.actionList.size();
         for(int index =0; index!=actionCnt;index++){
             Action a = this.actionList.get(index);
-            index++;
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 continue;
             }
             Tree tmp = (Tree) a.getNode();
-            if(processSmallAction(a,tmp.getAstNode().getNodeType())==1){
-                System.out.println(SimpleActionPrinter.getMyOneActionString(a));
-            }
+//            if(processSmallAction(a,tmp.getAstNode().getNodeType())==1){
+//                System.out.println(SimpleActionPrinter.getMyOneActionString(a));
+//            }
         }
     }
 }

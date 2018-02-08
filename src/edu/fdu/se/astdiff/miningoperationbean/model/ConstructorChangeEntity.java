@@ -9,7 +9,7 @@ import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
  * Created by huangkaifeng on 2018/1/16.
  *
  */
-public class ConstructorChangeEntity extends ChangeEntity {
+public class ConstructorChangeEntity extends MemberPlusChangeEntity {
 
     /**
      * gumtree 识别的 add/remove/modify

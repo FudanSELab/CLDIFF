@@ -10,7 +10,7 @@ import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
  * Created by huangkaifeng on 2018/1/22.
  *
  */
-public class InitializerChangeEntity extends ChangeEntity{
+public class InitializerChangeEntity extends MemberPlusChangeEntity{
 
     public InitializerChangeEntity(ClusteredActionBean bean){
         super(bean);

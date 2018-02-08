@@ -43,6 +43,7 @@ public class MatchClass {
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEditActions,changePacket,range,fafather);
         ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
+        code.changeEntity = ClassOrInterfaceDeclarationChangeEntity.CLASS_STR;
         fp.addOneChangeEntity(code);
     }
 

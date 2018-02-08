@@ -75,38 +75,41 @@ public class BasicTreeTraversal {
      * @return 返回fafafather
      */
     public static Tree findFafatherNode(ITree node) {
-        int type = 0;
-        String simpleName =null;
+        int type;
         Tree curNode = (Tree)node;
-        while (!curNode.isRoot()) {
+        while (true) {
             type = curNode.getAstNode().getNodeType();
-            simpleName = curNode.getAstClass().getSimpleName();
-            if (simpleName.endsWith("Statement") ||simpleName.endsWith("Declaration")) {
+            boolean isEnd = false;
+            switch (type) {
+                case ASTNode.TYPE_DECLARATION:
+                case ASTNode.METHOD_DECLARATION:
+                case ASTNode.FIELD_DECLARATION:
+                case ASTNode.ENUM_DECLARATION:
+                case ASTNode.BLOCK:
+                case ASTNode.ASSERT_STATEMENT:
+                case ASTNode.THROW_STATEMENT:
+                case ASTNode.RETURN_STATEMENT:
+                case ASTNode.DO_STATEMENT:
+                case ASTNode.IF_STATEMENT:
+                case ASTNode.WHILE_STATEMENT:
+                case ASTNode.ENHANCED_FOR_STATEMENT:
+                case ASTNode.FOR_STATEMENT:
+                case ASTNode.TRY_STATEMENT:
+                case ASTNode.SWITCH_STATEMENT:
+                case ASTNode.SWITCH_CASE:
+                case ASTNode.CATCH_CLAUSE:
+                case ASTNode.EXPRESSION_STATEMENT:
+                case ASTNode.VARIABLE_DECLARATION_STATEMENT:
+                case ASTNode.SYNCHRONIZED_STATEMENT:
+                    isEnd = true;
+                default:break;
+            }
+            curNode = (Tree) curNode.getParent();
+            if(isEnd){
                 break;
-            } else{
-                boolean isEnd = false;
-                switch(type) {
-                    //declaration
-                    case ASTNode.BLOCK:
-                    case ASTNode.INITIALIZER:
-                    case ASTNode.SWITCH_CASE:
-                    case ASTNode.CONSTRUCTOR_INVOCATION:
-                    case ASTNode.SUPER_CONSTRUCTOR_INVOCATION:
-                        isEnd = true;
-                        break;
-                    default:
-                        curNode = (Tree)curNode.getParent();
-                        break;
-                }
-                if(isEnd) {
-                    break;
-                }
             }
         }
-        if (curNode.isRoot())
-            return null;
-        else
-            return curNode;
+        return curNode;
     }
 
     public static ITree[] getMappedFafatherNode(MiningActionData fp, Action a, ITree fafather){
@@ -121,6 +124,22 @@ public class BasicTreeTraversal {
         }
         ITree [] result = {srcFafather,dstFafather};
         return result;
+    }
+
+    public static Tree getQueryFafatherNode(MiningActionData fp,Action a,ITree fafather){
+        ITree[] fatherPair = BasicTreeTraversal.getMappedFafatherNode(fp, a, fafather);
+        Tree srcFafather = (Tree) fatherPair[0];
+        Tree dstFafather = (Tree) fatherPair[1];
+        Tree queryFather = null;
+        if (srcFafather == null && dstFafather != null) {
+            queryFather = dstFafather;
+        } else if (srcFafather != null && dstFafather == null) {
+            queryFather = srcFafather;
+        } else if (srcFafather != null && dstFafather != null) {
+            queryFather = srcFafather;
+        }
+        return queryFather;
+
     }
 
 

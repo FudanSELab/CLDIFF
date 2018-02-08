@@ -20,17 +20,7 @@ public class MatchSimpleNameOrLiteral {
 
     public static void matchSimpleNameOrLiteral(MiningActionData fp, Action a) {
         Tree fafather = BasicTreeTraversal.findFafatherNode(a.getNode());
-        ITree[] fatherPair = BasicTreeTraversal.getMappedFafatherNode(fp, a, fafather);
-        Tree srcFafather = (Tree) fatherPair[0];
-        Tree dstFafather = (Tree) fatherPair[1];
-        Tree queryFather = null;
-        if (srcFafather == null && dstFafather != null) {
-            queryFather = dstFafather;
-        } else if (srcFafather != null && dstFafather == null) {
-            queryFather = srcFafather;
-        } else if (srcFafather != null && dstFafather != null) {
-            queryFather = srcFafather;
-        }
+        Tree queryFather = BasicTreeTraversal.getQueryFafatherNode(fp, a, fafather);
         ChangeEntity changeEntity = MiningActionData.getEntityByNode(fp, queryFather);
         List<Action> sameEditAction = new ArrayList<>();
         DefaultDownUpTraversal.traverseFafather(a,fafather,sameEditAction);
@@ -39,14 +29,12 @@ public class MatchSimpleNameOrLiteral {
         }else{
             matchXXXChangeCurEntity(fp,a,changeEntity,sameEditAction);
         }
-
-
-
     }
 
 
     public static void matchNodeNewEntity(MiningActionData fp,Action a,Tree fafather,List<Action> sameEdits){
         int nodeType = fafather.getAstNode().getNodeType();
+        String nodeStr = fafather.getAstClass().getSimpleName();
         switch (nodeType) {
             case  ASTNode.TYPE_DECLARATION:
                 MatchClass.matchClassSignatureNewEntity(fp, a, fafather,sameEdits);

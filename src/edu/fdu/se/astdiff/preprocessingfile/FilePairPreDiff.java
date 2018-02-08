@@ -123,12 +123,13 @@ public class FilePairPreDiff {
         InitializerDeclaration idd;
         if(bd instanceof InitializerDeclaration){
             idd = (InitializerDeclaration) bd;
+            bdMapPrevKey = prefixClassName;
             if(idd.isStatic()){
-                bdMapPrevKey = "static";
+                bdMapPrevKey += "static";
             }else{
-                bdMapPrevKey = "{";
+                bdMapPrevKey += "{";
             }
-            bdMapPrevMethodNameKey = bdMapPrevKey;
+            bdMapPrevMethodNameKey = prefixClassName + bdMapPrevKey;
         }else{
             if(bd instanceof MethodDeclaration){
                 MethodDeclaration md = (MethodDeclaration) bd;

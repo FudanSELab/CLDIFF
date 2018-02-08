@@ -9,7 +9,7 @@ import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
  * Created by huangkaifeng on 2018/1/23.
  *
  */
-public class ClassOrInterfaceDeclarationChangeEntity extends ChangeEntity{
+public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEntity{
     /**
      * gumtree 识别的 add/remove/modify
      * @param bean
@@ -24,7 +24,6 @@ public class ClassOrInterfaceDeclarationChangeEntity extends ChangeEntity{
      * 预处理 识别的
      */
     public ClassOrInterfaceDeclarationChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType){
-        super();
         ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration)bodyDeclarationPair.getBodyDeclaration();
         this.lineRange = cod.getRange().get();
         if(cod.isInterface()){

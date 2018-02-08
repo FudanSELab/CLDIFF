@@ -10,7 +10,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 
 /**
  * Created by huangkaifeng on 2018/2/2.
- *
+ * Statement/Declaration/控制流的子结构
  */
 public class ClusterBig extends AbstractCluster{
 
@@ -47,6 +47,9 @@ public class ClusterBig extends AbstractCluster{
                 break;
             case ASTNode.METHOD_DECLARATION:
                 MatchMethod.matchMethdDeclaration(fp, a);
+                break;
+            case ASTNode.ENUM_DECLARATION:
+                //// TODO: 2018/2/8
                 break;
 
             // 里面
@@ -102,9 +105,7 @@ public class ClusterBig extends AbstractCluster{
                     MatchExpressionStatement.matchExpression(fp, a);
                 }
                 break;
-//                case ASTNode.CONDITIONALEXPRESSION:
-//                    MatchConditionalExpression.matchConditionalExpression(fp, a, type);
-//                    break;
+
             case ASTNode.SYNCHRONIZED_STATEMENT:
                 MatchSynchronized.matchSynchronized(fp, a);
                 break;
@@ -114,14 +115,16 @@ public class ClusterBig extends AbstractCluster{
             case ASTNode.SWITCH_CASE:
                 MatchSwitch.matchSwitchCase(fp, a);
                 break;
-//            case ASTNode.CONSTRUCTORINVOCATION:
-//                //构造方法this
-//                MatchMethod.matchConstructorInvocation(fp, a);
-//                break;
-//            case ASTNode.SUPERCONSTRUCTORINVOCATION:
-//                //构造方法super
-//                MatchMethod.matchSuperConstructorInvocation(fp, a, type);
-//                break;
+            case ASTNode.EMPTY_STATEMENT:
+                break;
+            case ASTNode.LABELED_STATEMENT:
+                break;
+            case ASTNode.TYPE_DECLARATION_STATEMENT:
+                break;
+            //                case ASTNode.CONDITIONALEXPRESSION:
+//                    MatchConditionalExpression.matchConditionalExpression(fp, a, type);
+//                    break;
+
             default:
                 res =1;
                 break;

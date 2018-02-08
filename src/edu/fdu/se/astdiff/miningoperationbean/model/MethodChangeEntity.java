@@ -8,7 +8,7 @@ import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 /**
  * Created by huangkaifeng on 2018/1/22.
  */
-public class MethodChangeEntity extends ChangeEntity {
+public class MethodChangeEntity extends MemberPlusChangeEntity {
 
     public MethodChangeEntity(ClusteredActionBean bean){
         super(bean);
