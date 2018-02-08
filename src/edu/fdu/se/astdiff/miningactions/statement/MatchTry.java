@@ -1,5 +1,6 @@
 package edu.fdu.se.astdiff.miningactions.statement;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.model.ClassOrInterfaceDeclarationChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.SwitchChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.TryCatchChangeEntity;
+import org.eclipse.jdt.core.dom.ASTNode;
 
 public class MatchTry {
 	
@@ -32,9 +34,15 @@ public class MatchTry {
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
-		code.changeEntity = TryCatchChangeEntity.tryCatch;
+		Tree firstC = (Tree) a.getNode().getChild(0);
+		if(firstC.getAstNode().getNodeType() == ASTNode.BLOCK){
+			code.changeEntity = TryCatchChangeEntity.tryCatch;
+		}else{
+			code.changeEntity = TryCatchChangeEntity.tryWithResources;
+		}
 		fp.addOneChangeEntity(code);
 	}
+	//try-with-resources statement
 
 	public static void matchCatchClause(MiningActionData fp,Action a){
 		ChangePacket changePacket = new ChangePacket();
@@ -47,7 +55,7 @@ public class MatchTry {
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
-		code.changeEntity = TryCatchChangeEntity.catchclause;
+		code.changeEntity = TryCatchChangeEntity.catchClause;
 		fp.addOneChangeEntity(code);
 	}
 

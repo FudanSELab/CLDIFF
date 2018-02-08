@@ -58,7 +58,7 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         int i=0;
         for(;i<children.size();i++){
             Tree t = (Tree) children.get(i);
-            if(t.getAstClass().getSimpleName().endsWith("Block")){
+            if(t.getAstNode().getNodeType() == ASTNode.BLOCK ){
                 break;
             }
         }
@@ -77,7 +77,7 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         int i=0;
         for(;i<children.size();i++){
             Tree t = (Tree) children.get(i);
-            if(t.getAstClass().getSimpleName().endsWith("Block")){
+            if(t.getAstNode().getNodeType() == ASTNode.BLOCK ){
                 break;
             }
         }
@@ -97,7 +97,7 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         int i=0;
         for(;i<children.size();i++){
             Tree t = (Tree) children.get(i);
-            if(t.getAstClass().getSimpleName().endsWith("Block") || t.getAstClass().getSimpleName().endsWith("Statement")){
+            if(t.getAstNode().getNodeType() == ASTNode.BLOCK  || t.getAstClass().getSimpleName().endsWith("Statement")){
                 break;
             }
         }
@@ -119,7 +119,7 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         int i=0;
         for(;i<children.size();i++){
             Tree t = (Tree) children.get(i);
-            if(t.getAstClass().getSimpleName().endsWith("Block")){
+            if(t.getAstNode().getNodeType() == ASTNode.BLOCK ){
                 type = 1;
                 break;
             }else if(t.getAstClass().getSimpleName().endsWith("Statement")){
@@ -161,7 +161,7 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         int i=0;
         for(;i<children.size();i++){
             Tree t = (Tree) children.get(i);
-            if(t.getAstClass().getSimpleName().endsWith("SwitchCase")){
+            if(t.getAstNode().getNodeType() == ASTNode.SWITCH_CASE){
                 break;
             }
         }

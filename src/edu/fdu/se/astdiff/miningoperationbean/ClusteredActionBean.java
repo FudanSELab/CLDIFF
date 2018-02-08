@@ -1,7 +1,6 @@
 package edu.fdu.se.astdiff.miningoperationbean;
 
 import java.util.List;
-import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;

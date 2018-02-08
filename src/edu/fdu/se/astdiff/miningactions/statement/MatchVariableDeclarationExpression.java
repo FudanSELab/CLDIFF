@@ -2,23 +2,18 @@ package edu.fdu.se.astdiff.miningactions.statement;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.tree.ITree;
 
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
-import edu.fdu.se.astdiff.miningactions.statement.MatchTry;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.ExpressionChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.statementplus.ReturnChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.VariableChangeEntity;
 
 public class MatchVariableDeclarationExpression {

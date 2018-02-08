@@ -1,17 +1,12 @@
 package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.Body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import org.eclipse.jdt.core.dom.ASTNode;
-
-import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/2/2.

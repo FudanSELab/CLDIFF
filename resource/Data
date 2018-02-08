@@ -88,7 +88,10 @@ SDK文件代码中的统计信息
 版本 数据库条目  统计条目  android子目录 统计Android子目录
 
 
+做Cluster并不是简单的聚类，因为还要处理gumtree的识别和逻辑不对应的问题
 
 GumTree 的误识别
 1.Block相关 很容易识别成block的增删,然后一系列子句的move
+2.SwitchCase insert之后识别和逻辑不对应***** gumtree的缺陷
+
 

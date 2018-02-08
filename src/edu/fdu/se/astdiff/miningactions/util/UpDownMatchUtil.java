@@ -14,7 +14,9 @@ import java.util.Set;
 public class UpDownMatchUtil {
 
     public static void setChangePacket(ClusteredActionBean bean){
-        if(bean.changePacket.changeSet2 == null){
+        if(bean.changePacket.changeSet1 == null){
+            return;
+        }else if(bean.changePacket.changeSet2 == null){
             setChangePacket(bean.changePacket,bean.changePacket.changeSet1);
         }else{
             setChangePacket(bean.changePacket,bean.changePacket.changeSet1,bean.changePacket.changeSet2);

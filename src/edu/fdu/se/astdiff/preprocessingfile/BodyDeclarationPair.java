@@ -1,8 +1,6 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
 import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.sun.xml.internal.bind.annotation.OverrideAnnotationOf;
 
 /**
  * Created by huangkaifeng on 2018/1/22.

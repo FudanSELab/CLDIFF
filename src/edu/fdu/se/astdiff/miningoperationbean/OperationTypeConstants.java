@@ -1,8 +1,6 @@
 package edu.fdu.se.astdiff.miningoperationbean;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
-import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.HashMap;
 import java.util.Map;

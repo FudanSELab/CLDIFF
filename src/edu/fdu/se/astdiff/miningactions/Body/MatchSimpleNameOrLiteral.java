@@ -1,20 +1,14 @@
 package edu.fdu.se.astdiff.miningactions.Body;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
-import com.github.gumtreediff.utils.Pair;
-import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
-import edu.fdu.se.astdiff.miningactions.util.StatementConstants;
 import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import org.eclipse.jdt.core.dom.ASTNode;
 

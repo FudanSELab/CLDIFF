@@ -1,7 +1,6 @@
 package edu.fdu.se.astdiff.miningactions.statement;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;

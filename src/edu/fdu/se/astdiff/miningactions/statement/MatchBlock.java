@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.miningactions.Body;
+package edu.fdu.se.astdiff.miningactions.statement;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.Tree;
@@ -25,7 +25,9 @@ public class MatchBlock {
                 break;
             case ASTNode.TRY_STATEMENT:
                 ////Finally块
-                MatchTry.matchFinally(fp, a);
+                if(fatherNode.getChildPosition(a.getNode()) == fatherNode.getChildren().size()-1){
+                    MatchTry.matchFinally(fp, a);
+                }
                 break;
             default:
                 break;
