@@ -7,6 +7,7 @@ import edu.fdu.se.astdiff.miningactions.Body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.model.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.model.StatementPlusChangeEntity;
