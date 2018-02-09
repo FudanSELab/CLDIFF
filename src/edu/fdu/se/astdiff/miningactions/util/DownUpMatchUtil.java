@@ -18,13 +18,13 @@ public class DownUpMatchUtil {
         }else if(bean.changePacket.changeSet2 == null){
             setChangePacket(bean.changePacket,bean.changePacket.changeSet1);
         }else{
+            //不存在
             setChangePacket(bean.changePacket,bean.changePacket.changeSet1,bean.changePacket.changeSet2);
         }
 
     }
 
     private static void setChangePacket(ChangePacket changePacket, Set<String> type1,Set<String> type2){
-
 
     }
 
@@ -38,6 +38,7 @@ public class DownUpMatchUtil {
         }else if(BaseMatchUtil.twoItemUpdateAndNullAction(type1)){
             changePacket.setOperationType(OperationTypeConstants.UPDATE);
         }
+        changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_REFURNISH);
 
     }
 }

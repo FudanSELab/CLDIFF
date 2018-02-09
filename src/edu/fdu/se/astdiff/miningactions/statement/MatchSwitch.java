@@ -46,7 +46,7 @@ public class MatchSwitch {
 			code.changeEntity = SwitchChangeEntity.switchCase;
 		}
 		fp.addOneChangeEntity(code);
-		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_UPGRADE);
+		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_CHANGE);
 	}
 
 	public static void matchSwitchCaseByFather(MiningActionData fp, Action a){

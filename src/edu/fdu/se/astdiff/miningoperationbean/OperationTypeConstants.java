@@ -33,7 +33,7 @@ public class OperationTypeConstants {
         constantName.put(12000,"WHOLE_STRUCTURE");
         constantName.put(12001,"WHOLE_WRAPPER");
         constantName.put(12002,"REFURNISH");
-        constantName.put(12003,"UPGRADE");
+        constantName.put(12003,"STRUCTURE_CHANGE");
 
         constantName.put(10005,"INSERT_M");
         constantName.put(10006,"DELETE_M");
@@ -72,7 +72,7 @@ public class OperationTypeConstants {
     final public static int SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE = 12000;
     final public static int SUB_ENTITY_STRUCTURE_WHOLE_WRAPPER = 12001;
     final public static int SUB_ENTITY_STRUCTURE_REFURNISH = 12002;
-    final public static int SUB_ENTITY_STRUCTURE_UPGRADE = 12003;
+    final public static int SUB_ENTITY_STRUCTURE_CHANGE = 12003;
 
 
 

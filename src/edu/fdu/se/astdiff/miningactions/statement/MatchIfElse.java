@@ -32,7 +32,7 @@ public class MatchIfElse {
 		fp.addOneChangeEntity(code);
 		if (AstRelations.isFatherXXXStatement(a, ASTNode.IF_STATEMENT)) {
 			code.changeEntity = IfChangeEntity.ELSE_IF;
-			changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_UPGRADE);
+			changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_CHANGE);
 		} else {
 			code.changeEntity = IfChangeEntity.IF;
 			changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);

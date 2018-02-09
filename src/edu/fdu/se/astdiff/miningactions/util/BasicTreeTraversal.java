@@ -104,17 +104,18 @@ public class BasicTreeTraversal {
                     isEnd = true;
                 default:break;
             }
-            curNode = (Tree) curNode.getParent();
+
             if(isEnd){
                 break;
             }
+            curNode = (Tree) curNode.getParent();
         }
         return curNode;
     }
 
     public static ITree[] getMappedFafatherNode(MiningActionData fp, Action a, ITree fafather){
-        ITree srcFafather = null;
-        ITree dstFafather = null;
+        ITree srcFafather;
+        ITree dstFafather;
         if (a instanceof Insert) {
             dstFafather = fafather;
             srcFafather = fp.getMappedSrcOfDstNode(dstFafather);
@@ -126,7 +127,7 @@ public class BasicTreeTraversal {
         return result;
     }
 
-    public static Tree getQueryFafatherNode(MiningActionData fp,Action a,ITree fafather){
+    public static Tree[] getQueryFafatherNode(MiningActionData fp,Action a,ITree fafather){
         ITree[] fatherPair = BasicTreeTraversal.getMappedFafatherNode(fp, a, fafather);
         Tree srcFafather = (Tree) fatherPair[0];
         Tree dstFafather = (Tree) fatherPair[1];

@@ -46,6 +46,7 @@ public class ClusterActions {
                 m.appendListString();
             }
         }
+        System.out.print("");
     }
 
 

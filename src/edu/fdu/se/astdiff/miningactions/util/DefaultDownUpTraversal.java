@@ -6,6 +6,7 @@ import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,22 +18,23 @@ import java.util.Set;
  */
 public class DefaultDownUpTraversal extends BasicTreeTraversal{
 
-    public static int traverseFafather(Action a,Tree node, List<Action> result1){
-        int flag = 1;
-        for(ITree t:node.preOrder()){
-            Tree tt = (Tree) t;
-            if(tt.getDoAction()==null){
-                flag = 0;
-                continue;
+
+
+    public static void traverseClassSignature(Tree node, List<Action> result1,ChangePacket changePacket){
+        assert node.getDoAction() ==null;
+        Set<String> type = new HashSet<>();
+        type.add(ActionConstants.NULLACTION);
+        List<ITree> children = node.getChildren();
+        for(ITree child :children){
+            Tree tmp = (Tree) child;
+            if(tmp.getAstClass().getSimpleName().endsWith("Declaration")||tmp.getAstNode().getNodeType()== ASTNode.INITIALIZER){
+                break;
             }
-            List<Action> actions = tt.getDoAction();
-            for(Action tmp:actions){
-                if(a.getClass().equals(tmp.getClass())){
-                    result1.add(tmp);
-                }
-            }
+            traverseNode(tmp,result1,type);
         }
-        return flag;
+        changePacket.changeSet1 = type;
+
+
     }
 
 

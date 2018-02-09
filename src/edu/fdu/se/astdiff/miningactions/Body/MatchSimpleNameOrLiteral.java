@@ -8,7 +8,6 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
-import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -23,7 +22,6 @@ public class MatchSimpleNameOrLiteral {
         Tree queryFather = BasicTreeTraversal.getQueryFafatherNode(fp, a, fafather);
         ChangeEntity changeEntity = MiningActionData.getEntityByNode(fp, queryFather);
         List<Action> sameEditAction = new ArrayList<>();
-        DefaultDownUpTraversal.traverseFafather(a,fafather,sameEditAction);
         if(changeEntity==null){
             matchNodeNewEntity(fp,a,queryFather,sameEditAction);
         }else{

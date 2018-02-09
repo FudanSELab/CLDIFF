@@ -24,13 +24,13 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
     public static void traverseClass(Action a, List<Action> result1, ChangePacket changePacket){
         ITree node = a.getNode();
         result1.add(a);
-            List<ITree> children = node.getChildren();
-            int i=0;
-            for(;i<children.size();i++){
-                Tree t = (Tree) children.get(i);
-                if(t.getAstClass().getSimpleName().endsWith("Declaration")){
-                    break;
-                }
+        List<ITree> children = node.getChildren();
+        int i=0;
+        for(;i<children.size();i++){
+            Tree t = (Tree) children.get(i);
+            if(t.getAstClass().getSimpleName().endsWith("Declaration")||t.getAstNode().getNodeType() == ASTNode.INITIALIZER){
+                break;
+            }
         }
         Set<String> type1 = new HashSet<>();
         Set<String> type2 = new HashSet<>();

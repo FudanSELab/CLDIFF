@@ -42,9 +42,9 @@ public abstract class ChangeEntity {
         this.changeType = bean.changePacket.getOperationType();
         this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationEntity()));
         if(this.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
-            this.outputStringList.add("BIG");
+            this.outputStringList.add("UP-DOWN-PHASE");
         }else{
-            this.outputStringList.add("SMALL");
+            this.outputStringList.add("DOWN-UP-PHASE");
         }
     }
 

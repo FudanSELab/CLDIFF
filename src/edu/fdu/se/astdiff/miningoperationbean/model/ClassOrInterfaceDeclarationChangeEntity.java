@@ -19,6 +19,7 @@ public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEnt
     }
     final public static String CLASS_STR = "Class";
     final public static String INTERFACE_STR = "Interface";
+    final public static String CLASS_SIGNATURE = "class signature";
 
     /**
      * 预处理 识别的
