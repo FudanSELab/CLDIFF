@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.miningactions.Body;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
@@ -16,17 +17,50 @@ import java.util.List;
 
 public class MatchSimpleNameOrLiteral {
 
-
+    //todo
     public static void matchSimpleNameOrLiteral(MiningActionData fp, Action a) {
-        Tree fafather = BasicTreeTraversal.findFafatherNode(a.getNode());
-        Tree queryFather = BasicTreeTraversal.getQueryFafatherNode(fp, a, fafather);
-        ChangeEntity changeEntity = MiningActionData.getEntityByNode(fp, queryFather);
+        ITree[] fathers = BasicTreeTraversal.getMappedFafatherNode(fp,a,a.getNode());
+//        Tree fafather = BasicTreeTraversal.findFafatherNode(a.getNode());
+//        Tree queryFather = BasicTreeTraversal.getQueryFafatherNode(fp, a, fafather);
+        Tree srcFather = fathers[0]==null ? null:(Tree)fathers[0];
+        Tree dstFather = fathers[1]==null ? null:(Tree)fathers[1];
+        Tree queryFather =null;
+        if(srcFather == null && dstFather!=null){
+            queryFather = dstFather;
+        }else if(srcFather !=null){
+            queryFather = srcFather;
+        }
+
+        ChangeEntity changeEntity = null;
+        changeEntity = MiningActionData.getEntityByNode(fp, queryFather);
+        if(changeEntity==null){
+            Tree moveNode = checkIfMoveActionInUppperNode(queryFather);
+            if(moveNode!=null)
+                changeEntity = MiningActionData.getEntityByNode(fp,queryFather);
+        }
+        // 如果节点往上有move标记那么找到move标记的ChangeEntity
         List<Action> sameEditAction = new ArrayList<>();
         if(changeEntity==null){
             matchNodeNewEntity(fp,a,queryFather,sameEditAction);
         }else{
             matchXXXChangeCurEntity(fp,a,changeEntity,sameEditAction);
         }
+    }
+
+    public static Tree checkIfMoveActionInUppperNode(ITree node){
+        Tree parent = (Tree)node;
+        while(!parent.isRoot()){
+            if(parent.getDoAction()!=null){
+                List<Action> subActions = parent.getDoAction();
+                for(Action tmp:subActions){
+                    if(tmp instanceof Move){
+                        return parent;
+                    }
+                }
+            }
+            parent = (Tree)parent.getParent();
+        }
+        return null;
     }
 
 

@@ -65,6 +65,7 @@ public class MiningActionData {
 	}
 
 	public static ChangeEntity getEntityByNode(MiningActionData fp,ITree tree){
+		if(tree==null) return null;
 		for(ChangeEntity changeEntity:fp.getChangeEntityList()){
 			if(changeEntity.clusteredActionBean.fafather ==tree){
 				return changeEntity;

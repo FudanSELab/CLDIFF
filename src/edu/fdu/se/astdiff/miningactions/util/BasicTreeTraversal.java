@@ -127,7 +127,7 @@ public class BasicTreeTraversal {
         return result;
     }
 
-    public static Tree[] getQueryFafatherNode(MiningActionData fp,Action a,ITree fafather){
+    public static Tree getQueryFafatherNode(MiningActionData fp,Action a,ITree fafather){
         ITree[] fatherPair = BasicTreeTraversal.getMappedFafatherNode(fp, a, fafather);
         Tree srcFafather = (Tree) fatherPair[0];
         Tree dstFafather = (Tree) fatherPair[1];
