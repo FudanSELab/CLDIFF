@@ -19,7 +19,14 @@ import java.util.Set;
  */
 public class BasicTreeTraversal {
 
-    public static void traverseNode(ITree tree, List<Action> resultActions, Set<String> resultTypes){
+    /**
+     * 遍历子树，子树中含有任何的action都添加进resultActions，resultType记录type
+     *
+     * @param tree 遍历的root节点
+     * @param resultActions [insert,null] 或者[delete,move,update,null]
+     * @param resultTypes 同上
+     */
+    protected static void traverseNode(ITree tree, List<Action> resultActions, Set<String> resultTypes){
         for(ITree node:tree.preOrder()){
             Tree tmp = (Tree)node;
             if(tmp.getDoAction()==null){
@@ -33,7 +40,13 @@ public class BasicTreeTraversal {
         }
     }
 
-    public static void traverseNodeChildren(ITree tree, List<Action> resultActions, Set<String> resultTypes){
+    /**
+     * 类似于traverseNode，只是考虑到遍历block节点，block节点的属性会影响类型的判断，root节点为block属性时，舍弃block信息
+     * @param tree root节点
+     * @param resultActions result
+     * @param resultTypes resulttype
+     */
+    protected static void traverseNodeChildren(ITree tree, List<Action> resultActions, Set<String> resultTypes){
         boolean flag = true;
         for(ITree node:tree.preOrder()){
             if(flag){
@@ -53,7 +66,15 @@ public class BasicTreeTraversal {
         }
     }
 
-    public static void traverseNodeInRange(ITree tree,int a,int b,List<Action> resultActions,Set<String> resultTypes){
+    /**
+     * class signature，method signature等需要将形如 XXX(A){B} A和B的变化分开，所以需要首先识别分割点，然后按照range遍历
+     * @param tree root
+     * @param a range a
+     * @param b range b
+     * @param resultActions result
+     * @param resultTypes resulttype
+     */
+    protected static void traverseNodeInRange(ITree tree,int a,int b,List<Action> resultActions,Set<String> resultTypes){
         List<ITree> children = tree.getChildren();
         for(int i = a;i<=b;i++){
             ITree c = children.get(i);
@@ -61,9 +82,15 @@ public class BasicTreeTraversal {
         }
     }
 
-    public static void traverseOneType(Action a,List<Action> result1,ChangePacket changePacket){
+    /**
+     * 如果是形如field等类型，将其作为一个整体考虑，所以不需要range
+     * @param node root
+     * @param result1
+     * @param changePacket
+     */
+    protected static void traverseOneType(ITree node,List<Action> result1,ChangePacket changePacket){
         Set<String> type1 = new HashSet<>();
-        traverseNode(a.getNode(),result1,type1);
+        traverseNode(node,result1,type1);
         changePacket.changeSet1 = type1;
     }
 
@@ -71,8 +98,8 @@ public class BasicTreeTraversal {
     /**
      * 找当前节点的父节点 XXXStatement XXXDelclaration JavaDoc CatchClause
      *
-     * @param node
-     * @return 返回fafafather
+     * @param node 节点
+     * @return 返回fafather
      */
     public static Tree findFafatherNode(ITree node) {
         int type;
@@ -127,21 +154,6 @@ public class BasicTreeTraversal {
         return result;
     }
 
-    public static Tree getQueryFafatherNode(MiningActionData fp,Action a,ITree fafather){
-        ITree[] fatherPair = BasicTreeTraversal.getMappedFafatherNode(fp, a, fafather);
-        Tree srcFafather = (Tree) fatherPair[0];
-        Tree dstFafather = (Tree) fatherPair[1];
-        Tree queryFather = null;
-        if (srcFafather == null && dstFafather != null) {
-            queryFather = dstFafather;
-        } else if (srcFafather != null && dstFafather == null) {
-            queryFather = srcFafather;
-        } else if (srcFafather != null && dstFafather != null) {
-            queryFather = srcFafather;
-        }
-        return queryFather;
-
-    }
 
 
 

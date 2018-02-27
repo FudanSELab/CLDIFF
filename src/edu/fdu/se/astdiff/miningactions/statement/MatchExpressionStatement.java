@@ -4,6 +4,7 @@ import com.github.gumtreediff.actions.model.Action;
 
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
@@ -32,14 +33,14 @@ public class MatchExpressionStatement {
 	}
 
 
-	public static void matchExpressionByFather(MiningActionData fp, Action a, Tree fafather,List<Action> sameEditActions) {
+	public static void matchExpressionByFather(MiningActionData fp, Action a, Tree fafather) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
-		DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
+		DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(fafather,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range,fafather);
 		ExpressionChangeEntity code = new ExpressionChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}

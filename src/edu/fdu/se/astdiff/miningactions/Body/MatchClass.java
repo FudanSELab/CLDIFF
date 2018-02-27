@@ -36,14 +36,14 @@ public class MatchClass {
         fp.addOneChangeEntity(code);
     }
 
-    public static void matchClassSignatureNewEntity(MiningActionData fp, Action a, Tree fafather,List<Action> sameEditActions ) {
+    public static void matchClassSignatureNewEntity(MiningActionData fp, Action a, Tree fafather) {
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
         DefaultDownUpTraversal.traverseClassSignature(fafather,subActions,changePacket);
-        fp.setActionTraversedMap(sameEditActions);
+        fp.setActionTraversedMap(subActions);
         Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEditActions,changePacket,range,fafather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range,fafather);
         ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
         code.changeEntity = ClassOrInterfaceDeclarationChangeEntity.CLASS_SIGNATURE;
         fp.addOneChangeEntity(code);

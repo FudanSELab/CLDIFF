@@ -9,6 +9,7 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
@@ -59,11 +60,13 @@ public class MatchIfElse {
 
 
 
-	public static void matchIfPredicateChangeNewEntity(MiningActionData fp, Action a, Tree fafather, List<Action> sameEdits) {
+	public static void matchIfPredicateChangeNewEntity(MiningActionData fp, Action a, Tree fafather) {
 
 		ChangePacket changePacket = new ChangePacket();
+		List<Action> sameEdits = new ArrayList<>();
 		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
+		DefaultDownUpTraversal.traverseIfPredicate(fafather,sameEdits,changePacket);
 		fp.setActionTraversedMap(sameEdits);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,fafather);

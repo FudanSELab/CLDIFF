@@ -4,6 +4,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
@@ -32,9 +33,11 @@ public class MatchFieldDeclaration {
     }
 
 
-    public static ClusteredActionBean matchFieldDeclarationChangeNewEntity(MiningActionData fp, Action a, ITree faFather,List<Action> sameEdits) {
+    public static ClusteredActionBean matchFieldDeclarationChangeNewEntity(MiningActionData fp, Action a, ITree faFather) {
         ChangePacket changePacket = new ChangePacket();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
+        List<Action> sameEdits = new ArrayList<>();
+        DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions((Tree)faFather,sameEdits,changePacket);
         fp.setActionTraversedMap(sameEdits);
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,(Tree)faFather);

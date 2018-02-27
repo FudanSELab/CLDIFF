@@ -33,8 +33,62 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
             traverseNode(tmp,result1,type);
         }
         changePacket.changeSet1 = type;
+    }
 
+    public static void traverseMethodSignature(Tree node,List<Action> result1,ChangePacket changePacket){
+        assert node.getDoAction() == null;
+        Set<String> type = new HashSet<>();
+        type.add(ActionConstants.NULLACTION);
+        List<ITree> children = node.getChildren();
+        for(ITree child:children){
+            Tree tmp = (Tree) child;
+            if(tmp.getAstNode().getNodeType() == ASTNode.BLOCK){
+                break;
+            }
+            traverseNode(tmp,result1,type);
+        }
+        changePacket.changeSet1 = type;
+    }
 
+    /**
+     * 最简单的从father node往下找edit 节点，然后标记
+     * @param fafather root节点
+     * @param editAction editAction
+     * @param changePacket changePacket
+     */
+    public static void traverseFatherNodeGetSameNodeActions(Tree fafather,List<Action> editAction,ChangePacket changePacket){
+        Set<String> type = new HashSet<>();
+        for(ITree node:fafather.preOrder()){
+            Tree tmp = (Tree) node;
+            traverseNode(tmp,editAction,type);
+        }
+        changePacket.changeSet1 = type;
+    }
+
+    public static void traverseIfPredicate(Tree node,List<Action> result1,ChangePacket changePacket){
+        assert node.getDoAction() == null;
+        Set<String> type = new HashSet<>();
+        type.add(ActionConstants.NULLACTION);
+        List<ITree> children = node.getChildren();
+        int i;
+        for(i =0;i<children.size();i++){
+            Tree tmp = (Tree) children.get(i);
+            if(tmp.getAstNode().getNodeType() == ASTNode.BLOCK){
+                break;
+            }
+        }
+        int bound;
+        if(i!=children.size()){
+            bound=i;
+
+        }else{
+            bound=children.size()-1;
+        }
+        for(int j=0;j<bound;j++){
+            Tree tmp = (Tree) children.get(j);
+            traverseNode(tmp,result1,type);
+        }
+        changePacket.changeSet1 = type;
     }
 
 

@@ -6,6 +6,7 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
@@ -32,12 +33,14 @@ public class MatchMethod {
 	}
 
 
-	public static void matchMethodSignatureChangeNewEntity(MiningActionData fp, Action a, ITree fafather,List<Action> sameEditActions) {
+	public static void matchMethodSignatureChangeNewEntity(MiningActionData fp, Action a, Tree fafather) {
 		ChangePacket changePacket = new ChangePacket();
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
-		fp.setActionTraversedMap(sameEditActions);
+		List<Action> sameEdits = new ArrayList<>();
+		DefaultDownUpTraversal.traverseMethodSignature(fafather,sameEdits,changePacket);
+		fp.setActionTraversedMap(sameEdits);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEditActions,changePacket,range,(Tree)fafather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,(Tree)fafather);
 		MethodChangeEntity code = new MethodChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}

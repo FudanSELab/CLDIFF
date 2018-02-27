@@ -21,6 +21,10 @@ import java.util.Set;
  */
 public class DefaultUpDownTraversal extends BasicTreeTraversal{
 
+    private static void traverseOneType(Action a,List<Action> result1,ChangePacket changePacket){
+        traverseOneType(a.getNode(),result1,changePacket);
+    }
+
     public static void traverseClass(Action a, List<Action> result1, ChangePacket changePacket){
         ITree node = a.getNode();
         result1.add(a);
@@ -141,7 +145,7 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
                     }
                 }
             }
-            traverseNodeChildren(node.getChild(i),result1,type2);
+            traverseNodeChildren(block,result1,type2);
             traverseNodeInRange(node,i+1,children.size()-1,result1,type2);
         }else{
             traverseNodeInRange(node,i,children.size()-1,result1,type2);

@@ -6,6 +6,7 @@ import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
+import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
@@ -29,18 +30,15 @@ public class MatchReturnStatement {
         fp.addOneChangeEntity(code);
     }
 
-    public static void matchReturnStatentByFather(MiningActionData fp, Action a, Tree fafatherNode, List<Action> sameEditActions){
+    public static void matchReturnStatentByFather(MiningActionData fp, Action a, Tree fafather){
         ChangePacket changePacket = new ChangePacket();
-        List<Action> subActions = new ArrayList<>();
+        List<Action> sameEdits = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
-        DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
-        fp.setActionTraversedMap(subActions);
+        DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(fafather,sameEdits,changePacket);
+        fp.setActionTraversedMap(sameEdits);
         Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range);
-        ExpressionChangeEntity code = new ExpressionChangeEntity(mBean);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range);
+        ReturnChangeEntity code = new ReturnChangeEntity(mBean);
         fp.addOneChangeEntity(code);
-
-        String operationEntity = "FATHER-RETURNSTATEMENT";
-
     }
 }

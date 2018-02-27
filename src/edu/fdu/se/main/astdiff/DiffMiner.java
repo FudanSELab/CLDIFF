@@ -1,19 +1,11 @@
 package edu.fdu.se.main.astdiff;
 
 
-import edu.fdu.se.astdiff.generatingactions.*;
-import edu.fdu.se.astdiff.miningactions.ClusterActions;
-import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
-import edu.fdu.se.astdiff.miningoperationbean.MiningOperation;
-import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
-import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
-import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
-import edu.fdu.se.astdiff.treegenerator.JavaParserTreeGenerator;
+
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidSDKJavaFileDAO;
-import edu.fdu.se.fileutil.FileWriter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,7 +18,7 @@ import java.util.Map;
  *
  * @author huangkaifeng
  */
-public class DiffMiner {
+public class DiffMiner extends BaseDiffMiner {
 
     public List<String> readCompareList(int version, String prevPath, String currPath) {
         prevList = new ArrayList<>();
@@ -80,67 +72,9 @@ public class DiffMiner {
             break;
         }
     }
-
-    /**
-     * test 单个文件
-     */
-    public void runGumTree() {
-        System.out.println("Step1 Generating Diff Actions:----------------------");
-        String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
-        String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
-        GumTreeDiffParser his = new GumTreeDiffParser(new File(file1), new File(file2));
-        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", his.getPrettyOldTreeString());
-        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", his.getPrettyNewTreeString());
-        // package 1
-        MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
-        GeneratingActionsData data = gen.generate();
-        SimpleActionPrinter.printMyActions(data.getAllActions());
-        // package 2
-        System.out.println("Step2 Begin to cluster actions:-------------------");
-        MiningActionData mMiningActionData = new MiningActionData(data, his.srcTC, his.dstTC, his.mapping);
-        ClusterActions.doCluster(mMiningActionData);
-        // package 3
-        List<ChangeEntity> mlist = mMiningActionData.getChangeEntityList();
-        mlist.forEach(a-> {
-            System.out.println(a.toString());
-        });
-
-    }
-
-    /**
-     * 测试单个文件的功能
-     */
-    private void runSingleFilePair() {
-        String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
-        String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
-        String outputDir = "test";
-        doo(file1, file2, outputDir);
-    }
-
-    private void doo(String filePrev, String fileCurr, String outputDirName) {
-        FilePairPreDiff psc = new FilePairPreDiff().compareTwoFile(filePrev, fileCurr, outputDirName);
-        PreprocessedData preData = psc.getPreprocessedData();
-        DiffMiner.preprocessedData = preData;
-        JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getPreviousCu().toString(),preData.getCurrentCu().toString());
-        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", jtg.getPrettyOldTreeString());
-        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", jtg.getPrettyNewTreeString());
-        MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);
-        GeneratingActionsData data = gen.generate();
-        SimpleActionPrinter.printMyActions(data.getAllActions());
-        MiningActionData mMiningActionData = new MiningActionData(data, jtg.srcTC, jtg.dstTC, jtg.mapping);
-        ClusterActions.doCluster(mMiningActionData);
-        MiningOperation mo = new MiningOperation(preData,mMiningActionData);
-        mo.printListDiffMiner();
-        mo.printListPreprocess();
-    }
-
-    public static PreprocessedData preprocessedData;
-
-
+//    public static PreprocessedData preprocessedData;
     public static void main(String []args) {
         DiffMiner i = new DiffMiner();
-		i.runSingleFilePair();
-//		i.runGumTree();
 //		i.runBatch();
 
     }
