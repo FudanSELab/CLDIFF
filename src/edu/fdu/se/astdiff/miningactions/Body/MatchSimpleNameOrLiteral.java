@@ -92,6 +92,9 @@ public class MatchSimpleNameOrLiteral {
             case ASTNode.FOR_STATEMENT:
                 MatchForStatement.matchForPredicate(fp, a, fafather);
                 break;
+            case ASTNode.WHILE_STATEMENT:
+                MatchWhileStatement.matchWhileByFather(fp,a,fafather);
+                break;
             case ASTNode.ENHANCED_FOR_STATEMENT:
                 MatchForStatement.matchEnhancedForPredicate(fp, a, fafather);
                 break;
@@ -107,6 +110,8 @@ public class MatchSimpleNameOrLiteral {
             case ASTNode.RETURN_STATEMENT:
                 MatchReturnStatement.matchReturnStatentByFather(fp, a, fafather);
                 break;
+            case ASTNode.ASSERT_STATEMENT:
+                MatchAssert.matchAssertByFather(fp,a,fafather);
             default:
                 break;
         }
