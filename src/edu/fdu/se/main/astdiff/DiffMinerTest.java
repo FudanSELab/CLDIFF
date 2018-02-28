@@ -18,10 +18,11 @@ import java.util.List;
 /**
  * Created by huangkaifeng on 2018/2/27.
  */
-public class DiffMinerTest extends BaseDiffMiner{
+public class DiffMinerTest extends BaseDiffMiner {
 
 
-    /**使用gt的流程
+    /**
+     * 使用gt的流程
      * test 单个文件
      */
     public void runGumTree() {
@@ -41,7 +42,7 @@ public class DiffMinerTest extends BaseDiffMiner{
         ClusterActions.doCluster(mMiningActionData);
         // package 3
         List<ChangeEntity> mlist = mMiningActionData.getChangeEntityList();
-        mlist.forEach(a-> {
+        mlist.forEach(a -> {
             System.out.println(a.toString());
         });
 
@@ -61,30 +62,29 @@ public class DiffMinerTest extends BaseDiffMiner{
      * 使用修改简化之后的流程，测试多个文件的功能
      */
     private void runBatchTest() {
-        String batchTestFilePath = "C:\\Users\\huangkaifeng\\Desktop\\DiffMiner\\11-8-GumTree\\batchtest";
-        File currdir = new File(batchTestFilePath+"\\curr");
+        String batchTestFilePath = "C:\\Users\\huangkaifeng\\Desktop\\DiffMiner\\11-8-GumTree\\test_batch_simple_action";
+        File currdir = new File(batchTestFilePath + "\\curr");
 
         File[] files = currdir.listFiles();
         String outputDir = "test";
+
         try {
             for (File currf1 : files) {
-                String prevFile = batchTestFilePath +"\\prev\\"+currf1.getName();
-                if(currf1.getName().startsWith("Refurnish")) {
-                    System.out.println(currf1.getName());
-                    doo(prevFile, currf1.getAbsolutePath(), outputDir);
-                }
+                String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
+                System.out.println(currf1.getName());
+                doo(prevFile, currf1.getAbsolutePath(), outputDir);
+                System.out.println();
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
-
-
-    public static void main(String []args) {
+    public static void main(String[] args) {
         DiffMinerTest i = new DiffMinerTest();
         i.runBatchTest();
+//        i.runSingleFilePair();
 
     }
 

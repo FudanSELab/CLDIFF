@@ -91,5 +91,14 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
         changePacket.changeSet1 = type;
     }
 
+    public static void traverseDoWhileCondition(Tree node,List<Action> result,ChangePacket changePacket){
+        assert node.getDoAction() == null;
+        assert node.getChildren().size()==2;
+        Set<String> type = new HashSet<>();
+        Tree secondChild = (Tree) node.getChild(1);
+        traverseNode(secondChild,result,type);
+        changePacket.changeSet1 = type;
+    }
+
 
 }

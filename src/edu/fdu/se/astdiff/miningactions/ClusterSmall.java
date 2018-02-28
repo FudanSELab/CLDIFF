@@ -22,44 +22,6 @@ public class ClusterSmall extends AbstractCluster{
         super(mClazz, mminingActionData);
     }
 
-
-
-//    public int processSmallAction(Action a,int type) {
-////        int res = 0;
-////        switch(type){
-////            case ASTNode.TAG_ELEMENT:
-////            case ASTNode.TEXT_ELEMENT:
-////            case ASTNode.SIMPLE_NAME:
-////            case ASTNode.SIMPLE_TYPE:
-////            case ASTNode.STRING_LITERAL:
-////            case ASTNode.NULL_LITERAL:
-////            case ASTNode.PREFIX_EXPRESSION:
-////            case ASTNode.CHARACTER_LITERAL:
-////            case ASTNode.NUMBER_LITERAL:
-////            case ASTNode.BOOLEAN_LITERAL:
-////            case ASTNode.INFIX_EXPRESSION:
-////            case ASTNode.METHOD_INVOCATION:
-////            case ASTNode.QUALIFIED_NAME:
-////            case ASTNode.MODIFIER:
-////            case ASTNode.MARKER_ANNOTATION:
-////            case ASTNode.NORMAL_ANNOTATION:
-////            case ASTNode.SINGLE_MEMBER_ANNOTATION:
-////            case ASTNode.ASSIGNMENT:
-//
-////                break;
-////            default:
-////                res= 1;
-////                break;
-////        }
-////        return res;
-//        return 0;
-//
-//    }
-
-
-
-
-
     public void doClusterSmall() {
         int actionCnt = this.actionList.size();
         for(int index =0; index!=actionCnt;index++){

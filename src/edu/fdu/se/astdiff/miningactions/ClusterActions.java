@@ -32,6 +32,10 @@ public class ClusterActions {
         new ClusterSmall(Move.class, fpd).doClusterSmall();
         new ClusterSmall(Update.class, fpd).doClusterSmall();
         iterateChangeEntityListSetChangePacket(fpd);
+        mergeWrapperAndMoveEntity();
+    }
+    public static void mergeWrapperAndMoveEntity(){
+        //todo 优化之一
     }
 
 

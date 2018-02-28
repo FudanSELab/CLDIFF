@@ -44,5 +44,9 @@ public class MatchFieldDeclaration {
         return mHighLevelOperationBean;
     }
 
+    public static ClusteredActionBean matchFieldDeclarationChangeCurrEntity(MiningActionData fp,Action a){
+        return null;
+    }
+
 
 }

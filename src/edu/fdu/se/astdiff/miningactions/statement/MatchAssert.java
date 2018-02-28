@@ -44,7 +44,7 @@ public class MatchAssert {
         fp.setActionTraversedMap(sameEdits);
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,fafather);
-        ExpressionChangeEntity code = new ExpressionChangeEntity(mBean);
+        AssertChangeEntity code = new AssertChangeEntity(mBean);
         fp.addOneChangeEntity(code);
     }
 }

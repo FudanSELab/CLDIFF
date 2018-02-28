@@ -71,7 +71,6 @@ public class MatchSimpleNameOrLiteral {
 
     public static void matchNodeNewEntity(MiningActionData fp,Action a,Tree fafather){
         int nodeType = fafather.getAstNode().getNodeType();
-        String nodeStr = fafather.getAstClass().getSimpleName();
         switch (nodeType) {
             case  ASTNode.TYPE_DECLARATION:
                 MatchClass.matchClassSignatureNewEntity(fp, a, fafather);
@@ -95,6 +94,9 @@ public class MatchSimpleNameOrLiteral {
             case ASTNode.WHILE_STATEMENT:
                 MatchWhileStatement.matchWhileByFather(fp,a,fafather);
                 break;
+            case ASTNode.DO_STATEMENT:
+                MatchWhileStatement.matchDoByFather(fp,a,fafather);
+                break;
             case ASTNode.ENHANCED_FOR_STATEMENT:
                 MatchForStatement.matchEnhancedForPredicate(fp, a, fafather);
                 break;
@@ -115,7 +117,6 @@ public class MatchSimpleNameOrLiteral {
             default:
                 break;
         }
-
     }
 
     public static void matchXXXChangeCurEntity(MiningActionData fp,ChangeEntity changeEntity) {
@@ -136,7 +137,6 @@ public class MatchSimpleNameOrLiteral {
             signatureChildren.add(tmp);
         }
         fp.setActionTraversedMap(sameEditActions);
-
     }
 
 }

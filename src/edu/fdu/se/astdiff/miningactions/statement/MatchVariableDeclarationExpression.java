@@ -41,7 +41,7 @@ public class MatchVariableDeclarationExpression {
 		fp.setActionTraversedMap(sameEdits);
 		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,fafather);
-		ExpressionChangeEntity code = new ExpressionChangeEntity(mBean);
+		VariableChangeEntity code = new VariableChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}
 }
