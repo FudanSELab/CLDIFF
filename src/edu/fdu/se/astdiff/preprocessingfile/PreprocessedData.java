@@ -63,10 +63,6 @@ public class PreprocessedData {
 
 
 
-    public void refreshCompilationUnit(CompilationUnit cu){
-
-    }
-
 
 
 
@@ -127,5 +123,13 @@ public class PreprocessedData {
 
     public List<BodyDeclarationPair> getmBodiesDeleted() {
         return mBodiesDeleted;
+    }
+
+    /**
+     * name 修改导致 识别出来一个增一个删
+     */
+    public void findMethodNameChange(){
+        //todo
+        System.out.println("todo");
     }
 }

@@ -39,6 +39,7 @@ public class MiningOperation {
 
 
     public void initPreprocessChangeEntityList(){
+        this.preprocessedData.findMethodNameChange();
         for(BodyDeclarationPair item:this.preprocessedData.getmBodiesAdded()){
             addOneBody(item,OperationTypeConstants.INSERT);
         }

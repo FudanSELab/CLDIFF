@@ -33,14 +33,14 @@ public class MatchMethod {
 	}
 
 
-	public static void matchMethodSignatureChangeNewEntity(MiningActionData fp, Action a, Tree fafather) {
+	public static void matchMethodSignatureChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,Tree traverseFather) {
 		ChangePacket changePacket = new ChangePacket();
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
 		List<Action> sameEdits = new ArrayList<>();
-		DefaultDownUpTraversal.traverseMethodSignature(fafather,sameEdits,changePacket);
+		DefaultDownUpTraversal.traverseMethodSignature(traverseFather,sameEdits,changePacket);
 		fp.setActionTraversedMap(sameEdits);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,(Tree)fafather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
 		MethodChangeEntity code = new MethodChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}

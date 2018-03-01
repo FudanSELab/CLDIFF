@@ -55,7 +55,7 @@ public class DiffMinerTest extends BaseDiffMiner {
         String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
         String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
         String outputDir = "test";
-        doo(file1, file2, outputDir);
+        doo(file1, file2, outputDir,true);
     }
 
     /**
@@ -64,16 +64,16 @@ public class DiffMinerTest extends BaseDiffMiner {
     private void runBatchTest() {
         String batchTestFilePath = "C:\\Users\\huangkaifeng\\Desktop\\DiffMiner\\11-8-GumTree\\test_batch_simple_action";
         File currdir = new File(batchTestFilePath + "\\curr");
-
         File[] files = currdir.listFiles();
         String outputDir = "test";
-
         try {
             for (File currf1 : files) {
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
-                System.out.println(currf1.getName());
-                doo(prevFile, currf1.getAbsolutePath(), outputDir);
-                System.out.println();
+                if(currf1.getName().startsWith("RefurnishClassSignature.java")) {
+                    System.out.println(currf1.getName());
+                    doo(prevFile, currf1.getAbsolutePath(), outputDir, true);
+                    System.out.println();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

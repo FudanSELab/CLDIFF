@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/2/2.
+ *
  */
 public class ClusterSmall extends AbstractCluster{
 

@@ -47,29 +47,29 @@ public class MatchWhileStatement {
         code.changeEntity = WhileChangeEntity.DO_WHILE;
     }
 
-    public static void matchWhileByFather(MiningActionData fp,Action a,Tree fafather){
+    public static void matchWhileByFather(MiningActionData fp,Action a,Tree queryFather,Tree traverseFather){
         ChangePacket changePacket = new ChangePacket();
         List<Action> sameEdits = new ArrayList<>();
         changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
-        DefaultDownUpTraversal.traverseIfPredicate(fafather,sameEdits,changePacket);
+        DefaultDownUpTraversal.traverseIfPredicate(traverseFather,sameEdits,changePacket);
         fp.setActionTraversedMap(sameEdits);
         Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,fafather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
         WhileChangeEntity code = new WhileChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         code.changeEntity = WhileChangeEntity.WHILE;
     }
 
-    public static void matchDoByFather(MiningActionData fp,Action a,Tree fafather){
+    public static void matchDoByFather(MiningActionData fp,Action a,Tree queryFather,Tree traverseFather){
         ChangePacket changePacket = new ChangePacket();
         List<Action> sameEdits = new ArrayList<>();
         changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_II);
-        DefaultDownUpTraversal.traverseDoWhileCondition(fafather,sameEdits,changePacket);
+        DefaultDownUpTraversal.traverseDoWhileCondition(traverseFather,sameEdits,changePacket);
         fp.setActionTraversedMap(sameEdits);
         Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,fafather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
         WhileChangeEntity code = new WhileChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         code.changeEntity = WhileChangeEntity.DO_WHILE;

@@ -22,11 +22,9 @@ import java.util.List;
 public class ClusterActions {
 
     public static void doCluster(MiningActionData fpd) {
-        //big
         new ClusterBig(Insert.class, fpd).doClusterBig();
         new ClusterBig(Delete.class, fpd).doClusterBig();
         new ClusterBig(Move.class, fpd).doClusterBig();
-        //small
         new ClusterSmall(Insert.class, fpd).doClusterSmall();
         new ClusterSmall(Delete.class, fpd).doClusterSmall();
         new ClusterSmall(Move.class, fpd).doClusterSmall();

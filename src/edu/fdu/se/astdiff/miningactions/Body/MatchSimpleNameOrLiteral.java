@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.miningactions.Body;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.AbstractTree;
 import com.github.gumtreediff.tree.ITree;
@@ -42,7 +43,11 @@ public class MatchSimpleNameOrLiteral {
         }
         // 如果节点往上有move标记那么找到move标记的ChangeEntity
         if (changeEntity == null) {
-            matchNodeNewEntity(fp, a, queryFather);
+            if(a instanceof Insert) {
+                matchNodeNewEntity(fp, a, queryFather,dstFather);
+            }else{
+                matchNodeNewEntity(fp,a,queryFather,srcFather);
+            }
         } else {
             matchXXXChangeCurEntity(fp,changeEntity);
         }
@@ -69,51 +74,51 @@ public class MatchSimpleNameOrLiteral {
     }
 
 
-    public static void matchNodeNewEntity(MiningActionData fp,Action a,Tree fafather){
-        int nodeType = fafather.getAstNode().getNodeType();
+    public static void matchNodeNewEntity(MiningActionData fp,Action a,Tree queryFather,Tree traverseFather){
+        int nodeType = traverseFather.getAstNode().getNodeType();
         switch (nodeType) {
             case  ASTNode.TYPE_DECLARATION:
-                MatchClass.matchClassSignatureNewEntity(fp, a, fafather);
+                MatchClass.matchClassSignatureNewEntity(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.FIELD_DECLARATION:
-                MatchFieldDeclaration.matchFieldDeclarationChangeNewEntity(fp, a, fafather);
+                MatchFieldDeclaration.matchFieldDeclarationChangeNewEntity(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.INITIALIZER:
                 break;
             case ASTNode.METHOD_DECLARATION:
                 if (((Tree)a.getNode()).getAstNode().getNodeType()!=ASTNode.BLOCK) {
-                    MatchMethod.matchMethodSignatureChangeNewEntity(fp, a, fafather);
+                    MatchMethod.matchMethodSignatureChangeNewEntity(fp, a, queryFather,traverseFather);
                 }
                 break;
             case ASTNode.IF_STATEMENT:
-                MatchIfElse.matchIfPredicateChangeNewEntity(fp, a, fafather);
+                MatchIfElse.matchIfPredicateChangeNewEntity(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.FOR_STATEMENT:
-                MatchForStatement.matchForPredicate(fp, a, fafather);
+                MatchForStatement.matchForPredicate(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.WHILE_STATEMENT:
-                MatchWhileStatement.matchWhileByFather(fp,a,fafather);
+                MatchWhileStatement.matchWhileByFather(fp,a,queryFather,traverseFather);
                 break;
             case ASTNode.DO_STATEMENT:
-                MatchWhileStatement.matchDoByFather(fp,a,fafather);
+                MatchWhileStatement.matchDoByFather(fp,a,queryFather,traverseFather);
                 break;
             case ASTNode.ENHANCED_FOR_STATEMENT:
-                MatchForStatement.matchEnhancedForPredicate(fp, a, fafather);
+                MatchForStatement.matchEnhancedForPredicate(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.VARIABLE_DECLARATION_STATEMENT:
-                MatchVariableDeclarationExpression.matchVariableDeclarationNewEntity(fp, a, fafather);
+                MatchVariableDeclarationExpression.matchVariableDeclarationNewEntity(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.EXPRESSION_STATEMENT:
-                MatchExpressionStatement.matchExpressionByFather(fp, a, fafather);
+                MatchExpressionStatement.matchExpressionByFather(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.SWITCH_CASE:
                 MatchSwitch.matchSwitchCaseByFather(fp, a);
                 break;
             case ASTNode.RETURN_STATEMENT:
-                MatchReturnStatement.matchReturnStatentByFather(fp, a, fafather);
+                MatchReturnStatement.matchReturnStatentByFather(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.ASSERT_STATEMENT:
-                MatchAssert.matchAssertByFather(fp,a,fafather);
+                MatchAssert.matchAssertByFather(fp,a,queryFather,traverseFather);
             default:
                 break;
         }

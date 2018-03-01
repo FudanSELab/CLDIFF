@@ -19,16 +19,17 @@ import edu.fdu.se.fileutil.FileWriter;
  */
 public class BaseDiffMiner {
 
-    protected void doo(String filePrev, String fileCurr, String outputDirName) {
+    protected void doo(String filePrev, String fileCurr, String outputDirName,boolean flag) {
         FilePairPreDiff psc = new FilePairPreDiff().compareTwoFile(filePrev, fileCurr, outputDirName);
         PreprocessedData preData = psc.getPreprocessedData();
-//        DiffMiner.preprocessedData = preData;
         JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getPreviousCu().toString(),preData.getCurrentCu().toString());
-        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", jtg.getPrettyOldTreeString());
-        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", jtg.getPrettyNewTreeString());
         MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);
         GeneratingActionsData data = gen.generate();
-        SimpleActionPrinter.printMyActions(data.getAllActions());
+        if(flag) {
+            FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", jtg.getPrettyOldTreeString());
+            FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", jtg.getPrettyNewTreeString());
+            SimpleActionPrinter.printMyActions(data.getAllActions());
+        }
         MiningActionData mMiningActionData = new MiningActionData(data, jtg.srcTC, jtg.dstTC, jtg.mapping);
         ClusterActions.doCluster(mMiningActionData);
         MiningOperation mo = new MiningOperation(preData,mMiningActionData);

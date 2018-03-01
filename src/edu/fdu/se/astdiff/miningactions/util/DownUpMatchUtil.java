@@ -19,14 +19,11 @@ public class DownUpMatchUtil {
             setChangePacket(bean.changePacket,bean.changePacket.changeSet1);
         }else{
             //不存在
-            setChangePacket(bean.changePacket,bean.changePacket.changeSet1,bean.changePacket.changeSet2);
         }
 
     }
 
-    private static void setChangePacket(ChangePacket changePacket, Set<String> type1,Set<String> type2){
 
-    }
 
     private static void setChangePacket(ChangePacket changePacket,Set<String> type1){
         if(BaseMatchUtil.twoItemInsertAndNullAction(type1)){

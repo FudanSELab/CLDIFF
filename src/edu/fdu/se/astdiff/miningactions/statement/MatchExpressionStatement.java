@@ -33,14 +33,14 @@ public class MatchExpressionStatement {
 	}
 
 
-	public static void matchExpressionByFather(MiningActionData fp, Action a, Tree fafather) {
+	public static void matchExpressionByFather(MiningActionData fp, Action a, Tree queryFather,Tree traverseFather) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
-		DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(fafather,subActions,changePacket);
+		DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,subActions,changePacket);
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range,fafather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range,queryFather);
 		ExpressionChangeEntity code = new ExpressionChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}

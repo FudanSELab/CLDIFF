@@ -27,10 +27,12 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
         List<ITree> children = node.getChildren();
         for(ITree child :children){
             Tree tmp = (Tree) child;
-            if(tmp.getAstClass().getSimpleName().endsWith("Declaration")||tmp.getAstNode().getNodeType()== ASTNode.INITIALIZER){
-                break;
+            if(tmp.getAstNode().getNodeType()== ASTNode.MODIFIER ||
+                    tmp.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME ||
+                    tmp.getAstNode().getNodeType() == ASTNode.PARAMETERIZED_TYPE||
+                    tmp.getAstNode().getNodeType() == ASTNode.SIMPLE_TYPE){
+                traverseNode(tmp,result1,type);
             }
-            traverseNode(tmp,result1,type);
         }
         changePacket.changeSet1 = type;
     }

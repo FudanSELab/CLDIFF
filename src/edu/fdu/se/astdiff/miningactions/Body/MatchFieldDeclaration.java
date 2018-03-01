@@ -33,14 +33,14 @@ public class MatchFieldDeclaration {
     }
 
 
-    public static ClusteredActionBean matchFieldDeclarationChangeNewEntity(MiningActionData fp, Action a, ITree faFather) {
+    public static ClusteredActionBean matchFieldDeclarationChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,Tree traverseFather) {
         ChangePacket changePacket = new ChangePacket();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
         List<Action> sameEdits = new ArrayList<>();
-        DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions((Tree)faFather,sameEdits,changePacket);
+        DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,sameEdits,changePacket);
         fp.setActionTraversedMap(sameEdits);
         Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,(Tree)faFather);
+        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
         return mHighLevelOperationBean;
     }
 

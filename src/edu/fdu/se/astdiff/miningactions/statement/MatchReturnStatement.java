@@ -30,14 +30,14 @@ public class MatchReturnStatement {
         fp.addOneChangeEntity(code);
     }
 
-    public static void matchReturnStatentByFather(MiningActionData fp, Action a, Tree fafather){
+    public static void matchReturnStatentByFather(MiningActionData fp, Action a, Tree queryFather,Tree traverseFather){
         ChangePacket changePacket = new ChangePacket();
         List<Action> sameEdits = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
-        DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(fafather,sameEdits,changePacket);
+        DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,sameEdits,changePacket);
         fp.setActionTraversedMap(sameEdits);
         Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
         ReturnChangeEntity code = new ReturnChangeEntity(mBean);
         fp.addOneChangeEntity(code);
     }
