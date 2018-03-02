@@ -13,6 +13,7 @@ import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.TryCatchChangeEntity;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -83,6 +84,13 @@ public class MatchTry {
 		fp.addOneChangeEntity(code);
 		code.changeEntity = TryCatchChangeEntity.finallyClause;
 		fp.setActionTraversedMap(subActions);
+	}
+	//todo
+	public void matchCatchChangeNewEntity(MiningActionData fp,Action a,Tree queryFather,Tree traverseFather){
+
+	}
+	public void matchCatchChangeCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){
+
 	}
 
 

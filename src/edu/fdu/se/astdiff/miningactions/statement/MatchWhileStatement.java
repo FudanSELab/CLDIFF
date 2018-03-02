@@ -10,6 +10,7 @@ import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.ForChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.WhileChangeEntity;
 
@@ -47,7 +48,7 @@ public class MatchWhileStatement {
         code.changeEntity = WhileChangeEntity.DO_WHILE;
     }
 
-    public static void matchWhileByFather(MiningActionData fp,Action a,Tree queryFather,Tree traverseFather){
+    public static void matchWhileConditionChangeNewEntity(MiningActionData fp, Action a, Tree queryFather, Tree traverseFather){
         ChangePacket changePacket = new ChangePacket();
         List<Action> sameEdits = new ArrayList<>();
         changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
@@ -61,7 +62,7 @@ public class MatchWhileStatement {
         code.changeEntity = WhileChangeEntity.WHILE;
     }
 
-    public static void matchDoByFather(MiningActionData fp,Action a,Tree queryFather,Tree traverseFather){
+    public static void matchDoConditionChangeNewEntity(MiningActionData fp, Action a, Tree queryFather, Tree traverseFather){
         ChangePacket changePacket = new ChangePacket();
         List<Action> sameEdits = new ArrayList<>();
         changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
@@ -73,6 +74,35 @@ public class MatchWhileStatement {
         WhileChangeEntity code = new WhileChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         code.changeEntity = WhileChangeEntity.DO_WHILE;
+    }
+
+    public static void matchDoConditionChangeCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){
+        ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
+        List<Action> actions = changeEntity.clusteredActionBean.actions;
+        List<Action> newActions = new ArrayList<>();
+        DefaultDownUpTraversal.traverseIfPredicate(traverseFather,newActions,changePacket);
+        for(Action tmp:newActions){
+            if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
+                continue;
+            }
+            actions.add(tmp);
+        }
+        fp.setActionTraversedMap(newActions);
+    }
+
+    public static void matchWhileConditionChangeCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){
+        ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
+        List<Action> actions = changeEntity.clusteredActionBean.actions;
+        List<Action> newActions = new ArrayList<>();
+        DefaultDownUpTraversal.traverseIfPredicate(traverseFather,newActions,changePacket);
+        for(Action tmp:newActions){
+            if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
+                continue;
+            }
+            actions.add(tmp);
+        }
+        fp.setActionTraversedMap(newActions);
+
     }
 
 }

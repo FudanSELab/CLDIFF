@@ -49,16 +49,18 @@ public class MatchClass {
         fp.addOneChangeEntity(code);
     }
 
-    public static void matchClassSignatureCurEntity(MiningActionData fp, Action a,ChangeEntity changeEntity,List<Action> sameEditActions) {
+    public static void matchClassSignatureCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather) {
         ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
-        List<Action> signatureChildren = changeEntity.clusteredActionBean.actions;
-        for(Action tmp:sameEditActions){
+        List<Action> actions = changeEntity.clusteredActionBean.actions;
+        List<Action> newActions = new ArrayList<>();
+        DefaultDownUpTraversal.traverseClassSignature(traverseFather,newActions,changePacket);
+        for(Action tmp:newActions){
             if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
                 continue;
             }
-            signatureChildren.add(tmp);
+            actions.add(tmp);
         }
-        fp.setActionTraversedMap(sameEditActions);
+        fp.setActionTraversedMap(newActions);
     }
 
 

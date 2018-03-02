@@ -12,6 +12,7 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.model.MethodChangeEntity;
 
 import java.util.ArrayList;
@@ -43,6 +44,20 @@ public class MatchMethod {
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
 		MethodChangeEntity code = new MethodChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
+	}
+
+	public static void matchMethodSignatureChangeCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){
+		ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
+		List<Action> actions = changeEntity.clusteredActionBean.actions;
+		List<Action> newActions = new ArrayList<>();
+		DefaultDownUpTraversal.traverseMethodSignature(traverseFather,newActions,changePacket);
+		for(Action tmp:newActions){
+			if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
+				continue;
+			}
+			actions.add(tmp);
+		}
+		fp.setActionTraversedMap(newActions);
 	}
 
 

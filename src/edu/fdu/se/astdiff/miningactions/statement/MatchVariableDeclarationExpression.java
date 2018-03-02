@@ -14,6 +14,7 @@ import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.ExpressionChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.VariableChangeEntity;
 
@@ -43,5 +44,20 @@ public class MatchVariableDeclarationExpression {
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
 		VariableChangeEntity code = new VariableChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
+	}
+
+	public static void matchVariableDeclarationCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){
+		ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
+		List<Action> actions = changeEntity.clusteredActionBean.actions;
+		List<Action> newActions = new ArrayList<>();
+		DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,newActions,changePacket);
+		for(Action tmp:newActions){
+			if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
+				continue;
+			}
+			actions.add(tmp);
+		}
+		fp.setActionTraversedMap(newActions);
+
 	}
 }

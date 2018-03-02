@@ -22,8 +22,10 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
 
     public static void traverseClassSignature(Tree node, List<Action> result1,ChangePacket changePacket){
         assert node.getDoAction() ==null;
-        Set<String> type = new HashSet<>();
-        type.add(ActionConstants.NULLACTION);
+        if(changePacket.changeSet1 == null){
+            changePacket.changeSet1 = new HashSet<>();
+        }
+        changePacket.changeSet1.add(ActionConstants.NULLACTION);
         List<ITree> children = node.getChildren();
         for(ITree child :children){
             Tree tmp = (Tree) child;
@@ -31,25 +33,25 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
                     tmp.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME ||
                     tmp.getAstNode().getNodeType() == ASTNode.PARAMETERIZED_TYPE||
                     tmp.getAstNode().getNodeType() == ASTNode.SIMPLE_TYPE){
-                traverseNode(tmp,result1,type);
+                traverseNode(tmp,result1,changePacket.changeSet1);
             }
         }
-        changePacket.changeSet1 = type;
     }
 
     public static void traverseMethodSignature(Tree node,List<Action> result1,ChangePacket changePacket){
         assert node.getDoAction() == null;
-        Set<String> type = new HashSet<>();
-        type.add(ActionConstants.NULLACTION);
+        if(changePacket.changeSet1 == null){
+            changePacket.changeSet1 = new HashSet<>();
+        }
+        changePacket.changeSet1.add(ActionConstants.NULLACTION);
         List<ITree> children = node.getChildren();
         for(ITree child:children){
             Tree tmp = (Tree) child;
             if(tmp.getAstNode().getNodeType() == ASTNode.BLOCK){
                 break;
             }
-            traverseNode(tmp,result1,type);
+            traverseNode(tmp,result1,changePacket.changeSet1);
         }
-        changePacket.changeSet1 = type;
     }
 
     /**
@@ -59,18 +61,21 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
      * @param changePacket changePacket
      */
     public static void traverseFatherNodeGetSameNodeActions(Tree fafather,List<Action> editAction,ChangePacket changePacket){
-        Set<String> type = new HashSet<>();
+        if(changePacket.changeSet1 == null){
+            changePacket.changeSet1 = new HashSet<>();
+        }
         for(ITree node:fafather.preOrder()){
             Tree tmp = (Tree) node;
-            traverseNode(tmp,editAction,type);
+            traverseNode(tmp,editAction,changePacket.changeSet1);
         }
-        changePacket.changeSet1 = type;
     }
 
     public static void traverseIfPredicate(Tree node,List<Action> result1,ChangePacket changePacket){
         assert node.getDoAction() == null;
-        Set<String> type = new HashSet<>();
-        type.add(ActionConstants.NULLACTION);
+        if(changePacket.changeSet1 == null){
+            changePacket.changeSet1 = new HashSet<>();
+        }
+        changePacket.changeSet1.add(ActionConstants.NULLACTION);
         List<ITree> children = node.getChildren();
         int i;
         for(i =0;i<children.size();i++){
@@ -88,9 +93,8 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
         }
         for(int j=0;j<bound;j++){
             Tree tmp = (Tree) children.get(j);
-            traverseNode(tmp,result1,type);
+            traverseNode(tmp,result1,changePacket.changeSet1);
         }
-        changePacket.changeSet1 = type;
     }
 
     public static void traverseDoWhileCondition(Tree node,List<Action> result,ChangePacket changePacket){

@@ -14,6 +14,7 @@ import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.IfChangeEntity;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -79,6 +80,19 @@ public class MatchIfElse {
 			code.changeEntity = IfChangeEntity.IF;
 		}
 
+	}
+	public static void matchIfPredicateChangeCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){
+		ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
+		List<Action> actions = changeEntity.clusteredActionBean.actions;
+		List<Action> newActions = new ArrayList<>();
+		DefaultDownUpTraversal.traverseIfPredicate(traverseFather,newActions,changePacket);
+		for(Action tmp:newActions){
+			if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
+				continue;
+			}
+			actions.add(tmp);
+		}
+		fp.setActionTraversedMap(newActions);
 	}
 
 }

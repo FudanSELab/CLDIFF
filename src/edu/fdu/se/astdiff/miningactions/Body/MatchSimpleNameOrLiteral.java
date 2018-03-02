@@ -7,16 +7,12 @@ import com.github.gumtreediff.tree.AbstractTree;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
-import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
-import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import org.eclipse.jdt.core.dom.ASTNode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MatchSimpleNameOrLiteral {
@@ -49,7 +45,11 @@ public class MatchSimpleNameOrLiteral {
                 matchNodeNewEntity(fp,a,queryFather,srcFather);
             }
         } else {
-            matchXXXChangeCurEntity(fp,changeEntity);
+            if(a instanceof Insert){
+                matchXXXChangeCurEntity(fp,a,changeEntity,dstFather);
+            }else{
+                matchXXXChangeCurEntity(fp,a,changeEntity,srcFather);
+            }
         }
     }
 
@@ -94,54 +94,87 @@ public class MatchSimpleNameOrLiteral {
                 MatchIfElse.matchIfPredicateChangeNewEntity(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.FOR_STATEMENT:
-                MatchForStatement.matchForPredicate(fp, a, queryFather,traverseFather);
+                MatchForStatement.matchForConditionChangeNewEntity(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.WHILE_STATEMENT:
-                MatchWhileStatement.matchWhileByFather(fp,a,queryFather,traverseFather);
+                MatchWhileStatement.matchWhileConditionChangeNewEntity(fp,a,queryFather,traverseFather);
                 break;
             case ASTNode.DO_STATEMENT:
-                MatchWhileStatement.matchDoByFather(fp,a,queryFather,traverseFather);
+                MatchWhileStatement.matchDoConditionChangeNewEntity(fp,a,queryFather,traverseFather);
                 break;
             case ASTNode.ENHANCED_FOR_STATEMENT:
-                MatchForStatement.matchEnhancedForPredicate(fp, a, queryFather,traverseFather);
+                MatchForStatement.matchEnhancedForConditionChangeNewEntity(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.VARIABLE_DECLARATION_STATEMENT:
                 MatchVariableDeclarationExpression.matchVariableDeclarationNewEntity(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.EXPRESSION_STATEMENT:
-                MatchExpressionStatement.matchExpressionByFather(fp, a, queryFather,traverseFather);
+                MatchExpressionStatement.matchExpressionChangeNewEntity(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.SWITCH_CASE:
-                MatchSwitch.matchSwitchCaseByFather(fp, a);
+                MatchSwitch.matchSwitchCaseNewEntity(fp, a);
                 break;
             case ASTNode.RETURN_STATEMENT:
-                MatchReturnStatement.matchReturnStatentByFather(fp, a, queryFather,traverseFather);
+                MatchReturnStatement.matchReturnChangeNewEntity(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.ASSERT_STATEMENT:
-                MatchAssert.matchAssertByFather(fp,a,queryFather,traverseFather);
+                MatchAssert.matchAssertChangeNewEntity(fp,a,queryFather,traverseFather);
             default:
                 break;
         }
     }
 
-    public static void matchXXXChangeCurEntity(MiningActionData fp,ChangeEntity changeEntity) {
-        ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
-        List<Action> signatureChildren = changeEntity.clusteredActionBean.actions;
-        List<Action> sameEditActions = new ArrayList<>();
-        Tree fatherNode;
-        if(changeEntity.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
-            fatherNode = (Tree) changeEntity.clusteredActionBean.getCurAction().getNode();
-        }else{
-            fatherNode = (Tree) changeEntity.clusteredActionBean.getFatherNode();
+    public static void matchXXXChangeCurEntity(MiningActionData fp,Action a,ChangeEntity changeEntity,Tree traverseFather) {
+        Tree queryFather = (Tree) changeEntity.clusteredActionBean.getCurAction().getNode();
+        int nodeType = queryFather.getAstNode().getNodeType();
+        switch (nodeType) {
+            case ASTNode.TYPE_DECLARATION:
+                MatchClass.matchClassSignatureCurrEntity(fp,a,changeEntity,traverseFather);
+                break;
+            case ASTNode.FIELD_DECLARATION:
+                MatchFieldDeclaration.matchFieldDeclarationChangeCurrEntity(fp,a,changeEntity,traverseFather);
+                break;
+            case ASTNode.INITIALIZER:
+                break;
+            case ASTNode.METHOD_DECLARATION:
+                if (((Tree)a.getNode()).getAstNode().getNodeType()!=ASTNode.BLOCK) {
+                    MatchMethod.matchMethodSignatureChangeCurrEntity(fp, a, changeEntity,traverseFather);
+                }
+                break;
+            case ASTNode.IF_STATEMENT:
+                MatchIfElse.matchIfPredicateChangeCurrEntity(fp,a,changeEntity,traverseFather);
+                break;
+            case ASTNode.FOR_STATEMENT:
+                MatchForStatement.matchForConditionChangeCurrEntity(fp, a, changeEntity,traverseFather);
+                break;
+            case ASTNode.WHILE_STATEMENT:
+                MatchWhileStatement.matchWhileConditionChangeCurrEntity(fp,a,changeEntity,traverseFather);
+                break;
+            case ASTNode.DO_STATEMENT:
+                MatchWhileStatement.matchDoConditionChangeCurrEntity(fp,a,changeEntity,traverseFather);
+                break;
+            case ASTNode.ENHANCED_FOR_STATEMENT:
+                MatchForStatement.matchEnhancedForConditionChangeCurrEntity(fp, a, changeEntity,traverseFather);
+                break;
+            case ASTNode.VARIABLE_DECLARATION_STATEMENT:
+                MatchVariableDeclarationExpression.matchVariableDeclarationCurrEntity(fp, a, changeEntity,traverseFather);
+                break;
+            case ASTNode.EXPRESSION_STATEMENT:
+                MatchExpressionStatement.matchExpressionChangeCurrEntity(fp, a,changeEntity,traverseFather);
+                break;
+            case ASTNode.SWITCH_CASE:
+                MatchSwitch.matchSwitchCaseCurrEntity(fp, a,changeEntity,traverseFather);
+                break;
+            case ASTNode.RETURN_STATEMENT:
+                MatchReturnStatement.matchReturnChangeCurrEntity(fp, a, changeEntity,traverseFather);
+                break;
+            case ASTNode.ASSERT_STATEMENT:
+                MatchAssert.matchAssertChangeCurrEntity(fp,a,changeEntity,traverseFather);
+            default:
+                break;
         }
-        DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(fatherNode,sameEditActions,changePacket);
-        for(Action tmp:sameEditActions){
-            if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
-                continue;
-            }
-            signatureChildren.add(tmp);
-        }
-        fp.setActionTraversedMap(sameEditActions);
+
+
     }
 
 }

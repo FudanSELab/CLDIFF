@@ -10,6 +10,7 @@ import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.AssertChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.statementplus.ExpressionChangeEntity;
 
@@ -36,7 +37,7 @@ public class MatchAssert {
 
     }
 
-    public static void matchAssertByFather(MiningActionData fp,Action a,Tree queryFather,Tree traverseFather){
+    public static void matchAssertChangeNewEntity(MiningActionData fp, Action a, Tree queryFather, Tree traverseFather){
         ChangePacket changePacket = new ChangePacket();
         List<Action> sameEdits = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
@@ -46,5 +47,19 @@ public class MatchAssert {
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
         AssertChangeEntity code = new AssertChangeEntity(mBean);
         fp.addOneChangeEntity(code);
+    }
+
+    public static void matchAssertChangeCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){
+        ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
+        List<Action> actions = changeEntity.clusteredActionBean.actions;
+        List<Action> newActions = new ArrayList<>();
+        DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,newActions,changePacket);
+        for(Action tmp:newActions){
+            if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
+                continue;
+            }
+            actions.add(tmp);
+        }
+        fp.setActionTraversedMap(newActions);
     }
 }

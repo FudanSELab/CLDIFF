@@ -11,6 +11,7 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.model.FieldChangeEntity;
 
 import java.util.ArrayList;
@@ -44,7 +45,18 @@ public class MatchFieldDeclaration {
         return mHighLevelOperationBean;
     }
 
-    public static ClusteredActionBean matchFieldDeclarationChangeCurrEntity(MiningActionData fp,Action a){
+    public static ClusteredActionBean matchFieldDeclarationChangeCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){
+        ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
+        List<Action> actions = changeEntity.clusteredActionBean.actions;
+        List<Action> newActions = new ArrayList<>();
+        DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,newActions,changePacket);
+        for(Action tmp:newActions){
+            if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
+                continue;
+            }
+            actions.add(tmp);
+        }
+        fp.setActionTraversedMap(newActions);
         return null;
     }
 
