@@ -51,6 +51,13 @@ public class MatchSwitch {
 		fp.addOneChangeEntity(code);
 		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_CHANGE);
 	}
+
+	public static void matchSwitchNewEntity(MiningActionData fp,Action a){
+
+	}
+	public static void matchSwitchCurrEntity(MiningActionData fp,Action a){
+
+	}
 	//todo
 	public static void matchSwitchCaseNewEntity(MiningActionData fp, Action a){
 		ChangePacket changePacket = new ChangePacket();

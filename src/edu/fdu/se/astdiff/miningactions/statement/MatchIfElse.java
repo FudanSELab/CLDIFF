@@ -74,7 +74,7 @@ public class MatchIfElse {
 		IfChangeEntity code = new IfChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 
-		if (AstRelations.isFatherXXXStatement(a,ASTNode.IF_STATEMENT)) {
+		if (AstRelations.isFatherXXXStatement(traverseFather,ASTNode.IF_STATEMENT)) {
 			code.changeEntity = IfChangeEntity.ELSE_IF;
 		} else {
 			code.changeEntity = IfChangeEntity.IF;

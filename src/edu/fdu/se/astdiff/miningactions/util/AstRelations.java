@@ -42,6 +42,14 @@ public class AstRelations {
 		return false;
 	}
 
+	public static boolean isFatherXXXStatement(Tree node,int astNodeType){
+		int type =((Tree) node.getParent()).getAstNode().getNodeType();
+		if (astNodeType == type) {
+			return true;
+		}
+		return false;
+	}
+
 
 	public static boolean actionListContainsXXX(List<Action> list,String stmt) {
 		for (Action a : list) {

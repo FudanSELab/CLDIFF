@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/2/27.
+ *
  */
 public class DiffMinerTest extends BaseDiffMiner {
 
@@ -69,11 +70,11 @@ public class DiffMinerTest extends BaseDiffMiner {
         try {
             for (File currf1 : files) {
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
-                if(currf1.getName().startsWith("RefurnishClassSignature.java")) {
+//                if(currf1.getName().startsWith("TryAddition.java")) {
                     System.out.println(currf1.getName());
                     doo(prevFile, currf1.getAbsolutePath(), outputDir, true);
                     System.out.println();
-                }
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();

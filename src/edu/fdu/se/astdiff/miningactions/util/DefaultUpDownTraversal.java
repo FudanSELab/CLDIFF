@@ -10,6 +10,7 @@ import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
 
 import java.util.HashSet;
 import java.util.List;
@@ -156,6 +157,27 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
     }
     public static void traverseTypeIStatements(Action a,List<Action> result1,ChangePacket changePacket){
         traverseOneType(a,result1,changePacket);
+    }
+
+    public static void traverseTryStatements(Action a,List<Action> result,ChangePacket changePacket){
+        ITree node = a.getNode();
+        result.add(a);
+        List<ITree> children = node.getChildren();
+        changePacket.changeSet1 = new HashSet<>();
+        changePacket.changeSet1.add(a.getClass().getSimpleName());
+        changePacket.changeSet2 = new HashSet<>();
+        changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
+        int i=0;
+        for(;i<children.size();i++){
+            Tree t = (Tree) children.get(i);
+            if(t.getAstNode().getNodeType() == ASTNode.BLOCK){
+                traverseNodeChildren(t,result,changePacket.changeSet2);
+            }else{
+                traverseNode(t,result,changePacket.changeSet1);
+            }
+        }
+
+
     }
 
     public static void traverseSwitchStatements(Action a,List<Action> result1,ChangePacket changePacket){

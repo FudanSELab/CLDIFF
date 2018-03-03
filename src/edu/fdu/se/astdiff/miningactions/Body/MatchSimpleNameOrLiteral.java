@@ -111,21 +111,31 @@ public class MatchSimpleNameOrLiteral {
             case ASTNode.EXPRESSION_STATEMENT:
                 MatchExpressionStatement.matchExpressionChangeNewEntity(fp, a, queryFather,traverseFather);
                 break;
-            case ASTNode.SWITCH_CASE:
-                MatchSwitch.matchSwitchCaseNewEntity(fp, a);
-                break;
             case ASTNode.RETURN_STATEMENT:
                 MatchReturnStatement.matchReturnChangeNewEntity(fp, a, queryFather,traverseFather);
                 break;
             case ASTNode.ASSERT_STATEMENT:
                 MatchAssert.matchAssertChangeNewEntity(fp,a,queryFather,traverseFather);
+                break;
+            case ASTNode.CATCH_CLAUSE:
+                MatchTry.matchCatchChangeNewEntity(fp,a,queryFather,traverseFather);
+                break;
+            case ASTNode.SYNCHRONIZED_STATEMENT:
+                MatchSynchronized.matchSynchronizedChangeNewEntity(fp,a,queryFather,traverseFather);
+                break;
+            case ASTNode.SWITCH_STATEMENT:
+                MatchSwitch.matchSwitchNewEntity(fp,a);
+                break;
+            case ASTNode.SWITCH_CASE:
+                MatchSwitch.matchSwitchCaseNewEntity(fp,a);
+                break;
             default:
                 break;
         }
     }
 
     public static void matchXXXChangeCurEntity(MiningActionData fp,Action a,ChangeEntity changeEntity,Tree traverseFather) {
-        Tree queryFather = (Tree) changeEntity.clusteredActionBean.getCurAction().getNode();
+        Tree queryFather = (Tree) changeEntity.clusteredActionBean.getFatherNode();
         int nodeType = queryFather.getAstNode().getNodeType();
         switch (nodeType) {
             case ASTNode.TYPE_DECLARATION:
@@ -162,14 +172,25 @@ public class MatchSimpleNameOrLiteral {
             case ASTNode.EXPRESSION_STATEMENT:
                 MatchExpressionStatement.matchExpressionChangeCurrEntity(fp, a,changeEntity,traverseFather);
                 break;
-            case ASTNode.SWITCH_CASE:
-                MatchSwitch.matchSwitchCaseCurrEntity(fp, a,changeEntity,traverseFather);
-                break;
+
             case ASTNode.RETURN_STATEMENT:
                 MatchReturnStatement.matchReturnChangeCurrEntity(fp, a, changeEntity,traverseFather);
                 break;
             case ASTNode.ASSERT_STATEMENT:
                 MatchAssert.matchAssertChangeCurrEntity(fp,a,changeEntity,traverseFather);
+                break;
+            case ASTNode.CATCH_CLAUSE:
+                MatchTry.matchCatchChangeCurrEntity(fp,a,changeEntity,traverseFather);
+                break;
+            case ASTNode.SYNCHRONIZED_STATEMENT:
+                MatchSynchronized.matchSynchronizedChangeCurrEntity(fp,a,changeEntity,traverseFather);
+                break;
+            case ASTNode.SWITCH_STATEMENT:
+                MatchSwitch.matchSwitchCurrEntity(fp,a);
+                break;
+            case ASTNode.SWITCH_CASE:
+                MatchSwitch.matchSwitchCaseCurrEntity(fp, a,changeEntity,traverseFather);
+                break;
             default:
                 break;
         }
