@@ -28,8 +28,6 @@ public class MiningOperation {
         this.mad = mad;
     }
 
-    public MiningOperation(){
-    }
 
     public void initDiffMinerChangeEntityList(){
 

@@ -45,7 +45,7 @@ public class PreprocessedTempData {
     /**
      * list of comments to be removed
      */
-    private List<BodyDeclaration> removalList;
+    public List<BodyDeclaration> removalList;
 
     /**
      * method name

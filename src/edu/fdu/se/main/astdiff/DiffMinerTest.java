@@ -70,11 +70,11 @@ public class DiffMinerTest extends BaseDiffMiner {
         try {
             for (File currf1 : files) {
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
-//                if(currf1.getName().startsWith("TryAddition.java")) {
+                if(currf1.getName().startsWith("RefurnishMethodSignature.java")) {
                     System.out.println(currf1.getName());
                     doo(prevFile, currf1.getAbsolutePath(), outputDir, true);
                     System.out.println();
-//                }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,6 +88,11 @@ public class DiffMinerTest extends BaseDiffMiner {
 //        i.runSingleFilePair();
 
     }
+
+    // 1.重构method name问题
+    // 2. Insert 加move合并问题
+
+
 
 }
 
