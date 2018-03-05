@@ -5,6 +5,7 @@ import java.util.Set;
 
 /**
  * Created by huangkaifeng on 2018/1/25.
+ *
  */
 public class ChangePacket {
     public ChangePacket(){
@@ -12,6 +13,7 @@ public class ChangePacket {
     }
 
     private int operationType;
+    public String multiEditStr;
     private int operationEntity;
     private int operationSubEntity;
     public int statementType;

@@ -1,16 +1,11 @@
 package edu.fdu.se.astdiff.miningactions.util;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.PackageDeclaration;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,8 +35,8 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         Set<String> type1 = new HashSet<>();
         Set<String> type2 = new HashSet<>();
         type1.add(a.getClass().getSimpleName());
-        traverseNodeInRange(node,0,i-1,result1,type1);
-        traverseNodeInRange(node,i,children.size()-1,result1,type2);
+        traverseNodeSubTreeInRange(node,0,i-1,result1,type1);
+        traverseNodeSubTreeInRange(node,i,children.size()-1,result1,type2);
         changePacket.changeSet1 = type1;
         changePacket.changeSet2 = type2;
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
@@ -70,8 +65,8 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         Set<String> type1 = new HashSet<>();
         Set<String> type2 = new HashSet<>();
         type1.add(a.getClass().getSimpleName());
-        traverseNodeInRange(node,0,i-1,result1,type1);
-        traverseNodeInRange(node,i,children.size()-1,result1,type2);
+        traverseNodeSubTreeInRange(node,0,i-1,result1,type1);
+        traverseNodeSubTreeInRange(node,i,children.size()-1,result1,type2);
         changePacket.changeSet1 = type1;
         changePacket.changeSet2 = type2;
     }
@@ -89,8 +84,8 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         Set<String> type1 = new HashSet<>();
         Set<String> type2 = new HashSet<>();
         type1.add(a.getClass().getSimpleName());
-        traverseNodeInRange(node,0,i-1,result1,type1);
-        traverseNodeInRange(node,i,children.size()-1,result1,type2);
+        traverseNodeSubTreeInRange(node,0,i-1,result1,type1);
+        traverseNodeSubTreeInRange(node,i,children.size()-1,result1,type2);
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
     }
 
@@ -109,8 +104,8 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         Set<String> type1 = new HashSet<>();
         Set<String> type2 = new HashSet<>();
         type1.add(a.getClass().getSimpleName());
-        traverseNodeInRange(node,0,i-1,result1,type1);
-        traverseNodeInRange(node,i,children.size()-1,result1,type2);
+        traverseNodeSubTreeInRange(node,0,i-1,result1,type1);
+        traverseNodeSubTreeInRange(node,i,children.size()-1,result1,type2);
         changePacket.changeSet1 = type1;
         changePacket.changeSet2 = type2;
 
@@ -135,7 +130,7 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         Set<String> type1 = new HashSet<>();
         Set<String> type2 = new HashSet<>();
         type1.add(a.getClass().getSimpleName());
-        traverseNodeInRange(node,0,i-1,result1,type1);
+        traverseNodeSubTreeInRange(node,0,i-1,result1,type1);
 
         if(type==1){
             Tree block  = (Tree) node.getChild(i);
@@ -146,10 +141,10 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
                     }
                 }
             }
-            traverseNodeChildren(block,result1,type2);
-            traverseNodeInRange(node,i+1,children.size()-1,result1,type2);
+            traverseNodeChildrenSubTree(block,result1,type2);
+            traverseNodeSubTreeInRange(node,i+1,children.size()-1,result1,type2);
         }else{
-            traverseNodeInRange(node,i,children.size()-1,result1,type2);
+            traverseNodeSubTreeInRange(node,i,children.size()-1,result1,type2);
         }
         changePacket.changeSet1 = type1;
         changePacket.changeSet2 = type2;
@@ -171,9 +166,9 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         for(;i<children.size();i++){
             Tree t = (Tree) children.get(i);
             if(t.getAstNode().getNodeType() == ASTNode.BLOCK){
-                traverseNodeChildren(t,result,changePacket.changeSet2);
+                traverseNodeChildrenSubTree(t,result,changePacket.changeSet2);
             }else{
-                traverseNode(t,result,changePacket.changeSet1);
+                traverseNodeSubTree(t,result,changePacket.changeSet1);
             }
         }
 
@@ -194,8 +189,8 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         Set<String> type1 = new HashSet<>();
         Set<String> type2 = new HashSet<>();
         type1.add(a.getClass().getSimpleName());
-        traverseNodeInRange(node,0,i-1,result1,type1);
-        traverseNodeInRange(node,i,children.size()-1,result1,type2);
+        traverseNodeSubTreeInRange(node,0,i-1,result1,type1);
+        traverseNodeSubTreeInRange(node,i,children.size()-1,result1,type2);
         changePacket.changeSet1 = type1;
         changePacket.changeSet2 = type2;
 
@@ -217,10 +212,10 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
 
         }
         if(i>len){
-            traverseNodeInRange(switchParent,pos,len,result1,type1);
+            traverseNodeSubTreeInRange(switchParent,pos,len,result1,type1);
 
         }else{
-            traverseNodeInRange(switchParent,pos,i-1,result1,type1);
+            traverseNodeSubTreeInRange(switchParent,pos,i-1,result1,type1);
         }
         changePacket.changeSet1 = type1;
 

@@ -26,7 +26,7 @@ public class BasicTreeTraversal {
      * @param resultActions [insert,null] 或者[delete,move,update,null]
      * @param resultTypes 同上
      */
-    protected static void traverseNode(ITree tree, List<Action> resultActions, Set<String> resultTypes){
+    protected static void traverseNodeSubTree(ITree tree, List<Action> resultActions, Set<String> resultTypes){
         for(ITree node:tree.preOrder()){
             Tree tmp = (Tree)node;
             if(tmp.getDoAction()==null){
@@ -46,7 +46,7 @@ public class BasicTreeTraversal {
      * @param resultActions result
      * @param resultTypes resulttype
      */
-    protected static void traverseNodeChildren(ITree tree, List<Action> resultActions, Set<String> resultTypes){
+    protected static void traverseNodeChildrenSubTree(ITree tree, List<Action> resultActions, Set<String> resultTypes){
         boolean flag = true;
         for(ITree node:tree.preOrder()){
             if(flag){
@@ -74,11 +74,11 @@ public class BasicTreeTraversal {
      * @param resultActions result
      * @param resultTypes resulttype
      */
-    protected static void traverseNodeInRange(ITree tree,int a,int b,List<Action> resultActions,Set<String> resultTypes){
+    protected static void traverseNodeSubTreeInRange(ITree tree, int a, int b, List<Action> resultActions, Set<String> resultTypes){
         List<ITree> children = tree.getChildren();
         for(int i = a;i<=b;i++){
             ITree c = children.get(i);
-            traverseNode(c,resultActions,resultTypes);
+            traverseNodeSubTree(c,resultActions,resultTypes);
         }
     }
 
@@ -89,9 +89,10 @@ public class BasicTreeTraversal {
      * @param changePacket
      */
     protected static void traverseOneType(ITree node,List<Action> result1,ChangePacket changePacket){
-        Set<String> type1 = new HashSet<>();
-        traverseNode(node,result1,type1);
-        changePacket.changeSet1 = type1;
+        if(changePacket.changeSet1 == null){
+            changePacket.changeSet1 = new HashSet<>();
+        }
+        traverseNodeSubTree(node,result1,changePacket.changeSet1);
     }
 
 

@@ -5,7 +5,6 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.HashSet;
@@ -33,7 +32,7 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
                     tmp.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME ||
                     tmp.getAstNode().getNodeType() == ASTNode.PARAMETERIZED_TYPE||
                     tmp.getAstNode().getNodeType() == ASTNode.SIMPLE_TYPE){
-                traverseNode(tmp,result1,changePacket.changeSet1);
+                traverseNodeSubTree(tmp,result1,changePacket.changeSet1);
             }
         }
     }
@@ -50,7 +49,7 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
             if(tmp.getAstNode().getNodeType() == ASTNode.BLOCK){
                 break;
             }
-            traverseNode(tmp,result1,changePacket.changeSet1);
+            traverseNodeSubTree(tmp,result1,changePacket.changeSet1);
         }
     }
 
@@ -64,10 +63,7 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
         if(changePacket.changeSet1 == null){
             changePacket.changeSet1 = new HashSet<>();
         }
-        for(ITree node:fafather.preOrder()){
-            Tree tmp = (Tree) node;
-            traverseNode(tmp,editAction,changePacket.changeSet1);
-        }
+        traverseNodeSubTree(fafather,editAction,changePacket.changeSet1);
     }
 
     public static void traverseIfPredicate(Tree node,List<Action> result1,ChangePacket changePacket){
@@ -93,7 +89,7 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
         }
         for(int j=0;j<bound;j++){
             Tree tmp = (Tree) children.get(j);
-            traverseNode(tmp,result1,changePacket.changeSet1);
+            traverseNodeSubTree(tmp,result1,changePacket.changeSet1);
         }
     }
 
@@ -102,7 +98,7 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
         assert node.getChildren().size()==2;
         Set<String> type = new HashSet<>();
         Tree secondChild = (Tree) node.getChild(1);
-        traverseNode(secondChild,result,type);
+        traverseNodeSubTree(secondChild,result,type);
         changePacket.changeSet1 = type;
     }
 

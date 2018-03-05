@@ -63,14 +63,14 @@ public class DiffMinerTest extends BaseDiffMiner {
      * 使用修改简化之后的流程，测试多个文件的功能
      */
     private void runBatchTest() {
-        String batchTestFilePath = "C:\\Users\\huangkaifeng\\Desktop\\DiffMiner\\11-8-GumTree\\test_batch_simple_action";
+        String batchTestFilePath = "C:\\Users\\huangkaifeng\\Desktop\\DiffMiner\\11-8-GumTree\\test_batch_complex_action";
         File currdir = new File(batchTestFilePath + "\\curr");
         File[] files = currdir.listFiles();
         String outputDir = "test";
         try {
             for (File currf1 : files) {
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
-                if(currf1.getName().startsWith("RefurnishMethodSignature.java")) {
+                if(currf1.getName().startsWith("DownUpInsertPlusMove.java")) {
                     System.out.println(currf1.getName());
                     doo(prevFile, currf1.getAbsolutePath(), outputDir, true);
                     System.out.println();
@@ -90,8 +90,8 @@ public class DiffMinerTest extends BaseDiffMiner {
     }
 
     // 1.重构method name问题
-    // 2. Insert 加move合并问题
-
+    // 2. Insert 加move合并问题  复合情况
+    // 3.
 
 
 }

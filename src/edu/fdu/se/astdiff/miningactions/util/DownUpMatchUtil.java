@@ -1,5 +1,6 @@
 package edu.fdu.se.astdiff.miningactions.util;
 
+import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
@@ -25,17 +26,31 @@ public class DownUpMatchUtil {
 
 
 
-    private static void setChangePacket(ChangePacket changePacket,Set<String> type1){
-        if(BaseMatchUtil.twoItemInsertAndNullAction(type1)){
-            changePacket.setOperationType(OperationTypeConstants.INSERT);
-        }else if(BaseMatchUtil.twoItemDeleteAndNullAction(type1)){
-            changePacket.setOperationType(OperationTypeConstants.DELETE);
-        }else if(BaseMatchUtil.twoItemMoveAndNullAction(type1)){
-            changePacket.setOperationType(OperationTypeConstants.MOVE);
-        }else if(BaseMatchUtil.twoItemUpdateAndNullAction(type1)){
-            changePacket.setOperationType(OperationTypeConstants.UPDATE);
-        }
+    private static void setChangePacket(ChangePacket changePacket,Set<String> type){
         changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_REFURNISH);
+        if(BaseMatchUtil.twoItemInsertAndNullAction(type)){
+            changePacket.setOperationType(OperationTypeConstants.INSERT);
+        }else if(BaseMatchUtil.twoItemDeleteAndNullAction(type)){
+            changePacket.setOperationType(OperationTypeConstants.DELETE);
+        }else if(BaseMatchUtil.twoItemMoveAndNullAction(type)){
+            changePacket.setOperationType(OperationTypeConstants.MOVE);
+        }else if(BaseMatchUtil.twoItemUpdateAndNullAction(type)){
+            changePacket.setOperationType(OperationTypeConstants.UPDATE);
+        }else {
+            changePacket.setOperationType(OperationTypeConstants.MULTIPLE_EDIT);
+            changePacket.multiEditStr = generateMultiEditString(type);
+        }
 
+
+    }
+
+    private static String generateMultiEditString(Set<String> types){
+        String result = "";
+        for(String tmp:types){
+            if(!tmp.equals(ActionConstants.NULLACTION)){
+                result += tmp+"_";
+            }
+        }
+        return result.substring(0,result.length()-1);
     }
 }

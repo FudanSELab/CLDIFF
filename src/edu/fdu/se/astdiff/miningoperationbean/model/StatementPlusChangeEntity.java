@@ -25,7 +25,11 @@ public abstract class StatementPlusChangeEntity extends ChangeEntity{
             DownUpMatchUtil.setChangePacket(this.clusteredActionBean);
         }
         this.changeType = this.clusteredActionBean.changePacket.getOperationType();
-        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(this.changeType));
+        if(this.changeType == OperationTypeConstants.MULTIPLE_EDIT){
+            this.outputStringList.add(this.clusteredActionBean.changePacket.multiEditStr);
+        }else{
+            this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(this.changeType));
+        }
         this.outputStringList.add(this.changeEntity);
         this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
         this.outputStringList.add(this.lineRangeStr);

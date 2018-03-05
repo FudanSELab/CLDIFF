@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.miningactions.util;
 
 
+import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
@@ -46,5 +47,8 @@ public class UpDownMatchUtil {
             changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
         }
 
+
     }
+
+
 }
