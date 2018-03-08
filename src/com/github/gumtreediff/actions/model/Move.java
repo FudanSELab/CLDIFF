@@ -24,9 +24,16 @@ import com.github.gumtreediff.tree.ITree;
 
 public class Move extends Addition {
 
+    /**
+     *
+     * @param node move的节点
+     * @param parent move之后的新的parent，旧的parent可以可以通过node获得
+     * @param pos 位置
+     */
     public Move(ITree node, ITree parent, int pos) {
         super(node, parent, pos);
     }
+
 
     @Override
     public String getName() {

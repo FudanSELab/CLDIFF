@@ -261,17 +261,12 @@ public class Tree extends AbstractTree implements ITree {
 	}
 	public void setDoAction(Action doAction) {
 		if(this.doActions == null){
-			this.doActions = new ArrayList<Action>();
+			this.doActions = new ArrayList<>();
 		}
 		this.doActions.add(doAction);
 	}
     public Class getAstClass() {
         return astClass;
     }
-//    public JdtMethodCall getMethodCall() {
-//		return methodCall;
-//	}
-//	public void setMethodCall(JdtMethodCall methodCall) {
-//		this.methodCall = methodCall;
-//	}
+
 }

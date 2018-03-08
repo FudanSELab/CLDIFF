@@ -120,7 +120,6 @@ public class MyActionGenerator {
                 Tree tmp = (Tree) dstItem;
                 tmp.setDoAction(ins);
                 myAgbData.addAction(ins);
-                
                 origSrcTrees.put(mappedSrcNode.getId(), dstItem);
                 newMappings.link(mappedSrcNode, dstItem);
                 parentSrc.getChildren().add(k, mappedSrcNode);
@@ -130,7 +129,7 @@ public class MyActionGenerator {
             	// 有mapping
                 mappedSrcNode = newMappings.getSrc(dstItem);
                 if (!dstItem.equals(origDst)) { // TODO => x != origDst // Case of the root
-                    ITree v = mappedSrcNode.getParent();
+                    ITree mappedSrcNodeParent = mappedSrcNode.getParent();
                     if (!mappedSrcNode.getLabel().equals(dstItem.getLabel())) {
                     	Update upd = new Update(origSrcTrees.get(mappedSrcNode.getId()), dstItem.getLabel());
                     	myAgbData.addAction(upd);
@@ -141,7 +140,7 @@ public class MyActionGenerator {
 
                         mappedSrcNode.setLabel(dstItem.getLabel());
                     }
-                    if (!parentSrc.equals(v)) {
+                    if (!parentSrc.equals(mappedSrcNodeParent)) {
                         int k = findPos(dstItem);
                         Action mv = new Move(origSrcTrees.get(mappedSrcNode.getId()), origSrcTrees.get(parentSrc.getId()), k);
                         Tree tmp = (Tree) origSrcTrees.get(mappedSrcNode.getId());
@@ -205,6 +204,8 @@ public class MyActionGenerator {
                     if (!lcs.contains(new Mapping(a, b))) {
                         int k = findPos(b);
                         Action mv = new Move(origSrcTrees.get(a.getId()), origSrcTrees.get(w.getId()), k);
+                        Tree tmp = (Tree) origSrcTrees.get(a.getId());
+                        tmp.setDoAction(mv);
                         myAgbData.addAction(mv);
                         //System.out.println(mv);
                         int oldk = a.positionInParent();
