@@ -2,11 +2,13 @@ package edu.fdu.se.astdiff.miningactions.util;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
+import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.HashSet;
@@ -154,6 +156,23 @@ public class BasicTreeTraversal {
         ITree [] result = {srcFafather,dstFafather};
         return result;
     }
+
+    public static boolean traverseWhenActionIsMove(Action a,List<Action> result,ChangePacket changePacket,boolean flag){
+        if(a instanceof Move){
+            result.add(a);
+            changePacket.changeSet1 = new HashSet<>();
+            changePacket.changeSet1.add(ActionConstants.MOVE);
+            if(flag) {
+                changePacket.changeSet2 = new HashSet<>();
+                changePacket.changeSet2.add(ActionConstants.NULLACTION);
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+
 
 
 

@@ -197,28 +197,28 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
     }
 
     public static void traverseSwitchCase(Action a,List<Action> result1,ChangePacket changePacket){
-        Set<String> type1 = new HashSet<>();
-        Tree switchCase = (Tree) a.getNode();
-        Tree switchParent = (Tree) switchCase.getParent();
-        result1.add(a);
-        int pos = switchParent.getChildPosition(switchCase);
-        int len = switchParent.getChildren().size();
-        int i=pos+1;
-        for(;i<=len-1;i++){
-            Tree tmp = (Tree)switchParent.getChild(i);
-            if(tmp.getAstNode().getNodeType() == ASTNode.SWITCH_CASE){
-                break;
-            }
-
-        }
-        if(i>len){
-            traverseNodeSubTreeInRange(switchParent,pos,len,result1,type1);
-
-        }else{
-            traverseNodeSubTreeInRange(switchParent,pos,i-1,result1,type1);
-        }
-        changePacket.changeSet1 = type1;
-
+        traverseOneType(a,result1,changePacket);
+//        Set<String> type1 = new HashSet<>();
+//        Tree switchCase = (Tree) a.getNode();
+//        Tree switchParent = (Tree) switchCase.getParent();
+//        result1.add(a);
+//        int pos = switchParent.getChildPosition(switchCase);
+//        int len = switchParent.getChildren().size();
+//        int i=pos+1;
+//        for(;i<=len-1;i++){
+//            Tree tmp = (Tree)switchParent.getChild(i);
+//            if(tmp.getAstNode().getNodeType() == ASTNode.SWITCH_CASE){
+//                break;
+//            }
+//
+//        }
+//        if(i>len){
+//            traverseNodeSubTreeInRange(switchParent,pos,len,result1,type1);
+//
+//        }else{
+//            traverseNodeSubTreeInRange(switchParent,pos,i-1,result1,type1);
+//        }
+//        changePacket.changeSet1 = type1;
     }
 
 

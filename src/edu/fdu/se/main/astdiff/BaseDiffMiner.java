@@ -20,7 +20,7 @@ import edu.fdu.se.fileutil.FileWriter;
 public class BaseDiffMiner {
 
     protected void doo(String filePrev, String fileCurr, String outputDirName,boolean flag) {
-        FilePairPreDiff psc = new FilePairPreDiff().compareTwoFile(filePrev, fileCurr, outputDirName);
+        FilePairPreDiff psc = new FilePairPreDiff().compareTwoFile(filePrev, fileCurr, outputDirName,false);
         PreprocessedData preData = psc.getPreprocessedData();
         JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getPreviousCu().toString(),preData.getCurrentCu().toString());
         MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);

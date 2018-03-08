@@ -32,7 +32,7 @@ public class FilePairPreDiff {
 
     public static void main(String args[]) {
         new FilePairPreDiff().compareTwoFile("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java",
-                "D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java", "test_file");
+                "D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java", "test_file",true);
     }
 
     public FilePairPreDiff() {
@@ -202,7 +202,7 @@ public class FilePairPreDiff {
     }
 
 
-    public FilePairPreDiff compareTwoFile(String prev, String curr, String outputDirName) {
+    public FilePairPreDiff compareTwoFile(String prev, String curr, String outputDirName,boolean debugFlag) {
         CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prev);
         CompilationUnit cuCurr = JavaParserFactory.getCompilationUnit(curr);
         String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
@@ -214,9 +214,10 @@ public class FilePairPreDiff {
         if (!dirFileCurr.exists()) {
             dirFileCurr.mkdirs();
         }
-
-        FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_before_trim.java", cuPrev.toString());
-        FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_before_trim.java", cuCurr.toString());
+        if(debugFlag) {
+            FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_before_trim.java", cuPrev.toString());
+            FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_before_trim.java", cuCurr.toString());
+        }
         removeAllCommentsOfCompilationUnit(cuPrev);
         removeAllCommentsOfCompilationUnit(cuCurr);
         initPreprocessingDataFromPrev(cuPrev);
@@ -266,8 +267,10 @@ public class FilePairPreDiff {
         }
         this.undeleteSignatureChange();
         preprocessedTempData.removeRemovalList();
-        FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_after_trim.java", cuPrev.toString());
-        FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_after_trim.java", cuCurr.toString());
+        if(debugFlag) {
+            FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_after_trim.java", cuPrev.toString());
+            FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_after_trim.java", cuCurr.toString());
+        }
         this.preprocessedData.setCurrentCu(cuCurr);
         this.preprocessedData.setPreviousCu(cuPrev);
         return this;

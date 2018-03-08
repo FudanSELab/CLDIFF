@@ -102,5 +102,20 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
         changePacket.changeSet1 = type;
     }
 
+    public static void traverseSwitchCondition(Tree node,List<Action> result,ChangePacket changePacket){
+        assert node.getDoAction() == null;
+        assert node.getChildren().size()==2;
+        changePacket.changeSet1 = new HashSet<>();
+        List<ITree> children = node.getChildren();
+        for(ITree tmp:children){
+            Tree tmp2 = (Tree) tmp;
+            if(tmp2.getAstNode().getNodeType() == ASTNode.SWITCH_CASE){
+                break;
+            }
+            traverseOneType(node,result,changePacket);
+        }
+
+    }
+
 
 }

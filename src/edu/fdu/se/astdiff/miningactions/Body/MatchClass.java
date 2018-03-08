@@ -1,10 +1,12 @@
 package edu.fdu.se.astdiff.miningactions.Body;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.util.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
@@ -14,6 +16,7 @@ import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.model.ClassOrInterfaceDeclarationChangeEntity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +31,9 @@ public class MatchClass {
         List<Action> subActions = new ArrayList<>();
         changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
-        DefaultUpDownTraversal.traverseClass(a,subActions,changePacket);
+        if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
+            DefaultUpDownTraversal.traverseClass(a, subActions, changePacket);
+        }
         fp.setActionTraversedMap(subActions);
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
@@ -40,7 +45,9 @@ public class MatchClass {
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
-        DefaultDownUpTraversal.traverseClassSignature(traverseFather,subActions,changePacket);
+        if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,false)){
+            DefaultDownUpTraversal.traverseClassSignature(traverseFather,subActions,changePacket);
+        }
         fp.setActionTraversedMap(subActions);
         Range range = AstRelations.getRangeOfAstNode(a);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range,queryFather);
@@ -53,7 +60,10 @@ public class MatchClass {
         ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
         List<Action> actions = changeEntity.clusteredActionBean.actions;
         List<Action> newActions = new ArrayList<>();
-        DefaultDownUpTraversal.traverseClassSignature(traverseFather,newActions,changePacket);
+        if(!BasicTreeTraversal.traverseWhenActionIsMove(a,actions,changePacket,false)){
+            DefaultDownUpTraversal.traverseClassSignature(traverseFather,newActions,changePacket);
+        }
+
         for(Action tmp:newActions){
             if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
                 continue;
@@ -62,6 +72,7 @@ public class MatchClass {
         }
         fp.setActionTraversedMap(newActions);
     }
+
 
 
 

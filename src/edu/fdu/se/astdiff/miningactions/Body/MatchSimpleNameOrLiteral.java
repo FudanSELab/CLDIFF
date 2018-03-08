@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MatchSimpleNameOrLiteral {
 
-    //todo
+
     public static void matchSimpleNameOrLiteral(MiningActionData fp, Action a) {
         ITree fafather1 = BasicTreeTraversal.findFafatherNode(a.getNode());
         ITree[] fathers = BasicTreeTraversal.getMappedFafatherNode(fp,a,fafather1);
@@ -124,10 +124,10 @@ public class MatchSimpleNameOrLiteral {
                 MatchSynchronized.matchSynchronizedChangeNewEntity(fp,a,queryFather,traverseFather);
                 break;
             case ASTNode.SWITCH_STATEMENT:
-                MatchSwitch.matchSwitchNewEntity(fp,a);
+                MatchSwitch.matchSwitchNewEntity(fp,a,queryFather,traverseFather);
                 break;
             case ASTNode.SWITCH_CASE:
-                MatchSwitch.matchSwitchCaseNewEntity(fp,a);
+                MatchSwitch.matchSwitchCaseNewEntity(fp,a,queryFather,traverseFather);
                 break;
             default:
                 break;
@@ -186,7 +186,7 @@ public class MatchSimpleNameOrLiteral {
                 MatchSynchronized.matchSynchronizedChangeCurrEntity(fp,a,changeEntity,traverseFather);
                 break;
             case ASTNode.SWITCH_STATEMENT:
-                MatchSwitch.matchSwitchCurrEntity(fp,a);
+                MatchSwitch.matchSwitchCurrEntity(fp,a,changeEntity,traverseFather);
                 break;
             case ASTNode.SWITCH_CASE:
                 MatchSwitch.matchSwitchCaseCurrEntity(fp, a,changeEntity,traverseFather);

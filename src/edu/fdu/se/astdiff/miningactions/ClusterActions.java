@@ -1,17 +1,10 @@
 package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.*;
-import com.github.gumtreediff.tree.Tree;
-import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
-import edu.fdu.se.astdiff.miningactions.Body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
-import edu.fdu.se.astdiff.miningactions.statement.*;
-import edu.fdu.se.astdiff.miningactions.util.AstRelations;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.model.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.model.StatementPlusChangeEntity;
-import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.List;
 
@@ -22,13 +15,13 @@ import java.util.List;
 public class ClusterActions {
 
     public static void doCluster(MiningActionData fpd) {
-        new ClusterBig(Move.class, fpd).doClusterBig();
-        new ClusterBig(Insert.class, fpd).doClusterBig();
-        new ClusterBig(Delete.class, fpd).doClusterBig();
-        new ClusterSmall(Insert.class, fpd).doClusterSmall();
-        new ClusterSmall(Delete.class, fpd).doClusterSmall();
-        new ClusterSmall(Move.class, fpd).doClusterSmall();
-        new ClusterSmall(Update.class, fpd).doClusterSmall();
+        new ClusterUpDown(Move.class, fpd).doClusterUpDown();
+        new ClusterDownUp(Move.class, fpd).doClusterDownUp();
+        new ClusterUpDown(Insert.class, fpd).doClusterUpDown();
+        new ClusterUpDown(Delete.class, fpd).doClusterUpDown();
+        new ClusterDownUp(Insert.class, fpd).doClusterDownUp();
+        new ClusterDownUp(Delete.class, fpd).doClusterDownUp();
+        new ClusterDownUp(Update.class, fpd).doClusterDownUp();
         iterateChangeEntityListSetChangePacket(fpd);
         mergeWrapperAndMoveEntity();
     }

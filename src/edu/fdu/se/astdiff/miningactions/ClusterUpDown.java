@@ -12,12 +12,13 @@ import org.eclipse.jdt.core.dom.ASTNode;
  * Created by huangkaifeng on 2018/2/2.
  * Statement/Declaration/控制流的子结构
  */
-public class ClusterBig extends AbstractCluster{
+public class ClusterUpDown extends AbstractCluster{
 
-    public ClusterBig(Class mClazz, MiningActionData mminingActionData) {
+    public ClusterUpDown(Class mClazz, MiningActionData mminingActionData) {
         super(mClazz, mminingActionData);
     }
-    public void doClusterBig() {
+
+    public void doClusterUpDown() {
         int actionCnt = this.actionList.size();
         for(int index =0; index!=actionCnt;index++){
             Action a = this.actionList.get(index);

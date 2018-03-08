@@ -12,7 +12,8 @@ public class MatchBlock {
         int type = fatherNode.getAstNode().getNodeType();
         switch (type) {
             case ASTNode.SWITCH_STATEMENT:
-                MatchSwitch.matchSwitchCaseNewEntity(fp,a);
+//                MatchSwitch.matchSwitchCaseNewEntity(fp,a);
+                fp.setActionTraversedMap(a);
                 break;
             case ASTNode.IF_STATEMENT:
                 //Pattern 1.2 Match else

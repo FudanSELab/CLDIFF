@@ -16,14 +16,14 @@ import java.util.List;
  * Created by huangkaifeng on 2018/2/2.
  *
  */
-public class ClusterSmall extends AbstractCluster{
+public class ClusterDownUp extends AbstractCluster{
 
 
-    public ClusterSmall(Class mClazz, MiningActionData mminingActionData) {
+    public ClusterDownUp(Class mClazz, MiningActionData mminingActionData) {
         super(mClazz, mminingActionData);
     }
 
-    public void doClusterSmall() {
+    public void doClusterDownUp() {
         int actionCnt = this.actionList.size();
         for(int index =0; index!=actionCnt;index++){
             Action a = this.actionList.get(index);
