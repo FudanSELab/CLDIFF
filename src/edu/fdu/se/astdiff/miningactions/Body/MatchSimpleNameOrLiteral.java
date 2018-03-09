@@ -32,13 +32,13 @@ public class MatchSimpleNameOrLiteral {
 
         ChangeEntity changeEntity;
         changeEntity = MiningActionData.getEntityByNode(fp, queryFather);
-        if(changeEntity==null){
-            Tree moveNode = checkIfMoveActionInUppperNode(queryFather);
-            if(moveNode!=null)
-                changeEntity = MiningActionData.getEntityByNode(fp,queryFather);
-        }
+//        if(changeEntity==null){
+//            Tree moveNode = checkIfMoveActionInUppperNode(queryFather);
+//            if(moveNode!=null)
+//                changeEntity = MiningActionData.getEntityByNode(fp,queryFather);
+//        }
         // 如果节点往上有move标记那么找到move标记的ChangeEntity
-        if (changeEntity == null) {
+        if (changeEntity == null||(a instanceof Move)) {
             if(a instanceof Insert) {
                 matchNodeNewEntity(fp, a, queryFather,dstFather);
             }else{

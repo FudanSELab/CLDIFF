@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.miningactions.statement;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -10,6 +11,9 @@ public class MatchBlock {
     public static void matchBlock(MiningActionData fp, Action a) {
         Tree fatherNode = (Tree)a.getNode().getParent();
         int type = fatherNode.getAstNode().getNodeType();
+        if(a instanceof Move){
+            System.err.println("Move on Block");
+        }
         switch (type) {
             case ASTNode.SWITCH_STATEMENT:
 //                MatchSwitch.matchSwitchCaseNewEntity(fp,a);

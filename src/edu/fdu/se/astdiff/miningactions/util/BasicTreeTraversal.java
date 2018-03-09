@@ -35,8 +35,10 @@ public class BasicTreeTraversal {
                 resultTypes.add(ActionConstants.NULLACTION);
             }else{
                 tmp.getDoAction().forEach(a -> {
-                    resultActions.add(a);
-                    resultTypes.add(a.getClass().getSimpleName());
+                    if(!(a instanceof Move)) {
+                        resultActions.add(a);
+                        resultTypes.add(a.getClass().getSimpleName());
+                    }
                 });
             }
         }
@@ -61,8 +63,10 @@ public class BasicTreeTraversal {
                 resultTypes.add(ActionConstants.NULLACTION);
             }else{
                 tmp.getDoAction().forEach(a -> {
-                    resultActions.add(a);
-                    resultTypes.add(a.getClass().getSimpleName());
+                    if(!(a instanceof Move)) {
+                        resultActions.add(a);
+                        resultTypes.add(a.getClass().getSimpleName());
+                    }
                 });
             }
         }
@@ -170,6 +174,7 @@ public class BasicTreeTraversal {
         }
         return false;
     }
+
 
 
 
