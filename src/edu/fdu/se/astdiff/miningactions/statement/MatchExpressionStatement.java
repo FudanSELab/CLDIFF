@@ -12,8 +12,8 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.statementplus.ExpressionChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.statement.ExpressionChangeEntity;
 
 import java.util.ArrayList;
 import java.util.List;

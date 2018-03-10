@@ -5,7 +5,7 @@ package edu.fdu.se.astdiff.linkpool;
  *
  */
 public class Test {
-    //		ITree tree = a.getNode();
+//	    ITree tree = a.getNode();
 //		Tree parent = (Tree) tree.getParent();
 //		MethodInvocation mi = (MethodInvocation) parent.getAstNode();
 //		System.out.println("MethodInvocation:");

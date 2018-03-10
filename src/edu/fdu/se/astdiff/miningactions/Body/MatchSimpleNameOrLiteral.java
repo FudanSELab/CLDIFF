@@ -10,7 +10,7 @@ import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
-import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.List;

@@ -1,10 +1,16 @@
-package edu.fdu.se.astdiff.miningoperationbean.model;
+package edu.fdu.se.astdiff.miningoperationbean.member;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
+
+import java.util.HashSet;
 
 /**
  * Created by huangkaifeng on 2018/1/16.
@@ -19,7 +25,7 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
         this.lineRange = bean.nodeLinePosition;
         this.changeEntity = "Field - AnonymousClass";
         this.changeType = bean.changePacket.getOperationType();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) +ChangeEntity.SPLITTER + this.changeEntity +ChangeEntity.SPLITTER;
+        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) + ChangeEntity.SPLITTER + this.changeEntity +ChangeEntity.SPLITTER;
     }
 
 
@@ -40,8 +46,14 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
         this.outputStringList.add("PRE_DIFF");
         this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
         this.outputStringList.add(this.changeEntity);
-        NodeList list = fd.getVariables();
+        NodeList<VariableDeclarator> list = fd.getVariables();
         this.outputStringList.add(fieldDeclarationPair.getLocationClassString() + list.toString());
+
+        this.linkBean = new LinkBean();
+        this.linkBean.variables = new HashSet<>();
+        for(VariableDeclarator vd:fd.getVariables()){
+            this.linkBean.variables.add(vd.getNameAsString());
+        }
     }
 
 

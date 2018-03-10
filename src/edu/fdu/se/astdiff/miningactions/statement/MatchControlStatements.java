@@ -7,7 +7,7 @@ import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.statementplus.BreakContinueEntity;
+import edu.fdu.se.astdiff.miningoperationbean.statement.BreakContinueEntity;
 
 /**
  * Created by huangkaifeng on 2018/2/7.

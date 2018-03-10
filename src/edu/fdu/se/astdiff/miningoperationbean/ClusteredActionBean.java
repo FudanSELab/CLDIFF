@@ -6,6 +6,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 
 /**
@@ -15,6 +16,9 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
  */
 public class ClusteredActionBean {
 
+
+	public static final int TRAVERSE_UP_DOWN = 1;
+	public static final int TRAVERSE_DOWN_UP = 2;
 	/**
 	 * 1 up-down   2 down-up
 	 */
@@ -28,9 +32,6 @@ public class ClusteredActionBean {
 	 */
 	public ChangePacket changePacket;
 
-
-	public static final int TRAVERSE_UP_DOWN = 1;
-	public static final int TRAVERSE_DOWN_UP = 2;
 
 	public Range nodeLinePosition;
 

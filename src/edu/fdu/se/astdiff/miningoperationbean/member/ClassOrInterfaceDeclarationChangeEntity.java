@@ -1,15 +1,18 @@
-package edu.fdu.se.astdiff.miningoperationbean.model;
+package edu.fdu.se.astdiff.miningoperationbean.member;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.MiningOperationBeanUtil;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 
 /**
  * Created by huangkaifeng on 2018/1/23.
  *
  */
-public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEntity{
+public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEntity {
     /**
      * gumtree 识别的 add/remove/modify
      * @param bean
@@ -44,7 +47,13 @@ public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEnt
 //        this.outputStringList.add(isStatic);
         this.outputStringList.add(this.changeEntity);
         this.outputStringList.add(cod.getNameAsString());
+        this.linkBean = new LinkBean();
+        this.linkBean.methodDeclarations = MiningOperationBeanUtil.getNames(cod.getMembers());
+        this.linkBean.methodDeclarations.add(cod.getNameAsString());
     }
+
+
+
 
 
 

@@ -1,6 +1,7 @@
-package edu.fdu.se.astdiff.miningoperationbean.model;
+package edu.fdu.se.astdiff.miningoperationbean.base;
 
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 
@@ -15,6 +16,7 @@ public abstract class ChangeEntity {
 
     final public static String SPLITTER = "\t";
     public ClusteredActionBean clusteredActionBean;
+    public LinkBean linkBean;
 
     public Range lineRange;
     public String lineRangeStr;

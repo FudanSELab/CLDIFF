@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.miningoperationbean.model;
+package edu.fdu.se.astdiff.miningoperationbean.base;
 
 
 import edu.fdu.se.astdiff.miningactions.util.DownUpMatchUtil;
@@ -11,7 +11,7 @@ import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
  *
  *
  */
-public abstract class StatementPlusChangeEntity extends ChangeEntity{
+public abstract class StatementPlusChangeEntity extends ChangeEntity {
 
     public StatementPlusChangeEntity(ClusteredActionBean bean){
         super(bean);

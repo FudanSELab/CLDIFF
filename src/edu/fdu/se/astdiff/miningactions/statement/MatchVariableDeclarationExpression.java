@@ -15,9 +15,8 @@ import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.statementplus.ExpressionChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.statementplus.VariableChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.statement.VariableChangeEntity;
 
 public class MatchVariableDeclarationExpression {
 

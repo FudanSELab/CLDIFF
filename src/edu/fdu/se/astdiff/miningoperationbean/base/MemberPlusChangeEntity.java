@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.miningoperationbean.model;
+package edu.fdu.se.astdiff.miningoperationbean.base;
 
 import edu.fdu.se.astdiff.miningactions.util.DownUpMatchUtil;
 import edu.fdu.se.astdiff.miningactions.util.UpDownMatchUtil;
@@ -7,6 +7,7 @@ import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 
 /**
  * Created by huangkaifeng on 2018/2/8.
+ *
  */
 public class MemberPlusChangeEntity extends ChangeEntity {
 
@@ -14,6 +15,7 @@ public class MemberPlusChangeEntity extends ChangeEntity {
     public MemberPlusChangeEntity(ClusteredActionBean bean){
         super(bean);
     }
+
     public MemberPlusChangeEntity(){
         super();
     }
@@ -29,6 +31,7 @@ public class MemberPlusChangeEntity extends ChangeEntity {
         this.outputStringList.add(this.changeEntity);
         this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
         this.outputStringList.add(this.lineRangeStr);
-
     }
+
+
 }

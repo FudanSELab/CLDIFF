@@ -2,7 +2,8 @@ package edu.fdu.se.astdiff.miningoperationbean;
 
 import com.github.javaparser.ast.body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
-import edu.fdu.se.astdiff.miningoperationbean.model.*;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.member.*;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
 

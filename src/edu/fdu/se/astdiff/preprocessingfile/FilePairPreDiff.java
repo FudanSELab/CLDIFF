@@ -17,6 +17,7 @@ import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.handlefile.Method;
 import edu.fdu.se.javaparser.JavaParserFactory;
 import javassist.compiler.ast.MethodDecl;
+import org.eclipse.jdt.core.IType;
 
 /**
  * 两个文件 预处理
@@ -33,6 +34,7 @@ public class FilePairPreDiff {
     public static void main(String args[]) {
         new FilePairPreDiff().compareTwoFile("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java",
                 "D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java", "test_file",true);
+
     }
 
     public FilePairPreDiff() {

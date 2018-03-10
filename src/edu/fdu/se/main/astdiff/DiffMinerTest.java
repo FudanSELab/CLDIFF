@@ -6,7 +6,7 @@ import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
 import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.astdiff.miningactions.ClusterActions;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
-import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
@@ -63,7 +63,7 @@ public class DiffMinerTest extends BaseDiffMiner {
      * 使用修改简化之后的流程，测试多个文件的功能
      */
     private void runBatchTest() {
-        String batchTestFilePath = "C:\\Users\\huangkaifeng\\Desktop\\DiffMiner\\11-8-GumTree\\test_batch_complex_action";
+        String batchTestFilePath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\test_batch_complex_action";
         File currdir = new File(batchTestFilePath + "\\curr");
         File[] files = currdir.listFiles();
         String outputDir = "test";

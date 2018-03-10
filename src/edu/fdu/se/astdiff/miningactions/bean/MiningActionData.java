@@ -8,10 +8,8 @@ import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import com.github.javaparser.printer.lexicalpreservation.changes.Change;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 
 public class MiningActionData {
 

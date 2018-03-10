@@ -1,10 +1,7 @@
-package edu.fdu.se.astdiff.miningoperationbean.statementplus;
+package edu.fdu.se.astdiff.miningoperationbean.statement;
 
-import edu.fdu.se.astdiff.miningactions.util.UpDownMatchUtil;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.model.StatementPlusChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.StatementPlusChangeEntity;
 
 /**
  * Created by huangkaifeng on 2018/1/23.

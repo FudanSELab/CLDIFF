@@ -2,10 +2,8 @@ package edu.fdu.se.astdiff.miningactions.statement;
 
 import com.github.gumtreediff.actions.model.Action;
 
-import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
@@ -14,11 +12,10 @@ import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.model.ChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.statementplus.SwitchChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.statement.SwitchChangeEntity;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class MatchSwitch {
