@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
-import com.github.javaparser.ast.body.BodyDeclaration;
+
+import org.eclipse.jdt.core.dom.BodyDeclaration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,11 +82,7 @@ public class PreprocessedTempData {
 
     public void removeRemovalList() {
         for (BodyDeclaration item : this.removalList) {
-            boolean s = item.remove();
-            if(!s){
-                System.err.println("error: removing return false");
-                System.err.println(item.toString());
-            }
+            item.delete();
         }
         this.removalList.clear();
     }

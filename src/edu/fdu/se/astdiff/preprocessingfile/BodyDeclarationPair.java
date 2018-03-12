@@ -1,9 +1,11 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
-import com.github.javaparser.ast.body.BodyDeclaration;
+
+import org.eclipse.jdt.core.dom.BodyDeclaration;
 
 /**
  * Created by huangkaifeng on 2018/1/22.
+ *
  */
 public class BodyDeclarationPair {
     private BodyDeclaration bd;
@@ -13,7 +15,7 @@ public class BodyDeclarationPair {
     public BodyDeclarationPair(BodyDeclaration bd1,String str){
         this.bd = bd1;
         this.locationClassString = str;
-        String hashStr = String.valueOf(bd1)+String.valueOf(str.hashCode());
+        String hashStr = String.valueOf(bd1.toString().hashCode())+String.valueOf(str.hashCode());
         this.hashCode = hashStr.hashCode();
     }
     private int hashCode;

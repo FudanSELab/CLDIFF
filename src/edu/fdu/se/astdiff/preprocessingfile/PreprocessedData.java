@@ -1,12 +1,9 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
-import com.github.javaparser.Position;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.*;
-import edu.fdu.se.javaparser.JavaParserFactory;
-import org.apache.ibatis.javassist.compiler.ast.FieldDecl;
+
+import org.eclipse.jdt.core.dom.BodyDeclaration;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +36,7 @@ public class PreprocessedData {
 
 
 
-    private Map<String,List<ClassOrInterfaceDeclaration>> classOrInterfaceDeclarationsList;
+    private Map<String,List<TypeDeclaration>> classOrInterfaceDeclarationsList;
 
     public PreprocessedData(){
         mBodiesAdded = new ArrayList<>();
@@ -48,12 +45,12 @@ public class PreprocessedData {
         classOrInterfaceDeclarationsList = new HashMap<>();
     }
 
-    public void addClassOrInterfaceDeclaration(String prefix,ClassOrInterfaceDeclaration a){
+    public void addTypeDeclaration(String prefix,TypeDeclaration a){
         if(this.classOrInterfaceDeclarationsList.containsKey(prefix)){
-            List<ClassOrInterfaceDeclaration> mList = this.classOrInterfaceDeclarationsList.get(prefix);
+            List<TypeDeclaration> mList = this.classOrInterfaceDeclarationsList.get(prefix);
             mList.add(a);
         }else{
-            List<ClassOrInterfaceDeclaration> mList = new ArrayList<>();
+            List<TypeDeclaration> mList = new ArrayList<>();
             mList.add(a);
             this.classOrInterfaceDeclarationsList.put(prefix,mList);
         }
@@ -69,7 +66,10 @@ public class PreprocessedData {
 
     public BodyDeclaration getBelongedBodyDeclaration(int start){
         for(BodyDeclarationPair bd: mBodiesRetained){
-            Position p = (Position)bd.getBodyDeclaration().getBegin().get();
+            bd.getBodyDeclaration().getStartPosition();
+            bd.getBodyDeclaration().getLength();
+
+            Position p = (Position)bd.getBodyDeclaration() getBegin().get();
             Position p2 = (Position)bd.getBodyDeclaration().getEnd().get();
             if(start>p.line && start<p2.line){
                 return bd.getBodyDeclaration();

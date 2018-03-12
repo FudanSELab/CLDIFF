@@ -5,19 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.Comment;
 
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
-import edu.fdu.se.handlefile.Method;
-import edu.fdu.se.javaparser.JavaParserFactory;
-import javassist.compiler.ast.MethodDecl;
-import org.eclipse.jdt.core.IType;
+import edu.fdu.se.javaparser.JDTParserFactory;
+import edu.fdu.se.javaparser.JDTParserUtil;
+import org.eclipse.jdt.core.dom.*;
 
 /**
  * 两个文件 预处理
@@ -52,9 +46,8 @@ public class FilePairPreDiff {
      * @param cu compilationUnit
      */
     private void initPreprocessingDataFromPrev(CompilationUnit cu) {
-        TypeDeclaration mTypePrev = cu.getType(0);
-        ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) mTypePrev;
-        traverseClassOrInterfaceDeclarationInitPrevData(cod, cod.getNameAsString() + ".");
+        TypeDeclaration mTypePrev = (TypeDeclaration) cu.types().get(0);
+        traverseTypeDeclarationInitPrevData(mTypePrev, mTypePrev.getName().toString() + ".");
     }
 
     /**
@@ -74,9 +67,10 @@ public class FilePairPreDiff {
                 return 2;
             }
         } else {
-            for (VariableDeclarator vd : fd.getVariables()) {
-                if (preprocessedTempData.prevNodeBodyNameMap.containsKey(prefix + vd.getName())) {
-                    List<BodyDeclarationPair> mOverload = preprocessedTempData.prevNodeBodyNameMap.get(prefix + vd.getName());
+            List<VariableDeclarationFragment> mmList = fd.fragments();
+            for (VariableDeclarationFragment vd:mmList) {
+                if (preprocessedTempData.prevNodeBodyNameMap.containsKey(prefix + vd.getName().toString())) {
+                    List<BodyDeclarationPair> mOverload = preprocessedTempData.prevNodeBodyNameMap.get(prefix + vd.getName().toString());
                     for (BodyDeclarationPair mItem : mOverload) {
                         // variable相同， 设置为不删除
                         if (PreprocessedTempData.BODY_SAME_REMOVE != preprocessedTempData.getNodeMapValue(mItem)) {
@@ -98,15 +92,15 @@ public class FilePairPreDiff {
      * @param prefixClassName classname到cod的name前一个为止
      * @return 1 2
      */
-    private int checkCurrBodies(ClassOrInterfaceDeclaration cod, String prefixClassName) {
-        String key = prefixClassName + cod.getNameAsString() + ".";
+    private int checkCurrBodies(TypeDeclaration cod, String prefixClassName) {
+        String key = prefixClassName + cod.getName().toString() + ".";
         if (preprocessedTempData.prevNodeBodyDeclarationMap.containsKey(key)) {
             BodyDeclarationPair prevNode = preprocessedTempData.prevNodeBodyDeclarationMap.get(key);
             if (prevNode.getBodyDeclaration().hashCode() == cod.hashCode()
                     && prevNode.getLocationClassString().hashCode() == prefixClassName.hashCode()) {
                 preprocessedTempData.addToRemoveList(cod);
                 preprocessedTempData.setBodyPrevNodeMap(prevNode, PreprocessedTempData.BODY_SAME_REMOVE);
-                traverseClassOrInterfaceDeclarationSetVisited((ClassOrInterfaceDeclaration) prevNode.getBodyDeclaration(), prefixClassName);
+                traverseTypeDeclarationSetVisited((TypeDeclaration) prevNode.getBodyDeclaration(), prefixClassName);
                 return 1;
             } else {
                 preprocessedTempData.setBodyPrevNodeMap(prevNode, PreprocessedTempData.BODY_DIFFERENT_RETAIN);
@@ -123,11 +117,11 @@ public class FilePairPreDiff {
         // signature 完全一摸一样的
         String bdMapPrevKey = null;
         String bdMapPrevMethodNameKey = null;
-        InitializerDeclaration idd;
-        if (bd instanceof InitializerDeclaration) {
-            idd = (InitializerDeclaration) bd;
+        Initializer idd;
+        if (bd instanceof Initializer) {
+            idd = (Initializer) bd;
             bdMapPrevKey = prefixClassName;
-            if (idd.isStatic()) {
+            if (idd.modifiers().contains("static")) {
                 bdMapPrevKey += "static";
             } else {
                 bdMapPrevKey += "{";
@@ -136,12 +130,8 @@ public class FilePairPreDiff {
         } else {
             if (bd instanceof MethodDeclaration) {
                 MethodDeclaration md = (MethodDeclaration) bd;
-                bdMapPrevKey = prefixClassName + md.getDeclarationAsString();
-                bdMapPrevMethodNameKey = prefixClassName + md.getNameAsString();
-            } else if (bd instanceof ConstructorDeclaration) {
-                ConstructorDeclaration cd = (ConstructorDeclaration) bd;
-                bdMapPrevKey = prefixClassName + cd.getDeclarationAsString();
-                bdMapPrevMethodNameKey = prefixClassName + cd.getNameAsString();
+                bdMapPrevKey = prefixClassName + JDTParserUtil.getDeclarationAsString(md);
+                bdMapPrevMethodNameKey = prefixClassName + md.getName().toString();
             }
         }
 
@@ -177,36 +167,29 @@ public class FilePairPreDiff {
         }
     }
 
-    private void removeCommentss(Node n) {
-        List<Comment> mList = n.getAllContainedComments();
-        List<Comment> mList2 = n.getOrphanComments();
-        for (Comment m : mList) {
-            m.remove();
-        }
-        for (Comment m : mList2) {
-            m.remove();
-        }
-    }
+
 
     private void removeAllCommentsOfCompilationUnit(CompilationUnit cu) {
-        cu.removeComment();
-        cu.removePackageDeclaration();
-        NodeList imports = cu.getImports();
-        for (int i = imports.size() - 1; i >= 0; i--) {
-            Node n = imports.get(i);
-            n.remove();
+        List<ASTNode> commentList = cu.getCommentList();
+        PackageDeclaration packageDeclaration = cu.getPackage();
+        if(packageDeclaration!=null)
+            packageDeclaration.delete();
+        List<ImportDeclaration> imprortss = cu.imports();
+        for(int i = commentList.size()-1;i>=0 ;i--){
+            commentList.get(i).delete();
+
         }
-        assert cu.getTypes() != null;
-        assert cu.getTypes().size() == 1;
-        TypeDeclaration mTypeCurr = cu.getType(0);
-        ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) mTypeCurr;
-        traverseClassOrInterfaceDeclarationRemoveComment(cod);
+        for(int i = imprortss.size()-1;i>=0 ;i--){
+            imprortss.get(i).delete();
+        }
+        assert cu.types() != null;
+        assert cu.types().size() == 1;
     }
 
 
     public FilePairPreDiff compareTwoFile(String prev, String curr, String outputDirName,boolean debugFlag) {
-        CompilationUnit cuPrev = JavaParserFactory.getCompilationUnit(prev);
-        CompilationUnit cuCurr = JavaParserFactory.getCompilationUnit(curr);
+        CompilationUnit cuPrev = JDTParserFactory.getCompilationUnit(prev);
+        CompilationUnit cuCurr = JDTParserFactory.getCompilationUnit(curr);
         String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
         File dirFilePrev = new File(rootOutPath + "/prev/" + outputDirName);
         File dirFileCurr = new File(rootOutPath + "/curr/" + outputDirName);
@@ -224,14 +207,14 @@ public class FilePairPreDiff {
         removeAllCommentsOfCompilationUnit(cuCurr);
         initPreprocessingDataFromPrev(cuPrev);
 //        preprocessedTempData.removeRemovalList();//2
-        ClassOrInterfaceDeclaration codMain = (ClassOrInterfaceDeclaration) cuCurr.getType(0);
-        traverseClassOrInterfaceDeclarationCmpCurr((ClassOrInterfaceDeclaration) cuCurr.getType(0), codMain.getNameAsString() + ".");
+        TypeDeclaration codMain = (TypeDeclaration) cuCurr.types().get(0);
+        traverseTypeDeclarationCmpCurr(codMain, codMain.getName().toString() + ".");
 //        preprocessedTempData.removeRemovalList();//1 考虑后面的识别method name变化，这里把remove的注释掉
         for (Entry<BodyDeclarationPair, Integer> item : preprocessedTempData.prevNodeVisitingMap.entrySet()) {
             BodyDeclarationPair bdp = item.getKey();
             int value = item.getValue();
             BodyDeclaration bd = bdp.getBodyDeclaration();
-            if (bd instanceof ClassOrInterfaceDeclaration) {
+            if (bd instanceof TypeDeclaration) {
                 switch (value) {
 //                    case PreprocessedTempData.BODY_DIFFERENT_RETAIN:
 //                    case PreprocessedTempData.BODY_FATHERNODE_REMOVE:
@@ -239,7 +222,7 @@ public class FilePairPreDiff {
                     case PreprocessedTempData.BODY_INITIALIZED_VALUE:
                         this.preprocessedData.addBodiesDeleted(bdp);
                         this.preprocessedTempData.addToRemoveList(bd);
-                        traverseClassOrInterfaceDeclarationSetVisited((ClassOrInterfaceDeclaration) bd, bdp.getLocationClassString());
+                        traverseTypeDeclarationSetVisited((TypeDeclaration) bd, bdp.getLocationClassString());
                         break;
                     case PreprocessedTempData.BODY_SAME_REMOVE:
                         this.preprocessedTempData.addToRemoveList(bd);
@@ -252,7 +235,7 @@ public class FilePairPreDiff {
             BodyDeclarationPair bdp = item.getKey();
             int value = item.getValue();
             BodyDeclaration bd = bdp.getBodyDeclaration();
-            if (!(bd instanceof ClassOrInterfaceDeclaration)) {
+            if (!(bd instanceof TypeDeclaration)) {
                 switch (value) {
                     case PreprocessedTempData.BODY_DIFFERENT_RETAIN:
                     case PreprocessedTempData.BODY_FATHERNODE_REMOVE:
@@ -287,12 +270,12 @@ public class FilePairPreDiff {
         for (BodyDeclarationPair bdpAdd : this.preprocessedData.getmBodiesAdded()) {
             if(bdpAdd.getBodyDeclaration() instanceof MethodDeclaration){
                 MethodDeclaration md = (MethodDeclaration)bdpAdd.getBodyDeclaration();
-                String methodName = md.getNameAsString();
+                String methodName = md.getName().toString();
                 List<BodyDeclarationPair> bdpDeleteList = new ArrayList<>();
                 for (BodyDeclarationPair bdpDelete : this.preprocessedData.getmBodiesDeleted()) {
                     if(bdpDelete.getBodyDeclaration() instanceof MethodDeclaration){
                         MethodDeclaration md2 = (MethodDeclaration) bdpDelete.getBodyDeclaration();
-                        String methodName2 = md2.getNameAsString();
+                        String methodName2 = md2.getName().toString();
                         if(potentialMethodNameChange(methodName,methodName2)){
                             bdpDeleteList.add(bdpDelete);
                         }
@@ -344,26 +327,23 @@ public class FilePairPreDiff {
      * @param cod             class 节点
      * @param prefixClassName class 节点为止的prefix ， root节点的class prefix 为classname
      */
-    public void traverseClassOrInterfaceDeclarationCmpCurr(ClassOrInterfaceDeclaration cod, String prefixClassName) {
-        this.preprocessedData.addClassOrInterfaceDeclaration(prefixClassName, cod);
-        NodeList nodeList = cod.getMembers();
+    public void traverseTypeDeclarationCmpCurr(TypeDeclaration cod, String prefixClassName) {
+        this.preprocessedData.addTypeDeclaration(prefixClassName, cod);
+        List<BodyDeclaration> nodeList = cod.bodyDeclarations();
         for (int i = nodeList.size() - 1; i >= 0; i--) {
-            Node node = nodeList.get(i);
-            if (node instanceof ClassOrInterfaceDeclaration) {
-                ClassOrInterfaceDeclaration cod2 = (ClassOrInterfaceDeclaration) node;
+            BodyDeclaration node = nodeList.get(i);
+            if (node instanceof TypeDeclaration) {
+                TypeDeclaration cod2 = (TypeDeclaration) node;
                 int status = checkCurrBodies(cod2, prefixClassName);
                 if (status == 3) {
                     this.preprocessedData.addBodiesAdded(cod2, prefixClassName);
                     this.preprocessedTempData.addToRemoveList(cod2);
                 } else if (status != 1) {
-                    traverseClassOrInterfaceDeclarationCmpCurr(cod2, prefixClassName + cod2.getNameAsString() + ".");
+                    traverseTypeDeclarationCmpCurr(cod2, prefixClassName + cod2.getName().toString() + ".");
                 }
                 continue;
             }
-            if (node instanceof AnnotationDeclaration) {
-                continue;
-            }
-            if (node instanceof InitializerDeclaration || node instanceof ConstructorDeclaration
+            if (node instanceof Initializer
                     || node instanceof MethodDeclaration) {
                 BodyDeclaration bd = (BodyDeclaration) node;
                 checkCurrBodies(bd, prefixClassName);
@@ -377,43 +357,43 @@ public class FilePairPreDiff {
         }
     }
 
-    /**
-     * prev + curr
-     *
-     * @param cod class name
-     */
-    public void traverseClassOrInterfaceDeclarationRemoveComment(ClassOrInterfaceDeclaration cod) {
-        cod.removeJavaDocComment();
-        cod.removeComment();
-        NodeList nodeList = cod.getMembers();
-        for (int i = nodeList.size() - 1; i >= 0; i--) {
-            Node node = nodeList.get(i);
-            node.removeComment();
-            removeCommentss(node);
-            if (node instanceof ClassOrInterfaceDeclaration) {
-                traverseClassOrInterfaceDeclarationRemoveComment((ClassOrInterfaceDeclaration) node);
-            }
-            if (node instanceof AnnotationDeclaration) {
-                preprocessedTempData.addToRemoveList((BodyDeclaration) node);
-            }
-            if (node instanceof ConstructorDeclaration) {
-                ConstructorDeclaration cd = (ConstructorDeclaration) node;
-                cd.removeJavaDocComment();
-            }
-            if (node instanceof MethodDeclaration) {
-                MethodDeclaration md = (MethodDeclaration) node;
-                md.removeJavaDocComment();
-            }
-            if (node instanceof FieldDeclaration) {
-                FieldDeclaration fd = (FieldDeclaration) node;
-                fd.removeJavaDocComment();
-            }
-            if (node instanceof InitializerDeclaration) {
-                InitializerDeclaration idd = (InitializerDeclaration) node;
-                idd.removeJavaDocComment();
-            }
-        }
-    }
+//    /**
+//     * prev + curr
+//     *
+//     * @param cod class name
+//     */
+//    public void traverseTypeDeclarationRemoveComment(TypeDeclaration cod) {
+//        cod.removeJavaDocComment();
+//        cod.removeComment();
+//        NodeList nodeList = cod.getMembers();
+//        for (int i = nodeList.size() - 1; i >= 0; i--) {
+//            Node node = nodeList.get(i);
+//            node.removeComment();
+//            removeCommentss(node);
+//            if (node instanceof TypeDeclaration) {
+//                traverseTypeDeclarationRemoveComment((TypeDeclaration) node);
+//            }
+//            if (node instanceof AnnotationDeclaration) {
+//                preprocessedTempData.addToRemoveList((BodyDeclaration) node);
+//            }
+//            if (node instanceof ConstructorDeclaration) {
+//                ConstructorDeclaration cd = (ConstructorDeclaration) node;
+//                cd.removeJavaDocComment();
+//            }
+//            if (node instanceof MethodDeclaration) {
+//                MethodDeclaration md = (MethodDeclaration) node;
+//                md.removeJavaDocComment();
+//            }
+//            if (node instanceof FieldDeclaration) {
+//                FieldDeclaration fd = (FieldDeclaration) node;
+//                fd.removeJavaDocComment();
+//            }
+//            if (node instanceof Initializer) {
+//                Initializer idd = (Initializer) node;
+//                idd.removeJavaDocComment();
+//            }
+//        }
+//    }
 
     /**
      * 设置该cod下的孩子节点为访问，因为father已经被remove了，所以不需要remove
@@ -421,18 +401,18 @@ public class FilePairPreDiff {
      * @param cod             该节点
      * @param prefixClassName 该节点为止的preix ClassName
      */
-    public void traverseClassOrInterfaceDeclarationSetVisited(ClassOrInterfaceDeclaration cod, String prefixClassName) {
-        NodeList tmpList = cod.getMembers();
-        String childrenClassPrefix = prefixClassName + cod.getNameAsString() + ".";
+    public void traverseTypeDeclarationSetVisited(TypeDeclaration cod, String prefixClassName) {
+        List<BodyDeclaration> tmpList = cod.bodyDeclarations();
+        String childrenClassPrefix = prefixClassName + cod.getName().toString() + ".";
         for (int m = tmpList.size() - 1; m >= 0; m--) {
-            Node n = tmpList.get(m);
+            BodyDeclaration n = tmpList.get(m);
             BodyDeclarationPair bdp = new BodyDeclarationPair((BodyDeclaration) n, childrenClassPrefix);
             if (this.preprocessedTempData.prevNodeVisitingMap.containsKey(bdp)) {
                 this.preprocessedTempData.setBodyPrevNodeMap(bdp, PreprocessedTempData.BODY_FATHERNODE_REMOVE);
             }
-            if (n instanceof ClassOrInterfaceDeclaration) {
-                ClassOrInterfaceDeclaration next = (ClassOrInterfaceDeclaration) n;
-                traverseClassOrInterfaceDeclarationSetVisited(next, childrenClassPrefix);
+            if (n instanceof TypeDeclaration) {
+                TypeDeclaration next = (TypeDeclaration) n;
+                traverseTypeDeclarationSetVisited(next, childrenClassPrefix);
             }
         }
     }
@@ -443,53 +423,47 @@ public class FilePairPreDiff {
      * @param cod             classname
      * @param prefixClassName prefix name
      */
-    public void traverseClassOrInterfaceDeclarationInitPrevData(ClassOrInterfaceDeclaration cod, String prefixClassName) {
-        this.preprocessedData.addClassOrInterfaceDeclaration(prefixClassName, cod);
-        NodeList nodeList = cod.getMembers();
+    public void traverseTypeDeclarationInitPrevData(TypeDeclaration cod, String prefixClassName) {
+        this.preprocessedData.addTypeDeclaration(prefixClassName, cod);
+        List<BodyDeclaration> nodeList = cod.bodyDeclarations();
         for (int i = nodeList.size() - 1; i >= 0; i--) {
-            Node node = nodeList.get(i);
+            BodyDeclaration node = nodeList.get(i);
             if (node instanceof BodyDeclaration) {
                 BodyDeclaration bd = (BodyDeclaration) node;
-                if (bd instanceof AnnotationDeclaration) {
-                    //todo index 5 AccountManager
-                    continue;
-                }
+//                if (bd instanceof AnnotationDeclaration) {
+//                    //todo index 5 AccountManager
+//                    continue;
+//                }
                 preprocessedTempData.initBodyPrevNodeMap(bd, prefixClassName);
                 BodyDeclarationPair bdp = new BodyDeclarationPair(bd, prefixClassName);
 
-                if (node instanceof ClassOrInterfaceDeclaration) {
-                    ClassOrInterfaceDeclaration cod2 = (ClassOrInterfaceDeclaration) node;
-                    String subCodName = prefixClassName + cod2.getNameAsString() + ".";
-                    traverseClassOrInterfaceDeclarationInitPrevData(cod2, subCodName);
+                if (node instanceof TypeDeclaration) {
+                    TypeDeclaration cod2 = (TypeDeclaration) node;
+                    String subCodName = prefixClassName + cod2.getName().toString() + ".";
+                    traverseTypeDeclarationInitPrevData(cod2, subCodName);
                     preprocessedTempData.addToMapBodyDeclaration(bdp, subCodName);
-                    continue;
-                }
-                if (node instanceof ConstructorDeclaration) {
-                    ConstructorDeclaration cd = (ConstructorDeclaration) node;
-                    preprocessedTempData.addToMapBodyDeclaration(bdp, prefixClassName + cd.getDeclarationAsString());
-                    preprocessedTempData.addToMapBodyName(bdp, prefixClassName + cd.getNameAsString());
                     continue;
                 }
                 if (node instanceof MethodDeclaration) {
                     MethodDeclaration md = (MethodDeclaration) node;
-                    preprocessedTempData.addToMapBodyDeclaration(bdp, prefixClassName + md.getDeclarationAsString());
-                    preprocessedTempData.addToMapBodyName(bdp, prefixClassName + md.getNameAsString());
+                    preprocessedTempData.addToMapBodyDeclaration(bdp, prefixClassName + JDTParserUtil.getDeclarationAsString(md));
+                    preprocessedTempData.addToMapBodyName(bdp, prefixClassName + md.getName().toString());
                     continue;
                 }
                 if (node instanceof FieldDeclaration) {
                     FieldDeclaration fd = (FieldDeclaration) node;
                     preprocessedTempData.addToMapBodyDeclaration(bdp, prefixClassName + fd.toString());
-
-                    for (VariableDeclarator vd : fd.getVariables()) {
-                        preprocessedTempData.addToMapBodyName(bdp, prefixClassName + vd.getName());
+                    List<VariableDeclarationFragment> mmList = fd.fragments();
+                    for (VariableDeclarationFragment vd : mmList) {
+                        preprocessedTempData.addToMapBodyName(bdp, prefixClassName + vd.getName().toString());
                     }
                     continue;
                 }
-                if (node instanceof InitializerDeclaration) {
+                if (node instanceof Initializer) {
                     //内部类不会有static
-                    InitializerDeclaration idd = (InitializerDeclaration) node;
+                    Initializer idd = (Initializer) node;
                     String iddStr;
-                    if (idd.isStatic()) {
+                    if (idd.modifiers().contains("static")) {
                         iddStr = "static";
                     } else {
                         iddStr = "{";
