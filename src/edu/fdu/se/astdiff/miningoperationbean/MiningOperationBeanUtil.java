@@ -2,11 +2,8 @@ package edu.fdu.se.astdiff.miningoperationbean;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.Tree;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.*;
 import edu.fdu.se.astdiff.linkpool.LinkBean;
-import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,29 +14,25 @@ import java.util.Set;
  */
 public class MiningOperationBeanUtil {
 
-    public static Set<String> getNames(NodeList nodeList){
+    public static Set<String> getNames(List<BodyDeclaration> nodeList){
         Set<String> result = new HashSet<>();
         for(int i =0;i<nodeList.size();i++){
-            Node n = nodeList.get(i);
+            BodyDeclaration n = nodeList.get(i);
             if(n instanceof MethodDeclaration){
                 MethodDeclaration md = (MethodDeclaration) n;
-                result.add(md.getNameAsString());
+                result.add(md.getName().toString());
             }
             if(n instanceof FieldDeclaration){
                 FieldDeclaration fd = (FieldDeclaration) n;
-                NodeList<VariableDeclarator> list2 = fd.getVariables();
-                for(VariableDeclarator vd:list2){
-                    result.add(vd.getNameAsString());
+                List<VariableDeclarationFragment> mmList = fd.fragments();
+                for(VariableDeclarationFragment vd:mmList){
+                    result.add(vd.getName().toString());
                 }
             }
-            if(n instanceof ClassOrInterfaceDeclaration){
-                ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) n;
-                Set<String> result2 = getNames(cod.getMembers());
+            if(n instanceof TypeDeclaration){
+                TypeDeclaration cod = (TypeDeclaration) n;
+                Set<String> result2 = getNames(cod.bodyDeclarations());
                 result.addAll(result2);
-            }
-            if(n instanceof ConstructorDeclaration){
-                ConstructorDeclaration cd = (ConstructorDeclaration)n;
-                result.add(cd.getNameAsString());
             }
         }
         return result;

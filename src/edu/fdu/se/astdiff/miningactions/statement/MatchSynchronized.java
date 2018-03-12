@@ -30,7 +30,7 @@ public class MatchSynchronized {
 		}
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		SynchronizedChangeEntity code = new SynchronizedChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}
@@ -45,7 +45,7 @@ public class MatchSynchronized {
 		}
 		fp.setActionTraversedMap(sameEdits);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
 		SynchronizedChangeEntity code = new SynchronizedChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 

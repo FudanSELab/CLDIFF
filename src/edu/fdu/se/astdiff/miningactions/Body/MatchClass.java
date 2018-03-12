@@ -29,8 +29,7 @@ public class MatchClass {
             DefaultUpDownTraversal.traverseClass(a, subActions, changePacket);
         }
         fp.setActionTraversedMap(subActions);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
         fp.addOneChangeEntity(code);
     }
@@ -43,8 +42,7 @@ public class MatchClass {
             DefaultDownUpTraversal.traverseClassSignature(traverseFather,subActions,changePacket);
         }
         fp.setActionTraversedMap(subActions);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range,queryFather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather);
         ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
         code.changeEntity = ClassOrInterfaceDeclarationChangeEntity.CLASS_SIGNATURE;
         fp.addOneChangeEntity(code);

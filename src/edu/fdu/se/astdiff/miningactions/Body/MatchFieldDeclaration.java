@@ -28,9 +28,8 @@ public class MatchFieldDeclaration {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,false)){
             DefaultUpDownTraversal.traverseField(a, subActions, changePacket);
         }
-        Range range = AstRelations.getRangeOfAstNode(a);
         fp.setActionTraversedMap(subActions);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         FieldChangeEntity code = new FieldChangeEntity(mBean);
         fp.addOneChangeEntity(code);
     }
@@ -44,8 +43,7 @@ public class MatchFieldDeclaration {
             DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,sameEdits,changePacket);
         }
         fp.setActionTraversedMap(sameEdits);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
+        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
         return mHighLevelOperationBean;
     }
 

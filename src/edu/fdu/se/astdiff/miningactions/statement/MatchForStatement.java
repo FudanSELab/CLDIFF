@@ -27,8 +27,7 @@ public class MatchForStatement {
             DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
         }
         fp.setActionTraversedMap(subActions);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         code.changeEntity = ForChangeEntity.FOR;
@@ -44,8 +43,7 @@ public class MatchForStatement {
             DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
         }
         fp.setActionTraversedMap(subActions);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         code.changeEntity = ForChangeEntity.FOR_EACH;
@@ -60,8 +58,7 @@ public class MatchForStatement {
             DefaultDownUpTraversal.traverseIfPredicate(traverseFather, sameEdits, changePacket);
         }
         fp.setActionTraversedMap(sameEdits);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         code.changeEntity = ForChangeEntity.FOR;
@@ -77,8 +74,8 @@ public class MatchForStatement {
             DefaultDownUpTraversal.traverseIfPredicate(traverseFather, sameEdits, changePacket);
         }
         fp.setActionTraversedMap(sameEdits);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
+
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         code.changeEntity = ForChangeEntity.FOR_EACH;

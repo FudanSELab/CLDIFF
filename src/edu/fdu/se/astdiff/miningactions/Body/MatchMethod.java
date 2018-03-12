@@ -29,8 +29,7 @@ public class MatchMethod {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
 			DefaultUpDownTraversal.traverseMethod(a,subActions,changePacket);
 		}
-		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		MethodChangeEntity code = new MethodChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}
@@ -44,8 +43,7 @@ public class MatchMethod {
 			DefaultDownUpTraversal.traverseMethodSignature(traverseFather,sameEdits,changePacket);
 		}
 		fp.setActionTraversedMap(sameEdits);
-		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
 		MethodChangeEntity code = new MethodChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}

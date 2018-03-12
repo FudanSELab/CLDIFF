@@ -32,8 +32,7 @@ public class MatchAssert {
             DefaultUpDownTraversal.traverseTypeIStatements(a, subActions, changePacket);
         }
         fp.setActionTraversedMap(subActions);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         AssertChangeEntity code = new AssertChangeEntity(mBean);
         fp.addOneChangeEntity(code);
 
@@ -47,8 +46,7 @@ public class MatchAssert {
             DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,sameEdits,changePacket);
         }
         fp.setActionTraversedMap(sameEdits);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
         AssertChangeEntity code = new AssertChangeEntity(mBean);
         fp.addOneChangeEntity(code);
     }

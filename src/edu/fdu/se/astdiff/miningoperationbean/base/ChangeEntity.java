@@ -2,6 +2,7 @@ package edu.fdu.se.astdiff.miningoperationbean.base;
 
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.linkpool.LinkBean;
+import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 
@@ -18,7 +19,7 @@ public abstract class ChangeEntity {
     public ClusteredActionBean clusteredActionBean;
     public LinkBean linkBean;
 
-    public Range lineRange;
+    public MyRange lineRange;
     public String lineRangeStr;
 
     public int changeType;
@@ -39,8 +40,7 @@ public abstract class ChangeEntity {
 
     public ChangeEntity(ClusteredActionBean bean){
         this.clusteredActionBean = bean;
-        Range range = bean.nodeLinePosition;
-        this.lineRangeStr ="("+range.begin.line+","+range.end.line+")";
+        this.lineRangeStr ="("+this.lineRange.startLineNo +","+ this.lineRange.endLineNo+")";
         this.changeType = bean.changePacket.getOperationType();
         this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationEntity()));
         if(this.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){

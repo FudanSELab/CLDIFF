@@ -30,8 +30,7 @@ public class MatchExpressionStatement {
 			DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
 		}
 		fp.setActionTraversedMap(subActions);
-		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		ExpressionChangeEntity code = new ExpressionChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}
@@ -46,7 +45,7 @@ public class MatchExpressionStatement {
 		}
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range,queryFather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather);
 		ExpressionChangeEntity code = new ExpressionChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}

@@ -1,12 +1,13 @@
 package edu.fdu.se.astdiff.miningoperationbean.member;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import edu.fdu.se.astdiff.linkpool.LinkBean;
+import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.MiningOperationBeanUtil;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
  * Created by huangkaifeng on 2018/1/23.
@@ -27,9 +28,10 @@ public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEnt
     /**
      * 预处理 识别的
      */
-    public ClassOrInterfaceDeclarationChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType){
-        ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration)bodyDeclarationPair.getBodyDeclaration();
-        this.lineRange = cod.getRange().get();
+    public ClassOrInterfaceDeclarationChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType, MyRange myRange){
+        TypeDeclaration cod = (TypeDeclaration)bodyDeclarationPair.getBodyDeclaration();
+        this.lineRange = myRange;
+        this.location = bodyDeclarationPair.getLocationClassString();
         if(cod.isInterface()){
             this.changeEntity = INTERFACE_STR;
         }else{
@@ -46,10 +48,10 @@ public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEnt
         this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
 //        this.outputStringList.add(isStatic);
         this.outputStringList.add(this.changeEntity);
-        this.outputStringList.add(cod.getNameAsString());
+        this.outputStringList.add(cod.getName().toString());
         this.linkBean = new LinkBean();
-        this.linkBean.methodDeclarations = MiningOperationBeanUtil.getNames(cod.getMembers());
-        this.linkBean.methodDeclarations.add(cod.getNameAsString());
+        this.linkBean.methodDeclarations = MiningOperationBeanUtil.getNames(cod.bodyDeclarations());
+        this.linkBean.methodDeclarations.add(cod.getName().toString());
     }
 
 

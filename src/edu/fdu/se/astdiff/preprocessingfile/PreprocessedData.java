@@ -64,19 +64,7 @@ public class PreprocessedData {
 
 
 
-    public BodyDeclaration getBelongedBodyDeclaration(int start){
-        for(BodyDeclarationPair bd: mBodiesRetained){
-            bd.getBodyDeclaration().getStartPosition();
-            bd.getBodyDeclaration().getLength();
 
-            Position p = (Position)bd.getBodyDeclaration() getBegin().get();
-            Position p2 = (Position)bd.getBodyDeclaration().getEnd().get();
-            if(start>p.line && start<p2.line){
-                return bd.getBodyDeclaration();
-            }
-        }
-        return null;
-    }
 
 
     public CompilationUnit getPreviousCu() {

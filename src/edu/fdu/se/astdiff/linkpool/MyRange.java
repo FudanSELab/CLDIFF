@@ -6,7 +6,12 @@ package edu.fdu.se.astdiff.linkpool;
  */
 public class MyRange {
 
-    public int start;
-    public int end;
+    public int startLineNo;
+    public int endLineNo;
+
+    public MyRange(int start,int end){
+        this.startLineNo = start;
+        this.endLineNo = end;
+    }
 
 }

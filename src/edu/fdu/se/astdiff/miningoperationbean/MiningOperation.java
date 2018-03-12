@@ -1,11 +1,14 @@
 package edu.fdu.se.astdiff.miningoperationbean;
 
-import com.github.javaparser.ast.body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.member.*;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.Initializer;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,11 +56,9 @@ public class MiningOperation {
             ce = new FieldChangeEntity(item,type);
         }else if(item.getBodyDeclaration() instanceof MethodDeclaration){
             ce = new MethodChangeEntity(item,type);
-        }else if(item.getBodyDeclaration() instanceof InitializerDeclaration){
+        }else if(item.getBodyDeclaration() instanceof Initializer){
             ce = new InitializerChangeEntity(item,type);
-        }else if(item.getBodyDeclaration() instanceof ConstructorDeclaration){
-            ce = new ConstructorChangeEntity(item,type);
-        }else if(item.getBodyDeclaration() instanceof ClassOrInterfaceDeclaration){
+        }else if(item.getBodyDeclaration() instanceof TypeDeclaration){
             ce = new ClassOrInterfaceDeclarationChangeEntity(item,type);
         }
         if(ce!=null){

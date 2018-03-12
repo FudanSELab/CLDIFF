@@ -32,7 +32,7 @@ public class MatchTry {
 		}
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		Tree firstC = (Tree) a.getNode().getChild(0);
 		if(firstC.getAstNode().getNodeType() == ASTNode.BLOCK){
@@ -55,7 +55,7 @@ public class MatchTry {
 		}
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		code.changeEntity = TryCatchChangeEntity.catchClause;
 		fp.addOneChangeEntity(code);
@@ -71,7 +71,7 @@ public class MatchTry {
 		}
 		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_CHANGE);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 		code.changeEntity = TryCatchChangeEntity.throwStatement;
@@ -89,7 +89,7 @@ public class MatchTry {
 		}
 		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_CHANGE);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 		code.changeEntity = TryCatchChangeEntity.finallyClause;
@@ -107,7 +107,7 @@ public class MatchTry {
 		}
 		fp.setActionTraversedMap(sameEdits);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		code.changeEntity = TryCatchChangeEntity.catchClause;
 		fp.addOneChangeEntity(code);

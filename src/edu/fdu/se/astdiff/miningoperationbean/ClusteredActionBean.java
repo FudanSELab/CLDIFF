@@ -7,6 +7,7 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.linkpool.LinkBean;
+import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 
 /**
@@ -33,26 +34,24 @@ public class ClusteredActionBean {
 	public ChangePacket changePacket;
 
 
-	public Range nodeLinePosition;
+	public MyRange range;
 
 	public Tree fafather;
 
 
 
-	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions,ChangePacket changePacket,Range nodeLine){
+	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions,ChangePacket changePacket){
 		this.traverseType = traverseType;
 		this.curAction = curAction;
 		this.actions = actions;
 		this.changePacket = changePacket;
-		this.nodeLinePosition = nodeLine;
 		this.fafather = (Tree) curAction.getNode();
 	}
-	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions, ChangePacket changePacket,Range nodeLine,Tree fafather){
+	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions, ChangePacket changePacket,Tree fafather){
 		this.traverseType = traverseType;
 		this.curAction = curAction;
 		this.actions = actions;
 		this.changePacket = changePacket;
-		this.nodeLinePosition = nodeLine;
 		this.fafather = fafather;
 	}
 

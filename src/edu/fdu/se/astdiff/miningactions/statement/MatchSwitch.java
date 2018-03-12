@@ -30,7 +30,7 @@ public class MatchSwitch {
 		}
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		code.changeEntity = SwitchChangeEntity.switchStatement;
 		fp.addOneChangeEntity(code);
@@ -47,7 +47,7 @@ public class MatchSwitch {
 		}
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		if(a.getNode().getChildren() == null || a.getNode().getChildren().size()==0){
 			code.changeEntity = SwitchChangeEntity.defaultCase;
@@ -69,7 +69,7 @@ public class MatchSwitch {
 		}
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean =  new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range,queryFather);
+		ClusteredActionBean mBean =  new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 
@@ -102,7 +102,7 @@ public class MatchSwitch {
 		}
 		fp.setActionTraversedMap(subActions);
 		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean =  new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,range,queryFather);
+		ClusteredActionBean mBean =  new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		code.changeEntity = SwitchChangeEntity.switchCase;
 		fp.addOneChangeEntity(code);

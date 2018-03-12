@@ -21,8 +21,7 @@ public class MatchControlStatements {
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
         changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
         fp.setActionTraversedMap(a);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,null,changePacket,range);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,null,changePacket);
         BreakContinueEntity code = new BreakContinueEntity(mBean);
         fp.addOneChangeEntity(code);
         code.changeEntity = BreakContinueEntity.breakStatement;
@@ -33,8 +32,7 @@ public class MatchControlStatements {
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
         changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE);
         fp.setActionTraversedMap(a);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,null,changePacket,range);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,null,changePacket);
         BreakContinueEntity code = new BreakContinueEntity(mBean);
         fp.addOneChangeEntity(code);
         code.changeEntity = BreakContinueEntity.continueStatement;

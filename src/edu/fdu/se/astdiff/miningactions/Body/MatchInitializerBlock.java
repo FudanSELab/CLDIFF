@@ -23,8 +23,7 @@ public class MatchInitializerBlock {
         changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
         DefaultUpDownTraversal.traverseInitializer(a,subActions,changePacket);
-        Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         InitializerChangeEntity code = new InitializerChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         fp.setActionTraversedMap(subActions);

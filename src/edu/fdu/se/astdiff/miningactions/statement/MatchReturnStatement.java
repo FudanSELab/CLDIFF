@@ -28,7 +28,7 @@ public class MatchReturnStatement {
         }
         fp.setActionTraversedMap(subActions);
         Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket,range);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         ReturnChangeEntity code = new ReturnChangeEntity(mBean);
         fp.addOneChangeEntity(code);
     }
@@ -42,7 +42,7 @@ public class MatchReturnStatement {
         }
         fp.setActionTraversedMap(sameEdits);
         Range range = AstRelations.getRangeOfAstNode(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,range,queryFather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
         ReturnChangeEntity code = new ReturnChangeEntity(mBean);
         fp.addOneChangeEntity(code);
     }
