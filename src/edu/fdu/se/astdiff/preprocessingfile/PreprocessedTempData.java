@@ -30,13 +30,13 @@ public class PreprocessedTempData {
 
 
     public PreprocessedTempData(){
-        prevNodeBodyDeclarationMap = new HashMap<>();
+//        prevNodeBodyDeclarationMap = new HashMap<>();
         prevNodeBodyNameMap = new HashMap<>();
         prevNodeVisitingMap = new HashMap<>();
         this.removalList = new ArrayList<>();
     }
 
-    protected Map<String, BodyDeclarationPair> prevNodeBodyDeclarationMap;
+//    protected Map<String, BodyDeclarationPair> prevNodeBodyDeclarationMap;
     protected Map<String, List<BodyDeclarationPair>> prevNodeBodyNameMap;
     /**
      * 0 初始化之后的值  1 遍历到了之后 需要保留的different  2 遍历到了之后 需要删除的same   3 prev中有，curr没有，change：deleted
@@ -48,14 +48,13 @@ public class PreprocessedTempData {
      */
     public List<BodyDeclaration> removalList;
 
-    /**
-     * method name
-     *
-     */
-    public void addToMapBodyDeclaration(BodyDeclarationPair bd,String fullDeclaration) {
-        this.prevNodeBodyDeclarationMap.put(fullDeclaration, bd);
-
-    }
+//    /**
+//     * method name
+//     *
+//     */
+//    public void addToMapBodyDeclaration(BodyDeclarationPair bd,String fullDeclaration) {
+//        this.prevNodeBodyDeclarationMap.put(fullDeclaration, bd);
+//    }
 
     /**
      * method name
@@ -87,8 +86,8 @@ public class PreprocessedTempData {
         this.removalList.clear();
     }
 
-    public void initBodyPrevNodeMap(BodyDeclaration bd,String classPrefix){
-        this.prevNodeVisitingMap.put(new BodyDeclarationPair(bd,classPrefix),BODY_INITIALIZED_VALUE);
+    public void initBodyPrevNodeMap(BodyDeclarationPair bodyDeclarationPair){
+        this.prevNodeVisitingMap.put(bodyDeclarationPair,BODY_INITIALIZED_VALUE);
     }
 
     /**
