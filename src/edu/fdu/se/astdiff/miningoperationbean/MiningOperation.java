@@ -1,5 +1,6 @@
 package edu.fdu.se.astdiff.miningoperationbean;
 
+import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.member.*;
@@ -42,29 +43,39 @@ public class MiningOperation {
 
     public void initPreprocessChangeEntityList(){
         this.preprocessedData.findMethodNameChange();
-        for(BodyDeclarationPair item:this.preprocessedData.getmBodiesAdded()){
-            addOneBody(item,OperationTypeConstants.INSERT);
-        }
-        for(BodyDeclarationPair item:this.preprocessedData.getmBodiesDeleted()){
-            addOneBody(item,OperationTypeConstants.DELETE);
-        }
+        this.preprocessedData.getmBodiesAdded().forEach(a-> addOneBody(a,OperationTypeConstants.INSERT));
+        this.preprocessedData.getmBodiesDeleted().forEach(a-> addOneBody(a,OperationTypeConstants.DELETE));
     }
 
     public void addOneBody(BodyDeclarationPair item,int type){
         ChangeEntity ce = null;
+        int s;
+        int e;
+        MyRange myRange = null;
+        if(OperationTypeConstants.INSERT == type){
+            s = this.preprocessedData.getCurrentCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
+            e = this.preprocessedData.getCurrentCu().getLineNumber(item.getBodyDeclaration().getStartPosition()+item.getBodyDeclaration().getLength()-1);
+            myRange = new MyRange(s,e,type);
+        }else if(OperationTypeConstants.DELETE == type){
+            s = this.preprocessedData.getPreviousCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
+            e = this.preprocessedData.getPreviousCu().getLineNumber(item.getBodyDeclaration().getStartPosition()+item.getBodyDeclaration().getLength()-1);
+            myRange = new MyRange(s,e,type);
+        }
+
         if(item.getBodyDeclaration() instanceof FieldDeclaration){
-            ce = new FieldChangeEntity(item,type);
+            ce = new FieldChangeEntity(item,type,myRange);
         }else if(item.getBodyDeclaration() instanceof MethodDeclaration){
-            ce = new MethodChangeEntity(item,type);
+            ce = new MethodChangeEntity(item,type,myRange);
         }else if(item.getBodyDeclaration() instanceof Initializer){
-            ce = new InitializerChangeEntity(item,type);
+            ce = new InitializerChangeEntity(item,type,myRange);
         }else if(item.getBodyDeclaration() instanceof TypeDeclaration){
-            ce = new ClassOrInterfaceDeclarationChangeEntity(item,type);
+            ce = new ClassOrInterfaceDeclarationChangeEntity(item,type,myRange);
         }
         if(ce!=null){
             this.mChangeEntityAll.add(ce);
         }
     }
+
 
 
     public void printListDiffMiner() {

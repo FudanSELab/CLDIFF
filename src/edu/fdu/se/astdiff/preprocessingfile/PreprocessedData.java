@@ -12,13 +12,13 @@ import java.util.Map;
 
 /**
  * Created by huangkaifeng on 2018/1/16.
+ *
  */
 public class PreprocessedData {
-    /**
-     * 操作之后的CompilationUnit
-     */
-    private CompilationUnit currentCu;
-    private CompilationUnit previousCu;
+
+
+    protected CompilationUnit currentCu;
+    protected CompilationUnit previousCu;
 
     /**
      * curr 删除的added的body
