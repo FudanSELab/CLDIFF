@@ -29,13 +29,12 @@ public class MatchSynchronized {
 			DefaultUpDownTraversal.traverseIf(a, subActions, changePacket);
 		}
 		fp.setActionTraversedMap(subActions);
-		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		SynchronizedChangeEntity code = new SynchronizedChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}
 
-	public static void matchSynchronizedChangeNewEntity(MiningActionData fp,Action a,Tree queryFather,Tree traverseFather){
+	public static void matchSynchronizedChangeNewEntity(MiningActionData fp,Action a,Tree queryFather,int treeType,Tree traverseFather){
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> sameEdits = new ArrayList<>();
 		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
@@ -44,8 +43,7 @@ public class MatchSynchronized {
 			DefaultDownUpTraversal.traverseIfPredicate(traverseFather,sameEdits,changePacket);
 		}
 		fp.setActionTraversedMap(sameEdits);
-		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
 		SynchronizedChangeEntity code = new SynchronizedChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 

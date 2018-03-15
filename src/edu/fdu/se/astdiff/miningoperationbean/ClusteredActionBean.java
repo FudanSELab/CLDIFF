@@ -3,12 +3,14 @@ package edu.fdu.se.astdiff.miningoperationbean;
 import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
+import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 
 /**
  * 记录find时候找到的节点，以及对应的fafafather 节点，以及该节点下，所有的action
@@ -38,6 +40,11 @@ public class ClusteredActionBean {
 
 	public Tree fafather;
 
+	public int nodeType;
+
+	public static final int SRC_TREE_NODE = 3;
+	public static final int DST_TREE_NODE = 4;
+
 
 
 	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions,ChangePacket changePacket){
@@ -46,36 +53,27 @@ public class ClusteredActionBean {
 		this.actions = actions;
 		this.changePacket = changePacket;
 		this.fafather = (Tree) curAction.getNode();
+		if(curAction instanceof Insert){
+			this.nodeType = DST_TREE_NODE;
+		}else{
+			this.nodeType = SRC_TREE_NODE;
+		}
+		this.range = AstRelations.getMyRange(this.fafather,this.nodeType);
 	}
-	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions, ChangePacket changePacket,Tree fafather){
+	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions, ChangePacket changePacket,Tree fafather,int nodeType){
 		this.traverseType = traverseType;
 		this.curAction = curAction;
 		this.actions = actions;
 		this.changePacket = changePacket;
 		this.fafather = fafather;
+		this.nodeType = nodeType;
+		this.range = AstRelations.getMyRange(this.fafather,this.nodeType);
 	}
 
 
 
 
-	public List<Action> getActions() {
-		return actions;
-	}
 
-	public ITree getFatherNode() {
-		return fafather;
-	}
-
-
-	public Action getCurAction() {
-		return curAction;
-	}
-
-
-
-	public int getTraverseType() {
-		return traverseType;
-	}
 
 	@Override
 	public String toString(){

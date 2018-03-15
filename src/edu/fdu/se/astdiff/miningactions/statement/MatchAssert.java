@@ -38,7 +38,7 @@ public class MatchAssert {
 
     }
 
-    public static void matchAssertChangeNewEntity(MiningActionData fp, Action a, Tree queryFather, Tree traverseFather){
+    public static void matchAssertChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType, Tree traverseFather){
         ChangePacket changePacket = new ChangePacket();
         List<Action> sameEdits = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
@@ -46,7 +46,7 @@ public class MatchAssert {
             DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,sameEdits,changePacket);
         }
         fp.setActionTraversedMap(sameEdits);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
         AssertChangeEntity code = new AssertChangeEntity(mBean);
         fp.addOneChangeEntity(code);
     }

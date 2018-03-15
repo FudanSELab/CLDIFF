@@ -36,7 +36,7 @@ public class MatchExpressionStatement {
 	}
 
 
-	public static void matchExpressionChangeNewEntity(MiningActionData fp, Action a, Tree queryFather, Tree traverseFather) {
+	public static void matchExpressionChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType, Tree traverseFather) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_STATEMENT_TYPE_I);
@@ -44,8 +44,7 @@ public class MatchExpressionStatement {
 			DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,subActions,changePacket);
 		}
 		fp.setActionTraversedMap(subActions);
-		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather,treeType);
 		ExpressionChangeEntity code = new ExpressionChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}

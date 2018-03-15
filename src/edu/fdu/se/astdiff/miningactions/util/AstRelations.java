@@ -7,30 +7,13 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
+import edu.fdu.se.astdiff.linkpool.MyRange;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
 public class AstRelations {
 
-	public static Range getRangeOfAstNode(Action a){
-		Integer[] range = ((Tree)a.getNode()).getRange();
-		Range linePosition = new Range(new Position(range[0],1),new Position(range[1],1));
-		return linePosition;
-	}
 
-	public static boolean isSubChildContainXXX(Action a,String stmt) {
-		List<ITree> child = a.getNode().getChildren();
-		if (child.size() < 1) {
-			System.err.println("There is no child");
-			return false;
-		}
-		for (ITree tmp : child) {
-			Tree t = (Tree) tmp;
-			String type = t.getAstClass().getSimpleName();
-			if (stmt.equals(type)) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 
 	public static boolean isFatherXXXStatement(Action a,int astNodeType) {
@@ -51,15 +34,23 @@ public class AstRelations {
 	}
 
 
-	public static boolean actionListContainsXXX(List<Action> list,String stmt) {
-		for (Action a : list) {
-			Tree t = (Tree) a.getNode();
-			String str = t.getAstClass().getSimpleName();
-			if (stmt.equals(str)) {
-				return true;
-			}
+	public static CompilationUnit cuPrev;
+	public static CompilationUnit cuCurr;
+
+	public static MyRange getMyRange(Tree tree, int treeType){
+		int start = tree.getAstNode().getStartPosition();
+		int end = tree.getAstNode().getStartPosition() + tree.getAstNode().getLength();
+		MyRange myRange = null;
+		if(treeType == ClusteredActionBean.SRC_TREE_NODE){
+			int s = cuPrev.getLineNumber(start);
+			int e = cuPrev.getLineNumber(end);
+			myRange = new MyRange(s,e,ClusteredActionBean.SRC_TREE_NODE);
+		}else{
+			int s = cuCurr.getLineNumber(start);
+			int e = cuCurr.getLineNumber(end);
+			myRange = new MyRange(s,e,ClusteredActionBean.DST_TREE_NODE);
 		}
-		return false;
+		return myRange;
 	}
 
 

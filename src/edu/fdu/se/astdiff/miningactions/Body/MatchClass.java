@@ -34,7 +34,7 @@ public class MatchClass {
         fp.addOneChangeEntity(code);
     }
 
-    public static void matchClassSignatureNewEntity(MiningActionData fp, Action a, Tree queryFather,Tree traverseFather) {
+    public static void matchClassSignatureNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType,Tree traverseFather) {
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
         changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
@@ -42,7 +42,7 @@ public class MatchClass {
             DefaultDownUpTraversal.traverseClassSignature(traverseFather,subActions,changePacket);
         }
         fp.setActionTraversedMap(subActions);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather,treeType);
         ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
         code.changeEntity = ClassOrInterfaceDeclarationChangeEntity.CLASS_SIGNATURE;
         fp.addOneChangeEntity(code);

@@ -6,10 +6,15 @@ import java.util.List;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
+import edu.fdu.se.astdiff.linkpool.MyRange;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
 public class MiningActionData {
 
@@ -22,11 +27,15 @@ public class MiningActionData {
 		this.mChangeEntityList = new ArrayList<>();
 	}
 
+
 	public GeneratingActionsData mGeneratingActionsData;
 	public MappingStore mMapping;
 
 	protected TreeContext mDstTree;
 	protected TreeContext mSrcTree;
+
+
+
 
 
 

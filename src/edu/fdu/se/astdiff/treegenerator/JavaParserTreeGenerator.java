@@ -5,7 +5,6 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
-import edu.fdu.se.astdiff.generatingactions.ActionPrinter;
 import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
@@ -42,7 +41,17 @@ public class JavaParserTreeGenerator {
         }
     }
 
-    public JavaParserTreeGenerator(String prevContent,String currContent) {
+    public JavaParserTreeGenerator(CompilationUnit prev, CompilationUnit curr) {
+        srcTC = generateFromCompilationUnit(prev);
+        src = srcTC.getRoot();
+        dstTC = generateFromCompilationUnit(curr);
+        dst = dstTC.getRoot();
+        Matcher m = Matchers.getInstance().getMatcher(src, dst);
+        m.match();
+        mapping = m.getMappings();
+    }
+
+    public JavaParserTreeGenerator(String prevContent, String currContent) {
         try {
             srcTC = generateFromString(prevContent);
             src = srcTC.getRoot();
@@ -68,7 +77,7 @@ public class JavaParserTreeGenerator {
         parser.setSource(readerToCharArray(r));
         JavaParserVisitor visitor = new JavaParserVisitor();
         ASTNode temp = parser.createAST(null);
-        visitor.getTreeContext().setCu((CompilationUnit)temp);
+        visitor.getTreeContext().setCu((CompilationUnit) temp);
         temp.accept(visitor);
         return visitor.getTreeContext();
     }
@@ -84,7 +93,7 @@ public class JavaParserTreeGenerator {
                 buf = new char[1024];
             }
         }
-        return  fileData.toString().toCharArray();
+        return fileData.toString().toCharArray();
     }
 
     public TreeContext generateFromReader(Reader r) throws IOException {
@@ -92,17 +101,30 @@ public class JavaParserTreeGenerator {
         ctx.validate();
         return ctx;
     }
+
     public TreeContext generateFromFile(File file) throws IOException {
         return generateFromReader(new FileReader(file));
     }
+
     public TreeContext generateFromString(String content) throws IOException {
         return generateFromReader(new StringReader(content));
+    }
+
+    public TreeContext generateFromCompilationUnit(CompilationUnit cu) {
+        JavaParserVisitor visitor = new JavaParserVisitor();
+        visitor.getTreeContext().setCu(cu);
+        ASTNode astNode = cu;
+        astNode.accept(visitor);
+        TreeContext ctx = visitor.getTreeContext();
+        ctx.validate();
+        return ctx;
     }
 
     public String getPrettyOldTreeString() {
         return SimpleActionPrinter.getPrettyTreeString(src);
     }
-    public String getPrettyNewTreeString(){
+
+    public String getPrettyNewTreeString() {
         return SimpleActionPrinter.getPrettyTreeString(dst);
     }
 

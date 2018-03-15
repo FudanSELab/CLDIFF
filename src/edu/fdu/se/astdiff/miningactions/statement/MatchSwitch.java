@@ -29,7 +29,6 @@ public class MatchSwitch {
 			DefaultUpDownTraversal.traverseSwitchStatements(a,subActions,changePacket);
 		}
 		fp.setActionTraversedMap(subActions);
-		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		code.changeEntity = SwitchChangeEntity.switchStatement;
@@ -46,7 +45,6 @@ public class MatchSwitch {
 			DefaultUpDownTraversal.traverseSwitchCase(a, subActions, changePacket);
 		}
 		fp.setActionTraversedMap(subActions);
-		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		if(a.getNode().getChildren() == null || a.getNode().getChildren().size()==0){
@@ -58,7 +56,7 @@ public class MatchSwitch {
 
 	}
 
-	public static void matchSwitchNewEntity(MiningActionData fp,Action a, Tree queryFather,Tree traverseFather){
+	public static void matchSwitchNewEntity(MiningActionData fp,Action a, Tree queryFather,int treeType,Tree traverseFather){
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
 		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
@@ -68,8 +66,7 @@ public class MatchSwitch {
 			DefaultDownUpTraversal.traverseSwitchCondition(traverseFather,subActions,changePacket);
 		}
 		fp.setActionTraversedMap(subActions);
-		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean =  new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather);
+		ClusteredActionBean mBean =  new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather,treeType);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 
@@ -91,7 +88,7 @@ public class MatchSwitch {
 	}
 
 
-	public static void matchSwitchCaseNewEntity(MiningActionData fp, Action a, Tree queryFather,Tree traverseFather){
+	public static void matchSwitchCaseNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType,Tree traverseFather){
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
 		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
@@ -101,8 +98,7 @@ public class MatchSwitch {
 			DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,subActions,changePacket);
 		}
 		fp.setActionTraversedMap(subActions);
-		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean =  new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather);
+		ClusteredActionBean mBean =  new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather,treeType);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		code.changeEntity = SwitchChangeEntity.switchCase;
 		fp.addOneChangeEntity(code);

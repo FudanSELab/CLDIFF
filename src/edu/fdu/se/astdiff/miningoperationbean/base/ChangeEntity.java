@@ -40,6 +40,7 @@ public abstract class ChangeEntity {
 
     public ChangeEntity(ClusteredActionBean bean){
         this.clusteredActionBean = bean;
+        this.lineRange = bean.range;
         this.lineRangeStr ="("+this.lineRange.startLineNo +","+ this.lineRange.endLineNo+")";
         this.changeType = bean.changePacket.getOperationType();
         this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationEntity()));

@@ -35,7 +35,7 @@ public class MatchMethod {
 	}
 
 
-	public static void matchMethodSignatureChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,Tree traverseFather) {
+	public static void matchMethodSignatureChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType,Tree traverseFather) {
 		ChangePacket changePacket = new ChangePacket();
 		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
 		List<Action> sameEdits = new ArrayList<>();
@@ -43,7 +43,7 @@ public class MatchMethod {
 			DefaultDownUpTraversal.traverseMethodSignature(traverseFather,sameEdits,changePacket);
 		}
 		fp.setActionTraversedMap(sameEdits);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
 		MethodChangeEntity code = new MethodChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 	}

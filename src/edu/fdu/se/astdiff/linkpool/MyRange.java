@@ -6,7 +6,9 @@ package edu.fdu.se.astdiff.linkpool;
  */
 public class MyRange {
 
-
+    /**
+     * type指这个start end是src 树还是dst树
+     */
     public int type;
 
     public int startLineNo;

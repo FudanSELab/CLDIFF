@@ -18,7 +18,11 @@ public class JDTParserFactory {
         bufferedInputStream.read(input);
         bufferedInputStream.close();
         Map options = JavaCore.getOptions();
-        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+        options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
+        options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
+        options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
+        options.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
+//        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
         astParser.setCompilerOptions(options);
         astParser.setSource(new String(input).toCharArray());
         CompilationUnit result = (CompilationUnit) (astParser.createAST(null));

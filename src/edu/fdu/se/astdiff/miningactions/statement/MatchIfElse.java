@@ -31,7 +31,6 @@ public class MatchIfElse {
 			DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
 		}
 		fp.setActionTraversedMap(subActions);
-		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		IfChangeEntity code = new IfChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
@@ -55,7 +54,6 @@ public class MatchIfElse {
 			DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
 		}
 		fp.setActionTraversedMap(subActions);
-		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		IfChangeEntity code = new IfChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
@@ -66,7 +64,7 @@ public class MatchIfElse {
 
 
 
-	public static void matchIfPredicateChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,Tree traverseFather) {
+	public static void matchIfPredicateChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType,Tree traverseFather) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> sameEdits = new ArrayList<>();
 		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
@@ -75,8 +73,7 @@ public class MatchIfElse {
 			DefaultDownUpTraversal.traverseIfPredicate(traverseFather,sameEdits,changePacket);
 		}
 		fp.setActionTraversedMap(sameEdits);
-		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
 		IfChangeEntity code = new IfChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
 

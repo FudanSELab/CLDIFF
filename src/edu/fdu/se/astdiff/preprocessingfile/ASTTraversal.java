@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/3/12.
+ *
  */
 public class ASTTraversal {
     /**
@@ -153,22 +154,10 @@ public class ASTTraversal {
      */
     private int checkCurrBodies(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration cod, String prefixClassName) {
         String key = prefixClassName + cod.getName().toString() + ".";
-        boolean a = false;
-        if (cod.getName().toString().equals("CapabilityInfo")) {
-            System.out.println("a");
-            System.out.println(cod.toString());
-            a = true;
-        }
         if (compareCache.prevNodeBodyNameMap.containsKey(key)) {
             List<BodyDeclarationPair> prevNodeList = compareCache.prevNodeBodyNameMap.get(key);
             assert prevNodeList.size() <= 1;
             BodyDeclarationPair prevBody = prevNodeList.get(0);
-            if(a){
-                System.out.println(prevBody.getBodyDeclaration().toString());
-                System.out.println(prevBody.getBodyDeclaration().toString().hashCode());
-                System.out.println(cod.toString());
-                System.out.println(cod.toString().hashCode());
-            }
             if (prevBody.getBodyDeclaration().toString().hashCode() == cod.toString().hashCode()
                     && prefixClassName.hashCode() == prevBody.getLocationClassString().hashCode()) {
                 compareCache.addToRemoveList(cod);

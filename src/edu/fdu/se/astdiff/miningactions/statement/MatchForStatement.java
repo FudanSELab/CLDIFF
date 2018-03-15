@@ -49,7 +49,7 @@ public class MatchForStatement {
         code.changeEntity = ForChangeEntity.FOR_EACH;
     }
 
-    public static void matchForConditionChangeNewEntity(MiningActionData fp, Action a, Tree queryFather, Tree traverseFather) {
+    public static void matchForConditionChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType, Tree traverseFather) {
         ChangePacket changePacket = new ChangePacket();
         List<Action> sameEdits = new ArrayList<>();
         changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
@@ -58,14 +58,14 @@ public class MatchForStatement {
             DefaultDownUpTraversal.traverseIfPredicate(traverseFather, sameEdits, changePacket);
         }
         fp.setActionTraversedMap(sameEdits);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         code.changeEntity = ForChangeEntity.FOR;
 
     }
 
-    public static void matchEnhancedForConditionChangeNewEntity(MiningActionData fp, Action a, Tree queryFather, Tree traverseFather) {
+    public static void matchEnhancedForConditionChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType, Tree traverseFather) {
         ChangePacket changePacket = new ChangePacket();
         List<Action> sameEdits = new ArrayList<>();
         changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
@@ -75,7 +75,7 @@ public class MatchForStatement {
         }
         fp.setActionTraversedMap(sameEdits);
 
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         code.changeEntity = ForChangeEntity.FOR_EACH;

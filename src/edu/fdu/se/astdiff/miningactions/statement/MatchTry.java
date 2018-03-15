@@ -31,7 +31,6 @@ public class MatchTry {
 			DefaultUpDownTraversal.traverseTryStatements(a,subActions,changePacket);
 		}
 		fp.setActionTraversedMap(subActions);
-		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		Tree firstC = (Tree) a.getNode().getChild(0);
@@ -54,7 +53,6 @@ public class MatchTry {
 			DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
 		}
 		fp.setActionTraversedMap(subActions);
-		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		code.changeEntity = TryCatchChangeEntity.catchClause;
@@ -70,7 +68,6 @@ public class MatchTry {
 			DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
 		}
 		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_CHANGE);
-		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
@@ -88,7 +85,6 @@ public class MatchTry {
 			DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
 		}
 		changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_CHANGE);
-		Range range = AstRelations.getRangeOfAstNode(a);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		fp.addOneChangeEntity(code);
@@ -96,7 +92,7 @@ public class MatchTry {
 		fp.setActionTraversedMap(subActions);
 	}
 
-	public static void matchCatchChangeNewEntity(MiningActionData fp,Action a,Tree queryFather,Tree traverseFather){
+	public static void matchCatchChangeNewEntity(MiningActionData fp,Action a,Tree queryFather,int treeType,Tree traverseFather){
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> sameEdits = new ArrayList<>();
 		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
@@ -106,8 +102,7 @@ public class MatchTry {
 			DefaultDownUpTraversal.traverseIfPredicate(traverseFather,sameEdits,changePacket);
 		}
 		fp.setActionTraversedMap(sameEdits);
-		Range range = AstRelations.getRangeOfAstNode(a);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather);
+		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		code.changeEntity = TryCatchChangeEntity.catchClause;
 		fp.addOneChangeEntity(code);

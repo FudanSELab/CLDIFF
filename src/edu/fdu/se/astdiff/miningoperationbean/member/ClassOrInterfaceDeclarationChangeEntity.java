@@ -37,16 +37,11 @@ public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEnt
         }else{
             this.changeEntity = CLASS_STR;
         }
-//        String isStatic = "";
-//        if(cod.isStatic()){
-//            isStatic = "static ";
-//        }
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
         this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
         this.outputStringList.add("PRE_DIFF");
         this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
-//        this.outputStringList.add(isStatic);
         this.outputStringList.add(this.changeEntity);
         this.outputStringList.add(cod.getName().toString());
         this.linkBean = new LinkBean();
