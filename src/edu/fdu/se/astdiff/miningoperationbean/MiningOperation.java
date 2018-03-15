@@ -42,7 +42,6 @@ public class MiningOperation {
 
 
     public void initPreprocessChangeEntityList(){
-        this.preprocessedData.findMethodNameChange();
         this.preprocessedData.getmBodiesAdded().forEach(a-> addOneBody(a,OperationTypeConstants.INSERT));
         this.preprocessedData.getmBodiesDeleted().forEach(a-> addOneBody(a,OperationTypeConstants.DELETE));
     }

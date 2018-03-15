@@ -26,7 +26,7 @@ public class FilePairPreDiff {
 
     public static void main(String args[]) {
         new FilePairPreDiff().compareTwoFile("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java",
-                "D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java", "test_file", true);
+                "D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java", "test_file");
 
     }
 
@@ -56,7 +56,7 @@ public class FilePairPreDiff {
     }
 
 
-    public FilePairPreDiff compareTwoFile(String prev, String curr, String outputDirName, boolean debugFlag) {
+    public FilePairPreDiff compareTwoFile(String prev, String curr, String outputDirName) {
         ASTTraversal astTraversal = new ASTTraversal();
         CompilationUnit cuPrev = JDTParserFactory.getCompilationUnit(prev);
         CompilationUnit cuCurr = JDTParserFactory.getCompilationUnit(curr);
@@ -69,7 +69,7 @@ public class FilePairPreDiff {
         if (!dirFileCurr.exists()) {
             dirFileCurr.mkdirs();
         }
-        if (debugFlag) {
+        if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
             FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_before_trim.java", cuPrev.toString());
             FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_before_trim.java", cuCurr.toString());
         }
@@ -93,7 +93,7 @@ public class FilePairPreDiff {
                     case PreprocessedTempData.BODY_INITIALIZED_VALUE:
                         this.preprocessedData.addBodiesDeleted(bdp);
                         this.preprocessedTempData.addToRemoveList(bd);
-                        astTraversal.traverseTypeDeclarationSetVisited(this.preprocessedData,this.preprocessedTempData,(TypeDeclaration) bd, bdp.getLocationClassString());
+                        astTraversal.traverseTypeDeclarationSetVisited(this.preprocessedTempData,(TypeDeclaration) bd, bdp.getLocationClassString());
                         break;
                     case PreprocessedTempData.BODY_SAME_REMOVE:
                         this.preprocessedTempData.addToRemoveList(bd);
@@ -123,7 +123,7 @@ public class FilePairPreDiff {
         }
         this.undeleteSignatureChange();
         preprocessedTempData.removeRemovalList();
-        if(debugFlag) {
+        if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
             FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_after_trim.java", cuPrev.toString());
             FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_after_trim.java", cuCurr.toString());
         }
@@ -195,8 +195,3 @@ public class FilePairPreDiff {
 
 
 }
-
-//                if (bd instanceof AnnotationDeclaration) {
-//                    //todo index 5 AccountManager
-//                    continue;
-//                }

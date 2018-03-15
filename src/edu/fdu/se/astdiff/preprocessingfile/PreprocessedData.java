@@ -16,7 +16,6 @@ import java.util.Map;
  */
 public class PreprocessedData {
 
-
     protected CompilationUnit currentCu;
     protected CompilationUnit previousCu;
 
@@ -34,8 +33,6 @@ public class PreprocessedData {
      */
     private List<BodyDeclarationPair> mBodiesRetained;
 
-
-
     private Map<String,List<TypeDeclaration>> classOrInterfaceDeclarationsList;
 
     public PreprocessedData(){
@@ -46,26 +43,15 @@ public class PreprocessedData {
     }
 
     public void addTypeDeclaration(String prefix,TypeDeclaration a){
-        if(this.classOrInterfaceDeclarationsList.containsKey(prefix)){
-            List<TypeDeclaration> mList = this.classOrInterfaceDeclarationsList.get(prefix);
-            mList.add(a);
+        String key = prefix + "." +a.getName().toString();
+        if(this.classOrInterfaceDeclarationsList.containsKey(key)){
+            classOrInterfaceDeclarationsList.get(key).add(a);
         }else{
             List<TypeDeclaration> mList = new ArrayList<>();
             mList.add(a);
-            this.classOrInterfaceDeclarationsList.put(prefix,mList);
+            this.classOrInterfaceDeclarationsList.put(key,mList);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 
     public CompilationUnit getPreviousCu() {
         return previousCu;
@@ -113,13 +99,4 @@ public class PreprocessedData {
         return mBodiesDeleted;
     }
 
-
-
-    /**
-     * name 修改导致 识别出来一个增一个删
-     */
-    public void findMethodNameChange(){
-        //todo
-        System.out.println("todo");
-    }
 }

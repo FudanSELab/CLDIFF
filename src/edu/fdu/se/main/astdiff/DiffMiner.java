@@ -68,7 +68,7 @@ public class DiffMiner extends BaseDiffMiner {
             String outputDirName = subPath.replace("\\", "_").substring(1);
             String fileFullPathPrev = fileRootPathPrev + subPath2;
             String fileFullPathCurr = fileRootPathCurr + subPath2;
-            doo(fileFullPathPrev, fileFullPathCurr, outputDirName,true);
+            doo(fileFullPathPrev, fileFullPathCurr, outputDirName);
             break;
         }
     }

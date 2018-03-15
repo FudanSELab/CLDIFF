@@ -23,4 +23,10 @@ public class PropertyKeys {
 	final public static String DIFF_MINER_GUMTREE_OUTPUT_DIR = "diff_miner_gumtree_output_dir";
 
 	final public static String DIFF_MINER_NEW_SDK_DIR = "diff_miner_new_sdk_dir";
+
+	final public static String DEBUG_PREPROCESSING = "debug_preprocessing";
+
+	final public static String DEBUG_SRC_DST_TREE = "debug_src_dst_tree";
+
+	final public static String DEBUG_ACTION_OUTPUT = "debug_action_output";
 }

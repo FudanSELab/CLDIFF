@@ -56,7 +56,7 @@ public class DiffMinerTest extends BaseDiffMiner {
         String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
         String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
         String outputDir = "test";
-        doo(file1, file2, outputDir,true);
+        doo(file1, file2, outputDir);
     }
 
     /**
@@ -72,7 +72,7 @@ public class DiffMinerTest extends BaseDiffMiner {
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
                 if(currf1.getName().startsWith("DownUpInsertPlusMove.java")) {
                     System.out.println(currf1.getName());
-                    doo(prevFile, currf1.getAbsolutePath(), outputDir, true);
+                    doo(prevFile, currf1.getAbsolutePath(), outputDir);
                     System.out.println();
                 }
             }

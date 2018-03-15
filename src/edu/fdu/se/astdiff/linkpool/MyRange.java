@@ -6,8 +6,6 @@ package edu.fdu.se.astdiff.linkpool;
  */
 public class MyRange {
 
-    public static int TYPE_PREV = 10000;
-    public static int TYPE_CURR = 10001;
 
     public int type;
 
