@@ -57,10 +57,13 @@ public class DiffMiner extends BaseDiffMiner {
                 = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR) + "/android-" + String.valueOf(version);
         List<String> filePathList = readCompareList(version, fileRootPathPrev, fileRootPathCurr);
         int cnt = 0;
-        int candidateIndex = 28;
+        int candidateIndex = 20;
         for (String subPath : filePathList) {
-            if (cnt < candidateIndex) {
-                cnt++;
+//            if (cnt > candidateIndex) {
+//                break;
+//            }
+            cnt++;
+            if(!subPath.startsWith("\\android\\accessibilityservice\\AccessibilityServiceInfo.java")){
                 continue;
             }
             System.out.println(subPath);
@@ -72,15 +75,12 @@ public class DiffMiner extends BaseDiffMiner {
             break;
         }
     }
-//    public static PreprocessedData preprocessedData;
     public static void main(String []args) {
         DiffMiner i = new DiffMiner();
-//		i.runBatch();
+		i.runBatch();
 
     }
 
-    //todo preprocessing 和gumtree的ast处理统一
-    // 二次compile目的是整理line number，设法不二次compile整理
 
 
 }

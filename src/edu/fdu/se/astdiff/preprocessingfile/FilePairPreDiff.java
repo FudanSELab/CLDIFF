@@ -75,6 +75,13 @@ public class FilePairPreDiff {
         }
         removeAllCommentsOfCompilationUnit(cuPrev);
         removeAllCommentsOfCompilationUnit(cuCurr);
+        BodyDeclaration bodyDeclarationPrev = (BodyDeclaration) cuPrev.types().get(0);
+        BodyDeclaration bodyDeclarationCurr = (BodyDeclaration) cuCurr.types().get(0);
+        if(!(bodyDeclarationPrev instanceof TypeDeclaration)||!(bodyDeclarationCurr instanceof TypeDeclaration)){
+            this.preprocessedData.setCurrentCu(cuCurr);
+            this.preprocessedData.setPreviousCu(cuPrev);
+            return this;
+        }
         TypeDeclaration mTypePrev = (TypeDeclaration) cuPrev.types().get(0);
         astTraversal.traverseTypeDeclarationInitPrevData(this.preprocessedData,this.preprocessedTempData,mTypePrev, mTypePrev.getName().toString() + ".");
 //        preprocessedTempData.removeRemovalList();//2

@@ -1,10 +1,13 @@
 package edu.fdu.se.javaparser;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
 
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 /**
  * Created by huangkaifeng on 2018/3/12.
+ *
  */
 public class JDTParserFactory {
 
@@ -14,6 +17,9 @@ public class JDTParserFactory {
         byte[] input = new byte[bufferedInputStream.available()];
         bufferedInputStream.read(input);
         bufferedInputStream.close();
+        Map options = JavaCore.getOptions();
+        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+        astParser.setCompilerOptions(options);
         astParser.setSource(new String(input).toCharArray());
         CompilationUnit result = (CompilationUnit) (astParser.createAST(null));
         return result;
