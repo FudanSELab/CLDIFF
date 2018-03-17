@@ -21,10 +21,9 @@ import edu.fdu.se.fileutil.FileWriter;
 public class BaseDiffMiner {
 
     protected void doo(String filePrev, String fileCurr, String output) {
-        FilePairPreDiff psc = new FilePairPreDiff().compareTwoFile(filePrev, fileCurr, output);
+        FilePairPreDiff psc = new FilePairPreDiff();
+        psc.compareTwoFile(filePrev, fileCurr, output);
         PreprocessedData preData = psc.getPreprocessedData();
-        AstRelations.cuCurr = preData.getCurrentCu();
-        AstRelations.cuPrev = preData.getPreviousCu();
         JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getPreviousCu(),preData.getCurrentCu());
         MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);
         GeneratingActionsData actionsData = gen.generate();
@@ -36,7 +35,7 @@ public class BaseDiffMiner {
         MiningActionData mMiningActionData = new MiningActionData(actionsData, jtg.srcTC, jtg.dstTC, jtg.mapping);
         ClusterActions.doCluster(mMiningActionData);
         MiningOperation mo = new MiningOperation(preData,mMiningActionData);
-//        mo.printListDiffMiner();
-//        mo.printListPreprocess();
+        mo.printListDiffMiner();
+        mo.printListPreprocess();
     }
 }

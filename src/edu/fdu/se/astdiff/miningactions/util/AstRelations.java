@@ -30,27 +30,19 @@ public class AstRelations {
 	}
 
 
-	public static CompilationUnit cuPrev;
-	public static CompilationUnit cuCurr;
 
 	public static MyRange getMyRange(Tree tree, int treeType){
-		int start = tree.getAstNode().getStartPosition();
-		int end = tree.getAstNode().getStartPosition() + tree.getAstNode().getLength();
+		Integer[] range =  tree.getRange();
+
+		int start = range[0];
+		int end = range[1];
 		MyRange myRange = null;
 		if(treeType == ClusteredActionBean.SRC_TREE_NODE){
-			int s = cuPrev.getLineNumber(start);
-			int e = cuPrev.getLineNumber(end);
-			myRange = new MyRange(s,e,ClusteredActionBean.SRC_TREE_NODE);
+			myRange = new MyRange(start,end,ClusteredActionBean.SRC_TREE_NODE);
 		}else{
-			int s = cuCurr.getLineNumber(start);
-			int e = cuCurr.getLineNumber(end);
-			myRange = new MyRange(s,e,ClusteredActionBean.DST_TREE_NODE);
+			myRange = new MyRange(start,end,ClusteredActionBean.DST_TREE_NODE);
 		}
 		return myRange;
 	}
-
-
-
-
 
 }

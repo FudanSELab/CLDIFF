@@ -16,6 +16,9 @@ import java.util.Map;
  */
 public class PreprocessedData {
 
+    protected List<String> currentLineList;
+    protected List<String> previousLineList;
+
     protected CompilationUnit currentCu;
     protected CompilationUnit previousCu;
 
@@ -40,6 +43,7 @@ public class PreprocessedData {
         mBodiesDeleted = new ArrayList<>();
         mBodiesRetained = new ArrayList<>();
         classOrInterfaceDeclarationsList = new HashMap<>();
+
     }
 
     public void addTypeDeclaration(String prefix,TypeDeclaration a){

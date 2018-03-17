@@ -1,7 +1,7 @@
 package edu.fdu.se.astdiff.treegenerator;
 
-import com.github.gumtreediff.jdt.cd.EntityType;
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import org.eclipse.jdt.core.dom.*;
 
@@ -12,6 +12,7 @@ import java.util.Deque;
  * Created by huangkaifeng on 2018/1/23.
  */
 public class JavaParserVisitor  extends ASTVisitor {
+
     public JavaParserVisitor() {
         super();
     }
@@ -73,6 +74,7 @@ public class JavaParserVisitor  extends ASTVisitor {
 
     private void push(int type, String typeName, String label, int startPosition, int length,ASTNode node) {
         ITree t = context.createTree(type, label, node);
+        Tree a;
         t.setPos(startPosition);
         t.setLength(length);
         if (trees.isEmpty())

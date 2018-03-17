@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.Modifier;
 public class JDTParserUtil {
 
     public static String getDeclarationAsString(MethodDeclaration methodDeclaration){
-    	System.out.println(methodDeclaration.toString());
-        return null;
+//    	System.out.println(methodDeclaration.toString());
+        return methodDeclaration.getName().toString();
     }
 }

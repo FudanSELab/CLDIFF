@@ -38,15 +38,16 @@ public class FilePairPreDiff {
     private PreprocessedData preprocessedData;
     private PreprocessedTempData preprocessedTempData;
 
+
     private void removeAllCommentsOfCompilationUnit(CompilationUnit cu) {
         List<ASTNode> commentList = cu.getCommentList();
         PackageDeclaration packageDeclaration = cu.getPackage();
         if (packageDeclaration != null)
             packageDeclaration.delete();
+
         List<ImportDeclaration> imprortss = cu.imports();
         for (int i = commentList.size() - 1; i >= 0; i--) {
             commentList.get(i).delete();
-
         }
         for (int i = imprortss.size() - 1; i >= 0; i--) {
             imprortss.get(i).delete();
@@ -56,10 +57,12 @@ public class FilePairPreDiff {
     }
 
 
-    public FilePairPreDiff compareTwoFile(String prev, String curr, String outputDirName) {
+    public void compareTwoFile(String prev, String curr, String outputDirName) {
         ASTTraversal astTraversal = new ASTTraversal();
         CompilationUnit cuPrev = JDTParserFactory.getCompilationUnit(prev);
         CompilationUnit cuCurr = JDTParserFactory.getCompilationUnit(curr);
+        preprocessedData.previousLineList = JDTParserFactory.getLinesOfFile(prev);
+        preprocessedData.currentLineList = JDTParserFactory.getLinesOfFile(curr);
         String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
         File dirFilePrev = new File(rootOutPath + "/prev/" + outputDirName);
         File dirFileCurr = new File(rootOutPath + "/curr/" + outputDirName);
@@ -70,8 +73,8 @@ public class FilePairPreDiff {
             dirFileCurr.mkdirs();
         }
         if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
-            FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_before_trim.java", cuPrev.toString());
-            FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_before_trim.java", cuCurr.toString());
+            FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_before_trim.java", preprocessedData.previousLineList);
+            FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_before_trim.java", preprocessedData.currentLineList);
         }
         removeAllCommentsOfCompilationUnit(cuPrev);
         removeAllCommentsOfCompilationUnit(cuCurr);
@@ -80,7 +83,7 @@ public class FilePairPreDiff {
         if(!(bodyDeclarationPrev instanceof TypeDeclaration)||!(bodyDeclarationCurr instanceof TypeDeclaration)){
             this.preprocessedData.setCurrentCu(cuCurr);
             this.preprocessedData.setPreviousCu(cuPrev);
-            return this;
+            return;
         }
         TypeDeclaration mTypePrev = (TypeDeclaration) cuPrev.types().get(0);
         astTraversal.traverseTypeDeclarationInitPrevData(this.preprocessedData,this.preprocessedTempData,mTypePrev, mTypePrev.getName().toString() + ".");
@@ -136,7 +139,7 @@ public class FilePairPreDiff {
         }
         this.preprocessedData.setCurrentCu(cuCurr);
         this.preprocessedData.setPreviousCu(cuPrev);
-        return this;
+        return ;
     }
 
     public PreprocessedData getPreprocessedData() {

@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FileWriter {
@@ -23,6 +24,22 @@ public class FileWriter {
 		try {
 			FileOutputStream fos = new FileOutputStream(filePath);
 			fos.write(content.getBytes());
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void writeInAll(String filePath, List<String> content) {
+		try {
+			final String lineEnd = "\n";
+			FileOutputStream fos = new FileOutputStream(filePath);
+			for(String line:content){
+				fos.write(line.getBytes());
+				fos.write(lineEnd.getBytes());
+			}
 			fos.flush();
 			fos.close();
 		} catch (IOException e) {

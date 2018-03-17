@@ -48,12 +48,11 @@ public class Tree extends AbstractTree implements ITree {
     private ASTNode astNode;
 //    private JdtMethodCall methodCall = null;
     
-//    private String actionType;
-    private List<Action> doActions;
     /**
      * added by hkf
      */
     private Class astClass;
+    private List<Action> doActions;
 
     private Integer[] lineRange;
 
@@ -73,7 +72,7 @@ public class Tree extends AbstractTree implements ITree {
         this.astClass = n.getClass();
     }
 
-    public Tree(int type, String label, ASTNode n,Integer[] linerange) {
+    public Tree(int type, String label, ASTNode n,Integer[] lineRange) {
         this.type = type;
         this.label = (label == null) ? NO_LABEL : label.intern();
         this.id = NO_ID;
@@ -87,7 +86,7 @@ public class Tree extends AbstractTree implements ITree {
         this.children = new ArrayList<>();
         this.astNode = n;
         this.astClass = n.getClass();
-        this.lineRange = linerange;
+        this.lineRange = lineRange;
     }
 
     public ASTNode getAstNode(){
