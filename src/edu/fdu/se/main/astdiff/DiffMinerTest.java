@@ -79,6 +79,7 @@ public class DiffMinerTest extends BaseDiffMiner {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 
@@ -93,5 +94,7 @@ public class DiffMinerTest extends BaseDiffMiner {
     // 2. Insert 加move合并问题  复合情况
 
 
+    // Preprocessing 检查
+    // ASTNode 整合情况 检查
 }
 

@@ -1,6 +1,5 @@
 package edu.fdu.se.astdiff.miningoperationbean.base;
 
-import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;

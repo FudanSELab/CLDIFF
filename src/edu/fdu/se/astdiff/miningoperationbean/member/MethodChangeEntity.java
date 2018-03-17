@@ -33,10 +33,6 @@ public class MethodChangeEntity extends MemberPlusChangeEntity {
         this.changeEntity = "Method";
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-//        String isStatic = "";
-//        if(md.isStatic()){
-//            isStatic = "static ";
-//        }
         this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
         this.outputStringList.add("PRE_DIFF");
         this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));

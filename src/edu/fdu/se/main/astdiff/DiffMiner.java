@@ -59,20 +59,20 @@ public class DiffMiner extends BaseDiffMiner {
         int cnt = 0;
         int candidateIndex = 20;
         for (String subPath : filePathList) {
-//            if (cnt > candidateIndex) {
-//                break;
-//            }
-            cnt++;
-            if(!subPath.startsWith("\\android\\accessibilityservice\\AccessibilityServiceInfo.java")){
-                continue;
+            if (cnt > candidateIndex) {
+                break;
             }
+            cnt++;
+//            if(!(subPath.equals("\\android\\accessibilityservice\\AccessibilityServiceInfo.java"))){
+//                continue;
+//            }
             System.out.println(subPath);
             String subPath2 = subPath.replace("\\", "/");
             String outputDirName = subPath.replace("\\", "_").substring(1);
             String fileFullPathPrev = fileRootPathPrev + subPath2;
             String fileFullPathCurr = fileRootPathCurr + subPath2;
             doo(fileFullPathPrev, fileFullPathCurr, outputDirName);
-            break;
+//            break;
         }
     }
     public static void main(String []args) {

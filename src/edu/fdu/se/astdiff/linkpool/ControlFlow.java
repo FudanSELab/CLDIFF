@@ -1,6 +1,5 @@
 package edu.fdu.se.astdiff.linkpool;
 
-import com.github.javaparser.Range;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,5 +15,5 @@ public class ControlFlow {
         controlFlowList = new ArrayList<>();
     }
 
-    private Range controlFlowRange;
+    private MyRange controlFlowRange;
 }

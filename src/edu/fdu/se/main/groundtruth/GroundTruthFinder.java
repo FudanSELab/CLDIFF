@@ -1,11 +1,6 @@
 package edu.fdu.se.main.groundtruth;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,15 +10,12 @@ import java.util.Set;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
 import edu.fdu.se.bean.AndroidCacheCommit;
 import edu.fdu.se.bean.AndroidTag;
-import edu.fdu.se.config.ProjectProperties;
-import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.dao.AndroidCacheCommitDAO;
 import edu.fdu.se.dao.AndroidTagDAO;
 import edu.fdu.se.git.JGitCommand;
@@ -45,8 +37,8 @@ public class GroundTruthFinder {
 
 	public GroundTruthFinder() {
 		tagCmd = JGitRepositoryManager.getBaseCommand();
-		this.commitAndTagMap = new HashMap<RevCommit, String>();
-		tagCmd = (JGitTagCommand) RepositoryHelper.getInstance1().myCmd;
+		this.commitAndTagMap = new HashMap<>();
+		tagCmd = RepositoryHelper.getInstance1().myCmd;
 	}
 
 	JGitTagCommand tagCmd;

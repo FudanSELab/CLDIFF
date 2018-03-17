@@ -60,7 +60,6 @@ public class MiningOperation {
             e = this.preprocessedData.getPreviousCu().getLineNumber(item.getBodyDeclaration().getStartPosition()+item.getBodyDeclaration().getLength()-1);
             myRange = new MyRange(s,e,type);
         }
-
         if(item.getBodyDeclaration() instanceof FieldDeclaration){
             ce = new FieldChangeEntity(item,type,myRange);
         }else if(item.getBodyDeclaration() instanceof MethodDeclaration){

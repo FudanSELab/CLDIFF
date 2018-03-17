@@ -1,12 +1,8 @@
 package edu.fdu.se.astdiff.miningactions.util;
 
-import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
-import com.github.javaparser.Position;
-import com.github.javaparser.Range;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import org.eclipse.jdt.core.dom.CompilationUnit;

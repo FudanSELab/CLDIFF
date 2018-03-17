@@ -47,10 +47,6 @@ public class TestFilePre {
         }catch(Exception e){
             e.printStackTrace();
         }
-        // 测试 hashCode 情况
-        // 测试注释删除之后hashCode情况
-        // 测试 methodSignature的情况
-        //
     }
     
     private static void removeAllCommentsOfCompilationUnit(CompilationUnit cu) {

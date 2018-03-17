@@ -188,11 +188,8 @@ public class JavaParserFactory {
 	// System.out.println("replace startA 之后一行 replace 到endA");
 	// System.out.println(e.getBeginA()+" "+e.getEndA());
 	// }
-	//
-	//
 	// }
 	// System.out.println(m.getPatchScript());
-	//
 	// }
 	// }
 	// }

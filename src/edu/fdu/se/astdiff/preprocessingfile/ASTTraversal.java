@@ -101,7 +101,6 @@ public class ASTTraversal {
                 String iddStr;
                 if (idd.modifiers().contains("static")) {
                     iddStr = "static";
-                    System.out.println("staticstatic--------------------");
                 } else {
                     iddStr = "{";
                 }
@@ -121,7 +120,7 @@ public class ASTTraversal {
     private int checkCurrBodies(PreprocessedData compareResult, PreprocessedTempData compareCache, FieldDeclaration fd, String prefix) {
         List<VariableDeclarationFragment> vdList = fd.fragments();
         for (VariableDeclarationFragment vd : vdList) {
-            String key = fd + vd.getName().toString();
+            String key = prefix + vd.getName().toString();
             if (compareCache.prevNodeBodyNameMap.containsKey(key)) {
                 List<BodyDeclarationPair> prevBodyPairs = compareCache.prevNodeBodyNameMap.get(key);
                 assert prevBodyPairs.size() <= 1;
