@@ -1,6 +1,5 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -8,7 +7,6 @@ import java.util.Map.Entry;
 
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.javaparser.JDTParserFactory;
 import org.eclipse.jdt.core.dom.*;
 
@@ -39,59 +37,40 @@ public class FilePairPreDiff {
     private PreprocessedTempData preprocessedTempData;
 
 
-    private void removeAllCommentsOfCompilationUnit(CompilationUnit cu) {
-        List<ASTNode> commentList = cu.getCommentList();
-        PackageDeclaration packageDeclaration = cu.getPackage();
-        if (packageDeclaration != null)
-            packageDeclaration.delete();
-
-        List<ImportDeclaration> imprortss = cu.imports();
-        for (int i = commentList.size() - 1; i >= 0; i--) {
-            commentList.get(i).delete();
+    public void compareTwoFile(String src, String dst, String outputDirName) {
+        ASTTraversal astTraversal = new ASTTraversal();
+        CompilationUnit cuSrc = JDTParserFactory.getCompilationUnit(src);
+        CompilationUnit cuDst = JDTParserFactory.getCompilationUnit(dst);
+        preprocessedData.loadTwoCompilationUnits(cuSrc, cuDst, src, dst);
+        FilePreprocessLog filePreprocessLog = null;
+        if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
+            filePreprocessLog = new FilePreprocessLog(outputDirName);
+            filePreprocessLog.writeFileBeforeProcess(preprocessedData);
         }
-        for (int i = imprortss.size() - 1; i >= 0; i--) {
-            imprortss.get(i).delete();
+        preprocessedTempData.removeAllSrcComments(cuSrc, preprocessedData.srcLines);
+        preprocessedTempData.removeAllDstComments(cuDst, preprocessedData.dstLines);// remove comment
+        BodyDeclaration bodyDeclarationSrc = (BodyDeclaration) cuSrc.types().get(0);
+        BodyDeclaration bodyDeclarationDst = (BodyDeclaration) cuDst.types().get(0);
+        if (!(bodyDeclarationSrc instanceof TypeDeclaration) || !(bodyDeclarationDst instanceof TypeDeclaration)) {
+            return;
         }
-        assert cu.types() != null;
-        assert cu.types().size() == 1;
+        TypeDeclaration mTypeSrc = (TypeDeclaration) bodyDeclarationSrc;
+        TypeDeclaration mTypeDst = (TypeDeclaration) bodyDeclarationDst;
+        astTraversal.traverseSrcTypeDeclarationInit(preprocessedData, preprocessedTempData, mTypeSrc, mTypeSrc.getName().toString() + ".");
+        astTraversal.traverseDstTypeDeclarationCompareSrc(preprocessedData, preprocessedTempData, mTypeDst, mTypeDst.getName().toString() + ".");
+        // 考虑后面的识别method name变化，这里把remove的注释掉
+        iterateVisitingMap(astTraversal);
+        undeleteSignatureChange();
+        preprocessedTempData.removeSrcRemovalList(cuSrc, preprocessedData.srcLines);
+        preprocessedTempData.removeDstRemovalList(cuDst,preprocessedData.dstLines);
+        if (filePreprocessLog != null) {
+            filePreprocessLog.writeFileAfterProcess(preprocessedData);
+        }
     }
 
 
-    public void compareTwoFile(String prev, String curr, String outputDirName) {
-        ASTTraversal astTraversal = new ASTTraversal();
-        CompilationUnit cuPrev = JDTParserFactory.getCompilationUnit(prev);
-        CompilationUnit cuCurr = JDTParserFactory.getCompilationUnit(curr);
-        preprocessedData.previousLineList = JDTParserFactory.getLinesOfFile(prev);
-        preprocessedData.currentLineList = JDTParserFactory.getLinesOfFile(curr);
-        String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
-        File dirFilePrev = new File(rootOutPath + "/prev/" + outputDirName);
-        File dirFileCurr = new File(rootOutPath + "/curr/" + outputDirName);
-        if (!dirFilePrev.exists()) {
-            dirFilePrev.mkdirs();
-        }
-        if (!dirFileCurr.exists()) {
-            dirFileCurr.mkdirs();
-        }
-        if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
-            FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_before_trim.java", preprocessedData.previousLineList);
-            FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_before_trim.java", preprocessedData.currentLineList);
-        }
-        removeAllCommentsOfCompilationUnit(cuPrev);
-        removeAllCommentsOfCompilationUnit(cuCurr);
-        BodyDeclaration bodyDeclarationPrev = (BodyDeclaration) cuPrev.types().get(0);
-        BodyDeclaration bodyDeclarationCurr = (BodyDeclaration) cuCurr.types().get(0);
-        if(!(bodyDeclarationPrev instanceof TypeDeclaration)||!(bodyDeclarationCurr instanceof TypeDeclaration)){
-            this.preprocessedData.setCurrentCu(cuCurr);
-            this.preprocessedData.setPreviousCu(cuPrev);
-            return;
-        }
-        TypeDeclaration mTypePrev = (TypeDeclaration) cuPrev.types().get(0);
-        astTraversal.traverseTypeDeclarationInitPrevData(this.preprocessedData,this.preprocessedTempData,mTypePrev, mTypePrev.getName().toString() + ".");
-//        preprocessedTempData.removeRemovalList();//2
-        TypeDeclaration codMain = (TypeDeclaration) cuCurr.types().get(0);
-        astTraversal.traverseTypeDeclarationCompareCurr(this.preprocessedData,this.preprocessedTempData,codMain, codMain.getName().toString() + ".");
-//        preprocessedTempData.removeRemovalList();//1 考虑后面的识别method name变化，这里把remove的注释掉
-        for (Entry<BodyDeclarationPair, Integer> item : preprocessedTempData.prevNodeVisitingMap.entrySet()) {
+    private void iterateVisitingMap(ASTTraversal astTraversal) {
+        for (Entry<BodyDeclarationPair, Integer> item : preprocessedTempData.srcNodeVisitingMap.entrySet()) {
             BodyDeclarationPair bdp = item.getKey();
             int value = item.getValue();
             BodyDeclaration bd = bdp.getBodyDeclaration();
@@ -102,17 +81,16 @@ public class FilePairPreDiff {
 //                        break;
                     case PreprocessedTempData.BODY_INITIALIZED_VALUE:
                         this.preprocessedData.addBodiesDeleted(bdp);
-                        this.preprocessedTempData.addToRemoveList(bd);
-                        astTraversal.traverseTypeDeclarationSetVisited(this.preprocessedTempData,(TypeDeclaration) bd, bdp.getLocationClassString());
+                        this.preprocessedTempData.addToSrcRemoveList(bd);
+                        astTraversal.traverseTypeDeclarationSetVisited(preprocessedTempData, (TypeDeclaration) bd, bdp.getLocationClassString());
                         break;
                     case PreprocessedTempData.BODY_SAME_REMOVE:
-                        this.preprocessedTempData.addToRemoveList(bd);
+                        this.preprocessedTempData.addToSrcRemoveList(bd);
                         break;
                 }
             }
-
         }
-        for (Entry<BodyDeclarationPair, Integer> item : preprocessedTempData.prevNodeVisitingMap.entrySet()) {
+        for (Entry<BodyDeclarationPair, Integer> item : preprocessedTempData.srcNodeVisitingMap.entrySet()) {
             BodyDeclarationPair bdp = item.getKey();
             int value = item.getValue();
             BodyDeclaration bd = bdp.getBodyDeclaration();
@@ -123,23 +101,14 @@ public class FilePairPreDiff {
                         break;
                     case PreprocessedTempData.BODY_INITIALIZED_VALUE:
                         this.preprocessedData.addBodiesDeleted(bdp);
-                        preprocessedTempData.addToRemoveList(bd);
+                        preprocessedTempData.addToSrcRemoveList(bd);
                         break;
                     case PreprocessedTempData.BODY_SAME_REMOVE:
-                        preprocessedTempData.addToRemoveList(bd);
+                        preprocessedTempData.addToSrcRemoveList(bd);
                         break;
                 }
             }
         }
-        this.undeleteSignatureChange();
-        preprocessedTempData.removeRemovalList();
-        if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
-            FileWriter.writeInAll(dirFilePrev.getAbsolutePath() + "/file_after_trim.java", cuPrev.toString());
-            FileWriter.writeInAll(dirFileCurr.getAbsolutePath() + "/file_after_trim.java", cuCurr.toString());
-        }
-        this.preprocessedData.setCurrentCu(cuCurr);
-        this.preprocessedData.setPreviousCu(cuPrev);
-        return ;
     }
 
     public PreprocessedData getPreprocessedData() {
@@ -148,12 +117,12 @@ public class FilePairPreDiff {
 
     public void undeleteSignatureChange() {
         List<BodyDeclarationPair> addTmp = new ArrayList<>();
-        for (BodyDeclarationPair bdpAdd : this.preprocessedData.getmBodiesAdded()) {
+        for (BodyDeclarationPair bdpAdd : preprocessedData.getmBodiesAdded()) {
             if (bdpAdd.getBodyDeclaration() instanceof MethodDeclaration) {
                 MethodDeclaration md = (MethodDeclaration) bdpAdd.getBodyDeclaration();
                 String methodName = md.getName().toString();
                 List<BodyDeclarationPair> bdpDeleteList = new ArrayList<>();
-                for (BodyDeclarationPair bdpDelete : this.preprocessedData.getmBodiesDeleted()) {
+                for (BodyDeclarationPair bdpDelete : preprocessedData.getmBodiesDeleted()) {
                     if (bdpDelete.getBodyDeclaration() instanceof MethodDeclaration) {
                         MethodDeclaration md2 = (MethodDeclaration) bdpDelete.getBodyDeclaration();
                         String methodName2 = md2.getName().toString();
@@ -164,10 +133,10 @@ public class FilePairPreDiff {
                 }
                 if (bdpDeleteList.size() > 0) {
                     //remove的时候可能会有hashcode相同但是一个是在内部类的情况，但是这种情况很少见，所以暂时先不考虑
-                    this.preprocessedTempData.removalList.remove(bdpAdd.getBodyDeclaration());
+                    preprocessedTempData.dstRemovalNodes.remove(bdpAdd.getBodyDeclaration());
                     addTmp.add(bdpAdd);
                     for (BodyDeclarationPair bdpTmp : bdpDeleteList) {
-                        this.preprocessedTempData.removalList.remove(bdpTmp.getBodyDeclaration());
+                        this.preprocessedTempData.srcRemovalNodes.remove(bdpTmp.getBodyDeclaration());
                         this.preprocessedData.getmBodiesDeleted().remove(bdpTmp);
                     }
                 }
@@ -201,7 +170,6 @@ public class FilePairPreDiff {
         }
         return false;
     }
-
 
 
 }

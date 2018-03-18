@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
 
+import edu.fdu.se.javaparser.JDTParserFactory;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -16,11 +17,23 @@ import java.util.Map;
  */
 public class PreprocessedData {
 
-    protected List<String> currentLineList;
-    protected List<String> previousLineList;
+    protected List<String> dstLineList;
+    protected List<String> srcLineList;
 
-    protected CompilationUnit currentCu;
-    protected CompilationUnit previousCu;
+    protected List<Integer> dstLines;
+
+    protected List<Integer> srcLines;
+
+    protected CompilationUnit dstCu;
+    protected CompilationUnit srcCu;
+
+    public CompilationUnit getDstCu() {
+        return dstCu;
+    }
+
+    public CompilationUnit getSrcCu() {
+        return srcCu;
+    }
 
     /**
      * curr 删除的added的body
@@ -57,13 +70,17 @@ public class PreprocessedData {
         }
     }
 
-    public CompilationUnit getPreviousCu() {
-        return previousCu;
+    public void loadTwoCompilationUnits(CompilationUnit src,CompilationUnit dst,String srcPath,String dstPath){
+        this.srcCu = src;
+        this.srcLineList = JDTParserFactory.getLinesOfFile(srcPath);
+        this.srcLines = JDTParserFactory.getLinesList(srcLineList.size());
+
+        this.dstCu = dst;
+        this.dstLineList = JDTParserFactory.getLinesOfFile(dstPath);
+        this.dstLines = JDTParserFactory.getLinesList(dstLineList.size());
     }
 
-    public CompilationUnit getCurrentCu() {
-        return currentCu;
-    }
+
 
     public void addBodiesAdded(BodyDeclaration bodyDeclaration,String classPrefix){
         this.mBodiesAdded.add(new BodyDeclarationPair(bodyDeclaration,classPrefix));
@@ -75,13 +92,7 @@ public class PreprocessedData {
     }
 
 
-    public void setCurrentCu(CompilationUnit currentCu) {
-        this.currentCu = currentCu;
-    }
 
-    public void setPreviousCu(CompilationUnit previousCu) {
-        this.previousCu = previousCu;
-    }
 
     public void printAddedRemovedBodies(){
         for(BodyDeclarationPair item:this.mBodiesAdded){

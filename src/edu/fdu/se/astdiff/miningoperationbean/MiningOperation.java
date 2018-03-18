@@ -52,12 +52,12 @@ public class MiningOperation {
         int e;
         MyRange myRange = null;
         if(OperationTypeConstants.INSERT == type){
-            s = this.preprocessedData.getCurrentCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
-            e = this.preprocessedData.getCurrentCu().getLineNumber(item.getBodyDeclaration().getStartPosition()+item.getBodyDeclaration().getLength()-1);
+            s = this.preprocessedData.getDstCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
+            e = this.preprocessedData.getDstCu().getLineNumber(item.getBodyDeclaration().getStartPosition()+item.getBodyDeclaration().getLength()-1);
             myRange = new MyRange(s,e,type);
         }else if(OperationTypeConstants.DELETE == type){
-            s = this.preprocessedData.getPreviousCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
-            e = this.preprocessedData.getPreviousCu().getLineNumber(item.getBodyDeclaration().getStartPosition()+item.getBodyDeclaration().getLength()-1);
+            s = this.preprocessedData.getSrcCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
+            e = this.preprocessedData.getSrcCu().getLineNumber(item.getBodyDeclaration().getStartPosition()+item.getBodyDeclaration().getLength()-1);
             myRange = new MyRange(s,e,type);
         }
         if(item.getBodyDeclaration() instanceof FieldDeclaration){

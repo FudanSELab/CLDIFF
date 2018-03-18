@@ -5,7 +5,6 @@ import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
 import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.astdiff.miningactions.ClusterActions;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
-import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.MiningOperation;
 import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
@@ -24,7 +23,7 @@ public class BaseDiffMiner {
         FilePairPreDiff psc = new FilePairPreDiff();
         psc.compareTwoFile(filePrev, fileCurr, output);
         PreprocessedData preData = psc.getPreprocessedData();
-        JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getPreviousCu(),preData.getCurrentCu());
+        JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
         MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);
         GeneratingActionsData actionsData = gen.generate();
         if("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_SRC_DST_TREE))){

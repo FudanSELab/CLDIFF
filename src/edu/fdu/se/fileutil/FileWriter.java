@@ -47,6 +47,26 @@ public class FileWriter {
 		}
 
 	}
+
+	public static void writeInAll(String filePath, List<String> content,List<Integer> lines) {
+		try {
+			final String lineEnd = "\n";
+			FileOutputStream fos = new FileOutputStream(filePath);
+			for(int i =0; i<lines.size();i++){
+				String str = content.get(i);
+				int index = lines.get(i).intValue();
+				if(index>0) {
+					fos.write(str.getBytes());
+					fos.write(lineEnd.getBytes());
+				}
+			}
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 	public static void writeInAll(String filePath,byte[] content){
 		try {

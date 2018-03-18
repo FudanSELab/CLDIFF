@@ -56,34 +56,39 @@ public class JDTParserFactory {
         return null;
     }
 
+    public static List<Integer> getLinesList(int line){
+        List<Integer> mList = new ArrayList<>();
+        for(int i=0;i<line;i++){
+            mList.add(i);
+        }
+        return mList;
+    }
+
 
 
     public static void main(String args[]) {
         try {
 //        CompilationUnit cu = getCompilationUnit("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accounts/AccountManager.java");
-//            CompilationUnit cu = getCompilationUnit("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java");
-//            CompilationUnit cuPrev = getCompilationUnit("C:\\Users\\huangkaifeng\\Desktop\\Test.java");
-//            CompilationUnit cuCurr = getCompilationUnit("C:\\Users\\huangkaifeng\\Desktop\\a\\Test.java");
-//            removeAllCommentsOfCompilationUnit(cuPrev);
-//            removeAllCommentsOfCompilationUnit(cuCurr);
-//            List<ASTNode> list =  cuPrev.types();
-//            List<ASTNode> list2 = cuCurr.types();
-//            TypeDeclaration typeDeclaration = (TypeDeclaration) list.get(0);
-//            TypeDeclaration typeDeclaration2 = (TypeDeclaration) list2.get(0);
-//            List<ASTNode> bodies = typeDeclaration.bodyDeclarations();
-//            List<ASTNode> bodies2 = typeDeclaration2.bodyDeclarations();
-//            for(ASTNode a:bodies){
-//                System.out.println(a.getClass().getSimpleName()+" "+a.hashCode());
-//                System.out.println(a.toString());
-//            }
-//            System.out.print("--------------------------\n");
-//            for(ASTNode a:bodies2){
-//                System.out.println(a.getClass().getSimpleName()+" "+a.hashCode());
-//                System.out.println(a.toString());
-//            }
-            List<String> a = getLinesOfFile("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accounts/AccountManager.java");
-            System.out.print("a");
-
+            CompilationUnit cu = getCompilationUnit("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java");
+            CompilationUnit cuPrev = getCompilationUnit("C:\\Users\\huangkaifeng\\Desktop\\Test.java");
+            CompilationUnit cuCurr = getCompilationUnit("C:\\Users\\huangkaifeng\\Desktop\\a\\Test.java");
+            removeAllCommentsOfCompilationUnit(cuPrev);
+            removeAllCommentsOfCompilationUnit(cuCurr);
+            List<ASTNode> list =  cuPrev.types();
+            List<ASTNode> list2 = cuCurr.types();
+            TypeDeclaration typeDeclaration = (TypeDeclaration) list.get(0);
+            TypeDeclaration typeDeclaration2 = (TypeDeclaration) list2.get(0);
+            List<ASTNode> bodies = typeDeclaration.bodyDeclarations();
+            List<ASTNode> bodies2 = typeDeclaration2.bodyDeclarations();
+            for(ASTNode a:bodies){
+                System.out.println(a.getClass().getSimpleName()+" "+a.hashCode());
+                System.out.println(a.toString());
+            }
+            System.out.print("--------------------------\n");
+            for(ASTNode a:bodies2){
+                System.out.println(a.getClass().getSimpleName()+" "+a.hashCode());
+                System.out.println(a.toString());
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
