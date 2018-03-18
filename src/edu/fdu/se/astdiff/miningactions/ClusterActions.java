@@ -52,12 +52,11 @@ public class ClusterActions {
         List<ChangeEntity> mList = mad.getChangeEntityList();
         for(ChangeEntity c :mList){
             if(c.linkBean ==null){
-                c.linkBean = new LinkBean();
-                //todo
-
+                c.linkBean = new LinkBean(c.clusteredActionBean);
+            }else{
+                //不为空的为预处理add/remove的field 或者method
             }
         }
-
     }
 
 

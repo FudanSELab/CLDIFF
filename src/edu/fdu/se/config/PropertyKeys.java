@@ -29,4 +29,6 @@ public class PropertyKeys {
 	final public static String DEBUG_SRC_DST_TREE = "debug_src_dst_tree";
 
 	final public static String DEBUG_ACTION_OUTPUT = "debug_action_output";
+
+	final public static String DEBUG_CLUSTER_PRE_DIFF_ENTITY = "debug_cluster_pre_diff_entity";
 }
