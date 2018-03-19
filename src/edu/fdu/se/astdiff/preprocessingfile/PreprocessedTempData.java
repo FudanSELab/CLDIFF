@@ -71,19 +71,14 @@ public class PreprocessedTempData {
 
     private void setLinesFlag(List<Integer> lineFlags,int start,int end){
         for(int i =start ;i<=end;i++){
-            lineFlags.set(i - 1, -lineFlags.get(i - 1));
+            if(lineFlags.get(i-1)>0){
+                lineFlags.set(i - 1, -lineFlags.get(i - 1));
+            }
         }
     }
 
     public void removeSrcRemovalList(CompilationUnit cu, List<Integer> lineList) {
         for (ASTNode item : this.srcRemovalNodes) {
-            if(item instanceof BodyDeclaration){
-                BodyDeclaration bd = (BodyDeclaration) item;
-                if(bd.getJavadoc()!=null){
-                    setLinesFlag(lineList,cu.getLineNumber(bd.getJavadoc().getStartPosition()),
-                            cu.getLineNumber(bd.getJavadoc().getStartPosition()+bd.getJavadoc().getLength()));
-                }
-            }
             setLinesFlag(lineList,cu.getLineNumber(item.getStartPosition()),
                     cu.getLineNumber(item.getStartPosition()+item.getLength()));
             item.delete();

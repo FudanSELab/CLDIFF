@@ -37,10 +37,12 @@ public class FilePairPreDiff {
     private PreprocessedTempData preprocessedTempData;
 
 
+
     public void compareTwoFile(String src, String dst, String outputDirName) {
         ASTTraversal astTraversal = new ASTTraversal();
         CompilationUnit cuSrc = JDTParserFactory.getCompilationUnit(src);
         CompilationUnit cuDst = JDTParserFactory.getCompilationUnit(dst);
+
         preprocessedData.loadTwoCompilationUnits(cuSrc, cuDst, src, dst);
         FilePreprocessLog filePreprocessLog = null;
         if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {

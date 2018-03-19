@@ -39,13 +39,14 @@ public class LinkBean {
         Set<String> simpleNameList = new HashSet<>();
         for(Action a:actions){
             Tree tree = (Tree)a.getNode();
-            if(tree.getAstNode().getClass().getSimpleName().equals("SimpleName")|| tree.getAstNode().getClass().getSimpleName().endsWith("Literal")){
+            if(tree.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME|| tree.getAstNode().getClass().getSimpleName().endsWith("Literal")){
                 simpleNameList.add(tree.getLabel());
             }
         }
         for(Action a:actions){
             Tree tree = (Tree)a.getNode();
-            if(tree.getAstNode().getClass().getSimpleName().equals("SimpleName")|| tree.getAstNode().getClass().getSimpleName().endsWith("Literal")){
+            if(tree.getAstNode().getClass().getSimpleName().equals("SimpleName")
+                    || tree.getAstNode().getClass().getSimpleName().endsWith("Literal")){
                 ASTNode methodInvocation = findMethodInvoation(tree);
                 if(methodInvocation == null){
                     continue;
@@ -118,5 +119,40 @@ public class LinkBean {
         result.add(methodNameList);
         result.add(varNameList);
         return result;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        if(this.variables!=null) {
+            sb.append("Variables:[");
+            for (String tmp : this.variables) {
+                sb.append(tmp);
+                sb.append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append("] \n");
+        }
+
+        if(this.methodNames!=null) {
+            sb.append("MethodNames:[");
+            for (String tmp : this.methodNames) {
+                sb.append(tmp);
+                sb.append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append("] \n");
+        }
+
+        if(this.methodDeclarations!=null){
+            sb.append("MethodDeclaration:[");
+            for (String tmp : this.methodDeclarations) {
+                sb.append(tmp);
+                sb.append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append("] \n");
+        }
+        return sb.toString();
     }
 }
