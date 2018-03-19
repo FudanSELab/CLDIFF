@@ -22,19 +22,19 @@ public class BaseDiffMiner {
     protected void doo(String filePrev, String fileCurr, String output) {
         FilePairPreDiff psc = new FilePairPreDiff();
         psc.compareTwoFile(filePrev, fileCurr, output);
-//        PreprocessedData preData = psc.getPreprocessedData();
-//        JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
-//        MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);
-//        GeneratingActionsData actionsData = gen.generate();
-//        if("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_SRC_DST_TREE))){
-//            FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", jtg.getPrettyOldTreeString());
-//            FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", jtg.getPrettyNewTreeString());
-//            SimpleActionPrinter.printMyActions(actionsData.getAllActions());
-//        }
-//        MiningActionData mMiningActionData = new MiningActionData(actionsData, jtg.srcTC, jtg.dstTC, jtg.mapping);
-//        ClusterActions.doCluster(mMiningActionData);
-//        MiningOperation mo = new MiningOperation(preData,mMiningActionData);
-//        mo.printListDiffMiner();
-//        mo.printListPreprocess();
+        PreprocessedData preData = psc.getPreprocessedData();
+        JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
+        MyActionGenerator gen = new MyActionGenerator(jtg.src, jtg.dst, jtg.mapping);
+        GeneratingActionsData actionsData = gen.generate();
+        if("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_SRC_DST_TREE))){
+            FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", jtg.getPrettyOldTreeString());
+            FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", jtg.getPrettyNewTreeString());
+            SimpleActionPrinter.printMyActions(actionsData.getAllActions());
+        }
+        MiningActionData mMiningActionData = new MiningActionData(actionsData, jtg.srcTC, jtg.dstTC, jtg.mapping);
+        ClusterActions.doCluster(mMiningActionData);
+        MiningOperation mo = new MiningOperation(preData,mMiningActionData);
+        mo.printListDiffMiner();
+        mo.printListPreprocess();
     }
 }

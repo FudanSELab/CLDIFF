@@ -50,7 +50,7 @@ public class FilePairPreDiff {
             filePreprocessLog.writeFileBeforeProcess(preprocessedData);
         }
         preprocessedTempData.removeAllSrcComments(cuSrc, preprocessedData.srcLines);
-        preprocessedTempData.removeAllDstComments(cuDst, preprocessedData.dstLines);// remove comment
+        preprocessedTempData.removeAllDstComments(cuDst, preprocessedData.dstLines);
         BodyDeclaration bodyDeclarationSrc = (BodyDeclaration) cuSrc.types().get(0);
         BodyDeclaration bodyDeclarationDst = (BodyDeclaration) cuDst.types().get(0);
         if (!(bodyDeclarationSrc instanceof TypeDeclaration) || !(bodyDeclarationDst instanceof TypeDeclaration)) {
