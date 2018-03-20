@@ -78,9 +78,10 @@ public class DiffMiner extends BaseDiffMiner {
     public static void main(String []args) {
         DiffMiner i = new DiffMiner();
 		i.runBatch();
-
     }
-// 数据流link
-
+//todo 数据流link
+//todo move 复杂操作处理
+//todo 控制流
+    //todo block为move的情况
 
 }

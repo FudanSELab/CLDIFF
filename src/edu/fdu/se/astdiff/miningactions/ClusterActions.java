@@ -25,7 +25,7 @@ public class ClusterActions {
         new ClusterDownUp(Update.class, fpd).doClusterDownUp();
         iterateChangeEntityListSetChangePacket(fpd);
         mergeWrapperAndMoveEntity();
-        generateLinkInfo(fpd);
+//        generateLinkInfo(fpd);
     }
 
 
@@ -48,16 +48,7 @@ public class ClusterActions {
         //todo 优化之一
     }
 
-    public static void generateLinkInfo(MiningActionData mad){
-        List<ChangeEntity> mList = mad.getChangeEntityList();
-        for(ChangeEntity c :mList){
-            if(c.linkBean ==null){
-                c.linkBean = new LinkBean(c.clusteredActionBean);
-            }else{
-                //不为空的为预处理add/remove的field 或者method
-            }
-        }
-    }
+
 
 
 

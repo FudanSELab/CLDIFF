@@ -62,6 +62,7 @@ public class MatchAssert {
             }
             actions.add(tmp);
         }
+        changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);
     }
 }

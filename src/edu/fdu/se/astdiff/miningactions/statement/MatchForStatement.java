@@ -92,6 +92,7 @@ public class MatchForStatement {
             }
             actions.add(tmp);
         }
+        changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);
 
     }
@@ -109,6 +110,7 @@ public class MatchForStatement {
             }
             actions.add(tmp);
         }
+        changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);
     }
 }

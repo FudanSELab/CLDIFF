@@ -59,6 +59,7 @@ public class MatchMethod {
 			}
 			actions.add(tmp);
 		}
+		changeEntity.linkBean.addAppendedActions(newActions);
 		fp.setActionTraversedMap(newActions);
 	}
 

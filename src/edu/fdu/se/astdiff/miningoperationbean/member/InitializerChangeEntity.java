@@ -22,10 +22,6 @@ public class InitializerChangeEntity extends MemberPlusChangeEntity {
     public InitializerChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType,MyRange myRange){
         Initializer iid = (Initializer) bodyDeclarationPair.getBodyDeclaration();
         this.lineRange = myRange;
-//        String isStatic = "";
-//        if(iid.isStatic()){
-//            isStatic = "static ";
-//        }
         this.changeEntity = "Initializer";
         this.location = bodyDeclarationPair.getLocationClassString();
         this.changeType = changeType;

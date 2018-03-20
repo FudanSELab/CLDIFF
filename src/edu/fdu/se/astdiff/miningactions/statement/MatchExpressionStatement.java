@@ -60,6 +60,7 @@ public class MatchExpressionStatement {
 			}
 			actions.add(tmp);
 		}
+		changeEntity.linkBean.addAppendedActions(newActions);
 		fp.setActionTraversedMap(newActions);
 
 	}

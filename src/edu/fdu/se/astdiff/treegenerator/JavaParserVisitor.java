@@ -7,9 +7,11 @@ import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/1/23.
+ *
  */
 public class JavaParserVisitor  extends ASTVisitor {
 
@@ -49,6 +51,19 @@ public class JavaParserVisitor  extends ASTVisitor {
     @Override
     public boolean visit(QualifiedName name) {
         return false;
+    }
+
+    @Override
+    public boolean visit(MethodInvocation methodInvocation){
+//        System.out.println(methodInvocation.toString());
+//        if(methodInvocation.getName()!=null)
+//            System.out.println("Method Name:"+methodInvocation.getName().toString());
+//        if(methodInvocation.getExpression()!=null)
+//            System.out.println("Expression:"+methodInvocation.getExpression().toString()+" "+methodInvocation.getExpression().getClass().getSimpleName());
+//        if(methodInvocation.arguments()!=null)
+//            System.out.println("Arguments:"+methodInvocation.arguments().toString());
+//        System.out.println();
+        return true;
     }
 
 

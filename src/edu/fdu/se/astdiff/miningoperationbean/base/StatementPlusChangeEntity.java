@@ -1,9 +1,12 @@
 package edu.fdu.se.astdiff.miningoperationbean.base;
 
 
+import com.github.gumtreediff.actions.model.Move;
+import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.miningactions.util.DownUpMatchUtil;
 import edu.fdu.se.astdiff.miningactions.util.UpDownMatchUtil;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.MiningOperationBeanUtil;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 
 /**
@@ -15,6 +18,11 @@ public abstract class StatementPlusChangeEntity extends ChangeEntity {
 
     public StatementPlusChangeEntity(ClusteredActionBean bean){
         super(bean);
+        if(bean.curAction instanceof Move){
+            this.linkBean = new LinkBean(bean.curAction);
+        }else {
+            this.linkBean = new LinkBean(bean.actions);
+        }
     }
 
 

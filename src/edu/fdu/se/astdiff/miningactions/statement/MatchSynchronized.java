@@ -59,6 +59,7 @@ public class MatchSynchronized {
 			}
 			actions.add(tmp);
 		}
+		changeEntity.linkBean.addAppendedActions(newActions);
 		fp.setActionTraversedMap(newActions);
 
 	}

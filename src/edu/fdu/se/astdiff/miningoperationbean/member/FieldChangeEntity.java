@@ -1,5 +1,6 @@
 package edu.fdu.se.astdiff.miningoperationbean.member;
 
+import com.github.gumtreediff.actions.model.Move;
 import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
@@ -28,6 +29,11 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
         this.changeEntity = "Field - AnonymousClass";
         this.changeType = bean.changePacket.getOperationType();
         this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) + ChangeEntity.SPLITTER + this.changeEntity +ChangeEntity.SPLITTER;
+        if(bean.curAction instanceof Move){
+            this.linkBean = new LinkBean(bean.curAction);
+        }else {
+            this.linkBean = new LinkBean(bean.actions);
+        }
     }
 
 
@@ -50,7 +56,6 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
         this.outputStringList.add(this.changeEntity);
         List<VariableDeclarationFragment> list = fd.fragments();
         this.linkBean = new LinkBean();
-        this.linkBean.variables = new HashSet<>();
         String res = "";
         for(VariableDeclarationFragment vd:list){
             res += vd+",";

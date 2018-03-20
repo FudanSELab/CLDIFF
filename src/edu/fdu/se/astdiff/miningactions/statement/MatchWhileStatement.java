@@ -92,6 +92,7 @@ public class MatchWhileStatement {
             }
             actions.add(tmp);
         }
+        changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);
     }
 
@@ -108,6 +109,7 @@ public class MatchWhileStatement {
             }
             actions.add(tmp);
         }
+        changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);
 
     }

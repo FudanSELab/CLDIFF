@@ -29,7 +29,6 @@ public abstract class ChangeEntity {
     /**
      * 因为存在复杂的内部类
      * String为A.B.c的形式
-     *
      */
     public String location;
 
@@ -61,7 +60,7 @@ public abstract class ChangeEntity {
 
     @Override
     public String toString(){
-        outputDesc = tabbedToString() + linkBean.toString();
+        outputDesc = tabbedToString()+ linkBean.toString();
         return outputDesc;
     }
 

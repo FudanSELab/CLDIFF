@@ -57,6 +57,7 @@ public class MatchReturnStatement {
             }
             actions.add(tmp);
         }
+        changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);
 
     }

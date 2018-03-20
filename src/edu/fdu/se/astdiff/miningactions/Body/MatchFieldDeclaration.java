@@ -58,6 +58,7 @@ public class MatchFieldDeclaration {
             }
             actions.add(tmp);
         }
+        changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);
         return null;
     }

@@ -119,6 +119,7 @@ public class MatchTry {
 			}
 			actions.add(tmp);
 		}
+		changeEntity.linkBean.addAppendedActions(newActions);
 		fp.setActionTraversedMap(newActions);
 
 	}

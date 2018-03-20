@@ -35,6 +35,6 @@ public class BaseDiffMiner {
         ClusterActions.doCluster(mMiningActionData);
         MiningOperation mo = new MiningOperation(preData,mMiningActionData);
         mo.printListDiffMiner();
-        mo.printListPreprocess();
+//        mo.printListPreprocess();
     }
 }

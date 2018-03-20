@@ -59,6 +59,7 @@ public class MatchVariableDeclarationExpression {
 			}
 			actions.add(tmp);
 		}
+		changeEntity.linkBean.addAppendedActions(newActions);
 		fp.setActionTraversedMap(newActions);
 
 	}

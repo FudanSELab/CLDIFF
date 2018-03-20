@@ -82,6 +82,7 @@ public class MatchSwitch {
 			}
 			actions.add(tmp);
 		}
+		changeEntity.linkBean.addAppendedActions(newActions);
 		fp.setActionTraversedMap(newActions);
 	}
 
@@ -115,6 +116,7 @@ public class MatchSwitch {
 			}
 			actions.add(tmp);
 		}
+		changeEntity.linkBean.addAppendedActions(newActions);
 		fp.setActionTraversedMap(newActions);
 	}
 }
