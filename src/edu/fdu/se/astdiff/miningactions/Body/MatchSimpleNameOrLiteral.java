@@ -36,12 +36,6 @@ public class MatchSimpleNameOrLiteral {
 
         ChangeEntity changeEntity;
         changeEntity = MiningActionData.getEntityByNode(fp, queryFather);
-//        if(changeEntity==null){
-//            Tree moveNode = checkIfMoveActionInUppperNode(queryFather);
-//            if(moveNode!=null)
-//                changeEntity = MiningActionData.getEntityByNode(fp,queryFather);
-//        }
-        // 如果节点往上有move标记那么找到move标记的ChangeEntity
         if (changeEntity == null || (a instanceof Move)) {
             if (a instanceof Insert) {
                 matchNodeNewEntity(fp, a, queryFather,treeType, dstFather);
@@ -55,26 +49,6 @@ public class MatchSimpleNameOrLiteral {
                 matchXXXChangeCurEntity(fp, a, changeEntity, srcFather);
             }
         }
-    }
-
-    private static Tree checkIfMoveActionInUppperNode(ITree node) {
-        Tree parent = (Tree) node;
-        while (!parent.isRoot()) {
-            if (parent.getDoAction() != null) {
-                List<Action> subActions = parent.getDoAction();
-                for (Action tmp : subActions) {
-                    if (tmp instanceof Move) {
-                        return parent;
-                    }
-                }
-            }
-            ITree tree = parent.getParent();
-            if (tree instanceof AbstractTree.FakeTree) {
-                break;
-            }
-            parent = (Tree) parent.getParent();
-        }
-        return null;
     }
 
 
@@ -93,6 +67,10 @@ public class MatchSimpleNameOrLiteral {
                 if (((Tree) a.getNode()).getAstNode().getNodeType() != ASTNode.BLOCK) {
                     MatchMethod.matchMethodSignatureChangeNewEntity(fp, a, queryFather,treeType, traverseFather);
                 }
+                break;
+            case ASTNode.ENUM_DECLARATION:
+            case ASTNode.ENUM_CONSTANT_DECLARATION:
+                MatchEnum.matchEnumDeclarationNewEntity(fp,a,queryFather,treeType,traverseFather);
                 break;
             case ASTNode.IF_STATEMENT:
                 MatchIfElse.matchIfPredicateChangeNewEntity(fp, a, queryFather,treeType, traverseFather);
@@ -154,6 +132,10 @@ public class MatchSimpleNameOrLiteral {
                 if (((Tree) a.getNode()).getAstNode().getNodeType() != ASTNode.BLOCK) {
                     MatchMethod.matchMethodSignatureChangeCurrEntity(fp, a, changeEntity, traverseFather);
                 }
+                break;
+            case ASTNode.ENUM_DECLARATION:
+            case ASTNode.ENUM_CONSTANT_DECLARATION:
+                MatchEnum.matchEnumDeclarationCurrEntity(fp,a,changeEntity,traverseFather);
                 break;
             case ASTNode.IF_STATEMENT:
                 MatchIfElse.matchIfPredicateChangeCurrEntity(fp, a, changeEntity, traverseFather);

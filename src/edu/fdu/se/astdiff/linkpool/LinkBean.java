@@ -151,6 +151,7 @@ public class LinkBean {
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
+        boolean flag = false;
         if(this.variables.size()!=0) {
             sb.append("\nVariables:[");
             for (String tmp : this.variables) {
@@ -158,28 +159,34 @@ public class LinkBean {
                 sb.append(",");
             }
             sb.deleteCharAt(sb.length() - 1);
-            sb.append("] \n");
+            sb.append("]");
+            flag = true;
         }
 
         if(this.methodNames.size()!=0) {
-            sb.append("MethodNames:[");
+            sb.append("\nMethodNames:[");
             for (String tmp : this.methodNames) {
                 sb.append(tmp);
                 sb.append(",");
             }
             sb.deleteCharAt(sb.length() - 1);
-            sb.append("] \n");
+            sb.append("]");
+            flag = true;
         }
 
         if(this.methodDeclarations.size()!=0){
-            sb.append("MethodDeclaration:[");
+            sb.append("\nMethodDeclaration:[");
             for (String tmp : this.methodDeclarations) {
                 sb.append(tmp);
                 sb.append(",");
             }
             sb.deleteCharAt(sb.length() - 1);
-            sb.append("] ");
+            sb.append("]");
+            flag = true;
         }
+//        if(true){
+//            sb.append("\n");
+//        }
         return sb.toString();
     }
 }

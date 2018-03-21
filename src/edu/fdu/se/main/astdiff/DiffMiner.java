@@ -80,8 +80,10 @@ public class DiffMiner extends BaseDiffMiner {
 		i.runBatch();
     }
 //todo 数据流link
-//todo move 复杂操作处理
 //todo 控制流
-    //todo block为move的情况
 
+//todo block为move的情况
+//todo move 复杂操作处理
+
+//todo enum check
 }

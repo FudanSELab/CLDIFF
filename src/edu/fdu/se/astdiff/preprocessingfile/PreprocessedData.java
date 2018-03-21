@@ -4,7 +4,6 @@ package edu.fdu.se.astdiff.preprocessingfile;
 import edu.fdu.se.javaparser.JDTParserFactory;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,24 +48,24 @@ public class PreprocessedData {
      */
     private List<BodyDeclarationPair> mBodiesRetained;
 
-    private Map<String,List<TypeDeclaration>> classOrInterfaceDeclarationsList;
+    private Map<String,List<BodyDeclaration>> classOrInterfaceOrEnum;
 
     public PreprocessedData(){
         mBodiesAdded = new ArrayList<>();
         mBodiesDeleted = new ArrayList<>();
         mBodiesRetained = new ArrayList<>();
-        classOrInterfaceDeclarationsList = new HashMap<>();
+        classOrInterfaceOrEnum = new HashMap<>();
 
     }
 
-    public void addTypeDeclaration(String prefix,TypeDeclaration a){
-        String key = prefix + "." +a.getName().toString();
-        if(this.classOrInterfaceDeclarationsList.containsKey(key)){
-            classOrInterfaceDeclarationsList.get(key).add(a);
+    public void addTypeDeclaration(String prefix, BodyDeclaration a, String name){
+        String key = prefix + "." + name;
+        if(this.classOrInterfaceOrEnum.containsKey(key)){
+            classOrInterfaceOrEnum.get(key).add(a);
         }else{
-            List<TypeDeclaration> mList = new ArrayList<>();
+            List<BodyDeclaration> mList = new ArrayList<>();
             mList.add(a);
-            this.classOrInterfaceDeclarationsList.put(key,mList);
+            this.classOrInterfaceOrEnum.put(key,mList);
         }
     }
 

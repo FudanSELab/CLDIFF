@@ -50,7 +50,8 @@ public class ClusterUpDown extends AbstractCluster{
                 MatchMethod.matchMethdDeclaration(fp, a);
                 break;
             case ASTNode.ENUM_DECLARATION:
-                //// TODO: 2018/2/8
+            case ASTNode.ENUM_CONSTANT_DECLARATION:
+                MatchEnum.matchEnum(fp,a);
                 break;
 
             // 里面
@@ -106,7 +107,6 @@ public class ClusterUpDown extends AbstractCluster{
                     MatchExpressionStatement.matchExpression(fp, a);
                 }
                 break;
-
             case ASTNode.SYNCHRONIZED_STATEMENT:
                 MatchSynchronized.matchSynchronized(fp, a);
                 break;

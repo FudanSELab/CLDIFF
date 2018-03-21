@@ -70,7 +70,7 @@ public class DiffMinerTest extends BaseDiffMiner {
         try{
             for (File currf1 : files) {
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
-                if(currf1.getName().startsWith("DownUpInsertPlusMove.java")) {
+                if(currf1.getName().startsWith("UpDownInsertPlusMove.java")) {
                     System.out.println(currf1.getName());
                     doo(prevFile, currf1.getAbsolutePath(), outputDir);
                     System.out.println();
@@ -87,14 +87,10 @@ public class DiffMinerTest extends BaseDiffMiner {
         DiffMinerTest i = new DiffMinerTest();
 //        i.runBatchTest();
         i.runSingleFilePair();
-
     }
 
     // 1.重构method name问题
     // 2. Insert 加move合并问题  复合情况
 
-
-    // Preprocessing 检查
-    // ASTNode 整合情况 检查
 }
 

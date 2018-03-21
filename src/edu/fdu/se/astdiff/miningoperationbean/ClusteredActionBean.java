@@ -74,13 +74,7 @@ public class ClusteredActionBean {
 
 	@Override
 	public String toString(){
-		//TODO
-//		String operationTypeString = OperationTypeConstants.getKeyNameByValue(type);
-//		String result = "[Pattern] "+ operationTypeString + " " + getOperationEntity()+", [curNodeType] ";
-//		if(!"".equals(fatherNodeType)) {
-//			result += ", [fafafatherNodeType] " + fatherNodeType;
-//		}
-		return null;
+		return this.curAction.getClass().getSimpleName()+" "+this.actions.size();
 	}
 	
 	

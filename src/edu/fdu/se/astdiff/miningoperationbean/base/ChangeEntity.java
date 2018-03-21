@@ -60,7 +60,7 @@ public abstract class ChangeEntity {
 
     @Override
     public String toString(){
-        outputDesc = tabbedToString()+ linkBean.toString();
+        outputDesc = tabbedToString() + linkBean.toString();
         return outputDesc;
     }
 

@@ -42,7 +42,6 @@ public class FilePairPreDiff {
         ASTTraversal astTraversal = new ASTTraversal();
         CompilationUnit cuSrc = JDTParserFactory.getCompilationUnit(src);
         CompilationUnit cuDst = JDTParserFactory.getCompilationUnit(dst);
-
         preprocessedData.loadTwoCompilationUnits(cuSrc, cuDst, src, dst);
         FilePreprocessLog filePreprocessLog = null;
         if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
@@ -69,6 +68,7 @@ public class FilePairPreDiff {
             filePreprocessLog.writeFileAfterProcess(preprocessedData);
         }
     }
+
 
 
     private void iterateVisitingMap(ASTTraversal astTraversal) {

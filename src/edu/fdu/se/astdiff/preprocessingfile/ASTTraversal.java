@@ -16,23 +16,26 @@ public class ASTTraversal {
      * @param prefixClassName class 节点为止的prefix ， root节点的class prefix 为classname
      */
     public void traverseDstTypeDeclarationCompareSrc(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration cod, String prefixClassName) {
-        compareResult.addTypeDeclaration(prefixClassName, cod);
+        compareResult.addTypeDeclaration(prefixClassName, cod, cod.getName().toString());
         List<BodyDeclaration> nodeList = cod.bodyDeclarations();
         for (int i = nodeList.size() - 1; i >= 0; i--) {
             BodyDeclaration node = nodeList.get(i);
             if (node instanceof TypeDeclaration) {
                 TypeDeclaration cod2 = (TypeDeclaration) node;
-                int status = checkDstBodies(compareResult, compareCache, cod2, prefixClassName);
+                int status = checkTypeDeclarationInDst(compareResult, compareCache, cod2, prefixClassName);
                 if (status != 1) {
                     traverseDstTypeDeclarationCompareSrc(compareResult, compareCache, cod2, prefixClassName + cod2.getName().toString() + ".");
                 }
             } else if (node instanceof Initializer || node instanceof MethodDeclaration) {
-                checkDstBodies(compareResult, compareCache, node, prefixClassName);
+                checkMethodDeclarationOrInitializerInDst(compareResult, compareCache, node, prefixClassName);
             } else if (node instanceof FieldDeclaration) {
                 FieldDeclaration fd = (FieldDeclaration) node;
-                checkDstBodies(compareResult, compareCache, fd, prefixClassName);
+                checkFieldDeclarationInDst(compareResult, compareCache, fd, prefixClassName);
             } else if (node instanceof AnnotationTypeDeclaration) {
                 compareCache.addToSrcRemoveList(node);
+            } else if (node instanceof EnumDeclaration) {
+                EnumDeclaration ed = (EnumDeclaration) node;
+                checkEnumDeclarationInDst(compareResult,compareCache,ed,prefixClassName);
             } else {
                 System.err.println("ERROR:" + node.getClass().getSimpleName());
             }
@@ -62,15 +65,10 @@ public class ASTTraversal {
         }
     }
 
-    /**
-     * prev
-     *
-     * @param cod             classname
-     * @param prefixClassName prefix name
-     */
-    public void traverseSrcTypeDeclarationInit(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration cod, String prefixClassName) {
-        compareResult.addTypeDeclaration(prefixClassName, cod);
-        List<BodyDeclaration> nodeList = cod.bodyDeclarations();
+
+    public void traverseSrcTypeDeclarationInit(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration typeDeclaration, String prefixClassName) {
+        List<BodyDeclaration> nodeList = typeDeclaration.bodyDeclarations();
+        compareResult.addTypeDeclaration(prefixClassName, typeDeclaration, typeDeclaration.getName().toString());
         for (int i = nodeList.size() - 1; i >= 0; i--) {
             BodyDeclaration bodyDeclaration = nodeList.get(i);
             BodyDeclarationPair bdp = new BodyDeclarationPair(bodyDeclaration, prefixClassName);
@@ -80,6 +78,11 @@ public class ASTTraversal {
                 String subCodName = prefixClassName + cod2.getName().toString() + ".";
                 compareCache.addToMapBodyName(bdp, subCodName);
                 traverseSrcTypeDeclarationInit(compareResult, compareCache, cod2, subCodName);
+                continue;
+            }
+            if (bodyDeclaration instanceof EnumDeclaration) {
+                EnumDeclaration ed = (EnumDeclaration) bodyDeclaration;
+                compareCache.addToMapBodyName(bdp, prefixClassName + ed.getName().toString());
                 continue;
             }
             if (bodyDeclaration instanceof MethodDeclaration) {
@@ -109,7 +112,9 @@ public class ASTTraversal {
             }
             if (bodyDeclaration instanceof AnnotationTypeDeclaration) {
                 compareCache.addToSrcRemoveList(bodyDeclaration);
+                continue;
             }
+
         }
 
     }
@@ -117,7 +122,7 @@ public class ASTTraversal {
     /**
      * visited
      */
-    private int checkDstBodies(PreprocessedData compareResult, PreprocessedTempData compareCache, FieldDeclaration fd, String prefix) {
+    private int checkFieldDeclarationInDst(PreprocessedData compareResult, PreprocessedTempData compareCache, FieldDeclaration fd, String prefix) {
         List<VariableDeclarationFragment> vdList = fd.fragments();
         for (VariableDeclarationFragment vd : vdList) {
             String key = prefix + vd.getName().toString();
@@ -151,7 +156,7 @@ public class ASTTraversal {
      * @param prefixClassName classname到cod的name前一个为止
      * @return 1 2
      */
-    private int checkDstBodies(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration cod, String prefixClassName) {
+    private int checkTypeDeclarationInDst(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration cod, String prefixClassName) {
         String key = prefixClassName + cod.getName().toString() + ".";
         if (compareCache.srcNodeBodyNameMap.containsKey(key)) {
             List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(key);
@@ -174,10 +179,31 @@ public class ASTTraversal {
         return 3;
     }
 
+    private int checkEnumDeclarationInDst(PreprocessedData compareResult, PreprocessedTempData compareCache, EnumDeclaration ed, String prefixClassName){
+        String key = prefixClassName + ed.getName().toString();
+        if(compareCache.srcNodeBodyNameMap.containsKey(key)){
+            List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(key);
+            assert srcNodeList.size()<=1;
+            BodyDeclarationPair srcBody = srcNodeList.get(0);
+            if(srcBody.getBodyDeclaration().toString().hashCode()== ed.toString().hashCode()
+                    && prefixClassName.hashCode() == srcBody.getLocationClassString().hashCode()){
+                compareCache.addToDstRemoveList(ed);
+                compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
+                return 1;
+            }else{
+                compareCache.setBodySrcNodeMap(srcBody,PreprocessedTempData.BODY_DIFFERENT_RETAIN);
+                return 2;
+            }
+        }
+        compareResult.addBodiesAdded(ed,prefixClassName);
+        compareCache.addToDstRemoveList(ed);
+        return 3;
+    }
+
     /**
      * curr的节点去prev的map里check
      */
-    private int checkDstBodies(PreprocessedData compareResult, PreprocessedTempData compareCache, BodyDeclaration bd, String prefixClassName) {
+    private int checkMethodDeclarationOrInitializerInDst(PreprocessedData compareResult, PreprocessedTempData compareCache, BodyDeclaration bd, String prefixClassName) {
         String methodNameKey = null;
         if (bd instanceof Initializer) {
             Initializer idd = (Initializer) bd;
@@ -187,13 +213,14 @@ public class ASTTraversal {
             } else {
                 methodNameKey += "{";
             }
+        } else if (bd instanceof MethodDeclaration) {
+            MethodDeclaration md = (MethodDeclaration) bd;
+            methodNameKey = prefixClassName + md.getName().toString();
+        } else if (bd instanceof EnumDeclaration) {
+            EnumDeclaration ed = (EnumDeclaration) bd;
+            methodNameKey = prefixClassName + ed.getName().toString();
         } else {
-            if (bd instanceof MethodDeclaration) {
-                MethodDeclaration md = (MethodDeclaration) bd;
-                methodNameKey = prefixClassName + md.getName().toString();
-            } else {
-                System.err.println("---------------------------");
-            }
+            System.err.println("---------------------------");
         }
 
         if (compareCache.srcNodeBodyNameMap.containsKey(methodNameKey)) {
