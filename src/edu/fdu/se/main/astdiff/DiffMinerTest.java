@@ -85,12 +85,10 @@ public class DiffMinerTest extends BaseDiffMiner {
 
     public static void main(String[] args) {
         DiffMinerTest i = new DiffMinerTest();
-//        i.runBatchTest();
-        i.runSingleFilePair();
+        i.runBatchTest();
+//        i.runSingleFilePair();
     }
 
-    // 1.重构method name问题
-    // 2. Insert 加move合并问题  复合情况
 
 }
 

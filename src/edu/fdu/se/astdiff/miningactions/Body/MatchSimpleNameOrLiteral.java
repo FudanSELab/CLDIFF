@@ -36,6 +36,9 @@ public class MatchSimpleNameOrLiteral {
 
         ChangeEntity changeEntity;
         changeEntity = MiningActionData.getEntityByNode(fp, queryFather);
+        if(changeEntity!=null &&changeEntity.clusteredActionBean.curAction instanceof Move){
+            changeEntity = null;
+        }
         if (changeEntity == null || (a instanceof Move)) {
             if (a instanceof Insert) {
                 matchNodeNewEntity(fp, a, queryFather,treeType, dstFather);

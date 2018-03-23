@@ -84,6 +84,7 @@ public class DiffMiner extends BaseDiffMiner {
 
 //todo block为move的情况
 //todo move 复杂操作处理
+    // 2. Insert 加move合并问题  复合情况
 
-//todo enum check
+//todo enum check 50%
 }
