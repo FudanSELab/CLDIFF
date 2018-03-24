@@ -63,9 +63,6 @@ public class MiningActionData {
 
 
 
-	/**
-	 * todo 增加之后 duplicate的outer relation check
-	 */
 	public void addOneChangeEntity(ChangeEntity changeEntity){
 		this.mChangeEntityList.add(changeEntity);
 
@@ -86,9 +83,6 @@ public class MiningActionData {
 	public List<ChangeEntity> getChangeEntityList() {
 		return this.mChangeEntityList;
 	}
-
-
-
 
 	public ITree getMappedSrcOfDstNode(ITree dst){
 		return this.mMapping.getSrc(dst);

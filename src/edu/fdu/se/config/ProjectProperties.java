@@ -11,7 +11,7 @@ import java.util.Properties;
 public class ProjectProperties {
 	private Map<String,String> kvMap;
 	private ProjectProperties(){
-		kvMap = new HashMap<String,String>();
+		kvMap = new HashMap<>();
 		Properties prop = new Properties();     
         try{
             InputStream in = new BufferedInputStream (new FileInputStream("resource/config.properties"));

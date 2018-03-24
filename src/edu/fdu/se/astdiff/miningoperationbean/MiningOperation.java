@@ -3,6 +3,7 @@ package edu.fdu.se.astdiff.miningoperationbean;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.container.LayeredChangeEntityContainer;
 import edu.fdu.se.astdiff.miningoperationbean.member.*;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
@@ -19,23 +20,31 @@ public class MiningOperation {
 
     private PreprocessedData preprocessedData;
 
-    private List<ChangeEntity> mChangeEntityAll;
+    private List<ChangeEntity> mChangeEntityPreDiff;
+
+    private List<ChangeEntity> mChangeEntityGumTreePlus;
+
+    private LayeredChangeEntityContainer entityContainer;
+
 
     private MiningActionData mad;
     public MiningOperation(PreprocessedData pd, MiningActionData mad){
         this.preprocessedData = pd;
-        this.mChangeEntityAll = new ArrayList<>();
+        this.mChangeEntityPreDiff = new ArrayList<>();
+        this.mChangeEntityGumTreePlus = mad.getChangeEntityList();
+        this.entityContainer = new LayeredChangeEntityContainer();
+        this.mad = mad;
+        //todo check logically
         initPreprocessChangeEntityList();
         initDiffMinerChangeEntityList();
-        this.mad = mad;
     }
 
 
     public void initDiffMinerChangeEntityList(){
-
+        for(ChangeEntity ce : this.mChangeEntityGumTreePlus) {
+            this.entityContainer.addGumTreePlus(ce,this.mad);
+        }
     }
-
-
 
 
     public void initPreprocessChangeEntityList(){
@@ -43,7 +52,7 @@ public class MiningOperation {
         this.preprocessedData.getmBodiesDeleted().forEach(a-> addOneBody(a,OperationTypeConstants.DELETE));
     }
 
-    public void addOneBody(BodyDeclarationPair item,int type){
+    private void addOneBody(BodyDeclarationPair item,int type){
         ChangeEntity ce = null;
         int s;
         int e;
@@ -69,20 +78,21 @@ public class MiningOperation {
             ce = new EnumDeclarationEntity(item,type,myRange);
         }
         if(ce!=null){
-            this.mChangeEntityAll.add(ce);
+            this.mChangeEntityPreDiff.add(ce);
         }
+        this.entityContainer.addPreDiffChangeEntity(ce,item,type);
     }
 
 
 
     public void printListDiffMiner() {
-        List<ChangeEntity> mChangeEntityList =  this.mad.getChangeEntityList();
+        List<ChangeEntity> mChangeEntityList =  this.mChangeEntityGumTreePlus;
         mChangeEntityList.forEach(a -> System.out.println(a.toString()));
     }
 
 
     public void printListPreprocess() {
-        List<ChangeEntity> mChangeEntityList =  this.mChangeEntityAll;
+        List<ChangeEntity> mChangeEntityList =  this.mChangeEntityPreDiff;
         mChangeEntityList.forEach(a -> System.out.println(a.toString()));
     }
 

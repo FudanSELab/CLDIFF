@@ -24,6 +24,12 @@ public abstract class ChangeEntity {
     public int changeType;
     public String changeEntity;
 
+    public int entityGeneratedStage;
+
+    public static final int STAGE_PREDIFF = 0;
+    public static final int STAGE_GUMTREE_UD = 1;
+    public static final int STAGE_GUMTREE_DUD = 2;
+
     public String outputDesc;
     public List<String> outputStringList = new ArrayList<>();
     /**

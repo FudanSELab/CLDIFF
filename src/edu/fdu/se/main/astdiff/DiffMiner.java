@@ -81,10 +81,19 @@ public class DiffMiner extends BaseDiffMiner {
     }
 //todo 数据流link
 //todo 控制流
-
 //todo block为move的情况
 //todo move 复杂操作处理
-    // 2. Insert 加move合并问题  复合情况
-
 //todo enum check 50%
+
+//  Key -> Value
+//  BodyDeclaration -> List<ChangeEntity> 发生在这个BodyDeclaration里面的change entity
+//  BodyDeclaration [rangeA,rangeB]  -> List<ChangeEntity>
+
+    // change entity 为member,找往上的class declaration 节点 的bodyDeclaration
+    // change entity 为statement,往上找method declaration 节点 bodyDeclaration
+    // change entity 为class,往上找
+
+    // 预处理的change entity : add member / remove member 都可以放入以src 的BodyDeclaration 不考虑行号
+    // gumtree 拓展识别的change entity add member / remove member  add stmt remove stmt
+    // add节点UpDown 往上找到mapping的节点,src的range 其他则
 }
