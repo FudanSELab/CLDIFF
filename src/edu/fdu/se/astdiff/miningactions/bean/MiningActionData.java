@@ -34,12 +34,6 @@ public class MiningActionData {
 	protected TreeContext mDstTree;
 	protected TreeContext mSrcTree;
 
-
-
-
-
-
-
 	protected List<ChangeEntity> mChangeEntityList;
 
 

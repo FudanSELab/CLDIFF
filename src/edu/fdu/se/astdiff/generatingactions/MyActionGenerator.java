@@ -31,6 +31,7 @@ import com.github.gumtreediff.tree.Tree;
 
 import com.github.gumtreediff.tree.TreeUtils;
 import edu.fdu.se.astdiff.miningactions.util.MyTreeUtil;
+import edu.fdu.se.astdiff.treegenerator.JavaParserTreeGenerator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
@@ -76,6 +77,25 @@ public class MyActionGenerator {
 
         origMappings = new MappingStore();
         for (Mapping m: mappings)
+            this.origMappings.link(copySrcTrees.get(m.getFirst().getId()), m.getSecond());
+        this.newMappings = origMappings.copy();
+        myAgbData = new GeneratingActionsData();
+    }
+
+    public MyActionGenerator(JavaParserTreeGenerator generator) {
+        this.origSrc = generator.src;
+        this.copySrc = this.origSrc.deepCopy();
+        this.origDst = generator.dst;
+
+        origSrcTrees = new TIntObjectHashMap<>();
+        for (ITree t: origSrc.getTrees())
+            origSrcTrees.put(t.getId(), t);
+        copySrcTrees = new TIntObjectHashMap<>();
+        for (ITree t: copySrc.getTrees())
+            copySrcTrees.put(t.getId(), t);
+
+        origMappings = new MappingStore();
+        for (Mapping m: generator.mapping)
             this.origMappings.link(copySrcTrees.get(m.getFirst().getId()), m.getSecond());
         this.newMappings = origMappings.copy();
         myAgbData = new GeneratingActionsData();

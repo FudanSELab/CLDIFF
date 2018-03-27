@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.miningoperationbean.container;
+package edu.fdu.se.astdiff.humanreadableoutput;
 
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.matchers.MappingStore;

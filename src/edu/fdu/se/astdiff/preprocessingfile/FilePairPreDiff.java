@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 
+import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.javaparser.JDTParserFactory;
@@ -31,11 +32,11 @@ public class FilePairPreDiff {
     public FilePairPreDiff() {
         preprocessedData = new PreprocessedData();
         preprocessedTempData = new PreprocessedTempData();
+
     }
 
     private PreprocessedData preprocessedData;
     private PreprocessedTempData preprocessedTempData;
-
 
 
     public void compareTwoFile(String src, String dst, String outputDirName) {
@@ -63,12 +64,12 @@ public class FilePairPreDiff {
         iterateVisitingMap(astTraversal);
         undeleteSignatureChange();
         preprocessedTempData.removeSrcRemovalList(cuSrc, preprocessedData.srcLines);
-        preprocessedTempData.removeDstRemovalList(cuDst,preprocessedData.dstLines);
+        preprocessedTempData.removeDstRemovalList(cuDst, preprocessedData.dstLines);
+        iterateVisitingMap2LoadContainerMap();
         if (filePreprocessLog != null) {
             filePreprocessLog.writeFileAfterProcess(preprocessedData);
         }
     }
-
 
 
     private void iterateVisitingMap(ASTTraversal astTraversal) {
@@ -109,6 +110,22 @@ public class FilePairPreDiff {
                         preprocessedTempData.addToSrcRemoveList(bd);
                         break;
                 }
+            }
+        }
+    }
+
+    private void iterateVisitingMap2LoadContainerMap() {
+        for (Entry<BodyDeclarationPair, Integer> item : preprocessedTempData.srcNodeVisitingMap.entrySet()) {
+            BodyDeclarationPair bdp = item.getKey();
+            int value = item.getValue();
+            switch (value) {
+                case PreprocessedTempData.BODY_DIFFERENT_RETAIN:
+                    this.preprocessedData.entityContainer.addKey(bdp);
+                    break;
+                case PreprocessedTempData.BODY_FATHERNODE_REMOVE:
+                case PreprocessedTempData.BODY_INITIALIZED_VALUE:
+                case PreprocessedTempData.BODY_SAME_REMOVE:
+                    break;
             }
         }
     }

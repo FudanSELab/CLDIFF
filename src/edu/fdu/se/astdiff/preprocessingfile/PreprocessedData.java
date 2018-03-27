@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
 
+import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
 import edu.fdu.se.javaparser.JDTParserFactory;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -56,7 +57,12 @@ public class PreprocessedData {
         mBodiesRetained = new ArrayList<>();
         classOrInterfaceOrEnum = new HashMap<>();
 
+        entityContainer = new LayeredChangeEntityContainer();
+
+
     }
+    public LayeredChangeEntityContainer entityContainer;
+
 
     public void addTypeDeclaration(String prefix, BodyDeclaration a, String name){
         String key = prefix + "." + name;

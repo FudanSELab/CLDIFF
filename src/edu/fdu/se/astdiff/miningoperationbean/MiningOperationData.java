@@ -3,7 +3,7 @@ package edu.fdu.se.astdiff.miningoperationbean;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.container.LayeredChangeEntityContainer;
+import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
 import edu.fdu.se.astdiff.miningoperationbean.member.*;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
@@ -16,19 +16,19 @@ import java.util.List;
  * Created by huangkaifeng on 2018/1/13.
  *
  */
-public class MiningOperation {
+public class MiningOperationData {
 
     private PreprocessedData preprocessedData;
 
-    private List<ChangeEntity> mChangeEntityPreDiff;
+    public List<ChangeEntity> mChangeEntityPreDiff;
 
-    private List<ChangeEntity> mChangeEntityGumTreePlus;
+    public List<ChangeEntity> mChangeEntityGumTreePlus;
 
     private LayeredChangeEntityContainer entityContainer;
 
 
     private MiningActionData mad;
-    public MiningOperation(PreprocessedData pd, MiningActionData mad){
+    public MiningOperationData(PreprocessedData pd, MiningActionData mad){
         this.preprocessedData = pd;
         this.mChangeEntityPreDiff = new ArrayList<>();
         this.mChangeEntityGumTreePlus = mad.getChangeEntityList();
@@ -83,6 +83,11 @@ public class MiningOperation {
         this.entityContainer.addPreDiffChangeEntity(ce,item,type);
     }
 
+
+    public void printStage1ChangeEntity(){
+        printListDiffMiner();
+        printListDiffMiner();
+    }
 
 
     public void printListDiffMiner() {
