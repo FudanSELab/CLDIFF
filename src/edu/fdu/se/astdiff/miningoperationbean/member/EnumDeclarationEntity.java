@@ -26,11 +26,11 @@ public class EnumDeclarationEntity extends MemberPlusChangeEntity{
         this.lineRange = myRange;
         this.changeEntity = enumStr;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
-        this.outputStringList.add("PRE_DIFF");
-        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
-        this.outputStringList.add(this.changeEntity);
-        this.outputStringList.add(ed.getName().toString());
+        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
+        this.stageIIOutput.add("PRE_DIFF");
+        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(changeType));
+        this.stageIIOutput.add(this.changeEntity);
+        this.stageIIOutput.add(ed.getName().toString());
         this.linkBean = new LinkBean();
 //        this.linkBean.methodDeclarations = MiningOperationBeanUtil.getNames(ed.bodyDeclarations());
 //        this.linkBean.methodDeclarations.add(ed.getName().toString());

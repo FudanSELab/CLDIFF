@@ -25,10 +25,10 @@ public class InitializerChangeEntity extends MemberPlusChangeEntity {
         this.changeEntity = "Initializer";
         this.location = bodyDeclarationPair.getLocationClassString();
         this.changeType = changeType;
-        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
-        this.outputStringList.add("PRE_DIFF");
-        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
-        this.outputStringList.add(this.changeEntity);
+        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
+        this.stageIIOutput.add("PRE_DIFF");
+        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(changeType));
+        this.stageIIOutput.add(this.changeEntity);
         this.linkBean = new LinkBean();
 
     }

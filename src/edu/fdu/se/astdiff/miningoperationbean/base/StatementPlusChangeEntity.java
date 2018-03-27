@@ -6,7 +6,6 @@ import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.miningactions.util.DownUpMatchUtil;
 import edu.fdu.se.astdiff.miningactions.util.UpDownMatchUtil;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.MiningOperationBeanUtil;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 
 /**
@@ -34,13 +33,13 @@ public abstract class StatementPlusChangeEntity extends ChangeEntity {
         }
         this.changeType = this.clusteredActionBean.changePacket.getOperationType();
         if(this.changeType == OperationTypeConstants.MULTIPLE_EDIT){
-            this.outputStringList.add(this.clusteredActionBean.changePacket.multiEditStr);
+            this.stageIIOutput.add(this.clusteredActionBean.changePacket.multiEditStr);
         }else{
-            this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(this.changeType));
+            this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(this.changeType));
         }
-        this.outputStringList.add(this.changeEntity);
-        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
-        this.outputStringList.add(this.lineRangeStr);
+        this.stageIIOutput.add(this.changeEntity);
+        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
+        this.stageIIOutput.add(this.lineRangeStr);
 
     }
 

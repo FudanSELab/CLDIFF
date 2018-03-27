@@ -31,7 +31,7 @@ public abstract class ChangeEntity {
     public static final int STAGE_GUMTREE_DUD = 2;
 
     public String outputDesc;
-    public List<String> outputStringList = new ArrayList<>();
+    public List<String> stageIIOutput = new ArrayList<>();
     /**
      * 因为存在复杂的内部类
      * String为A.B.c的形式
@@ -47,17 +47,17 @@ public abstract class ChangeEntity {
         this.lineRange = bean.range;
         this.lineRangeStr ="("+this.lineRange.startLineNo +","+ this.lineRange.endLineNo+")";
         this.changeType = bean.changePacket.getOperationType();
-        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationEntity()));
+        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationEntity()));
         if(this.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
-            this.outputStringList.add("UP-DOWN-PHASE");
+            this.stageIIOutput.add("UP-DOWN-PHASE");
         }else{
-            this.outputStringList.add("DOWN-UP-PHASE");
+            this.stageIIOutput.add("DOWN-UP-PHASE");
         }
     }
 
     public String tabbedToString(){
         StringBuffer sb = new StringBuffer();
-        for(String tmp:this.outputStringList){
+        for(String tmp:this.stageIIOutput){
             sb.append(tmp);
             sb.append(ChangeEntity.SPLITTER);
         }

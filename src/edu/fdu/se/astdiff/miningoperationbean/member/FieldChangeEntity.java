@@ -11,7 +11,6 @@ import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -50,10 +49,10 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
 //        if(fd.isStatic()){
 //            isStatic = "static ";
 //        }
-        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
-        this.outputStringList.add("PRE_DIFF");
-        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
-        this.outputStringList.add(this.changeEntity);
+        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
+        this.stageIIOutput.add("PRE_DIFF");
+        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(changeType));
+        this.stageIIOutput.add(this.changeEntity);
         List<VariableDeclarationFragment> list = fd.fragments();
         this.linkBean = new LinkBean();
         String res = "";
@@ -61,7 +60,7 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
             res += vd+",";
             this.linkBean.variables.add(vd.getName().toString());
         }
-        this.outputStringList.add(fieldDeclarationPair.getLocationClassString() + res);
+        this.stageIIOutput.add(fieldDeclarationPair.getLocationClassString() + res);
 
     }
 

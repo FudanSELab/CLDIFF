@@ -11,8 +11,6 @@ import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import edu.fdu.se.javaparser.JDTParserUtil;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
-import java.util.HashSet;
-
 /**
  * Created by huangkaifeng on 2018/1/22.
  */
@@ -37,11 +35,11 @@ public class MethodChangeEntity extends MemberPlusChangeEntity {
         this.changeEntity = "Method";
         this.changeType = changeType;
         this.location = bodyDeclarationPair.getLocationClassString();
-        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
-        this.outputStringList.add("PRE_DIFF");
-        this.outputStringList.add(OperationTypeConstants.getKeyNameByValue(changeType));
-        this.outputStringList.add(this.changeEntity);
-        this.outputStringList.add(JDTParserUtil.getDeclarationAsString(md));
+        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
+        this.stageIIOutput.add("PRE_DIFF");
+        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(changeType));
+        this.stageIIOutput.add(this.changeEntity);
+        this.stageIIOutput.add(JDTParserUtil.getDeclarationAsString(md));
         this.linkBean = new LinkBean();
         this.linkBean.methodDeclarations.add(md.getName().toString());
     }

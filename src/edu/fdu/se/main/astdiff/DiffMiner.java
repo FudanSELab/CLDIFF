@@ -42,7 +42,6 @@ public class DiffMiner extends BaseDiffMiner {
         }
         return fileSubPathList;
 
-
     }
 
     private List<AndroidSDKJavaFile> prevList;
@@ -83,6 +82,7 @@ public class DiffMiner extends BaseDiffMiner {
 //todo 控制流
 //todo block为move的情况
 //todo move 复杂操作处理
+
 //todo enum check 50%
 
 //  Key -> Value
