@@ -5,6 +5,7 @@ import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import org.eclipse.jdt.core.dom.Initializer;
@@ -20,11 +21,9 @@ public class InitializerChangeEntity extends MemberPlusChangeEntity {
     }
 
     public InitializerChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType,MyRange myRange){
+        super(bodyDeclarationPair.getLocationClassString(),changeType,myRange);
         Initializer iid = (Initializer) bodyDeclarationPair.getBodyDeclaration();
-        this.lineRange = myRange;
         this.changeEntity = "Initializer";
-        this.location = bodyDeclarationPair.getLocationClassString();
-        this.changeType = changeType;
         this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
         this.stageIIOutput.add("PRE_DIFF");
         this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(changeType));

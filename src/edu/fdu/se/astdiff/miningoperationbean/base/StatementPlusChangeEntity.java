@@ -24,7 +24,6 @@ public abstract class StatementPlusChangeEntity extends ChangeEntity {
         }
     }
 
-
     public void appendListString(){
         if(this.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
             UpDownMatchUtil.setChangePacket(this.clusteredActionBean);

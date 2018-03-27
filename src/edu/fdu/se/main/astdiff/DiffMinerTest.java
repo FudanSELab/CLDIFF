@@ -39,7 +39,7 @@ public class DiffMinerTest extends BaseDiffMiner {
         SimpleActionPrinter.printMyActions(data.getAllActions());
         // package 2
         System.out.println("Step2 Begin to cluster actions:-------------------");
-        MiningActionData mMiningActionData = new MiningActionData(data, his.srcTC, his.dstTC, his.mapping);
+        MiningActionData mMiningActionData = new MiningActionData(data,his);
         ClusterActions.doCluster(mMiningActionData);
         // package 3
         List<ChangeEntity> mlist = mMiningActionData.getChangeEntityList();

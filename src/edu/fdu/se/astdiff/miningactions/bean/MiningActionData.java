@@ -10,19 +10,33 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
+import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
+import edu.fdu.se.astdiff.treegenerator.JavaParserTreeGenerator;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 public class MiningActionData {
 
-	public MiningActionData(GeneratingActionsData agb, TreeContext src, TreeContext dst, MappingStore mapping) {
+	public MiningActionData(GeneratingActionsData agb, JavaParserTreeGenerator treeGenerator){
+
 		this.mGeneratingActionsData = agb;
-		this.mMapping = mapping;
-		this.mDstTree = dst;
-		this.mSrcTree = src;
+		this.mMapping = treeGenerator.mapping;
+		this.mDstTree = treeGenerator.dstTC;
+		this.mSrcTree = treeGenerator.srcTC;
+		this.mGeneratingActionsData.generateActionMap();
+		this.mChangeEntityList = new ArrayList<>();
+	}
+
+
+	public MiningActionData(GeneratingActionsData agb, GumTreeDiffParser treeGenerator){
+
+		this.mGeneratingActionsData = agb;
+		this.mMapping = treeGenerator.mapping;
+		this.mDstTree = treeGenerator.dstTC;
+		this.mSrcTree = treeGenerator.srcTC;
 		this.mGeneratingActionsData.generateActionMap();
 		this.mChangeEntityList = new ArrayList<>();
 	}
@@ -34,7 +48,7 @@ public class MiningActionData {
 	protected TreeContext mDstTree;
 	protected TreeContext mSrcTree;
 
-	protected List<ChangeEntity> mChangeEntityList;
+	public List<ChangeEntity> mChangeEntityList;
 
 
 	public void setActionTraversedMap(List<Action> mList) {

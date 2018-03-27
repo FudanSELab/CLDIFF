@@ -20,6 +20,8 @@ import org.eclipse.jdt.core.dom.*;
  * 删除remove method
  * 删除内部类中的add / remove method
  * 保留 remove field 和add field 因为需要识别是否是refactor
+ *
+ * prefx 为 method field等所属的class，如果是内部类A, 那么prfix写到X.X.X.A.为止
  */
 public class FilePairPreDiff {
 
@@ -60,12 +62,13 @@ public class FilePairPreDiff {
         TypeDeclaration mTypeDst = (TypeDeclaration) bodyDeclarationDst;
         astTraversal.traverseSrcTypeDeclarationInit(preprocessedData, preprocessedTempData, mTypeSrc, mTypeSrc.getName().toString() + ".");
         astTraversal.traverseDstTypeDeclarationCompareSrc(preprocessedData, preprocessedTempData, mTypeDst, mTypeDst.getName().toString() + ".");
-        // 考虑后面的识别method name变化，这里把remove的注释掉
+        // 考虑后面的识别 method name变化，这里把remove的注释掉
         iterateVisitingMap(astTraversal);
         undeleteSignatureChange();
         preprocessedTempData.removeSrcRemovalList(cuSrc, preprocessedData.srcLines);
         preprocessedTempData.removeDstRemovalList(cuDst, preprocessedData.dstLines);
         iterateVisitingMap2LoadContainerMap();
+
         if (filePreprocessLog != null) {
             filePreprocessLog.writeFileAfterProcess(preprocessedData);
         }
@@ -128,6 +131,7 @@ public class FilePairPreDiff {
                     break;
             }
         }
+        this.preprocessedData.entityContainer.sortKeys();
     }
 
     public PreprocessedData getPreprocessedData() {

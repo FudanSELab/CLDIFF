@@ -20,34 +20,31 @@ public class MiningOperationData {
 
     private PreprocessedData preprocessedData;
 
-    public List<ChangeEntity> mChangeEntityPreDiff;
+    public List<ChangeEntity> mChangeEntityAll;
 
-    public List<ChangeEntity> mChangeEntityGumTreePlus;
 
     private LayeredChangeEntityContainer entityContainer;
 
 
     private MiningActionData mad;
+
+
     public MiningOperationData(PreprocessedData pd, MiningActionData mad){
         this.preprocessedData = pd;
-        this.mChangeEntityPreDiff = new ArrayList<>();
-        this.mChangeEntityGumTreePlus = mad.getChangeEntityList();
+        this.mChangeEntityAll = mad.getChangeEntityList();
         this.entityContainer = new LayeredChangeEntityContainer();
         this.mad = mad;
-        //todo check logically
-        initPreprocessChangeEntityList();
-        initDiffMinerChangeEntityList();
     }
 
 
-    public void initDiffMinerChangeEntityList(){
-        for(ChangeEntity ce : this.mChangeEntityGumTreePlus) {
-            this.entityContainer.addGumTreePlus(ce,this.mad);
+
+
+    public void initContainerEntityData(){
+        for(ChangeEntity ce : this.mChangeEntityAll) {
+            if(ce.entityGeneratedStage != ChangeEntity.STAGE_PREDIFF) {
+                this.entityContainer.addGumTreePlus(ce, this.mad);
+            }
         }
-    }
-
-
-    public void initPreprocessChangeEntityList(){
         this.preprocessedData.getmBodiesAdded().forEach(a-> addOneBody(a,OperationTypeConstants.INSERT));
         this.preprocessedData.getmBodiesDeleted().forEach(a-> addOneBody(a,OperationTypeConstants.DELETE));
     }
@@ -78,27 +75,18 @@ public class MiningOperationData {
             ce = new EnumDeclarationEntity(item,type,myRange);
         }
         if(ce!=null){
-            this.mChangeEntityPreDiff.add(ce);
+            this.entityContainer.addPreDiffChangeEntity(ce);
         }
-        this.entityContainer.addPreDiffChangeEntity(ce,item,type);
+
     }
 
 
     public void printStage1ChangeEntity(){
-        printListDiffMiner();
-        printListDiffMiner();
-    }
-
-
-    public void printListDiffMiner() {
-        List<ChangeEntity> mChangeEntityList =  this.mChangeEntityGumTreePlus;
-        mChangeEntityList.forEach(a -> System.out.println(a.toString()));
-    }
-
-
-    public void printListPreprocess() {
-        List<ChangeEntity> mChangeEntityList =  this.mChangeEntityPreDiff;
-        mChangeEntityList.forEach(a -> System.out.println(a.toString()));
+        this.mChangeEntityAll.forEach(a->{
+            if(a.entityGeneratedStage!=ChangeEntity.STAGE_PREDIFF){
+                System.out.println(a.toString());
+            }
+        });
     }
 
 

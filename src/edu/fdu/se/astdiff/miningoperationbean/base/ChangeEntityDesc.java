@@ -6,8 +6,6 @@ package edu.fdu.se.astdiff.miningoperationbean.base;
  */
 public class ChangeEntityDesc {
 
-
-
     public static final String OPT_INSERT = "Insert";
 
     public static final String OPT_MOVE = "Move";

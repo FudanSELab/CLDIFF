@@ -23,7 +23,6 @@ public abstract class ChangeEntity {
 
     public int changeType;
     public String changeEntity;
-
     public int entityGeneratedStage;
 
     public static final int STAGE_PREDIFF = 0;
@@ -43,6 +42,11 @@ public abstract class ChangeEntity {
     }
 
     public ChangeEntity(ClusteredActionBean bean){
+        if(bean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
+            this.entityGeneratedStage = ChangeEntity.STAGE_GUMTREE_UD;
+        }else{
+            this.entityGeneratedStage = ChangeEntity.STAGE_GUMTREE_DUD;
+        }
         this.clusteredActionBean = bean;
         this.lineRange = bean.range;
         this.lineRangeStr ="("+this.lineRange.startLineNo +","+ this.lineRange.endLineNo+")";

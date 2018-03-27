@@ -40,15 +40,9 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
      * 预处理识别的
      */
     public FieldChangeEntity(BodyDeclarationPair fieldDeclarationPair, int changeType,MyRange myRange){
+        super(fieldDeclarationPair.getLocationClassString(),changeType,myRange);
         FieldDeclaration fd = (FieldDeclaration) fieldDeclarationPair.getBodyDeclaration();
-        this.lineRange = myRange;
-        this.location = fieldDeclarationPair.getLocationClassString();
         this.changeEntity = "Field";
-        this.changeType = changeType;
-//        String isStatic = "";
-//        if(fd.isStatic()){
-//            isStatic = "static ";
-//        }
         this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
         this.stageIIOutput.add("PRE_DIFF");
         this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(changeType));

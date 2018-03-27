@@ -1,7 +1,6 @@
 package edu.fdu.se.astdiff.humanreadableoutput;
 
 import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
@@ -10,10 +9,8 @@ import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Created by huangkaifeng on 3/24/18.
@@ -27,6 +24,18 @@ public class LayeredChangeEntityContainer {
 
     public LayeredChangeEntityContainer(){
         this.layerMap = new HashMap<>();
+        this.keyIndex = new ArrayList<>();
+    }
+
+    public void sortKeys(){
+        List<Entry<BodyDeclarationPair,List<ChangeEntity>>> mList = new ArrayList<>(layerMap.entrySet());
+        mList.sort(new Comparator<Entry<BodyDeclarationPair,List<ChangeEntity>>>(){
+            @Override
+            public int compare(Entry<BodyDeclarationPair,List<ChangeEntity>> a,Entry<BodyDeclarationPair,List<ChangeEntity>> b){
+                return a.getKey().getBodyDeclaration().getStartPosition() - a.getKey().getBodyDeclaration().getStartPosition();
+            }
+        });
+        mList.forEach(a-> keyIndex.add(a.getKey()));
     }
 
     public void addKey(BodyDeclarationPair bodyDeclarationPair){
@@ -37,10 +46,11 @@ public class LayeredChangeEntityContainer {
         layerMap.put(bodyDeclarationPair,mList);
     }
 
-    public void addPreDiffChangeEntity(ChangeEntity changeEntity,BodyDeclarationPair bodyDeclarationPair,int changeType){
+    public void addPreDiffChangeEntity(ChangeEntity changeEntity){
         BodyDeclarationPair mKey = null;
         for(BodyDeclarationPair key:this.layerMap.keySet()){
-            if(bodyDeclarationPair.getBodyDeclaration() instanceof TypeDeclaration && bodyDeclarationPair.getLocationClassString() == key.getLocationClassString()){
+            if(key.getBodyDeclaration() instanceof TypeDeclaration &&
+                    changeEntity.location == key.getLocationClassString()){
                 mKey = key;
                 break;
             }
@@ -71,9 +81,8 @@ public class LayeredChangeEntityContainer {
     }
 
     private BodyDeclarationPair getEnclosedBodyDeclaration(int start){
-
         for(BodyDeclarationPair key:this.layerMap.keySet()){
-            if(start>key.getBodyDeclaration().getStartPosition() && start< (key.getBodyDeclaration().getStartPosition()+key.getBodyDeclaration().getLength())){
+            if(start >= key.getBodyDeclaration().getStartPosition() && start<= (key.getBodyDeclaration().getStartPosition()+key.getBodyDeclaration().getLength())){
                 return key;
             }
         }

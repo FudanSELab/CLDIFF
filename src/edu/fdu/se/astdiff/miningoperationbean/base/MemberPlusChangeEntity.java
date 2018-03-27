@@ -1,9 +1,11 @@
 package edu.fdu.se.astdiff.miningoperationbean.base;
 
+import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningactions.util.DownUpMatchUtil;
 import edu.fdu.se.astdiff.miningactions.util.UpDownMatchUtil;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 
 /**
  * Created by huangkaifeng on 2018/2/8.
@@ -16,8 +18,12 @@ public class MemberPlusChangeEntity extends ChangeEntity {
         super(bean);
     }
 
-    public MemberPlusChangeEntity(){
+    public MemberPlusChangeEntity(String location,int changeType,MyRange myRange){
         super();
+        this.entityGeneratedStage = ChangeEntity.STAGE_PREDIFF;
+        this.lineRange = myRange;
+        this.changeType = changeType;
+        this.location = location;
     }
 
     public void appendListString(){

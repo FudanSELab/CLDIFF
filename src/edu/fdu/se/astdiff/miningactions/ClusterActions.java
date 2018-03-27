@@ -24,8 +24,6 @@ public class ClusterActions {
         new ClusterDownUp(Delete.class, fpd).doClusterDownUp();
         new ClusterDownUp(Update.class, fpd).doClusterDownUp();
         iterateChangeEntityListSetChangePacket(fpd);
-        mergeWrapperAndMoveEntity();
-//        generateLinkInfo(fpd);
     }
 
 
@@ -41,12 +39,8 @@ public class ClusterActions {
                 m.appendListString();
             }
         }
-        System.out.print("");
     }
 
-    public static void mergeWrapperAndMoveEntity(){
-        //todo 优化之一
-    }
 
 
 

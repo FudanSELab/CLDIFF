@@ -17,15 +17,16 @@ public class ASTTraversal {
      */
     public void traverseDstTypeDeclarationCompareSrc(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration cod, String prefixClassName) {
         compareResult.addTypeDeclaration(prefixClassName, cod, cod.getName().toString());
+        int status = checkTypeDeclarationInDst(compareResult, compareCache, cod, prefixClassName);
+        if(status == 1){
+            return;
+        }
         List<BodyDeclaration> nodeList = cod.bodyDeclarations();
         for (int i = nodeList.size() - 1; i >= 0; i--) {
             BodyDeclaration node = nodeList.get(i);
             if (node instanceof TypeDeclaration) {
                 TypeDeclaration cod2 = (TypeDeclaration) node;
-                int status = checkTypeDeclarationInDst(compareResult, compareCache, cod2, prefixClassName);
-                if (status != 1) {
-                    traverseDstTypeDeclarationCompareSrc(compareResult, compareCache, cod2, prefixClassName + cod2.getName().toString() + ".");
-                }
+                traverseDstTypeDeclarationCompareSrc(compareResult, compareCache, cod2, prefixClassName + cod2.getName().toString() + ".");
             } else if (node instanceof Initializer || node instanceof MethodDeclaration) {
                 checkMethodDeclarationOrInitializerInDst(compareResult, compareCache, node, prefixClassName);
             } else if (node instanceof FieldDeclaration) {
@@ -37,7 +38,7 @@ public class ASTTraversal {
                 EnumDeclaration ed = (EnumDeclaration) node;
                 checkEnumDeclarationInDst(compareResult,compareCache,ed,prefixClassName);
             } else {
-                System.err.println("ERROR:" + node.getClass().getSimpleName());
+                System.err.println("Error:" + node.getClass().getSimpleName());
             }
         }
     }
@@ -69,17 +70,18 @@ public class ASTTraversal {
     public void traverseSrcTypeDeclarationInit(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration typeDeclaration, String prefixClassName) {
         List<BodyDeclaration> nodeList = typeDeclaration.bodyDeclarations();
         compareResult.addTypeDeclaration(prefixClassName, typeDeclaration, typeDeclaration.getName().toString());
+        BodyDeclarationPair typeBodyDeclarationPair = new BodyDeclarationPair(typeDeclaration, prefixClassName);
+        compareCache.addToMapBodyName(typeBodyDeclarationPair, prefixClassName);
         for (int i = nodeList.size() - 1; i >= 0; i--) {
             BodyDeclaration bodyDeclaration = nodeList.get(i);
-            BodyDeclarationPair bdp = new BodyDeclarationPair(bodyDeclaration, prefixClassName);
-            compareCache.initBodySrcNodeMap(bdp);
             if (bodyDeclaration instanceof TypeDeclaration) {
                 TypeDeclaration cod2 = (TypeDeclaration) bodyDeclaration;
                 String subCodName = prefixClassName + cod2.getName().toString() + ".";
-                compareCache.addToMapBodyName(bdp, subCodName);
                 traverseSrcTypeDeclarationInit(compareResult, compareCache, cod2, subCodName);
                 continue;
             }
+            BodyDeclarationPair bdp = new BodyDeclarationPair(bodyDeclaration, prefixClassName);
+            compareCache.initBodySrcNodeMap(bdp);
             if (bodyDeclaration instanceof EnumDeclaration) {
                 EnumDeclaration ed = (EnumDeclaration) bodyDeclaration;
                 compareCache.addToMapBodyName(bdp, prefixClassName + ed.getName().toString());
@@ -112,7 +114,6 @@ public class ASTTraversal {
             }
             if (bodyDeclaration instanceof AnnotationTypeDeclaration) {
                 compareCache.addToSrcRemoveList(bodyDeclaration);
-                continue;
             }
 
         }
@@ -156,9 +157,8 @@ public class ASTTraversal {
      * @return 1 2
      */
     private int checkTypeDeclarationInDst(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration cod, String prefixClassName) {
-        String key = prefixClassName + cod.getName().toString() + ".";
-        if (compareCache.srcNodeBodyNameMap.containsKey(key)) {
-            List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(key);
+        if (compareCache.srcNodeBodyNameMap.containsKey(prefixClassName)) {
+            List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(prefixClassName);
             assert srcNodeList.size() <= 1;
             BodyDeclarationPair srcBody = srcNodeList.get(0);
             if (srcBody.getBodyDeclaration().toString().hashCode() == cod.toString().hashCode()

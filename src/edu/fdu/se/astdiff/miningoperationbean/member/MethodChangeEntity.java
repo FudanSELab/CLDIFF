@@ -30,11 +30,10 @@ public class MethodChangeEntity extends MemberPlusChangeEntity {
     }
 
     public MethodChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType, MyRange myRange){
+        super(bodyDeclarationPair.getLocationClassString(),changeType,myRange);
         MethodDeclaration md =(MethodDeclaration) bodyDeclarationPair.getBodyDeclaration();
-        this.lineRange = myRange;
         this.changeEntity = "Method";
-        this.changeType = changeType;
-        this.location = bodyDeclarationPair.getLocationClassString();
+        this.entityGeneratedStage = ChangeEntity.STAGE_PREDIFF;
         this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
         this.stageIIOutput.add("PRE_DIFF");
         this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(changeType));

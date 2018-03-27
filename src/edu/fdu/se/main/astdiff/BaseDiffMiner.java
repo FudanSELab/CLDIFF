@@ -33,15 +33,15 @@ public class BaseDiffMiner {
         GeneratingActionsData actionsData = gen.generate();
         printActions(actionsData,treeGenerator);
         // 3. Aggregation
-        MiningActionData mMiningActionData = new MiningActionData(actionsData, treeGenerator.srcTC, treeGenerator.dstTC, treeGenerator.mapping);
+        MiningActionData mMiningActionData = new MiningActionData(actionsData,treeGenerator);
         ClusterActions.doCluster(mMiningActionData);
         MiningOperationData mod = new MiningOperationData(preData,mMiningActionData);
         // 3.5 data
         mod.printStage1ChangeEntity();
-        // 4.Layer
+//        // 4.Layer
+        mod.initContainerEntityData(); //todo 做好分类  + move merge
         ChangeEntityData changeEntityData = new ChangeEntityData(mod,preData.entityContainer);
-
-
+        changeEntityData.printStage2ChangeEntity(); //todo print
     }
 
     private void printActions(GeneratingActionsData actionsData,JavaParserTreeGenerator treeGenerator){
