@@ -15,6 +15,13 @@ import java.util.List;
  */
 public class JavaParserVisitor  extends ASTVisitor {
 
+
+    private int treeType;
+    public JavaParserVisitor(int treeType) {
+        super();
+        this.treeType = treeType;
+    }
+
     public JavaParserVisitor() {
         super();
     }
@@ -38,7 +45,6 @@ public class JavaParserVisitor  extends ASTVisitor {
         if (n instanceof Assignment) return ((Assignment) n).getOperator().toString();
         if (n instanceof TextElement) return n.toString();
         if (n instanceof TagElement) return ((TagElement) n).getTagName();
-
         return "";
     }
 
@@ -87,10 +93,11 @@ public class JavaParserVisitor  extends ASTVisitor {
         push(type, typeName, label, n.getStartPosition(), n.getLength(), n);
     }
 
-    private void push(int type, String typeName, String label, int startPosition, int length,ASTNode node) {
+    private void push(int type, String typeName, String label, int startPosition, int length, ASTNode node) {
         ITree t = context.createTree(type, label, node);
-        Tree a;
         t.setPos(startPosition);
+        Tree tree = (Tree) t;
+        tree.setTreeSrcOrDst(this.treeType);
         t.setLength(length);
         if (trees.isEmpty())
             context.setRoot(t);

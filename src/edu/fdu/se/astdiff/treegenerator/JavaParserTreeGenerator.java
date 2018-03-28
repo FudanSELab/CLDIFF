@@ -43,9 +43,9 @@ public class JavaParserTreeGenerator {
     }
 
     public JavaParserTreeGenerator(CompilationUnit prev, CompilationUnit curr) {
-        srcTC = generateFromCompilationUnit(prev);
+        srcTC = generateFromCompilationUnit(prev,1);
         src = srcTC.getRoot();
-        dstTC = generateFromCompilationUnit(curr);
+        dstTC = generateFromCompilationUnit(curr,2);
         dst = dstTC.getRoot();
         Matcher m = Matchers.getInstance().getMatcher(src, dst);
         m.match();
@@ -111,8 +111,8 @@ public class JavaParserTreeGenerator {
         return generateFromReader(new StringReader(content));
     }
 
-    public TreeContext generateFromCompilationUnit(CompilationUnit cu) {
-        JavaParserVisitor visitor = new JavaParserVisitor();
+    public TreeContext generateFromCompilationUnit(CompilationUnit cu,int srcOrDst) {
+        JavaParserVisitor visitor = new JavaParserVisitor(srcOrDst);
         visitor.getTreeContext().setCu(cu);
         ASTNode astNode = cu;
         astNode.accept(visitor);

@@ -33,7 +33,7 @@ public class ASTTraversal {
                 FieldDeclaration fd = (FieldDeclaration) node;
                 checkFieldDeclarationInDst(compareResult, compareCache, fd, prefixClassName);
             } else if (node instanceof AnnotationTypeDeclaration) {
-                compareCache.addToSrcRemoveList(node);
+                compareCache.addToDstRemoveList(node);
             } else if (node instanceof EnumDeclaration) {
                 EnumDeclaration ed = (EnumDeclaration) node;
                 checkEnumDeclarationInDst(compareResult,compareCache,ed,prefixClassName);
@@ -43,7 +43,6 @@ public class ASTTraversal {
         }
     }
 
-
     /**
      * 设置该cod下的孩子节点为访问，因为father已经被remove了，所以不需要remove
      *
@@ -52,16 +51,15 @@ public class ASTTraversal {
      */
     public void traverseTypeDeclarationSetVisited(PreprocessedTempData compareCache, TypeDeclaration cod, String prefixClassName) {
         List<BodyDeclaration> tmpList = cod.bodyDeclarations();
-        String childrenClassPrefix = prefixClassName + cod.getName().toString() + ".";
         for (int m = tmpList.size() - 1; m >= 0; m--) {
             BodyDeclaration n = tmpList.get(m);
-            BodyDeclarationPair bdp = new BodyDeclarationPair(n, childrenClassPrefix);
+            BodyDeclarationPair bdp = new BodyDeclarationPair(n, prefixClassName);
             if (compareCache.srcNodeVisitingMap.containsKey(bdp)) {
                 compareCache.setBodySrcNodeMap(bdp, PreprocessedTempData.BODY_FATHERNODE_REMOVE);
             }
             if (n instanceof TypeDeclaration) {
                 TypeDeclaration next = (TypeDeclaration) n;
-                traverseTypeDeclarationSetVisited(compareCache, next, childrenClassPrefix);
+                traverseTypeDeclarationSetVisited(compareCache, next, prefixClassName + next.getName().toString()+".");
             }
         }
     }
@@ -223,17 +221,17 @@ public class ASTTraversal {
         }
 
         if (compareCache.srcNodeBodyNameMap.containsKey(methodNameKey)) {
-            List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(methodNameKey);
-            boolean findSame = false;
-            for (BodyDeclarationPair srcBody : srcNodeList) {
-                if (srcBody.hashCode() == (String.valueOf(bd.toString().hashCode()) + String.valueOf(prefixClassName.hashCode())).hashCode()) {
-                    compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
-                    compareCache.addToDstRemoveList(bd);
-                    findSame = true;
-                    break;
+                List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(methodNameKey);
+                boolean findSame = false;
+                for (BodyDeclarationPair srcBody : srcNodeList) {
+                    if (srcBody.hashCode() == (String.valueOf(bd.toString().hashCode()) + String.valueOf(prefixClassName.hashCode())).hashCode()) {
+                        compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
+                        compareCache.addToDstRemoveList(bd);
+                        findSame = true;
+                        break;
+                    }
                 }
-            }
-            if (findSame) {
+                if (findSame) {
                 return 1;
             } else {
                 for (BodyDeclarationPair srcBody : srcNodeList) {

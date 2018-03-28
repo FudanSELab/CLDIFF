@@ -26,6 +26,7 @@ public class BaseDiffMiner {
         preDiff.compareTwoFile(filePrev, fileCurr, output);
         // 1.5 data
         PreprocessedData preData = preDiff.getPreprocessedData();
+//        preData.printAddedRemovedBodies();
         // 2.gen
         JavaParserTreeGenerator treeGenerator = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
         MyActionGenerator gen = new MyActionGenerator(treeGenerator);
@@ -37,9 +38,11 @@ public class BaseDiffMiner {
         ClusterActions.doCluster(mMiningActionData);
         MiningOperationData mod = new MiningOperationData(preData,mMiningActionData);
         // 3.5 data
-        mod.printStage1ChangeEntity();
+//        mod.printStage1ChangeEntity();
 //        // 4.Layer
-        mod.initContainerEntityData(); //todo 做好分类  + move merge
+        mod.initContainerEntityData(); //todo move merge
+        mod.printContainerEntityData();
+        mod.mergeMoveAndWrapper();
         ChangeEntityData changeEntityData = new ChangeEntityData(mod,preData.entityContainer);
         changeEntityData.printStage2ChangeEntity(); //todo print
     }
@@ -52,4 +55,9 @@ public class BaseDiffMiner {
         }
 
     }
+    // 验证 Preprocessing *
+    // 验证 GumTree 输出  **
+    // 验证Aggregatio   ***
+    // 验证分类   ***
+    // 验证按照行号排序 ***
 }

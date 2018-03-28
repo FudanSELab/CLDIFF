@@ -6,6 +6,7 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.MiningOperationBeanUtil;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -15,17 +16,8 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
  *
  */
 public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEntity {
-    /**
-     * gumtree 识别的 add/remove/modify
-     * @param bean
-     */
-    public ClassOrInterfaceDeclarationChangeEntity(ClusteredActionBean bean){
-        super(bean);
 
-    }
-    final public static String CLASS_STR = "Class";
-    final public static String INTERFACE_STR = "Interface";
-    final public static String CLASS_SIGNATURE = "class signature";
+
 
     /**
      * 预处理 识别的
@@ -33,22 +25,24 @@ public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEnt
     public ClassOrInterfaceDeclarationChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType, MyRange myRange){
         super(bodyDeclarationPair.getLocationClassString(),changeType,myRange);
         TypeDeclaration cod = (TypeDeclaration)bodyDeclarationPair.getBodyDeclaration();
-        this.location = bodyDeclarationPair.getLocationClassString();
+        this.stageIIBean.setLocation(bodyDeclarationPair.getLocationClassString());
         if(cod.isInterface()){
-            this.changeEntity = INTERFACE_STR;
+            this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIIENTITY.ENTITY_INTERFACE);
         }else{
-            this.changeEntity = CLASS_STR;
+            this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIIENTITY.ENTITY_INNER_CLASS);
         }
-        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
-        this.stageIIOutput.add("PRE_DIFF");
-        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(changeType));
-        this.stageIIOutput.add(this.changeEntity);
-        this.stageIIOutput.add(cod.getName().toString());
-        this.linkBean = new LinkBean();
+        this.stageIIBean.setThumbnail(cod.getName().toString());
         this.linkBean.methodDeclarations = MiningOperationBeanUtil.getNames(cod.bodyDeclarations());
         this.linkBean.methodDeclarations.add(cod.getName().toString());
     }
 
+    /**
+     * gumtree 识别的 add/remove/modify
+     * @param bean
+     */
+    public ClassOrInterfaceDeclarationChangeEntity(ClusteredActionBean bean){
+        super(bean);
+    }
 
 
 

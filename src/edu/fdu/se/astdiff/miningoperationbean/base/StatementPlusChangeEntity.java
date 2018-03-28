@@ -24,7 +24,7 @@ public abstract class StatementPlusChangeEntity extends ChangeEntity {
         }
     }
 
-    public void appendListString(){
+    public void refreshEntityValue(){
         if(this.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
             UpDownMatchUtil.setChangePacket(this.clusteredActionBean);
         }else{
@@ -34,11 +34,11 @@ public abstract class StatementPlusChangeEntity extends ChangeEntity {
         if(this.changeType == OperationTypeConstants.MULTIPLE_EDIT){
             this.stageIIOutput.add(this.clusteredActionBean.changePacket.multiEditStr);
         }else{
-            this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(this.changeType));
+            this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(this.changeType));
         }
-        this.stageIIOutput.add(this.changeEntity);
-        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
-        this.stageIIOutput.add(this.lineRangeStr);
+        this.stageIIBean.setChangeEntity(this.changeEntity);
+        this.stageIIBean.setSubEntity(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
+        this.stageIIBean.setLineRange(this.lineRangeStr);
 
     }
 

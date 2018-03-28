@@ -53,7 +53,7 @@ public class Tree extends AbstractTree implements ITree {
      */
     private Class astClass;
     private List<Action> doActions;
-
+    private int srcOrDst;
     private Integer[] lineRange;
 
     public Tree(int type, String label, ASTNode n) {
@@ -87,6 +87,10 @@ public class Tree extends AbstractTree implements ITree {
         this.astNode = n;
         this.astClass = n.getClass();
         this.lineRange = lineRange;
+    }
+
+    public void setTreeSrcOrDst(int a){
+        this.srcOrDst = a;
     }
 
     public ASTNode getAstNode(){
@@ -268,4 +272,7 @@ public class Tree extends AbstractTree implements ITree {
         return astClass;
     }
 
+    public int getTreeSrcOrDst(){
+        return this.srcOrDst;
+    }
 }

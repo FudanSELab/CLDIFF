@@ -6,6 +6,7 @@ import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import edu.fdu.se.javaparser.JDTParserUtil;
@@ -13,15 +14,15 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 /**
  * Created by huangkaifeng on 2018/1/22.
+ *
  */
 public class MethodChangeEntity extends MemberPlusChangeEntity {
 
     public MethodChangeEntity(ClusteredActionBean bean){
         super(bean);
         this.lineRange = bean.range;
-        this.changeEntity = "Method - AnonymousClass";
-        this.changeType = bean.changePacket.getOperationType();
-        this.outputDesc = OperationTypeConstants.getKeyNameByValue(changeType) + ChangeEntity.SPLITTER + this.changeEntity +ChangeEntity.SPLITTER;
+        this.stageIIBean.setChangeEntity(ChangeEntityDesc.ENTITY_METHOD);
+        this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(bean.changePacket.getOperationType()));
         if(bean.curAction instanceof Move){
             this.linkBean = new LinkBean(bean.curAction);
         }else {
@@ -32,14 +33,9 @@ public class MethodChangeEntity extends MemberPlusChangeEntity {
     public MethodChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType, MyRange myRange){
         super(bodyDeclarationPair.getLocationClassString(),changeType,myRange);
         MethodDeclaration md =(MethodDeclaration) bodyDeclarationPair.getBodyDeclaration();
-        this.changeEntity = "Method";
-        this.entityGeneratedStage = ChangeEntity.STAGE_PREDIFF;
-        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(OperationTypeConstants.ENTITY_MEMBER));
-        this.stageIIOutput.add("PRE_DIFF");
-        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(changeType));
-        this.stageIIOutput.add(this.changeEntity);
-        this.stageIIOutput.add(JDTParserUtil.getDeclarationAsString(md));
-        this.linkBean = new LinkBean();
+        this.stageIIBean.setLocation(bodyDeclarationPair.getLocationClassString());
+        this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIIENTITY.ENTITY_METHOD);
+        this.stageIIBean.setThumbnail(md.getName().toString());
         this.linkBean.methodDeclarations.add(md.getName().toString());
     }
 

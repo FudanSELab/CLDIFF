@@ -32,12 +32,14 @@ public class MiningOperationData {
     public MiningOperationData(PreprocessedData pd, MiningActionData mad){
         this.preprocessedData = pd;
         this.mChangeEntityAll = mad.getChangeEntityList();
-        this.entityContainer = new LayeredChangeEntityContainer();
+        this.entityContainer = pd.entityContainer;
         this.mad = mad;
     }
 
 
-
+    public void mergeMoveAndWrapper(){
+        this.entityContainer.mergeMoveAndWrapper();
+    }
 
     public void initContainerEntityData(){
         for(ChangeEntity ce : this.mChangeEntityAll) {
@@ -45,8 +47,14 @@ public class MiningOperationData {
                 this.entityContainer.addGumTreePlus(ce, this.mad);
             }
         }
-        this.preprocessedData.getmBodiesAdded().forEach(a-> addOneBody(a,OperationTypeConstants.INSERT));
-        this.preprocessedData.getmBodiesDeleted().forEach(a-> addOneBody(a,OperationTypeConstants.DELETE));
+        this.entityContainer.sortEntityList();
+//
+//        this.preprocessedData.getmBodiesAdded().forEach(a-> addOneBody(a,OperationTypeConstants.INSERT));
+//        this.preprocessedData.getmBodiesDeleted().forEach(a-> addOneBody(a,OperationTypeConstants.DELETE));
+    }
+
+    public void printContainerEntityData(){
+        this.entityContainer.printContainerEntityBeforeSorting();
     }
 
     private void addOneBody(BodyDeclarationPair item,int type){
@@ -75,6 +83,8 @@ public class MiningOperationData {
             ce = new EnumDeclarationEntity(item,type,myRange);
         }
         if(ce!=null){
+//            System.out.println(ce.location +" " +ce.getClass().getSimpleName());
+//            System.out.println(type);
             this.entityContainer.addPreDiffChangeEntity(ce);
         }
 

@@ -14,67 +14,38 @@ import java.util.List;
  */
 public abstract class ChangeEntity {
 
-    final public static String SPLITTER = "\t";
     public ClusteredActionBean clusteredActionBean;
+
+    public StageIIIBean stageIIIBean;
+    public StageIIBean stageIIBean;
     public LinkBean linkBean;
-
     public MyRange lineRange;
-    public String lineRangeStr;
 
-    public int changeType;
-    public String changeEntity;
-    public int entityGeneratedStage;
+    private  void init(){
+        stageIIIBean = new StageIIIBean();
+        stageIIBean = new StageIIBean();
+        linkBean = new LinkBean();
+    }
 
-    public static final int STAGE_PREDIFF = 0;
-    public static final int STAGE_GUMTREE_UD = 1;
-    public static final int STAGE_GUMTREE_DUD = 2;
-
-    public String outputDesc;
-    public List<String> stageIIOutput = new ArrayList<>();
-    /**
-     * 因为存在复杂的内部类
-     * String为A.B.c的形式
-     */
-    public String location;
-
-    public ChangeEntity(){
-
+    public ChangeEntity(String location,int changeType,MyRange myRange){
+        init();
+        this.lineRange = myRange;
+        this.stageIIBean.setLineRange("("+this.lineRange.startLineNo +","+ this.lineRange.endLineNo+")");
+        this.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF);
+        this.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
+        this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(changeType));
+        this.stageIIBean.setLocation(location);
     }
 
     public ChangeEntity(ClusteredActionBean bean){
-        if(bean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
-            this.entityGeneratedStage = ChangeEntity.STAGE_GUMTREE_UD;
-        }else{
-            this.entityGeneratedStage = ChangeEntity.STAGE_GUMTREE_DUD;
-        }
+        init();
         this.clusteredActionBean = bean;
         this.lineRange = bean.range;
-        this.lineRangeStr ="("+this.lineRange.startLineNo +","+ this.lineRange.endLineNo+")";
-        this.changeType = bean.changePacket.getOperationType();
-        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationEntity()));
-        if(this.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
-            this.stageIIOutput.add("UP-DOWN-PHASE");
-        }else{
-            this.stageIIOutput.add("DOWN-UP-PHASE");
-        }
-    }
-
-    public String tabbedToString(){
-        StringBuffer sb = new StringBuffer();
-        for(String tmp:this.stageIIOutput){
-            sb.append(tmp);
-            sb.append(ChangeEntity.SPLITTER);
-        }
-        return sb.toString();
     }
 
     @Override
     public String toString(){
-        outputDesc = tabbedToString() + linkBean.toString();
-        return outputDesc;
+        return this.stageIIBean.toString();
     }
-
-
-
 
 }

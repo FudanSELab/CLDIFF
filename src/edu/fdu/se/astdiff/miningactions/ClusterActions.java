@@ -33,10 +33,10 @@ public class ClusterActions {
         for(ChangeEntity c : mList){
             if(c instanceof StatementPlusChangeEntity){
                 StatementPlusChangeEntity s = (StatementPlusChangeEntity) c;
-                s.appendListString();
+                s.refreshEntityValue();
             }else {
                 MemberPlusChangeEntity m = (MemberPlusChangeEntity) c;
-                m.appendListString();
+                m.refreshEntityValue();
             }
         }
     }

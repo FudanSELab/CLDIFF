@@ -5,6 +5,7 @@ import edu.fdu.se.astdiff.miningoperationbean.base.StatementPlusChangeEntity;
 
 /**
  * Created by huangkaifeng on 2018/1/23.
+ *
  */
 public class SynchronizedChangeEntity extends StatementPlusChangeEntity {
     final static public String synchronizedStr = "synchronized";

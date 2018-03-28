@@ -19,24 +19,21 @@ public class MemberPlusChangeEntity extends ChangeEntity {
     }
 
     public MemberPlusChangeEntity(String location,int changeType,MyRange myRange){
-        super();
-        this.entityGeneratedStage = ChangeEntity.STAGE_PREDIFF;
-        this.lineRange = myRange;
-        this.changeType = changeType;
-        this.location = location;
+        super(location,changeType,myRange);
+
     }
 
-    public void appendListString(){
+    public void refreshEntityValue(){
         if(this.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
             UpDownMatchUtil.setChangePacket(this.clusteredActionBean);
         }else{
             DownUpMatchUtil.setChangePacket(this.clusteredActionBean);
         }
-        this.changeType = this.clusteredActionBean.changePacket.getOperationType();
-        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(this.changeType));
-        this.stageIIOutput.add(this.changeEntity);
-        this.stageIIOutput.add(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
-        this.stageIIOutput.add(this.lineRangeStr);
+
+        this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationType()));
+
+        this.stageIIBean.setSubEntity(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
+        this.stageIIBean.setLineRange(this.lineRangeStr);
     }
 
 
