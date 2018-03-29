@@ -11,7 +11,6 @@ public class ReturnChangeEntity extends StatementPlusChangeEntity {
     final public static String returnStr = "Return";
     public ReturnChangeEntity(ClusteredActionBean bean) {
         super(bean);
-        this.changeEntity = ReturnChangeEntity.returnStr;
 
     }
 

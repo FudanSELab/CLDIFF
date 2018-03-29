@@ -1,11 +1,8 @@
 package edu.fdu.se.astdiff.miningoperationbean.member;
 
-import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.MiningOperationBeanUtil;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
@@ -27,9 +24,9 @@ public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEnt
         TypeDeclaration cod = (TypeDeclaration)bodyDeclarationPair.getBodyDeclaration();
         this.stageIIBean.setLocation(bodyDeclarationPair.getLocationClassString());
         if(cod.isInterface()){
-            this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIIENTITY.ENTITY_INTERFACE);
+            this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_INTERFACE);
         }else{
-            this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIIENTITY.ENTITY_INNER_CLASS);
+            this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_INNER_CLASS);
         }
         this.stageIIBean.setThumbnail(cod.getName().toString());
         this.linkBean.methodDeclarations = MiningOperationBeanUtil.getNames(cod.bodyDeclarations());

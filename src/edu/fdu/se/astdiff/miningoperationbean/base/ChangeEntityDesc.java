@@ -17,7 +17,7 @@ public class ChangeEntityDesc {
         public static final String OPT_CHANGE = "Change";
     }
 
-    public static class StageIIIENTITY{
+    public static class StageIIENTITY {
 
         public static final String ENTITY_CLASS = "Inner Class";
 
@@ -80,6 +80,8 @@ public class ChangeEntityDesc {
         public static final String OPT2_MOVE = "Move";
 
         public static final String OPT2_UPDATE = "Update";
+
+        public static final String OPT2_CHANGE = "Change";
 
     }
 

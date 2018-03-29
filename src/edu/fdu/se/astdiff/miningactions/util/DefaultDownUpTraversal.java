@@ -7,6 +7,7 @@ import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,10 +22,10 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
 
     public static void traverseClassSignature(Tree node, List<Action> result1,ChangePacket changePacket){
         assert node.getDoAction() ==null;
-        if(changePacket.changeSet1 == null){
-            changePacket.changeSet1 = new HashSet<>();
+        if(changePacket.getChangeSet1()==null){
+            changePacket.initChangeSet1();
         }
-        changePacket.changeSet1.add(ActionConstants.NULLACTION);
+        changePacket.getChangeSet1().add(ActionConstants.NULLACTION);
         List<ITree> children = node.getChildren();
         for(ITree child :children){
             Tree tmp = (Tree) child;
@@ -32,24 +33,24 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
                     tmp.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME ||
                     tmp.getAstNode().getNodeType() == ASTNode.PARAMETERIZED_TYPE||
                     tmp.getAstNode().getNodeType() == ASTNode.SIMPLE_TYPE){
-                traverseNodeSubTree(tmp,result1,changePacket.changeSet1);
+                traverseNodeSubTree(tmp,result1,changePacket.getChangeSet1());
             }
         }
     }
 
     public static void traverseMethodSignature(Tree node,List<Action> result1,ChangePacket changePacket){
         assert node.getDoAction() == null;
-        if(changePacket.changeSet1 == null){
-            changePacket.changeSet1 = new HashSet<>();
+        if(changePacket.getChangeSet1()==null){
+            changePacket.initChangeSet1();
         }
-        changePacket.changeSet1.add(ActionConstants.NULLACTION);
+        changePacket.getChangeSet1().add(ActionConstants.NULLACTION);
         List<ITree> children = node.getChildren();
         for(ITree child:children){
             Tree tmp = (Tree) child;
             if(tmp.getAstNode().getNodeType() == ASTNode.BLOCK){
                 break;
             }
-            traverseNodeSubTree(tmp,result1,changePacket.changeSet1);
+            traverseNodeSubTree(tmp,result1,changePacket.getChangeSet1());
         }
     }
 
@@ -60,18 +61,18 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
      * @param changePacket changePacket
      */
     public static void traverseFatherNodeGetSameNodeActions(Tree fafather,List<Action> editAction,ChangePacket changePacket){
-        if(changePacket.changeSet1 == null){
-            changePacket.changeSet1 = new HashSet<>();
+        if(changePacket.getChangeSet1()==null){
+            changePacket.initChangeSet1();
         }
-        traverseNodeSubTree(fafather,editAction,changePacket.changeSet1);
+        traverseNodeSubTree(fafather,editAction,changePacket.getChangeSet1());
     }
 
     public static void traverseIfPredicate(Tree node,List<Action> result1,ChangePacket changePacket){
         assert node.getDoAction() == null;
-        if(changePacket.changeSet1 == null){
-            changePacket.changeSet1 = new HashSet<>();
+        if(changePacket.getChangeSet1()==null){
+            changePacket.initChangeSet1();
         }
-        changePacket.changeSet1.add(ActionConstants.NULLACTION);
+        changePacket.getChangeSet1().add(ActionConstants.NULLACTION);
         List<ITree> children = node.getChildren();
         int i;
         for(i =0;i<children.size();i++){
@@ -89,23 +90,22 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
         }
         for(int j=0;j<bound;j++){
             Tree tmp = (Tree) children.get(j);
-            traverseNodeSubTree(tmp,result1,changePacket.changeSet1);
+            traverseNodeSubTree(tmp,result1,changePacket.getChangeSet1());
         }
     }
 
     public static void traverseDoWhileCondition(Tree node,List<Action> result,ChangePacket changePacket){
         assert node.getDoAction() == null;
         assert node.getChildren().size()==2;
-        Set<String> type = new HashSet<>();
+        changePacket.initChangeSet1();
         Tree secondChild = (Tree) node.getChild(1);
-        traverseNodeSubTree(secondChild,result,type);
-        changePacket.changeSet1 = type;
+        traverseNodeSubTree(secondChild,result,changePacket.getChangeSet1());
     }
 
     public static void traverseSwitchCondition(Tree node,List<Action> result,ChangePacket changePacket){
         assert node.getDoAction() == null;
         assert node.getChildren().size()==2;
-        changePacket.changeSet1 = new HashSet<>();
+        changePacket.initChangeSet1();
         List<ITree> children = node.getChildren();
         for(ITree tmp:children){
             Tree tmp2 = (Tree) tmp;

@@ -4,6 +4,7 @@ import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.member.*;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
@@ -43,7 +44,7 @@ public class MiningOperationData {
 
     public void initContainerEntityData(){
         for(ChangeEntity ce : this.mChangeEntityAll) {
-            if(ce.entityGeneratedStage != ChangeEntity.STAGE_PREDIFF) {
+            if(!ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
                 this.entityContainer.addGumTreePlus(ce, this.mad);
             }
         }
@@ -93,7 +94,7 @@ public class MiningOperationData {
 
     public void printStage1ChangeEntity(){
         this.mChangeEntityAll.forEach(a->{
-            if(a.entityGeneratedStage!=ChangeEntity.STAGE_PREDIFF){
+            if(!a.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
                 System.out.println(a.toString());
             }
         });

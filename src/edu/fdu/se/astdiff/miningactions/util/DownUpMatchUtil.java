@@ -5,6 +5,7 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,10 +15,10 @@ import java.util.Set;
 public class DownUpMatchUtil {
 
     public static void setChangePacket(ClusteredActionBean bean){
-        if(bean.changePacket.changeSet1==null){
+        if(bean.changePacket.getChangeSet1()==null){
             return;
-        }else if(bean.changePacket.changeSet2 == null){
-            setChangePacket(bean.changePacket,bean.changePacket.changeSet1);
+        }else if(bean.changePacket.getChangeSet1() == null){
+            setChangePacket(bean.changePacket,bean.changePacket.getChangeSet1());
         }else{
             //不存在
         }
@@ -26,10 +27,9 @@ public class DownUpMatchUtil {
 
 
 
-    private static void setChangePacket(ChangePacket changePacket,Set<String> type){
+    private static void setChangePacket(ChangePacket changePacket,List<String> type){
         changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_REFURNISH);
         if(BaseMatchUtil.twoItemInsertAndNullAction(type)){
-            changePacket.setOperationType(OperationTypeConstants.INSERT);
         }else if(BaseMatchUtil.twoItemDeleteAndNullAction(type)){
             changePacket.setOperationType(OperationTypeConstants.DELETE);
         }else if(BaseMatchUtil.twoItemMoveAndNullAction(type)){
@@ -44,7 +44,7 @@ public class DownUpMatchUtil {
 
     }
 
-    private static String generateMultiEditString(Set<String> types){
+    private static String generateMultiEditString(List<String> types){
         String result = "";
         for(String tmp:types){
             if(!tmp.equals(ActionConstants.NULLACTION)){

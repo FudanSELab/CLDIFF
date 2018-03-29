@@ -12,8 +12,6 @@ public class VariableChangeEntity extends StatementPlusChangeEntity {
     final static public String VARIABLEDECLARATION = "VariableDeclaration";
     public VariableChangeEntity(ClusteredActionBean bean) {
         super(bean);
-        this.changeEntity = VARIABLEDECLARATION;
-
     }
 
 

@@ -1,11 +1,8 @@
 package edu.fdu.se.astdiff.miningoperationbean.member;
 
 
-import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
@@ -25,7 +22,7 @@ public class InitializerChangeEntity extends MemberPlusChangeEntity {
         super(bodyDeclarationPair.getLocationClassString(),changeType,myRange);
         Initializer iid = (Initializer) bodyDeclarationPair.getBodyDeclaration();
         this.stageIIBean.setLocation(bodyDeclarationPair.getLocationClassString());
-        this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIIENTITY.ENTITY_INITIALIZER);
+        this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_INITIALIZER);
         this.stageIIBean.setThumbnail("{}");
 
     }

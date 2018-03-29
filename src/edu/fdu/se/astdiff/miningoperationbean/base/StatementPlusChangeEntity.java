@@ -7,6 +7,7 @@ import edu.fdu.se.astdiff.miningactions.util.DownUpMatchUtil;
 import edu.fdu.se.astdiff.miningactions.util.UpDownMatchUtil;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
  * Created by huangkaifeng on 2018/1/22.
@@ -30,15 +31,17 @@ public abstract class StatementPlusChangeEntity extends ChangeEntity {
         }else{
             DownUpMatchUtil.setChangePacket(this.clusteredActionBean);
         }
-        this.changeType = this.clusteredActionBean.changePacket.getOperationType();
-        if(this.changeType == OperationTypeConstants.MULTIPLE_EDIT){
-            this.stageIIOutput.add(this.clusteredActionBean.changePacket.multiEditStr);
-        }else{
-            this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(this.changeType));
-        }
-        this.stageIIBean.setChangeEntity(this.changeEntity);
-        this.stageIIBean.setSubEntity(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
-        this.stageIIBean.setLineRange(this.lineRangeStr);
+//            OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationType());
+//
+//        this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(this.changeType));
+//
+//
+//        if(this.changeType == OperationTypeConstants.MULTIPLE_EDIT){
+//            this.stageIIOutput.add(this.clusteredActionBean.changePacket.multiEditStr);
+//        }else{
+//        }
+//        this.stageIIBean.setChangeEntity(this.changeEntity);
+//        this.stageIIBean.setSubEntity(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
 
     }
 

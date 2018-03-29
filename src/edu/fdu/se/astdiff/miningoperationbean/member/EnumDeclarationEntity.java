@@ -1,10 +1,7 @@
 package edu.fdu.se.astdiff.miningoperationbean.member;
 
-import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
@@ -27,7 +24,7 @@ public class EnumDeclarationEntity extends MemberPlusChangeEntity{
         super(bodyDeclarationPair.getLocationClassString(),changeType,myRange);
         EnumDeclaration ed = (EnumDeclaration) bodyDeclarationPair.getBodyDeclaration();
         this.stageIIBean.setLocation(bodyDeclarationPair.getLocationClassString());
-        this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIIENTITY.ENTITY_ENUM);
+        this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENUM);
         this.stageIIBean.setThumbnail(ed.getName().toString());
 
 //        this.linkBean.methodDeclarations = MiningOperationBeanUtil.getNames(ed.bodyDeclarations());

@@ -6,19 +6,21 @@ package edu.fdu.se.astdiff.miningoperationbean.base;
  */
 public class StageIIBean {
 
-    private String changeEntity;
-
     private String entityCreationStage;
+
+    private String granularity;
 
     private String opt;
 
-    private String granularity;
+    private String changeEntity;
+
+    private String opt2;
+
+    private String subEntity;
 
     private String thumbnail;
 
     private String lineRange;
-
-    private String subEntity;
 
     private String location;
 
@@ -43,6 +45,15 @@ public class StageIIBean {
     public StageIIBean(){
 
 
+    }
+
+    public void setOpt2(String opt2) {
+        this.opt2 = opt2;
+    }
+
+    public String getOpt2() {
+
+        return opt2;
     }
 
     public String getLineRange() {

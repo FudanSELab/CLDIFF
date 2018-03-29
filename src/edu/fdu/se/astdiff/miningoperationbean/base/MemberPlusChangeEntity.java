@@ -29,11 +29,8 @@ public class MemberPlusChangeEntity extends ChangeEntity {
         }else{
             DownUpMatchUtil.setChangePacket(this.clusteredActionBean);
         }
-
-        this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationType()));
-
-        this.stageIIBean.setSubEntity(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
-        this.stageIIBean.setLineRange(this.lineRangeStr);
+//        this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationType()));
+//        this.stageIIBean.setSubEntity(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
     }
 
 

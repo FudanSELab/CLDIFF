@@ -3,6 +3,7 @@ package edu.fdu.se.astdiff.miningactions.util;
 
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 
+import java.util.List;
 import java.util.Set;
 import java.util.jar.Pack200;
 
@@ -13,14 +14,14 @@ import java.util.jar.Pack200;
 public class BaseMatchUtil {
 
 
-    public static boolean oneItemInsert(Set<String> type){
+    public static boolean oneItemInsert(List<String> type){
         if(type.size()==1&&type.contains(ActionConstants.INSERT)){
             return true;
         }
         return false;
     }
 
-    public static boolean oneItemDelete(Set<String> type){
+    public static boolean oneItemDelete(List<String> type){
         if(type.size()==1&&type.contains(ActionConstants.DELETE)){
             return true;
         }
@@ -28,7 +29,7 @@ public class BaseMatchUtil {
 
     }
 
-    public static boolean oneItemMoveOrTwoItemMoveAndNullAction(Set<String> type){
+    public static boolean oneItemMoveOrTwoItemMoveAndNullAction(List<String> type){
         if(type.size()==2&&type.contains(ActionConstants.MOVE)&&type.contains(ActionConstants.NULLACTION)){
             return true;
         }
@@ -45,25 +46,25 @@ public class BaseMatchUtil {
     }
 
 
-    public static boolean twoItemInsertAndNullAction(Set<String> type){
+    public static boolean twoItemInsertAndNullAction(List<String> type){
         if(type.size()==2 && type.contains(ActionConstants.INSERT)&&type.contains(ActionConstants.NULLACTION)){
             return true;
         }
         return false;
     }
-    public static boolean twoItemDeleteAndNullAction(Set<String> type){
+    public static boolean twoItemDeleteAndNullAction(List<String> type){
         if(type.size()==2 &&type.contains(ActionConstants.DELETE)&& type.contains(ActionConstants.NULLACTION)){
             return true;
         }
         return false;
     }
-    public static boolean twoItemUpdateAndNullAction(Set<String> type){
+    public static boolean twoItemUpdateAndNullAction(List<String> type){
         if(type.size()==2&&type.contains(ActionConstants.UPDATE) && type.contains(ActionConstants.NULLACTION)){
             return true;
         }
         return false;
     }
-    public static boolean twoItemMoveAndNullAction(Set<String> type){
+    public static boolean twoItemMoveAndNullAction(List<String> type){
         if(type.size()==2 &&type.contains(ActionConstants.MOVE)&&type.contains(ActionConstants.NULLACTION)){
             return true;
         }

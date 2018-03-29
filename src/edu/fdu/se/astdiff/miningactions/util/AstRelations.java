@@ -2,10 +2,13 @@ package edu.fdu.se.astdiff.miningactions.util;
 
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class AstRelations {
 
@@ -43,6 +46,20 @@ public class AstRelations {
 			myRange = new MyRange(start,end,ClusteredActionBean.DST_TREE_NODE);
 		}
 		return myRange;
+	}
+
+	public static String getLocationString(ITree tree){
+		ASTNode node = ((Tree)tree).getAstNode();
+		String result="";
+		while(!(node instanceof CompilationUnit)){
+			if(node instanceof TypeDeclaration){
+				TypeDeclaration tp  = (TypeDeclaration) node;
+				result = tp.getName().toString()+"."+ result;
+			}
+			node = node.getParent();
+		}
+		System.out.println("Result String："+result);
+		return null;
 	}
 
 }

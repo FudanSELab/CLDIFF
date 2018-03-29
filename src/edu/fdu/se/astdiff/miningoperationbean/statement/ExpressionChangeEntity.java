@@ -11,7 +11,6 @@ public class ExpressionChangeEntity extends StatementPlusChangeEntity{
     final static public String expression = "expression";
     public ExpressionChangeEntity(ClusteredActionBean bean) {
         super(bean);
-        this.changeEntity = expression;
     }
 
 

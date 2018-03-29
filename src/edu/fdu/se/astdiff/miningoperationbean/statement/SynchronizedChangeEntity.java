@@ -11,7 +11,6 @@ public class SynchronizedChangeEntity extends StatementPlusChangeEntity {
     final static public String synchronizedStr = "synchronized";
     public SynchronizedChangeEntity(ClusteredActionBean bean) {
         super(bean);
-        this.changeEntity = synchronizedStr;
     }
 
 }

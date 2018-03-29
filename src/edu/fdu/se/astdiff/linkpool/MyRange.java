@@ -20,4 +20,9 @@ public class MyRange {
         this.type = type;
     }
 
+    @Override
+    public String toString(){
+        return "("+this.startLineNo+","+this.endLineNo+")";
+    }
+
 }

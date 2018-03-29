@@ -12,7 +12,6 @@ public class AssertChangeEntity extends StatementPlusChangeEntity{
     final static String  assertStr = "assert";
     public AssertChangeEntity(ClusteredActionBean bean) {
         super(bean);
-        this.changeEntity = assertStr;
     }
 
 

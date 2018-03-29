@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.miningoperationbean;
 
 import com.github.gumtreediff.actions.model.Action;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +13,6 @@ import java.util.Map;
 public class OperationTypeConstants {
 
     final public static int UNKNOWN = -1;
-
-
 
     private static Map<Integer,String> constantName;
     static {
@@ -60,20 +59,6 @@ public class OperationTypeConstants {
 
 
 
-    final public static int ENTITY_MEMBER = 11000;
-    final public static int ENTITY_STATEMENT_TYPE_I = 11001; //无嵌套
-    final public static int ENTITY_STATEMENT_TYPE_II = 11002; // 有嵌套
-
-
-
-
-    // 整个BodyDeclaration Statement的增删
-    // structure
-    final public static int SUB_ENTITY_STRUCTURE_WHOLE_STRUCTURE = 12000;
-    final public static int SUB_ENTITY_STRUCTURE_WHOLE_WRAPPER = 12001;
-    final public static int SUB_ENTITY_STRUCTURE_REFURNISH = 12002;
-    final public static int SUB_ENTITY_STRUCTURE_CHANGE = 12003;
-
 
 
     public static String getKeyNameByValue(int v){
@@ -101,7 +86,16 @@ public class OperationTypeConstants {
             case "Delete":return DELETE;
         }
         return UNKNOWN;
+    }
 
+    public static String getChangeEntityDescString(Action a){
+        switch (a.getClass().getSimpleName()){
+            case "Insert":return ChangeEntityDesc.StageIIIOpt.OPT_INSERT;
+            case "Move":return ChangeEntityDesc.StageIIIOpt.OPT_MOVE;
+            case "Delete":return ChangeEntityDesc.StageIIIOpt.OPT_DELETE;
+            case "Update":break;
+        }
+        return null;
     }
 
 // 最小变化单位为Statement 变化包括 INS,MOV,UPD,MULTI_EDITS

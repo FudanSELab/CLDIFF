@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.miningoperationbean.statement;
 
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.base.StatementPlusChangeEntity;
 
 

@@ -27,6 +27,12 @@ public abstract class ChangeEntity {
         linkBean = new LinkBean();
     }
 
+    /**
+     * 预处理
+     * @param location
+     * @param changeType
+     * @param myRange
+     */
     public ChangeEntity(String location,int changeType,MyRange myRange){
         init();
         this.lineRange = myRange;
@@ -37,6 +43,7 @@ public abstract class ChangeEntity {
         this.stageIIBean.setLocation(location);
     }
 
+
     public ChangeEntity(ClusteredActionBean bean){
         init();
         this.clusteredActionBean = bean;
@@ -46,6 +53,21 @@ public abstract class ChangeEntity {
     @Override
     public String toString(){
         return this.stageIIBean.toString();
+    }
+
+
+    public void voidS(){
+//        this.stageIIBean.setEnityCreationStage();
+//               this.stageIIBean.setGranularity();
+//        this.stageIIBean.setOpt();
+//        this.stageIIBean.setChangeEntity();
+//        this.stageIIBean.setOpt2();
+//        this.stageIIBean.setSubEntity();
+//        this.stageIIBean.setLineRange();1
+//        this.stageIIBean.setLocation();
+
+//        this.stageIIBean.setThumbnail();
+
     }
 
 }

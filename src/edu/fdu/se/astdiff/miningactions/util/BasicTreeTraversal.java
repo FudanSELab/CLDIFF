@@ -11,6 +11,7 @@ import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,7 @@ public class BasicTreeTraversal {
      * @param resultActions [insert,null] 或者[delete,move,update,null]
      * @param resultTypes 同上
      */
-    protected static void traverseNodeSubTree(ITree tree, List<Action> resultActions, Set<String> resultTypes){
+    protected static void traverseNodeSubTree(ITree tree, List<Action> resultActions, List<String> resultTypes){
         for(ITree node:tree.preOrder()){
             Tree tmp = (Tree)node;
             if(tmp.getDoAction()==null){
@@ -50,7 +51,7 @@ public class BasicTreeTraversal {
      * @param resultActions result
      * @param resultTypes resulttype
      */
-    protected static void traverseNodeChildrenSubTree(ITree tree, List<Action> resultActions, Set<String> resultTypes){
+    protected static void traverseNodeChildrenSubTree(ITree tree, List<Action> resultActions, List<String> resultTypes){
         boolean flag = true;
         for(ITree node:tree.preOrder()){
             if(flag){
@@ -80,7 +81,7 @@ public class BasicTreeTraversal {
      * @param resultActions result
      * @param resultTypes resulttype
      */
-    protected static void traverseNodeSubTreeInRange(ITree tree, int a, int b, List<Action> resultActions, Set<String> resultTypes){
+    protected static void traverseNodeSubTreeInRange(ITree tree, int a, int b, List<Action> resultActions, List<String> resultTypes){
         List<ITree> children = tree.getChildren();
         for(int i = a;i<=b;i++){
             ITree c = children.get(i);
@@ -95,10 +96,10 @@ public class BasicTreeTraversal {
      * @param changePacket
      */
     protected static void traverseOneType(ITree node,List<Action> result1,ChangePacket changePacket){
-        if(changePacket.changeSet1 == null){
-            changePacket.changeSet1 = new HashSet<>();
+        if(changePacket.getChangeSet1()==null){
+            changePacket.initChangeSet1();
         }
-        traverseNodeSubTree(node,result1,changePacket.changeSet1);
+        traverseNodeSubTree(node,result1,changePacket.getChangeSet1());
     }
 
 
@@ -164,11 +165,11 @@ public class BasicTreeTraversal {
     public static boolean traverseWhenActionIsMove(Action a,List<Action> result,ChangePacket changePacket,boolean flag){
         if(a instanceof Move){
             result.add(a);
-            changePacket.changeSet1 = new HashSet<>();
-            changePacket.changeSet1.add(ActionConstants.MOVE);
+            changePacket.initChangeSet1();
+            changePacket.getChangeSet1().add(ActionConstants.MOVE);
             if(flag) {
-                changePacket.changeSet2 = new HashSet<>();
-                changePacket.changeSet2.add(ActionConstants.NULLACTION);
+                changePacket.initChangeSet2();
+                changePacket.getChangeSet2().add(ActionConstants.NULLACTION);
             }
             return true;
         }
