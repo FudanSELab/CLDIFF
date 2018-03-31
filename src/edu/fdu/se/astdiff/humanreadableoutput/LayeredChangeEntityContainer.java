@@ -6,6 +6,8 @@ import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityUtil;
 import edu.fdu.se.astdiff.miningoperationbean.member.ClassOrInterfaceDeclarationChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
 import org.eclipse.jdt.core.dom.*;
@@ -126,9 +128,36 @@ public class LayeredChangeEntityContainer {
             BodyDeclarationPair bodyDeclarationPair = entry.getKey();
             if(bodyDeclarationPair.getBodyDeclaration() instanceof MethodDeclaration){
                 List<ChangeEntity> mList = entry.getValue();
+                List<ChangeEntity> moveList = new ArrayList<>();
+                List<ChangeEntity> stmtWrapperList = new ArrayList<>();
+                List<ChangeEntity> deletedMove = new ArrayList<>();
+                for(ChangeEntity ce:mList){
+                    int resultCode = ChangeEntityUtil.checkEntityCode(ce);
+                    if(resultCode==1){
+                        moveList.add(ce);
+                    }else if(resultCode == 2){
+                        stmtWrapperList.add(ce);
+                    }
+
+                }
+                for(ChangeEntity ce:stmtWrapperList){
+                    for(ChangeEntity mv : moveList){
+                        if(ChangeEntityUtil.isMoveInWrapper(ce,mv)){
+                            ChangeEntityUtil.mergeMoveAndWrapper(ce,mv);
+                            deletedMove.add(mv);
+                        }
+                    }
+                }
+                for(ChangeEntity e:deletedMove){
+                    mList.remove(e);
+                }
+
             }
         }
     }
+
+
+
 
     public void sortEntityList(){
         for(Entry<BodyDeclarationPair,List<ChangeEntity>> entry:this.layerMap.entrySet()){

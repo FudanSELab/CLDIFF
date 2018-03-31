@@ -78,12 +78,12 @@ public class DiffMiner extends BaseDiffMiner {
         DiffMiner i = new DiffMiner();
 		i.runBatch();
     }
-//todo 数据流link
-//todo 控制流
-//todo block为move的情况
-//todo move 复杂操作处理
 
-//todo enum check 50%
+    //todo enum check 50%
+    //todo move 复杂操作处理
+    //todo block 为move的情况
+    //todo link各种
+
 
 //  Key -> Value
 //  BodyDeclaration -> List<ChangeEntity> 发生在这个BodyDeclaration里面的change entity

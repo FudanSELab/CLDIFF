@@ -12,7 +12,7 @@ public class MyList<E> extends ArrayList<E> {
         if(this.contains(e)){
             return true;
         }
-        add(e);
+        super.add(e);
         return true;
     }
 }

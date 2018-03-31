@@ -58,7 +58,7 @@ public class AstRelations {
 			}
 			node = node.getParent();
 		}
-		System.out.println("Result String："+result);
+//		System.out.println("Result String："+result);
 		return null;
 	}
 
