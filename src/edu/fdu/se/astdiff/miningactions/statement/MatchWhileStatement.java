@@ -35,7 +35,7 @@ public class MatchWhileStatement {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_WHILE_STMT);
         code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION_AND_BODY);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 
     }
@@ -56,7 +56,7 @@ public class MatchWhileStatement {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_DO_STMT);
         code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION_AND_BODY);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
     }
 
@@ -76,7 +76,7 @@ public class MatchWhileStatement {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_WHILE_STMT);
         code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
     }
 
@@ -96,7 +96,7 @@ public class MatchWhileStatement {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_DO_STMT);
         code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
     }
 

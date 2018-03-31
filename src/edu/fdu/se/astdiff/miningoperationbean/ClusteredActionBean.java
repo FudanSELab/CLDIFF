@@ -32,9 +32,6 @@ public class ClusteredActionBean {
 	 */
 	public ChangePacket changePacket;
 
-
-	public MyRange range;
-
 	public Tree fafather;
 
 	public int nodeType;
@@ -55,7 +52,6 @@ public class ClusteredActionBean {
 		}else{
 			this.nodeType = SRC_TREE_NODE;
 		}
-		this.range = AstRelations.getMyRange(this.fafather,this.nodeType);
 	}
 	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions, ChangePacket changePacket,Tree fafather,int nodeType){
 		this.traverseType = traverseType;
@@ -64,7 +60,6 @@ public class ClusteredActionBean {
 		this.changePacket = changePacket;
 		this.fafather = fafather;
 		this.nodeType = nodeType;
-		this.range = AstRelations.getMyRange(this.fafather,this.nodeType);
 	}
 
 

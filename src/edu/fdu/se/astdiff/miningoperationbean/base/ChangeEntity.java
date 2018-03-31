@@ -2,6 +2,7 @@ package edu.fdu.se.astdiff.miningoperationbean.base;
 
 import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.linkpool.MyRange;
+import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 
@@ -15,7 +16,6 @@ import java.util.List;
 public abstract class ChangeEntity {
 
     public ClusteredActionBean clusteredActionBean;
-
     public StageIIIBean stageIIIBean;
     public StageIIBean stageIIBean;
     public LinkBean linkBean;
@@ -47,7 +47,7 @@ public abstract class ChangeEntity {
     public ChangeEntity(ClusteredActionBean bean){
         init();
         this.clusteredActionBean = bean;
-        this.lineRange = bean.range;
+        this.lineRange = AstRelations.getMyRange(bean.fafather,bean.nodeType);
     }
 
     @Override
@@ -56,18 +56,6 @@ public abstract class ChangeEntity {
     }
 
 
-    public void voidS(){
-//        this.stageIIBean.setEnityCreationStage();
-//               this.stageIIBean.setGranularity();
-//        this.stageIIBean.setOpt();
-//        this.stageIIBean.setChangeEntity();
-//        this.stageIIBean.setOpt2();
-//        this.stageIIBean.setSubEntity();
-//        this.stageIIBean.setLineRange();1
-//        this.stageIIBean.setLocation();
 
-//        this.stageIIBean.setThumbnail();
-
-    }
 
 }

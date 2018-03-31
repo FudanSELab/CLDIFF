@@ -2,7 +2,6 @@ package edu.fdu.se.astdiff.miningoperationbean.base;
 
 /**
  * Created by huangkaifeng on 2018/3/28.
- *
  */
 public class StageIIBean {
 
@@ -42,7 +41,7 @@ public class StageIIBean {
         return subEntity;
     }
 
-    public StageIIBean(){
+    public StageIIBean() {
 
 
     }
@@ -103,5 +102,18 @@ public class StageIIBean {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    @Override
+    public String toString() {
+        return this.entityCreationStage + " " +
+                this.granularity + " " +
+                this.opt + " " +
+                this.changeEntity + " " +
+                this.opt2 + " " +
+                this.subEntity + " " +
+                this.thumbnail + " " +
+                this.lineRange + " " +
+                this.location;
     }
 }

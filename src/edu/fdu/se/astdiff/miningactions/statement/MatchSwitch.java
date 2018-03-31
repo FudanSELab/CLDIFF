@@ -35,7 +35,7 @@ public class MatchSwitch {
 		code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
 		code.stageIIBean.setOpt2(null);
 		code.stageIIBean.setSubEntity(null);
-		code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
 	}
@@ -54,7 +54,7 @@ public class MatchSwitch {
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_SWITCH_STMT);
 		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
 		code.stageIIBean.setOpt2(OperationTypeConstants.getChangeEntityDescString(a));
-		code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		if(a.getNode().getChildren() == null || a.getNode().getChildren().size()==0){
 			code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_SWITCH_CASE_DEFAULT);
@@ -81,7 +81,7 @@ public class MatchSwitch {
 		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
 		code.stageIIBean.setOpt2(null);
 		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION);
-		code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
 
@@ -119,7 +119,7 @@ public class MatchSwitch {
 		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
 		code.stageIIBean.setOpt2(null);
 		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_SWITCH_CASE);
-		code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
 	}

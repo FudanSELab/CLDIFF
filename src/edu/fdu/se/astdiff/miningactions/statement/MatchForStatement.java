@@ -34,7 +34,7 @@ public class MatchForStatement {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_FOR_STMT);
         code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 
     }
@@ -55,7 +55,7 @@ public class MatchForStatement {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENHANCED_FOR_STMT);
         code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
     }
 
@@ -75,7 +75,7 @@ public class MatchForStatement {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_FOR_STMT);
         code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 
     }
@@ -97,7 +97,7 @@ public class MatchForStatement {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENHANCED_FOR_STMT);
         code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
     }
 

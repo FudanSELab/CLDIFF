@@ -36,7 +36,7 @@ public class MatchExpressionStatement {
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_EXPRESSION_STMT);
 		code.stageIIBean.setOpt2(null);// 暂时不设置
 		code.stageIIBean.setSubEntity(null);
-		code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
 	}
@@ -57,7 +57,7 @@ public class MatchExpressionStatement {
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_EXPRESSION_STMT);
 		code.stageIIBean.setOpt2(null);// 暂时不设置
 		code.stageIIBean.setSubEntity(null);
-		code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
 	}

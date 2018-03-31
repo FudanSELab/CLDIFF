@@ -33,7 +33,7 @@ public class MatchReturnStatement {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_RETURN_STMT);
         code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(null);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
         fp.addOneChangeEntity(code);
     }
@@ -53,7 +53,7 @@ public class MatchReturnStatement {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_RETURN_STMT);
         code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(null);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
         fp.addOneChangeEntity(code);
     }

@@ -27,7 +27,7 @@ public class MatchControlStatements {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_BREAK);
         code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
     }
     public static void matchContinueStatements(MiningActionData fp,Action a){
@@ -42,7 +42,7 @@ public class MatchControlStatements {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CONTINUE);
         code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 
     }

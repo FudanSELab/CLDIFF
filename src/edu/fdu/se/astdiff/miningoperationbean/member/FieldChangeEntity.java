@@ -46,7 +46,6 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
      */
     public FieldChangeEntity(ClusteredActionBean bean){
         super(bean);
-        this.lineRange = bean.range;
         if(bean.curAction instanceof Move){
             this.linkBean = new LinkBean(bean.curAction);
         }else {

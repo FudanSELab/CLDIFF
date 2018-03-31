@@ -18,7 +18,6 @@ public class MethodChangeEntity extends MemberPlusChangeEntity {
 
     public MethodChangeEntity(ClusteredActionBean bean){
         super(bean);
-        this.lineRange = bean.range;
 //        this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_METHOD);
 //        this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(bean.changePacket.getOperationType()));
         if(bean.curAction instanceof Move){

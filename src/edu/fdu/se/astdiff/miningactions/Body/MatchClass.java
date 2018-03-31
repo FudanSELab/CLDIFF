@@ -34,7 +34,7 @@ public class MatchClass {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CLASS);
         code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION_AND_BODY);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
         fp.addOneChangeEntity(code);
     }
@@ -54,7 +54,7 @@ public class MatchClass {
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CLASS);
         code.stageIIBean.setOpt2(null);//暂时设为null
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_SIGNATURE);
-        code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+        code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
         fp.addOneChangeEntity(code);
     }

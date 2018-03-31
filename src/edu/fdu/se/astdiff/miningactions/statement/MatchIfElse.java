@@ -37,7 +37,7 @@ public class MatchIfElse {
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_IF_STMT);
 		code.stageIIBean.setOpt2(null);// 暂时不设置
 		code.stageIIBean.setSubEntity(null);
-		code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
 		if (AstRelations.isFatherXXXStatement(a, ASTNode.IF_STATEMENT)) {
@@ -66,7 +66,7 @@ public class MatchIfElse {
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_IF_STMT);
 		code.stageIIBean.setOpt2(OperationTypeConstants.getChangeEntityDescString(a));
 		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_ELSE);
-		code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 	}
 	
@@ -90,7 +90,7 @@ public class MatchIfElse {
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_IF_STMT);
 		code.stageIIBean.setOpt2(OperationTypeConstants.getChangeEntityDescString(a));
 		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION);
-		code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		if (AstRelations.isFatherXXXStatement(traverseFather,ASTNode.IF_STATEMENT)) {
 //			code.changeEntity = IfChangeEntity.ELSE_IF;
