@@ -4,6 +4,7 @@ import com.github.gumtreediff.actions.model.Action;
 
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
@@ -11,6 +12,7 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.member.MethodChangeEntity;
 
 import java.util.ArrayList;
@@ -22,20 +24,25 @@ public class MatchMethod {
 	public static void matchMethdDeclaration(MiningActionData fp, Action a) {
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
-		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
-		changePacket.setOperationType(OperationTypeConstants.getEditTypeIntCode(a));
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
 			DefaultUpDownTraversal.traverseMethod(a,subActions,changePacket);
 		}
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		MethodChangeEntity code = new MethodChangeEntity(mBean);
+		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
+		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
+		code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_INITIALIZER);
+		code.stageIIBean.setOpt2(null);// 暂时不设置
+		code.stageIIBean.setSubEntity(null);
+		code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
 	}
 
 
 	public static void matchMethodSignatureChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType,Tree traverseFather) {
 		ChangePacket changePacket = new ChangePacket();
-		changePacket.setOperationEntity(OperationTypeConstants.ENTITY_MEMBER);
 		List<Action> sameEdits = new ArrayList<>();
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,sameEdits,changePacket,false)){
 			DefaultDownUpTraversal.traverseMethodSignature(traverseFather,sameEdits,changePacket);
@@ -43,6 +50,14 @@ public class MatchMethod {
 		fp.setActionTraversedMap(sameEdits);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
 		MethodChangeEntity code = new MethodChangeEntity(mBean);
+		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
+		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
+		code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_METHOD);
+		code.stageIIBean.setOpt2(null);// 暂时不设置
+		code.stageIIBean.setSubEntity(null);
+		code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
+		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
 	}
 

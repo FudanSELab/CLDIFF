@@ -52,7 +52,7 @@ public class MatchClass {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_CLASS);
         code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CLASS);
-        code.stageIIBean.setOpt2(null);
+        code.stageIIBean.setOpt2(null);//暂时设为null
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_SIGNATURE);
         code.stageIIBean.setLineRange(code.clusteredActionBean.range.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
@@ -66,7 +66,6 @@ public class MatchClass {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,actions,changePacket,false)){
             DefaultDownUpTraversal.traverseClassSignature(traverseFather,newActions,changePacket);
         }
-
         for(Action tmp:newActions){
             if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
                 continue;

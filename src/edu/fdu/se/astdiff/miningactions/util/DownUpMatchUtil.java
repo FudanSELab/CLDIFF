@@ -28,18 +28,18 @@ public class DownUpMatchUtil {
 
 
     private static void setChangePacket(ChangePacket changePacket,List<String> type){
-        changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_REFURNISH);
-        if(BaseMatchUtil.twoItemInsertAndNullAction(type)){
-        }else if(BaseMatchUtil.twoItemDeleteAndNullAction(type)){
-            changePacket.setOperationType(OperationTypeConstants.DELETE);
-        }else if(BaseMatchUtil.twoItemMoveAndNullAction(type)){
-            changePacket.setOperationType(OperationTypeConstants.MOVE);
-        }else if(BaseMatchUtil.twoItemUpdateAndNullAction(type)){
-            changePacket.setOperationType(OperationTypeConstants.UPDATE);
-        }else {
-            changePacket.setOperationType(OperationTypeConstants.MULTIPLE_EDIT);
-            changePacket.multiEditStr = generateMultiEditString(type);
-        }
+//        changePacket.setOperationSubEntity(OperationTypeConstants.SUB_ENTITY_STRUCTURE_REFURNISH);
+//        if(BaseMatchUtil.twoItemInsertAndNullAction(type)){
+//        }else if(BaseMatchUtil.twoItemDeleteAndNullAction(type)){
+//            changePacket.setOperationType(OperationTypeConstants.DELETE);
+//        }else if(BaseMatchUtil.twoItemMoveAndNullAction(type)){
+//            changePacket.setOperationType(OperationTypeConstants.MOVE);
+//        }else if(BaseMatchUtil.twoItemUpdateAndNullAction(type)){
+//            changePacket.setOperationType(OperationTypeConstants.UPDATE);
+//        }else {
+//            changePacket.setOperationType(OperationTypeConstants.MULTIPLE_EDIT);
+//            changePacket.multiEditStr = generateMultiEditString(type);
+//        }
 
 
     }

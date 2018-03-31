@@ -52,7 +52,7 @@ public class LayeredChangeEntityContainer {
         for(BodyDeclarationPair key:this.layerMap.keySet()){
             if(key.getBodyDeclaration() instanceof TypeDeclaration){
                 if(changeEntity instanceof ClassOrInterfaceDeclarationChangeEntity){
-                    String location = changeEntity.location;
+                    String location = changeEntity.stageIIBean.getLocation();
                     location = location.substring(0,location.length()-1);
                     int index = location.lastIndexOf(".");
                     location = location.substring(0,index);
@@ -61,7 +61,7 @@ public class LayeredChangeEntityContainer {
                         break;
                     }
                 }else{
-                    if(changeEntity.location.equals(key.getLocationClassString())){
+                    if(changeEntity.stageIIBean.getLocation().equals(key.getLocationClassString())){
                         mKey = key;
                         break;
                     }
@@ -71,7 +71,7 @@ public class LayeredChangeEntityContainer {
         if(mKey!=null && this.layerMap.containsKey(mKey)){
             this.layerMap.get(mKey).add(changeEntity);
         }else{
-            System.err.println(changeEntity.location+" "+changeEntity.getClass().getSimpleName());
+            System.err.println(changeEntity.stageIIBean.getLocation()+" "+changeEntity.getClass().getSimpleName());
         }
     }
 

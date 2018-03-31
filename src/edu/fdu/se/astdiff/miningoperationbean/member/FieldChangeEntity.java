@@ -44,13 +44,9 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
      * gumtree 识别的
      * @param bean
      */
-    public FieldChangeEntity(ClusteredActionBean bean,String granularity){
+    public FieldChangeEntity(ClusteredActionBean bean){
         super(bean);
         this.lineRange = bean.range;
-//        this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_FIELD);
-//        this.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
-
-//        this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(bean.changePacket.getOperationType()));
         if(bean.curAction instanceof Move){
             this.linkBean = new LinkBean(bean.curAction);
         }else {

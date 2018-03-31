@@ -26,7 +26,6 @@ public class InitializerChangeEntity extends MemberPlusChangeEntity {
         this.stageIIBean.setThumbnail("{}");
 
     }
-    public String staticOrNonStatic;
 
 
 

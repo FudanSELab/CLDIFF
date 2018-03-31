@@ -93,6 +93,8 @@ public class ChangeEntityDesc {
 
         public static final String SUB_CONDITION_AND_BODY = "Condition and Body";
 
+        public static final String SUB_ELSE = "Else";
+
         /**
          * 针对class
          */
@@ -104,14 +106,19 @@ public class ChangeEntityDesc {
         /**
          * Try
          */
+        public static final String SUB_CATCH_CLAUSE = "Catch clause";
         public static final String SUB_BODY_AND_CATCH_CLAUSE = "Body and Catch Clause";
 
         public static final String SUB_BODY_AND_CATCH_CLAUSE_AND_FINALLY = "Body and Catch Clause and Finally";
+
+        public static final String SUB_FINALLY = "Finally";
 
 
         /**
          * switch
          */
+        public static final String SUB_SWITCH_CASE = "Switch case";
+        public static final String SUB_SWITCH_CASE_DEFAULT = "Switch case default";
 
     }
 

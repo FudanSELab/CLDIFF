@@ -27,9 +27,9 @@ public abstract class StatementPlusChangeEntity extends ChangeEntity {
 
     public void refreshEntityValue(){
         if(this.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
-            UpDownMatchUtil.setChangePacket(this.clusteredActionBean);
+//            UpDownMatchUtil.setChangePacket(this.clusteredActionBean);
         }else{
-            DownUpMatchUtil.setChangePacket(this.clusteredActionBean);
+//            DownUpMatchUtil.setChangePacket(this.clusteredActionBean);
         }
 //            OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationType());
 //
