@@ -1,7 +1,11 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
+import edu.fdu.se.astdiff.linkpool.MyRange;
+import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningoperationbean.member.EnumChangeEntity;
 import org.eclipse.jdt.core.dom.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +15,6 @@ import java.util.List;
 public class ASTTraversal {
     /**
      * curr
-     *
      * @param cod             class 节点
      * @param prefixClassName class 节点为止的prefix ， root节点的class prefix 为classname
      */
@@ -188,7 +191,21 @@ public class ASTTraversal {
                 compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
                 return 1;
             }else{
-                compareCache.setBodySrcNodeMap(srcBody,PreprocessedTempData.BODY_DIFFERENT_RETAIN);
+                MyRange myRange;
+                int s,e;
+                s = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition());
+                e = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition()+srcBody.getBodyDeclaration().getLength()-1);
+                myRange = new MyRange(s,e,OperationTypeConstants.INSERT);
+                EnumChangeEntity code = new EnumChangeEntity(srcBody,OperationTypeConstants.CHANGE,myRange);
+                EnumDeclaration fd = (EnumDeclaration) srcBody.getBodyDeclaration();
+                PreprocessUtil.generateEnumChangeEntity(code,fd,ed);
+                if(compareResult.getPreprocessChangeEntity()==null){
+                    compareResult.setPreprocessChangeEntity(new ArrayList<>());
+                }
+                compareResult.getPreprocessChangeEntity().add(code);
+                compareCache.addToDstRemoveList(ed);
+                compareCache.setBodySrcNodeMap(srcBody,PreprocessedTempData.BODY_SAME_REMOVE);
+//                compareCache.setBodySrcNodeMap(srcBody,PreprocessedTempData.BODY_DIFFERENT_RETAIN);
                 return 2;
             }
         }

@@ -56,10 +56,11 @@ public class DiffMiner extends BaseDiffMiner {
                 = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR) + "/android-" + String.valueOf(version);
         List<String> filePathList = readCompareList(version, fileRootPathPrev, fileRootPathCurr);
         int cnt = 0;
-        int candidateIndex = 20;
+        int candidateIndex = 5;
         for (String subPath : filePathList) {
-            if (cnt > candidateIndex) {
-                break;
+            if (cnt < candidateIndex) {
+                cnt++;
+                continue;
             }
             cnt++;
 //            if(!(subPath.equals("\\android\\accessibilityservice\\AccessibilityServiceInfo.java"))){
@@ -79,11 +80,23 @@ public class DiffMiner extends BaseDiffMiner {
 		i.runBatch();
     }
 
-    //todo enum check 50%
-    //todo move 复杂操作处理
     //todo block 为move的情况
+
+    //todo move 复杂操作处理  需要考虑两个树之间的行数mapping
+
+
+
     //todo link各种
 
+    //todo enum 内部变化 都归为change
+
+
+
+    //4-2 讨论
+    // 1.Type Bing问题
+    // 2.Enum 问题
+    // 3. Insert condition +  Move
+    // 4. Insert condition body + Move
 
 //  Key -> Value
 //  BodyDeclaration -> List<ChangeEntity> 发生在这个BodyDeclaration里面的change entity

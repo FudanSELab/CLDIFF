@@ -85,8 +85,8 @@ public class DiffMinerTest extends BaseDiffMiner {
 
     public static void main(String[] args) {
         DiffMinerTest i = new DiffMinerTest();
-        i.runBatchTest();
-//        i.runSingleFilePair();
+//        i.runBatchTest();
+        i.runSingleFilePair();
     }
 
 

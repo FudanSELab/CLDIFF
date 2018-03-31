@@ -6,7 +6,6 @@ import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityUtil;
 import edu.fdu.se.astdiff.miningoperationbean.member.ClassOrInterfaceDeclarationChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
@@ -106,7 +105,7 @@ public class LayeredChangeEntityContainer {
         if(mKey!=null && this.layerMap.containsKey(mKey)){
             this.layerMap.get(mKey).add(changeEntity);
         }else{
-            System.err.println(changeEntity.toString());
+            System.err.println("Not In BodyMap keys:"+ changeEntity.toString());
         }
 
     }
@@ -127,6 +126,7 @@ public class LayeredChangeEntityContainer {
         for(Entry<BodyDeclarationPair,List<ChangeEntity>> entry:this.layerMap.entrySet()){
             BodyDeclarationPair bodyDeclarationPair = entry.getKey();
             if(bodyDeclarationPair.getBodyDeclaration() instanceof MethodDeclaration){
+                //每个method里面
                 List<ChangeEntity> mList = entry.getValue();
                 List<ChangeEntity> moveList = new ArrayList<>();
                 List<ChangeEntity> stmtWrapperList = new ArrayList<>();
@@ -172,12 +172,11 @@ public class LayeredChangeEntityContainer {
     }
 
     public void printContainerEntityBeforeSorting(){
-        System.out.println(this.layerMap.size());
+        System.out.println("Member Key Size:" + this.layerMap.size());
         for(Entry<BodyDeclarationPair,List<ChangeEntity>> entry:this.layerMap.entrySet()){
             BodyDeclarationPair bodyDeclarationPair = entry.getKey();
             List<ChangeEntity> mList = entry.getValue();
             System.out.println(bodyDeclarationPair.toString());
-
             for(ChangeEntity ce:mList){
                 System.out.println(ce.toString());
             }

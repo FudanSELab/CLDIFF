@@ -5,6 +5,7 @@ package edu.fdu.se.astdiff.linkpool;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
+import edu.fdu.se.astdiff.miningactions.util.MyList;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
@@ -18,11 +19,11 @@ import java.util.Set;
  */
 public class LinkBean {
 
-    public Set<String> variables;
+    public List<String> variables;
 
-    public Set<String> methodNames;
+    public List<String> methodNames;
 
-    public Set<String> methodDeclarations;
+    public List<String> methodDeclarations;
 
     /**
      * 针对PreDiff BodyDeclaraiton 的情况
@@ -31,9 +32,9 @@ public class LinkBean {
         initField();
     }
     public void initField(){
-        this.methodNames = new HashSet<>();
-        this.variables = new HashSet<>();
-        this.methodDeclarations = new HashSet<>();
+        this.methodNames = new MyList<>();
+        this.variables = new MyList<>();
+        this.methodDeclarations = new MyList<>();
     }
     /**
      * 针对Bean的情况 !Move情况
@@ -43,7 +44,7 @@ public class LinkBean {
         addAppendedActions(actions);
     }
 
-    private List<String> addCommonNames(Set<String> a,Set<String> b){
+    private List<String> addCommonNames(MyList<String> a,MyList<String> b){
         List<String> result = new ArrayList<>();
         for(String tmp:a){
             if(b.contains(tmp)){
@@ -79,7 +80,7 @@ public class LinkBean {
         return null;
     }
 
-    private void setInfixExpression(InfixExpression infixExpression,Set<String> methodInvocationSet,Set<String> varNameSet){
+    private void setInfixExpression(InfixExpression infixExpression,List<String> methodInvocationSet,List<String> varNameSet){
         ASTNode leftOp = infixExpression.getLeftOperand();
         ASTNode rightOp = infixExpression.getRightOperand();
         List<ASTNode> tmp = new ArrayList<>();
@@ -89,7 +90,7 @@ public class LinkBean {
 
     }
 
-    public void traverseASTNodeList(List<ASTNode> list,Set<String> methodInvocationSet,Set<String> varNameSet) {
+    public void traverseASTNodeList(List<ASTNode> list,List<String> methodInvocationSet,List<String> varNameSet) {
         for (int i = 0; i < list.size(); i++) {
             ASTNode tmp = list.get(i);
             if(tmp.getNodeType() == ASTNode.METHOD_INVOCATION) {
@@ -102,7 +103,7 @@ public class LinkBean {
         }
     }
 
-    private void setMethodInvocation(MethodInvocation methodInvocation,Set<String> methodInvocationSet,Set<String> varNameSet) {
+    private void setMethodInvocation(MethodInvocation methodInvocation,List<String> methodInvocationSet,List<String> varNameSet) {
         String methodName = methodInvocation.getName().toString();
         methodInvocationSet.add(methodName);
         Expression exp = methodInvocation.getExpression();
@@ -123,15 +124,15 @@ public class LinkBean {
 
 
     public void addAppendedActions(List<Action> actions){
-        Set<String> simpleNameList = new HashSet<>();
+        MyList<String> simpleNameList = new MyList<>();
         for(Action a:actions){
             Tree tree = (Tree)a.getNode();
             if(tree.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME|| tree.getAstNode().getClass().getSimpleName().endsWith("Literal")){
                 simpleNameList.add(tree.getLabel());
             }
         }
-        Set<String> tmpMethodInvocations = new HashSet<>();
-        Set<String> tmpVars = new HashSet<>();
+        MyList<String> tmpMethodInvocations = new MyList<>();
+        MyList<String> tmpVars = new MyList<>();
         for(Action a:actions){
             Tree tree = (Tree)a.getNode();
             if(tree.getAstNode().getClass().getSimpleName().equals("SimpleName")

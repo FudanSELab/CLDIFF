@@ -11,16 +11,16 @@ import org.eclipse.jdt.core.dom.EnumDeclaration;
  * Created by huangkaifeng on 2018/3/21.
  *
  */
-public class EnumDeclarationEntity extends MemberPlusChangeEntity{
+public class EnumChangeEntity extends MemberPlusChangeEntity{
 
-    public EnumDeclarationEntity(ClusteredActionBean bean){
+    public EnumChangeEntity(ClusteredActionBean bean){
         super(bean);
     }
 
     final public static String enumStr = "Enum";
 
 
-    public EnumDeclarationEntity(BodyDeclarationPair bodyDeclarationPair, int changeType, MyRange myRange){
+    public EnumChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType, MyRange myRange){
         super(bodyDeclarationPair.getLocationClassString(),changeType,myRange);
         EnumDeclaration ed = (EnumDeclaration) bodyDeclarationPair.getBodyDeclaration();
         this.stageIIBean.setLocation(bodyDeclarationPair.getLocationClassString());

@@ -5,6 +5,7 @@ import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.linkpool.LinkBean;
 import org.eclipse.jdt.core.dom.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,8 +15,8 @@ import java.util.Set;
  */
 public class MiningOperationBeanUtil {
 
-    public static Set<String> getNames(List<BodyDeclaration> nodeList){
-        Set<String> result = new HashSet<>();
+    public static List<String> getNames(List<BodyDeclaration> nodeList){
+        List<String> result = new ArrayList<>();
         for(int i =0;i<nodeList.size();i++){
             BodyDeclaration n = nodeList.get(i);
             if(n instanceof MethodDeclaration){
@@ -31,7 +32,7 @@ public class MiningOperationBeanUtil {
             }
             if(n instanceof TypeDeclaration){
                 TypeDeclaration cod = (TypeDeclaration) n;
-                Set<String> result2 = getNames(cod.bodyDeclarations());
+                List<String> result2 = getNames(cod.bodyDeclarations());
                 result.addAll(result2);
             }
         }

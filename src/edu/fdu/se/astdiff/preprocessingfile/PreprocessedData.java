@@ -2,6 +2,7 @@ package edu.fdu.se.astdiff.preprocessingfile;
 
 
 import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.javaparser.JDTParserFactory;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -43,6 +44,16 @@ public class PreprocessedData {
      * prev 删除的removed body
      */
     private List<BodyDeclarationPair> mBodiesDeleted;
+
+    private List<ChangeEntity> preprocessChangeEntity;
+
+    public List<ChangeEntity> getPreprocessChangeEntity() {
+        return preprocessChangeEntity;
+    }
+
+    public void setPreprocessChangeEntity(List<ChangeEntity> preprocessChangeEntity) {
+        this.preprocessChangeEntity = preprocessChangeEntity;
+    }
 
     /**
      * prev 和curr 中都没被删除 保修下来在CompilationUnit的Body

@@ -37,7 +37,7 @@ public class OperationTypeConstants {
         constantName.put(10005,"INSERT_M");
         constantName.put(10006,"DELETE_M");
         constantName.put(10007,"MOVE_M");
-
+        constantName.put(10010,"CHANGE");
     }
 
     // 操作类型，操作entity，操作子entity
@@ -46,6 +46,8 @@ public class OperationTypeConstants {
     final public static int DELETE = 10001;
     final public static int MOVE = 10002;
     final public static int UPDATE = 10003;
+
+    final public static int CHANGE = 10010;
 
 
     final public static int MULTIPLE_EDIT = 10004;

@@ -86,6 +86,8 @@ public class ChangeEntityDesc {
     }
 
     public class StageIIISub{
+
+        public static final String SUB_DECLARATION = "Declaration";
         /**
          * 针对类似于if结构
          */

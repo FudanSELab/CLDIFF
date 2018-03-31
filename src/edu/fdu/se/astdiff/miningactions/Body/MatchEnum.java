@@ -12,8 +12,7 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
-import edu.fdu.se.astdiff.miningoperationbean.member.ClassOrInterfaceDeclarationChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.member.EnumDeclarationEntity;
+import edu.fdu.se.astdiff.miningoperationbean.member.EnumChangeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,7 @@ public class MatchEnum {
         }
         fp.setActionTraversedMap(subActions);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
-        EnumDeclarationEntity code = new EnumDeclarationEntity(mBean);
+        EnumChangeEntity code = new EnumChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
@@ -54,7 +53,7 @@ public class MatchEnum {
         }
         fp.setActionTraversedMap(subActions);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather,treeType);
-        EnumDeclarationEntity code = new EnumDeclarationEntity(mBean);
+        EnumChangeEntity code = new EnumChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
