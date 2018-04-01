@@ -67,7 +67,6 @@ public class PreprocessedData {
         mBodiesDeleted = new ArrayList<>();
         mBodiesRetained = new ArrayList<>();
         classOrInterfaceOrEnum = new HashMap<>();
-
         entityContainer = new LayeredChangeEntityContainer();
 
 

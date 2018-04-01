@@ -162,8 +162,12 @@ public class ASTTraversal {
             List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(prefixClassName);
             assert srcNodeList.size() <= 1;
             BodyDeclarationPair srcBody = srcNodeList.get(0);
+
+            //todo
             if (srcBody.getBodyDeclaration().toString().hashCode() == cod.toString().hashCode()
                     && prefixClassName.hashCode() == srcBody.getLocationClassString().hashCode()) {
+                System.out.println(srcBody.getBodyDeclaration().toString());
+                System.out.println(cod.toString());
                 compareCache.addToDstRemoveList(cod);
                 compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
                 traverseTypeDeclarationSetVisited(compareCache, (TypeDeclaration) srcBody.getBodyDeclaration(), prefixClassName);

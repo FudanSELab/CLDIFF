@@ -84,12 +84,7 @@ public class DiffMiner extends BaseDiffMiner {
 
     //todo move 复杂操作处理  需要考虑两个树之间的行数mapping
 
-
-
     //todo link各种
-
-    //todo enum 内部变化 都归为change
-
 
 
     //4-2 讨论

@@ -19,9 +19,9 @@ public class ChangeEntityDesc {
 
     public static class StageIIENTITY {
 
-        public static final String ENTITY_CLASS = "Inner Class";
+        public static final String ENTITY_CLASS = "Class";
 
-        public static final String ENTITY_INNER_CLASS = "Class";
+        public static final String ENTITY_INNER_CLASS = "Inner Class";
 
         public static final String ENTITY_INTERFACE = "Interface";
 

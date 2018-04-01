@@ -101,22 +101,28 @@ public class LayeredChangeEntityContainer {
             tree = (Tree)node;
             startPos = tree.getAstNode().getStartPosition();
         }
-        mKey = getEnclosedBodyDeclaration(startPos);
+        mKey = getEnclosedBodyDeclaration(changeEntity,startPos);
         if(mKey!=null && this.layerMap.containsKey(mKey)){
             this.layerMap.get(mKey).add(changeEntity);
         }else{
             System.err.println("Not In BodyMap keys:"+ changeEntity.toString());
+
         }
 
     }
 
-    private BodyDeclarationPair getEnclosedBodyDeclaration(int start){
+    private BodyDeclarationPair getEnclosedBodyDeclaration(ChangeEntity changeEntity,int start){
         for(BodyDeclarationPair key:this.layerMap.keySet()){
-            if(key.getBodyDeclaration() instanceof TypeDeclaration){
-                continue;
-            }
-            if(start >= key.getBodyDeclaration().getStartPosition() && start<= (key.getBodyDeclaration().getStartPosition()+key.getBodyDeclaration().getLength())){
-                return key;
+            if(key.getBodyDeclaration() instanceof TypeDeclaration ){
+                if(changeEntity instanceof ClassOrInterfaceDeclarationChangeEntity){
+                    if (start >= key.getBodyDeclaration().getStartPosition() && start <= (key.getBodyDeclaration().getStartPosition() + key.getBodyDeclaration().getLength())) {
+                        return key;
+                    }
+                }
+            }else {
+                if (start >= key.getBodyDeclaration().getStartPosition() && start <= (key.getBodyDeclaration().getStartPosition() + key.getBodyDeclaration().getLength())) {
+                    return key;
+                }
             }
         }
         return null;

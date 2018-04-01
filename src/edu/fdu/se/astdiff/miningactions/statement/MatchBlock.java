@@ -40,6 +40,7 @@ public class MatchBlock {
     }
 
     public static void handleMoveOnBlock(MiningActionData fp,Action a){
+        System.err.println("Move block");
         Tree moveTree = (Tree) a.getNode();
         List<ITree> children = moveTree.getChildren();
         for(ITree child:children){

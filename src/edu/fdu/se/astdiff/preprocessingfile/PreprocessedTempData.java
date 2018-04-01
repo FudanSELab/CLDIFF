@@ -72,7 +72,7 @@ public class PreprocessedTempData {
     private void setLinesFlag(List<Integer> lineFlags,int start,int end){
         for(int i =start ;i<=end;i++){
             if(lineFlags.get(i-1)>0){
-                lineFlags.set(i - 1, -lineFlags.get(i - 1));
+                lineFlags.set(i-1, -lineFlags.get(i-1));
             }
         }
     }
@@ -80,7 +80,7 @@ public class PreprocessedTempData {
     public void removeSrcRemovalList(CompilationUnit cu, List<Integer> lineList) {
         for (ASTNode item : this.srcRemovalNodes) {
             setLinesFlag(lineList,cu.getLineNumber(item.getStartPosition()),
-                    cu.getLineNumber(item.getStartPosition()+item.getLength()));
+                    cu.getLineNumber(item.getStartPosition()+item.getLength()-1));
             item.delete();
         }
         this.srcRemovalNodes.clear();
@@ -96,11 +96,11 @@ public class PreprocessedTempData {
                 BodyDeclaration bd = (BodyDeclaration) item;
                 if(bd.getJavadoc()!=null){
                     setLinesFlag(lineList,cu.getLineNumber(bd.getJavadoc().getStartPosition()),
-                            cu.getLineNumber(bd.getJavadoc().getStartPosition()+bd.getJavadoc().getLength()));
+                            cu.getLineNumber(bd.getJavadoc().getStartPosition()+bd.getJavadoc().getLength()-1));
                 }
             }
             setLinesFlag(lineList,cu.getLineNumber(item.getStartPosition()),
-                    cu.getLineNumber(item.getStartPosition()+item.getLength()));
+                    cu.getLineNumber(item.getStartPosition()+item.getLength()-1));
             item.delete();
         }
         dstRemovalNodes.clear();

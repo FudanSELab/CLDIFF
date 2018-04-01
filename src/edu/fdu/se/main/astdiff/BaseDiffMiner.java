@@ -45,6 +45,7 @@ public class BaseDiffMiner {
         mod.mergeMoveAndWrapper();
         ChangeEntityData changeEntityData = new ChangeEntityData(mod,preData.entityContainer);
         changeEntityData.printStage2ChangeEntity(); //todo print
+
     }
 
     private void printActions(GeneratingActionsData actionsData,JavaParserTreeGenerator treeGenerator){
@@ -53,7 +54,6 @@ public class BaseDiffMiner {
             FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", treeGenerator.getPrettyNewTreeString());
             SimpleActionPrinter.printMyActions(actionsData.getAllActions());
         }
-
     }
     // 验证 Preprocessing *
     // 验证 GumTree 输出  **
