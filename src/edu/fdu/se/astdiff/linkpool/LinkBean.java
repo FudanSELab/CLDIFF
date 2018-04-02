@@ -70,6 +70,17 @@ public class LinkBean {
         }
     }
 
+    public LinkBean(Tree moveTree){
+        initField();
+        for(ITree t :moveTree.preOrder()){
+            Tree tree = (Tree)t;
+            if(tree.getAstNode().getNodeType()== ASTNode.METHOD_INVOCATION){
+                ASTNode methodInvocation = tree.getAstNode();
+                setMethodInvocation((MethodInvocation) methodInvocation,this.methodNames,this.variables);
+            }
+        }
+    }
+
     private ASTNode findMethodInvoation(Tree tree){
         while(!tree.getAstNode().getClass().getSimpleName().endsWith("Declaration")){
             tree = (Tree)tree.getParent();

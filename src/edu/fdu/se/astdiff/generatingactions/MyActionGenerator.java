@@ -123,8 +123,8 @@ public class MyActionGenerator {
         for (int i=1;i<=bfsDst.size();i++){
         	ITree dstItem = bfsDst.get(i-1);
             ITree mappedSrcNode = null;
-            ITree parentDst = dstItem.getParent();
-            ITree parentSrc = newMappings.getSrc(parentDst);
+            ITree parentOfDstNode = dstItem.getParent();
+            ITree mappingSrcOfParentDst = newMappings.getSrc(parentOfDstNode);
 
             if (!newMappings.hasDst(dstItem)) {
             	//item is not in src
@@ -136,14 +136,14 @@ public class MyActionGenerator {
                 // furnish x instead of w and fake that x has the newly
                 // generated ID.
                 // insert增加过程中，tree也在更新，mapping也在更新
-                Action ins = new Insert(dstItem, origSrcTrees.get(parentSrc.getId()), k);
+                Action ins = new Insert(dstItem, origSrcTrees.get(mappingSrcOfParentDst.getId()), k);
                 Tree tmp = (Tree) dstItem;
                 tmp.setDoAction(ins);
                 myAgbData.addAction(ins);
                 origSrcTrees.put(mappedSrcNode.getId(), dstItem);
                 newMappings.link(mappedSrcNode, dstItem);
-                parentSrc.getChildren().add(k, mappedSrcNode);
-                mappedSrcNode.setParent(parentSrc);
+                mappingSrcOfParentDst.getChildren().add(k, mappedSrcNode);
+                mappedSrcNode.setParent(mappingSrcOfParentDst);
             } else {
             	//in 
             	// 有mapping
@@ -160,17 +160,17 @@ public class MyActionGenerator {
 
                         mappedSrcNode.setLabel(dstItem.getLabel());
                     }
-                    if (!parentSrc.equals(mappedSrcNodeParent)) {
+                    if (!mappingSrcOfParentDst.equals(mappedSrcNodeParent)) {
                         int k = findPos(dstItem);
-                        Action mv = new Move(origSrcTrees.get(mappedSrcNode.getId()), origSrcTrees.get(parentSrc.getId()), k);
+                        Action mv = new Move(origSrcTrees.get(mappedSrcNode.getId()), origSrcTrees.get(mappingSrcOfParentDst.getId()), k);
                         Tree tmp = (Tree) origSrcTrees.get(mappedSrcNode.getId());
                         tmp.setDoAction(mv);
                         myAgbData.addAction(mv);
 
                         int oldk = mappedSrcNode.positionInParent();
-                        parentSrc.getChildren().add(k, mappedSrcNode);
+                        mappingSrcOfParentDst.getChildren().add(k, mappedSrcNode);
                         mappedSrcNode.getParent().getChildren().remove(oldk);
-                        mappedSrcNode.setParent(parentSrc);
+                        mappedSrcNode.setParent(mappingSrcOfParentDst);
                     }
                 }
             }

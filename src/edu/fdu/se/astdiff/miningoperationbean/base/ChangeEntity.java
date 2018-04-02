@@ -13,7 +13,7 @@ import java.util.List;
  * Created by huangkaifeng on 2018/1/16.
  * 父类 其他的Entity都继承于此Entity
  */
-public abstract class ChangeEntity {
+public class ChangeEntity {
 
     public ClusteredActionBean clusteredActionBean;
     public StageIIIBean stageIIIBean;
@@ -48,6 +48,10 @@ public abstract class ChangeEntity {
         init();
         this.clusteredActionBean = bean;
         this.lineRange = AstRelations.getMyRange(bean.fafather,bean.nodeType);
+    }
+
+    public ChangeEntity(){
+        init();
     }
 
     @Override

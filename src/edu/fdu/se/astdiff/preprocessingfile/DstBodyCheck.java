@@ -63,8 +63,8 @@ public class DstBodyCheck {
             //todo
             if (srcBody.getBodyDeclaration().toString().hashCode() == cod.toString().hashCode()
                     && prefixClassName.hashCode() == srcBody.getLocationClassString().hashCode()) {
-                System.out.println(srcBody.getBodyDeclaration().toString());
-                System.out.println(cod.toString());
+//                System.out.println(srcBody.getBodyDeclaration().toString());
+//                System.out.println(cod.toString());
                 compareCache.addToDstRemoveList(cod);
                 compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
                 TypeNodesTraversal.traverseTypeDeclarationSetVisited(compareCache, (TypeDeclaration) srcBody.getBodyDeclaration(), prefixClassName);

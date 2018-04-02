@@ -25,26 +25,26 @@ public class BaseDiffMiner {
         FilePairPreDiff preDiff = new FilePairPreDiff();
         preDiff.compareTwoFile(filePrev, fileCurr, output);
         // 1.5 data
-//        PreprocessedData preData = preDiff.getPreprocessedData();
-////        preData.printAddedRemovedBodies();
-//        // 2.gen
-//        JavaParserTreeGenerator treeGenerator = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
-//        MyActionGenerator gen = new MyActionGenerator(treeGenerator);
-//        // 2.5 data
-//        GeneratingActionsData actionsData = gen.generate();
-//        printActions(actionsData,treeGenerator);
-//        // 3. Aggregation
-//        MiningActionData mMiningActionData = new MiningActionData(actionsData,treeGenerator);
-//        ClusterActions.doCluster(mMiningActionData);
-//        MiningOperationData mod = new MiningOperationData(preData,mMiningActionData);
-//        // 3.5 data
-////        mod.printStage1ChangeEntity();
-////        // 4.Layer
-//        mod.initContainerEntityData(); //todo move merge
-//        mod.printContainerEntityData();
-//        mod.mergeMoveAndWrapper();
-//        ChangeEntityData changeEntityData = new ChangeEntityData(mod,preData.entityContainer);
-//        changeEntityData.printStage2ChangeEntity(); //todo print
+        PreprocessedData preData = preDiff.getPreprocessedData();
+//        preData.printAddedRemovedBodies();
+        // 2.gen
+        JavaParserTreeGenerator treeGenerator = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
+        MyActionGenerator gen = new MyActionGenerator(treeGenerator);
+        // 2.5 data
+        GeneratingActionsData actionsData = gen.generate();
+        printActions(actionsData,treeGenerator);
+        // 3. Aggregation
+        MiningActionData mMiningActionData = new MiningActionData(actionsData,treeGenerator);
+        ClusterActions.doCluster(mMiningActionData);
+        MiningOperationData mod = new MiningOperationData(preData,mMiningActionData);
+        // 3.5 data
+        mod.printStage1ChangeEntity();
+//        // 4.Layer
+        mod.initContainerEntityData(); //todo move merge
+        mod.printContainerEntityData();
+        mod.mergeMoveAndWrapper();
+        ChangeEntityData changeEntityData = new ChangeEntityData(mod,preData.entityContainer);
+        changeEntityData.printStage2ChangeEntity(); //todo print
 
     }
 

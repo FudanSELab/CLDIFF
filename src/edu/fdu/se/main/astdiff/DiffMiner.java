@@ -56,17 +56,17 @@ public class DiffMiner extends BaseDiffMiner {
                 = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR) + "/android-" + String.valueOf(version);
         List<String> filePathList = readCompareList(version, fileRootPathPrev, fileRootPathCurr);
         int cnt = 0;
-        int candidateIndex = 5;
-        for (String subPath : filePathList) {
-            if (cnt < candidateIndex) {
-                cnt++;
+        int candidateIndex = 26;
+        System.out.println(filePathList.size());
+        for(int i = 0;i<filePathList.size();i++){
+            String subPath = filePathList.get(i);
+            if(i!=candidateIndex){
                 continue;
             }
-            cnt++;
 //            if(!(subPath.equals("\\android\\accessibilityservice\\AccessibilityServiceInfo.java"))){
 //                continue;
 //            }
-            System.out.println(subPath);
+            System.out.println(i+ ": "+subPath);
             String subPath2 = subPath.replace("\\", "/");
             String outputDirName = subPath.replace("\\", "_").substring(1);
             String fileFullPathPrev = fileRootPathPrev + subPath2;

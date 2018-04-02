@@ -31,7 +31,8 @@ public class SimpleActionPrinter {
 			sb.append( " to " + prettyString((Tree)treeNode.getParent()) + " at " +((Insert)a).getPosition() +" "+ treeNode.getRangeString()+ "\n");
 		}
 		if (a instanceof Move) {
-			sb.append(" to " + prettyString((Tree)treeNode.getParent()) + " at " + ((Move)a).getPosition()+" "+ treeNode.getRangeString() + "\n");// old
+			Move move = (Move) a;
+			sb.append(" to " + prettyString((Tree)move.getParent()) + " at " + ((Move)a).getPosition()+" "+ treeNode.getRangeString() + "\n");// old
 		}
 		if (a instanceof Update) {
 			sb.append( "from " + treeNode.getLabel() + " to " + ((Update)a).getValue() +" "+ treeNode.getRangeString()+ "\n");// old

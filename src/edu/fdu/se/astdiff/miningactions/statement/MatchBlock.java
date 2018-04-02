@@ -4,9 +4,17 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
+import edu.fdu.se.astdiff.generatingactions.ActionConstants;
+import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+import edu.fdu.se.astdiff.miningactions.util.AstRelations;
+import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
+import edu.fdu.se.astdiff.miningoperationbean.base.StatementPlusChangeEntity;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MatchBlock {
@@ -41,14 +49,23 @@ public class MatchBlock {
 
     public static void handleMoveOnBlock(MiningActionData fp,Action a){
         System.err.println("Move block");
-        Tree moveTree = (Tree) a.getNode();
-        List<ITree> children = moveTree.getChildren();
-        for(ITree child:children){
-            Tree childd = (Tree) child;
-            // 标记被move的节点的children节点
-            // 分别有change entity 封装
+//        Tree parent = (Tree)a.getNode().getParent();
+//        System.err.println(parent.getAstNode().getClass().getSimpleName());
+//        Move move = (Move)a;
+        Tree movedBlock = (Tree)a.getNode();
+//        Tree nextParent =(Tree) move.getParent();
+        List<ITree> children = movedBlock.getChildren();
+        for(int i =0;i<children.size();i++){
+            Tree childd = (Tree) children.get(i);
+            ClusteredActionBean clusteredActionBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,null,null,null,childd,ClusteredActionBean.SRC_TREE_NODE);
+            ChangeEntity changeEntity = new StatementPlusChangeEntity(clusteredActionBean);
+            changeEntity.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
+            changeEntity.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
+            changeEntity.stageIIBean.setChangeEntity(childd.getAstNode().getClass().getSimpleName());
+            changeEntity.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_MOVE);
+            changeEntity.stageIIBean.setLineRange(AstRelations.getMyRange(childd, ClusteredActionBean.SRC_TREE_NODE).toString());
+            fp.addOneChangeEntity(changeEntity);
         }
-        // clear 原先的move节点
     }
     // gumtree 原先识别的问题
 

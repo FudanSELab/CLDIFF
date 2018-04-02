@@ -14,11 +14,13 @@ import org.eclipse.jgit.treewalk.TreeWalk;
  *
  *
  */
-public abstract class StatementPlusChangeEntity extends ChangeEntity {
+public class StatementPlusChangeEntity extends ChangeEntity {
 
     public StatementPlusChangeEntity(ClusteredActionBean bean){
         super(bean);
-        if(bean.curAction instanceof Move){
+        if(bean.curAction==null){
+            this.linkBean = new LinkBean(bean.fafather);
+        } else if(bean.curAction instanceof Move){
             this.linkBean = new LinkBean(bean.curAction);
         }else {
             this.linkBean = new LinkBean(bean.actions);

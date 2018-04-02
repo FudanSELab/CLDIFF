@@ -1,5 +1,6 @@
 package edu.fdu.se.main.astdiff;
 
+import com.github.gumtreediff.actions.model.Move;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
@@ -79,7 +80,6 @@ public class DiffMinerTest extends BaseDiffMiner {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
