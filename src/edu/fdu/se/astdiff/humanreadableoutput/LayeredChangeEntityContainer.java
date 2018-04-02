@@ -8,7 +8,7 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityUtil;
 import edu.fdu.se.astdiff.miningoperationbean.member.ClassOrInterfaceDeclarationChangeEntity;
-import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
+import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.*;

@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.preprocessingfile;
+package edu.fdu.se.astdiff.preprocessingfile.data;
 
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;

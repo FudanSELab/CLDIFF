@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.preprocessingfile;
+package edu.fdu.se.astdiff.preprocessingfile.data;
 
 
 import org.eclipse.jdt.core.dom.BodyDeclaration;

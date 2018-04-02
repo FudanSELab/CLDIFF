@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Map.Entry;
 
 
-import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
+import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
+import edu.fdu.se.astdiff.preprocessingfile.data.FilePreprocessLog;
+import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
+import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedTempData;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.javaparser.JDTParserFactory;
@@ -42,7 +45,7 @@ public class FilePairPreDiff {
 
 
     public void compareTwoFile(String src, String dst, String outputDirName) {
-        ASTTraversal astTraversal = new ASTTraversal();
+        TypeNodesTraversal astTraversal = new TypeNodesTraversal();
         CompilationUnit cuSrc = JDTParserFactory.getCompilationUnit(src);
         CompilationUnit cuDst = JDTParserFactory.getCompilationUnit(dst);
         preprocessedData.loadTwoCompilationUnits(cuSrc, cuDst, src, dst);
@@ -75,7 +78,7 @@ public class FilePairPreDiff {
     }
 
 
-    private void iterateVisitingMap(ASTTraversal astTraversal) {
+    private void iterateVisitingMap(TypeNodesTraversal astTraversal) {
         for (Entry<BodyDeclarationPair, Integer> item : preprocessedTempData.srcNodeVisitingMap.entrySet()) {
             BodyDeclarationPair bdp = item.getKey();
             int value = item.getValue();

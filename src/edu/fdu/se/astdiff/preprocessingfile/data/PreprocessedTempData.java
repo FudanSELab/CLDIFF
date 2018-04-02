@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.preprocessingfile;
+package edu.fdu.se.astdiff.preprocessingfile.data;
 
 
 import org.eclipse.jdt.core.dom.*;
@@ -32,15 +32,18 @@ public class PreprocessedTempData {
     public PreprocessedTempData(){
         srcNodeBodyNameMap = new HashMap<>();
         srcNodeVisitingMap = new HashMap<>();
+        srcNodeHashCodeMap = new HashMap<>();
         srcRemovalNodes = new ArrayList<>();
         dstRemovalNodes = new ArrayList<>();
     }
 
-    protected Map<String, List<BodyDeclarationPair>> srcNodeBodyNameMap;
+    public Map<String, List<BodyDeclarationPair>> srcNodeBodyNameMap;
     /**
      * 0 初始化之后的值  1 遍历到了之后 需要保留的different  2 遍历到了之后 需要删除的same   3 prev中有，curr没有，change：deleted
      */
     public Map<BodyDeclarationPair,Integer> srcNodeVisitingMap;
+
+    public Map<BodyDeclarationPair,Integer> srcNodeHashCodeMap;
 
     /**
      * list of comments to be removed
@@ -127,10 +130,11 @@ public class PreprocessedTempData {
         PackageDeclaration packageDeclaration = cu.getPackage();
         if (packageDeclaration != null)
             addToSrcRemoveList(packageDeclaration);
-
         List<ASTNode> commentList = cu.getCommentList();
         for (int i = commentList.size() - 1; i >= 0; i--) {
-            addToSrcRemoveList(commentList.get(i));
+            if(commentList.get(i) instanceof Javadoc){
+                addToSrcRemoveList(commentList.get(i));
+            }
         }
         List<ImportDeclaration> imprortss = cu.imports();
         for (int i = imprortss.size() - 1; i >= 0; i--) {
@@ -146,7 +150,9 @@ public class PreprocessedTempData {
             addToDstRemoveList(packageDeclaration);
         List<ImportDeclaration> imprortss = cu.imports();
         for (int i = commentList.size() - 1; i >= 0; i--) {
-            addToDstRemoveList(commentList.get(i));
+            if(commentList.get(i) instanceof Javadoc) {
+                addToDstRemoveList(commentList.get(i));
+            }
         }
         for (int i = imprortss.size() - 1; i >= 0; i--) {
             addToDstRemoveList(imprortss.get(i));

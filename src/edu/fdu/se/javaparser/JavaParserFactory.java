@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.Comment;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.diff.EditList;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -18,12 +20,6 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
 
 import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitCommand;
@@ -47,6 +43,72 @@ public class JavaParserFactory {
 		}
 		return compilationUnit;
 	}
+	public static void removeCommentss(Node n) {
+		List<Comment> mList = n.getAllContainedComments();
+		List<Comment> mList2 = n.getOrphanComments();
+		for (Comment m : mList) {
+			m.remove();
+		}
+		for (Comment m : mList2) {
+			m.remove();
+		}
+	}
+
+	/**
+	 * prev + curr
+	 *
+	 * @param cod class name
+	 */
+	public static void traverseClassOrInterfaceDeclarationRemoveComment(ClassOrInterfaceDeclaration cod) {
+		cod.removeJavaDocComment();
+		cod.removeComment();
+		NodeList nodeList = cod.getMembers();
+		for (int i = nodeList.size() - 1; i >= 0; i--) {
+			Node node = nodeList.get(i);
+			node.removeComment();
+			removeCommentss(node);
+			if (node instanceof ClassOrInterfaceDeclaration) {
+				traverseClassOrInterfaceDeclarationRemoveComment((ClassOrInterfaceDeclaration) node);
+			}
+			if (node instanceof AnnotationDeclaration) {
+//				preprocessedTempData.addToRemoveList((BodyDeclaration) node);
+				node.remove();
+			}
+			if (node instanceof ConstructorDeclaration) {
+				ConstructorDeclaration cd = (ConstructorDeclaration) node;
+				cd.removeJavaDocComment();
+			}
+			if (node instanceof MethodDeclaration) {
+				MethodDeclaration md = (MethodDeclaration) node;
+				md.removeJavaDocComment();
+			}
+			if (node instanceof FieldDeclaration) {
+				FieldDeclaration fd = (FieldDeclaration) node;
+				fd.removeJavaDocComment();
+			}
+			if (node instanceof InitializerDeclaration) {
+				InitializerDeclaration idd = (InitializerDeclaration) node;
+				idd.removeJavaDocComment();
+			}
+		}
+	}
+
+	public static void removeAllCommentsOfCompilationUnit(CompilationUnit cu) {
+		cu.removeComment();
+		cu.removePackageDeclaration();
+		NodeList imports = cu.getImports();
+		for (int i = imports.size() - 1; i >= 0; i--) {
+			Node n = imports.get(i);
+			n.remove();
+		}
+		assert cu.getTypes() != null;
+		assert cu.getTypes().size() == 1;
+		TypeDeclaration mTypeCurr = cu.getType(0);
+		ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) mTypeCurr;
+		traverseClassOrInterfaceDeclarationRemoveComment(cod);
+	}
+
+
 	/**
 	 * commit prev的代码 + edit list output： edit list所在的method
 	 * get buggy methods

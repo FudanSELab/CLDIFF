@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.preprocessingfile;
+package edu.fdu.se.astdiff.preprocessingfile.data;
 
 
 import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
@@ -17,21 +17,20 @@ import java.util.Map;
  *
  */
 public class PreprocessedData {
+    public String fullStringSrc;
+    public String fullStringDst;
 
-    protected List<String> dstLineList;
-    protected List<String> srcLineList;
+    public List<String> dstLineList;
+    public List<String> srcLineList;
+    public List<Integer> dstLines;
+    public List<Integer> srcLines;
 
-    protected List<Integer> dstLines;
-
-    protected List<Integer> srcLines;
-
-    protected CompilationUnit dstCu;
-    protected CompilationUnit srcCu;
+    public CompilationUnit dstCu;
+    public CompilationUnit srcCu;
 
     public CompilationUnit getDstCu() {
         return dstCu;
     }
-
     public CompilationUnit getSrcCu() {
         return srcCu;
     }
@@ -87,11 +86,13 @@ public class PreprocessedData {
 
     public void loadTwoCompilationUnits(CompilationUnit src,CompilationUnit dst,String srcPath,String dstPath){
         this.srcCu = src;
-        this.srcLineList = JDTParserFactory.getLinesOfFile(srcPath);
+        this.srcLineList = new ArrayList<>();
+        this.fullStringSrc = JDTParserFactory.getLinesOfFile(srcPath,this.srcLineList);
         this.srcLines = JDTParserFactory.getLinesList(srcLineList.size());
 
         this.dstCu = dst;
-        this.dstLineList = JDTParserFactory.getLinesOfFile(dstPath);
+        this.dstLineList = new ArrayList<>();
+        this.fullStringDst = JDTParserFactory.getLinesOfFile(dstPath,this.dstLineList);
         this.dstLines = JDTParserFactory.getLinesList(dstLineList.size());
     }
 
@@ -127,6 +128,19 @@ public class PreprocessedData {
 
     public List<BodyDeclarationPair> getmBodiesDeleted() {
         return mBodiesDeleted;
+    }
+
+    public int hashCodeOfBodyDeclaration(BodyDeclaration bodyDeclaration, String fileFullText){
+
+        int a = bodyDeclaration.getStartPosition();
+        int b = bodyDeclaration.getLength();
+        if(bodyDeclaration.getJavadoc()!=null){
+            int c = bodyDeclaration.getJavadoc().getLength();
+            return fileFullText.substring(a+c+1,a+b).trim().hashCode();
+        }else{
+            return fileFullText.substring(a,a+b).trim().hashCode();
+        }
+
     }
 
 }

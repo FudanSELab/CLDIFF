@@ -39,17 +39,19 @@ public class JDTParserFactory {
         return null;
     }
 
-    public static List<String> getLinesOfFile(String filePath){
+    public static String getLinesOfFile(String filePath,List<String> fileList){
         try {
-            List<String> fileList = new ArrayList<>();
             FileInputStream fis = new FileInputStream(filePath);
+            StringBuilder sb = new StringBuilder();
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
             String line;
             while((line = br.readLine())!= null){
                 fileList.add(line);
+                sb.append(line);
+                sb.append("\n");
             }
-            return fileList;
+            return sb.toString();
         }catch(Exception e){
             e.printStackTrace();
         }

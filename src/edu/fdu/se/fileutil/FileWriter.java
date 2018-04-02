@@ -55,7 +55,7 @@ public class FileWriter {
 			for(int i =0; i<lines.size();i++){
 				String str = content.get(i);
 				int index = lines.get(i).intValue();
-				if(index>0) {
+				if(index>=0) {
 					fos.write(str.getBytes());
 					fos.write(lineEnd.getBytes());
 				}

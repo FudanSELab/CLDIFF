@@ -88,10 +88,11 @@ public class DiffMiner extends BaseDiffMiner {
 
 
     //4-2 讨论
-    // 1.Type Bing问题
-    // 2.Enum 问题
+    // 1. Type Binding问题
     // 3. Insert condition +  Move
     // 4. Insert condition body + Move
+    // 5. Preprocessing toString问题
+    // 6. Insert Stmt
 
 //  Key -> Value
 //  BodyDeclaration -> List<ChangeEntity> 发生在这个BodyDeclaration里面的change entity

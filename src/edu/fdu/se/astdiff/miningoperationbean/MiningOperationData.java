@@ -6,8 +6,8 @@ import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.member.*;
-import edu.fdu.se.astdiff.preprocessingfile.BodyDeclarationPair;
-import edu.fdu.se.astdiff.preprocessingfile.PreprocessedData;
+import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
+import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.List;
