@@ -57,7 +57,10 @@ public class MatchBlock {
         List<ITree> children = movedBlock.getChildren();
         for(int i =0;i<children.size();i++){
             Tree childd = (Tree) children.get(i);
-            ClusteredActionBean clusteredActionBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,null,null,null,childd,ClusteredActionBean.SRC_TREE_NODE);
+            ChangePacket changePacket = new ChangePacket();
+            changePacket.initChangeSet1();
+            List<Action> subActions = new ArrayList<>();
+            ClusteredActionBean clusteredActionBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,null,subActions,changePacket,childd,ClusteredActionBean.SRC_TREE_NODE);
             ChangeEntity changeEntity = new StatementPlusChangeEntity(clusteredActionBean);
             changeEntity.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
             changeEntity.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);

@@ -132,6 +132,25 @@ public class TypeNodesTraversal {
     }
 
 
+    public void traverseSrcTypeDeclaration2Keys(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration typeDeclaration, String prefixClassName) {
+        List<BodyDeclaration> nodeList = typeDeclaration.bodyDeclarations();
+        BodyDeclarationPair typeBodyDeclarationPair = new BodyDeclarationPair(typeDeclaration, prefixClassName);
+        compareResult.entityContainer.addKey(typeBodyDeclarationPair);
+        for (int i = nodeList.size() - 1; i >= 0; i--) {
+            BodyDeclaration bodyDeclaration = nodeList.get(i);
+            if (bodyDeclaration instanceof TypeDeclaration) {
+                TypeDeclaration cod2 = (TypeDeclaration) bodyDeclaration;
+                String subCodName = prefixClassName + cod2.getName().toString() + ".";
+                traverseSrcTypeDeclarationInit(compareResult, compareCache, cod2, subCodName);
+                continue;
+            }
+            BodyDeclarationPair bdp = new BodyDeclarationPair(bodyDeclaration, prefixClassName);
+            compareResult.entityContainer.addKey(bdp);
+
+        }
+    }
+
+
 
 
 }

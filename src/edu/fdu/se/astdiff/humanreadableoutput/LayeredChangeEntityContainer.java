@@ -183,9 +183,9 @@ public class LayeredChangeEntityContainer {
 
     public void printContainerEntityBeforeSorting(CompilationUnit cu){
         System.out.println("Member Key Size:" + this.layerMap.size());
-//        for(Entry<BodyDeclarationPair,List<ChangeEntity>> entry:this.layerMap.entrySet()){
-            for(BodyDeclarationPair bodyDeclarationPair : this.keyIndex){
-//            BodyDeclarationPair bodyDeclarationPair = entry.getKey();
+        for(Entry<BodyDeclarationPair,List<ChangeEntity>> entry:this.layerMap.entrySet()){
+//            for(BodyDeclarationPair bodyDeclarationPair : this.keyIndex){
+            BodyDeclarationPair bodyDeclarationPair = entry.getKey();
             List<ChangeEntity> mList = this.layerMap.get(bodyDeclarationPair);
             int startL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getStartPosition());
             int endL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getLength()+bodyDeclarationPair.getBodyDeclaration().getStartPosition()-1);

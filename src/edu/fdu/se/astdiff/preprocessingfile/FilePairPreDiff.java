@@ -101,6 +101,7 @@ public class FilePairPreDiff {
         preprocessedTempData.removeSrcRemovalList(cuSrc, preprocessedData.srcLines);
         preprocessedTempData.removeDstRemovalList(cuDst, preprocessedData.dstLines);
         iterateVisitingMap2LoadContainerMap();
+//        astTraversal.traverseSrcTypeDeclaration2Keys(preprocessedData,preprocessedTempData,tdSrc,tdSrc.getName().toString() + ".");
 
         if (fileOutputLog != null) {
             fileOutputLog.writeFileAfterProcess(preprocessedData);
@@ -135,12 +136,7 @@ public class FilePairPreDiff {
             BodyDeclarationPair bdp = item.getKey();
             int value = item.getValue();
             BodyDeclaration bd = bdp.getBodyDeclaration();
-            if(bd instanceof MethodDeclaration){
-                MethodDeclaration md = (MethodDeclaration) bd;
-                if(md.getName().toString().equals("create")){
-                    System.out.println("aa");
-                }
-            }
+
             if (!(bd instanceof TypeDeclaration)) {
                 switch (value) {
                     case PreprocessedTempData.BODY_DIFFERENT_RETAIN:
@@ -155,6 +151,13 @@ public class FilePairPreDiff {
                         break;
                 }
             }
+//            if(bd instanceof MethodDeclaration){
+//                MethodDeclaration md = (MethodDeclaration) bd;
+////                if(md.getName().toString().equals("create")){
+////                    System.out.println("aa");
+//                    break;
+//                }
+//            }
         }
     }
 
@@ -206,6 +209,7 @@ public class FilePairPreDiff {
                     for (BodyDeclarationPair bdpTmp : bdpDeleteList) {
                         this.preprocessedTempData.srcRemovalNodes.remove(bdpTmp.getBodyDeclaration());
                         this.preprocessedData.getmBodiesDeleted().remove(bdpTmp);
+//                        this.preprocessedData.entityContainer.addKey(bdpTmp);
                     }
                 }
             }
@@ -234,6 +238,7 @@ public class FilePairPreDiff {
         }
         double ii = (i * 1.0) / name1.length();
         if (ii > 0.7) {
+//            System.out.println("Potential:"+name1+" "+name2);
             return true;
         }
         return false;

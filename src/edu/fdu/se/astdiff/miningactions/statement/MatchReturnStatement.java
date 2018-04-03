@@ -60,7 +60,8 @@ public class MatchReturnStatement {
 
     public static void matchReturnChangeCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){
         ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
-        List<Action> actions = changeEntity.clusteredActionBean.actions;
+        List<Action> subActions = null;
+            subActions = changeEntity.clusteredActionBean.actions;
         List<Action> newActions = new ArrayList<>();
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,newActions,changePacket,false)){
             DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,newActions,changePacket);
@@ -70,7 +71,7 @@ public class MatchReturnStatement {
             if(fp.mGeneratingActionsData.getAllActionMap().get(tmp)==1){
                 continue;
             }
-            actions.add(tmp);
+            subActions.add(tmp);
         }
         changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);

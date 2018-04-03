@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.preprocessingfile.data;
 
 
+import javassist.compiler.ast.MethodDecl;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
@@ -82,6 +83,13 @@ public class PreprocessedTempData {
 
     public void removeSrcRemovalList(CompilationUnit cu, List<Integer> lineList) {
         for (ASTNode item : this.srcRemovalNodes) {
+//            if(item instanceof MethodDeclaration){
+//                MethodDeclaration md = (MethodDeclaration) item;
+//                if(md.getName().toString().startsWith("create")){
+//                    System.out.println(md.getName().toString());
+//
+//                }
+//            }
             setLinesFlag(lineList,cu.getLineNumber(item.getStartPosition()),
                     cu.getLineNumber(item.getStartPosition()+item.getLength()-1));
             item.delete();
