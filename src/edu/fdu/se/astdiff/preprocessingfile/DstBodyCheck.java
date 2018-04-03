@@ -135,7 +135,7 @@ public class DstBodyCheck {
             EnumDeclaration ed = (EnumDeclaration) bd;
             methodNameKey = prefixClassName + ed.getName().toString();
         } else {
-            System.err.println("---------------------------");
+            System.err.println("[ERR]---------------------------");
         }
 
         if (compareCache.srcNodeBodyNameMap.containsKey(methodNameKey)) {

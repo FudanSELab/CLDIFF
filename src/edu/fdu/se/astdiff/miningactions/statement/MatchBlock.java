@@ -48,7 +48,7 @@ public class MatchBlock {
     }
 
     public static void handleMoveOnBlock(MiningActionData fp,Action a){
-        System.err.println("Move block");
+        System.err.println("[ERR]Move block");
 //        Tree parent = (Tree)a.getNode().getParent();
 //        System.err.println(parent.getAstNode().getClass().getSimpleName());
 //        Move move = (Move)a;

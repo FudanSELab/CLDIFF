@@ -40,8 +40,30 @@ public class SimpleActionPrinter {
 		return sb.toString();
 	}
 
+	public static final String INS = "I,";
+	public static final String MOV = "M,";
+	public static final String UPD = "U,";
+	public static final String DEL = "D,";
 	public static String prettyString(Tree node) {
-		return node.getId() + ". " + node.getAstClass().getSimpleName() + ":" + node.getLabel();//+node.getRangeString();
+		if(node.getDoAction()==null) {
+			return node.getId() + "." + node.getAstClass().getSimpleName() + ":" + node.getLabel();//+node.getRangeString();
+		}else{
+			String res = "[";
+			for(Action a:node.getDoAction()){
+				if(a instanceof Insert){
+					res += INS;
+				}else if(a instanceof Move){
+					res += MOV;
+				}else if(a instanceof Update){
+					res+=UPD;
+				}else{
+					res+=DEL;
+				}
+			}
+			res = res.substring(0,res.length()-1);
+			res +="]";
+			return node.getId() + "." + node.getAstClass().getSimpleName() + ":" + node.getLabel()+" "+res;
+		}
 	}
 
 

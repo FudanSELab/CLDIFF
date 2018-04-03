@@ -46,7 +46,7 @@ public class TypeNodesTraversal {
                 EnumDeclaration ed = (EnumDeclaration) node;
                 dstBodyCheck.checkEnumDeclarationInDst(compareResult,compareCache,ed,prefixClassName);
             } else {
-                System.err.println("Error:" + node.getClass().getSimpleName());
+                System.err.println("[ERR]Error:" + node.getClass().getSimpleName());
             }
         }
     }

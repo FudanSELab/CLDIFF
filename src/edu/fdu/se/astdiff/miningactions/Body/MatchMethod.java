@@ -32,7 +32,7 @@ public class MatchMethod {
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
 		code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
-		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_INITIALIZER);
+		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_METHOD);
 		code.stageIIBean.setOpt2(null);// 暂时不设置
 		code.stageIIBean.setSubEntity(null);
 		code.stageIIBean.setLineRange(code.lineRange.toString());

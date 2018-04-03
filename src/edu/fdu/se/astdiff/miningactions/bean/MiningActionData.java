@@ -51,7 +51,7 @@ public class MiningActionData {
 			if (this.mGeneratingActionsData.getAllActionMap().containsKey(tmp)) {
 				this.mGeneratingActionsData.getAllActionMap().put(tmp, 1);
 			} else {
-				System.err.println("action not added");
+				System.err.println("[ERR]action not added");
 			}
 		}
 	}
@@ -60,7 +60,7 @@ public class MiningActionData {
 		if (this.mGeneratingActionsData.getAllActionMap().containsKey(a)) {
 			this.mGeneratingActionsData.getAllActionMap().put(a, 1);
 		} else {
-			System.err.println("action not added");
+			System.err.println("[ERR]action not added");
 		}
 	}
 

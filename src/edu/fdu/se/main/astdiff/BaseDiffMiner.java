@@ -40,9 +40,8 @@ public class BaseDiffMiner {
         // 3.5 data
         mod.printStage1ChangeEntity();
 //        // 4.Layer
-        mod.initContainerEntityData(); //todo move merge
-        mod.printContainerEntityData();
-        mod.mergeMoveAndWrapper();
+        mod.preprocessChangeEntity();
+
         ChangeEntityData changeEntityData = new ChangeEntityData(mod,preData.entityContainer);
         changeEntityData.printStage2ChangeEntity(); //todo print
 

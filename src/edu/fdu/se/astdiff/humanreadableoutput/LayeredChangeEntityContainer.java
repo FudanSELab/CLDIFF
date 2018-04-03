@@ -7,7 +7,7 @@ import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityUtil;
-import edu.fdu.se.astdiff.miningoperationbean.member.ClassOrInterfaceDeclarationChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.member.*;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import org.eclipse.jdt.core.dom.*;
 
@@ -72,7 +72,7 @@ public class LayeredChangeEntityContainer {
         if(mKey!=null && this.layerMap.containsKey(mKey)){
             this.layerMap.get(mKey).add(changeEntity);
         }else{
-            System.err.println(changeEntity.stageIIBean.getLocation()+" "+changeEntity.getClass().getSimpleName());
+            System.err.println("[ERR]"+changeEntity.stageIIBean.getLocation()+" "+changeEntity.getClass().getSimpleName());
         }
     }
 
@@ -105,7 +105,7 @@ public class LayeredChangeEntityContainer {
         if(mKey!=null && this.layerMap.containsKey(mKey)){
             this.layerMap.get(mKey).add(changeEntity);
         }else{
-            System.err.println("Not In BodyMap keys:"+ changeEntity.toString());
+            System.err.println("[ERR]Not In BodyMap keys:"+ changeEntity.toString());
 
         }
 
@@ -114,7 +114,11 @@ public class LayeredChangeEntityContainer {
     private BodyDeclarationPair getEnclosedBodyDeclaration(ChangeEntity changeEntity,int start){
         for(BodyDeclarationPair key:this.layerMap.keySet()){
             if(key.getBodyDeclaration() instanceof TypeDeclaration ){
-                if(changeEntity instanceof ClassOrInterfaceDeclarationChangeEntity){
+                if(changeEntity instanceof ClassOrInterfaceDeclarationChangeEntity
+                        || changeEntity instanceof EnumChangeEntity
+                        || changeEntity instanceof FieldChangeEntity
+                        || changeEntity instanceof InitializerChangeEntity
+                        || changeEntity instanceof MethodChangeEntity){
                     if (start >= key.getBodyDeclaration().getStartPosition() && start <= (key.getBodyDeclaration().getStartPosition() + key.getBodyDeclaration().getLength())) {
                         return key;
                     }

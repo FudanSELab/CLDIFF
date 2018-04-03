@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/1/13.
+ *
  */
 public class MiningOperationData {
 
@@ -98,6 +99,14 @@ public class MiningOperationData {
                 System.out.println(a.toString());
             }
         });
+    }
+
+    public void preprocessChangeEntity(){
+//        this.
+        this.initContainerEntityData();
+        this.printContainerEntityData();
+        this.mergeMoveAndWrapper();
+
     }
 
 
