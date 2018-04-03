@@ -46,7 +46,8 @@ public class SimpleActionPrinter {
 	public static final String DEL = "D,";
 	public static String prettyString(Tree node) {
 		if(node.getDoAction()==null) {
-			return node.getId() + "." + node.getAstClass().getSimpleName() + ":" + node.getLabel();//+node.getRangeString();
+
+			return node.getId() + "." + node.getAstClass().getSimpleName() + ":" + node.getLabel()+ " "+node.getRangeString();
 		}else{
 			String res = "[";
 			for(Action a:node.getDoAction()){
@@ -62,7 +63,7 @@ public class SimpleActionPrinter {
 			}
 			res = res.substring(0,res.length()-1);
 			res +="]";
-			return node.getId() + "." + node.getAstClass().getSimpleName() + ":" + node.getLabel()+" "+res;
+			return node.getId() + "." + node.getAstClass().getSimpleName() + ":" + node.getLabel()+" "+res + " "+node.getRangeString();
 		}
 	}
 
