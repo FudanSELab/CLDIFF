@@ -1,6 +1,6 @@
 package edu.fdu.se.astdiff.miningoperationbean;
 
-import edu.fdu.se.astdiff.linkpool.MyRange;
+import edu.fdu.se.astdiff.link.MyRange;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
@@ -57,8 +57,8 @@ public class MiningOperationData {
         this.preprocessedData.getmBodiesDeleted().forEach(a -> addOneBody(a, OperationTypeConstants.DELETE));
     }
 
-    public void printContainerEntityData() {
-        this.entityContainer.printContainerEntityBeforeSorting();
+    public void printContainerEntityData(CompilationUnit cu) {
+        this.entityContainer.printContainerEntityBeforeSorting(cu);
     }
 
     private void addOneBody(BodyDeclarationPair item, int type) {
@@ -104,7 +104,7 @@ public class MiningOperationData {
     public void preprocessChangeEntity(){
 //        this.
         this.initContainerEntityData();
-        this.printContainerEntityData();
+        this.printContainerEntityData(this.preprocessedData.srcCu);
         this.mergeMoveAndWrapper();
 
     }

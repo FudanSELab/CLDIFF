@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.linkpool;
+package edu.fdu.se.astdiff.link;
 
 
 
@@ -9,9 +9,7 @@ import edu.fdu.se.astdiff.miningactions.util.MyList;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by huangkaifeng on 2018/3/10.

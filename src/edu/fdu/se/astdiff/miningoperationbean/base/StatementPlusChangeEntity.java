@@ -2,12 +2,8 @@ package edu.fdu.se.astdiff.miningoperationbean.base;
 
 
 import com.github.gumtreediff.actions.model.Move;
-import edu.fdu.se.astdiff.linkpool.LinkBean;
-import edu.fdu.se.astdiff.miningactions.util.DownUpMatchUtil;
-import edu.fdu.se.astdiff.miningactions.util.UpDownMatchUtil;
+import edu.fdu.se.astdiff.link.LinkBean;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
  * Created by huangkaifeng on 2018/1/22.

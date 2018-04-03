@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.linkpool;
+package edu.fdu.se.astdiff.link;
 
 /**
  * Created by huangkaifeng on 2018/3/12.

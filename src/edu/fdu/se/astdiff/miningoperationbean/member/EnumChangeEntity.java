@@ -1,6 +1,6 @@
 package edu.fdu.se.astdiff.miningoperationbean.member;
 
-import edu.fdu.se.astdiff.linkpool.MyRange;
+import edu.fdu.se.astdiff.link.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;

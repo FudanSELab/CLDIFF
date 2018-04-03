@@ -1,6 +1,6 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
-import edu.fdu.se.astdiff.linkpool.MyRange;
+import edu.fdu.se.astdiff.link.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.member.EnumChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
@@ -21,9 +21,13 @@ public class DstBodyCheck {
      * visited
      */
     public int checkFieldDeclarationInDst(PreprocessedData compareResult, PreprocessedTempData compareCache, FieldDeclaration fd, String prefix) {
+
         List<VariableDeclarationFragment> vdList = fd.fragments();
         for (VariableDeclarationFragment vd : vdList) {
             String key = prefix + vd.getName().toString();
+//            if(vd.getName().toString().equals("TAG")){
+//                System.out.println(vd.getName().toString());
+//            }
             if (compareCache.srcNodeBodyNameMap.containsKey(key)) {
                 List<BodyDeclarationPair> srcBodyPairs = compareCache.srcNodeBodyNameMap.get(key);
                 assert srcBodyPairs.size() <= 1;
@@ -131,6 +135,7 @@ public class DstBodyCheck {
         } else if (bd instanceof MethodDeclaration) {
             MethodDeclaration md = (MethodDeclaration) bd;
             methodNameKey = prefixClassName + md.getName().toString();
+
         } else if (bd instanceof EnumDeclaration) {
             EnumDeclaration ed = (EnumDeclaration) bd;
             methodNameKey = prefixClassName + ed.getName().toString();

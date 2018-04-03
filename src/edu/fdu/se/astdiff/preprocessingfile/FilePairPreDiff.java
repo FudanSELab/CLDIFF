@@ -1,8 +1,10 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Queue;
 
 
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
@@ -11,6 +13,7 @@ import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedTempData;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
+import edu.fdu.se.handlefile.Method;
 import edu.fdu.se.javaparser.JDTParserFactory;
 import org.eclipse.jdt.core.dom.*;
 
@@ -37,6 +40,7 @@ public class FilePairPreDiff {
     public FilePairPreDiff() {
         preprocessedData = new PreprocessedData();
         preprocessedTempData = new PreprocessedTempData();
+        queue = new LinkedList<>();
 
     }
 
@@ -44,12 +48,18 @@ public class FilePairPreDiff {
     private PreprocessedTempData preprocessedTempData;
     private FileOutputLog fileOutputLog;
 
+    class SrcDstPair{
+        TypeDeclaration tpSrc;
+        TypeDeclaration tpDst;
+    }
+    private Queue<SrcDstPair> queue;
+
     public FileOutputLog getFileOutputLog() {
         return fileOutputLog;
     }
 
     public int compareTwoFile(String src, String dst, String outputDirName) {
-        TypeNodesTraversal astTraversal = new TypeNodesTraversal();
+
         CompilationUnit cuSrc = JDTParserFactory.getCompilationUnit(src);
         CompilationUnit cuDst = JDTParserFactory.getCompilationUnit(dst);
         preprocessedData.loadTwoCompilationUnits(cuSrc, cuDst, src, dst);
@@ -59,15 +69,32 @@ public class FilePairPreDiff {
         }
         preprocessedTempData.removeAllSrcComments(cuSrc, preprocessedData.srcLines);
         preprocessedTempData.removeAllDstComments(cuDst, preprocessedData.dstLines);
-        BodyDeclaration bodyDeclarationSrc = (BodyDeclaration) cuSrc.types().get(0);
-        BodyDeclaration bodyDeclarationDst = (BodyDeclaration) cuDst.types().get(0);
-        if (!(bodyDeclarationSrc instanceof TypeDeclaration) || !(bodyDeclarationDst instanceof TypeDeclaration)) {
+        if(cuSrc.types().size() != cuDst.types().size()){
             return -1;
         }
-        TypeDeclaration mTypeSrc = (TypeDeclaration) bodyDeclarationSrc;
-        TypeDeclaration mTypeDst = (TypeDeclaration) bodyDeclarationDst;
-        astTraversal.traverseSrcTypeDeclarationInit(preprocessedData, preprocessedTempData, mTypeSrc, mTypeSrc.getName().toString() + ".");
-        astTraversal.traverseDstTypeDeclarationCompareSrc(preprocessedData, preprocessedTempData, mTypeDst, mTypeDst.getName().toString() + ".");
+        for(int i = 0;i<cuSrc.types().size();i++){
+            BodyDeclaration bodyDeclarationSrc = (BodyDeclaration) cuSrc.types().get(i);
+            BodyDeclaration bodyDeclarationDst = (BodyDeclaration) cuDst.types().get(i);
+            if ((bodyDeclarationSrc instanceof TypeDeclaration) && (bodyDeclarationDst instanceof TypeDeclaration)) {
+                SrcDstPair srcDstPair = new SrcDstPair();
+                srcDstPair.tpSrc = (TypeDeclaration) bodyDeclarationSrc;
+                srcDstPair.tpDst = (TypeDeclaration) bodyDeclarationDst;
+                this.queue.offer(srcDstPair);
+            }else{
+                return -1;
+            }
+        }
+        while(queue.size()!=0){
+            SrcDstPair tmp = queue.poll();
+            compare(cuSrc,cuDst,tmp.tpSrc,tmp.tpDst);
+        }
+        return 0;
+    }
+
+    private void compare(CompilationUnit cuSrc,CompilationUnit cuDst,TypeDeclaration tdSrc,TypeDeclaration tdDst){
+        TypeNodesTraversal astTraversal = new TypeNodesTraversal();
+        astTraversal.traverseSrcTypeDeclarationInit(preprocessedData, preprocessedTempData, tdSrc, tdSrc.getName().toString() + ".");
+        astTraversal.traverseDstTypeDeclarationCompareSrc(preprocessedData, preprocessedTempData, tdDst, tdDst.getName().toString() + ".");
         // 考虑后面的识别 method name变化，这里把remove的注释掉
         iterateVisitingMap();
         undeleteSignatureChange();
@@ -78,7 +105,7 @@ public class FilePairPreDiff {
         if (fileOutputLog != null) {
             fileOutputLog.writeFileAfterProcess(preprocessedData);
         }
-        return 0;
+
     }
 
 
@@ -88,11 +115,6 @@ public class FilePairPreDiff {
             int value = item.getValue();
             BodyDeclaration bd = bdp.getBodyDeclaration();
             if (bd instanceof TypeDeclaration) {
-//                TypeDeclaration typeDeclaration = (TypeDeclaration)bd;
-//                System.out.println("-----"+ typeDeclaration.getName().toString());
-//                if(typeDeclaration.getName().toString().equals("LayoutTransition")){
-//                    System.out.print("a");
-//                }
                 switch (value) {
 //                    case PreprocessedTempData.BODY_DIFFERENT_RETAIN:
 //                    case PreprocessedTempData.BODY_FATHERNODE_REMOVE:
@@ -113,6 +135,12 @@ public class FilePairPreDiff {
             BodyDeclarationPair bdp = item.getKey();
             int value = item.getValue();
             BodyDeclaration bd = bdp.getBodyDeclaration();
+            if(bd instanceof MethodDeclaration){
+                MethodDeclaration md = (MethodDeclaration) bd;
+                if(md.getName().toString().equals("create")){
+                    System.out.println("aa");
+                }
+            }
             if (!(bd instanceof TypeDeclaration)) {
                 switch (value) {
                     case PreprocessedTempData.BODY_DIFFERENT_RETAIN:
@@ -134,6 +162,9 @@ public class FilePairPreDiff {
         for (Entry<BodyDeclarationPair, Integer> item : preprocessedTempData.srcNodeVisitingMap.entrySet()) {
             BodyDeclarationPair bdp = item.getKey();
             int value = item.getValue();
+//            System.out.println(bdp.getBodyDeclaration().toString());
+//            System.out.println(bdp.getLocationClassString());
+//            System.out.println(value);
             switch (value) {
                 case PreprocessedTempData.BODY_DIFFERENT_RETAIN:
                     this.preprocessedData.entityContainer.addKey(bdp);
@@ -145,6 +176,7 @@ public class FilePairPreDiff {
             }
         }
         this.preprocessedData.entityContainer.sortKeys();
+
     }
 
     public PreprocessedData getPreprocessedData() {

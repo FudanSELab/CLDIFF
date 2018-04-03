@@ -4,7 +4,7 @@ package edu.fdu.se.astdiff.miningactions.util;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
-import edu.fdu.se.astdiff.linkpool.MyRange;
+import edu.fdu.se.astdiff.link.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;

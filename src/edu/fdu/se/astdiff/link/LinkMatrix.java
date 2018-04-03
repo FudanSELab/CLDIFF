@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.linkpool;
+package edu.fdu.se.astdiff.link;
 
 import java.util.ArrayList;
 import java.util.HashMap;

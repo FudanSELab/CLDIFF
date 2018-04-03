@@ -1,7 +1,6 @@
 package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.*;
-import edu.fdu.se.astdiff.linkpool.LinkBean;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;

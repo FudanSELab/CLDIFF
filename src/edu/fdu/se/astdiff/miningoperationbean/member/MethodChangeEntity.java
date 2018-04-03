@@ -1,8 +1,8 @@
 package edu.fdu.se.astdiff.miningoperationbean.member;
 
 import com.github.gumtreediff.actions.model.Move;
-import edu.fdu.se.astdiff.linkpool.LinkBean;
-import edu.fdu.se.astdiff.linkpool.MyRange;
+import edu.fdu.se.astdiff.link.LinkBean;
+import edu.fdu.se.astdiff.link.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;

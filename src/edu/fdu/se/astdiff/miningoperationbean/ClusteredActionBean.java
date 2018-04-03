@@ -5,9 +5,7 @@ import java.util.List;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.Tree;
-import edu.fdu.se.astdiff.linkpool.MyRange;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
-import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 
 /**
  * 记录find时候找到的节点，以及对应的fafafather 节点，以及该节点下，所有的action

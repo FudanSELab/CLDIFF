@@ -1,13 +1,10 @@
 package edu.fdu.se.astdiff.miningoperationbean.base;
 
-import edu.fdu.se.astdiff.linkpool.LinkBean;
-import edu.fdu.se.astdiff.linkpool.MyRange;
+import edu.fdu.se.astdiff.link.LinkBean;
+import edu.fdu.se.astdiff.link.MyRange;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/1/16.
