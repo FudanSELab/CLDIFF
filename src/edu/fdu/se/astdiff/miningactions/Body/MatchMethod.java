@@ -38,6 +38,7 @@ public class MatchMethod {
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
+		fp.setActionTraversedMap(subActions);
 	}
 
 

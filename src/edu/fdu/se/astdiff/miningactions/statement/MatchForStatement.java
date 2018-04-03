@@ -24,10 +24,8 @@ public class MatchForStatement {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
             DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
         }
-        fp.setActionTraversedMap(subActions);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         ForChangeEntity code = new ForChangeEntity(mBean);
-        fp.addOneChangeEntity(code);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
@@ -36,7 +34,8 @@ public class MatchForStatement {
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
-
+        fp.setActionTraversedMap(subActions);
+        fp.addOneChangeEntity(code);
     }
 
     public static void matchEnhancedForStatement(MiningActionData fp, Action a){
@@ -45,10 +44,8 @@ public class MatchForStatement {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
             DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
         }
-        fp.setActionTraversedMap(subActions);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         ForChangeEntity code = new ForChangeEntity(mBean);
-        fp.addOneChangeEntity(code);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
@@ -57,6 +54,8 @@ public class MatchForStatement {
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+        fp.addOneChangeEntity(code);
+        fp.setActionTraversedMap(subActions);
     }
 
     public static void matchForConditionChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType, Tree traverseFather) {

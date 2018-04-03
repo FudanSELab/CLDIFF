@@ -28,7 +28,6 @@ public class MatchIfElse {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
 			DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
 		}
-		fp.setActionTraversedMap(subActions);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		IfChangeEntity code = new IfChangeEntity(mBean);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
@@ -39,12 +38,14 @@ public class MatchIfElse {
 		code.stageIIBean.setSubEntity(null);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+		fp.setActionTraversedMap(subActions);
 		fp.addOneChangeEntity(code);
-		if (AstRelations.isFatherXXXStatement(a, ASTNode.IF_STATEMENT)) {
-			//code.changeEntity = IfChangeEntity.ELSE_IF;
-		} else {
-//			code.changeEntity = IfChangeEntity.IF;
-		}
+
+//		if (AstRelations.isFatherXXXStatement(a, ASTNode.IF_STATEMENT)) {
+//			//code.changeEntity = IfChangeEntity.ELSE_IF;
+//		} else {
+////			code.changeEntity = IfChangeEntity.IF;
+//		}
 	}
 	
 
@@ -55,10 +56,8 @@ public class MatchIfElse {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,false)){
 			DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
 		}
-		fp.setActionTraversedMap(subActions);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		IfChangeEntity code = new IfChangeEntity(mBean);
-		fp.addOneChangeEntity(code);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
 //		code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
@@ -68,6 +67,8 @@ public class MatchIfElse {
 		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_ELSE);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+		fp.addOneChangeEntity(code);
+		fp.setActionTraversedMap(subActions);
 	}
 	
 
@@ -80,10 +81,8 @@ public class MatchIfElse {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,sameEdits,changePacket,false)){
 			DefaultDownUpTraversal.traverseIfPredicate(traverseFather,sameEdits,changePacket);
 		}
-		fp.setActionTraversedMap(sameEdits);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
 		IfChangeEntity code = new IfChangeEntity(mBean);
-		fp.addOneChangeEntity(code);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
 		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
@@ -92,11 +91,13 @@ public class MatchIfElse {
 		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
-		if (AstRelations.isFatherXXXStatement(traverseFather,ASTNode.IF_STATEMENT)) {
-//			code.changeEntity = IfChangeEntity.ELSE_IF;
-		} else {
-//			code.changeEntity = IfChangeEntity.IF;
-		}
+		fp.setActionTraversedMap(sameEdits);
+		fp.addOneChangeEntity(code);
+//		if (AstRelations.isFatherXXXStatement(traverseFather,ASTNode.IF_STATEMENT)) {
+////			code.changeEntity = IfChangeEntity.ELSE_IF;
+//		} else {
+////			code.changeEntity = IfChangeEntity.IF;
+//		}
 
 	}
 	public static void matchIfPredicateChangeCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){

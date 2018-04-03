@@ -26,7 +26,6 @@ public class MatchSwitch {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
 			DefaultUpDownTraversal.traverseSwitchStatements(a,subActions,changePacket);
 		}
-		fp.setActionTraversedMap(subActions);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
@@ -37,6 +36,7 @@ public class MatchSwitch {
 		code.stageIIBean.setSubEntity(null);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+		fp.setActionTraversedMap(subActions);
 		fp.addOneChangeEntity(code);
 	}
 
@@ -46,7 +46,6 @@ public class MatchSwitch {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,false)){
 			DefaultUpDownTraversal.traverseSwitchCase(a, subActions, changePacket);
 		}
-		fp.setActionTraversedMap(subActions);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		SwitchChangeEntity code = new SwitchChangeEntity(mBean);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
@@ -61,6 +60,7 @@ public class MatchSwitch {
 		}else {
 			code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_SWITCH_CASE);
 		}
+		fp.setActionTraversedMap(subActions);
 		fp.addOneChangeEntity(code);
 
 	}

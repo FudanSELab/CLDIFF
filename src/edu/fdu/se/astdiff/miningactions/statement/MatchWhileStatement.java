@@ -25,10 +25,8 @@ public class MatchWhileStatement {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
             DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
         }
-        fp.setActionTraversedMap(subActions);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         WhileChangeEntity code = new WhileChangeEntity(mBean);
-        fp.addOneChangeEntity(code);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
@@ -37,7 +35,8 @@ public class MatchWhileStatement {
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION_AND_BODY);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
-
+        fp.addOneChangeEntity(code);
+        fp.setActionTraversedMap(subActions);
     }
 
     public static void matchDoStatement(MiningActionData fp, Action a){
@@ -46,10 +45,8 @@ public class MatchWhileStatement {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
             DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
         }
-        fp.setActionTraversedMap(subActions);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         WhileChangeEntity code = new WhileChangeEntity(mBean);
-        fp.addOneChangeEntity(code);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
@@ -58,6 +55,8 @@ public class MatchWhileStatement {
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION_AND_BODY);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+        fp.setActionTraversedMap(subActions);
+        fp.addOneChangeEntity(code);
     }
 
     public static void matchWhileConditionChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType, Tree traverseFather){
@@ -66,10 +65,8 @@ public class MatchWhileStatement {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,sameEdits,changePacket,false)){
             DefaultDownUpTraversal.traverseIfPredicate(traverseFather,sameEdits,changePacket);
         }
-        fp.setActionTraversedMap(sameEdits);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
         WhileChangeEntity code = new WhileChangeEntity(mBean);
-        fp.addOneChangeEntity(code);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
@@ -78,6 +75,8 @@ public class MatchWhileStatement {
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+        fp.addOneChangeEntity(code);
+        fp.setActionTraversedMap(sameEdits);
     }
 
     public static void matchDoConditionChangeNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType, Tree traverseFather){
@@ -86,10 +85,8 @@ public class MatchWhileStatement {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,sameEdits,changePacket,false)){
             DefaultDownUpTraversal.traverseDoWhileCondition(traverseFather,sameEdits,changePacket);
         }
-        fp.setActionTraversedMap(sameEdits);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
         WhileChangeEntity code = new WhileChangeEntity(mBean);
-        fp.addOneChangeEntity(code);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
@@ -98,6 +95,8 @@ public class MatchWhileStatement {
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+        fp.setActionTraversedMap(sameEdits);
+        fp.addOneChangeEntity(code);
     }
 
     public static void matchDoConditionChangeCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){

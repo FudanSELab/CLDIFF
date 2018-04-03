@@ -26,7 +26,7 @@ public class TypeNodesTraversal {
     public void traverseDstTypeDeclarationCompareSrc(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration cod, String prefixClassName) {
         compareResult.addTypeDeclaration(prefixClassName, cod, cod.getName().toString());
         int status = dstBodyCheck.checkTypeDeclarationInDst(compareResult, compareCache, cod, prefixClassName);
-        if(status == 1){
+        if(status == 1|| status==3){
             return;
         }
         List<BodyDeclaration> nodeList = cod.bodyDeclarations();
@@ -61,13 +61,18 @@ public class TypeNodesTraversal {
         List<BodyDeclaration> tmpList = cod.bodyDeclarations();
         for (int m = tmpList.size() - 1; m >= 0; m--) {
             BodyDeclaration n = tmpList.get(m);
-            BodyDeclarationPair bdp = new BodyDeclarationPair(n, prefixClassName);
-            if (compareCache.srcNodeVisitingMap.containsKey(bdp)) {
-                compareCache.setBodySrcNodeMap(bdp, PreprocessedTempData.BODY_FATHERNODE_REMOVE);
-            }
             if (n instanceof TypeDeclaration) {
                 TypeDeclaration next = (TypeDeclaration) n;
+                BodyDeclarationPair bdp = new BodyDeclarationPair(n, prefixClassName+next.getName().toString()+".");
+                if (compareCache.srcNodeVisitingMap.containsKey(bdp)) {
+                    compareCache.setBodySrcNodeMap(bdp, PreprocessedTempData.BODY_FATHERNODE_REMOVE);
+                }
                 traverseTypeDeclarationSetVisited(compareCache, next, prefixClassName + next.getName().toString()+".");
+            }else {
+                BodyDeclarationPair bdp = new BodyDeclarationPair(n, prefixClassName);
+                if (compareCache.srcNodeVisitingMap.containsKey(bdp)) {
+                    compareCache.setBodySrcNodeMap(bdp, PreprocessedTempData.BODY_FATHERNODE_REMOVE);
+                }
             }
         }
     }
@@ -78,6 +83,7 @@ public class TypeNodesTraversal {
         compareResult.addTypeDeclaration(prefixClassName, typeDeclaration, typeDeclaration.getName().toString());
         BodyDeclarationPair typeBodyDeclarationPair = new BodyDeclarationPair(typeDeclaration, prefixClassName);
         compareCache.addToMapBodyName(typeBodyDeclarationPair, prefixClassName);
+        compareCache.initBodySrcNodeMap(typeBodyDeclarationPair);
         for (int i = nodeList.size() - 1; i >= 0; i--) {
             BodyDeclaration bodyDeclaration = nodeList.get(i);
             if (bodyDeclaration instanceof TypeDeclaration) {

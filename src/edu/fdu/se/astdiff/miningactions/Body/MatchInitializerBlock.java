@@ -33,21 +33,20 @@ public class MatchInitializerBlock {
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
         fp.addOneChangeEntity(code);
         fp.setActionTraversedMap(subActions);
-
-        Tree tt = (Tree) a.getNode();
-        if(tt.getChildren().size()==1){
-            Tree child = (Tree)tt.getChild(0);
-            if(child.getAstNode().getNodeType()== ASTNode.BLOCK){
-                //non static
-            }
-        }else if(tt.getChildren().size()==2){
-            Tree child1 = (Tree)tt.getChild(0);
-            Tree child2 = (Tree)tt.getChild(1);
-            if(child1.getAstNode().getNodeType()==ASTNode.MODIFIER && child2.getAstNode().getNodeType()==ASTNode.BLOCK
-                    &&child1.getLabel()=="static"){
-                //static
-            }
-        }
+//        Tree tt = (Tree) a.getNode();
+//        if(tt.getChildren().size()==1){
+//            Tree child = (Tree)tt.getChild(0);
+//            if(child.getAstNode().getNodeType()== ASTNode.BLOCK){
+//                //non static
+//            }
+//        }else if(tt.getChildren().size()==2){
+//            Tree child1 = (Tree)tt.getChild(0);
+//            Tree child2 = (Tree)tt.getChild(1);
+//            if(child1.getAstNode().getNodeType()==ASTNode.MODIFIER && child2.getAstNode().getNodeType()==ASTNode.BLOCK
+//                    &&child1.getLabel()=="static"){
+//                //static
+//            }
+//        }
     }
 
 }

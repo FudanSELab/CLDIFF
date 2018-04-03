@@ -28,7 +28,6 @@ public class MatchTry {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
 			DefaultUpDownTraversal.traverseTryStatements(a,subActions,changePacket);
 		}
-		fp.setActionTraversedMap(subActions);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
@@ -40,11 +39,12 @@ public class MatchTry {
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		Tree firstC = (Tree) a.getNode().getChild(0);
-		if(firstC.getAstNode().getNodeType() == ASTNode.BLOCK){
-//			code.changeEntity = TryCatchChangeEntity.tryCatch;
-		}else{
-//			code.changeEntity = TryCatchChangeEntity.tryWithResources;
-		}
+//		if(firstC.getAstNode().getNodeType() == ASTNode.BLOCK){
+////			code.changeEntity = TryCatchChangeEntity.tryCatch;
+//		}else{
+////			code.changeEntity = TryCatchChangeEntity.tryWithResources;
+//		}
+		fp.setActionTraversedMap(subActions);
 		fp.addOneChangeEntity(code);
 	}
 

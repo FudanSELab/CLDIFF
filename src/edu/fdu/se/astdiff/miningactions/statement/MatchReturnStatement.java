@@ -24,7 +24,6 @@ public class MatchReturnStatement {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,false)){
             DefaultUpDownTraversal.traverseTypeIStatements(a, subActions, changePacket);
         }
-        fp.setActionTraversedMap(subActions);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         ReturnChangeEntity code = new ReturnChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
@@ -35,6 +34,7 @@ public class MatchReturnStatement {
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+        fp.setActionTraversedMap(subActions);
         fp.addOneChangeEntity(code);
     }
 
@@ -44,7 +44,6 @@ public class MatchReturnStatement {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,sameEdits,changePacket,false)){
             DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,sameEdits,changePacket);
         }
-        fp.setActionTraversedMap(sameEdits);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
         ReturnChangeEntity code = new ReturnChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
@@ -55,6 +54,7 @@ public class MatchReturnStatement {
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+        fp.setActionTraversedMap(sameEdits);
         fp.addOneChangeEntity(code);
     }
 

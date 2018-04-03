@@ -26,10 +26,8 @@ public class MatchVariableDeclarationExpression {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,false)) {
 			DefaultUpDownTraversal.traverseTypeIStatements(a, subActions, changePacket);
 		}
-		fp.setActionTraversedMap(subActions);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		VariableChangeEntity code = new VariableChangeEntity(mBean);
-		fp.addOneChangeEntity(code);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
 		code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
@@ -38,7 +36,8 @@ public class MatchVariableDeclarationExpression {
 		code.stageIIBean.setSubEntity(null);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
-
+		fp.addOneChangeEntity(code);
+		fp.setActionTraversedMap(subActions);
 	}
 
 	public static void matchVariableDeclarationNewEntity(MiningActionData fp, Action a, Tree queryFather,int treeType,Tree traverseFather) {
@@ -47,10 +46,8 @@ public class MatchVariableDeclarationExpression {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,sameEdits,changePacket,false)) {
 			DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,sameEdits,changePacket);
 		}
-		fp.setActionTraversedMap(sameEdits);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
 		VariableChangeEntity code = new VariableChangeEntity(mBean);
-		fp.addOneChangeEntity(code);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
 		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
@@ -59,6 +56,8 @@ public class MatchVariableDeclarationExpression {
 		code.stageIIBean.setSubEntity(null);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+		fp.setActionTraversedMap(sameEdits);
+		fp.addOneChangeEntity(code);
 	}
 
 	public static void matchVariableDeclarationCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity,Tree traverseFather){

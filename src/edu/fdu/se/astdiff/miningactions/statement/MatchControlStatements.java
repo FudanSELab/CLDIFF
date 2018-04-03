@@ -9,6 +9,9 @@ import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.statement.BreakContinueEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by huangkaifeng on 2018/2/7.
  *
@@ -17,10 +20,10 @@ public class MatchControlStatements {
 
     public static void matchBreakStatements(MiningActionData fp,Action a){
         ChangePacket changePacket = new ChangePacket();
-        fp.setActionTraversedMap(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,null,changePacket);
+        List<Action> subActions = new ArrayList<>();
+        subActions.add(a);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         BreakContinueEntity code = new BreakContinueEntity(mBean);
-        fp.addOneChangeEntity(code);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
@@ -29,13 +32,15 @@ public class MatchControlStatements {
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+        fp.addOneChangeEntity(code);
+        fp.setActionTraversedMap(a);
     }
     public static void matchContinueStatements(MiningActionData fp,Action a){
         ChangePacket changePacket = new ChangePacket();
-        fp.setActionTraversedMap(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,null,changePacket);
+        List<Action> subActions = new ArrayList<>();
+        subActions.add(a);
+        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         BreakContinueEntity code = new BreakContinueEntity(mBean);
-        fp.addOneChangeEntity(code);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
@@ -44,6 +49,7 @@ public class MatchControlStatements {
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
-
+        fp.setActionTraversedMap(a);
+        fp.addOneChangeEntity(code);
     }
 }

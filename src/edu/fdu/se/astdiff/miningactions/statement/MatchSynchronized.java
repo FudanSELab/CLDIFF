@@ -26,7 +26,6 @@ public class MatchSynchronized {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
 			DefaultUpDownTraversal.traverseIf(a, subActions, changePacket);
 		}
-		fp.setActionTraversedMap(subActions);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		SynchronizedChangeEntity code = new SynchronizedChangeEntity(mBean);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
@@ -37,6 +36,7 @@ public class MatchSynchronized {
 		code.stageIIBean.setSubEntity(null);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+		fp.setActionTraversedMap(subActions);
 		fp.addOneChangeEntity(code);
 	}
 
@@ -46,7 +46,6 @@ public class MatchSynchronized {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,sameEdits,changePacket,false)){
 			DefaultDownUpTraversal.traverseIfPredicate(traverseFather,sameEdits,changePacket);
 		}
-		fp.setActionTraversedMap(sameEdits);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
 		SynchronizedChangeEntity code = new SynchronizedChangeEntity(mBean);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
@@ -57,6 +56,7 @@ public class MatchSynchronized {
 		code.stageIIBean.setSubEntity(null);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+		fp.setActionTraversedMap(sameEdits);
 		fp.addOneChangeEntity(code);
 
 	}

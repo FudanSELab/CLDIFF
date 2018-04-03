@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
-import edu.fdu.se.astdiff.preprocessingfile.data.FilePreprocessLog;
+import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedTempData;
 import edu.fdu.se.config.ProjectProperties;
@@ -42,48 +42,57 @@ public class FilePairPreDiff {
 
     private PreprocessedData preprocessedData;
     private PreprocessedTempData preprocessedTempData;
+    private FileOutputLog fileOutputLog;
 
+    public FileOutputLog getFileOutputLog() {
+        return fileOutputLog;
+    }
 
-    public void compareTwoFile(String src, String dst, String outputDirName) {
+    public int compareTwoFile(String src, String dst, String outputDirName) {
         TypeNodesTraversal astTraversal = new TypeNodesTraversal();
         CompilationUnit cuSrc = JDTParserFactory.getCompilationUnit(src);
         CompilationUnit cuDst = JDTParserFactory.getCompilationUnit(dst);
         preprocessedData.loadTwoCompilationUnits(cuSrc, cuDst, src, dst);
-        FilePreprocessLog filePreprocessLog = null;
         if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
-            filePreprocessLog = new FilePreprocessLog(outputDirName);
-            filePreprocessLog.writeFileBeforeProcess(preprocessedData);
+            fileOutputLog = new FileOutputLog(outputDirName);
+            fileOutputLog.writeFileBeforeProcess(preprocessedData);
         }
         preprocessedTempData.removeAllSrcComments(cuSrc, preprocessedData.srcLines);
         preprocessedTempData.removeAllDstComments(cuDst, preprocessedData.dstLines);
         BodyDeclaration bodyDeclarationSrc = (BodyDeclaration) cuSrc.types().get(0);
         BodyDeclaration bodyDeclarationDst = (BodyDeclaration) cuDst.types().get(0);
         if (!(bodyDeclarationSrc instanceof TypeDeclaration) || !(bodyDeclarationDst instanceof TypeDeclaration)) {
-            return;
+            return -1;
         }
         TypeDeclaration mTypeSrc = (TypeDeclaration) bodyDeclarationSrc;
         TypeDeclaration mTypeDst = (TypeDeclaration) bodyDeclarationDst;
         astTraversal.traverseSrcTypeDeclarationInit(preprocessedData, preprocessedTempData, mTypeSrc, mTypeSrc.getName().toString() + ".");
         astTraversal.traverseDstTypeDeclarationCompareSrc(preprocessedData, preprocessedTempData, mTypeDst, mTypeDst.getName().toString() + ".");
         // 考虑后面的识别 method name变化，这里把remove的注释掉
-        iterateVisitingMap(astTraversal);
+        iterateVisitingMap();
         undeleteSignatureChange();
         preprocessedTempData.removeSrcRemovalList(cuSrc, preprocessedData.srcLines);
         preprocessedTempData.removeDstRemovalList(cuDst, preprocessedData.dstLines);
         iterateVisitingMap2LoadContainerMap();
 
-        if (filePreprocessLog != null) {
-            filePreprocessLog.writeFileAfterProcess(preprocessedData);
+        if (fileOutputLog != null) {
+            fileOutputLog.writeFileAfterProcess(preprocessedData);
         }
+        return 0;
     }
 
 
-    private void iterateVisitingMap(TypeNodesTraversal astTraversal) {
+    private void iterateVisitingMap() {
         for (Entry<BodyDeclarationPair, Integer> item : preprocessedTempData.srcNodeVisitingMap.entrySet()) {
             BodyDeclarationPair bdp = item.getKey();
             int value = item.getValue();
             BodyDeclaration bd = bdp.getBodyDeclaration();
             if (bd instanceof TypeDeclaration) {
+//                TypeDeclaration typeDeclaration = (TypeDeclaration)bd;
+//                System.out.println("-----"+ typeDeclaration.getName().toString());
+//                if(typeDeclaration.getName().toString().equals("LayoutTransition")){
+//                    System.out.print("a");
+//                }
                 switch (value) {
 //                    case PreprocessedTempData.BODY_DIFFERENT_RETAIN:
 //                    case PreprocessedTempData.BODY_FATHERNODE_REMOVE:
@@ -91,10 +100,11 @@ public class FilePairPreDiff {
                     case PreprocessedTempData.BODY_INITIALIZED_VALUE:
                         this.preprocessedData.addBodiesDeleted(bdp);
                         this.preprocessedTempData.addToSrcRemoveList(bd);
-                        astTraversal.traverseTypeDeclarationSetVisited(preprocessedTempData, (TypeDeclaration) bd, bdp.getLocationClassString());
+                        TypeNodesTraversal.traverseTypeDeclarationSetVisited(preprocessedTempData, (TypeDeclaration) bd, bdp.getLocationClassString());
                         break;
                     case PreprocessedTempData.BODY_SAME_REMOVE:
                         this.preprocessedTempData.addToSrcRemoveList(bd);
+                        TypeNodesTraversal.traverseTypeDeclarationSetVisited(preprocessedTempData, (TypeDeclaration) bd, bdp.getLocationClassString());
                         break;
                 }
             }

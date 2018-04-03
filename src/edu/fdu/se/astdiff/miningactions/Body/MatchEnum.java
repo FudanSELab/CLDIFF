@@ -31,7 +31,6 @@ public class MatchEnum {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
             DefaultUpDownTraversal.traverseTypeIStatements(a, subActions, changePacket);
         }
-        fp.setActionTraversedMap(subActions);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         EnumChangeEntity code = new EnumChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
@@ -42,6 +41,7 @@ public class MatchEnum {
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+        fp.setActionTraversedMap(subActions);
         fp.addOneChangeEntity(code);
     }
 
@@ -51,7 +51,6 @@ public class MatchEnum {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,false)){
             DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,subActions,changePacket);
         }
-        fp.setActionTraversedMap(subActions);
         ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather,treeType);
         EnumChangeEntity code = new EnumChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
@@ -62,6 +61,7 @@ public class MatchEnum {
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+        fp.setActionTraversedMap(subActions);
         fp.addOneChangeEntity(code);
     }
 

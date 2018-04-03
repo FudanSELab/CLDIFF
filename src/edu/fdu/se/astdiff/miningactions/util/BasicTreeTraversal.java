@@ -143,7 +143,11 @@ public class BasicTreeTraversal {
             if(isEnd){
                 break;
             }
-            curNode = (Tree) curNode.getParent();
+//            try {
+                curNode = (Tree) curNode.getParent();
+//            }catch(Exception e){
+//                System.out.println("a");
+//            }
         }
         return curNode;
     }

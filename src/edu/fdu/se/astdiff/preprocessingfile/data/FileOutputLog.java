@@ -10,11 +10,11 @@ import java.io.File;
  * Created by huangkaifeng on 2018/3/18.
  *
  */
-public class FilePreprocessLog {
+public class FileOutputLog {
 
-    File srcDirFile;
-    File dstDirFile;
-    public FilePreprocessLog(String path){
+    public File srcDirFile;
+    public File dstDirFile;
+    public FileOutputLog(String path){
         String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
         srcDirFile = new File(rootOutPath + "/prev/" + path);
         dstDirFile = new File(rootOutPath + "/curr/" + path);

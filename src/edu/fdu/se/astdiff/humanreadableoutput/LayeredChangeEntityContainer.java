@@ -56,7 +56,7 @@ public class LayeredChangeEntityContainer {
                     String location = changeEntity.stageIIBean.getLocation();
                     location = location.substring(0,location.length()-1);
                     int index = location.lastIndexOf(".");
-                    location = location.substring(0,index);
+                    location = location.substring(0,index+1);
                     if(location.equals(key.getLocationClassString())){
                         mKey = key;
                         break;
@@ -72,7 +72,7 @@ public class LayeredChangeEntityContainer {
         if(mKey!=null && this.layerMap.containsKey(mKey)){
             this.layerMap.get(mKey).add(changeEntity);
         }else{
-            System.err.println("[ERR]"+changeEntity.stageIIBean.getLocation()+" "+changeEntity.getClass().getSimpleName());
+            System.err.println("[ERR]Put to LayerMap error: "+changeEntity.stageIIBean.getLocation()+" "+changeEntity.getClass().getSimpleName());
         }
     }
 

@@ -55,12 +55,12 @@ public class DstBodyCheck {
      * @return 1 2
      */
     public int checkTypeDeclarationInDst(PreprocessedData compareResult, PreprocessedTempData compareCache, TypeDeclaration cod, String prefixClassName) {
+
         if (compareCache.srcNodeBodyNameMap.containsKey(prefixClassName)) {
             List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(prefixClassName);
             assert srcNodeList.size() <= 1;
             BodyDeclarationPair srcBody = srcNodeList.get(0);
 
-            //todo
             if (srcBody.getBodyDeclaration().toString().hashCode() == cod.toString().hashCode()
                     && prefixClassName.hashCode() == srcBody.getLocationClassString().hashCode()) {
 //                System.out.println(srcBody.getBodyDeclaration().toString());
@@ -135,7 +135,7 @@ public class DstBodyCheck {
             EnumDeclaration ed = (EnumDeclaration) bd;
             methodNameKey = prefixClassName + ed.getName().toString();
         } else {
-            System.err.println("[ERR]---------------------------");
+            System.err.println("[ERR] ---------------------------");
         }
 
         if (compareCache.srcNodeBodyNameMap.containsKey(methodNameKey)) {

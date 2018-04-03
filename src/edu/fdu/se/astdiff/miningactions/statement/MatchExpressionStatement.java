@@ -27,7 +27,6 @@ public class MatchExpressionStatement {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,false)){
 			DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
 		}
-		fp.setActionTraversedMap(subActions);
 		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		ExpressionChangeEntity code = new ExpressionChangeEntity(mBean);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
@@ -38,6 +37,7 @@ public class MatchExpressionStatement {
 		code.stageIIBean.setSubEntity(null);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+		fp.setActionTraversedMap(subActions);
 		fp.addOneChangeEntity(code);
 	}
 
