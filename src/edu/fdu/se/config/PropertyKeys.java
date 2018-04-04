@@ -31,4 +31,6 @@ public class PropertyKeys {
 	final public static String DEBUG_ACTION_OUTPUT = "debug_action_output";
 
 	final public static String DEBUG_CLUSTER_PRE_DIFF_ENTITY = "debug_cluster_pre_diff_entity";
+
+	final public static String JAVA_REPO_RQ1 = "java_repo_rq1";
 }
