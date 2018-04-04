@@ -69,6 +69,45 @@ public class JGitRepositoryCommand extends JGitCommand{
 		}
 
 	}
+
+
+	public void walkRepoFromBackwards() {
+		try {
+			Queue<RevCommit> commitQueue = new LinkedList<>();
+			Map<String, Boolean> isTraversed = new HashMap<>();
+			List<Ref> mList = this.git.branchList().setListMode(ListMode.ALL).call();
+			for (Ref item : mList) {
+				RevCommit commit = revWalk.parseCommit(item.getObjectId());
+				commitQueue.offer(commit);
+				while (commitQueue.size() != 0) {
+					RevCommit queueCommitItem = commitQueue.poll();
+					RevCommit[] parentCommits = queueCommitItem.getParents();
+					if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
+						continue;
+					}
+					Map<String,Map<String,List<String>>> changedFiles = this.getCommitParentMappedFileList(queueCommitItem.getName());
+//					this.extract()
+//					System.out.println(queueCommitItem.getName());
+					//todo
+					isTraversed.put(queueCommitItem.getName(), true);
+					for (RevCommit item2 : parentCommits) {
+						RevCommit commit2 = revWalk.parseCommit(item2.getId());
+						commitQueue.offer(commit2);
+					}
+				}
+			}
+			System.out.println("CommitSum:" + isTraversed.size());
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (GitAPIException e1) {
+			e1.printStackTrace();
+		}
+
+	}
 	
 	
 	public void visit(RevCommit commit, Map<String, List<String>> mMap) {
@@ -125,6 +164,8 @@ public class JGitRepositoryCommand extends JGitCommand{
 //		CommitCodeInfo cci = cmd.getCommitFileEditSummary("c7f502947b5b80baca084101fb7a0aaa74db9974", JGitCommand.JAVA_FILE);
 		cmd.walkRepoFromBackwardsToDB();
 	}
+
+
 	public Map<String, Map<String, List<String>>> test(String commmitid) {
 		Map<String, Map<String, List<String>>> result = new HashMap<String, Map<String, List<String>>>();
 		ObjectId commitId = ObjectId.fromString(commmitid);

@@ -56,14 +56,14 @@ public class DiffMiner extends BaseDiffMiner {
                 = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR) + "/android-" + String.valueOf(version);
         List<String> filePathList = readCompareList(version, fileRootPathPrev, fileRootPathCurr);
         int cnt = 0;
-        int candidateIndex = 95;
+        int candidateIndex = 94;
         System.out.println(filePathList.size());
         int size = filePathList.size();
-        for(int i = candidateIndex;i<100;i++){
+        for(int i = candidateIndex;i<candidateIndex+10;i++){
             String subPath = filePathList.get(i);
-//            if(i!=54){
-//                continue;
-//            }
+            if(i!=94){
+                continue;
+            }
             System.out.println(i+ ": "+subPath);
             String subPath2 = subPath.replace("\\", "/");
             String outputDirName = subPath.replace("\\", "_").substring(1);
@@ -74,7 +74,7 @@ public class DiffMiner extends BaseDiffMiner {
 //            }catch(Exception e){
 //                e.printStackTrace();
 //            }
-//            break;
+            break;
 
         }
     }
@@ -94,8 +94,19 @@ public class DiffMiner extends BaseDiffMiner {
     // 1. Type Binding问题
     // 3. Insert condition +  Move
     // 4. Insert condition body + Move
-    // 5. Preprocessing toString问题
     // 6. Insert Stmt
+
+    //4-4
+    // 1.Preprocessing
+    // 2.Aggregation - > Summary
+    // 3.Association
+
+    // Evaluation
+    // 1.验证准确性
+    // 2.验证和Gumtree的size
+    // 3.验证 Manual review角度（还有其他什么角度）
+    // 4.Performance
+    // 5.人link 和机器link结果比较，link时间比较
 
 //  Key -> Value
 //  BodyDeclaration -> List<ChangeEntity> 发生在这个BodyDeclaration里面的change entity

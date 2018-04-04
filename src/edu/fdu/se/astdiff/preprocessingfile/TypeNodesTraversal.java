@@ -146,7 +146,6 @@ public class TypeNodesTraversal {
             }
             BodyDeclarationPair bdp = new BodyDeclarationPair(bodyDeclaration, prefixClassName);
             compareResult.entityContainer.addKey(bdp);
-
         }
     }
 

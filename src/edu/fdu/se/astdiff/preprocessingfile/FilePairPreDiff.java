@@ -209,7 +209,7 @@ public class FilePairPreDiff {
                     for (BodyDeclarationPair bdpTmp : bdpDeleteList) {
                         this.preprocessedTempData.srcRemovalNodes.remove(bdpTmp.getBodyDeclaration());
                         this.preprocessedData.getmBodiesDeleted().remove(bdpTmp);
-//                        this.preprocessedData.entityContainer.addKey(bdpTmp);
+                        this.preprocessedData.entityContainer.addKey(bdpTmp);
                     }
                 }
             }
