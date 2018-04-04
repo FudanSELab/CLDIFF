@@ -13,7 +13,6 @@ import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.statement.LabeledStatementChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.statement.SuperConstructorInvocationChangeEntity;
 
 import java.util.ArrayList;
 import java.util.List;

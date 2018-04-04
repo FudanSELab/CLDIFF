@@ -11,9 +11,9 @@ import edu.fdu.se.git.RepoConstants;
 public class RQ1Data {
 
     public static void main(String args[]){
-        JGitRepositoryCommand cmd = new JGitRepositoryCommand(
-                ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)+ RepoConstants.platform_frameworks_base_ + ".git");
-        cmd.walkRepoFromBackwards();
+        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\tomcat";
+        JGitRepositoryCommand cmd = new JGitRepositoryCommand(repo);
+        cmd.walkRepoFromBackwards("D:/TomcatCompareFiles");
     }
 
 

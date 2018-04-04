@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Map.Entry;
 
+import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -71,8 +72,9 @@ public class JGitRepositoryCommand extends JGitCommand{
 	}
 
 
-	public void walkRepoFromBackwards() {
+	public void walkRepoFromBackwards(String outDir) {
 		try {
+			FileOutputLog fileOutputLog = new FileOutputLog(outDir,1);
 			Queue<RevCommit> commitQueue = new LinkedList<>();
 			Map<String, Boolean> isTraversed = new HashMap<>();
 			List<Ref> mList = this.git.branchList().setListMode(ListMode.ALL).call();
@@ -86,14 +88,26 @@ public class JGitRepositoryCommand extends JGitCommand{
 						continue;
 					}
 					Map<String,Map<String,List<String>>> changedFiles = this.getCommitParentMappedFileList(queueCommitItem.getName());
-//					this.extract()
-//					System.out.println(queueCommitItem.getName());
-					//todo
+					for(Entry<String,Map<String,List<String>>> entry:changedFiles.entrySet()){
+						String parentCommitId = entry.getKey();
+						Map<String,List<String>> changedFileEntry = entry.getValue();
+						if(changedFileEntry.containsKey("modifiedFiles")){
+							List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
+							for(String file:modifiedFile) {
+								byte[] prevFile = this.extract(file,parentCommitId);
+								byte[] currFile = this.extract(file,queueCommitItem.getName());
+								int index = file.lastIndexOf("/");
+								String fileName = file.substring(index+1,file.length()-1);
+								fileOutputLog.writeRQ1CommitFile(prevFile,currFile,parentCommitId+"-"+queueCommitItem.getName(),fileName);
+							}
+						}
+					}
 					isTraversed.put(queueCommitItem.getName(), true);
 					for (RevCommit item2 : parentCommits) {
 						RevCommit commit2 = revWalk.parseCommit(item2.getId());
 						commitQueue.offer(commit2);
 					}
+					break;
 				}
 			}
 			System.out.println("CommitSum:" + isTraversed.size());

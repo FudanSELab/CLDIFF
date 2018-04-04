@@ -141,4 +141,42 @@ public class DiffMiner extends BaseDiffMiner {
 //            TypeDeclarationStatement, N/A
 //            VariableDeclarationStatement , fragments() getModifiers() getType
 //            WhileStatement getExpression getBody();
+
+
+
+
+//    BooleanLiteral,
+//    CharacterLiteral,
+//    NullLiteral,
+//    NumberLiteral,
+//    StringLiteral,
+//    TypeLiteral,
+
+//    Annotation,
+//    ArrayAccess,
+//    ArrayCreation,
+//    ArrayInitializer,
+//    Assignment,
+//    CastExpression,
+//    ClassInstanceCreation,
+//    ConditionalExpression,
+//    CreationReference,
+//    ExpressionMethodReference,
+//    FieldAccess,
+//    InfixExpression,
+//    InstanceofExpression,
+//    LambdaExpression,
+//    MethodInvocation,
+//    MethodReference,
+//    Name,
+//    ParenthesizedExpression,
+//    PostfixExpression,
+//    PrefixExpression,
+//    SuperFieldAccess,
+//    SuperMethodInvocation,
+//    SuperMethodReference,
+//    ThisExpression,
+//    TypeMethodReference,
+//    VariableDeclarationExpression
+
 }
