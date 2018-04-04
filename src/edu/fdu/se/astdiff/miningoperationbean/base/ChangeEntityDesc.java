@@ -41,6 +41,12 @@ public class ChangeEntityDesc {
 
         public static final String ENTITY_EXPRESSION_STMT = "Expression Statement";
 
+        public static final String ENTITY_CONSTRUCTOR_INVOCATION = "Constructor Invocation";
+
+        public static final String ENTITY_SUPER_CONSTRUCTOR_INVOCATION = "Super Constructor Invocation";
+
+        public static final String ENTITY_LABELED_STATEMENT = "Labeled Statement";
+
         public static final String ENTITY_FOR_STMT = "For Statement";
 
         public static final String ENTITY_IF_STMT = "If Statement";

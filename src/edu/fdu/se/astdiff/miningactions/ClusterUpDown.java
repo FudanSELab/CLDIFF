@@ -118,14 +118,17 @@ public class ClusterUpDown extends AbstractCluster{
                 break;
             case ASTNode.EMPTY_STATEMENT:
                 break;
-            case ASTNode.LABELED_STATEMENT:
-                break;
             case ASTNode.TYPE_DECLARATION_STATEMENT:
                 break;
-            //                case ASTNode.CONDITIONALEXPRESSION:
-//                    MatchConditionalExpression.matchConditionalExpression(fp, a, type);
-//                    break;
-
+            case ASTNode.CONSTRUCTOR_INVOCATION:
+                MatchConstructorInvocation.matchConstructorInvocation(fp,a);
+                break;
+            case ASTNode.SUPER_CONSTRUCTOR_INVOCATION:
+                MatchConstructorInvocation.matchSuperConstructorInvocation(fp,a);
+                break;
+            case ASTNode.LABELED_STATEMENT:
+                MatchLabeledStatement.matchLabeledStatement(fp,a);
+                break;
             default:
                 res =1;
                 break;
