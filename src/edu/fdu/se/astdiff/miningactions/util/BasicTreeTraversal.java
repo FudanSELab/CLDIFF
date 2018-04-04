@@ -120,7 +120,7 @@ public class BasicTreeTraversal {
                 case ASTNode.METHOD_DECLARATION:
                 case ASTNode.FIELD_DECLARATION:
                 case ASTNode.ENUM_DECLARATION:
-                case ASTNode.BLOCK:
+//                case ASTNode.BLOCK:
                 case ASTNode.ASSERT_STATEMENT:
                 case ASTNode.THROW_STATEMENT:
                 case ASTNode.RETURN_STATEMENT:
@@ -136,6 +136,9 @@ public class BasicTreeTraversal {
                 case ASTNode.EXPRESSION_STATEMENT:
                 case ASTNode.VARIABLE_DECLARATION_STATEMENT:
                 case ASTNode.SYNCHRONIZED_STATEMENT:
+                case ASTNode.CONSTRUCTOR_INVOCATION:
+                case ASTNode.SUPER_CONSTRUCTOR_INVOCATION:
+                case ASTNode.LABELED_STATEMENT:
                     isEnd = true;
                 default:break;
             }

@@ -114,6 +114,16 @@ public class MatchSimpleNameOrLiteral {
             case ASTNode.SWITCH_CASE:
                 MatchSwitch.matchSwitchCaseNewEntity(fp, a, queryFather,treeType, traverseFather);
                 break;
+            case ASTNode.SUPER_CONSTRUCTOR_INVOCATION:
+//                System.err.println("aaa-----");
+                MatchConstructorInvocation.matchSuperConstructorInvocationNewEntity(fp,a,queryFather,treeType,traverseFather);
+                break;
+            case ASTNode.CONSTRUCTOR_INVOCATION:
+                MatchConstructorInvocation.matchConstructorInvocationNewEntity(fp,a,queryFather,treeType,traverseFather);
+                break;
+            case ASTNode.LABELED_STATEMENT:
+                MatchLabeledStatement.matchLabeledStatementNewEntity(fp,a,queryFather,treeType,traverseFather);
+                break;
             default:
                 break;
         }
@@ -179,6 +189,15 @@ public class MatchSimpleNameOrLiteral {
                 break;
             case ASTNode.SWITCH_CASE:
                 MatchSwitch.matchSwitchCaseCurrEntity(fp, a, changeEntity, traverseFather);
+                break;
+            case ASTNode.SUPER_CONSTRUCTOR_INVOCATION:
+                MatchConstructorInvocation.matchSuperConstructorInvocationCurrEntity(fp,a,changeEntity,traverseFather);
+                break;
+            case ASTNode.CONSTRUCTOR_INVOCATION:
+                MatchConstructorInvocation.matchConstructorInvocationCurrEntity(fp,a,changeEntity,traverseFather);
+                break;
+            case ASTNode.LABELED_STATEMENT:
+                MatchLabeledStatement.matchLabeledStatementCurrEntity(fp,a,changeEntity,traverseFather);
                 break;
             default:
                 break;

@@ -56,12 +56,12 @@ public class DiffMiner extends BaseDiffMiner {
                 = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_NEW_SDK_DIR) + "/android-" + String.valueOf(version);
         List<String> filePathList = readCompareList(version, fileRootPathPrev, fileRootPathCurr);
         int cnt = 0;
-        int candidateIndex = 94;
+        int candidateIndex = 0;
         System.out.println(filePathList.size());
         int size = filePathList.size();
         for(int i = candidateIndex;i<candidateIndex+10;i++){
             String subPath = filePathList.get(i);
-            if(i!=94){
+            if(i!=0){
                 continue;
             }
             System.out.println(i+ ": "+subPath);
@@ -98,7 +98,7 @@ public class DiffMiner extends BaseDiffMiner {
 
     //4-4
     // 1.Preprocessing
-    // 2.Aggregation - > Summary
+    // 2.Aggregation -> Summary
     // 3.Association
 
     // Evaluation
@@ -119,4 +119,26 @@ public class DiffMiner extends BaseDiffMiner {
     // 预处理的change entity : add member / remove member 都可以放入以src 的BodyDeclaration 不考虑行号
     // gumtree 拓展识别的change entity add member / remove member  add stmt remove stmt
     // add节点UpDown 往上找到mapping的节点,src的range 其他则
+//            AssertStatement, getExpression getMessage
+//            Block,        statements();
+//            BreakStatement,  break;
+//*            ConstructorInvocation, arguments();
+//            ContinueStatement,   continue;
+//            DoStatement,    getBody() getExpression()
+//            EmptyStatement, ;
+//            EnhancedForStatement getBody() getExpression() getParameter();
+//            ExpressionStatement,  getExpression();
+//            ForStatement,   getBody() getExpression() initializers() updaters();
+//            IfStatement, getElseStatement getExpression getThenStatement
+//*            LabeledStatement, getBody getLabel
+//            ReturnStatement, getExpression()
+//**            SuperConstructorInvocation,  arguments() getExpression typeArguments
+//*            SwitchCase,  getExpression() isDefault()
+//            SwitchStatement,  getExpression()   statements()
+//            SynchronizedStatement,  getBody getExpression
+//            ThrowStatement, getExpression
+//            TryStatement, catchClauses() 	getBody() getFinally() resources()
+//            TypeDeclarationStatement, N/A
+//            VariableDeclarationStatement , fragments() getModifiers() getType
+//            WhileStatement getExpression getBody();
 }

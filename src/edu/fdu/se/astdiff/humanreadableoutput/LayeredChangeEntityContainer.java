@@ -16,63 +16,62 @@ import java.util.Map.Entry;
 
 /**
  * Created by huangkaifeng on 3/24/18.
- *
  */
 public class LayeredChangeEntityContainer {
 
-    protected Map<BodyDeclarationPair,List<ChangeEntity>> layerMap;
+    protected Map<BodyDeclarationPair, List<ChangeEntity>> layerMap;
 
     protected List<BodyDeclarationPair> keyIndex;
 
-    public LayeredChangeEntityContainer(){
+    public LayeredChangeEntityContainer() {
         this.layerMap = new HashMap<>();
         this.keyIndex = new ArrayList<>();
     }
 
-    public void sortKeys(){
-        List<Entry<BodyDeclarationPair,List<ChangeEntity>>> mList = new ArrayList<>(layerMap.entrySet());
-        mList.sort(new Comparator<Entry<BodyDeclarationPair,List<ChangeEntity>>>(){
+    public void sortKeys() {
+        List<Entry<BodyDeclarationPair, List<ChangeEntity>>> mList = new ArrayList<>(layerMap.entrySet());
+        mList.sort(new Comparator<Entry<BodyDeclarationPair, List<ChangeEntity>>>() {
             @Override
-            public int compare(Entry<BodyDeclarationPair,List<ChangeEntity>> a,Entry<BodyDeclarationPair,List<ChangeEntity>> b){
+            public int compare(Entry<BodyDeclarationPair, List<ChangeEntity>> a, Entry<BodyDeclarationPair, List<ChangeEntity>> b) {
                 return a.getKey().getBodyDeclaration().getStartPosition() - b.getKey().getBodyDeclaration().getStartPosition();
             }
         });
-        mList.forEach(a-> keyIndex.add(a.getKey()));
+        mList.forEach(a -> keyIndex.add(a.getKey()));
     }
 
-    public void addKey(BodyDeclarationPair bodyDeclarationPair){
-        if(layerMap.containsKey(bodyDeclarationPair)){
+    public void addKey(BodyDeclarationPair bodyDeclarationPair) {
+        if (layerMap.containsKey(bodyDeclarationPair)) {
             return;
         }
         List<ChangeEntity> mList = new ArrayList<>();
-        layerMap.put(bodyDeclarationPair,mList);
+        layerMap.put(bodyDeclarationPair, mList);
     }
 
-    public void addPreDiffChangeEntity(ChangeEntity changeEntity){
+    public void addPreDiffChangeEntity(ChangeEntity changeEntity) {
         BodyDeclarationPair mKey = null;
-        for(BodyDeclarationPair key:this.layerMap.keySet()){
-            if(key.getBodyDeclaration() instanceof TypeDeclaration){
-                if(changeEntity instanceof ClassOrInterfaceDeclarationChangeEntity){
+        for (BodyDeclarationPair key : this.layerMap.keySet()) {
+            if (key.getBodyDeclaration() instanceof TypeDeclaration) {
+                if (changeEntity instanceof ClassOrInterfaceDeclarationChangeEntity) {
                     String location = changeEntity.stageIIBean.getLocation();
-                    location = location.substring(0,location.length()-1);
+                    location = location.substring(0, location.length() - 1);
                     int index = location.lastIndexOf(".");
-                    location = location.substring(0,index+1);
-                    if(location.equals(key.getLocationClassString())){
+                    location = location.substring(0, index + 1);
+                    if (location.equals(key.getLocationClassString())) {
                         mKey = key;
                         break;
                     }
-                }else{
-                    if(changeEntity.stageIIBean.getLocation().equals(key.getLocationClassString())){
+                } else {
+                    if (changeEntity.stageIIBean.getLocation().equals(key.getLocationClassString())) {
                         mKey = key;
                         break;
                     }
                 }
             }
         }
-        if(mKey!=null && this.layerMap.containsKey(mKey)){
+        if (mKey != null && this.layerMap.containsKey(mKey)) {
             this.layerMap.get(mKey).add(changeEntity);
-        }else{
-            System.err.println("[ERR]Put to LayerMap error: "+changeEntity.stageIIBean.getLocation()+" "+changeEntity.getClass().getSimpleName());
+        } else {
+            System.err.println("[ERR]Put to LayerMap error: " + changeEntity.stageIIBean.getLocation() + " " + changeEntity.getClass().getSimpleName());
         }
     }
 
@@ -82,48 +81,48 @@ public class LayeredChangeEntityContainer {
         BodyDeclarationPair mKey = null;
         int startPos = -1;
         if (changeEntity.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN) {
-            if(changeEntity.clusteredActionBean.curAction instanceof Insert){
+            if (changeEntity.clusteredActionBean.curAction instanceof Insert) {
                 // insert上一个节点mapping的节点
-                while(tree==null){
+                while (tree == null) {
                     node = node.getParent();
                     tree = (Tree) mad.getMappedSrcOfDstNode(node);
                 }
-            }else{
-                tree = (Tree)node;
+            } else {
+                tree = (Tree) node;
             }
-            if(tree ==null){
+            if (tree == null) {
                 System.out.println("a");
             }
             startPos = tree.getAstNode().getStartPosition();
 
-        } else if (changeEntity.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_DOWN_UP){
-                // father节点的range
-            tree = (Tree)node;
+        } else if (changeEntity.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_DOWN_UP) {
+            // father节点的range
+            tree = (Tree) node;
             startPos = tree.getAstNode().getStartPosition();
         }
-        mKey = getEnclosedBodyDeclaration(changeEntity,startPos);
-        if(mKey!=null && this.layerMap.containsKey(mKey)){
+        mKey = getEnclosedBodyDeclaration(changeEntity, startPos);
+        if (mKey != null && this.layerMap.containsKey(mKey)) {
             this.layerMap.get(mKey).add(changeEntity);
-        }else{
-            System.err.println("[ERR]Not In BodyMap keys:"+ changeEntity.toString());
+        } else {
+            System.err.println("[ERR]Not In BodyMap keys:" + changeEntity.toString());
 
         }
 
     }
 
-    private BodyDeclarationPair getEnclosedBodyDeclaration(ChangeEntity changeEntity,int start){
-        for(BodyDeclarationPair key:this.layerMap.keySet()){
-            if(key.getBodyDeclaration() instanceof TypeDeclaration ){
-                if(changeEntity instanceof ClassOrInterfaceDeclarationChangeEntity
+    private BodyDeclarationPair getEnclosedBodyDeclaration(ChangeEntity changeEntity, int start) {
+        for (BodyDeclarationPair key : this.layerMap.keySet()) {
+            if (key.getBodyDeclaration() instanceof TypeDeclaration) {
+                if (changeEntity instanceof ClassOrInterfaceDeclarationChangeEntity
                         || changeEntity instanceof EnumChangeEntity
                         || changeEntity instanceof FieldChangeEntity
                         || changeEntity instanceof InitializerChangeEntity
-                        || changeEntity instanceof MethodChangeEntity){
+                        || changeEntity instanceof MethodChangeEntity) {
                     if (start >= key.getBodyDeclaration().getStartPosition() && start <= (key.getBodyDeclaration().getStartPosition() + key.getBodyDeclaration().getLength())) {
                         return key;
                     }
                 }
-            }else {
+            } else {
                 if (start >= key.getBodyDeclaration().getStartPosition() && start <= (key.getBodyDeclaration().getStartPosition() + key.getBodyDeclaration().getLength())) {
                     return key;
                 }
@@ -132,33 +131,33 @@ public class LayeredChangeEntityContainer {
         return null;
     }
 
-    public void mergeMoveAndWrapper(){
-        for(Entry<BodyDeclarationPair,List<ChangeEntity>> entry:this.layerMap.entrySet()){
+    public void mergeMoveAndWrapper() {
+        for (Entry<BodyDeclarationPair, List<ChangeEntity>> entry : this.layerMap.entrySet()) {
             BodyDeclarationPair bodyDeclarationPair = entry.getKey();
-            if(bodyDeclarationPair.getBodyDeclaration() instanceof MethodDeclaration){
+            if (bodyDeclarationPair.getBodyDeclaration() instanceof MethodDeclaration) {
                 //每个method里面
                 List<ChangeEntity> mList = entry.getValue();
                 List<ChangeEntity> moveList = new ArrayList<>();
                 List<ChangeEntity> stmtWrapperList = new ArrayList<>();
                 List<ChangeEntity> deletedMove = new ArrayList<>();
-                for(ChangeEntity ce:mList){
+                for (ChangeEntity ce : mList) {
                     int resultCode = ChangeEntityUtil.checkEntityCode(ce);
-                    if(resultCode==1){
+                    if (resultCode == 1) {
                         moveList.add(ce);
-                    }else if(resultCode == 2){
+                    } else if (resultCode == 2) {
                         stmtWrapperList.add(ce);
                     }
 
                 }
-                for(ChangeEntity ce:stmtWrapperList){
-                    for(ChangeEntity mv : moveList){
-                        if(ChangeEntityUtil.isMoveInWrapper(ce,mv)){
-                            ChangeEntityUtil.mergeMoveAndWrapper(ce,mv);
+                for (ChangeEntity ce : stmtWrapperList) {
+                    for (ChangeEntity mv : moveList) {
+                        if (ChangeEntityUtil.isMoveInWrapper(ce, mv)) {
+                            ChangeEntityUtil.mergeMoveAndWrapper(ce, mv);
                             deletedMove.add(mv);
                         }
                     }
                 }
-                for(ChangeEntity e:deletedMove){
+                for (ChangeEntity e : deletedMove) {
                     mList.remove(e);
                 }
 
@@ -167,37 +166,36 @@ public class LayeredChangeEntityContainer {
     }
 
 
-
-
-    public void sortEntityList(){
-        for(Entry<BodyDeclarationPair,List<ChangeEntity>> entry:this.layerMap.entrySet()){
+    public void sortEntityList() {
+        for (Entry<BodyDeclarationPair, List<ChangeEntity>> entry : this.layerMap.entrySet()) {
             List<ChangeEntity> mList = entry.getValue();
-            mList.sort(new Comparator<ChangeEntity>(){
+            mList.sort(new Comparator<ChangeEntity>() {
                 @Override
-                public int compare(ChangeEntity a,ChangeEntity b){
+                public int compare(ChangeEntity a, ChangeEntity b) {
                     return a.lineRange.startLineNo - b.lineRange.startLineNo;
                 }
             });
         }
     }
 
-    public void printContainerEntityBeforeSorting(CompilationUnit cu){
-        System.out.println("Member Key Size:" + this.layerMap.size());
-        for(Entry<BodyDeclarationPair,List<ChangeEntity>> entry:this.layerMap.entrySet()){
-//            for(BodyDeclarationPair bodyDeclarationPair : this.keyIndex){
+    public void printContainerEntityBeforeSorting(CompilationUnit cu) {
+        System.out.println("\nMember Key Size:" + this.layerMap.size());
+        for (Entry<BodyDeclarationPair, List<ChangeEntity>> entry : this.layerMap.entrySet()) {
             BodyDeclarationPair bodyDeclarationPair = entry.getKey();
             List<ChangeEntity> mList = this.layerMap.get(bodyDeclarationPair);
+            if (mList == null || mList.size() == 0) {
+                continue;
+            }
             int startL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getStartPosition());
-            int endL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getLength()+bodyDeclarationPair.getBodyDeclaration().getStartPosition()-1);
-            System.out.println(bodyDeclarationPair.toString()+ " (" +startL+","+endL+")");
-            for(ChangeEntity ce:mList){
+            int endL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getLength() + bodyDeclarationPair.getBodyDeclaration().getStartPosition() - 1);
+            System.out.println(bodyDeclarationPair.toString() + " (" + startL + "," + endL + ")");
+            for (ChangeEntity ce : mList) {
                 System.out.println(ce.toString());
             }
             System.out.println("");
         }
 
     }
-
 
 
 }
