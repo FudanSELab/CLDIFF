@@ -11,8 +11,7 @@ import edu.fdu.se.git.RepoConstants;
 public class RQ1Data {
 
     public static void main(String args[]){
-        JGitRepositoryCommand cmd = new JGitRepositoryCommand(
-                ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2)+ RepoConstants.platform_frameworks_base_ + ".git");
+        JGitRepositoryCommand cmd = new JGitRepositoryCommand(ProjectProperties.getInstance().getValue(PropertyKeys.JAVA_REPO_RQ1));
         cmd.walkRepoFromBackwards();
     }
 
