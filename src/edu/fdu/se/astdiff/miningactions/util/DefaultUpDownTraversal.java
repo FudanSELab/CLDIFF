@@ -176,6 +176,7 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
             }
         }
         changePacket.initChangeSet1();
+        changePacket.initChangeSet2();
         changePacket.getChangeSet1().add(a.getClass().getSimpleName());
         traverseNodeSubTreeInRange(node,0,i-1,result1,changePacket.getChangeSet1());
         traverseNodeSubTreeInRange(node,i,children.size()-1,result1,changePacket.getChangeSet2());

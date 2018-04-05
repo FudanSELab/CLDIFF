@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.miningoperationbean.statement;
 
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.base.StatementPlusChangeEntity;
 
 /**
@@ -11,6 +12,20 @@ public class SuperConstructorInvocationChangeEntity extends StatementPlusChangeE
 
     public SuperConstructorInvocationChangeEntity(ClusteredActionBean bean) {
         super(bean);
+    }
+
+
+    public String toString2(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.stageIIBean.getOpt());
+        sb.append(" ");
+        sb.append(this.stageIIBean.getChangeEntity());
+        if(this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE)){
+            sb.append("'s arguments ");
+//            sb.append("");
+            sb.append("with/by...");
+        }
+        return sb.toString();
     }
 }
 

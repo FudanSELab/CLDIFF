@@ -18,12 +18,12 @@ import java.util.List;
  */
 public class MiningOperationData {
 
-    private PreprocessedData preprocessedData;
+    public PreprocessedData preprocessedData;
 
     public List<ChangeEntity> mChangeEntityAll;
 
 
-    private LayeredChangeEntityContainer entityContainer;
+    public LayeredChangeEntityContainer entityContainer;
 
 
     private MiningActionData mad;
@@ -57,9 +57,16 @@ public class MiningOperationData {
         this.preprocessedData.getmBodiesDeleted().forEach(a -> addOneBody(a, OperationTypeConstants.DELETE));
     }
 
-    public void printContainerEntityData(CompilationUnit cu) {
-        this.entityContainer.printContainerEntityBeforeSorting(cu);
+    public void printContainerEntityDataBefore() {
+        this.entityContainer.printContainerEntityBeforeSorting(this.preprocessedData.srcCu);
     }
+
+
+    public void printContainerEntityDataAfter(){
+        this.entityContainer.printContainerEntityAfterSorting(this.preprocessedData.srcCu);
+    }
+
+
 
     private void addOneBody(BodyDeclarationPair item, int type) {
         ChangeEntity ce = null;
@@ -95,16 +102,16 @@ public class MiningOperationData {
 
     public void printStage1ChangeEntity() {
         this.mChangeEntityAll.forEach(a -> {
-            if (!a.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
+//            if (!a.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
                 System.out.println(a.toString());
-            }
+//            }
         });
     }
 
     public void preprocessChangeEntity(){
 //        this.
         this.initContainerEntityData();
-        this.printContainerEntityData(this.preprocessedData.srcCu);
+        this.printContainerEntityDataBefore();
         this.mergeMoveAndWrapper();
 
     }

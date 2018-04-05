@@ -47,33 +47,35 @@ public class ChangeEntityDesc {
 
         public static final String ENTITY_LABELED_STATEMENT = "Labeled Statement";
 
-        public static final String ENTITY_FOR_STMT = "For Statement";
+        public static final String ENTITY_FOR_STMT = "For";
 
-        public static final String ENTITY_IF_STMT = "If Statement";
+        public static final String ENTITY_IF_STMT = "If";
 
-        public static final String ENTITY_RETURN_STMT = "Return Statement";
+        public static final String ENTITY_RETURN_STMT = "Return";
 
-        public static final String ENTITY_SWITCH_STMT = "Switch Statement";
+        public static final String ENTITY_SWITCH_STMT = "Switch";
 
-        public static final String ENTITY_SYNCHRONIZED_STMT = "Synchronized Statement";
+        public static final String ENTITY_SWITCH_CASE = "Switch Case";
 
-        public static final String ENTITY_TRY_STMT = "Try Statement";
+        public static final String ENTITY_SYNCHRONIZED_STMT = "Synchronized";
 
-        public static final String ENTITY_VARIABLE_STMT = "Variable Declaration Statement";
+        public static final String ENTITY_TRY_STMT = "Try";
 
-        public static final String ENTITY_WHILE_STMT = "While Statment";
+        public static final String ENTITY_VARIABLE_STMT = "Variable Declaration";
 
-        public static final String ENTITY_DO_STMT = "Do statement";
+        public static final String ENTITY_WHILE_STMT = "While";
 
-        public static final String ENTITY_EMPTY_STMT = "Empty Statement";
+        public static final String ENTITY_DO_STMT = "Do";
 
-        public static final String ENTITY_LABELED_STMT = "Labeled Statement";
+        public static final String ENTITY_EMPTY_STMT = "Empty";
 
-        public static final String ENTITY_THROW_STMT = "Throw Statement";
+        public static final String ENTITY_LABELED_STMT = "Labeled";
 
-        public static final String ENTITY_ENHANCED_FOR_STMT = "Enhanced For Statement";
+        public static final String ENTITY_THROW_STMT = "Throw";
 
-        public static final String ENTITY_TYPE_DECLARATION_STMT = "Type Declaration Statement";
+        public static final String ENTITY_ENHANCED_FOR_STMT = "Enhanced For";
+
+        public static final String ENTITY_TYPE_DECLARATION_STMT = "Type Declaration";
 
     }
 

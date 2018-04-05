@@ -11,8 +11,7 @@ public class ChangeEntityData {
 
     public MiningOperationData miningOperationData;
 
-    public ChangeEntityData(MiningOperationData mad, LayeredChangeEntityContainer container){
-        this.changeEntityLayerContainer = container;
+    public ChangeEntityData(MiningOperationData mad){
         this.miningOperationData = mad;
     }
 
@@ -23,11 +22,10 @@ public class ChangeEntityData {
 //        }
     }
 
-    public LayeredChangeEntityContainer changeEntityLayerContainer;
 
 
     public void printStage2ChangeEntity(){
-
+        miningOperationData.printContainerEntityDataAfter();
     }
 
 

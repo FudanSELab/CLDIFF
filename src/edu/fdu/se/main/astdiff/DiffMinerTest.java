@@ -64,18 +64,18 @@ public class DiffMinerTest extends BaseDiffMiner {
      * 使用修改简化之后的流程，测试多个文件的功能
      */
     private void runBatchTest() {
-        String batchTestFilePath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\test_batch_complex_action";
+        String batchTestFilePath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\test_batch_simple_action";
         File currdir = new File(batchTestFilePath + "\\curr");
         File[] files = currdir.listFiles();
         String outputDir = "test";
         try{
             for (File currf1 : files) {
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
-                if(currf1.getName().startsWith("UpDownInsertPlusMove.java")) {
+//                if(currf1.getName().startsWith("UpDownInsertPlusMove.java")) {
                     System.out.println(currf1.getName());
                     doo(prevFile, currf1.getAbsolutePath(), outputDir);
                     System.out.println();
-                }
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,8 +85,8 @@ public class DiffMinerTest extends BaseDiffMiner {
 
     public static void main(String[] args) {
         DiffMinerTest i = new DiffMinerTest();
-//        i.runBatchTest();
-        i.runSingleFilePair();
+        i.runBatchTest();
+//        i.runSingleFilePair();
     }
 
 

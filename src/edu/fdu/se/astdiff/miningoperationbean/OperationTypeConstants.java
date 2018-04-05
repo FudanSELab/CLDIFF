@@ -19,8 +19,8 @@ public class OperationTypeConstants {
         constantName = new HashMap<>();
         constantName.put(-1,"UNKNOWN");
 
-        constantName.put(10000,"INSERT");
-        constantName.put(10001,"DELETE");
+        constantName.put(10000,"Insert");
+        constantName.put(10001,"Delete");
         constantName.put(10002,"MOVE");
         constantName.put(10003,"UPDATE");
         constantName.put(10004,"MULTIPLE_EDIT");
@@ -50,12 +50,12 @@ public class OperationTypeConstants {
     final public static int CHANGE = 10010;
 
 
-    final public static int MULTIPLE_EDIT = 10004;
-
-    final public static int INSERT_M = 10005;
-    final public static int DELETE_M = 10006;
-    final public static int MOVE_M = 10007;
-
+//    final public static int MULTIPLE_EDIT = 10004;
+//
+//    final public static int INSERT_M = 10005;
+//    final public static int DELETE_M = 10006;
+//    final public static int MOVE_M = 10007;
+//
 
 
 

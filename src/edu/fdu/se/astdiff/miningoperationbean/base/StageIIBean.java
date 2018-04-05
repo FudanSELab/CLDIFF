@@ -116,4 +116,19 @@ public class StageIIBean {
                 this.lineRange + " " +
                 this.location;
     }
+
+    public String toString2(){
+        StringBuffer sb = new StringBuffer();
+        sb.append(this.opt);
+        sb.append(" ");
+        sb.append(this.changeEntity);
+        if(this.opt.equals(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE)){
+            sb.append(" with/by");
+
+        }
+//        this.opt2 + " " +
+//                this.subEntity + " " +
+//                this.thumbnail + " " +
+        return sb.toString();
+    }
 }

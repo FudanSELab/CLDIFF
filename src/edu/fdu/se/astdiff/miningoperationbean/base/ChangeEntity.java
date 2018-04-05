@@ -57,6 +57,11 @@ public class ChangeEntity {
     }
 
 
+    public String toString2(){
+        return this.stageIIBean.toString2();
+    }
+
+
 
 
 }

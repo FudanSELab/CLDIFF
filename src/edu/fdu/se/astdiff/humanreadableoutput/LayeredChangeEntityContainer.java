@@ -6,6 +6,7 @@ import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityUtil;
 import edu.fdu.se.astdiff.miningoperationbean.member.*;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
@@ -191,6 +192,25 @@ public class LayeredChangeEntityContainer {
             System.out.println(bodyDeclarationPair.toString() + " (" + startL + "," + endL + ")");
             for (ChangeEntity ce : mList) {
                 System.out.println(ce.toString());
+            }
+            System.out.println("");
+        }
+
+    }
+
+    public void printContainerEntityAfterSorting(CompilationUnit cu) {
+        System.out.println("\nMember Key Size:" + this.layerMap.size());
+        for (Entry<BodyDeclarationPair, List<ChangeEntity>> entry : this.layerMap.entrySet()) {
+            BodyDeclarationPair bodyDeclarationPair = entry.getKey();
+            List<ChangeEntity> mList = this.layerMap.get(bodyDeclarationPair);
+            if (mList == null || mList.size() == 0) {
+                continue;
+            }
+            int startL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getStartPosition());
+            int endL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getLength() + bodyDeclarationPair.getBodyDeclaration().getStartPosition() - 1);
+            System.out.println(bodyDeclarationPair.toString() + " (" + startL + "," + endL + ")");
+            for (ChangeEntity ce : mList) {
+                System.out.println(ce.toString2());
             }
             System.out.println("");
         }

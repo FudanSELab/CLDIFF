@@ -84,10 +84,15 @@ public class DiffMiner extends BaseDiffMiner {
     }
 
     //todo block 为move的情况
-
     //todo move 复杂操作处理  需要考虑两个树之间的行数mapping
 
-    //todo link各种
+
+
+    //清明todo
+    // 1.with/by 之后的详细
+    // 3.link   1.local global data  2.control 3. class 4.member 5.duplicate
+    // 2.Methodology tex
+
 
 
     //4-2 讨论
@@ -119,6 +124,8 @@ public class DiffMiner extends BaseDiffMiner {
     // 预处理的change entity : add member / remove member 都可以放入以src 的BodyDeclaration 不考虑行号
     // gumtree 拓展识别的change entity add member / remove member  add stmt remove stmt
     // add节点UpDown 往上找到mapping的节点,src的range 其他则
+
+
 //            AssertStatement, getExpression getMessage
 //            Block,        statements();
 //            BreakStatement,  break;
@@ -133,8 +140,11 @@ public class DiffMiner extends BaseDiffMiner {
 //*            LabeledStatement, getBody getLabel
 //            ReturnStatement, getExpression()
 //**            SuperConstructorInvocation,  arguments() getExpression typeArguments
+
 //*            SwitchCase,  getExpression() isDefault()
 //            SwitchStatement,  getExpression()   statements()
+
+
 //            SynchronizedStatement,  getBody getExpression
 //            ThrowStatement, getExpression
 //            TryStatement, catchClauses() 	getBody() getFinally() resources()

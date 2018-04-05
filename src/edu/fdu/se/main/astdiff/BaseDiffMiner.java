@@ -42,10 +42,10 @@ public class BaseDiffMiner {
         ClusterActions.doCluster(mMiningActionData);
         MiningOperationData mod = new MiningOperationData(preData,mMiningActionData);
         // 3.5 data
-        mod.printStage1ChangeEntity();
+//        mod.printStage1ChangeEntity();
 //        // 4.Layer
         mod.preprocessChangeEntity();
-        ChangeEntityData changeEntityData = new ChangeEntityData(mod,preData.entityContainer);
+        ChangeEntityData changeEntityData = new ChangeEntityData(mod);
         changeEntityData.printStage2ChangeEntity();
         //todo print
 
