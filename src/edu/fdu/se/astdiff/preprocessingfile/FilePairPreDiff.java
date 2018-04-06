@@ -31,17 +31,11 @@ import org.eclipse.jdt.core.dom.*;
  */
 public class FilePairPreDiff {
 
-    public static void main(String args[]) {
-        new FilePairPreDiff().compareTwoFile("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java",
-                "D:/Workspace/Android_Diff/SDK_Files_15-26/android-26/android/accessibilityservice/AccessibilityService.java", "test_file");
-
-    }
 
     public FilePairPreDiff() {
         preprocessedData = new PreprocessedData();
         preprocessedTempData = new PreprocessedTempData();
         queue = new LinkedList<>();
-
     }
 
     private PreprocessedData preprocessedData;
@@ -54,15 +48,28 @@ public class FilePairPreDiff {
     }
     private Queue<SrcDstPair> queue;
 
+    public void initFile(String prevPath,String currPath){
+        preprocessedData.srcCu = JDTParserFactory.getCompilationUnit(prevPath);
+        preprocessedData.dstCu = JDTParserFactory.getCompilationUnit(currPath);
+        preprocessedData.loadTwoCompilationUnits(preprocessedData.srcCu, preprocessedData.dstCu, prevPath, currPath);
+    }
+    public void initFile(byte[] prevContent,byte[] currContent){
+        try {
+            preprocessedData.srcCu = JDTParserFactory.getCompilationUnit(currContent);
+            preprocessedData.dstCu = JDTParserFactory.getCompilationUnit(prevContent);
+            preprocessedData.loadTwoCompilationUnits(preprocessedData.srcCu, preprocessedData.dstCu, prevContent, currContent);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public FileOutputLog getFileOutputLog() {
         return fileOutputLog;
     }
 
-    public int compareTwoFile(String src, String dst, String outputDirName) {
-
-        CompilationUnit cuSrc = JDTParserFactory.getCompilationUnit(src);
-        CompilationUnit cuDst = JDTParserFactory.getCompilationUnit(dst);
-        preprocessedData.loadTwoCompilationUnits(cuSrc, cuDst, src, dst);
+    public int compareTwoFile(String outputDirName) {
+        CompilationUnit cuSrc = preprocessedData.srcCu;
+        CompilationUnit cuDst = preprocessedData.dstCu;
         if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
             fileOutputLog = new FileOutputLog(outputDirName);
             fileOutputLog.writeFileBeforeProcess(preprocessedData);

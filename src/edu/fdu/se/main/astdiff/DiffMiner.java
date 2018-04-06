@@ -102,7 +102,7 @@ public class DiffMiner extends BaseDiffMiner {
 
 
     //I. II.Example
-//  Key -> Value
+    //  Key -> Value
 //  BodyDeclaration -> List<ChangeEntity> 发生在这个BodyDeclaration里面的change entity
 //  BodyDeclaration [rangeA,rangeB]  -> List<ChangeEntity>
 

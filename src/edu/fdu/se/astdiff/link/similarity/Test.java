@@ -43,7 +43,8 @@ public class Test {
     //测试相似度检测测试
     private void testDoo(String filePrev, String fileCurr, String output){
         FilePairPreDiff psc = new FilePairPreDiff();
-        psc.compareTwoFile(filePrev, fileCurr, output);
+        psc.initFile(filePrev, fileCurr);
+        psc.compareTwoFile(output);
         PreprocessedData preData = psc.getPreprocessedData();
         JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
 

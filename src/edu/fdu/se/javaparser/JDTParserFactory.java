@@ -30,6 +30,21 @@ public class JDTParserFactory {
         return result;
     }
 
+
+    public static CompilationUnit getCompilationUnit(byte[] fileContent) throws Exception{
+        ASTParser astParser = ASTParser.newParser(AST.JLS8);
+        Map options = JavaCore.getOptions();
+        options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
+        options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
+        options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
+        options.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
+//        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+        astParser.setCompilerOptions(options);
+        astParser.setSource(new String(fileContent).toCharArray());
+        CompilationUnit result = (CompilationUnit) (astParser.createAST(null));
+        return result;
+    }
+
     public static CompilationUnit getCompilationUnit(String filePath){
         try {
             return getCompilationUnit(new FileInputStream(filePath));
@@ -39,9 +54,31 @@ public class JDTParserFactory {
         return null;
     }
 
+
+
     public static String getLinesOfFile(String filePath,List<String> fileList){
         try {
             FileInputStream fis = new FileInputStream(filePath);
+            StringBuilder sb = new StringBuilder();
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            while((line = br.readLine())!= null){
+                fileList.add(line);
+                sb.append(line);
+                sb.append("\n");
+            }
+            return sb.toString();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public static String getLinesOfFile(byte[] fileContent,List<String> fileList){
+        try {
+            InputStream fis = new ByteArrayInputStream(fileContent);
             StringBuilder sb = new StringBuilder();
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
@@ -74,8 +111,8 @@ public class JDTParserFactory {
             CompilationUnit cu = getCompilationUnit("D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java");
             CompilationUnit cuPrev = getCompilationUnit("C:\\Users\\huangkaifeng\\Desktop\\Test.java");
             CompilationUnit cuCurr = getCompilationUnit("C:\\Users\\huangkaifeng\\Desktop\\a\\Test.java");
-            removeAllCommentsOfCompilationUnit(cuPrev);
-            removeAllCommentsOfCompilationUnit(cuCurr);
+//            removeAllCommentsOfCompilationUnit(cuPrev);
+//            removeAllCommentsOfCompilationUnit(cuCurr);
             List<ASTNode> list =  cuPrev.types();
             List<ASTNode> list2 = cuCurr.types();
             TypeDeclaration typeDeclaration = (TypeDeclaration) list.get(0);
@@ -94,25 +131,6 @@ public class JDTParserFactory {
         }catch(Exception e){
             e.printStackTrace();
         }
-    }
-
-    private static void removeAllCommentsOfCompilationUnit(CompilationUnit cu) {
-        List<ASTNode> commentList = cu.getCommentList();
-        PackageDeclaration packageDeclaration = cu.getPackage();
-        if(packageDeclaration!=null) packageDeclaration.delete();
-        List<ASTNode> imprortss = cu.imports();
-        for(int i = commentList.size()-1;i>=0 ;i--){
-//            System.out.println(commentList.get(i).getClass().getSimpleName());
-
-            commentList.get(i).delete();
-        }
-        for(int i = imprortss.size()-1;i>=0 ;i--){
-//        	System.out.println(imprortss.get(i).getClass().getSimpleName());
-            imprortss.get(i).delete();
-        }
-        assert cu.types() != null;
-        assert cu.types().size() == 1;
-//        System.out.println(cu.toString());
     }
 
 }

@@ -96,6 +96,18 @@ public class PreprocessedData {
         this.dstLines = JDTParserFactory.getLinesList(dstLineList.size());
     }
 
+    public void loadTwoCompilationUnits(CompilationUnit src,CompilationUnit dst,byte[] srcContent,byte[] dstContent){
+        this.srcCu = src;
+        this.srcLineList = new ArrayList<>();
+        this.fullStringSrc = JDTParserFactory.getLinesOfFile(srcContent,this.srcLineList);
+        this.srcLines = JDTParserFactory.getLinesList(srcLineList.size());
+
+        this.dstCu = dst;
+        this.dstLineList = new ArrayList<>();
+        this.fullStringDst = JDTParserFactory.getLinesOfFile(dstContent,this.dstLineList);
+        this.dstLines = JDTParserFactory.getLinesList(dstLineList.size());
+    }
+
 
 
     public void addBodiesAdded(BodyDeclaration bodyDeclaration,String classPrefix){

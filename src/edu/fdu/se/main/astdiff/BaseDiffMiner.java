@@ -21,13 +21,17 @@ import edu.fdu.se.fileutil.FileWriter;
  */
 public class BaseDiffMiner {
 
-    protected void doo(String filePrev, String fileCurr, String output) {
+    public void doo(String filePrev, String fileCurr, String output) {
         // 1.pre
         FilePairPreDiff preDiff = new FilePairPreDiff();
-        int result = preDiff.compareTwoFile(filePrev, fileCurr, output);
+        preDiff.initFile(filePrev,fileCurr);
+        int result = preDiff.compareTwoFile(output);
         if(result ==-1){
             return;
         }
+        runDiff(preDiff);
+    }
+    private void runDiff(FilePairPreDiff preDiff){
         // 1.5 data
         PreprocessedData preData = preDiff.getPreprocessedData();
 //        preData.printAddedRemovedBodies();
@@ -46,8 +50,21 @@ public class BaseDiffMiner {
         mod.preprocessChangeEntity(); //1.init 2.merge 3.set 4.sub
         ChangeEntityData changeEntityData = new ChangeEntityData(mod);
         changeEntityData.printStage2ChangeEntity();
-
     }
+
+    public void doo(byte[] filePrevContent, byte[] fileCurrContent, String output) {
+        // 1.pre
+        FilePairPreDiff preDiff = new FilePairPreDiff();
+        preDiff.initFile(filePrevContent,fileCurrContent);
+        int result = preDiff.compareTwoFile(output);
+        if(result ==-1){
+            return;
+        }
+        runDiff(preDiff);
+    }
+
+
+
 
     private void printActions(GeneratingActionsData actionsData, JavaParserTreeGenerator treeGenerator, FileOutputLog fileOutputLog){
         if("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_SRC_DST_TREE))){
