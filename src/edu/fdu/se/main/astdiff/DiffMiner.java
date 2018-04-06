@@ -2,6 +2,8 @@ package edu.fdu.se.main.astdiff;
 
 
 
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
@@ -75,17 +77,12 @@ public class DiffMiner extends BaseDiffMiner {
 //                e.printStackTrace();
 //            }
             break;
-
         }
     }
     public static void main(String []args) {
         DiffMiner i = new DiffMiner();
 		i.runBatch();
     }
-
-    //todo block 为move的情况
-    //todo move 复杂操作处理  需要考虑两个树之间的行数mapping
-
 
 
     //清明todo
@@ -94,25 +91,17 @@ public class DiffMiner extends BaseDiffMiner {
     // 2.Methodology tex
 
 
-
     //4-2 讨论
     // 1. Type Binding问题
-    // 3. Insert condition +  Move
-    // 4. Insert condition body + Move
-    // 6. Insert Stmt
 
     //4-4
     // 1.Preprocessing
     // 2.Aggregation -> Summary
     // 3.Association
 
-    // Evaluation
-    // 1.验证准确性
-    // 2.验证和Gumtree的size
-    // 3.验证 Manual review角度（还有其他什么角度）
-    // 4.Performance
-    // 5.人link 和机器link结果比较，link时间比较
 
+
+    //I. II.Example
 //  Key -> Value
 //  BodyDeclaration -> List<ChangeEntity> 发生在这个BodyDeclaration里面的change entity
 //  BodyDeclaration [rangeA,rangeB]  -> List<ChangeEntity>
@@ -124,7 +113,6 @@ public class DiffMiner extends BaseDiffMiner {
     // 预处理的change entity : add member / remove member 都可以放入以src 的BodyDeclaration 不考虑行号
     // gumtree 拓展识别的change entity add member / remove member  add stmt remove stmt
     // add节点UpDown 往上找到mapping的节点,src的range 其他则
-
 
 //            AssertStatement, getExpression getMessage
 //            Block,        statements();
@@ -151,8 +139,6 @@ public class DiffMiner extends BaseDiffMiner {
 //            TypeDeclarationStatement, N/A
 //            VariableDeclarationStatement , fragments() getModifiers() getType
 //            WhileStatement getExpression getBody();
-
-
 
 
 //    BooleanLiteral,
@@ -188,5 +174,6 @@ public class DiffMiner extends BaseDiffMiner {
 //    ThisExpression,
 //    TypeMethodReference,
 //    VariableDeclarationExpression
+
 
 }

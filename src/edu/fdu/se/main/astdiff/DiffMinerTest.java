@@ -1,5 +1,6 @@
 package edu.fdu.se.main.astdiff;
 
+import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
@@ -69,10 +70,11 @@ public class DiffMinerTest extends BaseDiffMiner {
         File[] files = currdir.listFiles();
         String outputDir = "test";
         try{
-            for (File currf1 : files) {
+            for (int i =4;i<files.length;i++){
+                File currf1 = files[i];
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
 //                if(currf1.getName().startsWith("UpDownInsertPlusMove.java")) {
-                    System.out.println(currf1.getName());
+                    System.out.println(i+" "+currf1.getName());
                     doo(prevFile, currf1.getAbsolutePath(), outputDir);
                     System.out.println();
 //                }
@@ -80,6 +82,7 @@ public class DiffMinerTest extends BaseDiffMiner {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 
@@ -88,7 +91,10 @@ public class DiffMinerTest extends BaseDiffMiner {
         i.runBatchTest();
 //        i.runSingleFilePair();
     }
-
+//
+//Src Code/ Dst Code -> GumTree -> Mapping -> List<Action> -> Up:Down Down:Up:Down ->
+//    Map<Node,List<Action>> mMap ->
+//    Insert Update Move Delete
 
 }
 

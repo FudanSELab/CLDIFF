@@ -6,6 +6,9 @@ import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningoperationbean.member.*;
+import edu.fdu.se.astdiff.miningoperationbean.statement.ForChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.statement.SynchronizedChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.statement.WhileChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import org.eclipse.jdt.core.dom.*;
@@ -109,11 +112,22 @@ public class MiningOperationData {
     }
 
     public void preprocessChangeEntity(){
-//        this.
         this.initContainerEntityData();
         this.printContainerEntityDataBefore();
         this.mergeMoveAndWrapper();
+        this.setChangeEntitySub();
 
+    }
+
+    public void setChangeEntitySub(){
+        this.mChangeEntityAll.forEach(a -> {
+            if (!a.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
+                if(a instanceof ForChangeEntity || a instanceof WhileChangeEntity
+                        || a instanceof SynchronizedChangeEntity ){
+//                    a.clusteredActionBean.changePacket.getChangeSet2()
+                }
+            }
+        });
     }
 
 

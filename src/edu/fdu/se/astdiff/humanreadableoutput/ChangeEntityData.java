@@ -16,11 +16,6 @@ public class ChangeEntityData {
     }
 
 
-    public void layerChangeEntity(){
-//        for(ChangeEntity changeEntity: miningOperationData.mChangeEntityPreDiff){
-//            this.changeEntityLayerContainer.addPreDiffChangeEntity(changeEntity);
-//        }
-    }
 
 
 

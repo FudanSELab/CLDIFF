@@ -43,11 +43,9 @@ public class BaseDiffMiner {
         MiningOperationData mod = new MiningOperationData(preData,mMiningActionData);
         // 3.5 data
 //        mod.printStage1ChangeEntity();
-//        // 4.Layer
-        mod.preprocessChangeEntity();
+        mod.preprocessChangeEntity(); //1.init 2.merge 3.set 4.sub
         ChangeEntityData changeEntityData = new ChangeEntityData(mod);
         changeEntityData.printStage2ChangeEntity();
-        //todo print
 
     }
 
