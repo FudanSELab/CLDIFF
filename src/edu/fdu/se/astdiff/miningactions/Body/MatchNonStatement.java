@@ -14,7 +14,7 @@ import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import org.eclipse.jdt.core.dom.ASTNode;
 
-public class MatchSimpleNameOrLiteral {
+public class MatchNonStatement {
 
 
     public static void matchSimpleNameOrLiteral(MiningActionData fp, Action a) {

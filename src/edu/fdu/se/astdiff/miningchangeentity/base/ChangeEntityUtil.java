@@ -61,9 +61,4 @@ public class ChangeEntityUtil {
     }
 
 
-    public static void mergeMoveAndWrapper(ChangeEntity wrapper,ChangeEntity move){
-
-        wrapper.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION);
-    }
-
 }

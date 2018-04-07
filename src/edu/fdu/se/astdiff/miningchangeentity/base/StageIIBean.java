@@ -25,9 +25,9 @@ public class StageIIBean {
 
     private String subEntity;
 
-    private List<Opt2> opt2List;
+    private List<Opt2Tuple> opt2List;
 
-    class Opt2 {
+    class Opt2Tuple {
         private String opt2;
         private String opt2Expression;
 
@@ -63,11 +63,11 @@ public class StageIIBean {
         return subEntity;
     }
 
-    public void setOpt2AndOpt2Expression(String opt2,String opt2Expression) {
-        Opt2 opt2Class = new Opt2();
+    public void addOpt2AndOpt2Expression(String opt2,String opt2Expression) {
+        Opt2Tuple opt2Class = new Opt2Tuple();
         opt2Class.opt2 = opt2;
         opt2Class.opt2Expression = opt2Expression;
-        for(Opt2 tmp:this.opt2List){
+        for(Opt2Tuple tmp:this.opt2List){
             if(tmp.hashCode() == opt2Class.hashCode()){
                 return;
             }
@@ -75,7 +75,7 @@ public class StageIIBean {
         this.opt2List.add(opt2Class);
     }
 
-    public List<Opt2> getOpt2List() {
+    public List<Opt2Tuple> getOpt2List() {
         return opt2List;
     }
 

@@ -48,11 +48,7 @@ public class MatchBlock {
 
     public static void handleMoveOnBlock(MiningActionData fp,Action a){
         System.err.println("[WARNING]Move block");
-//        Tree parent = (Tree)a.getNode().getParent();
-//        System.err.println(parent.getAstNode().getClass().getSimpleName());
-//        Move move = (Move)a;
         Tree movedBlock = (Tree)a.getNode();
-//        Tree nextParent =(Tree) move.getParent();
         List<ITree> children = movedBlock.getChildren();
         for(int i =0;i<children.size();i++){
             Tree childd = (Tree) children.get(i);
@@ -61,7 +57,6 @@ public class MatchBlock {
             }
             ChangePacket changePacket = new ChangePacket();
             changePacket.initChangeSet1();
-
             List<Action> subActions = new ArrayList<>();
             ClusteredActionBean clusteredActionBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,new Move(childd,null,0),subActions,changePacket,childd,ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
             ChangeEntity changeEntity = new StatementPlusChangeEntity(clusteredActionBean);
