@@ -17,22 +17,15 @@ import java.util.Map.Entry;
 
 /**
  * Created by huangkaifeng on 3/24/18.
+ *
  */
 public class LayeredChangeEntityContainer {
 
     protected Map<BodyDeclarationPair, List<ChangeEntity>> layerMap;
 
-    private List<ChangeEntity> mChangeEntityAll;
 
     protected List<BodyDeclarationPair> keyIndex;
 
-    public void setmChangeEntityAll(List<ChangeEntity> mChangeEntityAll) {
-        this.mChangeEntityAll = mChangeEntityAll;
-    }
-
-    public List<ChangeEntity> getmChangeEntityAll() {
-        return mChangeEntityAll;
-    }
 
     public Map<BodyDeclarationPair, List<ChangeEntity>> getLayerMap() {
         return layerMap;
@@ -146,39 +139,7 @@ public class LayeredChangeEntityContainer {
         return null;
     }
 
-    public void mergeMoveAndWrapper() {
-        for (Entry<BodyDeclarationPair, List<ChangeEntity>> entry : this.layerMap.entrySet()) {
-            BodyDeclarationPair bodyDeclarationPair = entry.getKey();
-            if (bodyDeclarationPair.getBodyDeclaration() instanceof MethodDeclaration) {
-                //每个method里面
-                List<ChangeEntity> mList = entry.getValue();
-                List<ChangeEntity> moveList = new ArrayList<>();
-                List<ChangeEntity> stmtWrapperList = new ArrayList<>();
-                List<ChangeEntity> deletedMove = new ArrayList<>();
-                for (ChangeEntity ce : mList) {
-                    int resultCode = ChangeEntityUtil.checkEntityCode(ce);
-                    if (resultCode == 1) {
-                        moveList.add(ce);
-                    } else if (resultCode == 2) {
-                        stmtWrapperList.add(ce);
-                    }
 
-                }
-                for (ChangeEntity ce : stmtWrapperList) {
-                    for (ChangeEntity mv : moveList) {
-                        if (ChangeEntityUtil.isMoveInWrapper(ce, mv)) {
-                            ChangeEntityUtil.mergeMoveAndWrapper(ce, mv);
-                            deletedMove.add(mv);
-                        }
-                    }
-                }
-                for (ChangeEntity e : deletedMove) {
-                    mList.remove(e);
-                }
-
-            }
-        }
-    }
 
 
     public void sortEntityList() {
@@ -193,43 +154,7 @@ public class LayeredChangeEntityContainer {
         }
     }
 
-    public void printContainerEntityBeforeSorting(CompilationUnit cu) {
-        System.out.println("\nMember Key Size:" + this.layerMap.size());
-        for (Entry<BodyDeclarationPair, List<ChangeEntity>> entry : this.layerMap.entrySet()) {
-            BodyDeclarationPair bodyDeclarationPair = entry.getKey();
-            List<ChangeEntity> mList = this.layerMap.get(bodyDeclarationPair);
-            if (mList == null || mList.size() == 0) {
-                continue;
-            }
-            int startL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getStartPosition());
-            int endL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getLength() + bodyDeclarationPair.getBodyDeclaration().getStartPosition() - 1);
-            System.out.println(bodyDeclarationPair.toString() + " (" + startL + "," + endL + ")");
-            for (ChangeEntity ce : mList) {
-                System.out.println(ce.toString());
-            }
-            System.out.println("");
-        }
 
-    }
-
-    public void printContainerEntityAfterSorting(CompilationUnit cu) {
-        System.out.println("\nMember Key Size:" + this.layerMap.size());
-        for (Entry<BodyDeclarationPair, List<ChangeEntity>> entry : this.layerMap.entrySet()) {
-            BodyDeclarationPair bodyDeclarationPair = entry.getKey();
-            List<ChangeEntity> mList = this.layerMap.get(bodyDeclarationPair);
-            if (mList == null || mList.size() == 0) {
-                continue;
-            }
-            int startL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getStartPosition());
-            int endL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getLength() + bodyDeclarationPair.getBodyDeclaration().getStartPosition() - 1);
-            System.out.println(bodyDeclarationPair.toString() + " (" + startL + "," + endL + ")");
-            for (ChangeEntity ce : mList) {
-                System.out.println(ce.toString2());
-            }
-            System.out.println("");
-        }
-
-    }
 
 
 }

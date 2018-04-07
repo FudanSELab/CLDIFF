@@ -7,6 +7,7 @@ import edu.fdu.se.astdiff.associating.AssociationGenerator;
 import edu.fdu.se.astdiff.miningactions.ActionAggregationGenerator;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
+import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityPreprocess;
 import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
@@ -46,11 +47,12 @@ public class BaseDiffMiner {
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
         aag.doCluster(mad);
 
-        ChangeEntityData mod = new ChangeEntityData(preData,mad);
-        mod.preprocessChangeEntity(); //1.init 2.merge 3.set 4.sub
+        ChangeEntityData ced = new ChangeEntityData(preData,mad);
+        ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
+        cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
 
-        AssociationGenerator associationGenerator = new AssociationGenerator(mod);
-        associationGenerator.generate();
+        AssociationGenerator associationGenerator = new AssociationGenerator(ced);
+//        associationGenerator.generate();
     }
 
     public void doo(String fileName,byte[] filePrevContent, byte[] fileCurrContent, String output) {

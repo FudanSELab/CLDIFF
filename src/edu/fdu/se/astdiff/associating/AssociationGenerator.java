@@ -30,9 +30,6 @@ public class AssociationGenerator {
         this.changeEntityData = mod;
     }
 
-    public void printStage2ChangeEntity(){
-        changeEntityData.printContainerEntityDataAfter();
-    }
 
 
     /**
@@ -40,7 +37,7 @@ public class AssociationGenerator {
      */
     public void generate() {
         LayeredChangeEntityContainer container = this.changeEntityData.entityContainer;
-        List<ChangeEntity> entities = container.getmChangeEntityAll();
+        List<ChangeEntity> entities = this.changeEntityData.mad.getChangeEntityList();
         entities.forEach(this::initLinkBean);
         Map<BodyDeclarationPair, List<ChangeEntity>> mMap = container.getLayerMap();
         List<ChangeEntity> methodChangeEntity = new ArrayList<>();

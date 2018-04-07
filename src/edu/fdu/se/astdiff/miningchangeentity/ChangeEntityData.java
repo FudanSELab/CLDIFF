@@ -8,14 +8,10 @@ import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.associating.LayeredChangeEntityContainer;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningchangeentity.member.*;
-import edu.fdu.se.astdiff.miningchangeentity.statement.ForChangeEntity;
-import edu.fdu.se.astdiff.miningchangeentity.statement.SynchronizedChangeEntity;
-import edu.fdu.se.astdiff.miningchangeentity.statement.WhileChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import org.eclipse.jdt.core.dom.*;
 
-import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/1/13.
@@ -25,7 +21,7 @@ public class ChangeEntityData {
 
     public PreprocessedData preprocessedData;
     public LayeredChangeEntityContainer entityContainer;
-    private MiningActionData mad;
+    public MiningActionData mad;
 
 
     public ChangeEntityData(PreprocessedData pd, MiningActionData mad) {
@@ -35,38 +31,7 @@ public class ChangeEntityData {
     }
 
 
-    public void mergeMoveAndWrapper() {
-        this.entityContainer.mergeMoveAndWrapper();
-    }
-
-    public void initContainerEntityData() {
-        for (ChangeEntity ce : this.mad.getChangeEntityList()) {
-            if (!ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
-                this.entityContainer.addGumTreePlus(ce, this.mad);
-            }
-        }
-        this.entityContainer.sortEntityList();
-        if (preprocessedData.getPreprocessChangeEntity() != null) {
-            for (ChangeEntity ce : preprocessedData.getPreprocessChangeEntity()) {
-                this.entityContainer.addPreDiffChangeEntity(ce);
-            }
-        }
-        this.preprocessedData.getmBodiesAdded().forEach(a -> addOneBody(a, Insert.class.getSimpleName()));
-        this.preprocessedData.getmBodiesDeleted().forEach(a -> addOneBody(a,Delete.class.getSimpleName()));
-    }
-
-    public void printContainerEntityDataBefore() {
-        this.entityContainer.printContainerEntityBeforeSorting(this.preprocessedData.srcCu);
-    }
-
-
-    public void printContainerEntityDataAfter(){
-        this.entityContainer.printContainerEntityAfterSorting(this.preprocessedData.srcCu);
-    }
-
-
-
-    private void addOneBody(BodyDeclarationPair item, String type) {
+    public void addOneBody(BodyDeclarationPair item, String type) {
         ChangeEntity ce = null;
         int s;
         int e;
@@ -94,36 +59,10 @@ public class ChangeEntityData {
         if (ce != null) {
             this.entityContainer.addPreDiffChangeEntity(ce);
         }
-
     }
 
 
-    public void printStage1ChangeEntity() {
-        this.mad.getChangeEntityList().forEach(a -> {
-//            if (!a.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
-                System.out.println(a.toString());
-//            }
-        });
-    }
 
-    public void preprocessChangeEntity(){
-        this.initContainerEntityData();
-        this.printContainerEntityDataBefore();
-        this.mergeMoveAndWrapper();
-        this.setChangeEntitySub();
-
-    }
-
-    public void setChangeEntitySub(){
-        this.mad.getChangeEntityList().forEach(a -> {
-            if (!a.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
-                if(a instanceof ForChangeEntity || a instanceof WhileChangeEntity
-                        || a instanceof SynchronizedChangeEntity ){
-//                    a.clusteredActionBean.changePacket.getChangeSet2()
-                }
-            }
-        });
-    }
 
 
 }

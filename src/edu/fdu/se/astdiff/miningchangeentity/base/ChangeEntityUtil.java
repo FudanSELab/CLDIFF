@@ -1,5 +1,10 @@
 package edu.fdu.se.astdiff.miningchangeentity.base;
 
+import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
+
 /**
  * Created by huangkaifeng on 2018/3/31.
  */
@@ -33,18 +38,31 @@ public class ChangeEntityUtil {
         return 0;
     }
 
-    public static boolean isMoveInWrapper(ChangeEntity wrapper,ChangeEntity move){
+    public static boolean isMoveInWrapper(MiningActionData fp,ChangeEntity wrapper, ChangeEntity move){
+        Integer[] range = null;
         if(wrapper.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIIOpt.OPT_INSERT)){
-//                      move.clusteredActionBean.curAction.getNode()
-            //todo
+            ITree dstITree = fp.getMappedDstOfSrcNode(move.clusteredActionBean.curAction.getNode());
+            if(dstITree == null){
+                return false;
+            }
+            Tree dstTree = (Tree) dstITree;
+            range = dstTree.getRange();
+        }else if(wrapper.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIIOpt.OPT_DELETE)){
+            range = ((Tree)move.clusteredActionBean.curAction.getNode()).getRange();
         }else{
-
+            return false;
+        }
+        Integer[] wrapperRange =((Tree) wrapper.clusteredActionBean.curAction.getNode()).getRange();
+        if(wrapperRange[0]<=range[0] && wrapperRange[1]>=range[1]){
+            return true;
         }
         return false;
 
     }
 
+
     public static void mergeMoveAndWrapper(ChangeEntity wrapper,ChangeEntity move){
+
         wrapper.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION);
     }
 

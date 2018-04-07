@@ -33,7 +33,7 @@ public class MatchSimpleNameOrLiteral {
         }
 
         ChangeEntity changeEntity;
-        changeEntity = MiningActionData.getEntityByNode(fp, queryFather);
+        changeEntity = fp.getEntityByNode(queryFather);
         if(changeEntity!=null &&changeEntity.clusteredActionBean.curAction instanceof Move){
             changeEntity = null;
         }
