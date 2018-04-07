@@ -6,6 +6,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 
 /**
  * 记录find时候找到的节点，以及对应的fafafather 节点，以及该节点下，所有的action
@@ -13,9 +14,6 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
  *
  */
 public class ClusteredActionBean {
-
-	public static final int SRC_TREE_NODE = 3;
-	public static final int DST_TREE_NODE = 4;
 
 
 	/**
@@ -45,9 +43,9 @@ public class ClusteredActionBean {
 		this.changePacket = changePacket;
 		this.fafather = (Tree) curAction.getNode();
 		if(curAction instanceof Insert){
-			this.nodeType = DST_TREE_NODE;
+			this.nodeType = ChangeEntityDesc.StageITreeType.DST_TREE_NODE;
 		}else{
-			this.nodeType = SRC_TREE_NODE;
+			this.nodeType = ChangeEntityDesc.StageITreeType.SRC_TREE_NODE;
 		}
 	}
 	public ClusteredActionBean(int traverseType,Action curAction, List<Action> actions, ChangePacket changePacket,Tree fafather,int nodeType){

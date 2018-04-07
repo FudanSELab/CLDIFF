@@ -1,8 +1,6 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
-import com.github.gumtreediff.actions.model.Insert;
 import edu.fdu.se.astdiff.associating.MyRange;
-import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningchangeentity.member.EnumChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;

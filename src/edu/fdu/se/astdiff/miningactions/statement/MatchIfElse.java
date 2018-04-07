@@ -12,8 +12,6 @@ import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningchangeentity.MiningOperationBeanUtil;
-import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningchangeentity.statement.IfChangeEntity;

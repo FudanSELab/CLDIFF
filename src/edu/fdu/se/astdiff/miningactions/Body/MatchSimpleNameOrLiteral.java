@@ -11,6 +11,7 @@ import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
 import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 public class MatchSimpleNameOrLiteral {
@@ -25,10 +26,10 @@ public class MatchSimpleNameOrLiteral {
         int treeType = -1;
         if (srcFather == null && dstFather != null) {
             queryFather = dstFather;
-            treeType = ClusteredActionBean.DST_TREE_NODE;
+            treeType = ChangeEntityDesc.StageITreeType.DST_TREE_NODE;
         } else if (srcFather != null) {
             queryFather = srcFather;
-            treeType = ClusteredActionBean.SRC_TREE_NODE;
+            treeType = ChangeEntityDesc.StageITreeType.SRC_TREE_NODE;
         }
 
         ChangeEntity changeEntity;

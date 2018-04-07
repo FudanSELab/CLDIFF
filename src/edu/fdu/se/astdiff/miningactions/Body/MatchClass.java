@@ -6,7 +6,6 @@ import edu.fdu.se.astdiff.miningactions.util.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningchangeentity.member.ClassOrInterfaceDeclarationChangeEntity;

@@ -13,9 +13,6 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class AstRelations {
 
-
-
-
 	public static boolean isFatherXXXStatement(Action a,int astNodeType) {
 		Tree parentTree = (Tree) a.getNode().getParent();
 		int type = parentTree.getAstNode().getNodeType();
@@ -41,7 +38,7 @@ public class AstRelations {
 		int start = range[0];
 		int end = range[1];
 		MyRange myRange = null;
-		if(treeType == ClusteredActionBean.SRC_TREE_NODE){
+		if(treeType == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE){
 			myRange = new MyRange(start,end,ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
 		}else{
 			myRange = new MyRange(start,end,ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);

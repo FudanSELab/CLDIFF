@@ -59,13 +59,13 @@ public class MatchBlock {
             ChangePacket changePacket = new ChangePacket();
             changePacket.initChangeSet1();
             List<Action> subActions = new ArrayList<>();
-            ClusteredActionBean clusteredActionBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,new Move(childd,null,0),subActions,changePacket,childd,ClusteredActionBean.SRC_TREE_NODE);
+            ClusteredActionBean clusteredActionBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,new Move(childd,null,0),subActions,changePacket,childd,ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
             ChangeEntity changeEntity = new StatementPlusChangeEntity(clusteredActionBean);
             changeEntity.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
             changeEntity.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
             changeEntity.stageIIBean.setChangeEntity(childd.getAstNode().getClass().getSimpleName());
             changeEntity.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_MOVE);
-            changeEntity.stageIIBean.setLineRange(AstRelations.getMyRange(childd, ClusteredActionBean.SRC_TREE_NODE).toString());
+            changeEntity.stageIIBean.setLineRange(AstRelations.getMyRange(childd, ChangeEntityDesc.StageITreeType.SRC_TREE_NODE).toString());
             fp.addOneChangeEntity(changeEntity);
         }
     }

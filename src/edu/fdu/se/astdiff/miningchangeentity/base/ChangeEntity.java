@@ -5,7 +5,6 @@ import edu.fdu.se.astdiff.associating.linkbean.LinkBean;
 import edu.fdu.se.astdiff.associating.MyRange;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
 
 /**
  * Created by huangkaifeng on 2018/1/16.
