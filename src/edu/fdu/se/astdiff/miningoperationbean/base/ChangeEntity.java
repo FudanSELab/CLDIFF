@@ -21,7 +21,7 @@ public class ChangeEntity {
     private  void init(){
         stageIIIBean = new StageIIIBean();
         stageIIBean = new StageIIBean();
-        linkBean = new LinkBean();
+
     }
 
     /**

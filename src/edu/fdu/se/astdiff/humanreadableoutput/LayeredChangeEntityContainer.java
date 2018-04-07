@@ -22,7 +22,21 @@ public class LayeredChangeEntityContainer {
 
     protected Map<BodyDeclarationPair, List<ChangeEntity>> layerMap;
 
+    private List<ChangeEntity> mChangeEntityAll;
+
     protected List<BodyDeclarationPair> keyIndex;
+
+    public void setmChangeEntityAll(List<ChangeEntity> mChangeEntityAll) {
+        this.mChangeEntityAll = mChangeEntityAll;
+    }
+
+    public List<ChangeEntity> getmChangeEntityAll() {
+        return mChangeEntityAll;
+    }
+
+    public Map<BodyDeclarationPair, List<ChangeEntity>> getLayerMap() {
+        return layerMap;
+    }
 
     public LayeredChangeEntityContainer() {
         this.layerMap = new HashMap<>();

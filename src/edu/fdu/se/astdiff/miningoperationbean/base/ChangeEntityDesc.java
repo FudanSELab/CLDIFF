@@ -152,6 +152,22 @@ public class ChangeEntityDesc {
     }
 
 
+    public class StageIIIAssociationType{
+
+        public static final String TYPE_VARIABLE = "variable";
+
+        public static final String TYPE_CONTROL = "control";
+
+        public static final String TYPE_METHOD_DECLARATION = "parameter change";
+
+        public static final String TYPE_METHOD_RETURN_CHANGE = "return type change";
+
+        public static final String TYPE_METHOD_SAME_PARAMETER_CHANGE = "same parameter change";
+
+        public static final String TYPE_CLASS_DECLARATION = "class signature change";
+    }
+
+
 
 
 
