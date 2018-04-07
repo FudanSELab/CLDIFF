@@ -8,11 +8,11 @@ import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
-import edu.fdu.se.astdiff.miningoperationbean.member.FieldChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
+import edu.fdu.se.astdiff.miningchangeentity.member.FieldChangeEntity;
 
 import java.util.ArrayList;
 import java.util.List;

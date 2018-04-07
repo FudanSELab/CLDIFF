@@ -3,18 +3,15 @@ package edu.fdu.se.astdiff.miningactions.Body;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
-import com.github.gumtreediff.tree.AbstractTree;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import org.eclipse.jdt.core.dom.ASTNode;
-
-import java.util.List;
 
 public class MatchSimpleNameOrLiteral {
 

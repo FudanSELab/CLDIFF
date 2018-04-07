@@ -1,17 +1,15 @@
 package edu.fdu.se.astdiff.miningactions.Body;
 
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.util.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
-import edu.fdu.se.astdiff.miningoperationbean.member.ClassOrInterfaceDeclarationChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
+import edu.fdu.se.astdiff.miningchangeentity.member.ClassOrInterfaceDeclarationChangeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +52,7 @@ public class MatchClass {
         code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CLASS);
 //        code.stageIIBean.setOpt2(null);//暂时设为null
-        code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_SIGNATURE);
+        code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_DECLARATION);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
         fp.setActionTraversedMap(subActions);

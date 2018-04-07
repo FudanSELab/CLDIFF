@@ -1,8 +1,8 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
 import edu.fdu.se.astdiff.miningactions.util.MyList;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
-import edu.fdu.se.astdiff.miningoperationbean.member.EnumChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
+import edu.fdu.se.astdiff.miningchangeentity.member.EnumChangeEntity;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;

@@ -1,19 +1,9 @@
 package edu.fdu.se.astdiff.miningactions.util;
 
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Tree;
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by huangkaifeng on 2018/1/25.

@@ -1,8 +1,8 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
-import edu.fdu.se.astdiff.link.MyRange;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.member.EnumChangeEntity;
+import edu.fdu.se.astdiff.associating.MyRange;
+import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningchangeentity.member.EnumChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedTempData;

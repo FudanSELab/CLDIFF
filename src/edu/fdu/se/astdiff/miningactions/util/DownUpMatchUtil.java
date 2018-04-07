@@ -2,11 +2,9 @@ package edu.fdu.se.astdiff.miningactions.util;
 
 import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by huangkaifeng on 2018/2/6.

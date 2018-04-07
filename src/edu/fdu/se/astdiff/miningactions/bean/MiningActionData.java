@@ -10,7 +10,7 @@ import com.github.gumtreediff.tree.TreeContext;
 
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
 
 public class MiningActionData {

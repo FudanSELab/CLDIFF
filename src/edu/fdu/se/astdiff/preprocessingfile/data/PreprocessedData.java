@@ -1,8 +1,8 @@
 package edu.fdu.se.astdiff.preprocessingfile.data;
 
 
-import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.associating.LayeredChangeEntityContainer;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.javaparser.JDTParserFactory;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -17,6 +17,7 @@ import java.util.Map;
  *
  */
 public class PreprocessedData {
+
     public String fullStringSrc;
     public String fullStringDst;
 
@@ -54,17 +55,12 @@ public class PreprocessedData {
         this.preprocessChangeEntity = preprocessChangeEntity;
     }
 
-    /**
-     * prev 和curr 中都没被删除 保修下来在CompilationUnit的Body
-     */
-    private List<BodyDeclarationPair> mBodiesRetained;
 
     private Map<String,List<BodyDeclaration>> classOrInterfaceOrEnum;
 
     public PreprocessedData(){
         mBodiesAdded = new ArrayList<>();
         mBodiesDeleted = new ArrayList<>();
-        mBodiesRetained = new ArrayList<>();
         classOrInterfaceOrEnum = new HashMap<>();
         entityContainer = new LayeredChangeEntityContainer();
 
@@ -142,17 +138,5 @@ public class PreprocessedData {
         return mBodiesDeleted;
     }
 
-    public int hashCodeOfBodyDeclaration(BodyDeclaration bodyDeclaration, String fileFullText){
-
-        int a = bodyDeclaration.getStartPosition();
-        int b = bodyDeclaration.getLength();
-        if(bodyDeclaration.getJavadoc()!=null){
-            int c = bodyDeclaration.getJavadoc().getLength();
-            return fileFullText.substring(a+c+1,a+b).trim().hashCode();
-        }else{
-            return fileFullText.substring(a,a+b).trim().hashCode();
-        }
-
-    }
 
 }

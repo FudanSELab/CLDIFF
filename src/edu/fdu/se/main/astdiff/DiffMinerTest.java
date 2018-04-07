@@ -1,14 +1,12 @@
 package edu.fdu.se.main.astdiff;
 
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
 import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
-import edu.fdu.se.astdiff.miningactions.ClusterActions;
+import edu.fdu.se.astdiff.miningactions.ActionAggregationGenerator;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
@@ -42,7 +40,8 @@ public class DiffMinerTest extends BaseDiffMiner {
         // package 2
         System.out.println("Step2 Begin to cluster actions:-------------------");
         MiningActionData mMiningActionData = new MiningActionData(data,his);
-        ClusterActions.doCluster(mMiningActionData);
+        ActionAggregationGenerator aag = new ActionAggregationGenerator();
+        aag.doCluster(mMiningActionData);
         // package 3
         List<ChangeEntity> mlist = mMiningActionData.getChangeEntityList();
         mlist.forEach(a -> {

@@ -3,11 +3,10 @@ package edu.fdu.se.main.astdiff;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
 import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
-import edu.fdu.se.astdiff.humanreadableoutput.ChangeEntityData;
-import edu.fdu.se.astdiff.link.AssociationGenerator;
-import edu.fdu.se.astdiff.miningactions.ClusterActions;
+import edu.fdu.se.astdiff.associating.AssociationGenerator;
+import edu.fdu.se.astdiff.miningactions.ActionAggregationGenerator;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
-import edu.fdu.se.astdiff.miningoperationbean.MiningOperationData;
+import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
@@ -23,7 +22,6 @@ import edu.fdu.se.fileutil.FileWriter;
 public class BaseDiffMiner {
 
     public void doo(String filePrev, String fileCurr, String output) {
-        // 1.pre
         FilePairPreDiff preDiff = new FilePairPreDiff();
         preDiff.initFile(filePrev,fileCurr);
         int result = preDiff.compareTwoFile(output);
@@ -35,27 +33,24 @@ public class BaseDiffMiner {
         runDiff(preDiff,fileName);
     }
     private void runDiff(FilePairPreDiff preDiff,String fileName){
-        // 1.5 data
         PreprocessedData preData = preDiff.getPreprocessedData();
-//        preData.printAddedRemovedBodies();
-        // 2.gen
         JavaParserTreeGenerator treeGenerator = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
         treeGenerator.setFileName(fileName);
-        MyActionGenerator gen = new MyActionGenerator(treeGenerator);
-        // 2.5 data
-        GeneratingActionsData actionsData = gen.generate();
+
+        MyActionGenerator actionGenerator = new MyActionGenerator(treeGenerator);
+        GeneratingActionsData actionsData = actionGenerator.generate();
+
         printActions(actionsData,treeGenerator,preDiff.getFileOutputLog());
-        // 3. Aggregation
-        MiningActionData mMiningActionData = new MiningActionData(actionsData,treeGenerator);
-        ClusterActions.doCluster(mMiningActionData);
-        MiningOperationData mod = new MiningOperationData(preData,mMiningActionData);
-        // 3.5 data
-//        mod.printStage1ChangeEntity();
+
+        MiningActionData mad = new MiningActionData(actionsData,treeGenerator);
+        ActionAggregationGenerator aag = new ActionAggregationGenerator();
+        aag.doCluster(mad);
+
+        ChangeEntityData mod = new ChangeEntityData(preData,mad);
         mod.preprocessChangeEntity(); //1.init 2.merge 3.set 4.sub
-        ChangeEntityData changeEntityData = new ChangeEntityData(mod);
-        changeEntityData.printStage2ChangeEntity();
-//        AssociationGenerator associationGenerator = new AssociationGenerator();
-//        associationGenerator.generate(changeEntityData.miningOperationData.entityContainer);
+
+        AssociationGenerator associationGenerator = new AssociationGenerator(mod);
+        associationGenerator.generate();
     }
 
     public void doo(String fileName,byte[] filePrevContent, byte[] fileCurrContent, String output) {
@@ -66,7 +61,6 @@ public class BaseDiffMiner {
         if(result ==-1){
             return;
         }
-
         runDiff(preDiff,fileName);
     }
 

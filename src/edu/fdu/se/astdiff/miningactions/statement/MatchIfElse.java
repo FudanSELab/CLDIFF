@@ -11,13 +11,11 @@ import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
-import edu.fdu.se.astdiff.miningoperationbean.statement.IfChangeEntity;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jgit.treewalk.TreeWalk;
+import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
+import edu.fdu.se.astdiff.miningchangeentity.statement.IfChangeEntity;
 
 public class MatchIfElse {
 

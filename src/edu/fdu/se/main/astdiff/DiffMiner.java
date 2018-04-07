@@ -2,9 +2,6 @@ package edu.fdu.se.main.astdiff;
 
 
 
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
-import edu.fdu.se.astdiff.miningoperationbean.base.StageIIBean;
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
@@ -107,25 +104,17 @@ public class DiffMiner extends BaseDiffMiner {
 //            IfStatement, getElseStatement getExpression getThenStatement
 //            Block,        statements();
 //            ReturnStatement, getExpression()
-//*            SwitchCase,  getExpression() isDefault()
+//*           SwitchCase,  getExpression() isDefault()
 //            SwitchStatement,  getExpression()   statements()
 //            WhileStatement getExpression getBody();
 //            SynchronizedStatement,  getBody getExpression
-
-
 //            BreakStatement,  break;
 //            ContinueStatement,   continue;
-//*            ConstructorInvocation, arguments();
+//*           ConstructorInvocation, arguments();
 //            EmptyStatement, ;
-//*            LabeledStatement, getBody getLabel
-//**            SuperConstructorInvocation,  arguments() getExpression typeArguments
-
-
-
+//*           LabeledStatement, getBody getLabel
+//**          SuperConstructorInvocation,  arguments() getExpression typeArguments
 //            TryStatement, catchClauses() 	getBody() getFinally() resources()
 //            TypeDeclarationStatement, N/A
 //            VariableDeclarationStatement , fragments() getModifiers() getType
-
-
-//    1.Summarize Sub Expression
 }

@@ -4,14 +4,13 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
-import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
-import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
-import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
-import edu.fdu.se.astdiff.miningoperationbean.base.StatementPlusChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
+import edu.fdu.se.astdiff.miningchangeentity.base.StatementPlusChangeEntity;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -60,7 +59,7 @@ public class MatchBlock {
             ChangePacket changePacket = new ChangePacket();
             changePacket.initChangeSet1();
             List<Action> subActions = new ArrayList<>();
-            ClusteredActionBean clusteredActionBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,null,subActions,changePacket,childd,ClusteredActionBean.SRC_TREE_NODE);
+            ClusteredActionBean clusteredActionBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,new Move(childd,null,0),subActions,changePacket,childd,ClusteredActionBean.SRC_TREE_NODE);
             ChangeEntity changeEntity = new StatementPlusChangeEntity(clusteredActionBean);
             changeEntity.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
             changeEntity.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
