@@ -1,10 +1,23 @@
 package edu.fdu.se.astdiff.miningchangeentity.base;
 
+import com.github.gumtreediff.actions.model.Action;
+
 /**
  * Created by huangkaifeng on 2018/3/27.
  *
  */
 public class ChangeEntityDesc {
+
+    public static class StageITreeType{
+        public static final int SRC_TREE_NODE = 3;
+        public static final int DST_TREE_NODE = 4;
+
+
+    }
+    public static class StageITraverseType{
+        public static final int TRAVERSE_UP_DOWN = 1;
+        public static final int TRAVERSE_DOWN_UP = 2;
+    }
 
     public static class StageIIIOpt{
 
@@ -79,7 +92,7 @@ public class ChangeEntityDesc {
 
     }
 
-    public class StageIIIOpt2{
+    public static class StageIIIOpt2{
 
         public static final String OPT2_INSERT = "Insert";
 
@@ -93,7 +106,23 @@ public class ChangeEntityDesc {
 
     }
 
-    public class StageIIISub{
+    public static String getChangeEntityDescString(Action a){
+        switch (a.getClass().getSimpleName()){
+            case "Insert":return ChangeEntityDesc.StageIIIOpt.OPT_INSERT;
+            case "Move":return ChangeEntityDesc.StageIIIOpt.OPT_MOVE;
+            case "Delete":return ChangeEntityDesc.StageIIIOpt.OPT_DELETE;
+            case "Update":break;
+        }
+        return null;
+    }
+
+    public static String getKeyNameByValue(String type){
+        return type;
+    }
+
+
+
+    public static class StageIIISub{
 
         public static final String SUB_DECLARATION = "declaration";
 
@@ -137,7 +166,7 @@ public class ChangeEntityDesc {
     }
 
 
-    public class StageIIGranularity{
+    public static class StageIIGranularity{
         public static final String GRANULARITY_MEMBER = "Member";
 
         public static final String GRANULARITY_CLASS = "ClassOrInterface";
@@ -148,7 +177,7 @@ public class ChangeEntityDesc {
 
 
 
-    public class StageIIGenStage{
+    public static class StageIIGenStage{
 
         public static final String ENTITY_GENERATION_STAGE_PRE_DIFF = "PRE_DIFF";
         public static final String ENTITY_GENERATION_STAGE_GT_UD = "UP_DOWN";
@@ -156,7 +185,7 @@ public class ChangeEntityDesc {
     }
 
 
-    public class StageIIIAssociationType{
+    public static class StageIIIAssociationType{
 
         public static final String TYPE_VARIABLE = "variable";
 

@@ -17,7 +17,7 @@ public class MethodChangeEntity extends MemberPlusChangeEntity {
         super(bean);
     }
 
-    public MethodChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType, MyRange myRange){
+    public MethodChangeEntity(BodyDeclarationPair bodyDeclarationPair, String changeType, MyRange myRange){
         super(bodyDeclarationPair.getLocationClassString(),changeType,myRange);
         MethodDeclaration md =(MethodDeclaration) bodyDeclarationPair.getBodyDeclaration();
         this.stageIIBean.setLocation(bodyDeclarationPair.getLocationClassString());

@@ -5,6 +5,7 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningchangeentity.MiningOperationBeanUtil;
 import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningchangeentity.statement.BreakContinueEntity;
@@ -22,11 +23,11 @@ public class MatchControlStatements {
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
         subActions.add(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
+        ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         BreakContinueEntity code = new BreakContinueEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-        code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+        code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_BREAK);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
@@ -39,11 +40,11 @@ public class MatchControlStatements {
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
         subActions.add(a);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
+        ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         BreakContinueEntity code = new BreakContinueEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-        code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+        code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CONTINUE);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);

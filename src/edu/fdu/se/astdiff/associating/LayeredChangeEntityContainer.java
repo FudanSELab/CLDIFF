@@ -6,6 +6,7 @@ import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityUtil;
 import edu.fdu.se.astdiff.miningchangeentity.member.*;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
@@ -94,7 +95,7 @@ public class LayeredChangeEntityContainer {
         Tree tree = null;
         BodyDeclarationPair mKey = null;
         int startPos = -1;
-        if (changeEntity.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN) {
+        if (changeEntity.clusteredActionBean.traverseType == ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN) {
             if (changeEntity.clusteredActionBean.curAction instanceof Insert) {
                 // insert上一个节点mapping的节点
                 while (tree == null) {
@@ -109,7 +110,7 @@ public class LayeredChangeEntityContainer {
             }
             startPos = tree.getAstNode().getStartPosition();
 
-        } else if (changeEntity.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_DOWN_UP) {
+        } else if (changeEntity.clusteredActionBean.traverseType == ChangeEntityDesc.StageITraverseType.TRAVERSE_DOWN_UP) {
             // father节点的range
             tree = (Tree) node;
             startPos = tree.getAstNode().getStartPosition();

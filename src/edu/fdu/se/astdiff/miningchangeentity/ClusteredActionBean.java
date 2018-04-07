@@ -14,9 +14,10 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
  */
 public class ClusteredActionBean {
 
+	public static final int SRC_TREE_NODE = 3;
+	public static final int DST_TREE_NODE = 4;
 
-	public static final int TRAVERSE_UP_DOWN = 1;
-	public static final int TRAVERSE_DOWN_UP = 2;
+
 	/**
 	 * 1 up-down   2 down-up
 	 */
@@ -34,8 +35,6 @@ public class ClusteredActionBean {
 
 	public int nodeType;
 
-	public static final int SRC_TREE_NODE = 3;
-	public static final int DST_TREE_NODE = 4;
 
 
 

@@ -26,11 +26,11 @@ public class MatchFieldDeclaration {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,false)){
             DefaultUpDownTraversal.traverseField(a, subActions, changePacket);
         }
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
+        ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         FieldChangeEntity code = new FieldChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
-        code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+        code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_FIELD);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
@@ -47,11 +47,11 @@ public class MatchFieldDeclaration {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,sameEdits,changePacket,false)){
             DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,sameEdits,changePacket);
         }
-        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
+        ClusteredActionBean mHighLevelOperationBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
         FieldChangeEntity code = new FieldChangeEntity(mHighLevelOperationBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
-        code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+        code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_FIELD);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);

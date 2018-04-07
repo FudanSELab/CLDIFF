@@ -9,6 +9,7 @@ import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningchangeentity.MiningOperationBeanUtil;
 import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
@@ -29,11 +30,11 @@ public class MatchLabeledStatement {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,false)){
             DefaultUpDownTraversal.traverseTypeIStatements(a,subActions,changePacket);
         }
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
+        ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         LabeledStatementChangeEntity code = new LabeledStatementChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-        code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+        code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_LABELED_STATEMENT);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
@@ -50,7 +51,7 @@ public class MatchLabeledStatement {
             DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather,subActions,changePacket);
         }
         fp.setActionTraversedMap(subActions);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather,treeType);
+        ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather,treeType);
         LabeledStatementChangeEntity code = new LabeledStatementChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);

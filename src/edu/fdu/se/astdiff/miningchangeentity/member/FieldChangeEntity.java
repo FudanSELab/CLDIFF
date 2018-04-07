@@ -21,7 +21,7 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
     /**
      * 预处理识别的
      */
-    public FieldChangeEntity(BodyDeclarationPair fieldDeclarationPair, int changeType,MyRange myRange){
+    public FieldChangeEntity(BodyDeclarationPair fieldDeclarationPair, String changeType,MyRange myRange){
         super(fieldDeclarationPair.getLocationClassString(),changeType,myRange);
         FieldDeclaration fd = (FieldDeclaration) fieldDeclarationPair.getBodyDeclaration();
         this.stageIIBean.setLocation(fieldDeclarationPair.getLocationClassString());

@@ -50,22 +50,9 @@ public class OperationTypeConstants {
     final public static int CHANGE = 10010;
 
 
-//    final public static int MULTIPLE_EDIT = 10004;
-//
-//    final public static int INSERT_M = 10005;
-//    final public static int DELETE_M = 10006;
-//    final public static int MOVE_M = 10007;
-//
-
-
-
-
-
-
-
-    public static String getKeyNameByValue(int v){
-        return constantName.get(v);
-    }
+//    public static String getKeyNameByValue(int v){
+//        return constantName.get(v);
+//    }
 
 
 
@@ -90,18 +77,8 @@ public class OperationTypeConstants {
         return UNKNOWN;
     }
 
-    public static String getChangeEntityDescString(Action a){
-        switch (a.getClass().getSimpleName()){
-            case "Insert":return ChangeEntityDesc.StageIIIOpt.OPT_INSERT;
-            case "Move":return ChangeEntityDesc.StageIIIOpt.OPT_MOVE;
-            case "Delete":return ChangeEntityDesc.StageIIIOpt.OPT_DELETE;
-            case "Update":break;
-        }
-        return null;
-    }
 
-// 最小变化单位为Statement 变化包括 INS,MOV,UPD,MULTI_EDITS
-    // 多个单位如果连续 而且变化相同，组合成cluster
+
 
 
 

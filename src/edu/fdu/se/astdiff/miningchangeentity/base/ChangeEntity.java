@@ -34,13 +34,13 @@ public class ChangeEntity {
      * @param changeType
      * @param myRange
      */
-    public ChangeEntity(String location,int changeType,MyRange myRange){
+    public ChangeEntity(String location,String changeType,MyRange myRange){
         init();
         this.lineRange = myRange;
         this.stageIIBean.setLineRange("("+this.lineRange.startLineNo +","+ this.lineRange.endLineNo+")");
         this.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF);
         this.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
-        this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(changeType));
+        this.stageIIBean.setOpt(ChangeEntityDesc.getKeyNameByValue(changeType));
         this.stageIIBean.setLocation(location);
     }
 

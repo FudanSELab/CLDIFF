@@ -14,14 +14,6 @@ public class StatementPlusChangeEntity extends ChangeEntity {
         super(bean);
     }
 
-    public void refreshEntityValue(){
-        if(this.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
-//            UpDownMatchUtil.setChangePacket(this.clusteredActionBean);
-        }else{
-//            DownUpMatchUtil.setChangePacket(this.clusteredActionBean);
-        }
-
-    }
 
 
 

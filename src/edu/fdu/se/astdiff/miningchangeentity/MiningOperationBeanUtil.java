@@ -3,6 +3,7 @@ package edu.fdu.se.astdiff.miningchangeentity;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.associating.linkbean.LinkBean;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
@@ -48,4 +49,6 @@ public class MiningOperationBeanUtil {
         }
 
     }
+
+
 }

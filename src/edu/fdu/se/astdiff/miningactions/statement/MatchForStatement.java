@@ -9,6 +9,7 @@ import edu.fdu.se.astdiff.miningactions.util.BasicTreeTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultDownUpTraversal;
 import edu.fdu.se.astdiff.miningactions.util.DefaultUpDownTraversal;
 import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningchangeentity.MiningOperationBeanUtil;
 import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
@@ -24,11 +25,11 @@ public class MatchForStatement {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
             DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
         }
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
+        ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         ForChangeEntity code = new ForChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-        code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+        code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_FOR_STMT);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
@@ -44,11 +45,11 @@ public class MatchForStatement {
         if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
             DefaultUpDownTraversal.traverseIf(a,subActions,changePacket);
         }
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
+        ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         ForChangeEntity code = new ForChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-        code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+        code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENHANCED_FOR_STMT);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
@@ -65,7 +66,7 @@ public class MatchForStatement {
             DefaultDownUpTraversal.traverseIfPredicate(traverseFather, sameEdits, changePacket);
         }
         fp.setActionTraversedMap(sameEdits);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
+        ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
@@ -87,7 +88,7 @@ public class MatchForStatement {
         }
         fp.setActionTraversedMap(sameEdits);
 
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
+        ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
         ForChangeEntity code = new ForChangeEntity(mBean);
         fp.addOneChangeEntity(code);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);

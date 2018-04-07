@@ -27,11 +27,11 @@ public class MatchMethod {
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
 			DefaultUpDownTraversal.traverseMethod(a,subActions,changePacket);
 		}
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
+		ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,a,subActions,changePacket);
 		MethodChangeEntity code = new MethodChangeEntity(mBean);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
-		code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+		code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_METHOD);
 //		code.stageIIBean.setOpt2(null);// 暂时不设置
 		code.stageIIBean.setSubEntity(null);
@@ -49,11 +49,11 @@ public class MatchMethod {
 			DefaultDownUpTraversal.traverseMethodSignature(traverseFather,sameEdits,changePacket);
 		}
 		fp.setActionTraversedMap(sameEdits);
-		ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
+		ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_DOWN_UP,a,sameEdits,changePacket,queryFather,treeType);
 		MethodChangeEntity code = new MethodChangeEntity(mBean);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
-		code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+		code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_METHOD);
 //		code.stageIIBean.setOpt2(null);// 暂时不设置
 		code.stageIIBean.setSubEntity(null);

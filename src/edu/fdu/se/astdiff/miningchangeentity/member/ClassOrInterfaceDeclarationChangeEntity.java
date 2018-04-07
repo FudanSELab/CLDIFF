@@ -18,7 +18,7 @@ public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEnt
     /**
      * 预处理 识别的
      */
-    public ClassOrInterfaceDeclarationChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType, MyRange myRange){
+    public ClassOrInterfaceDeclarationChangeEntity(BodyDeclarationPair bodyDeclarationPair, String changeType, MyRange myRange){
         super(bodyDeclarationPair.getLocationClassString(),changeType,myRange);
         TypeDeclaration cod = (TypeDeclaration)bodyDeclarationPair.getBodyDeclaration();
         this.stageIIBean.setLocation(bodyDeclarationPair.getLocationClassString());

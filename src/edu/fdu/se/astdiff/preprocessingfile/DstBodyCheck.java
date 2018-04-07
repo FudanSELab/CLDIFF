@@ -1,7 +1,9 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
+import com.github.gumtreediff.actions.model.Insert;
 import edu.fdu.se.astdiff.associating.MyRange;
 import edu.fdu.se.astdiff.miningchangeentity.OperationTypeConstants;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningchangeentity.member.EnumChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
@@ -100,8 +102,8 @@ public class DstBodyCheck {
                 int s,e;
                 s = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition());
                 e = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition()+srcBody.getBodyDeclaration().getLength()-1);
-                myRange = new MyRange(s,e, OperationTypeConstants.INSERT);
-                EnumChangeEntity code = new EnumChangeEntity(srcBody,OperationTypeConstants.CHANGE,myRange);
+                myRange = new MyRange(s,e,ChangeEntityDesc.StageITreeType.DST_TREE_NODE);
+                EnumChangeEntity code = new EnumChangeEntity(srcBody,ChangeEntityDesc.StageIIIOpt.OPT_CHANGE,myRange);
                 EnumDeclaration fd = (EnumDeclaration) srcBody.getBodyDeclaration();
                 PreprocessUtil.generateEnumChangeEntity(code,fd,ed);
                 if(compareResult.getPreprocessChangeEntity()==null){

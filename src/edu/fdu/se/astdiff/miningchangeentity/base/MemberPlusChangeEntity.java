@@ -16,20 +16,12 @@ public class MemberPlusChangeEntity extends ChangeEntity {
         super(bean);
     }
 
-    public MemberPlusChangeEntity(String location,int changeType,MyRange myRange){
+    public MemberPlusChangeEntity(String location,String changeType,MyRange myRange){
         super(location,changeType,myRange);
 
     }
 
-    public void refreshEntityValue(){
-        if(this.clusteredActionBean.traverseType == ClusteredActionBean.TRAVERSE_UP_DOWN){
-//            UpDownMatchUtil.setChangePacket(this.clusteredActionBean);
-        }else{
-//            DownUpMatchUtil.setChangePacket(this.clusteredActionBean);
-        }
-//        this.stageIIBean.setOpt(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationType()));
-//        this.stageIIBean.setSubEntity(OperationTypeConstants.getKeyNameByValue(this.clusteredActionBean.changePacket.getOperationSubEntity()));
-    }
+
 
 
 }

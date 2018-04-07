@@ -7,7 +7,7 @@ package edu.fdu.se.astdiff.associating;
 public class MyRange {
 
     /**
-     * type指这个start end是src 树还是dst树
+     * type insert/delete
      */
     public int type;
 

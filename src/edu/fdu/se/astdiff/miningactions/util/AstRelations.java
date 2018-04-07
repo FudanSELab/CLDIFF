@@ -6,6 +6,7 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.associating.MyRange;
 import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -41,9 +42,9 @@ public class AstRelations {
 		int end = range[1];
 		MyRange myRange = null;
 		if(treeType == ClusteredActionBean.SRC_TREE_NODE){
-			myRange = new MyRange(start,end,ClusteredActionBean.SRC_TREE_NODE);
+			myRange = new MyRange(start,end,ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
 		}else{
-			myRange = new MyRange(start,end,ClusteredActionBean.DST_TREE_NODE);
+			myRange = new MyRange(start,end,ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
 		}
 		return myRange;
 	}
@@ -58,7 +59,6 @@ public class AstRelations {
 			}
 			node = node.getParent();
 		}
-//		System.out.println("Result String："+result);
 		return null;
 	}
 

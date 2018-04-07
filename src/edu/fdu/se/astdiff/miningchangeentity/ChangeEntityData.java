@@ -1,5 +1,7 @@
 package edu.fdu.se.astdiff.miningchangeentity;
 
+import com.github.gumtreediff.actions.model.Delete;
+import com.github.gumtreediff.actions.model.Insert;
 import edu.fdu.se.astdiff.associating.MyRange;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
@@ -22,19 +24,12 @@ import java.util.List;
 public class ChangeEntityData {
 
     public PreprocessedData preprocessedData;
-
-    public List<ChangeEntity> mChangeEntityAll;
-
-
     public LayeredChangeEntityContainer entityContainer;
-
-
     private MiningActionData mad;
 
 
     public ChangeEntityData(PreprocessedData pd, MiningActionData mad) {
         this.preprocessedData = pd;
-        this.mChangeEntityAll = mad.getChangeEntityList();
         this.entityContainer = pd.entityContainer;
         this.mad = mad;
     }
@@ -45,7 +40,7 @@ public class ChangeEntityData {
     }
 
     public void initContainerEntityData() {
-        for (ChangeEntity ce : this.mChangeEntityAll) {
+        for (ChangeEntity ce : this.mad.getChangeEntityList()) {
             if (!ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
                 this.entityContainer.addGumTreePlus(ce, this.mad);
             }
@@ -56,8 +51,8 @@ public class ChangeEntityData {
                 this.entityContainer.addPreDiffChangeEntity(ce);
             }
         }
-        this.preprocessedData.getmBodiesAdded().forEach(a -> addOneBody(a, OperationTypeConstants.INSERT));
-        this.preprocessedData.getmBodiesDeleted().forEach(a -> addOneBody(a, OperationTypeConstants.DELETE));
+        this.preprocessedData.getmBodiesAdded().forEach(a -> addOneBody(a, Insert.class.getSimpleName()));
+        this.preprocessedData.getmBodiesDeleted().forEach(a -> addOneBody(a,Delete.class.getSimpleName()));
     }
 
     public void printContainerEntityDataBefore() {
@@ -71,19 +66,19 @@ public class ChangeEntityData {
 
 
 
-    private void addOneBody(BodyDeclarationPair item, int type) {
+    private void addOneBody(BodyDeclarationPair item, String type) {
         ChangeEntity ce = null;
         int s;
         int e;
         MyRange myRange = null;
-        if (OperationTypeConstants.INSERT == type) {
+        if (Insert.class.getSimpleName().equals(type)) {
             s = this.preprocessedData.getDstCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
             e = this.preprocessedData.getDstCu().getLineNumber(item.getBodyDeclaration().getStartPosition() + item.getBodyDeclaration().getLength() - 1);
-            myRange = new MyRange(s, e, type);
-        } else if (OperationTypeConstants.DELETE == type) {
+            myRange = new MyRange(s, e, ChangeEntityDesc.StageITreeType.DST_TREE_NODE);
+        } else if (Delete.class.getSimpleName().equals(type)) {
             s = this.preprocessedData.getSrcCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
             e = this.preprocessedData.getSrcCu().getLineNumber(item.getBodyDeclaration().getStartPosition() + item.getBodyDeclaration().getLength() - 1);
-            myRange = new MyRange(s, e, type);
+            myRange = new MyRange(s, e, ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
         }
         if (item.getBodyDeclaration() instanceof FieldDeclaration) {
             ce = new FieldChangeEntity(item, type, myRange);
@@ -104,7 +99,7 @@ public class ChangeEntityData {
 
 
     public void printStage1ChangeEntity() {
-        this.mChangeEntityAll.forEach(a -> {
+        this.mad.getChangeEntityList().forEach(a -> {
 //            if (!a.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
                 System.out.println(a.toString());
 //            }
@@ -120,7 +115,7 @@ public class ChangeEntityData {
     }
 
     public void setChangeEntitySub(){
-        this.mChangeEntityAll.forEach(a -> {
+        this.mad.getChangeEntityList().forEach(a -> {
             if (!a.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
                 if(a instanceof ForChangeEntity || a instanceof WhileChangeEntity
                         || a instanceof SynchronizedChangeEntity ){

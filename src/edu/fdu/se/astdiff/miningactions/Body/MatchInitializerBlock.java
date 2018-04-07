@@ -19,11 +19,11 @@ public class MatchInitializerBlock {
         ChangePacket changePacket = new ChangePacket();
         List<Action> subActions = new ArrayList<>();
         DefaultUpDownTraversal.traverseInitializer(a,subActions,changePacket);
-        ClusteredActionBean mBean = new ClusteredActionBean(ClusteredActionBean.TRAVERSE_UP_DOWN,a,subActions,changePacket);
+        ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,a,subActions,changePacket);
         InitializerChangeEntity code = new InitializerChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
-        code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+        code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_INITIALIZER);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
