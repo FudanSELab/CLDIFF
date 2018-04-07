@@ -4,6 +4,7 @@ package edu.fdu.se.main.astdiff;
 
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
+import edu.fdu.se.astdiff.miningoperationbean.base.StageIIBean;
 import edu.fdu.se.bean.AndroidSDKJavaFile;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
@@ -84,23 +85,6 @@ public class DiffMiner extends BaseDiffMiner {
 		i.runBatch();
     }
 
-
-    //清明todo
-    // 1.with/by 之后的详细
-    // 3.link   1.local global data  2.control 3. class 4.member 5.duplicate
-    // 2.Methodology tex
-
-
-    //4-2 讨论
-    // 1. Type Binding问题
-
-    //4-4
-    // 1.Preprocessing
-    // 2.Aggregation -> Summary
-    // 3.Association
-
-
-
     //I. II.Example
     //  Key -> Value
 //  BodyDeclaration -> List<ChangeEntity> 发生在这个BodyDeclaration里面的change entity
@@ -115,65 +99,33 @@ public class DiffMiner extends BaseDiffMiner {
     // add节点UpDown 往上找到mapping的节点,src的range 其他则
 
 //            AssertStatement, getExpression getMessage
-//            Block,        statements();
-//            BreakStatement,  break;
-//*            ConstructorInvocation, arguments();
-//            ContinueStatement,   continue;
+//            ThrowStatement, getExpression
 //            DoStatement,    getBody() getExpression()
-//            EmptyStatement, ;
 //            EnhancedForStatement getBody() getExpression() getParameter();
 //            ExpressionStatement,  getExpression();
 //            ForStatement,   getBody() getExpression() initializers() updaters();
 //            IfStatement, getElseStatement getExpression getThenStatement
-//*            LabeledStatement, getBody getLabel
+//            Block,        statements();
 //            ReturnStatement, getExpression()
-//**            SuperConstructorInvocation,  arguments() getExpression typeArguments
-
 //*            SwitchCase,  getExpression() isDefault()
 //            SwitchStatement,  getExpression()   statements()
-
-
+//            WhileStatement getExpression getBody();
 //            SynchronizedStatement,  getBody getExpression
-//            ThrowStatement, getExpression
+
+
+//            BreakStatement,  break;
+//            ContinueStatement,   continue;
+//*            ConstructorInvocation, arguments();
+//            EmptyStatement, ;
+//*            LabeledStatement, getBody getLabel
+//**            SuperConstructorInvocation,  arguments() getExpression typeArguments
+
+
+
 //            TryStatement, catchClauses() 	getBody() getFinally() resources()
 //            TypeDeclarationStatement, N/A
 //            VariableDeclarationStatement , fragments() getModifiers() getType
-//            WhileStatement getExpression getBody();
 
 
-//    BooleanLiteral,
-//    CharacterLiteral,
-//    NullLiteral,
-//    NumberLiteral,
-//    StringLiteral,
-//    TypeLiteral,
-
-//    Annotation,
-//    ArrayAccess,
-//    ArrayCreation,
-//    ArrayInitializer,
-//    Assignment,
-//    CastExpression,
-//    ClassInstanceCreation,
-//    ConditionalExpression,
-//    CreationReference,
-//    ExpressionMethodReference,
-//    FieldAccess,
-//    InfixExpression,
-//    InstanceofExpression,
-//    LambdaExpression,
-//    MethodInvocation,
-//    MethodReference,
-//    Name,
-//    ParenthesizedExpression,
-//    PostfixExpression,
-//    PrefixExpression,
-//    SuperFieldAccess,
-//    SuperMethodInvocation,
-//    SuperMethodReference,
-//    ThisExpression,
-//    TypeMethodReference,
-//    VariableDeclarationExpression
-
-
+//    1.Summarize Sub Expression
 }

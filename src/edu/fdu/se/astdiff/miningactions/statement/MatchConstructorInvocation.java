@@ -36,7 +36,7 @@ public class MatchConstructorInvocation {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_SUPER_CONSTRUCTOR_INVOCATION);
-        code.stageIIBean.setOpt2(null);// 暂时不设置
+//        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
@@ -59,7 +59,7 @@ public class MatchConstructorInvocation {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_SUPER_CONSTRUCTOR_INVOCATION);
-        code.stageIIBean.setOpt2(null);// 暂时不设置
+//        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
@@ -79,7 +79,7 @@ public class MatchConstructorInvocation {
             }
             actions.add(tmp);
         }
-        changeEntity.linkBean.addAppendedActions(newActions);
+//        changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);
 
     }
@@ -96,7 +96,7 @@ public class MatchConstructorInvocation {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CONSTRUCTOR_INVOCATION);
-        code.stageIIBean.setOpt2(null);// 暂时不设置
+//        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
@@ -116,9 +116,9 @@ public class MatchConstructorInvocation {
         ConstructorInvocationChangeEntity code = new ConstructorInvocationChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-        code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
+        code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CONSTRUCTOR_INVOCATION);
-        code.stageIIBean.setOpt2(null);// 暂时不设置
+//        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
@@ -139,7 +139,7 @@ public class MatchConstructorInvocation {
             }
             actions.add(tmp);
         }
-        changeEntity.linkBean.addAppendedActions(newActions);
+//        changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);
 
     }

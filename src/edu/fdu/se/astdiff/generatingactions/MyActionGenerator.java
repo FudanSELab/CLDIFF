@@ -30,8 +30,6 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
 import com.github.gumtreediff.tree.TreeUtils;
-import edu.fdu.se.astdiff.miningactions.util.MyTreeUtil;
-import edu.fdu.se.astdiff.treegenerator.JavaParserTreeGenerator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 

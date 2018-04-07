@@ -1,21 +1,11 @@
 package edu.fdu.se.astdiff.preprocessingfile;
 
-import com.github.gumtreediff.tree.TreeContext;
-import com.github.javaparser.ast.*;
-import edu.fdu.se.astdiff.treegenerator.JavaParserVisitor;
-import edu.fdu.se.javaparser.JDTParserFactory;
 import edu.fdu.se.javaparser.JavaParserFactory;
-import org.apache.ibatis.javassist.compiler.ast.MethodDecl;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

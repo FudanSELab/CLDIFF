@@ -1,7 +1,7 @@
 package edu.fdu.se.astdiff.miningoperationbean.member;
 
 import com.github.gumtreediff.actions.model.Move;
-import edu.fdu.se.astdiff.link.LinkBean;
+import edu.fdu.se.astdiff.link.linkbean.LinkBean;
 import edu.fdu.se.astdiff.link.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
@@ -28,12 +28,11 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
         FieldDeclaration fd = (FieldDeclaration) fieldDeclarationPair.getBodyDeclaration();
         this.stageIIBean.setLocation(fieldDeclarationPair.getLocationClassString());
         this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_FIELD);
-
+        this.bodyDeclarationPair = fieldDeclarationPair;
         List<VariableDeclarationFragment> list = fd.fragments();
         String res = "";
         for(VariableDeclarationFragment vd:list){
             res += vd+",";
-            this.linkBean.variables.add(vd.getName().toString());
         }
         this.stageIIBean.setThumbnail(fieldDeclarationPair.getLocationClassString() + res);
 
@@ -45,11 +44,6 @@ public class FieldChangeEntity extends MemberPlusChangeEntity {
      */
     public FieldChangeEntity(ClusteredActionBean bean){
         super(bean);
-        if(bean.curAction instanceof Move){
-            this.linkBean = new LinkBean(bean.curAction);
-        }else {
-            this.linkBean = new LinkBean(bean.actions);
-        }
     }
 
     public String toString2(){

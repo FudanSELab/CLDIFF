@@ -2,7 +2,7 @@ package edu.fdu.se.astdiff.miningoperationbean.base;
 
 
 import com.github.gumtreediff.actions.model.Move;
-import edu.fdu.se.astdiff.link.LinkBean;
+import edu.fdu.se.astdiff.link.linkbean.LinkBean;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
 
 /**
@@ -14,13 +14,6 @@ public class StatementPlusChangeEntity extends ChangeEntity {
 
     public StatementPlusChangeEntity(ClusteredActionBean bean){
         super(bean);
-        if(bean.curAction==null){
-            this.linkBean = new LinkBean(bean.fafather);
-        } else if(bean.curAction instanceof Move){
-            this.linkBean = new LinkBean(bean.curAction);
-        }else {
-            this.linkBean = new LinkBean(bean.actions);
-        }
     }
 
     public void refreshEntityValue(){

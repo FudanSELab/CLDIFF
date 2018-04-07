@@ -1,9 +1,19 @@
 package edu.fdu.se.astdiff.miningoperationbean.base;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by huangkaifeng on 2018/3/28.
+ *
  */
 public class StageIIBean {
+
+    public StageIIBean(){
+
+        this.opt2List = new ArrayList<>();
+    }
 
     private String entityCreationStage;
 
@@ -13,9 +23,21 @@ public class StageIIBean {
 
     private String changeEntity;
 
-    private String opt2;
-
     private String subEntity;
+
+    private List<Opt2> opt2List;
+
+    class Opt2 {
+        private String opt2;
+        private String opt2Expression;
+
+        @Override
+        public int hashCode(){
+            return (opt2+opt2Expression).hashCode();
+        }
+    }
+
+
 
     private String thumbnail;
 
@@ -41,18 +63,20 @@ public class StageIIBean {
         return subEntity;
     }
 
-    public StageIIBean() {
-
-
+    public void setOpt2AndOpt2Expression(String opt2,String opt2Expression) {
+        Opt2 opt2Class = new Opt2();
+        opt2Class.opt2 = opt2;
+        opt2Class.opt2Expression = opt2Expression;
+        for(Opt2 tmp:this.opt2List){
+            if(tmp.hashCode() == opt2Class.hashCode()){
+                return;
+            }
+        }
+        this.opt2List.add(opt2Class);
     }
 
-    public void setOpt2(String opt2) {
-        this.opt2 = opt2;
-    }
-
-    public String getOpt2() {
-
-        return opt2;
+    public List<Opt2> getOpt2List() {
+        return opt2List;
     }
 
     public String getLineRange() {
@@ -110,7 +134,6 @@ public class StageIIBean {
                 this.granularity + " " +
                 this.opt + " " +
                 this.changeEntity + " " +
-                this.opt2 + " " +
                 this.subEntity + " " +
                 this.thumbnail + " " +
                 this.lineRange + " " +
@@ -126,9 +149,6 @@ public class StageIIBean {
             sb.append(" with/by");
 
         }
-//        this.opt2 + " " +
-//                this.subEntity + " " +
-//                this.thumbnail + " " +
         return sb.toString();
     }
 }

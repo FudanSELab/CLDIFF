@@ -2,6 +2,7 @@ package edu.fdu.se.astdiff.miningoperationbean.base;
 
 import edu.fdu.se.astdiff.link.MyRange;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
+import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 
 /**
  * Created by huangkaifeng on 2018/2/8.
@@ -9,6 +10,7 @@ import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
  */
 public class MemberPlusChangeEntity extends ChangeEntity {
 
+    public BodyDeclarationPair bodyDeclarationPair;
 
     public MemberPlusChangeEntity(ClusteredActionBean bean){
         super(bean);

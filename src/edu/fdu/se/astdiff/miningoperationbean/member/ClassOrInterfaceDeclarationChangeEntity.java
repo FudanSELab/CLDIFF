@@ -29,8 +29,7 @@ public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEnt
             this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_INNER_CLASS);
         }
         this.stageIIBean.setThumbnail(cod.getName().toString());
-        this.linkBean.methodDeclarations = MiningOperationBeanUtil.getNames(cod.bodyDeclarations());
-        this.linkBean.methodDeclarations.add(cod.getName().toString());
+        this.bodyDeclarationPair = bodyDeclarationPair;
     }
 
     /**

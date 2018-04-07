@@ -40,10 +40,10 @@ public class PreprocessUtil {
         changeEntity.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
         changeEntity.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
         changeEntity.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENUM);
-        changeEntity.stageIIBean.setOpt2(ChangeEntityDesc.StageIIIOpt2.OPT2_CHANGE);
+//        changeEntity.stageIIBean.setOpt2(ChangeEntityDesc.StageIIIOpt2.OPT2_CHANGE);
         changeEntity.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_DECLARATION);
         changeEntity.stageIIBean.setThumbnail(name);
-        changeEntity.linkBean.variables = varList;
-        changeEntity.linkBean.methodDeclarations = methodDecList;
+        changeEntity.variableList = varList;
+        changeEntity.methodList = methodDecList;
     }
 }

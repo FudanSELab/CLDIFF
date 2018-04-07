@@ -30,7 +30,7 @@ public class MatchReturnStatement {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_RETURN_STMT);
-        code.stageIIBean.setOpt2(null);
+//        code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
@@ -50,7 +50,7 @@ public class MatchReturnStatement {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_RETURN_STMT);
-        code.stageIIBean.setOpt2(null);
+//        code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
@@ -73,7 +73,7 @@ public class MatchReturnStatement {
             }
             subActions.add(tmp);
         }
-        changeEntity.linkBean.addAppendedActions(newActions);
+//        changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);
 
     }

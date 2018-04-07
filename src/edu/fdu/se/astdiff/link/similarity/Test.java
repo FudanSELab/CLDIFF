@@ -3,7 +3,7 @@ package edu.fdu.se.astdiff.link.similarity;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
-import edu.fdu.se.astdiff.treegenerator.JavaParserTreeGenerator;
+import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
 
 import java.io.File;
 

@@ -7,6 +7,8 @@ import edu.fdu.se.astdiff.miningoperationbean.base.MemberPlusChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 
+import java.util.List;
+
 /**
  * Created by huangkaifeng on 2018/3/21.
  *
@@ -19,6 +21,8 @@ public class EnumChangeEntity extends MemberPlusChangeEntity{
 
     final public static String enumStr = "Enum";
 
+    public List<String> variableList;
+    public List<String> methodList;
 
     public EnumChangeEntity(BodyDeclarationPair bodyDeclarationPair, int changeType, MyRange myRange){
         super(bodyDeclarationPair.getLocationClassString(),changeType,myRange);

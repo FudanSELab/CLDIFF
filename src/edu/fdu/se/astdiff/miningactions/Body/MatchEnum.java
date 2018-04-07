@@ -37,7 +37,7 @@ public class MatchEnum {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENUM);
-        code.stageIIBean.setOpt2(null);
+//        code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
@@ -57,7 +57,7 @@ public class MatchEnum {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
         code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENUM);
-        code.stageIIBean.setOpt2(null);// 暂时不设置
+//        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
@@ -78,7 +78,7 @@ public class MatchEnum {
             }
             actions.add(tmp);
         }
-        changeEntity.linkBean.addAppendedActions(newActions);
+//        changeEntity.linkBean.addAppendedActions(newActions);
         fp.setActionTraversedMap(newActions);
     }
 }

@@ -70,14 +70,15 @@ public class DiffMinerTest extends BaseDiffMiner {
         File[] files = currdir.listFiles();
         String outputDir = "test";
         try{
-            for (int i =4;i<files.length;i++){
+            for (int i =0;i<files.length;i++){
                 File currf1 = files[i];
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
-//                if(currf1.getName().startsWith("UpDownInsertPlusMove.java")) {
+                if(currf1.getName().startsWith("ForAddition.java")) {
+                    //IfElseAddition
                     System.out.println(i+" "+currf1.getName());
                     doo(prevFile, currf1.getAbsolutePath(), outputDir);
                     System.out.println();
-//                }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,10 +92,11 @@ public class DiffMinerTest extends BaseDiffMiner {
         i.runBatchTest();
 //        i.runSingleFilePair();
     }
-//
-//Src Code/ Dst Code -> GumTree -> Mapping -> List<Action> -> Up:Down Down:Up:Down ->
-//    Map<Node,List<Action>> mMap ->
-//    Insert Update Move Delete
+
+    // 1. test case sub entity 问题
+    // 2. Insert+ Move问题
+    // 3.Opt2 + Opt2Exp 解决
+    // 4. Link
 
 }
 

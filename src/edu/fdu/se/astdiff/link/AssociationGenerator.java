@@ -2,17 +2,20 @@ package edu.fdu.se.astdiff.link;
 
 import com.github.gumtreediff.actions.model.Move;
 import edu.fdu.se.astdiff.humanreadableoutput.LayeredChangeEntityContainer;
+import edu.fdu.se.astdiff.link.linkbean.*;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningoperationbean.base.ChangeEntityDesc;
+import edu.fdu.se.astdiff.miningoperationbean.base.StatementPlusChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.member.ClassOrInterfaceDeclarationChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.member.FieldChangeEntity;
+import edu.fdu.se.astdiff.miningoperationbean.member.MethodChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.jar.Pack200;
 
 /**
  * Created by huangkaifeng on 2018/3/19.
@@ -26,60 +29,81 @@ public class AssociationGenerator {
         mAssociations = new ArrayList<>();
     }
 
+    /**
+     * main entrance
+     * @param container
+     */
     public void generate(LayeredChangeEntityContainer container) {
+        List<ChangeEntity> entities = container.getmChangeEntityAll();
+        entities.forEach(this::initLinkBean);
         Map<BodyDeclarationPair, List<ChangeEntity>> mMap = container.getLayerMap();
+        List<ChangeEntity> methodChangeEntity = new ArrayList<>();
+        List<ChangeEntity> fieldChangeEntity = new ArrayList<>();
+        List<ChangeEntity> innerClassChangeEntity = new ArrayList<>();
         for (Map.Entry<BodyDeclarationPair, List<ChangeEntity>> entry : mMap.entrySet()) {
-            // 方法先整理
             BodyDeclarationPair key = entry.getKey();
             if (key.getBodyDeclaration() instanceof MethodDeclaration) {
                 List<ChangeEntity> mList = entry.getValue();
-                //初始化
-                for (ChangeEntity ce : mList) {
-                    initLinkBean(ce);
-                }
-                //之后建立connection
                 for (int i = 0; i < mList.size(); i++) {
                     for (int j = i + 1; j < mList.size(); j++) {
                         ChangeEntity ce1 = mList.get(i);
                         ChangeEntity ce2 = mList.get(j);
-                        checkAssociation(ce1, ce2);// 方法内部
+                        LinkStatement2Statement.checkStmtAssociation(ce1, ce2);// stmt 与stmt之间
                     }
                 }
-
-
             }
-        }
-        List<ChangeEntity> methodSignatureChange = new ArrayList<>();
-        List<ChangeEntity> insertDeleteMethod = new ArrayList<>();
-        for(ChangeEntity changeEntity:container.getmChangeEntityAll()){
-            if(changeEntity.stageIIBean.getChangeEntity().equals(ChangeEntityDesc.StageIIENTITY.ENTITY_METHOD)){
-                if(changeEntity.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE)){
-                    methodSignatureChange.add(changeEntity);
-                }else{
-                    insertDeleteMethod.add(changeEntity);
+            if(key.getBodyDeclaration() instanceof TypeDeclaration){
+                List<ChangeEntity> mList = entry.getValue();
+                for(ChangeEntity tmp:mList){
+                    if(tmp instanceof MethodChangeEntity){
+                        methodChangeEntity.add(tmp);
+                    }
+                    if(tmp instanceof ClassOrInterfaceDeclarationChangeEntity){
+                        innerClassChangeEntity.add(tmp);
+                    }
+                    if(tmp instanceof FieldChangeEntity){
+                        fieldChangeEntity.add(tmp);
+                    }
                 }
             }
         }
+        for (int i = 0; i < methodChangeEntity.size(); i++) {
+            for (int j = i + 1; j < methodChangeEntity.size(); j++) {
+                ChangeEntity ce1 = methodChangeEntity.get(i);
+                ChangeEntity ce2 = methodChangeEntity.get(j);
+                LinkMember2Member.checkMethodAssociation(ce1, ce2);// method与method之间
+            }
+        }
+        for (Map.Entry<BodyDeclarationPair, List<ChangeEntity>> entry : mMap.entrySet()) {
+            BodyDeclarationPair key = entry.getKey();
+            if (key.getBodyDeclaration() instanceof MethodDeclaration) {
+                List<ChangeEntity> mList = entry.getValue();
+                for (int i = 0; i < mList.size(); i++) {
+                    LinkStatement2Member.checkStmtMethodAssociation();
+                    LinkStatement2Member.checkStmtFieldAssociation();
+                }
+            }
+        }
+
     }
 
     public void initLinkBean(ChangeEntity ce){
-        if(ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
-            ce.linkBean = new LinkBean();
+        if(ce instanceof ClassOrInterfaceDeclarationChangeEntity){
+            ce.linkBean = new ClassData((ClassOrInterfaceDeclarationChangeEntity)ce);
+        }else if(ce instanceof FieldChangeEntity){
+            ce.linkBean = new FieldData((FieldChangeEntity)ce);
+        }else if(ce instanceof MethodChangeEntity){
+            ce.linkBean = new MethodData((MethodChangeEntity)ce);
+        }else if(ce instanceof StatementPlusChangeEntity){
+            ce.linkBean = new StmtData((StatementPlusChangeEntity)ce);
         }else{
-            if(ce.clusteredActionBean.curAction==null){
-                ce.linkBean = new LinkBean(ce.clusteredActionBean.fafather);
-            } else if(ce.clusteredActionBean.curAction instanceof Move){
-                ce.linkBean = new LinkBean(ce.clusteredActionBean.curAction);
-            }else {
-                ce.linkBean = new LinkBean(ce.clusteredActionBean.actions);
-            }
+            System.err.println("[ERR]not included");
         }
 
-
     }
 
-    public void checkAssociation(ChangeEntity ce1,ChangeEntity ce2){
-        // check variable && control
-    }
-
+// sub的问题
+    // Link的问题
+    // dataset的问题
+    // User study的问题
 }

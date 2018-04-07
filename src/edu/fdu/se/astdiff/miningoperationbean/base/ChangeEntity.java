@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.miningoperationbean.base;
 
-import edu.fdu.se.astdiff.link.LinkBean;
+import edu.fdu.se.astdiff.Global.Global;
+import edu.fdu.se.astdiff.link.linkbean.LinkBean;
 import edu.fdu.se.astdiff.link.MyRange;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
 import edu.fdu.se.astdiff.miningoperationbean.ClusteredActionBean;
@@ -11,6 +12,7 @@ import edu.fdu.se.astdiff.miningoperationbean.OperationTypeConstants;
  * 父类 其他的Entity都继承于此Entity
  */
 public class ChangeEntity {
+    private int changeEntityId;
 
     public ClusteredActionBean clusteredActionBean;
     public StageIIIBean stageIIIBean;
@@ -19,6 +21,8 @@ public class ChangeEntity {
     public MyRange lineRange;
 
     private  void init(){
+        changeEntityId = Global.changeEntityId;
+        Global.changeEntityId++;
         stageIIIBean = new StageIIIBean();
         stageIIBean = new StageIIBean();
 

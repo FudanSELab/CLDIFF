@@ -2,7 +2,7 @@ package edu.fdu.se.astdiff.miningoperationbean;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.Tree;
-import edu.fdu.se.astdiff.link.LinkBean;
+import edu.fdu.se.astdiff.link.linkbean.LinkBean;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;

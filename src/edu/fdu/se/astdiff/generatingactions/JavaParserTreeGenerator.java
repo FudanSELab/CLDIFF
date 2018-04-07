@@ -1,16 +1,12 @@
-package edu.fdu.se.astdiff.treegenerator;
+package edu.fdu.se.astdiff.generatingactions;
 
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
-import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.*;
 
 import java.io.*;
 import java.util.Map;
@@ -25,6 +21,12 @@ public class JavaParserTreeGenerator {
     public ITree src;
     public ITree dst;
     public MappingStore mapping;
+
+    private String fileName;
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     public JavaParserTreeGenerator(File prevFile, File currFile) {
         File oldFile = prevFile;
@@ -75,7 +77,12 @@ public class JavaParserTreeGenerator {
         pOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
         pOptions.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
         parser.setCompilerOptions(pOptions);
+        parser.setEnvironment(null, null, null, true);
+        parser.setUnitName(fileName);//需要与代码文件的名称一致
+        parser.setResolveBindings(true);
+        parser.setBindingsRecovery(true);
         parser.setSource(readerToCharArray(r));
+
         JavaParserVisitor visitor = new JavaParserVisitor();
         ASTNode temp = parser.createAST(null);
         visitor.getTreeContext().setCu((CompilationUnit) temp);
@@ -129,5 +136,44 @@ public class JavaParserTreeGenerator {
         return SimpleActionPrinter.getPrettyTreeString(dst);
     }
 
+
+    //JdtMethodCall temp = getJdkMethodCall((MethodInvocation)((Tree)node).getAstNode());
+
+
+
+
+    public JdtMethodCall getJdkMethodCall(MethodInvocation md){
+        IMethodBinding mb = md.resolveMethodBinding();
+        //如果binding有效，且通过对象或类名调用
+        if(mb!=null&&md.getExpression()!=null){
+            JdtMethodCall jdtBinding = new JdtMethodCall(md.getExpression().resolveTypeBinding().getQualifiedName(),
+                    mb.getName(), mb.getReturnType().getQualifiedName(), mb.getDeclaringClass().getQualifiedName());
+            ITypeBinding[] list = mb.getParameterTypes();
+            for(int i = 0; i < list.length; i++){
+                jdtBinding.addParameter(list[i].getQualifiedName());
+            }
+
+            jdtBinding.setJdk(isJdk(md.getExpression().resolveTypeBinding().getQualifiedName()));
+            return jdtBinding;
+        }else{
+            if(mb==null)
+                System.out.println(md.getName()+" is null.");
+            if(md.getExpression()==null)
+                System.out.println(md.getName()+" is local method.");
+            return null;
+        }
+    }
+    private boolean isJdk(String s){
+        try {
+            String temp = s;
+            if(temp.contains("<")){
+                temp = temp.split("<")[0];
+            }
+            Class.forName(temp);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 }
 

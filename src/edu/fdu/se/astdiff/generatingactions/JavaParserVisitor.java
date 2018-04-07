@@ -1,4 +1,4 @@
-package edu.fdu.se.astdiff.treegenerator;
+package edu.fdu.se.astdiff.generatingactions;
 
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;

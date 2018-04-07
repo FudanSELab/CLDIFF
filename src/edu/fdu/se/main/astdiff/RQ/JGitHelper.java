@@ -60,7 +60,7 @@ public class JGitHelper extends JGitCommand {
                                 String fileName = file.substring(index + 1, file.length());
                                 System.out.println("CommitId: " + queueCommitItem.getName());
                                 String dirName = parentCommitId + "-" + commit.getName();
-                                baseDiffMiner.doo(prevFile,currFile,outDir+"/"+dirName+"/"+fileName);
+                                baseDiffMiner.doo(fileName.substring(0,fileName.length()-5),prevFile,currFile,outDir+"/"+dirName+"/"+fileName);
 //                                fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + queueCommitItem.getName(), fileName);
                             }
                         }
@@ -114,7 +114,7 @@ public class JGitHelper extends JGitCommand {
                         int index = file.lastIndexOf("/");
                         String fileName = file.substring(index + 1, file.length());
                         String dirName = parentCommitId + "-" + commit.getName();
-                        baseDiffMiner.doo(prevFile,currFile,outDir+"/"+dirName+"/"+fileName);
+                        baseDiffMiner.doo(fileName.substring(0,fileName.length()-5),prevFile,currFile,outDir+"/"+dirName+"/"+fileName);
                     }
                 }
             }

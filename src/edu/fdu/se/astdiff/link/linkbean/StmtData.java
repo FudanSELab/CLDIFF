@@ -1,83 +1,41 @@
-package edu.fdu.se.astdiff.link;
-
-
+package edu.fdu.se.astdiff.link.linkbean;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.util.MyList;
+import edu.fdu.se.astdiff.miningoperationbean.base.StatementPlusChangeEntity;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by huangkaifeng on 2018/3/10.
+ * Created by huangkaifeng on 2018/4/7.
  *
  */
-public class LinkBean {
+public class StmtData extends LinkBean {
 
-    public List<String> variables;
+    public List<String> variableLocal;
 
-    public List<String> methodNames;
+    public List<String> variableField;
 
-    public List<String> methodDeclarations;
+    public List<String> methodInvocation;
 
-    /**
-     * 针对PreDiff BodyDeclaraiton 的情况
-     */
-    public LinkBean(){
-        initField();
-    }
-    public void initField(){
-        this.methodNames = new MyList<>();
-        this.variables = new MyList<>();
-        this.methodDeclarations = new MyList<>();
-    }
-    /**
-     * 针对Bean的情况 !Move情况
-     */
-    public LinkBean(List<Action> actions){
-        initField();
-        addAppendedActions(actions);
-    }
-
-    private List<String> addCommonNames(MyList<String> a,MyList<String> b){
-        List<String> result = new ArrayList<>();
-        for(String tmp:a){
-            if(b.contains(tmp)){
-                result.add(tmp);
-            }
+    public StmtData(StatementPlusChangeEntity ce) {
+        if (ce.clusteredActionBean.curAction == null) {
+//            ce.linkBean = new LinkBean(ce.clusteredActionBean.fafather);
+        } else if (ce.clusteredActionBean.curAction instanceof Move) {
+//            ce.linkBean = new LinkBean(ce.clusteredActionBean.curAction);
+        } else {
+//            ce.linkBean = new LinkBean(ce.clusteredActionBean.actions);
         }
-        return result;
+        this.variableField = new MyList<>();
+        this.variableLocal = new MyList<>();
+        this.methodInvocation = new MyList<>();
     }
 
-    /**
-     * Bean Move情况
-     * @param moveAction
-     */
-    public LinkBean(Action moveAction){
-        initField();
-        Tree moveTree = (Tree)moveAction.getNode();
-        for(ITree t :moveTree.preOrder()){
-            Tree tree = (Tree)t;
-            if(tree.getAstNode().getNodeType()== ASTNode.METHOD_INVOCATION){
-                ASTNode methodInvocation = tree.getAstNode();
-                setMethodInvocation((MethodInvocation) methodInvocation,this.methodNames,this.variables);
-            }
-        }
-    }
-
-    public LinkBean(Tree moveTree){
-        initField();
-        for(ITree t :moveTree.preOrder()){
-            Tree tree = (Tree)t;
-            if(tree.getAstNode().getNodeType()== ASTNode.METHOD_INVOCATION){
-                ASTNode methodInvocation = tree.getAstNode();
-                setMethodInvocation((MethodInvocation) methodInvocation,this.methodNames,this.variables);
-            }
-        }
-    }
 
     private ASTNode findMethodInvoation(Tree tree){
         while(!tree.getAstNode().getClass().getSimpleName().endsWith("Declaration")){
@@ -89,14 +47,13 @@ public class LinkBean {
         return null;
     }
 
-    private void setInfixExpression(InfixExpression infixExpression,List<String> methodInvocationSet,List<String> varNameSet){
+    private void setInfixExpression(InfixExpression infixExpression, List<String> methodInvocationSet, List<String> varNameSet){
         ASTNode leftOp = infixExpression.getLeftOperand();
         ASTNode rightOp = infixExpression.getRightOperand();
         List<ASTNode> tmp = new ArrayList<>();
         tmp.add(leftOp);
         tmp.add(rightOp);
         traverseASTNodeList(tmp,methodInvocationSet,varNameSet);
-
     }
 
     public void traverseASTNodeList(List<ASTNode> list,List<String> methodInvocationSet,List<String> varNameSet) {
@@ -154,49 +111,42 @@ public class LinkBean {
             }
         }
 
-        this.methodNames.addAll(addCommonNames(tmpMethodInvocations,simpleNameList));
-        this.variables.addAll(addCommonNames(tmpVars,simpleNameList));
+//        this.methodNames.addAll(addCommonNames(tmpMethodInvocations,simpleNameList));
+//        this.variables.addAll(addCommonNames(tmpVars,simpleNameList));
     }
 
-    @Override
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        boolean flag = false;
-        if(this.variables.size()!=0) {
-            sb.append("\nVariables:[");
-            for (String tmp : this.variables) {
-                sb.append(tmp);
-                sb.append(",");
+    private List<String> addCommonNames(MyList<String> a,MyList<String> b){
+        List<String> result = new ArrayList<>();
+        for(String tmp:a){
+            if(b.contains(tmp)){
+                result.add(tmp);
             }
-            sb.deleteCharAt(sb.length() - 1);
-            sb.append("]");
-            flag = true;
         }
+        return result;
+    }
 
-        if(this.methodNames.size()!=0) {
-            sb.append("\nMethodNames:[");
-            for (String tmp : this.methodNames) {
-                sb.append(tmp);
-                sb.append(",");
+    /**
+     * Bean Move情况
+     * @param moveAction
+     */
+    public void move(Action moveAction){
+        Tree moveTree = (Tree)moveAction.getNode();
+        for(ITree t :moveTree.preOrder()){
+            Tree tree = (Tree)t;
+            if(tree.getAstNode().getNodeType()== ASTNode.METHOD_INVOCATION){
+                ASTNode methodInvocation = tree.getAstNode();
+//                setMethodInvocation((MethodInvocation) methodInvocation,this.methodNames,this.variables);
             }
-            sb.deleteCharAt(sb.length() - 1);
-            sb.append("]");
-            flag = true;
         }
+    }
 
-        if(this.methodDeclarations.size()!=0){
-            sb.append("\nMethodDeclaration:[");
-            for (String tmp : this.methodDeclarations) {
-                sb.append(tmp);
-                sb.append(",");
+    public void move(Tree moveTree){
+        for(ITree t :moveTree.preOrder()){
+            Tree tree = (Tree)t;
+            if(tree.getAstNode().getNodeType()== ASTNode.METHOD_INVOCATION){
+                ASTNode methodInvocation = tree.getAstNode();
+//                setMethodInvocation((MethodInvocation) methodInvocation,this.methodNames,this.variables);
             }
-            sb.deleteCharAt(sb.length() - 1);
-            sb.append("]");
-            flag = true;
         }
-//        if(true){
-//            sb.append("\n");
-//        }
-        return sb.toString();
     }
 }
