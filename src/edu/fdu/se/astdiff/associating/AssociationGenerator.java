@@ -4,7 +4,7 @@ import edu.fdu.se.astdiff.associating.linkbean.*;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.StatementPlusChangeEntity;
-import edu.fdu.se.astdiff.miningchangeentity.member.ClassOrInterfaceDeclarationChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.member.ClassChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.member.FieldChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.member.MethodChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
@@ -21,16 +21,14 @@ import java.util.Map;
  */
 public class AssociationGenerator {
 
-    private List<Association> mAssociations;
+
 
     private ChangeEntityData changeEntityData;
 
     public AssociationGenerator(ChangeEntityData mod){
-        mAssociations = new ArrayList<>();
         this.changeEntityData = mod;
+        this.changeEntityData.mAssociations = new ArrayList<>();
     }
-
-
 
     /**
      * main entrance
@@ -51,7 +49,7 @@ public class AssociationGenerator {
                     for (int j = i + 1; j < mList.size(); j++) {
                         ChangeEntity ce1 = mList.get(i);
                         ChangeEntity ce2 = mList.get(j);
-                        LinkStatement2Statement.checkStmtAssociation(ce1, ce2);// stmt 与stmt之间
+                        LinkStatement2Statement.checkStmtAssociation(changeEntityData,ce1, ce2);// stmt 与stmt之间
                     }
                 }
             }
@@ -61,7 +59,7 @@ public class AssociationGenerator {
                     if(tmp instanceof MethodChangeEntity){
                         methodChangeEntity.add(tmp);
                     }
-                    if(tmp instanceof ClassOrInterfaceDeclarationChangeEntity){
+                    if(tmp instanceof ClassChangeEntity){
                         innerClassChangeEntity.add(tmp);
                     }
                     if(tmp instanceof FieldChangeEntity){
@@ -74,16 +72,21 @@ public class AssociationGenerator {
             for (int j = i + 1; j < methodChangeEntity.size(); j++) {
                 ChangeEntity ce1 = methodChangeEntity.get(i);
                 ChangeEntity ce2 = methodChangeEntity.get(j);
-                LinkMember2Member.checkMethodAssociation(ce1, ce2);// method与method之间
+                LinkMember2Member.checkMethodAssociation(changeEntityData,ce1, ce2);// method与method之间
             }
         }
         for (Map.Entry<BodyDeclarationPair, List<ChangeEntity>> entry : mMap.entrySet()) {
             BodyDeclarationPair key = entry.getKey();
             if (key.getBodyDeclaration() instanceof MethodDeclaration) {
                 List<ChangeEntity> mList = entry.getValue();
-                for (int i = 0; i < mList.size(); i++) {
-                    LinkStatement2Member.checkStmtMethodAssociation();
-                    LinkStatement2Member.checkStmtFieldAssociation();
+                for (ChangeEntity ce:mList){
+                    fieldChangeEntity.forEach(a->{
+                        LinkStatement2Member.checkStmtFieldAssociation(changeEntityData,ce,a);
+                    });
+                    methodChangeEntity.forEach(a->{
+                        LinkStatement2Member.checkStmtMethodAssociation(changeEntityData,ce,a);
+
+                    });
                 }
             }
         }
@@ -91,8 +94,9 @@ public class AssociationGenerator {
     }
 
     public void initLinkBean(ChangeEntity ce){
-        if(ce instanceof ClassOrInterfaceDeclarationChangeEntity){
-            ce.linkBean = new ClassData((ClassOrInterfaceDeclarationChangeEntity)ce);
+
+        if(ce instanceof ClassChangeEntity){
+            ce.linkBean = new ClassData((ClassChangeEntity)ce);
         }else if(ce instanceof FieldChangeEntity){
             ce.linkBean = new FieldData((FieldChangeEntity)ce);
         }else if(ce instanceof MethodChangeEntity){
@@ -105,8 +109,4 @@ public class AssociationGenerator {
 
     }
 
-// sub的问题
-    // Link的问题
-    // dataset的问题
-    // User study的问题
 }

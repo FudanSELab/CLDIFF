@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class StageIIIBean {
 
-    private String changeEntityId;
+    private int changeEntityId;
 
     private String key;
 
@@ -103,7 +103,7 @@ public class StageIIIBean {
     }
 
 
-    public void setChangeEntityId(String changeEntityId) {
+    public void setChangeEntityId(int changeEntityId) {
         this.changeEntityId = changeEntityId;
     }
 
@@ -134,6 +134,7 @@ public class StageIIIBean {
         jsonObject.put("range", range);
         jsonObject.put("type", type);
         jsonObject.put("description", displayDesc);
+        jsonObject.put("id",changeEntityId);
         if (subRange != null) {
             JSONArray jsonArray1 = new JSONArray();
             for (SubRange subRange1 : subRange) {

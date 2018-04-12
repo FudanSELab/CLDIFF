@@ -8,6 +8,8 @@ import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
  */
 public class Association {
 
+    private String file;
+
     private ChangeEntity changeEntity1;
 
     private ChangeEntity changeEntity2;

@@ -11,14 +11,14 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
  * Created by huangkaifeng on 2018/1/23.
  *
  */
-public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEntity {
+public class ClassChangeEntity extends MemberPlusChangeEntity {
 
 
 
     /**
      * 预处理 识别的
      */
-    public ClassOrInterfaceDeclarationChangeEntity(BodyDeclarationPair bodyDeclarationPair, String changeType, MyRange myRange){
+    public ClassChangeEntity(BodyDeclarationPair bodyDeclarationPair, String changeType, MyRange myRange){
         super(bodyDeclarationPair.getLocationClassString(),changeType,myRange);
         TypeDeclaration cod = (TypeDeclaration)bodyDeclarationPair.getBodyDeclaration();
         this.stageIIBean.setLocation(bodyDeclarationPair.getLocationClassString());
@@ -35,7 +35,7 @@ public class ClassOrInterfaceDeclarationChangeEntity extends MemberPlusChangeEnt
      * gumtree 识别的 add/remove/modify
      * @param bean
      */
-    public ClassOrInterfaceDeclarationChangeEntity(ClusteredActionBean bean){
+    public ClassChangeEntity(ClusteredActionBean bean){
         super(bean);
     }
 

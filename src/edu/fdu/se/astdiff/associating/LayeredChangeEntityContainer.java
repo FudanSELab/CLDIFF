@@ -57,7 +57,7 @@ public class LayeredChangeEntityContainer {
         BodyDeclarationPair mKey = null;
         for (BodyDeclarationPair key : this.layerMap.keySet()) {
             if (key.getBodyDeclaration() instanceof TypeDeclaration) {
-                if (changeEntity instanceof ClassOrInterfaceDeclarationChangeEntity) {
+                if (changeEntity instanceof ClassChangeEntity) {
                     String location = changeEntity.stageIIBean.getLocation();
                     location = location.substring(0, location.length() - 1);
                     int index = location.lastIndexOf(".");
@@ -119,7 +119,7 @@ public class LayeredChangeEntityContainer {
     private BodyDeclarationPair getEnclosedBodyDeclaration(ChangeEntity changeEntity, int start) {
         for (BodyDeclarationPair key : this.layerMap.keySet()) {
             if (key.getBodyDeclaration() instanceof TypeDeclaration) {
-                if (changeEntity instanceof ClassOrInterfaceDeclarationChangeEntity
+                if (changeEntity instanceof ClassChangeEntity
                         || changeEntity instanceof EnumChangeEntity
                         || changeEntity instanceof FieldChangeEntity
                         || changeEntity instanceof InitializerChangeEntity

@@ -25,6 +25,7 @@ public class ChangeEntity {
         Global.changeEntityId++;
         stageIIIBean = new StageIIIBean();
         stageIIBean = new StageIIBean();
+        stageIIIBean.setChangeEntityId(changeEntityId);
 
     }
 
@@ -60,7 +61,7 @@ public class ChangeEntity {
         return changeEntityId+". "+this.stageIIBean.toString();
     }
 
-
+    // summary
     public String toString2(){
         return changeEntityId+". "+ this.stageIIBean.toString2();
     }

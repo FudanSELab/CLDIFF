@@ -8,12 +8,4 @@ package edu.fdu.se.astdiff.associating.linkbean;
 public class LinkBean {
 
 
-
-
-
-
-
-
-
-
 }

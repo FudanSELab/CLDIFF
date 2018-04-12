@@ -8,7 +8,7 @@ import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
-import edu.fdu.se.astdiff.miningchangeentity.member.ClassOrInterfaceDeclarationChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.member.ClassChangeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class MatchClass {
             DefaultUpDownTraversal.traverseClass(a, subActions, changePacket);
         }
         ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,a,subActions,changePacket);
-        ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
+        ClassChangeEntity code = new ClassChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_CLASS);
         code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
@@ -45,7 +45,7 @@ public class MatchClass {
             DefaultDownUpTraversal.traverseClassSignature(traverseFather,subActions,changePacket);
         }
         ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_DOWN_UP,a,subActions,changePacket,queryFather,treeType);
-        ClassOrInterfaceDeclarationChangeEntity code = new ClassOrInterfaceDeclarationChangeEntity(mBean);
+        ClassChangeEntity code = new ClassChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_CLASS);
         code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);

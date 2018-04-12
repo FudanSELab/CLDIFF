@@ -25,8 +25,16 @@ public class MyRange {
         return "("+this.startLineNo+","+this.endLineNo+")";
     }
 
-    public String toJsonString(){
-        return this.startLineNo+","+this.endLineNo;
-    }
 
+    public int isRangeWithin(MyRange myRange){
+        if(this.startLineNo<=myRange.startLineNo
+                && this.endLineNo >= myRange.endLineNo){
+            return -1;
+        }else if(myRange.startLineNo <= this.startLineNo
+                && this.endLineNo <=myRange.endLineNo){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
 }

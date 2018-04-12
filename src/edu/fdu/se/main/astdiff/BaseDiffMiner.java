@@ -57,6 +57,8 @@ public class BaseDiffMiner {
         associationGenerator.generate();
         String json = GenerateChangeEntityJson.generateEntityJson(ced.mad.mChangeEntityList);
         System.out.println(json);
+        String assoa = GenerateChangeEntityJson.generateAssociationJson(ced.mAssociations);
+        System.out.println(assoa);
 
     }
 
@@ -82,6 +84,5 @@ public class BaseDiffMiner {
             SimpleActionPrinter.printMyActions(actionsData.getAllActions());
         }
     }
-    // 3. 验证 json文件输出  4. link 5. Modifer Extends 等
 
 }

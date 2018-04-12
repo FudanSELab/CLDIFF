@@ -2,6 +2,7 @@ package edu.fdu.se.astdiff.miningchangeentity;
 
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
+import edu.fdu.se.astdiff.associating.Association;
 import edu.fdu.se.astdiff.associating.MyRange;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
@@ -11,6 +12,8 @@ import edu.fdu.se.astdiff.miningchangeentity.member.*;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import org.eclipse.jdt.core.dom.*;
+
+import java.util.List;
 
 
 /**
@@ -23,7 +26,7 @@ public class ChangeEntityData {
     public LayeredChangeEntityContainer entityContainer;
     public MiningActionData mad;
 
-
+    public List<Association> mAssociations;
 
     public ChangeEntityData(PreprocessedData pd, MiningActionData mad) {
         this.preprocessedData = pd;
@@ -53,7 +56,7 @@ public class ChangeEntityData {
         } else if (item.getBodyDeclaration() instanceof Initializer) {
             ce = new InitializerChangeEntity(item, type, myRange);
         } else if (item.getBodyDeclaration() instanceof TypeDeclaration) {
-            ce = new ClassOrInterfaceDeclarationChangeEntity(item, type, myRange);
+            ce = new ClassChangeEntity(item, type, myRange);
         } else if (item.getBodyDeclaration() instanceof EnumDeclaration) {
             ce = new EnumChangeEntity(item, type, myRange);
         }

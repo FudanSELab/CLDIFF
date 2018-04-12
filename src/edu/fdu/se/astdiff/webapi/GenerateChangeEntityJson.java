@@ -17,6 +17,7 @@ public class GenerateChangeEntityJson {
     public static void setChangeEntityStageIIIBean(List<ChangeEntity> changeEntityList){
         for(int i=0;i<changeEntityList.size();i++) {
             ChangeEntity changeEntity = changeEntityList.get(i);
+            changeEntity.stageIIIBean.setChangeEntityId(changeEntity.changeEntityId);
             if (changeEntity.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
                 changeEntity.stageIIIBean.setKey("preprocess");
             } else {
@@ -51,7 +52,7 @@ public class GenerateChangeEntityJson {
             JSONObject jsonObject = changeEntity.stageIIIBean.genJSonObject();
             jsonArray.put(jsonObject);
         }
-        return jsonArray.toString();
+        return jsonArray.toString(4);
     }
 
 

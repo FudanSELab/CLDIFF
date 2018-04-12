@@ -23,6 +23,7 @@ public class StmtData extends LinkBean {
 
     public List<String> methodInvocation;
 
+
     public StmtData(StatementPlusChangeEntity ce) {
         if (ce.clusteredActionBean.curAction == null) {
 //            ce.linkBean = new LinkBean(ce.clusteredActionBean.fafather);
@@ -34,6 +35,22 @@ public class StmtData extends LinkBean {
         this.variableField = new MyList<>();
         this.variableLocal = new MyList<>();
         this.methodInvocation = new MyList<>();
+    }
+
+    public int isCommitVar(StmtData stmtData){
+        int flag = 0;
+        for(String tmp:stmtData.variableLocal){
+            if(this.variableLocal.contains(tmp)){
+                flag ++;
+            }
+        }
+
+        for(String tmp:stmtData.variableLocal){
+            if(this.variableLocal.contains(tmp)){
+                flag ++;
+            }
+        }
+        return flag;
     }
 
 
