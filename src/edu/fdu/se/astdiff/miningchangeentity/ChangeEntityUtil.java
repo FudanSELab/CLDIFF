@@ -74,7 +74,6 @@ public class ChangeEntityUtil {
 
 
     public static void setStageIIIBean(StageIIIBean stageIIIBean, List<Action> actions,ChangeEntityData miningActionData){
-
         CompilationUnit src = miningActionData.preprocessedData.srcCu;
         CompilationUnit dst = miningActionData.preprocessedData.dstCu;
         List<Integer[]> rangeList = new ArrayList<>();
@@ -85,14 +84,23 @@ public class ChangeEntityUtil {
             }
         });
         List<Integer[]> insertResult = mi.merge(rangeList);
+        stageIIIBean.addInsertList(insertResult,dst);
         rangeList.clear();
         actions.forEach(a -> {
-            if (a instanceof Delete ||  a instanceof Update) {
+            if (a instanceof Delete) {
                 rangeList.add(((Tree) a.getNode()).getRange());
             }
         });
-        List<Integer[]> deleteOrUpdateResult = mi.merge(rangeList);
+        List<Integer[]> deleteResult = mi.merge(rangeList);
+        stageIIIBean.addDeleteList(deleteResult,src);
         rangeList.clear();
+        actions.forEach(a->{
+            if (a instanceof Update) {
+                rangeList.add(((Tree) a.getNode()).getRange());
+            }
+        });
+        List<Integer[]> updateResult = mi.merge(rangeList);
+        stageIIIBean.addUpdateList(updateResult,src);
         actions.forEach(a->{
             if(a instanceof Move){
                 Move mv = (Move)a;

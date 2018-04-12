@@ -12,6 +12,7 @@ import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
+import edu.fdu.se.astdiff.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
@@ -51,8 +52,12 @@ public class BaseDiffMiner {
         ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
         cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
 
+
         AssociationGenerator associationGenerator = new AssociationGenerator(ced);
-//        associationGenerator.generate();
+        associationGenerator.generate();
+        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad.mChangeEntityList);
+        System.out.println(json);
+
     }
 
     public void doo(String fileName,byte[] filePrevContent, byte[] fileCurrContent, String output) {
@@ -77,5 +82,6 @@ public class BaseDiffMiner {
             SimpleActionPrinter.printMyActions(actionsData.getAllActions());
         }
     }
+    // 3. 验证 json文件输出  4. link 5. Modifer Extends 等
 
 }

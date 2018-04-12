@@ -44,6 +44,7 @@ public class GenerateChangeEntityJson {
 
 
     public static String generateEntityJson(List<ChangeEntity> changeEntityList){
+        setChangeEntityStageIIIBean(changeEntityList);
         JSONArray jsonArray = new JSONArray();
         for(int i =0;i<changeEntityList.size();i++){
             ChangeEntity changeEntity = changeEntityList.get(i);
