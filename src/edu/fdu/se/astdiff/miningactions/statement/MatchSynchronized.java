@@ -49,7 +49,7 @@ public class MatchSynchronized {
 		SynchronizedChangeEntity code = new SynchronizedChangeEntity(mBean);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
+		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_SYNCHRONIZED_STMT);
 //		code.stageIIBean.setOpt2(null);
 		code.stageIIBean.setSubEntity(null);

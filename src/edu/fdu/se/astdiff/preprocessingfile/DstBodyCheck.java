@@ -101,7 +101,7 @@ public class DstBodyCheck {
                 s = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition());
                 e = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition()+srcBody.getBodyDeclaration().getLength()-1);
                 myRange = new MyRange(s,e,ChangeEntityDesc.StageITreeType.DST_TREE_NODE);
-                EnumChangeEntity code = new EnumChangeEntity(srcBody,ChangeEntityDesc.StageIIIOpt.OPT_CHANGE,myRange);
+                EnumChangeEntity code = new EnumChangeEntity(srcBody, ChangeEntityDesc.StageIIOpt.OPT_CHANGE,myRange);
                 EnumDeclaration fd = (EnumDeclaration) srcBody.getBodyDeclaration();
                 PreprocessUtil.generateEnumChangeEntity(code,fd,ed);
                 if(compareResult.getPreprocessChangeEntity()==null){

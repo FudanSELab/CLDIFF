@@ -63,7 +63,7 @@ public class MatchBlock {
             changeEntity.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
             changeEntity.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
             changeEntity.stageIIBean.setChangeEntity(childd.getAstNode().getClass().getSimpleName());
-            changeEntity.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_MOVE);
+            changeEntity.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_MOVE);
             changeEntity.stageIIBean.setLineRange(AstRelations.getMyRange(childd, ChangeEntityDesc.StageITreeType.SRC_TREE_NODE).toString());
             fp.addOneChangeEntity(changeEntity);
         }

@@ -25,4 +25,8 @@ public class MyRange {
         return "("+this.startLineNo+","+this.endLineNo+")";
     }
 
+    public String toJsonString(){
+        return this.startLineNo+","+this.endLineNo;
+    }
+
 }

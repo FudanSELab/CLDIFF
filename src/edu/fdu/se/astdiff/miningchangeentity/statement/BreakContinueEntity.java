@@ -21,7 +21,7 @@ public class BreakContinueEntity extends StatementPlusChangeEntity{
         sb.append(this.stageIIBean.getOpt());
         sb.append(" ");
         sb.append(this.stageIIBean.getChangeEntity());
-        if(this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE)){
+        if(this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
             sb.append("'s label ");
 //            sb.append("");
 //            sb.append("with/by...");

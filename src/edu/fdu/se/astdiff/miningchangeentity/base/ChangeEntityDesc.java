@@ -19,7 +19,7 @@ public class ChangeEntityDesc {
         public static final int TRAVERSE_DOWN_UP = 2;
     }
 
-    public static class StageIIIOpt{
+    public static class StageIIOpt {
 
         public static final String OPT_INSERT = "Insert";
 
@@ -92,7 +92,7 @@ public class ChangeEntityDesc {
 
     }
 
-    public static class StageIIIOpt2{
+    public static class StageIIOpt2 {
 
         public static final String OPT2_INSERT = "Insert";
 
@@ -108,9 +108,9 @@ public class ChangeEntityDesc {
 
     public static String getChangeEntityDescString(Action a){
         switch (a.getClass().getSimpleName()){
-            case "Insert":return ChangeEntityDesc.StageIIIOpt.OPT_INSERT;
-            case "Move":return ChangeEntityDesc.StageIIIOpt.OPT_MOVE;
-            case "Delete":return ChangeEntityDesc.StageIIIOpt.OPT_DELETE;
+            case "Insert":return StageIIOpt.OPT_INSERT;
+            case "Move":return StageIIOpt.OPT_MOVE;
+            case "Delete":return StageIIOpt.OPT_DELETE;
             case "Update":break;
         }
         return null;
@@ -122,7 +122,7 @@ public class ChangeEntityDesc {
 
 
 
-    public static class StageIIISub{
+    public static class StageIISub {
 
         public static final String SUB_DECLARATION = "declaration";
 

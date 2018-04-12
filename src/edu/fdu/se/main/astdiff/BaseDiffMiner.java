@@ -56,7 +56,6 @@ public class BaseDiffMiner {
     }
 
     public void doo(String fileName,byte[] filePrevContent, byte[] fileCurrContent, String output) {
-        // 1.pre
         FilePairPreDiff preDiff = new FilePairPreDiff();
         preDiff.initFile(filePrevContent,fileCurrContent);
         int result = preDiff.compareTwoFile(output);
@@ -78,9 +77,5 @@ public class BaseDiffMiner {
             SimpleActionPrinter.printMyActions(actionsData.getAllActions());
         }
     }
-    // 验证 Preprocessing *
-    // 验证 GumTree 输出  **
-    // 验证Aggregatio   ***
-    // 验证分类   ***
-    // 验证按照行号排序 ***
+
 }

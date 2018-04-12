@@ -8,7 +8,6 @@ import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.associating.LayeredChangeEntityContainer;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
-import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityUtil;
 import edu.fdu.se.astdiff.miningchangeentity.base.StageIIBean;
 import edu.fdu.se.astdiff.miningchangeentity.statement.ForChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.statement.IfChangeEntity;
@@ -35,7 +34,7 @@ public class ChangeEntityPreprocess {
     public ChangeEntityData ced;
 
 
-    public void preprocessChangeEntity(){
+    public void preprocessChangeEntity() {
         this.initContainerEntityData();
         this.printContainerEntityDataBefore();
         this.mergeMoveAndWrapper();
@@ -43,6 +42,17 @@ public class ChangeEntityPreprocess {
         this.setChangeEntityOpt2Opt2Exp();
         this.printContainerEntityDataAfter();
         this.printNaturalEntityDesc();
+        this.setStageIIIBean();
+    }
+
+    public void setStageIIIBean(){
+        List<ChangeEntity> mList = this.ced.mad.getChangeEntityList();
+        for(ChangeEntity tmp:mList){
+            if(tmp.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)) {
+                ChangeEntityUtil.setStageIIIBean(tmp.stageIIIBean, tmp.clusteredActionBean.actions,this.ced);
+
+            }
+        }
     }
 
     public void setChangeEntityOpt2Opt2Exp(){
@@ -52,7 +62,7 @@ public class ChangeEntityPreprocess {
             List<ChangeEntity> mList = entry.getValue();
             for(ChangeEntity ce:mList){
                 if(!ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
-                    if(ce.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE)){
+                    if(ce.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
                         if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_CLASS)){
                             // class signature 设置
                         }else if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER)){
@@ -187,17 +197,16 @@ public class ChangeEntityPreprocess {
             if (!a.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
                 if(a instanceof ForChangeEntity || a instanceof WhileChangeEntity
                         || a instanceof SynchronizedChangeEntity || a instanceof IfChangeEntity){
-//                    a.clusteredActionBean.changePacket.getChangeSet2()
-                    if(a.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIIOpt.OPT_INSERT)||a.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIIOpt.OPT_DELETE)){
+                    if(a.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_INSERT)||a.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_DELETE)){
                         if(a.clusteredActionBean.changePacket.getChangeSet2().contains(Move.class.getSimpleName())){
                             if(a.clusteredActionBean.changePacket.getChangeSet2().contains(Insert.class.getSimpleName())||
                                     a.clusteredActionBean.changePacket.getChangeSet2().contains(Delete.class.getSimpleName())){
-                                a.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION_AND_PARTIAL_BODY);
+                                a.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_CONDITION_AND_PARTIAL_BODY);
                             }else{
-                                a.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION);
+                                a.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_CONDITION);
                             }
                         }else{
-                            a.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION_AND_BODY);
+                            a.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_CONDITION_AND_BODY);
                         }
                     }
                 }

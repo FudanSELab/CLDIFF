@@ -47,7 +47,6 @@ public class TestFilePre {
 //        List<String> m  = new ArrayList<>();
 //        String full = JDTParserFactory.getLinesOfFile(file,m);
 //        StringBuilder sb = new StringBuilder();
-
 //        TypeDeclaration td = (TypeDeclaration) cu.types().get(0);
 ////        td.getJavadoc().delete();
 //        System.out.println(cu.getLineNumber(td.getStartPosition())+","+cu.getLineNumber(td.getStartPosition()+td.getLength()-1));
@@ -78,7 +77,7 @@ public class TestFilePre {
     }
 
 
-    
+
     private static void removeAllCommentsOfCompilationUnit(CompilationUnit cu) {
         List<ASTNode> commentList = cu.getCommentList();
         PackageDeclaration packageDeclaration = cu.getPackage();

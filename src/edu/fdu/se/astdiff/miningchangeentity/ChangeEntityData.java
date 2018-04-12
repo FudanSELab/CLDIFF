@@ -24,6 +24,7 @@ public class ChangeEntityData {
     public MiningActionData mad;
 
 
+
     public ChangeEntityData(PreprocessedData pd, MiningActionData mad) {
         this.preprocessedData = pd;
         this.entityContainer = pd.entityContainer;

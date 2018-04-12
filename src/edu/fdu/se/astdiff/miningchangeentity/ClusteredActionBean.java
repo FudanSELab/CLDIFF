@@ -14,8 +14,6 @@ import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
  *
  */
 public class ClusteredActionBean {
-
-
 	/**
 	 * 1 up-down   2 down-up
 	 */
@@ -24,15 +22,11 @@ public class ClusteredActionBean {
 	public Action curAction;
 	public List<Action> actions;
 
-	/**
-	 * operation type / entity / sub entity
-	 */
 	public ChangePacket changePacket;
 
 	public Tree fafather;
 
 	public int nodeType;
-
 
 
 
@@ -56,10 +50,6 @@ public class ClusteredActionBean {
 		this.fafather = fafather;
 		this.nodeType = nodeType;
 	}
-
-
-
-
 
 
 	@Override

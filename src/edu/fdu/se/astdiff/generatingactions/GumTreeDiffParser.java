@@ -35,6 +35,7 @@ public class GumTreeDiffParser {
 			Matcher m = Matchers.getInstance().getMatcher(src, dst); // retrieve the default matcher
 			m.match();
 			mapping = m.getMappings();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

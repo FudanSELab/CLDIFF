@@ -26,9 +26,9 @@ public class RQ1Data {
     }
 
 
-    // 2.抽取特定的commit
+    // 2. Debug抽取特定的commit
     public static void oneCommit(){
-        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\tomcat";
+        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\tomcat\\.git";
         String outputDir = "D:/aaa";
         String commitID = "";
         JGitHelper cmd = new JGitHelper(repo);

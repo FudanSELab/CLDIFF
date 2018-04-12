@@ -33,7 +33,7 @@ public class MatchTry {
 		code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_TRY_STMT);
 //		code.stageIIBean.setOpt2(null);
-		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_BODY_AND_CATCH_CLAUSE);//todo 和finally 做区别
+		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_BODY_AND_CATCH_CLAUSE);//todo 和finally 做区别
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		Tree firstC = (Tree) a.getNode().getChild(0);
@@ -58,10 +58,10 @@ public class MatchTry {
 		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
+		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_TRY_STMT);
 //		code.stageIIBean.setOpt2(OperationTypeConstants.getChangeEntityDescString(a));
-		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CATCH_CLAUSE);
+		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_CATCH_CLAUSE);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
@@ -99,10 +99,10 @@ public class MatchTry {
 		fp.addOneChangeEntity(code);
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
+		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_TRY_STMT);
 //		code.stageIIBean.setOpt2(OperationTypeConstants.getChangeEntityDescString(a));
-		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_FINALLY);
+		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_FINALLY);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.setActionTraversedMap(subActions);
@@ -120,10 +120,10 @@ public class MatchTry {
 
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
+		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_TRY_STMT);
-//		code.stageIIBean.setOpt2(ChangeEntityDesc.StageIIIOpt2.OPT2_CHANGE);
-		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CATCH_CLAUSE);
+//		code.stageIIBean.setOpt2(ChangeEntityDesc.StageIIOpt2.OPT2_CHANGE);
+		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_CATCH_CLAUSE);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);

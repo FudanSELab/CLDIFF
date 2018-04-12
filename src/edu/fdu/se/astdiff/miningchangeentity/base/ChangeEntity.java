@@ -11,11 +11,12 @@ import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
  * 父类 其他的Entity都继承于此Entity
  */
 public class ChangeEntity {
-    protected int changeEntityId;
+    public int changeEntityId;
 
     public ClusteredActionBean clusteredActionBean;
-    public StageIIIBean stageIIIBean;
+
     public StageIIBean stageIIBean;
+    public StageIIIBean stageIIIBean;
     public LinkBean linkBean;
     public MyRange lineRange;
 
@@ -65,6 +66,27 @@ public class ChangeEntity {
     }
 
 
+    public int getChangeEntityId() {
+        return changeEntityId;
+    }
 
+    public ClusteredActionBean getClusteredActionBean() {
+        return clusteredActionBean;
+    }
 
+    public StageIIIBean getStageIIIBean() {
+        return stageIIIBean;
+    }
+
+    public StageIIBean getStageIIBean() {
+        return stageIIBean;
+    }
+
+    public LinkBean getLinkBean() {
+        return linkBean;
+    }
+
+    public MyRange getLineRange() {
+        return lineRange;
+    }
 }

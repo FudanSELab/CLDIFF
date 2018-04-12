@@ -72,7 +72,7 @@ public class DiffMinerTest extends BaseDiffMiner {
             for (int i =0;i<files.length;i++){
                 File currf1 = files[i];
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
-                if(currf1.getName().startsWith("ForAddition.java")) {
+                if(currf1.getName().startsWith("IfElseAddition.java")) {
                     //IfElseAddition
                     System.out.println(i+" "+currf1.getName());
                     doo(prevFile, currf1.getAbsolutePath(), outputDir);
@@ -82,7 +82,6 @@ public class DiffMinerTest extends BaseDiffMiner {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -91,11 +90,8 @@ public class DiffMinerTest extends BaseDiffMiner {
         i.runBatchTest();
 //        i.runSingleFilePair();
     }
-
-    // 1. test case sub entity 问题
-    // 2. Insert+ Move问题
-    // 3.Opt2 + Opt2Exp 解决
-    // 4. Link
+    // 3.Human study
+    // 4.Link
 
 }
 

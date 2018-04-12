@@ -50,14 +50,14 @@ public class MatchSwitch {
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_SWITCH_STMT);
-		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
+		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
 //		code.stageIIBean.setOpt2(OperationTypeConstants.getChangeEntityDescString(a));
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		if(a.getNode().getChildren() == null || a.getNode().getChildren().size()==0){
-			code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_SWITCH_CASE_DEFAULT);
+			code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_SWITCH_CASE_DEFAULT);
 		}else {
-			code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_SWITCH_CASE);
+			code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_SWITCH_CASE);
 		}
 		fp.setActionTraversedMap(subActions);
 		fp.addOneChangeEntity(code);
@@ -77,9 +77,9 @@ public class MatchSwitch {
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_SWITCH_STMT);
-		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
+		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
 //		code.stageIIBean.setOpt2(null);
-		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_CONDITION);
+		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_CONDITION);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
@@ -115,9 +115,9 @@ public class MatchSwitch {
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_SWITCH_STMT);
-		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
+		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
 //		code.stageIIBean.setOpt2(null);
-		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_SWITCH_CASE);
+		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_SWITCH_CASE);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);

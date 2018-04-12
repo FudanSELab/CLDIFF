@@ -38,10 +38,10 @@ public class PreprocessUtil {
         String name  = e1.getName().toString();
         changeEntity.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF);
         changeEntity.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
-        changeEntity.stageIIBean.setOpt(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE);
+        changeEntity.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
         changeEntity.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENUM);
-//        changeEntity.stageIIBean.setOpt2(ChangeEntityDesc.StageIIIOpt2.OPT2_CHANGE);
-        changeEntity.stageIIBean.setSubEntity(ChangeEntityDesc.StageIIISub.SUB_DECLARATION);
+//        changeEntity.stageIIBean.setOpt2(ChangeEntityDesc.StageIIOpt2.OPT2_CHANGE);
+        changeEntity.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_DECLARATION);
         changeEntity.stageIIBean.setThumbnail(name);
         changeEntity.variableList = varList;
         changeEntity.methodList = methodDecList;

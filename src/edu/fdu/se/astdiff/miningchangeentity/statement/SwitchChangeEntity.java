@@ -26,9 +26,9 @@ public class SwitchChangeEntity extends StatementPlusChangeEntity {
         sb.append(this.stageIIBean.getOpt());
         sb.append(" ");
         sb.append(this.stageIIBean.getChangeEntity());
-        if(this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE)){
+        if(this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
             if(this.stageIIBean.getChangeEntity().equals(ChangeEntityDesc.StageIIENTITY.ENTITY_SWITCH_CASE)){
-                if(this.stageIIBean.getSubEntity().equals(ChangeEntityDesc.StageIIISub.SUB_SWITCH_CASE_DEFAULT)){
+                if(this.stageIIBean.getSubEntity().equals(ChangeEntityDesc.StageIISub.SUB_SWITCH_CASE_DEFAULT)){
                     sb.append(" ");
                     sb.append(this.stageIIBean.getSubEntity());
                 }

@@ -1,48 +1,79 @@
 package edu.fdu.se.astdiff.miningchangeentity.base;
 
+import org.json.JSONObject;
+
+import java.util.List;
+
 /**
  * Created by huangkaifeng on 2018/3/28.
  *
  */
 public class StageIIIBean {
-    private String opt;
-    private String stmtOrMember;
-    private String opt2;
-    private String sub;
+
+    private String changeEntityId;
+
+    private String key;
+
+    private String file;
+
+    private String range;
+
+    private String type;
+
+    private String displayDesc;
+
+    private List<SubRange> subRange;
 
     public StageIIIBean() {
 
     }
 
-    public void setOpt(String opt) {
-        this.opt = opt;
+    class SubRange{
+        String file2;
+        String subRangeCode;
+        String type2;
     }
 
-    public void setStmtOrMember(String stmtOrMember) {
-        this.stmtOrMember = stmtOrMember;
+
+
+    public void setDisplayDesc(String displayDesc) {
+        this.displayDesc = displayDesc;
     }
 
-    public void setOpt2(String opt2) {
-        this.opt2 = opt2;
+
+    public void setChangeEntityId(String changeEntityId) {
+        this.changeEntityId = changeEntityId;
     }
 
-    public void setSub(String sub) {
-        this.sub = sub;
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public String getOpt() {
-        return opt;
+
+    public void setFile(String file) {
+        this.file = file;
     }
 
-    public String getStmtOrMember() {
-        return stmtOrMember;
+
+    public void setRange(String range) {
+        this.range = range;
     }
 
-    public String getOpt2() {
-        return opt2;
+
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getSub() {
-        return sub;
+    public JSONObject genJSonObject(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("key",key);
+        jsonObject.put("file",file);
+        jsonObject.put("range",range);
+        jsonObject.put("type",type);
+        jsonObject.put("description",displayDesc);
+
+        return null;
+
     }
 }

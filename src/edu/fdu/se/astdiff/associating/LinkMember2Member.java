@@ -4,6 +4,7 @@ import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 
 /**
  * Created by huangkaifeng on 2018/4/7.
+ *
  */
 public class LinkMember2Member {
 

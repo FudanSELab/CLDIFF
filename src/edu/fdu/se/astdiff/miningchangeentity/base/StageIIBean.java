@@ -145,7 +145,7 @@ public class StageIIBean {
         sb.append(this.opt);
         sb.append(" ");
         sb.append(this.changeEntity);
-        if(this.opt.equals(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE)){
+        if(this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
             sb.append(" with/by");
 
         }

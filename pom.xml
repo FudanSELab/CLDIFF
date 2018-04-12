@@ -1,48 +1,49 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>DiffMiner</groupId>
-  <artifactId>DiffMiner</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <build>
-      <!--<resources>-->
-          <!--<resource>-->
-              <!--<directory>src/edu/fdu/se/sqlmap</directory>-->
-              <!--<includes>-->
-                  <!--<include>**/*.xml</include>-->
-              <!--</includes>-->
-              <!--<filtering>true</filtering>-->
-          <!--</resource>-->
-      <!--</resources>-->
-    <sourceDirectory>src</sourceDirectory>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-    </plugins>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>DiffMiner</groupId>
+    <artifactId>DiffMiner</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <build>
+        <!--<resources>-->
+        <!--<resource>-->
+        <!--<directory>src/edu/fdu/se/sqlmap</directory>-->
+        <!--<includes>-->
+        <!--<include>**/*.xml</include>-->
+        <!--</includes>-->
+        <!--<filtering>true</filtering>-->
+        <!--</resource>-->
+        <!--</resources>-->
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
 
-  </build>
-  <repositories>
-    <repository>
-      <id>jgit-repository</id>
-      <url>https://repo.eclipse.org/content/groups/releases/</url>
-    </repository>
-  </repositories>
-  <dependencies>
-    <dependency>
-      <groupId>org.eclipse.jgit</groupId>
-      <artifactId>org.eclipse.jgit</artifactId>
-      <version>4.6.0.201612231935-r</version>
-    </dependency>
-    <dependency>
-  <groupId>org.mybatis</groupId>
-  <artifactId>mybatis</artifactId>
-  <version>3.4.5</version>
-</dependency><!-- 
+    </build>
+    <repositories>
+        <repository>
+            <id>jgit-repository</id>
+            <url>https://repo.eclipse.org/content/groups/releases/</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>4.6.0.201612231935-r</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.4.5</version>
+        </dependency><!--
 <dependency>
     <groupId>org.mybatis.generator</groupId>
     <artifactId>mybatis-generator-maven-plugin</artifactId>
@@ -53,68 +54,75 @@
     <artifactId>mybatis-generator</artifactId>
     <version>1.3.5</version>
 </dependency>-->
-<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-<dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>6.0.6</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/com.github.mpkorstanje/simmetrics-core -->
-<dependency>
-    <groupId>com.github.mpkorstanje</groupId>
-    <artifactId>simmetrics-core</artifactId>
-    <version>3.2.3</version>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>6.0.6</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.mpkorstanje/simmetrics-core -->
+        <dependency>
+            <groupId>com.github.mpkorstanje</groupId>
+            <artifactId>simmetrics-core</artifactId>
+            <version>3.2.3</version>
 
-    <exclusions>
-    	<exclusion>
-    		<artifactId>guava</artifactId>
-    		<groupId>com.google.guava</groupId>
-    	</exclusion>
-    </exclusions>
-</dependency>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-<!-- https://mvnrepository.com/artifact/net.sf.trove4j/trove4j -->
-<dependency>
-    <groupId>net.sf.trove4j</groupId>
-    <artifactId>trove4j</artifactId>
-    <version>3.0.3</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-<dependency>
-    <groupId>com.google.code.gson</groupId>
-    <artifactId>gson</artifactId>
-    <version>2.8.2</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.jgrapht/jgrapht-core -->
-<dependency>
-    <groupId>org.jgrapht</groupId>
-    <artifactId>jgrapht-core</artifactId>
-    <version>1.0.1</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
-<dependency>
-    <groupId>org.reflections</groupId>
-    <artifactId>reflections</artifactId>
-    <version>0.9.11</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.eclipse.jdt/org.eclipse.jdt.core -->
-<dependency>
-    <groupId>org.eclipse.jdt</groupId>
-    <artifactId>org.eclipse.jdt.core</artifactId>
-    <version>3.12.3</version>
-</dependency>
+        <!-- https://mvnrepository.com/artifact/net.sf.trove4j/trove4j -->
+        <dependency>
+            <groupId>net.sf.trove4j</groupId>
+            <artifactId>trove4j</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jgrapht/jgrapht-core -->
+        <dependency>
+            <groupId>org.jgrapht</groupId>
+            <artifactId>jgrapht-core</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.jdt/org.eclipse.jdt.core -->
+        <dependency>
+            <groupId>org.eclipse.jdt</groupId>
+            <artifactId>org.eclipse.jdt.core</artifactId>
+            <version>3.12.3</version>
+        </dependency>
 
-<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-<dependency>
-    <groupId>commons-io</groupId>
-    <artifactId>commons-io</artifactId>
-    <version>2.6</version>
-</dependency>
-<dependency>
-    <groupId>com.github.javaparser</groupId>
-    <artifactId>javaparser-core</artifactId>
-    <version>3.5.6</version>
-</dependency>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>javaparser-core</artifactId>
+            <version>3.5.6</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180130</version>
+        </dependency>
 
-   </dependencies>
+
+    </dependencies>
 </project>
