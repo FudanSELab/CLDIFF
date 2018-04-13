@@ -76,8 +76,10 @@ public class JGitHelper extends JGitCommand {
                                 String dirName = parentCommitId + "-" + commit.getName();
                   
 //                                diffMinerTest.runGumTree(new String(prevFile), new String(currFile));
-                                baseDiffMiner.doo(fileName.substring(0,fileName.length()-5),prevFile,currFile,outDir+"/"+dirName+"/"+fileName);
-                                fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + queueCommitItem.getName(), fileName);
+                                if(!file.toLowerCase().contains("test")) {
+                                	baseDiffMiner.doo(fileName.substring(0,fileName.length()-5),prevFile,currFile,outDir+"/"+dirName+"/"+fileName);
+                                    fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + queueCommitItem.getName(), fileName);
+                                }
                             }
                         }
                     }
@@ -86,7 +88,7 @@ public class JGitHelper extends JGitCommand {
                         RevCommit commit2 = revWalk.parseCommit(item2.getId());
                         commitQueue.offer(commit2);
                     }
-                    break;
+//                    break;
                 }
             }
 //            System.out.println("CommitSum:" + isTraversed.size());
@@ -132,10 +134,12 @@ public class JGitHelper extends JGitCommand {
                         byte[] currFile = this.extract(file, commit.getName());
                         int index = file.lastIndexOf("/");
                         String fileName = file.substring(index + 1, file.length());
-                        System.out.println(fileName);
                         String dirName = parentCommitId + "-" + commit.getName();
-                        if("MiscUtilTest.java".equals(fileName))
-                        baseDiffMiner.doo(fileName.substring(0,fileName.length()-5),prevFile,currFile,outDir+"/"+dirName+"/"+fileName);
+                        System.out.println(fileName);
+                        if(!file.toLowerCase().contains("test")) {
+                        	if(fileName.equals("CompletableToObservable.java"))
+                        	baseDiffMiner.doo(fileName.substring(0,fileName.length()-5),prevFile,currFile,outDir+"/"+dirName+"/"+fileName);
+                        }
                     }
                 }
             }

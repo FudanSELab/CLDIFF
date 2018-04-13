@@ -57,8 +57,8 @@ public class FilePairPreDiff {
     }
     public void initFile(byte[] prevContent,byte[] currContent){
         try {
-            preprocessedData.srcCu = JDTParserFactory.getCompilationUnit(currContent);
-            preprocessedData.dstCu = JDTParserFactory.getCompilationUnit(prevContent);
+            preprocessedData.srcCu = JDTParserFactory.getCompilationUnit(prevContent);
+            preprocessedData.dstCu = JDTParserFactory.getCompilationUnit(currContent);
             preprocessedData.loadTwoCompilationUnits(preprocessedData.srcCu, preprocessedData.dstCu, prevContent, currContent);
         }catch(Exception e){
             e.printStackTrace();
@@ -107,10 +107,6 @@ public class FilePairPreDiff {
         // 考虑后面的识别 method name变化，这里把remove的注释掉
         iterateVisitingMap();
         undeleteSignatureChange();
-//        System.out.println(preprocessedData.srcLines.size());
-//        System.out.println(preprocessedData.dstLines.size());
-//        System.out.println(cuSrc.toString());
-//        System.out.println(cuDst.toString());
         preprocessedTempData.removeSrcRemovalList(cuSrc, preprocessedData.srcLines);
         preprocessedTempData.removeDstRemovalList(cuDst, preprocessedData.dstLines);
         iterateVisitingMap2LoadContainerMap();

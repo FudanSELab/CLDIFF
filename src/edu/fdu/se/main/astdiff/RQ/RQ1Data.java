@@ -9,9 +9,9 @@ public class RQ1Data {
     public static void main(String args[]){
 //    	long startTime = System.currentTimeMillis();    //获取开始时间  
 //    	System.out.println("开始时间：" + startTime + "ms");  
-//    	
+    	
 //        allCommits();        
-//        
+        
 //        long endTime = System.currentTimeMillis();    //获取结束时间
 //        System.out.println("结束时间：" + endTime + "ms"); 
 //
@@ -34,7 +34,7 @@ public class RQ1Data {
     public static void oneCommit(){
         String repo = "E:/projects/RxJava/.git";
         String outputDir = "";
-        String commitID = "9b44404b9f7845ea6c4c56eea7ba71525b4e8ad0";
+        String commitID = "8a6bf14fc9a61f7c1c0016ca217be02ca86211d2";
         JGitHelper cmd = new JGitHelper(repo);
         cmd.analyzeOneCommit(commitID,outputDir);
     }

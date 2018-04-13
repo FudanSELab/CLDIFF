@@ -40,11 +40,11 @@ public class ChangeEntityPreprocess {
 
     public void preprocessChangeEntity(){
         this.initContainerEntityData();
-        this.printContainerEntityDataBefore();
+//        this.printContainerEntityDataBefore();
         this.mergeMoveAndWrapper();
         this.setChangeEntitySub();
         this.setChangeEntityOpt2Opt2Exp();
-        this.printContainerEntityDataAfter();
+//        this.printContainerEntityDataAfter();
         this.printNaturalEntityDesc();
     }
 
@@ -56,13 +56,22 @@ public class ChangeEntityPreprocess {
             for(ChangeEntity ce:mList){
                 if(!ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
                     if(ce.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE)){
-                    	System.out.println(333333333);
-
                         if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_CLASS)){
+                        	System.out.println(333333333);
                             // class signature 设置
+//                        	List<Action> actions = ce.clusteredActionBean.actions;
+//                        	for(Action a:actions){
+//                                Tree tree = (Tree) a.getNode();
+//                                int nodeType = tree.getAstNode().getNodeType();
+//                                System.out.println(tree.getLabel());
+//                                System.out.println(tree.getType());
+//                                }
                         }else if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER)){
+                        	System.out.println(444444444);
                             // method signature
                         }else if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT)){
+                        	System.out.println(555555555);
+
                             // stmt
                             List<Action> actions = ce.clusteredActionBean.actions;
                             generatingExpressions(actions,ce.stageIIBean);
@@ -122,6 +131,8 @@ public class ChangeEntityPreprocess {
             if(flag){
                 String name =a.getClass().getSimpleName();
                 String exp = tree.getAstNode().getClass().getSimpleName();
+//            	System.out.println("-------------------------"+tree.getAstNode().getNodeType());
+//                System.out.println("-------------------------"+name+"  "+exp);
                 bean.addOpt2AndOpt2Expression(name,exp);
             }
         }

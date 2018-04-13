@@ -41,7 +41,7 @@ public class BaseDiffMiner {
         MyActionGenerator actionGenerator = new MyActionGenerator(treeGenerator);
         GeneratingActionsData actionsData = actionGenerator.generate();
         //print
-        printActions(actionsData,treeGenerator,preDiff.getFileOutputLog());
+//        printActions(actionsData,treeGenerator,preDiff.getFileOutputLog());
         
         MiningActionData mad = new MiningActionData(actionsData,treeGenerator);
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
