@@ -1,10 +1,18 @@
 package edu.fdu.se.astdiff.miningchangeentity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
+
 import edu.fdu.se.astdiff.associating.LayeredChangeEntityContainer;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
@@ -15,11 +23,6 @@ import edu.fdu.se.astdiff.miningchangeentity.statement.IfChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.statement.SynchronizedChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.statement.WhileChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.ASTNode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by huangkaifeng on 2018/4/7.
@@ -53,6 +56,8 @@ public class ChangeEntityPreprocess {
             for(ChangeEntity ce:mList){
                 if(!ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
                     if(ce.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIIOpt.OPT_CHANGE)){
+                    	System.out.println(333333333);
+
                         if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_CLASS)){
                             // class signature 设置
                         }else if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER)){
@@ -72,6 +77,7 @@ public class ChangeEntityPreprocess {
         for(Action a:actions){
             Tree tree = (Tree) a.getNode();
             int nodeType = tree.getAstNode().getNodeType();
+//            System.out.println(tree.getAstNode());
             boolean flag = false;
             switch(nodeType){
                 case ASTNode.NORMAL_ANNOTATION:

@@ -1,9 +1,10 @@
 package edu.fdu.se.main.astdiff;
 
+import edu.fdu.se.astdiff.associating.AssociationGenerator;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
+import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
 import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
-import edu.fdu.se.astdiff.associating.AssociationGenerator;
 import edu.fdu.se.astdiff.miningactions.ActionAggregationGenerator;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
@@ -11,7 +12,6 @@ import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityPreprocess;
 import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
-import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
@@ -37,20 +37,20 @@ public class BaseDiffMiner {
         PreprocessedData preData = preDiff.getPreprocessedData();
         JavaParserTreeGenerator treeGenerator = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
         treeGenerator.setFileName(fileName);
-
+        //gumtree
         MyActionGenerator actionGenerator = new MyActionGenerator(treeGenerator);
         GeneratingActionsData actionsData = actionGenerator.generate();
-
+        //print
         printActions(actionsData,treeGenerator,preDiff.getFileOutputLog());
-
+        
         MiningActionData mad = new MiningActionData(actionsData,treeGenerator);
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
         aag.doCluster(mad);
-
+//修正
         ChangeEntityData ced = new ChangeEntityData(preData,mad);
         ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
         cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
-
+//association
         AssociationGenerator associationGenerator = new AssociationGenerator(ced);
 //        associationGenerator.generate();
     }

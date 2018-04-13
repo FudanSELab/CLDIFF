@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Queue;
 
+import org.eclipse.jdt.core.dom.BodyDeclaration;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
@@ -13,9 +17,7 @@ import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedTempData;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-import edu.fdu.se.handlefile.Method;
 import edu.fdu.se.javaparser.JDTParserFactory;
-import org.eclipse.jdt.core.dom.*;
 
 /**
  * 两个文件 预处理
@@ -105,6 +107,10 @@ public class FilePairPreDiff {
         // 考虑后面的识别 method name变化，这里把remove的注释掉
         iterateVisitingMap();
         undeleteSignatureChange();
+//        System.out.println(preprocessedData.srcLines.size());
+//        System.out.println(preprocessedData.dstLines.size());
+//        System.out.println(cuSrc.toString());
+//        System.out.println(cuDst.toString());
         preprocessedTempData.removeSrcRemovalList(cuSrc, preprocessedData.srcLines);
         preprocessedTempData.removeDstRemovalList(cuDst, preprocessedData.dstLines);
         iterateVisitingMap2LoadContainerMap();

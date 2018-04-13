@@ -1,18 +1,12 @@
 package edu.fdu.se.main.astdiff;
 
+import java.io.File;
+
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
-import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
-import edu.fdu.se.astdiff.miningactions.ActionAggregationGenerator;
-import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
-import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-import edu.fdu.se.fileutil.FileWriter;
-
-import java.io.File;
-import java.util.List;
 
 
 /**
@@ -21,32 +15,37 @@ import java.util.List;
  */
 public class DiffMinerTest extends BaseDiffMiner {
 
+	public int wholeSize = 0;
 
     /**
      * 使用gt的流程
      * test 单个文件
      */
-    public void runGumTree() {
+    public void runGumTree(String prevContent,String currContent) {
         System.out.println("Step1 Generating Diff Actions:----------------------");
-        String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
-        String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
-        GumTreeDiffParser his = new GumTreeDiffParser(new File(file1), new File(file2));
-        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", his.getPrettyOldTreeString());
-        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", his.getPrettyNewTreeString());
+//        String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
+//        String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
+//        GumTreeDiffParser his = new GumTreeDiffParser(new File(file1), new File(file2));
+        GumTreeDiffParser his = new GumTreeDiffParser(prevContent, currContent);
+//        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", his.getPrettyOldTreeString());
+//        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", his.getPrettyNewTreeString());
         // package 1
+        
         MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
         GeneratingActionsData data = gen.generate();
-        SimpleActionPrinter.printMyActions(data.getAllActions());
+        wholeSize += data.getAllActions().size();
+        System.out.println("size: "+data.getAllActions().size());
+//        SimpleActionPrinter.printMyActions();
         // package 2
-        System.out.println("Step2 Begin to cluster actions:-------------------");
-        MiningActionData mMiningActionData = new MiningActionData(data,his);
-        ActionAggregationGenerator aag = new ActionAggregationGenerator();
-        aag.doCluster(mMiningActionData);
-        // package 3
-        List<ChangeEntity> mlist = mMiningActionData.getChangeEntityList();
-        mlist.forEach(a -> {
-            System.out.println(a.toString());
-        });
+//        System.out.println("Step2 Begin to cluster actions:-------------------");
+//        MiningActionData mMiningActionData = new MiningActionData(data,his);
+//        ActionAggregationGenerator aag = new ActionAggregationGenerator();
+//        aag.doCluster(mMiningActionData);
+//        // package 3
+//        List<ChangeEntity> mlist = mMiningActionData.getChangeEntityList();
+//        mlist.forEach(a -> {
+//            System.out.println(a.toString());
+//        });
 
     }
 
@@ -88,7 +87,8 @@ public class DiffMinerTest extends BaseDiffMiner {
 
     public static void main(String[] args) {
         DiffMinerTest i = new DiffMinerTest();
-        i.runBatchTest();
+//        i.runGumTree();
+//        i.runBatchTest();
 //        i.runSingleFilePair();
     }
 
