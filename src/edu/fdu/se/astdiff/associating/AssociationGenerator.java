@@ -47,9 +47,12 @@ public class AssociationGenerator {
                 List<ChangeEntity> mList = entry.getValue();
                 for (int i = 0; i < mList.size(); i++) {
                     for (int j = i + 1; j < mList.size(); j++) {
+
                         ChangeEntity ce1 = mList.get(i);
                         ChangeEntity ce2 = mList.get(j);
-                        LinkStatement2Statement.checkStmtAssociation(changeEntityData,ce1, ce2);// stmt 与stmt之间
+                        if(ce1 instanceof StatementPlusChangeEntity && ce2 instanceof StatementPlusChangeEntity) {
+                            LinkStatement2Statement.checkStmtAssociation(changeEntityData, ce1, ce2);// stmt 与stmt之间
+                        }
                     }
                 }
             }
@@ -80,11 +83,14 @@ public class AssociationGenerator {
             if (key.getBodyDeclaration() instanceof MethodDeclaration) {
                 List<ChangeEntity> mList = entry.getValue();
                 for (ChangeEntity ce:mList){
+                    if(! (ce instanceof StatementPlusChangeEntity)){
+                        continue;
+                    }
                     fieldChangeEntity.forEach(a->{
-                        LinkStatement2Member.checkStmtFieldAssociation(changeEntityData,ce,a);
+                        LinkStatement2Member.checkStmtFieldAssociation(changeEntityData,ce,(FieldChangeEntity) a);
                     });
                     methodChangeEntity.forEach(a->{
-                        LinkStatement2Member.checkStmtMethodAssociation(changeEntityData,ce,a);
+                        LinkStatement2Member.checkStmtMethodAssociation(changeEntityData,ce,(MethodChangeEntity)a);
 
                     });
                 }

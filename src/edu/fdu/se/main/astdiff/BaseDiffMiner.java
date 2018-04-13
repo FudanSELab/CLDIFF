@@ -16,6 +16,8 @@ import edu.fdu.se.astdiff.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 import edu.fdu.se.fileutil.FileWriter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by huangkaifeng on 2018/2/27.

@@ -55,8 +55,8 @@ public class FilePairPreDiff {
     }
     public void initFile(byte[] prevContent,byte[] currContent){
         try {
-            preprocessedData.srcCu = JDTParserFactory.getCompilationUnit(currContent);
-            preprocessedData.dstCu = JDTParserFactory.getCompilationUnit(prevContent);
+            preprocessedData.srcCu = JDTParserFactory.getCompilationUnit(prevContent);
+            preprocessedData.dstCu = JDTParserFactory.getCompilationUnit(currContent);
             preprocessedData.loadTwoCompilationUnits(preprocessedData.srcCu, preprocessedData.dstCu, prevContent, currContent);
         }catch(Exception e){
             e.printStackTrace();
