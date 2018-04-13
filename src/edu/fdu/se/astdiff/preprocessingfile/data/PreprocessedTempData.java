@@ -1,13 +1,17 @@
 package edu.fdu.se.astdiff.preprocessingfile.data;
 
 
-import javassist.compiler.ast.MethodDecl;
-import org.eclipse.jdt.core.dom.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.Javadoc;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
 
 /**
  * Created by huangkaifeng on 2018/1/18.
@@ -90,8 +94,12 @@ public class PreprocessedTempData {
 //
 //                }
 //            }
+        	
+//        	System.out.println(item.toString());
+//            System.out.println(cu.getLineNumber(item.getStartPosition()) +"  "+cu.getLineNumber(item.getStartPosition()+item.getLength()-1));
             setLinesFlag(lineList,cu.getLineNumber(item.getStartPosition()),
                     cu.getLineNumber(item.getStartPosition()+item.getLength()-1));
+            
             item.delete();
         }
         this.srcRemovalNodes.clear();

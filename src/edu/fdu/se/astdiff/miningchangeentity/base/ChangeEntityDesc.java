@@ -105,6 +105,18 @@ public class ChangeEntityDesc {
         public static final String OPT2_CHANGE = "Change";
 
     }
+    
+    //wang 4/12
+    public static class StageIIOpt2Exp{
+    	public static final String EXP_MODIFIER = "Modifier";
+    	public static final String EXP_TYPE = "Type";
+    	public static final String EXP_PARAMETER = "Parameter";
+    	public static final String EXP_THROWN_EXCEPTION = "Thrown Exception";
+    	public static final String EXP_EXTENDED_TYPE = "Extended Type";
+    	public static final String EXP_IMPLEMENTED_TYPE = "Implemented Type";
+    	public static final String EXP_TYPE_PARAMETER = "Type Parameter";
+    	public static final String EXP_SUPER_CLASS = "Type Parameter";
+    }
 
     public static String getChangeEntityDescString(Action a){
         switch (a.getClass().getSimpleName()){

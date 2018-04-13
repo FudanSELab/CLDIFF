@@ -1,9 +1,10 @@
 package edu.fdu.se.main.astdiff;
 
+import edu.fdu.se.astdiff.associating.AssociationGenerator;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
+import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
 import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
-import edu.fdu.se.astdiff.associating.AssociationGenerator;
 import edu.fdu.se.astdiff.miningactions.ActionAggregationGenerator;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
@@ -40,31 +41,31 @@ public class BaseDiffMiner {
         PreprocessedData preData = preDiff.getPreprocessedData();
         JavaParserTreeGenerator treeGenerator = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
         treeGenerator.setFileName(fileName);
-
+        //gumtree
         MyActionGenerator actionGenerator = new MyActionGenerator(treeGenerator);
         GeneratingActionsData actionsData = actionGenerator.generate();
-
-        printActions(actionsData,treeGenerator,preDiff.getFileOutputLog());
+        //print
+//        printActions(actionsData,treeGenerator,preDiff.getFileOutputLog());
 
         MiningActionData mad = new MiningActionData(actionsData,treeGenerator);
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
         aag.doCluster(mad);
-
+//修正
         ChangeEntityData ced = new ChangeEntityData(preData,mad);
         ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
         cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
-
-
-        AssociationGenerator associationGenerator = new AssociationGenerator(ced);
-        associationGenerator.generate();
-        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad.mChangeEntityList);
-        System.out.println(json);
-        String assoa = GenerateChangeEntityJson.generateAssociationJson(ced.mAssociations);
-        System.out.println(assoa);
+//association
+//        AssociationGenerator associationGenerator = new AssociationGenerator(ced);
+//        associationGenerator.generate();
+//        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad.mChangeEntityList);
+//        System.out.println(json);
+//        String assoa = GenerateChangeEntityJson.generateAssociationJson(ced.mAssociations);
+//        System.out.println(assoa);
 
     }
 
     public void doo(String fileName,byte[] filePrevContent, byte[] fileCurrContent, String output) {
+        // 1.pre
         FilePairPreDiff preDiff = new FilePairPreDiff();
         preDiff.initFile(filePrevContent,fileCurrContent);
         int result = preDiff.compareTwoFile(output);
@@ -86,5 +87,9 @@ public class BaseDiffMiner {
             SimpleActionPrinter.printMyActions(actionsData.getAllActions());
         }
     }
-
+    // 验证 Preprocessing *
+    // 验证 GumTree 输出  **
+    // 验证Aggregatio   ***
+    // 验证分类   ***
+    // 验证按照行号排序 ***
 }

@@ -74,7 +74,7 @@ public class JGitRepositoryCommand extends JGitCommand {
 
     public void walkRepoFromBackwards(String outDir) {
         try {
-            FileOutputLog fileOutputLog = new FileOutputLog(outDir, 1);
+            FileOutputLog fileOutputLog = new FileOutputLog(outDir);
             Queue<RevCommit> commitQueue = new LinkedList<>();
             Map<String, Boolean> isTraversed = new HashMap<>();
             List<Ref> mList = this.git.branchList().setListMode(ListMode.ALL).call();
@@ -172,7 +172,7 @@ public class JGitRepositoryCommand extends JGitCommand {
 
     public void analyzeOneCommit(String commitString, String outDir) {
         try {
-            FileOutputLog fileOutputLog = new FileOutputLog(outDir, 1);
+            FileOutputLog fileOutputLog = new FileOutputLog(outDir);
             ObjectId commitId = ObjectId.fromString(commitString);
             RevCommit commit = revWalk.parseCommit(commitId);
             if (commit.getParents() == null) {

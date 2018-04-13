@@ -19,6 +19,8 @@ public class FileWriter {
 	final public static int FILE_WRITE_ONCE = 3;
 	
 	final public static int FILE_WRITE_MULTIPLE = 4;
+
+
 	
 	public static void writeInAll(String filePath, String content) {
 		try {
@@ -89,8 +91,10 @@ public class FileWriter {
 			e.printStackTrace();
 		}
 	}
-  
-	
+
+
+
+
 	public static void writeInAll(String filePath,InputStream is){
 		try {
 			FileOutputStream fos = new FileOutputStream(filePath);

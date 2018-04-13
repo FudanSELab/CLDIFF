@@ -57,6 +57,7 @@ public class DiffMiner extends BaseDiffMiner {
         List<String> filePathList = readCompareList(version, fileRootPathPrev, fileRootPathCurr);
         int cnt = 0;
         int candidateIndex = 0;
+        String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
         System.out.println(filePathList.size());
         int size = filePathList.size();
         for(int i = candidateIndex;i<candidateIndex+10;i++){
@@ -70,7 +71,8 @@ public class DiffMiner extends BaseDiffMiner {
             String fileFullPathPrev = fileRootPathPrev + subPath2;
             String fileFullPathCurr = fileRootPathCurr + subPath2;
 //            try {
-                doo(fileFullPathPrev, fileFullPathCurr, outputDirName);
+
+                doo(fileFullPathPrev, fileFullPathCurr, rootOutPath+"/"+outputDirName);
 //            }catch(Exception e){
 //                e.printStackTrace();
 //            }

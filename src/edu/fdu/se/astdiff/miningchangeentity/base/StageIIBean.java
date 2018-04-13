@@ -40,9 +40,10 @@ public class StageIIBean {
 
 
     private String thumbnail;
-
+    //wang 行号
     private String lineRange;
 
+    //wang X.X.X.
     private String location;
 
     public String getLocation() {

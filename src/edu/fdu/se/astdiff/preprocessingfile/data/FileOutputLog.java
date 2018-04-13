@@ -14,19 +14,19 @@ public class FileOutputLog {
 
     public File srcDirFile;
     public File dstDirFile;
-    public FileOutputLog(String path){
-        String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
-        srcDirFile = new File(rootOutPath + "/prev/" + path);
-        dstDirFile = new File(rootOutPath + "/curr/" + path);
-        if (!srcDirFile.exists()) {
-            srcDirFile.mkdirs();
-        }
-        if (!dstDirFile.exists()) {
-            dstDirFile.mkdirs();
-        }
-    }
+//    public FileOutputLog(String path){
+//        String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
+//        srcDirFile = new File(rootOutPath + "/prev/" + path);
+//        dstDirFile = new File(rootOutPath + "/curr/" + path);
+//        if (!srcDirFile.exists()) {
+//            srcDirFile.mkdirs();
+//        }
+//        if (!dstDirFile.exists()) {
+//            dstDirFile.mkdirs();
+//        }
+//    }
 
-    public FileOutputLog(String path,int a){
+    public FileOutputLog(String path){
         srcDirFile = new File(path + "/prev");
         dstDirFile = new File(path + "/curr");
         if (!srcDirFile.exists()) {

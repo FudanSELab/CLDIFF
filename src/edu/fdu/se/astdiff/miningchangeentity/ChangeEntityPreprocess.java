@@ -1,10 +1,18 @@
 package edu.fdu.se.astdiff.miningchangeentity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
+
 import edu.fdu.se.astdiff.associating.LayeredChangeEntityContainer;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
@@ -14,11 +22,6 @@ import edu.fdu.se.astdiff.miningchangeentity.statement.IfChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.statement.SynchronizedChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.statement.WhileChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.ASTNode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by huangkaifeng on 2018/4/7.
@@ -36,11 +39,11 @@ public class ChangeEntityPreprocess {
 
     public void preprocessChangeEntity() {
         this.initContainerEntityData();
-        this.printContainerEntityDataBefore();
+//        this.printContainerEntityDataBefore();
         this.mergeMoveAndWrapper();
         this.setChangeEntitySub();
         this.setChangeEntityOpt2Opt2Exp();
-        this.printContainerEntityDataAfter();
+//        this.printContainerEntityDataAfter();
         this.printNaturalEntityDesc();
         this.setStageIIIBean();
     }
@@ -64,10 +67,21 @@ public class ChangeEntityPreprocess {
                 if(!ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
                     if(ce.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
                         if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_CLASS)){
+                        	System.out.println(333333333);
                             // class signature 设置
+//                        	List<Action> actions = ce.clusteredActionBean.actions;
+//                        	for(Action a:actions){
+//                                Tree tree = (Tree) a.getNode();
+//                                int nodeType = tree.getAstNode().getNodeType();
+//                                System.out.println(tree.getLabel());
+//                                System.out.println(tree.getType());
+//                                }
                         }else if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER)){
+                        	System.out.println(444444444);
                             // method signature
                         }else if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT)){
+                        	System.out.println(555555555);
+
                             // stmt
                             List<Action> actions = ce.clusteredActionBean.actions;
                             generatingExpressions(actions,ce.stageIIBean);
@@ -82,6 +96,7 @@ public class ChangeEntityPreprocess {
         for(Action a:actions){
             Tree tree = (Tree) a.getNode();
             int nodeType = tree.getAstNode().getNodeType();
+//            System.out.println(tree.getAstNode());
             boolean flag = false;
             switch(nodeType){
                 case ASTNode.NORMAL_ANNOTATION:
@@ -126,6 +141,8 @@ public class ChangeEntityPreprocess {
             if(flag){
                 String name =a.getClass().getSimpleName();
                 String exp = tree.getAstNode().getClass().getSimpleName();
+//            	System.out.println("-------------------------"+tree.getAstNode().getNodeType());
+//                System.out.println("-------------------------"+name+"  "+exp);
                 bean.addOpt2AndOpt2Expression(name,exp);
             }
         }
