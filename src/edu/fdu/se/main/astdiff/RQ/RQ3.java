@@ -1,7 +1,6 @@
 package edu.fdu.se.main.astdiff.RQ;
 
 import edu.fdu.se.fileutil.FileWriter;
-import org.eclipse.jdt.internal.compiler.ast.ArrayReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -27,6 +26,9 @@ public class RQ3 extends RQ{
         File f = new File(projPath);
         File[] files = f.listFiles();
         for(File commit:files){
+            if(!commit.getName().equals("34e7f4497962d235d94072d1544e22a7a362ae30")){
+                continue;
+            }
             File[] commitFiles = commit.listFiles();
             for(File commit2:commitFiles){
                 if(commit2.getName().endsWith(".json")){
@@ -59,15 +61,19 @@ public class RQ3 extends RQ{
                     for(int i =0;i<prevFiles.length;i++){
                         File a = prevFiles[i];
                         File b = currFiles[i];
-                        if(a.getName().endsWith("trim.java")){
+                        if(a.isDirectory()){
                             continue;
                         }
+                        System.out.println(a.getName());
                         rq.runDiffMiner(a.getAbsolutePath(),b.getAbsolutePath(),commit2.getAbsolutePath());
+                        if(a.getName().equals("YAxisRenderer.java")){
+                            break;
+                        }
                     }
                 }
-                break;
+                break; //commit parent json
             }
-            break;
+            break;//commit
         }
     }
 
@@ -150,6 +156,7 @@ public class RQ3 extends RQ{
                     ja.put(file);
                 }
                 JSONObject jo = new JSONObject();
+                jo.put("files",ja);
                 File f = new File(absolutePath);
                 f.mkdirs();
                 FileWriter.writeInAll(absolutePath+"/meta.json",jo.toString());

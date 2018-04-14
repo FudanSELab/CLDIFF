@@ -43,7 +43,7 @@ public class MiningActionData {
 	protected TreeContext mDstTree;
 	protected TreeContext mSrcTree;
 
-	public List<ChangeEntity> mChangeEntityList;
+	private List<ChangeEntity> mChangeEntityList;
 
 
 	public void setActionTraversedMap(List<Action> mList) {

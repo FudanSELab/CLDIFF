@@ -183,19 +183,33 @@ public class ChangeEntityPreprocess {
     }
 
     public void initContainerEntityData() {
-        for (ChangeEntity ce : ced.mad.getChangeEntityList()) {
-            if (!ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
-                ced.entityContainer.addGumTreePlus(ce, ced.mad);
+        ced.preprocessedData.getmBodiesAdded().forEach(a -> {
+            ChangeEntity ce = ced.addOneBody(a, Insert.class.getSimpleName());
+            ced.entityContainer.addPreDiffChangeEntity(ce);
+            if(ce!=null){
+                ced.mad.getChangeEntityList().add(ce);
             }
-        }
-        ced.entityContainer.sortEntityList();
+        });
+        ced.preprocessedData.getmBodiesDeleted().forEach(a -> {
+            ChangeEntity ce = ced.addOneBody(a,Delete.class.getSimpleName());
+            ced.entityContainer.addPreDiffChangeEntity(ce);
+            if(ce!=null){
+                ced.mad.getChangeEntityList().add(ce);
+            }
+        });
         if (ced.preprocessedData.getPreprocessChangeEntity() != null) {
-            for (ChangeEntity ce : ced.preprocessedData.getPreprocessChangeEntity()) {
-                ced.entityContainer.addPreDiffChangeEntity(ce);
-            }
+            ced.preprocessedData.getPreprocessChangeEntity().forEach(a->{
+                ced.entityContainer.addPreDiffChangeEntity(a);
+                ced.mad.getChangeEntityList().add(a);
+            });
         }
-        ced.preprocessedData.getmBodiesAdded().forEach(a -> ced.addOneBody(a, Insert.class.getSimpleName()));
-        ced.preprocessedData.getmBodiesDeleted().forEach(a -> ced.addOneBody(a,Delete.class.getSimpleName()));
+        ced.mad.getChangeEntityList().forEach(a->{
+            if (!a.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)) {
+                ced.entityContainer.addGumTreePlus(a, ced.mad);
+            }
+        });
+        ced.entityContainer.sortEntityList();
+
     }
 
     public void printContainerEntityDataBefore() {

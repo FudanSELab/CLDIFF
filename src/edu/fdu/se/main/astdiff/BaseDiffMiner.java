@@ -45,7 +45,7 @@ public class BaseDiffMiner {
         MyActionGenerator actionGenerator = new MyActionGenerator(treeGenerator);
         GeneratingActionsData actionsData = actionGenerator.generate();
         //print
-//        printActions(actionsData,treeGenerator,preDiff.getFileOutputLog());
+        printActions(actionsData,treeGenerator,preDiff.getFileOutputLog());
 
         MiningActionData mad = new MiningActionData(actionsData,treeGenerator);
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
@@ -57,8 +57,8 @@ public class BaseDiffMiner {
 //association
 //        AssociationGenerator associationGenerator = new AssociationGenerator(ced);
 //        associationGenerator.generate();
-//        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad.mChangeEntityList);
-//        System.out.println(json);
+        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad.getChangeEntityList());
+        System.out.println(json);
 //        String assoa = GenerateChangeEntityJson.generateAssociationJson(ced.mAssociations);
 //        System.out.println(assoa);
 
@@ -80,16 +80,11 @@ public class BaseDiffMiner {
 
     private void printActions(GeneratingActionsData actionsData, JavaParserTreeGenerator treeGenerator, FileOutputLog fileOutputLog){
         if("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_SRC_DST_TREE))){
-//            FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", treeGenerator.getPrettyOldTreeString());
-            FileWriter.writeInAll(fileOutputLog.srcDirFile.getAbsolutePath() + "/tree.txt", treeGenerator.getPrettyOldTreeString());
-//            FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", treeGenerator.getPrettyNewTreeString());
-            FileWriter.writeInAll(fileOutputLog.dstDirFile.getAbsolutePath() + "/tree.txt", treeGenerator.getPrettyNewTreeString());
+            FileWriter.writeInAll(fileOutputLog.srcDirFile.getAbsolutePath() + "/gen/tree.txt", treeGenerator.getPrettyOldTreeString());
+            FileWriter.writeInAll(fileOutputLog.dstDirFile.getAbsolutePath() + "/gen/tree.txt", treeGenerator.getPrettyNewTreeString());
             SimpleActionPrinter.printMyActions(actionsData.getAllActions());
         }
     }
-    // 验证 Preprocessing *
-    // 验证 GumTree 输出  **
-    // 验证Aggregatio   ***
     // 验证分类   ***
     // 验证按照行号排序 ***
 }

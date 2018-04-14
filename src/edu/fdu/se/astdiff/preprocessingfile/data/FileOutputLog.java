@@ -28,28 +28,32 @@ public class FileOutputLog {
 
     public FileOutputLog(String path){
         srcDirFile = new File(path + "/prev");
+        File tmp1 = new File(path+"/prev/gen");
         dstDirFile = new File(path + "/curr");
-        if (!srcDirFile.exists()) {
-            srcDirFile.mkdirs();
+        File tmp2 = new File(path+"/curr/gen");
+//        if (!srcDirFile.exists()) {
+//            srcDirFile.mkdirs();
+//        }
+//        if (!dstDirFile.exists()) {
+//            dstDirFile.mkdirs();
+//        }
+        if(!tmp1.exists()){
+            tmp1.mkdirs();
         }
-        if (!dstDirFile.exists()) {
-            dstDirFile.mkdirs();
+        if(!tmp2.exists()){
+            tmp2.mkdirs();
         }
     }
 
 
     public void writeFileBeforeProcess(PreprocessedData preprocessedData){
-//        FileWriter.writeInAll(srcDirFile.getAbsolutePath() + "/file_before_trim.java", preprocessedData.getSrcCu().toString());
-//        FileWriter.writeInAll(dstDirFile.getAbsolutePath() + "/file_before_trim.java", preprocessedData.getDstCu().toString());
-        FileWriter.writeInAll(srcDirFile.getAbsolutePath() + "/file_before_trim.java", preprocessedData.srcLineList);
-        FileWriter.writeInAll(dstDirFile.getAbsolutePath() + "/file_before_trim.java", preprocessedData.dstLineList);
+        FileWriter.writeInAll(srcDirFile.getAbsolutePath() + "/gen/file_before_trim.java", preprocessedData.srcLineList);
+        FileWriter.writeInAll(dstDirFile.getAbsolutePath() + "/gen/file_before_trim.java", preprocessedData.dstLineList);
     }
 
     public void writeFileAfterProcess(PreprocessedData preprocessedData){
-//        FileWriter.writeInAll(srcDirFile.getAbsolutePath() + "/file_after_trim.java", preprocessedData.getSrcCu().toString());
-//        FileWriter.writeInAll(dstDirFile.getAbsolutePath() + "/file_after_trim.java", preprocessedData.getDstCu().toString());
-        FileWriter.writeInAll(srcDirFile.getAbsolutePath() + "/file_after_trim.java", preprocessedData.srcLineList,preprocessedData.srcLines);
-        FileWriter.writeInAll(dstDirFile.getAbsolutePath() + "/file_after_trim.java", preprocessedData.dstLineList,preprocessedData.dstLines);
+        FileWriter.writeInAll(srcDirFile.getAbsolutePath() + "/gen/file_after_trim.java", preprocessedData.srcLineList,preprocessedData.srcLines);
+        FileWriter.writeInAll(dstDirFile.getAbsolutePath() + "/gen/file_after_trim.java", preprocessedData.dstLineList,preprocessedData.dstLines);
     }
 
 

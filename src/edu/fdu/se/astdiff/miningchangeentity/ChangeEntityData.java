@@ -35,7 +35,7 @@ public class ChangeEntityData {
     }
 
 
-    public void addOneBody(BodyDeclarationPair item, String type) {
+    public ChangeEntity addOneBody(BodyDeclarationPair item, String type) {
         ChangeEntity ce = null;
         int s;
         int e;
@@ -60,9 +60,10 @@ public class ChangeEntityData {
         } else if (item.getBodyDeclaration() instanceof EnumDeclaration) {
             ce = new EnumChangeEntity(item, type, myRange);
         }
-        if (ce != null) {
-            this.entityContainer.addPreDiffChangeEntity(ce);
-        }
+        return ce;
+//        if (ce != null) {
+
+//        }
     }
 
 

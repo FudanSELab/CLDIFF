@@ -54,6 +54,7 @@ public class LayeredChangeEntityContainer {
     }
 
     public void addPreDiffChangeEntity(ChangeEntity changeEntity) {
+        if(changeEntity==null) return;
         BodyDeclarationPair mKey = null;
         for (BodyDeclarationPair key : this.layerMap.keySet()) {
             if (key.getBodyDeclaration() instanceof TypeDeclaration) {

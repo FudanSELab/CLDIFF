@@ -29,6 +29,8 @@ public class MethodChangeEntity extends MemberPlusChangeEntity {
     @Override
     public String toString2(){
         StringBuilder sb = new StringBuilder();
+        sb.append(this.changeEntityId);
+        sb.append(". ");
         sb.append(this.stageIIBean.getOpt());
         sb.append(" ");
         sb.append(this.stageIIBean.getChangeEntity());
