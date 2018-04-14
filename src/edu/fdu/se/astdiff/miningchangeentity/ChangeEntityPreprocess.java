@@ -45,18 +45,9 @@ public class ChangeEntityPreprocess {
         this.setChangeEntityOpt2Opt2Exp();
 //        this.printContainerEntityDataAfter();
         this.printNaturalEntityDesc();
-        this.setStageIIIBean();
     }
 
-    public void setStageIIIBean(){
-        List<ChangeEntity> mList = this.ced.mad.getChangeEntityList();
-        for(ChangeEntity tmp:mList){
-            if(tmp.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)) {
-                ChangeEntityUtil.setStageIIIBean(tmp.stageIIIBean, tmp.clusteredActionBean.actions,this.ced);
 
-            }
-        }
-    }
 
     public void setChangeEntityOpt2Opt2Exp(){
         LayeredChangeEntityContainer container = this.ced.entityContainer;
@@ -83,6 +74,7 @@ public class ChangeEntityPreprocess {
                         	System.out.println(555555555);
 
                             // stmt
+                            ChangeEntity a;
                             List<Action> actions = ce.clusteredActionBean.actions;
                             generatingExpressions(actions,ce.stageIIBean);
                         }
@@ -183,22 +175,22 @@ public class ChangeEntityPreprocess {
     }
 
     public void initContainerEntityData() {
-        ced.preprocessedData.getmBodiesAdded().forEach(a -> {
+        ced.mad.preprocessedData.getmBodiesAdded().forEach(a -> {
             ChangeEntity ce = ced.addOneBody(a, Insert.class.getSimpleName());
             ced.entityContainer.addPreDiffChangeEntity(ce);
             if(ce!=null){
                 ced.mad.getChangeEntityList().add(ce);
             }
         });
-        ced.preprocessedData.getmBodiesDeleted().forEach(a -> {
+        ced.mad.preprocessedData.getmBodiesDeleted().forEach(a -> {
             ChangeEntity ce = ced.addOneBody(a,Delete.class.getSimpleName());
             ced.entityContainer.addPreDiffChangeEntity(ce);
             if(ce!=null){
                 ced.mad.getChangeEntityList().add(ce);
             }
         });
-        if (ced.preprocessedData.getPreprocessChangeEntity() != null) {
-            ced.preprocessedData.getPreprocessChangeEntity().forEach(a->{
+        if (ced.mad.preprocessedData.getPreprocessChangeEntity() != null) {
+            ced.mad.preprocessedData.getPreprocessChangeEntity().forEach(a->{
                 ced.entityContainer.addPreDiffChangeEntity(a);
                 ced.mad.getChangeEntityList().add(a);
             });
@@ -213,14 +205,14 @@ public class ChangeEntityPreprocess {
     }
 
     public void printContainerEntityDataBefore() {
-        ChangeEntityPrinter.printContainerEntity(ced.entityContainer, ced.preprocessedData.srcCu);
+        ChangeEntityPrinter.printContainerEntity(ced.entityContainer, ced.mad.preprocessedData.srcCu);
     }
 
     public void printContainerEntityDataAfter(){
-        ChangeEntityPrinter.printContainerEntity(ced.entityContainer, ced.preprocessedData.srcCu);
+        ChangeEntityPrinter.printContainerEntity(ced.entityContainer, ced.mad.preprocessedData.srcCu);
     }
     public void printNaturalEntityDesc(){
-        ChangeEntityPrinter.printContainerEntityNatural(ced.entityContainer, ced.preprocessedData.srcCu);
+        ChangeEntityPrinter.printContainerEntityNatural(ced.entityContainer, ced.mad.preprocessedData.srcCu);
     }
 
     public void setChangeEntitySub(){

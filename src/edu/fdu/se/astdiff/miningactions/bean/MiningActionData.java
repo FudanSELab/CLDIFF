@@ -12,11 +12,23 @@ import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
+import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 
 public class MiningActionData {
 
-	public MiningActionData(GeneratingActionsData agb, JavaParserTreeGenerator treeGenerator){
 
+	public GeneratingActionsData mGeneratingActionsData;
+	public MappingStore mMapping;
+
+	protected TreeContext mDstTree;
+	protected TreeContext mSrcTree;
+
+	private List<ChangeEntity> mChangeEntityList;
+
+	public PreprocessedData preprocessedData;
+
+	public MiningActionData(PreprocessedData preprocessedData, GeneratingActionsData agb, JavaParserTreeGenerator treeGenerator){
+		this.preprocessedData = preprocessedData;
 		this.mGeneratingActionsData = agb;
 		this.mMapping = treeGenerator.mapping;
 		this.mDstTree = treeGenerator.dstTC;
@@ -36,14 +48,6 @@ public class MiningActionData {
 		this.mChangeEntityList = new ArrayList<>();
 	}
 
-
-	public GeneratingActionsData mGeneratingActionsData;
-	public MappingStore mMapping;
-
-	protected TreeContext mDstTree;
-	protected TreeContext mSrcTree;
-
-	private List<ChangeEntity> mChangeEntityList;
 
 
 	public void setActionTraversedMap(List<Action> mList) {

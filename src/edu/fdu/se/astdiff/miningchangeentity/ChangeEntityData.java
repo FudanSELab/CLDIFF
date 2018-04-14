@@ -22,15 +22,13 @@ import java.util.List;
  */
 public class ChangeEntityData {
 
-    public PreprocessedData preprocessedData;
     public LayeredChangeEntityContainer entityContainer;
     public MiningActionData mad;
 
     public List<Association> mAssociations;
 
-    public ChangeEntityData(PreprocessedData pd, MiningActionData mad) {
-        this.preprocessedData = pd;
-        this.entityContainer = pd.entityContainer;
+    public ChangeEntityData(MiningActionData mad) {
+        this.entityContainer = mad.preprocessedData.entityContainer;
         this.mad = mad;
     }
 
@@ -41,12 +39,12 @@ public class ChangeEntityData {
         int e;
         MyRange myRange = null;
         if (Insert.class.getSimpleName().equals(type)) {
-            s = this.preprocessedData.getDstCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
-            e = this.preprocessedData.getDstCu().getLineNumber(item.getBodyDeclaration().getStartPosition() + item.getBodyDeclaration().getLength() - 1);
+            s = mad.preprocessedData.getDstCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
+            e = mad.preprocessedData.getDstCu().getLineNumber(item.getBodyDeclaration().getStartPosition() + item.getBodyDeclaration().getLength() - 1);
             myRange = new MyRange(s, e, ChangeEntityDesc.StageITreeType.DST_TREE_NODE);
         } else if (Delete.class.getSimpleName().equals(type)) {
-            s = this.preprocessedData.getSrcCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
-            e = this.preprocessedData.getSrcCu().getLineNumber(item.getBodyDeclaration().getStartPosition() + item.getBodyDeclaration().getLength() - 1);
+            s = mad.preprocessedData.getSrcCu().getLineNumber(item.getBodyDeclaration().getStartPosition());
+            e = mad.preprocessedData.getSrcCu().getLineNumber(item.getBodyDeclaration().getStartPosition() + item.getBodyDeclaration().getLength() - 1);
             myRange = new MyRange(s, e, ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
         }
         if (item.getBodyDeclaration() instanceof FieldDeclaration) {
@@ -61,9 +59,6 @@ public class ChangeEntityData {
             ce = new EnumChangeEntity(item, type, myRange);
         }
         return ce;
-//        if (ce != null) {
-
-//        }
     }
 
 

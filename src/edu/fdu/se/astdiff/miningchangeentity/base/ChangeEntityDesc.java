@@ -28,6 +28,8 @@ public class ChangeEntityDesc {
         public static final String OPT_DELETE = "Delete";
 
         public static final String OPT_CHANGE = "Change";
+
+        public static final String OPT_CHANGE_MOVE = "Change.Move";
     }
 
     public static class StageIIENTITY {

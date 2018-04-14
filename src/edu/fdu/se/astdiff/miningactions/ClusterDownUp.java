@@ -22,7 +22,7 @@ public class ClusterDownUp extends AbstractCluster{
             if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
                 continue;
             }
-            MatchNonStatement.matchSimpleNameOrLiteral(fp, a);
+            MatchNonStatement.matchNonStatement(fp, a);
         }
     }
 }

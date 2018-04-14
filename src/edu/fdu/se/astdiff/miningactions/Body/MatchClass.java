@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.miningactions.Body;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.util.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
@@ -48,7 +49,11 @@ public class MatchClass {
         ClassChangeEntity code = new ClassChangeEntity(mBean);
         code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_CLASS);
-        code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+        if(a instanceof Move){
+            code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+        }else {
+            code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+        }
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CLASS);
 //        code.stageIIBean.setOpt2(null);//暂时设为null
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_DECLARATION);

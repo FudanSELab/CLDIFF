@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
 
+import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
@@ -120,7 +121,11 @@ public class MatchTry {
 
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+		if(a instanceof Move){
+			code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+		}else {
+			code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+		}
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_TRY_STMT);
 //		code.stageIIBean.setOpt2(ChangeEntityDesc.StageIIOpt2.OPT2_CHANGE);
 		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_CATCH_CLAUSE);

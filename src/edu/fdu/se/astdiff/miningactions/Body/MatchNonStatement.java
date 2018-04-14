@@ -17,7 +17,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 public class MatchNonStatement {
 
 
-    public static void matchSimpleNameOrLiteral(MiningActionData fp, Action a) {
+    public static void matchNonStatement(MiningActionData fp, Action a) {
         ITree fafather1 = BasicTreeTraversal.findFafatherNode(a.getNode());
         ITree[] fathers = BasicTreeTraversal.getMappedFafatherNode(fp, a, fafather1);
         Tree srcFather = (Tree) fathers[0];

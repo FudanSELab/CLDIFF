@@ -47,17 +47,18 @@ public class BaseDiffMiner {
         //print
         printActions(actionsData,treeGenerator,preDiff.getFileOutputLog());
 
-        MiningActionData mad = new MiningActionData(actionsData,treeGenerator);
+        MiningActionData mad = new MiningActionData(preData,actionsData,treeGenerator);
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
         aag.doCluster(mad);
 //修正
-        ChangeEntityData ced = new ChangeEntityData(preData,mad);
+        ChangeEntityData ced = new ChangeEntityData(mad);
         ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
         cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
 //association
 //        AssociationGenerator associationGenerator = new AssociationGenerator(ced);
 //        associationGenerator.generate();
-        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad.getChangeEntityList());
+        GenerateChangeEntityJson.setStageIIIBean(ced);
+        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
         System.out.println(json);
 //        String assoa = GenerateChangeEntityJson.generateAssociationJson(ced.mAssociations);
 //        System.out.println(assoa);
@@ -85,6 +86,6 @@ public class BaseDiffMiner {
             SimpleActionPrinter.printMyActions(actionsData.getAllActions());
         }
     }
-    // 验证分类   ***
-    // 验证按照行号排序 ***
+    // move - 从 start -> End 需要link
+
 }

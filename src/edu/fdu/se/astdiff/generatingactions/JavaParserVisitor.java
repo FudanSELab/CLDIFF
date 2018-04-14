@@ -17,6 +17,7 @@ public class JavaParserVisitor  extends ASTVisitor {
 
 
     private int treeType;
+
     public JavaParserVisitor(int treeType) {
         super();
         this.treeType = treeType;

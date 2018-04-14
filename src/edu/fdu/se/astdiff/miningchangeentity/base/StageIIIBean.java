@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/3/28.
+ *
  */
 public class StageIIIBean {
 
@@ -97,6 +98,7 @@ public class StageIIIBean {
         String type = "delete";
         addRangeResultList(ranges, cu, file, type);
     }
+
 
     public void setDisplayDesc(String displayDesc) {
         this.displayDesc = displayDesc;

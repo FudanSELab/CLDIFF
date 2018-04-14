@@ -5,6 +5,7 @@ import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
 
@@ -45,9 +46,9 @@ public class JavaParserTreeGenerator {
     }
 
     public JavaParserTreeGenerator(CompilationUnit prev, CompilationUnit curr) {
-        srcTC = generateFromCompilationUnit(prev,1);
+        srcTC = generateFromCompilationUnit(prev,ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
         src = srcTC.getRoot();
-        dstTC = generateFromCompilationUnit(curr,2);
+        dstTC = generateFromCompilationUnit(curr,ChangeEntityDesc.StageITreeType.DST_TREE_NODE);
         dst = dstTC.getRoot();
         Matcher m = Matchers.getInstance().getMatcher(src, dst);
         m.match();
