@@ -1,5 +1,6 @@
 package edu.fdu.se.main.astdiff;
 
+import edu.fdu.se.astdiff.Global.Global;
 import edu.fdu.se.astdiff.associating.AssociationGenerator;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
@@ -27,17 +28,21 @@ import org.json.JSONObject;
 public class BaseDiffMiner {
 
     public void doo(String filePrev, String fileCurr, String output) {
+        int index = filePrev.lastIndexOf('/');
+        if(index ==-1) index = filePrev.lastIndexOf("\\");
+        String fileName = filePrev.substring(index+1,filePrev.length());
+        Global.fileName = fileName;
         FilePairPreDiff preDiff = new FilePairPreDiff();
         preDiff.initFile(filePrev,fileCurr);
         int result = preDiff.compareTwoFile(output);
         if(result ==-1){
             return;
         }
-        int index = filePrev.lastIndexOf('/');
-        String fileName = filePrev.substring(index+1,filePrev.length()-5);
+
         runDiff(preDiff,fileName);
     }
     private void runDiff(FilePairPreDiff preDiff,String fileName){
+
         PreprocessedData preData = preDiff.getPreprocessedData();
         JavaParserTreeGenerator treeGenerator = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
         treeGenerator.setFileName(fileName);
@@ -59,7 +64,8 @@ public class BaseDiffMiner {
 //        associationGenerator.generate();
         GenerateChangeEntityJson.setStageIIIBean(ced);
         String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
-        System.out.println(json);
+        preDiff.getFileOutputLog().writeEntityJson(json);
+//        System.out.println(json);
 //        String assoa = GenerateChangeEntityJson.generateAssociationJson(ced.mAssociations);
 //        System.out.println(assoa);
 
@@ -67,12 +73,16 @@ public class BaseDiffMiner {
 
     public void doo(String fileName,byte[] filePrevContent, byte[] fileCurrContent, String output) {
         // 1.pre
+        int index = fileName.lastIndexOf('/');
+        if(index ==-1) index = fileName.lastIndexOf("\\");
+        fileName = fileName.substring(index+1,fileName.length());
         FilePairPreDiff preDiff = new FilePairPreDiff();
         preDiff.initFile(filePrevContent,fileCurrContent);
         int result = preDiff.compareTwoFile(output);
         if(result ==-1){
             return;
         }
+
         runDiff(preDiff,fileName);
     }
 
@@ -81,11 +91,11 @@ public class BaseDiffMiner {
 
     private void printActions(GeneratingActionsData actionsData, JavaParserTreeGenerator treeGenerator, FileOutputLog fileOutputLog){
         if("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_SRC_DST_TREE))){
-            FileWriter.writeInAll(fileOutputLog.srcDirFile.getAbsolutePath() + "/gen/tree.txt", treeGenerator.getPrettyOldTreeString());
-            FileWriter.writeInAll(fileOutputLog.dstDirFile.getAbsolutePath() + "/gen/tree.txt", treeGenerator.getPrettyNewTreeString());
+            fileOutputLog.writeTreeFile(treeGenerator.getPrettyOldTreeString(),treeGenerator.getPrettyNewTreeString());
             SimpleActionPrinter.printMyActions(actionsData.getAllActions());
         }
     }
-    // move - 从 start -> End 需要link
+
+
 
 }

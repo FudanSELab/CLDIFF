@@ -26,7 +26,7 @@ public class JavaParserTreeGenerator {
     private String fileName;
 
     public void setFileName(String fileName) {
-        this.fileName = fileName;
+        this.fileName = fileName.substring(0,fileName.length()-5);
     }
 
     public JavaParserTreeGenerator(File prevFile, File currFile) {

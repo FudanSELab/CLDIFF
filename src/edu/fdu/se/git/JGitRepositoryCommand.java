@@ -101,7 +101,7 @@ public class JGitRepositoryCommand extends JGitCommand {
                                 byte[] currFile = this.extract(file, queueCommitItem.getName());
                                 int index = file.lastIndexOf("/");
                                 String fileName = file.substring(index + 1, file.length() - 1);
-                                fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + queueCommitItem.getName(), fileName);
+//                                fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + queueCommitItem.getName(), fileName);
                             }
                         }
                     }
@@ -192,7 +192,7 @@ public class JGitRepositoryCommand extends JGitCommand {
                         byte[] currFile = this.extract(file, commit.getName());
                         int index = file.lastIndexOf("/");
                         String fileName = file.substring(index + 1, file.length() - 1);
-                        fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + commit.getName(), fileName);
+//                        fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + commit.getName(), fileName);
                     }
                 }
             }

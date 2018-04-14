@@ -8,4 +8,7 @@ package edu.fdu.se.astdiff.Global;
 public class Global {
 
     public static int changeEntityId = 0;
+
+
+    public static String fileName;
 }

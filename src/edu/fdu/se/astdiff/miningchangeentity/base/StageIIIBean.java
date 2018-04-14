@@ -37,66 +37,82 @@ public class StageIIIBean {
         String type2;
     }
 
-    private void addRangeResultList(List<Integer[]> ranges, CompilationUnit cu, String file, String type) {
+    private void addRangeResultList(Integer[] range, CompilationUnit cu, String file, String type) {
         if (subRange == null) {
             subRange = new ArrayList<>();
         }
-        for (Integer[] range : ranges) {
-            int startLine = cu.getLineNumber(range[0]);
-            int startColumn = cu.getColumnNumber(range[0]);
-            int endLine = cu.getLineNumber(range[1]);
-            int endColumn = cu.getColumnNumber(range[1]);
+        int startLine = cu.getLineNumber(range[0]);
+        int startColumn = cu.getColumnNumber(range[0]);
+        int endLine = cu.getLineNumber(range[1]);
+        int endColumn = cu.getColumnNumber(range[1]);
 
-            List<Integer> endColumnList = new ArrayList<>();
-            int i = 1;
-            while (startLine + i <= endLine) {
-                int lineNum = startLine + i;
-                int pos = cu.getPosition(lineNum, 0);
-                pos--;
-                endColumnList.add(pos);
-                i++;
+        List<Integer> endColumnList = new ArrayList<>();
+        int i = 1;
+        while (startLine + i <= endLine) {
+            int lineNum = startLine + i;
+            int pos = cu.getPosition(lineNum, 0);
+            pos--;
+            endColumnList.add(pos);
+            i++;
+        }
+        for (int j = startLine, m = 0; j < endLine; j++, m++) {
+            int pos = endColumnList.get(m);
+            if (j == startLine) {
+                SubRange subRangeItem = new SubRange();
+                subRangeItem.file2 = file;
+                subRangeItem.type2 = type;
+                subRangeItem.subRangeCode = startLine + "," + startColumn + "," + pos;
+                subRange.add(subRangeItem);
+            } else {
+                SubRange subRangeItem = new SubRange();
+                subRangeItem.file2 = file;
+                subRangeItem.type2 = type;
+                subRangeItem.subRangeCode = startLine + "," + 0 + "," + pos;
+                subRange.add(subRangeItem);
             }
-            for (int j = startLine, m = 0; j < endLine; j++, m++) {
-                int pos = endColumnList.get(m);
-                if (j == startLine) {
-                    SubRange subRangeItem = new SubRange();
-                    subRangeItem.file2 = file;
-                    subRangeItem.type2 = type;
-                    subRangeItem.subRangeCode = startLine + "," + startColumn + "," + pos;
-                    subRange.add(subRangeItem);
-                } else {
-                    SubRange subRangeItem = new SubRange();
-                    subRangeItem.file2 = file;
-                    subRangeItem.type2 = type;
-                    subRangeItem.subRangeCode = startLine + "," + 0 + "," + pos;
-                    subRange.add(subRangeItem);
-                }
-            }
-            int startColumn2 = endLine > startLine ? 0 : startColumn;
-            SubRange subRangeItem = new SubRange();
-            subRangeItem.file2 = file;
-            subRangeItem.type2 = type;
-            subRangeItem.subRangeCode = endLine + "," + startColumn2 + "," + endColumn;
-            subRange.add(subRangeItem);
+        }
+        int startColumn2 = endLine > startLine ? 0 : startColumn;
+        SubRange subRangeItem = new SubRange();
+        subRangeItem.file2 = file;
+        subRangeItem.type2 = type;
+        subRangeItem.subRangeCode = endLine + "," + startColumn2 + "," + endColumn;
+        subRange.add(subRangeItem);
+    }
+
+    private void addRangesResultList(List<Integer[]> ranges, CompilationUnit cu, String file, String type) {
+        for (Integer[] range : ranges) {
+            addRangeResultList(range,cu,file,type);
         }
     }
 
     public void addInsertList(List<Integer[]> ranges, CompilationUnit cu) {
-        String file = "dst";
+        String file = ChangeEntityDesc.StageIIIFile.DST;
         String type = "insert";
-        addRangeResultList(ranges, cu, file, type);
+        addRangesResultList(ranges, cu, file, type);
     }
 
     public void addUpdateList(List<Integer[]> ranges, CompilationUnit cu) {
-        String file = "src";
+        String file = ChangeEntityDesc.StageIIIFile.SRC;
         String type = "update";
-        addRangeResultList(ranges, cu, file, type);
+        addRangesResultList(ranges, cu, file, type);
     }
 
     public void addDeleteList(List<Integer[]> ranges, CompilationUnit cu) {
-        String file = "src";
+        String file = ChangeEntityDesc.StageIIIFile.SRC;
         String type = "delete";
-        addRangeResultList(ranges, cu, file, type);
+        addRangesResultList(ranges, cu, file, type);
+    }
+
+    public void addMoveListSrc(Integer[] range,CompilationUnit cu){
+        String file = ChangeEntityDesc.StageIIIFile.SRC;
+        String type = "move";
+        addRangeResultList(range, cu, file, type);
+    }
+
+    public void addMoveListDst(Integer[] range,CompilationUnit cu){
+        String file = ChangeEntityDesc.StageIIIFile.DST;
+        String type = "move";
+        addRangeResultList(range, cu, file, type);
     }
 
 

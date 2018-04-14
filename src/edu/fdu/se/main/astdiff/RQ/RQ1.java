@@ -70,7 +70,7 @@ public class RQ1 extends RQ{
 //                                diffMinerTest.runGumTree(new String(prevFile), new String(currFile));
                     if(!file.toLowerCase().contains("test")) {
                         baseDiffMiner.doo(fileName.substring(0,fileName.length()-5),prevFile,currFile,outputDir+"/"+dirName+"/"+fileName);
-                        fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + currCommitId, fileName);
+//                        fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + currCommitId, fileName);
                     }
                 }
             }

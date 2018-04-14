@@ -214,6 +214,28 @@ public class ChangeEntityDesc {
         public static final String TYPE_CLASS_DECLARATION = "class signature change";
     }
 
+    public static class StageIIIKeys{
+        public static final String ID = "id";
+        public static final String KEYY = "key";
+        public static final String FILE = "file";
+        public static final String RANGE = "range";
+        public static final String TYPE1 = "type1";
+        public static final String TYPE2 = "type2";
+        public static final String SUB_RANGE = "sub-range";
+        public static final String SUB_RANGE_CODE = "sub-range-code";
+        public static final String SUB_TYPE  = "sub-type";
+    }
+
+
+
+    public static class StageIIIFile{
+        public static final String SRC = "src";
+        public static final String DST = "dst";
+        public static final String SRC_DST = "src-dst";
+    }
+
+
+
 
 
 
