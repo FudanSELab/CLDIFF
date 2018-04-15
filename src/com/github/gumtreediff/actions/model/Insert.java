@@ -21,6 +21,7 @@
 package com.github.gumtreediff.actions.model;
 
 import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
 
 public class Insert extends Addition {
 
@@ -31,6 +32,12 @@ public class Insert extends Addition {
     @Override
     public String getName() {
         return "INS";
+    }
+
+    @Override
+    public String toString(){
+        Tree t = (Tree)this.getNode();
+        return this.getClass().getSimpleName() +" "+ t.getAstNode().getClass().getSimpleName();
     }
 
 }

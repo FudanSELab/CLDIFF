@@ -1,5 +1,6 @@
 package edu.fdu.se.main.astdiff.RQ;
 
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.fileutil.FileWriter;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,11 +23,13 @@ public class RQ3 extends RQ{
 
     public static void generateDiffMinerOutput(){
         RQ3 rq = new RQ3();
-        String projPath  = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\MPAndroidChart";
+//        String projPath  = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\MPAndroidChart";
+        String projPath  = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\spring-framework";
         File f = new File(projPath);
         File[] files = f.listFiles();
         for(File commit:files){
-            if(!commit.getName().equals("34e7f4497962d235d94072d1544e22a7a362ae30")){
+//            if(!commit.getName().equals("34e7f4497962d235d94072d1544e22a7a362ae30")){
+                if(!commit.getName().equals("ea9ad4ee9bd6604fe57f73004bf375c7c4cd7be3")){
                 continue;
             }
             File[] commitFiles = commit.listFiles();
@@ -60,15 +63,17 @@ public class RQ3 extends RQ{
                     });
                     for(int i =0;i<prevFiles.length;i++){
                         File a = prevFiles[i];
+//                        if(!a.getName().equals("ConfigurationClassBeanDefinitionReader.java")){
+//                            continue;
+//                        }
                         File b = currFiles[i];
                         if(a.isDirectory()){
                             continue;
                         }
                         System.out.println(a.getName());
                         rq.runDiffMiner(a.getAbsolutePath(),b.getAbsolutePath(),commit2.getAbsolutePath());
-                        if(a.getName().equals("YAxisRenderer.java")){
-                            break;
-                        }
+//                        break;
+
                     }
                 }
                 break; //commit parent json

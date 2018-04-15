@@ -74,7 +74,7 @@ public class FilePairPreDiff {
         CompilationUnit cuDst = preprocessedData.dstCu;
         if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
             fileOutputLog = new FileOutputLog(outputDirName);
-            fileOutputLog.writeFileBeforeProcess(preprocessedData);
+//            fileOutputLog.writeFileBeforeProcess(preprocessedData);
         }
         preprocessedTempData.removeAllSrcComments(cuSrc, preprocessedData.srcLines);
         preprocessedTempData.removeAllDstComments(cuDst, preprocessedData.dstLines);
@@ -113,7 +113,7 @@ public class FilePairPreDiff {
 //        astTraversal.traverseSrcTypeDeclaration2Keys(preprocessedData,preprocessedTempData,tdSrc,tdSrc.getName().toString() + ".");
 
         if (fileOutputLog != null) {
-            fileOutputLog.writeFileAfterProcess(preprocessedData);
+//            fileOutputLog.writeFileAfterProcess(preprocessedData);
         }
 
     }

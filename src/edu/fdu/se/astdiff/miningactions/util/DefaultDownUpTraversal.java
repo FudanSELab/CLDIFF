@@ -82,7 +82,7 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
             }
         }
         int bound;
-        if(i!=children.size()){
+        if(i!=children.size()-1){
             bound=i;
 
         }else{

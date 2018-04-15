@@ -1,6 +1,8 @@
 package edu.fdu.se.astdiff.miningactions;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Insert;
+import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.Body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
@@ -14,8 +16,8 @@ import org.eclipse.jdt.core.dom.ASTNode;
  */
 public class ClusterUpDown extends AbstractCluster{
 
-    public ClusterUpDown(Class mClazz, MiningActionData mminingActionData) {
-        super(mClazz, mminingActionData);
+    public ClusterUpDown(Class mClazz, MiningActionData miningActionData) {
+        super(mClazz, miningActionData);
     }
 
     public void doClusterUpDown() {

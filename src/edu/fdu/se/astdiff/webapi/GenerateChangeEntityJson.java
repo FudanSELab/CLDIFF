@@ -35,33 +35,41 @@ public class GenerateChangeEntityJson {
             Tree srcNode;
             switch (changeEntity.stageIIBean.getOpt()) {
                 case ChangeEntityDesc.StageIIOpt.OPT_INSERT:
-                    changeEntity.stageIIIBean.setFile("dst");
+                    changeEntity.stageIIIBean.setFile(ChangeEntityDesc.StageIIIFile.DST);
                     changeEntity.stageIIIBean.setRange(changeEntity.stageIIBean.getLineRange());
+                    changeEntity.stageIIIBean.setType1(changeEntity.stageIIBean.getGranularity());
+                    changeEntity.stageIIIBean.setType2(changeEntity.stageIIBean.getOpt());
                     break;
                 case ChangeEntityDesc.StageIIOpt.OPT_DELETE:
-                    changeEntity.stageIIIBean.setFile("src");
+                    changeEntity.stageIIIBean.setFile(ChangeEntityDesc.StageIIIFile.SRC);
                     changeEntity.stageIIIBean.setRange(changeEntity.stageIIBean.getLineRange());
+                    changeEntity.stageIIIBean.setType1(changeEntity.stageIIBean.getGranularity());
+                    changeEntity.stageIIIBean.setType2(changeEntity.stageIIBean.getOpt());
                     break;
                 case ChangeEntityDesc.StageIIOpt.OPT_MOVE:
-                    changeEntity.stageIIIBean.setFile("src-dst");
+                    changeEntity.stageIIIBean.setFile(ChangeEntityDesc.StageIIIFile.SRC_DST);
                     if (changeEntity.clusteredActionBean.fafather.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE) {
                         Tree dstNode = (Tree) miningActionData.getMappedDstOfSrcNode(changeEntity.clusteredActionBean.fafather);
                         srcNode = changeEntity.clusteredActionBean.fafather;
                         String rangeStr = srcNode.getRangeString() + "-" + dstNode.getRangeString();
                         changeEntity.stageIIIBean.setRange(rangeStr);
+                        changeEntity.stageIIIBean.setType1(changeEntity.stageIIBean.getGranularity());
+                        changeEntity.stageIIIBean.setType2(changeEntity.stageIIBean.getOpt());
                     }
                     break;
                 case ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE:
-                    changeEntity.stageIIIBean.setFile("src-dst");
+                    changeEntity.stageIIIBean.setFile(ChangeEntityDesc.StageIIIFile.SRC_DST);
                     srcNode = (Tree) changeEntity.clusteredActionBean.curAction.getNode();
                     if (srcNode.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE) {
                         Tree dstNode = (Tree) miningActionData.getMappedDstOfSrcNode(srcNode);
                         String rangeStr = srcNode.getRangeString() + "-" + dstNode.getRangeString();
                         changeEntity.stageIIIBean.setRange(rangeStr);
+                        changeEntity.stageIIIBean.setType1(changeEntity.stageIIBean.getGranularity());
+                        changeEntity.stageIIIBean.setType2(changeEntity.stageIIBean.getOpt());
                     }
                     break;
                 case ChangeEntityDesc.StageIIOpt.OPT_CHANGE:
-                    changeEntity.stageIIIBean.setFile("src-dst");
+                    changeEntity.stageIIIBean.setFile(ChangeEntityDesc.StageIIIFile.SRC_DST);
                     //todo 可能还会变 仅仅获取其change的那几行
                     String rangeStr = null;
                     if (changeEntity.clusteredActionBean.fafather.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE) {
@@ -71,7 +79,8 @@ public class GenerateChangeEntityJson {
                         srcNode = (Tree) miningActionData.getMappedSrcOfDstNode(changeEntity.clusteredActionBean.fafather);
                         rangeStr = srcNode.getRangeString() + "-" + changeEntity.clusteredActionBean.fafather.getRangeString();
                     }
-
+                    changeEntity.stageIIIBean.setType1(changeEntity.stageIIBean.getGranularity());
+                    changeEntity.stageIIIBean.setType2(changeEntity.stageIIBean.getOpt());
                     changeEntity.stageIIIBean.setRange(rangeStr);
                     break;
             }
@@ -205,7 +214,8 @@ public class GenerateChangeEntityJson {
             JSONObject jsonObject = changeEntity.stageIIIBean.genJSonObject();
             jsonArray.put(jsonObject);
         }
-        return jsonArray.toString();
+
+        return jsonArray.toString(4);
     }
 
 

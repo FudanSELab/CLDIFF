@@ -15,4 +15,6 @@ public class MyList<E> extends ArrayList<E> {
         super.add(e);
         return true;
     }
+
+
 }

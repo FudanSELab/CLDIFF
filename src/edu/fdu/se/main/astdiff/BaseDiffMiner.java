@@ -62,9 +62,11 @@ public class BaseDiffMiner {
 //association
 //        AssociationGenerator associationGenerator = new AssociationGenerator(ced);
 //        associationGenerator.generate();
+//        associationGenerator.printAssociations();
+// json
         GenerateChangeEntityJson.setStageIIIBean(ced);
         String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
-        preDiff.getFileOutputLog().writeEntityJson(json);
+//        preDiff.getFileOutputLog().writeEntityJson(json);
 //        System.out.println(json);
 //        String assoa = GenerateChangeEntityJson.generateAssociationJson(ced.mAssociations);
 //        System.out.println(assoa);

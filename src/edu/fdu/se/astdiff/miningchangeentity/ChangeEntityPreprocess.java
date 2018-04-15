@@ -39,7 +39,7 @@ public class ChangeEntityPreprocess {
 
     public void preprocessChangeEntity() {
         this.initContainerEntityData();
-//        this.printContainerEntityDataBefore();
+        this.printContainerEntityDataBefore();
         this.mergeMoveAndWrapper();
         this.setChangeEntitySub();
         this.setChangeEntityOpt2Opt2Exp();
@@ -168,6 +168,7 @@ public class ChangeEntityPreprocess {
                 }
                 for (ChangeEntity e : deletedMove) {
                     mList.remove(e);
+                    ced.mad.getChangeEntityList().remove(e);
                 }
 
             }

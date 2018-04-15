@@ -33,7 +33,9 @@ public class MatchBlock {
                 break;
             case ASTNode.IF_STATEMENT:
                 //Pattern 1.2 Match else
-                MatchIfElse.matchElse(fp, a);
+                if(fatherNode.getChildPosition(a.getNode())==2){
+                    MatchIfElse.matchElse(fp, a);
+                }
                 break;
             case ASTNode.TRY_STATEMENT:
                 ////Finally块

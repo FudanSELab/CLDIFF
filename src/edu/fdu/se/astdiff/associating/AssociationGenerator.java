@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.associating;
 
 import edu.fdu.se.astdiff.associating.linkbean.*;
+import edu.fdu.se.astdiff.miningactions.util.MyList;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.StatementPlusChangeEntity;
@@ -27,7 +28,7 @@ public class AssociationGenerator {
 
     public AssociationGenerator(ChangeEntityData mod){
         this.changeEntityData = mod;
-        this.changeEntityData.mAssociations = new ArrayList<>();
+        this.changeEntityData.mAssociations = new MyList<>();
     }
 
     /**
@@ -47,7 +48,6 @@ public class AssociationGenerator {
                 List<ChangeEntity> mList = entry.getValue();
                 for (int i = 0; i < mList.size(); i++) {
                     for (int j = i + 1; j < mList.size(); j++) {
-
                         ChangeEntity ce1 = mList.get(i);
                         ChangeEntity ce2 = mList.get(j);
                         if(ce1 instanceof StatementPlusChangeEntity && ce2 instanceof StatementPlusChangeEntity) {
@@ -113,6 +113,13 @@ public class AssociationGenerator {
             System.err.println("[ERR]not included");
         }
 
+    }
+
+
+    public void printAssociations(){
+        this.changeEntityData.mAssociations.forEach(a->{
+            System.out.println(a.toString());
+        });
     }
 
 }

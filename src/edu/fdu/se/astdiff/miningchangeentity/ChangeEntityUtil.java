@@ -30,6 +30,7 @@ public class ChangeEntityUtil {
             case ChangeEntityDesc.StageIIENTITY.ENTITY_WHILE_STMT:
             case ChangeEntityDesc.StageIIENTITY.ENTITY_DO_STMT:
             case ChangeEntityDesc.StageIIENTITY.ENTITY_SYNCHRONIZED_STMT:
+            case ChangeEntityDesc.StageIIENTITY.ENTITY_TRY_STMT:
                 return true;
             default:
                 break;
