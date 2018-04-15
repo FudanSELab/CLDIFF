@@ -18,21 +18,21 @@ public class RQ1 extends RQ{
 //    	long startTime = System.currentTimeMillis();    //获取开始时间
 //    	System.out.println("开始时间：" + startTime + "ms");
 
-//        allCommits();
+        rq1.allCommits();
 
 //        long endTime = System.currentTimeMillis();    //获取结束时间
 //        System.out.println("结束时间：" + endTime + "ms");
 //
 //    	System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
 
-        rq1.oneCommit();
+//        rq1.oneCommit();
     }
 
     // 1.抽取所有的commit filter掉不需要的
 
     public void allCommits(){
-        String repo = "E:/projects/RxJava/.git";
-        outputDir = "";
+        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\RxJava\\.git";
+        outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ1";
         System.out.println("\n\n----------------------------"+repo);
         jGitHelper = new JGitHelper(repo);
         fileOutputLog = new FileOutputLog(outputDir);
@@ -42,9 +42,12 @@ public class RQ1 extends RQ{
 
     // 2. Debug抽取特定的commit
     public void oneCommit(){
-        String repo = "E:/projects/RxJava/.git";
+        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\RxJava\\.git";
         outputDir = "";
-        String commitID = "8a6bf14fc9a61f7c1c0016ca217be02ca86211d2";
+        //5387e206af84b2dea77ecb1ed552b16dc1aed2c8
+        //a267d7efdfe58b5727b5af22070ba3d953fe060a
+        //d3455d0c9d57d522c31b5c25af83e8f2b8df12b6
+        String commitID = "d3455d0c9d57d522c31b5c25af83e8f2b8df12b6";
         jGitHelper = new JGitHelper(repo);
         jGitHelper.analyzeOneCommit(this,commitID);
     }
@@ -69,7 +72,7 @@ public class RQ1 extends RQ{
 
 //                                diffMinerTest.runGumTree(new String(prevFile), new String(currFile));
                     if(!file.toLowerCase().contains("test")) {
-                        baseDiffMiner.doo(fileName.substring(0,fileName.length()-5),prevFile,currFile,outputDir+"/"+dirName+"/"+fileName);
+                        baseDiffMiner.doo(fileName,prevFile,currFile,outputDir+"/"+dirName+"/"+fileName);
 //                        fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + currCommitId, fileName);
                     }
                 }
@@ -95,8 +98,8 @@ public class RQ1 extends RQ{
                     String dirName = parentCommitId + "-" +currCommitId;
                     System.out.println(fileName);
                     if(!file.toLowerCase().contains("test")) {
-                        if(fileName.equals("CompletableToObservable.java"))
-                            baseDiffMiner.doo(fileName.substring(0,fileName.length()-5),prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
+//                        if(fileName.equals("Pow2.java"))
+                            baseDiffMiner.doo(fileName,prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
                     }
                 }
             }

@@ -29,7 +29,7 @@ public class RQ3 extends RQ{
         File[] files = f.listFiles();
         for(File commit:files){
 //            if(!commit.getName().equals("34e7f4497962d235d94072d1544e22a7a362ae30")){
-                if(!commit.getName().equals("ea9ad4ee9bd6604fe57f73004bf375c7c4cd7be3")){
+                    if(!commit.getName().equals("ea9ad4ee9bd6604fe57f73004bf375c7c4cd7be3")){
                 continue;
             }
             File[] commitFiles = commit.listFiles();
@@ -63,9 +63,9 @@ public class RQ3 extends RQ{
                     });
                     for(int i =0;i<prevFiles.length;i++){
                         File a = prevFiles[i];
-//                        if(!a.getName().equals("ConfigurationClassBeanDefinitionReader.java")){
-//                            continue;
-//                        }
+                        if(!a.getName().equals("ConfigurationClass.java")){
+                            continue;
+                        }
                         File b = currFiles[i];
                         if(a.isDirectory()){
                             continue;

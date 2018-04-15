@@ -60,12 +60,12 @@ public class BaseDiffMiner {
         ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
         cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
 //association
-//        AssociationGenerator associationGenerator = new AssociationGenerator(ced);
-//        associationGenerator.generate();
-//        associationGenerator.printAssociations();
+        AssociationGenerator associationGenerator = new AssociationGenerator(ced);
+        associationGenerator.generate();
+        associationGenerator.printAssociations();
 // json
-        GenerateChangeEntityJson.setStageIIIBean(ced);
-        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
+//        GenerateChangeEntityJson.setStageIIIBean(ced);
+//        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
 //        preDiff.getFileOutputLog().writeEntityJson(json);
 //        System.out.println(json);
 //        String assoa = GenerateChangeEntityJson.generateAssociationJson(ced.mAssociations);
@@ -75,9 +75,6 @@ public class BaseDiffMiner {
 
     public void doo(String fileName,byte[] filePrevContent, byte[] fileCurrContent, String output) {
         // 1.pre
-        int index = fileName.lastIndexOf('/');
-        if(index ==-1) index = fileName.lastIndexOf("\\");
-        fileName = fileName.substring(index+1,fileName.length());
         FilePairPreDiff preDiff = new FilePairPreDiff();
         preDiff.initFile(filePrevContent,fileCurrContent);
         int result = preDiff.compareTwoFile(output);
