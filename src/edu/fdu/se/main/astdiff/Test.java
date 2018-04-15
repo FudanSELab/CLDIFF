@@ -1,6 +1,9 @@
-package edu.fdu.se.astdiff.preprocessingfile;
+package edu.fdu.se.main.astdiff;
 
+import edu.fdu.se.astdiff.generatingactions.JdtMethodCall;
+import edu.fdu.se.javaparser.JDTParserFactory;
 import edu.fdu.se.javaparser.JavaParserFactory;
+import javassist.compiler.ast.MethodDecl;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
@@ -12,9 +15,63 @@ import java.util.List;
  * Created by huangkaifeng on 2018/3/10.
  *
  */
-public class TestFilePre {
+public class Test {
+
+    public static void  getJdkMethodCall(MethodInvocation md){
+        IMethodBinding mb = md.resolveMethodBinding();
+        if(mb!=null&&md.getExpression()!=null){
+//            JdtMethodCall jdtBinding = new JdtMethodCall(md.getExpression().resolveTypeBinding().getQualifiedName(),
+//                    mb.getName(), mb.getReturnType().getQualifiedName(), mb.getDeclaringClass().getQualifiedName());
+            System.out.println(md.getExpression().resolveTypeBinding().getQualifiedName());
+            System.out.println(mb.getName());
+            System.out.println(mb.getReturnType().getQualifiedName());
+            System.out.println(mb.getDeclaringClass().getQualifiedName());
+            ITypeBinding[] list = mb.getParameterTypes();
+            for(int i = 0; i < list.length; i++){
+//                jdtBinding.addParameter(list[i].getQualifiedName());
+            }
+
+//            jdtBinding.setJdk(isJdk(md.getExpression().resolveTypeBinding().getQualifiedName()));
+//            return jdtBinding;
+        }else{
+            if(mb==null)
+                System.out.println(md.getName()+" is null.");
+            if(md.getExpression()==null)
+                System.out.println(md.getName()+" is local method.");
+//            return null;
+        }
+    }
 
     public static void main(String args[]){
+        String file = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\test\\prev\\ClusterAction2.java";
+        CompilationUnit cu = JDTParserFactory.getCompilationUnit(file);
+        TypeDeclaration td = (TypeDeclaration) cu.types().get(0);
+        List<Type> aa  = td.superInterfaceTypes();
+        for(Type aaa:aa) {
+            System.out.println(aaa.toString());
+        }
+        td.getSuperclassType();
+        MethodDeclaration[] mds =  td.getMethods();
+        for(MethodDeclaration md:mds){
+            if(md.getName().toString().equals("method1")){
+                List<Statement> mList = md.getBody().statements();
+                for(Statement m:mList){
+                    if(m instanceof ExpressionStatement){
+                        ExpressionStatement es = (ExpressionStatement)m;
+                        Expression e =es.getExpression();
+                        Assignment a = (Assignment) e;
+                        MethodInvocation mi =(MethodInvocation) a.getRightHandSide();
+//                        IMethodBinding mb = mi.resolveMethodBinding();
+//                        SimpleName sn = (SimpleName) a.getLeftHandSide();
+//                        getJdkMethodCall(mi);
+//                        System.out.println(mb);
+//                        System.out.println(mi.getName());
+                    }
+                }
+            }
+        }
+//        System.out.println(cu.toString());
+
 //            String file = "D:/Workspace/Android_Diff/SDK_Files_15-26/android-25/android/accessibilityservice/AccessibilityService.java";
 //            String file = "C:\\Users\\huangkaifeng\\Desktop\\Test.java";
 //            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
@@ -39,11 +96,7 @@ public class TestFilePre {
 //                FieldAccess fd = (FieldAccess) ee;
 //                System.out.println(a+ ","+b);
 //            }
-        String file = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\test\\prev\\ClusterAction2.java";
-////        CompilationUnit cu = JDTParserFactory.getCompilationUnit(file);
-        com.github.javaparser.ast.CompilationUnit cu = JavaParserFactory.getCompilationUnit(file);
-        JavaParserFactory.removeAllCommentsOfCompilationUnit(cu);
-        System.out.println(cu.toString());
+
 //        List<String> m  = new ArrayList<>();
 //        String full = JDTParserFactory.getLinesOfFile(file,m);
 //        StringBuilder sb = new StringBuilder();

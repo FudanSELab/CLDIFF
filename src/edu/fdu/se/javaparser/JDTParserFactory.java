@@ -12,8 +12,16 @@ import java.util.Map;
  */
 public class JDTParserFactory {
 
+    public static String getUnit(String s){
+        String[] temp = s.split("/");
+        String t = temp[temp.length-1];
+        return t.substring(0,t.length()-5);
+    }
+
     public static CompilationUnit getCompilationUnit(InputStream is) throws Exception{
+
         ASTParser astParser = ASTParser.newParser(AST.JLS8);
+        astParser.setKind(ASTParser.K_COMPILATION_UNIT);
         BufferedInputStream bufferedInputStream = new BufferedInputStream(is);
         byte[] input = new byte[bufferedInputStream.available()];
         bufferedInputStream.read(input);
@@ -23,7 +31,12 @@ public class JDTParserFactory {
         options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
         options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
         options.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
-//        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+
+//        astParser.setEnvironment(null, null, null, true);
+//        astParser.setUnitName("ClusterAction2");//需要与代码文件的名称一致
+//        astParser.setResolveBindings(true);
+//        astParser.setBindingsRecovery(true);
+
         astParser.setCompilerOptions(options);
         astParser.setSource(new String(input).toCharArray());
         CompilationUnit result = (CompilationUnit) (astParser.createAST(null));

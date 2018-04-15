@@ -1,9 +1,14 @@
 package edu.fdu.se.astdiff.associating.linkbean;
 
+import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.util.MyList;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningchangeentity.member.MethodChangeEntity;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 import java.util.List;
 
@@ -14,27 +19,84 @@ import java.util.List;
 public class MethodData extends LinkBean {
 
     public MethodData(MethodChangeEntity ce) {
-
-        if(ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
-//            ce.linkBean = new LinkBean();
-        }else{
-            if(ce.clusteredActionBean.curAction==null){
-//                ce.linkBean = new LinkBean(ce.clusteredActionBean.fafather);
-            } else if(ce.clusteredActionBean.curAction instanceof Move){
-//                ce.linkBean = new LinkBean(ce.clusteredActionBean.curAction);
-            }else {
-//                ce.linkBean = new LinkBean(ce.clusteredActionBean.actions);
-            }
-        }
         this.parameterName = new MyList<>();
         this.parameterType = new MyList<>();
+        this.methodName = new MyList<>();
+
+        if(ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
+            MethodDeclaration md = (MethodDeclaration) ce.bodyDeclarationPair.getBodyDeclaration();
+            setValue(md);
+        }else{
+            Tree tree = (Tree)ce.clusteredActionBean.curAction.getNode();
+            if(ce.clusteredActionBean.curAction instanceof Move){
+                if(tree.getAstNode().getNodeType() == ASTNode.METHOD_DECLARATION){
+                    MethodDeclaration md = (MethodDeclaration) tree.getAstNode();
+                    setValue(md);
+                }
+            }else {
+                parseNonMove(ce);
+            }
+        }
+
     }
 
-    public String methodName;
+    public void setValue(MethodDeclaration md){
+        methodName.add(md.getName().toString());
+        List<SingleVariableDeclaration> params = md.parameters();
+        for(SingleVariableDeclaration svd :params){
+            svd.getName();
+            parameterName.add(svd.getName().toString());
+            parameterType.add(svd.getType().toString());
+        }
+        returnType = md.getReturnType2().toString();
+
+    }
+
+
+    public void parseNonMove(MethodChangeEntity ce){
+        Tree tree = (Tree)ce.clusteredActionBean.curAction.getNode();
+        List<String> tempMethodName = new MyList<>();
+        List<String> tempParameterType = new MyList<>();
+        List<String> tempParameterName = new MyList<>();
+        String tempReturn = null;
+        if(tree.getAstNode().getNodeType() == ASTNode.METHOD_DECLARATION) {
+            MethodDeclaration md = (MethodDeclaration) tree.getAstNode();
+            tempMethodName.add(md.getName().toString());
+            List<SingleVariableDeclaration> params = md.parameters();
+            for(SingleVariableDeclaration svd :params){
+                svd.getName();
+                tempParameterName.add(svd.getName().toString());
+                tempParameterType.add(svd.getType().toString());
+            }
+            tempReturn = md.getReturnType2().toString();
+        }
+        for(Action a:ce.clusteredActionBean.actions){
+            Tree t = (Tree) a.getNode();
+            if (t.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME
+                    || t.getAstNode().getClass().getSimpleName().endsWith("Literal")) {
+                if(tempMethodName.contains(t.getLabel())){
+                    methodName.add(t.getLabel());
+                }
+                if(tempParameterName.contains(t.getLabel())){
+                    parameterName.add(t.getLabel());
+                }
+                if(tempParameterType.contains(t.getLabel())){
+                    parameterType.add(t.getLabel());
+                }
+                if(tempReturn!=null &&tempReturn.equals(t.getLabel())){
+                    returnType = t.getLabel();
+                }
+            }
+        }
+    }
+
+    public List<String> methodName;
 
     public List<String> parameterType;
 
     public List<String> parameterName;
+
+    public String returnType;
 
 
 }
