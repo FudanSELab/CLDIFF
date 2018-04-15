@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * Created by huangkaifeng on 2018/4/12.
+ *
  */
 public class RQ2 extends RQ {
 
@@ -13,12 +14,14 @@ public class RQ2 extends RQ {
         String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\RxJava\\.git";
         rq.jGitHelper = new JGitHelper(repo);
         rq.jGitHelper.walkRepoFromBackwardsCountLineNumber(rq);
+        System.out.println(rq.wholeChangedLineNumber);
     }
 
-
+    private Long wholeChangedLineNumber;
 
     public void changedLineNumber(String commitId,int lineNumber){
         System.out.println(commitId+" "+lineNumber);
+        wholeChangedLineNumber+=lineNumber;
     }
 
 
