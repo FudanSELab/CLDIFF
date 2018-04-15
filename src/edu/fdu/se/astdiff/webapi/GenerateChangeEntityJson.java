@@ -100,7 +100,7 @@ public class GenerateChangeEntityJson {
         List<ChangeEntity> mList = mad.getChangeEntityList();
         for (ChangeEntity tmp : mList) {
             if (tmp.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)) {
-                // 设置sub 同时设置 大range
+                // 设置sub
                 setStageIIIBeanSubRangeDetail(tmp.stageIIIBean, tmp.clusteredActionBean.actions, mad);
             } else if (tmp.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)) {
                 // 设置move
@@ -117,13 +117,10 @@ public class GenerateChangeEntityJson {
         CompilationUnit src = mad.preprocessedData.srcCu;
         CompilationUnit dst = mad.preprocessedData.dstCu;
         Move mv = (Move) a;
-        Tree stmtNode = bean.fafather;
-        Tree mappedStmtNode = (Tree) mv.getParent();
 
-        stageIIIBean.setRange(stmtNode.getRangeString() + "-" + mappedStmtNode.getRangeString());
-        Tree originParent = (Tree) mv.getNode().getParent();
-        Tree movedDstNode = (Tree) mad.getMappedDstOfSrcNode(mv.getNode());
         Tree moveNode = (Tree)mv.getNode();
+        Tree movedDstNode = (Tree) mad.getMappedDstOfSrcNode(moveNode);
+        stageIIIBean.setRange(moveNode.getRangeString() + "-" + movedDstNode.getRangeString());
         Integer[] m = {moveNode.getPos(),moveNode.getPos()+moveNode.getLength()};
         Integer[] n = {movedDstNode.getPos(),movedDstNode.getPos()+movedDstNode.getLength()};
         stageIIIBean.addMoveListSrc(m, src);
@@ -215,7 +212,7 @@ public class GenerateChangeEntityJson {
             jsonArray.put(jsonObject);
         }
 
-        return jsonArray.toString(4);
+        return jsonArray.toString();
     }
 
 

@@ -1,5 +1,6 @@
 package edu.fdu.se.astdiff.miningchangeentity.base;
 
+import edu.fdu.se.astdiff.associating.LayeredChangeEntityContainer;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;

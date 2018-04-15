@@ -37,7 +37,11 @@ public class AssociationGenerator {
     public void generate() {
         LayeredChangeEntityContainer container = this.changeEntityData.entityContainer;
         List<ChangeEntity> entities = this.changeEntityData.mad.getChangeEntityList();
+
+
         entities.forEach(this::initLinkBean);
+
+
         Map<BodyDeclarationPair, List<ChangeEntity>> mMap = container.getLayerMap();
         List<ChangeEntity> methodChangeEntity = new ArrayList<>();
         List<ChangeEntity> fieldChangeEntity = new ArrayList<>();

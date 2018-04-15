@@ -86,10 +86,11 @@ public class MatchIfElse {
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
 		if(a instanceof Move){
 			code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+			code.stageIIBean.setChangeEntity(((Tree)a.getNode()).getAstClass().getSimpleName());
 		}else {
 			code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+			code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_IF_STMT);
 		}
-		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_IF_STMT);
 //		code.stageIIBean.setOpt2(OperationTypeConstants.getChangeEntityDescString(a));
 		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_CONDITION);
 		code.stageIIBean.setLineRange(code.lineRange.toString());

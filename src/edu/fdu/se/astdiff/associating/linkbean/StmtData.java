@@ -25,35 +25,76 @@ public class StmtData extends LinkBean {
 
 
     public StmtData(StatementPlusChangeEntity ce) {
-        if (ce.clusteredActionBean.curAction == null) {
-//            ce.linkBean = new LinkBean(ce.clusteredActionBean.fafather);
-        } else if (ce.clusteredActionBean.curAction instanceof Move) {
-//            ce.linkBean = new LinkBean(ce.clusteredActionBean.curAction);
+        if (ce.clusteredActionBean.curAction instanceof Move) {
+            parseMove(ce.clusteredActionBean.curAction);
         } else {
-//            ce.linkBean = new LinkBean(ce.clusteredActionBean.actions);
+            parseNonMove(ce.clusteredActionBean.actions);
         }
         this.variableField = new MyList<>();
         this.variableLocal = new MyList<>();
         this.methodInvocation = new MyList<>();
     }
 
-    public int isCommitVar(StmtData stmtData){
-        int flag = 0;
+    public int isContainSameVar(StmtData stmtData){
+        int flagA = 0;
+        int flagB = 0;
         for(String tmp:stmtData.variableLocal){
             if(this.variableLocal.contains(tmp)){
-                flag ++;
+                flagA ++;
             }
         }
 
-        for(String tmp:stmtData.variableLocal){
-            if(this.variableLocal.contains(tmp)){
-                flag ++;
+        for(String tmp:stmtData.variableField){
+            if(this.variableField.contains(tmp)){
+                flagB ++;
             }
         }
-        return flag;
+        if(flagA ==0 &&flagB==0){
+            return 0;
+        }
+        if(flagA !=0 && flagA==0){
+            return 1;
+        }
+        if(flagA ==0 && flagB!=0){
+            return 2;
+        }
+        return 3;
     }
 
 
+
+    private void parseMove(Action a){
+        Tree t = (Tree) a.getNode();
+    }
+
+    private void parseNonMove(List<Action> actions){
+
+        MyList<String> simpleNameList = new MyList<>();
+        for(Action a:actions){
+            Tree tree = (Tree)a.getNode();
+            if(tree.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME
+                    || tree.getAstNode().getClass().getSimpleName().endsWith("Literal")){
+                simpleNameList.add(tree.getLabel());
+            }
+        }
+        MyList<String> tmpMethodInvocations = new MyList<>();
+        MyList<String> tmpVars = new MyList<>();
+
+        for(Action a:actions){
+            Tree tree = (Tree)a.getNode();
+            if(tree.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME
+                    || tree.getAstNode().getClass().getSimpleName().endsWith("Literal")){
+                ASTNode methodInvocation = findMethodInvoation(tree);
+                if(methodInvocation == null){
+                    continue;
+                }
+                setMethodInvocation((MethodInvocation) methodInvocation,tmpMethodInvocations,tmpVars);
+            }
+        }
+
+//        this.methodNames.addAll(addCommonNames(tmpMethodInvocations,simpleNameList));
+//        this.variables.addAll(addCommonNames(tmpVars,simpleNameList));
+    }
     private ASTNode findMethodInvoation(Tree tree){
         while(!tree.getAstNode().getClass().getSimpleName().endsWith("Declaration")){
             tree = (Tree)tree.getParent();
@@ -106,31 +147,7 @@ public class StmtData extends LinkBean {
     }
 
 
-    public void addAppendedActions(List<Action> actions){
-        MyList<String> simpleNameList = new MyList<>();
-        for(Action a:actions){
-            Tree tree = (Tree)a.getNode();
-            if(tree.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME|| tree.getAstNode().getClass().getSimpleName().endsWith("Literal")){
-                simpleNameList.add(tree.getLabel());
-            }
-        }
-        MyList<String> tmpMethodInvocations = new MyList<>();
-        MyList<String> tmpVars = new MyList<>();
-        for(Action a:actions){
-            Tree tree = (Tree)a.getNode();
-            if(tree.getAstNode().getClass().getSimpleName().equals("SimpleName")
-                    || tree.getAstNode().getClass().getSimpleName().endsWith("Literal")){
-                ASTNode methodInvocation = findMethodInvoation(tree);
-                if(methodInvocation == null){
-                    continue;
-                }
-                setMethodInvocation((MethodInvocation) methodInvocation,tmpMethodInvocations,tmpVars);
-            }
-        }
 
-//        this.methodNames.addAll(addCommonNames(tmpMethodInvocations,simpleNameList));
-//        this.variables.addAll(addCommonNames(tmpVars,simpleNameList));
-    }
 
     private List<String> addCommonNames(MyList<String> a,MyList<String> b){
         List<String> result = new ArrayList<>();

@@ -51,10 +51,11 @@ public class MatchClass {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_CLASS);
         if(a instanceof Move){
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+            code.stageIIBean.setChangeEntity(((Tree)a.getNode()).getAstClass().getSimpleName());
         }else {
+            code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CLASS);
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
         }
-        code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CLASS);
 //        code.stageIIBean.setOpt2(null);//暂时设为null
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_DECLARATION);
         code.stageIIBean.setLineRange(code.lineRange.toString());

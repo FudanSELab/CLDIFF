@@ -1,5 +1,7 @@
 package edu.fdu.se.astdiff.miningchangeentity.base;
 
+import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.Global.Global;
 import edu.fdu.se.astdiff.associating.linkbean.LinkBean;
 import edu.fdu.se.astdiff.associating.MyRange;
@@ -49,7 +51,12 @@ public class ChangeEntity {
     public ChangeEntity(ClusteredActionBean bean){
         init();
         this.clusteredActionBean = bean;
-        this.lineRange = AstRelations.getMyRange(bean.fafather,bean.nodeType);
+        if(bean.curAction instanceof Move){
+            this.lineRange = AstRelations.getMyRange((Tree)bean.curAction.getNode(),bean.nodeType);
+        }else{
+            this.lineRange = AstRelations.getMyRange(bean.fafather,bean.nodeType);
+
+        }
     }
 
     public ChangeEntity(){

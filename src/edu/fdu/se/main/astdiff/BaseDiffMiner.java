@@ -10,6 +10,7 @@ import edu.fdu.se.astdiff.miningactions.ActionAggregationGenerator;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityPreprocess;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;

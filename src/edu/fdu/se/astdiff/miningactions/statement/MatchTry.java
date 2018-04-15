@@ -123,10 +123,11 @@ public class MatchTry {
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
 		if(a instanceof Move){
 			code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+			code.stageIIBean.setChangeEntity(((Tree)a.getNode()).getAstClass().getSimpleName());
 		}else {
 			code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+			code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_TRY_STMT);
 		}
-		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_TRY_STMT);
 //		code.stageIIBean.setOpt2(ChangeEntityDesc.StageIIOpt2.OPT2_CHANGE);
 		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_CATCH_CLAUSE);
 		code.stageIIBean.setLineRange(code.lineRange.toString());

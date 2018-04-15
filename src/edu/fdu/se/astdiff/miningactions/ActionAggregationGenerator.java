@@ -16,7 +16,7 @@ public class ActionAggregationGenerator {
 
     public void doCluster(MiningActionData fpd) {
         new ClusterUpDown(Move.class, fpd).doClusterUpDown();
-        new ClusterDownUp(Move.class, fpd).doClusterDownUp();
+//        new ClusterDownUp(Move.class, fpd).doClusterDownUp();
         new ClusterUpDown(Insert.class, fpd).doClusterUpDown();
         new ClusterUpDown(Delete.class, fpd).doClusterUpDown();
         new ClusterDownUp(Insert.class, fpd).doClusterDownUp();

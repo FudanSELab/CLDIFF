@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
@@ -79,7 +80,10 @@ public class MiningActionData {
 	public ChangeEntity getEntityByNode(ITree tree){
 		if(tree==null) return null;
 		for(ChangeEntity changeEntity:this.getChangeEntityList()){
-			if(changeEntity.clusteredActionBean.fafather ==tree){
+			if(changeEntity.clusteredActionBean.curAction instanceof Move){
+				continue;
+			}
+			if(changeEntity.clusteredActionBean.fafather == tree){
 				return changeEntity;
 			}
 		}

@@ -20,7 +20,7 @@ public class LinkStatement2Statement {
         }
         LinkBean linkBean1 = ce1.linkBean;
         LinkBean linkBean2 = ce2.linkBean;
-        if(isContainSameVar(linkBean1,linkBean2)){
+        if(isContainSameVar(linkBean1,linkBean2)!=0){
             Association association = new Association(ce1,ce1,ChangeEntityDesc.StageIIIAssociationType.TYPE_VARIABLE);
             changeEntityData.mAssociations.add(association);
         }
@@ -37,18 +37,12 @@ public class LinkStatement2Statement {
         }
     }
 
-    private static boolean isContainSameVar(LinkBean linkBean1,LinkBean linkBean2){
+    private static int isContainSameVar(LinkBean linkBean1,LinkBean linkBean2){
         assert linkBean1 instanceof StmtData;
         assert linkBean2 instanceof StmtData;
         StmtData stmtData1 = (StmtData)linkBean1;
         StmtData stmtData2 = (StmtData)linkBean2;
-        if(stmtData1.isCommitVar(stmtData2)!=0){
-            return true;
-        }else{
-            return false;
-        }
-
-
+        return stmtData1.isContainSameVar(stmtData2);
 
     }
 }

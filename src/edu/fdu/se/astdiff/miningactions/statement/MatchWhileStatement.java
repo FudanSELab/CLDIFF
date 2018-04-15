@@ -71,10 +71,11 @@ public class MatchWhileStatement {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         if(a instanceof Move){
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+            code.stageIIBean.setChangeEntity(((Tree)a.getNode()).getAstClass().getSimpleName());
         }else {
+            code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_WHILE_STMT);
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
         }
-        code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_WHILE_STMT);
 //        code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_CONDITION);
         code.stageIIBean.setLineRange(code.lineRange.toString());
@@ -95,10 +96,11 @@ public class MatchWhileStatement {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         if(a instanceof Move){
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+            code.stageIIBean.setChangeEntity(((Tree)a.getNode()).getAstClass().getSimpleName());
         }else {
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+            code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_DO_STMT);
         }
-        code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_DO_STMT);
 //        code.stageIIBean.setOpt2(null);
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_CONDITION);
         code.stageIIBean.setLineRange(code.lineRange.toString());

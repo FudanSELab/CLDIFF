@@ -72,10 +72,11 @@ public class MatchForStatement {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         if(a instanceof Move){
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+            code.stageIIBean.setChangeEntity(((Tree)a.getNode()).getAstClass().getSimpleName());
         }else {
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+            code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_FOR_STMT);
         }
-        code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_FOR_STMT);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
@@ -98,10 +99,11 @@ public class MatchForStatement {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
         if(a instanceof Move){
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+            code.stageIIBean.setChangeEntity(((Tree)a.getNode()).getAstClass().getSimpleName());
         }else {
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+            code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENHANCED_FOR_STMT);
         }
-        code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENHANCED_FOR_STMT);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());

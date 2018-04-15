@@ -44,7 +44,7 @@ public class ChangeEntityPrinter {
             int endL = cu.getLineNumber(bodyDeclarationPair.getBodyDeclaration().getLength() + bodyDeclarationPair.getBodyDeclaration().getStartPosition() - 1);
             System.out.println(bodyDeclarationPair.toString() + " (" + startL + "," + endL + ")" + " listSize:"+mList.size());
             for (ChangeEntity ce : mList) {
-                System.out.println(ce.toString2());
+                System.out.println(ce.toString2() +" "+ ce.getLineRange());
             }
             System.out.println("");
         }

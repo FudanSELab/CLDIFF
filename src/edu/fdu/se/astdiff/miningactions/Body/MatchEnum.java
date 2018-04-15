@@ -57,10 +57,11 @@ public class MatchEnum {
         code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER);
         if(a instanceof Move){
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+            code.stageIIBean.setChangeEntity(((Tree)a.getNode()).getAstClass().getSimpleName());
         }else {
+            code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENUM);
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
         }
-        code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENUM);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
         code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());

@@ -36,14 +36,17 @@ public class MatchBlock {
                 if(fatherNode.getChildPosition(a.getNode())==2){
                     MatchIfElse.matchElse(fp, a);
                 }
+                fp.setActionTraversedMap(a);
                 break;
             case ASTNode.TRY_STATEMENT:
                 ////Finally块
                 if(fatherNode.getChildPosition(a.getNode()) == fatherNode.getChildren().size()-1){
                     MatchTry.matchFinally(fp, a);
                 }
+                fp.setActionTraversedMap(a);
                 break;
             default:
+                fp.setActionTraversedMap(a);
                 break;
         }
     }
@@ -55,6 +58,9 @@ public class MatchBlock {
         for(int i =0;i<children.size();i++){
             Tree childd = (Tree) children.get(i);
             if(fp.getEntityByNode(childd)!=null){
+                continue;
+            }
+            if(childd.getDoAction()!=null && childd.getDoAction().size()!=0){
                 continue;
             }
             ChangePacket changePacket = new ChangePacket();
