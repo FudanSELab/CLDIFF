@@ -48,6 +48,7 @@ public class Association {
 
 
     public String toString(){
-        return changeEntity1.getChangeEntityId()+"->"+changeEntity2.getChangeEntityId()+":" +type;
+        return changeEntity1.getChangeEntityId()+". "+changeEntity1.getClass().getSimpleName()
+                +" -> "+changeEntity2.getChangeEntityId()+". "+changeEntity2.getClass().getSimpleName()+" : " +type;
     }
 }

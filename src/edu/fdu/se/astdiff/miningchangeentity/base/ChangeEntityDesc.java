@@ -201,17 +201,18 @@ public class ChangeEntityDesc {
 
     public static class StageIIIAssociationType{
 
-        public static final String TYPE_VARIABLE = "variable";
+        public static final String TYPE_SAME_VARIABLE = "a same variable as b";
 
-        public static final String TYPE_CONTROL = "control";
+        public static final String TYPE_CONTROL = "a control dependency b";
 
-        public static final String TYPE_METHOD_DECLARATION = "parameter change";
+        public static final String TYPE_FIELD_ACCESS = "a access field b";
 
-        public static final String TYPE_METHOD_RETURN_CHANGE = "return type change";
+        public static final String TYPE_CALL_METHOD = "a call method b";
 
-        public static final String TYPE_METHOD_SAME_PARAMETER_CHANGE = "same parameter change";
+        public static final String TYPE_PARAMETER_CHANGE_VAR_CHANGE = "a parameter change -> b variable change";
 
-        public static final String TYPE_CLASS_DECLARATION = "class signature change";
+        public static final String TYPE_SHARE_FIELD = "a field acess same as b";
+
     }
 
     public static class StageIIIKeys{

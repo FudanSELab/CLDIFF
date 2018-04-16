@@ -3,6 +3,7 @@ package edu.fdu.se.astdiff.associating.linkbean;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.util.MyList;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningchangeentity.member.MethodChangeEntity;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class MethodData extends LinkBean {
 
-    public MethodData(MethodChangeEntity ce) {
+    public MethodData(MethodChangeEntity ce, MiningActionData fp) {
         this.parameterName = new MyList<>();
         this.parameterType = new MyList<>();
         this.methodName = new MyList<>();
@@ -34,7 +35,7 @@ public class MethodData extends LinkBean {
                     setValue(md);
                 }
             }else {
-                parseNonMove(ce);
+                parseNonMove(ce,fp);
             }
         }
 
@@ -53,15 +54,20 @@ public class MethodData extends LinkBean {
     }
 
 
-    public void parseNonMove(MethodChangeEntity ce){
+    public void parseNonMove(MethodChangeEntity ce,MiningActionData fp){
         Tree tree = (Tree)ce.clusteredActionBean.curAction.getNode();
-        List<String> tempMethodName = new MyList<>();
+//        List<String> tempMethodName = new MyList<>();
         List<String> tempParameterType = new MyList<>();
         List<String> tempParameterName = new MyList<>();
         String tempReturn = null;
         if(tree.getAstNode().getNodeType() == ASTNode.METHOD_DECLARATION) {
+            if(tree.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE){
+                Tree dstTree = (Tree) fp.getMappedDstOfSrcNode(tree);
+                MethodDeclaration mdDst = (MethodDeclaration) dstTree.getAstNode();
+                methodName.add(mdDst.getName().toString());
+            }
             MethodDeclaration md = (MethodDeclaration) tree.getAstNode();
-            tempMethodName.add(md.getName().toString());
+            methodName.add(md.getName().toString());
             List<SingleVariableDeclaration> params = md.parameters();
             for(SingleVariableDeclaration svd :params){
                 svd.getName();
@@ -70,13 +76,14 @@ public class MethodData extends LinkBean {
             }
             tempReturn = md.getReturnType2().toString();
         }
+
         for(Action a:ce.clusteredActionBean.actions){
             Tree t = (Tree) a.getNode();
             if (t.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME
                     || t.getAstNode().getClass().getSimpleName().endsWith("Literal")) {
-                if(tempMethodName.contains(t.getLabel())){
-                    methodName.add(t.getLabel());
-                }
+//                if(tempMethodName.contains(t.getLabel())){
+//                    methodName.add(t.getLabel());
+//                }
                 if(tempParameterName.contains(t.getLabel())){
                     parameterName.add(t.getLabel());
                 }

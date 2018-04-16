@@ -14,28 +14,33 @@ public class LinkStatement2Statement {
 
 
     public static void checkStmtAssociation(ChangeEntityData changeEntityData, ChangeEntity ce1, ChangeEntity ce2){
-        if(isRangeWithin(ce1,ce2)){
-            Association association = new Association(ce1,ce1,ChangeEntityDesc.StageIIIAssociationType.TYPE_CONTROL);
+        if(LinkUtil.isRangeWithin(ce1,ce2)){
+            Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_CONTROL);
             changeEntityData.mAssociations.add(association);
         }
         LinkBean linkBean1 = ce1.linkBean;
         LinkBean linkBean2 = ce2.linkBean;
         if(isContainSameVar(linkBean1,linkBean2)!=0){
-            Association association = new Association(ce1,ce1,ChangeEntityDesc.StageIIIAssociationType.TYPE_VARIABLE);
+            Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SAME_VARIABLE);
             changeEntityData.mAssociations.add(association);
         }
 
     }
 
-    private static boolean isRangeWithin(ChangeEntity ce1,ChangeEntity ce2){
-        MyRange myRange1 = ce1.getLineRange();
-        MyRange myRange2 = ce2.getLineRange();
-        if(myRange1.isRangeWithin(myRange2)!=0){
-            return true;
-        }else{
-            return  false;
+    public static void checkStmtShareField(ChangeEntityData changeEntityData,ChangeEntity ce1,ChangeEntity ce2){
+        StmtData linkBean1 = (StmtData) ce1.linkBean;
+        StmtData linkBean2 = (StmtData) ce2.linkBean;
+        for(String l1:linkBean1.variableField){
+            for(String l2:linkBean2.variableField){
+                if(l1.equals(l2)){
+                    Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SHARE_FIELD);
+                    changeEntityData.mAssociations.add(association);
+                }
+            }
         }
     }
+
+
 
     private static int isContainSameVar(LinkBean linkBean1,LinkBean linkBean2){
         assert linkBean1 instanceof StmtData;

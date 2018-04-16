@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.associating;
 
 import edu.fdu.se.astdiff.associating.linkbean.*;
+import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.util.MyList;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
@@ -35,12 +36,12 @@ public class AssociationGenerator {
     /**
      * main entrance
      */
-    public void generate() {
+    public void generateFile() {
         LayeredChangeEntityContainer container = this.changeEntityData.entityContainer;
         List<ChangeEntity> entities = this.changeEntityData.mad.getChangeEntityList();
 
         entities.forEach(a-> {
-            initLinkBean(a, changeEntityData.mad.preprocessedData);
+            initLinkBean(a, changeEntityData.mad);
         });
 
 
@@ -48,16 +49,21 @@ public class AssociationGenerator {
         List<ChangeEntity> methodChangeEntity = new ArrayList<>();
         List<ChangeEntity> fieldChangeEntity = new ArrayList<>();
         List<ChangeEntity> innerClassChangeEntity = new ArrayList<>();
+        List<ChangeEntity> stmtChangeEntity = new ArrayList<>();
         for (Map.Entry<BodyDeclarationPair, List<ChangeEntity>> entry : mMap.entrySet()) {
             BodyDeclarationPair key = entry.getKey();
             if (key.getBodyDeclaration() instanceof MethodDeclaration) {
                 List<ChangeEntity> mList = entry.getValue();
                 for (int i = 0; i < mList.size(); i++) {
+                    ChangeEntity ce1 = mList.get(i);
+                    if(ce1 instanceof StatementPlusChangeEntity){
+                        stmtChangeEntity.add(ce1);
+                    }
                     for (int j = i + 1; j < mList.size(); j++) {
-                        ChangeEntity ce1 = mList.get(i);
                         ChangeEntity ce2 = mList.get(j);
                         if(ce1 instanceof StatementPlusChangeEntity && ce2 instanceof StatementPlusChangeEntity) {
-                            LinkStatement2Statement.checkStmtAssociation(changeEntityData, ce1, ce2);// stmt 与stmt之间
+                            // stmt 与stmt之间的association
+                            LinkStatement2Statement.checkStmtAssociation(changeEntityData, ce1, ce2);
                         }
                     }
                 }
@@ -81,7 +87,8 @@ public class AssociationGenerator {
             for (int j = i + 1; j < methodChangeEntity.size(); j++) {
                 ChangeEntity ce1 = methodChangeEntity.get(i);
                 ChangeEntity ce2 = methodChangeEntity.get(j);
-                LinkMember2Member.checkMethodAssociation(changeEntityData,ce1, ce2);// method与method之间
+                // method与method之间 todo
+                LinkMember2Member.checkMethodAssociation(changeEntityData,ce1, ce2);
             }
         }
         for (Map.Entry<BodyDeclarationPair, List<ChangeEntity>> entry : mMap.entrySet()) {
@@ -89,7 +96,7 @@ public class AssociationGenerator {
             if (key.getBodyDeclaration() instanceof MethodDeclaration) {
                 List<ChangeEntity> mList = entry.getValue();
                 for (ChangeEntity ce:mList){
-                    if(! (ce instanceof StatementPlusChangeEntity)){
+                    if(!(ce instanceof StatementPlusChangeEntity)){
                         continue;
                     }
                     fieldChangeEntity.forEach(a->{
@@ -102,19 +109,27 @@ public class AssociationGenerator {
                 }
             }
         }
+        // stmt跨方法之间
+        for(int i =0;i<stmtChangeEntity.size();i++){
+            for(int j =i+1;j<stmtChangeEntity.size();j++){
+                ChangeEntity ce1 = stmtChangeEntity.get(i);
+                ChangeEntity ce2 = stmtChangeEntity.get(j);
+                LinkStatement2Statement.checkStmtShareField(changeEntityData,ce1,ce2);
+            }
+        }
 
     }
 
-    public void initLinkBean(ChangeEntity ce, PreprocessedData preprocessedData){
+    public void initLinkBean(ChangeEntity ce, MiningActionData miningActionData){
 
         if(ce instanceof ClassChangeEntity){
             ce.linkBean = new ClassData((ClassChangeEntity)ce);
         }else if(ce instanceof FieldChangeEntity){
             ce.linkBean = new FieldData((FieldChangeEntity)ce);
         }else if(ce instanceof MethodChangeEntity){
-            ce.linkBean = new MethodData((MethodChangeEntity)ce);
+            ce.linkBean = new MethodData((MethodChangeEntity)ce,miningActionData);
         }else if(ce instanceof StatementPlusChangeEntity){
-            ce.linkBean = new StmtData((StatementPlusChangeEntity)ce,preprocessedData);
+            ce.linkBean = new StmtData((StatementPlusChangeEntity)ce,miningActionData.preprocessedData);
         }else{
             System.err.println("[ERR]not included");
         }
@@ -123,6 +138,9 @@ public class AssociationGenerator {
 
 
     public void printAssociations(){
+        if(this.changeEntityData.mAssociations.size()==0){
+            System.out.println("Association size 0");
+        }
         this.changeEntityData.mAssociations.forEach(a->{
             System.out.println(a.toString());
         });
