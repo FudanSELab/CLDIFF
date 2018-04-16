@@ -122,11 +122,12 @@ public class JGitHelper extends JGitCommand {
      */
     public void walkRepoFromBackwardsCountLineNumber(RQ2 rq) {
         try {
-            //wang 4/11
-            DiffMinerTest diffMinerTest = new DiffMinerTest();
             int commitNum = 0;
             Queue<RevCommit> commitQueue = new LinkedList<>();
             Map<String, Boolean> isTraversed = new HashMap<>();
+            long startTime=System.nanoTime();   //获取开始时间
+
+
 
             List<Ref> mList = this.git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
             for (Ref item : mList) {
@@ -135,13 +136,12 @@ public class JGitHelper extends JGitCommand {
                 while (commitQueue.size() != 0) {
                     RevCommit queueCommitItem = commitQueue.poll();
                     commitNum ++;
-
                     RevCommit[] parentCommits = queueCommitItem.getParents();
                     if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
                         continue;
                     }
-                    int tmp = getCommitFileEditLineNumber(queueCommitItem);
-                    rq.changedLineNumber(queueCommitItem.getName(),tmp);
+                    int temp2 = getCommitFileEditLineNumber(queueCommitItem);
+                    totalChangedLineNumber += temp2;
                     isTraversed.put(queueCommitItem.getName(), true);
                     for (RevCommit item2 : parentCommits) {
                         RevCommit commit2 = revWalk.parseCommit(item2.getId());
@@ -149,9 +149,11 @@ public class JGitHelper extends JGitCommand {
                     }
                 }
             }
+            long endTime=System.nanoTime(); //获取结束时间
 //            System.out.println("CommitSum:" + isTraversed.size());
-            System.out.println("commitNum:" + commitNum);
-            System.out.println("wholeSize:" + diffMinerTest.wholeSize);
+            System.out.println("totalCommitNum: " + commitNum);
+            System.out.println("totalChangedLineNumber: "+totalChangedLineNumber);
+            System.out.println("totalExecTime: " +(endTime-startTime));
 
         } catch (MissingObjectException e) {
             e.printStackTrace();
@@ -164,13 +166,20 @@ public class JGitHelper extends JGitCommand {
         }
     }
 
+    private long totalChangedLineNumber;
 
 
 
 
     public int getCommitFileEditLineNumber(RevCommit commit) {
         try {
+            System.out.println("CommitId: "+commit.getName());
             int count = 0;
+            long startTime=System.nanoTime();   //获取开始时间
+
+
+
+
             RevCommit[] parentsCommits = commit.getParents();
             for (RevCommit parent : parentsCommits) {
                 ObjectReader reader = git.getRepository().newObjectReader();
@@ -193,7 +202,10 @@ public class JGitHelper extends JGitCommand {
                             if(!mOldPath.toLowerCase().contains("test")&&mOldPath.endsWith(".java")){
                                 FileHeader fileHeader = diffFormatter.toFileHeader(entry);
                                 EditList editList = fileHeader.toEditList();
-                                count += lineNumber(editList);
+
+                                int temp =  lineNumber(editList);
+                                count += temp;
+                                System.out.println(mOldPath.substring(mOldPath.lastIndexOf("/")+1)+" "+count);
                                 diffFormatter.format(entry);
                                 out.reset();
                             }
@@ -206,6 +218,9 @@ public class JGitHelper extends JGitCommand {
                 }
                 diffFormatter.close();
             }
+            long endTime=System.nanoTime(); //获取结束时间
+
+            System.out.println("timePerCommit:"+(endTime-startTime));
             return count;
         } catch (MissingObjectException e) {
             e.printStackTrace();

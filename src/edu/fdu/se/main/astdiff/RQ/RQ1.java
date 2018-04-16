@@ -18,14 +18,19 @@ public class RQ1 extends RQ{
 //    	long startTime = System.currentTimeMillis();    //获取开始时间
 //    	System.out.println("开始时间：" + startTime + "ms");
 
-        rq1.allCommits();
+//        rq1.allCommits();
 
 //        long endTime = System.currentTimeMillis();    //获取结束时间
 //        System.out.println("结束时间：" + endTime + "ms");
 //
 //    	System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
 
-//        rq1.oneCommit();
+        rq1.oneCommit();
+        // RQ1 准确性 ？GumTree(DiffMiner)/10proj*100commit*2file*10change entity
+        // RQ2 size  gumtree /linenumber /diff miner
+        // RQ3
+        // RQ4
+        // RQ5
     }
 
     // 1.抽取所有的commit filter掉不需要的
