@@ -1,7 +1,7 @@
 package edu.fdu.se.main.astdiff;
 
 import edu.fdu.se.astdiff.Global.Global;
-import edu.fdu.se.astdiff.associating.AssociationGenerator;
+import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
@@ -10,17 +10,11 @@ import edu.fdu.se.astdiff.miningactions.ActionAggregationGenerator;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityPreprocess;
-import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
-import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
-import edu.fdu.se.astdiff.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-import edu.fdu.se.fileutil.FileWriter;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  * Created by huangkaifeng on 2018/2/27.
@@ -39,9 +33,25 @@ public class BaseDiffMiner {
         if(result ==-1){
             return;
         }
+        runDiff(preDiff,fileName);
+    }
+
+
+    public void doo(String fileName,byte[] filePrevContent, byte[] fileCurrContent, String output) {
+        // 1.pre
+        FilePairPreDiff preDiff = new FilePairPreDiff();
+        preDiff.initFile(filePrevContent,fileCurrContent);
+        int result = preDiff.compareTwoFile(output);
+        if(result ==-1){
+            return;
+        }
 
         runDiff(preDiff,fileName);
     }
+
+    public ChangeEntityData changeEntityData;
+    public String mFileName;
+
     private void runDiff(FilePairPreDiff preDiff,String fileName){
 
         PreprocessedData preData = preDiff.getPreprocessedData();
@@ -61,9 +71,11 @@ public class BaseDiffMiner {
         ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
         cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
 //association
-//        AssociationGenerator associationGenerator = new AssociationGenerator(ced);
+//        FileInsideAssociationGenerator associationGenerator = new FileInsideAssociationGenerator(ced);
 //        associationGenerator.generateFile();
 //        associationGenerator.printAssociations();
+//        changeEntityData = ced;
+//        mFileName = fileName;
 // json
 //        GenerateChangeEntityJson.setStageIIIBean(ced);
 //        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
@@ -73,20 +85,6 @@ public class BaseDiffMiner {
 //        System.out.println(assoa);
 
     }
-
-    public void doo(String fileName,byte[] filePrevContent, byte[] fileCurrContent, String output) {
-        // 1.pre
-        FilePairPreDiff preDiff = new FilePairPreDiff();
-        preDiff.initFile(filePrevContent,fileCurrContent);
-        int result = preDiff.compareTwoFile(output);
-        if(result ==-1){
-            return;
-        }
-
-        runDiff(preDiff,fileName);
-    }
-
-
 
 
     private void printActions(GeneratingActionsData actionsData, JavaParserTreeGenerator treeGenerator, FileOutputLog fileOutputLog){

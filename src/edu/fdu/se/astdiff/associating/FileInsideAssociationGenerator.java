@@ -1,6 +1,5 @@
 package edu.fdu.se.astdiff.associating;
 
-import com.github.javaparser.ast.body.InitializerDeclaration;
 import edu.fdu.se.astdiff.associating.linkbean.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.util.MyList;
@@ -9,7 +8,6 @@ import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.StatementPlusChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.member.*;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
-import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
@@ -21,13 +19,11 @@ import java.util.Map;
  * Created by huangkaifeng on 2018/3/19.
  *
  */
-public class AssociationGenerator {
-
-
+public class FileInsideAssociationGenerator {
 
     private ChangeEntityData changeEntityData;
 
-    public AssociationGenerator(ChangeEntityData mod){
+    public FileInsideAssociationGenerator(ChangeEntityData mod){
         this.changeEntityData = mod;
         this.changeEntityData.mAssociations = new MyList<>();
     }

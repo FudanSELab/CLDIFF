@@ -1,6 +1,6 @@
 package edu.fdu.se.main.astdiff.RQ;
 
-import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
+import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.fileutil.FileWriter;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,7 +17,6 @@ public class RQ3 extends RQ{
 
     private String projName;
     public static void main(String args[]){
-        Exception e = new Exception();
 //        generateCommitCache();
         generateDiffMinerOutput();
     }
@@ -28,6 +27,7 @@ public class RQ3 extends RQ{
         String projPath  = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\spring-framework";
         File f = new File(projPath);
         File[] files = f.listFiles();
+        rq.fileChangeEntityData = new HashMap<>();
         for(File commit:files){
 //            if(!commit.getName().equals("34e7f4497962d235d94072d1544e22a7a362ae30")){
                     if(!commit.getName().equals("ea9ad4ee9bd6604fe57f73004bf375c7c4cd7be3")){
@@ -74,9 +74,10 @@ public class RQ3 extends RQ{
                         System.out.println(a.getName());
                         rq.runDiffMiner(a.getAbsolutePath(),b.getAbsolutePath(),commit2.getAbsolutePath());
 //                        break;
-
                     }
                 }
+                
+                rq.fileChangeEntityData.clear();
                 break; //commit parent json
             }
             break;//commit
@@ -85,7 +86,10 @@ public class RQ3 extends RQ{
 
     public void runDiffMiner(String prev,String curr,String output){
         this.baseDiffMiner.doo(prev,curr,output);
+        this.fileChangeEntityData.put(this.baseDiffMiner.mFileName,this.baseDiffMiner.changeEntityData);
     }
+    private Map<String,ChangeEntityData> fileChangeEntityData;
+
 
     public static void generateCommitCache(){
         RQ3 rq = new RQ3();
