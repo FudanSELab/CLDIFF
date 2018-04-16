@@ -13,6 +13,7 @@ import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityPreprocess;
 import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
+import edu.fdu.se.astdiff.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 
@@ -67,9 +68,9 @@ public class BaseDiffMiner {
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
         aag.doCluster(mad);
 //修正
-        ChangeEntityData ced = new ChangeEntityData(mad);
-        ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
-        cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
+//        ChangeEntityData ced = new ChangeEntityData(mad);
+//        ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
+//        cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
 //association
 //        FileInsideAssociationGenerator associationGenerator = new FileInsideAssociationGenerator(ced);
 //        associationGenerator.generateFile();

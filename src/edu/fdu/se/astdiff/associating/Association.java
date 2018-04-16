@@ -8,7 +8,10 @@ import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
  */
 public class Association {
 
-    private String file;
+
+    public String fileA;
+
+    public String fileB;
 
     private ChangeEntity changeEntity1;
 
@@ -50,5 +53,9 @@ public class Association {
     public String toString(){
         return changeEntity1.getChangeEntityId()+". "+changeEntity1.getClass().getSimpleName()
                 +" -> "+changeEntity2.getChangeEntityId()+". "+changeEntity2.getClass().getSimpleName()+" : " +type;
+    }
+
+    public String linkJsonString(){
+        return changeEntity1.getChangeEntityId()+","+changeEntity2.getChangeEntityId();
     }
 }

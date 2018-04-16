@@ -28,7 +28,7 @@ public class AssertChangeEntity extends StatementPlusChangeEntity{
         if(this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
             sb.append("'s expression ");
 //            sb.append();
-            sb.append("with/by...");
+            sb.append("with/by ");
         }
         return sb.toString();
     }

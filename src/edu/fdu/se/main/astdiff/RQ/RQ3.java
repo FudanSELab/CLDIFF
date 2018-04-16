@@ -76,7 +76,7 @@ public class RQ3 extends RQ{
 //                        break;
                     }
                 }
-                
+
                 rq.fileChangeEntityData.clear();
                 break; //commit parent json
             }
@@ -145,7 +145,6 @@ public class RQ3 extends RQ{
                 jGitHelper.analyzeOneCommit(this, commit);
             }
         }
-
     }
 
 
