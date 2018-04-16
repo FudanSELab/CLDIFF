@@ -61,9 +61,9 @@ public class BaseDiffMiner {
         ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
         cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
 //association
-        AssociationGenerator associationGenerator = new AssociationGenerator(ced);
-        associationGenerator.generateFile();
-        associationGenerator.printAssociations();
+//        AssociationGenerator associationGenerator = new AssociationGenerator(ced);
+//        associationGenerator.generateFile();
+//        associationGenerator.printAssociations();
 // json
 //        GenerateChangeEntityJson.setStageIIIBean(ced);
 //        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);

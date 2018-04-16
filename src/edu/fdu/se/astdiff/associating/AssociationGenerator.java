@@ -1,14 +1,13 @@
 package edu.fdu.se.astdiff.associating;
 
+import com.github.javaparser.ast.body.InitializerDeclaration;
 import edu.fdu.se.astdiff.associating.linkbean.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.util.MyList;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.StatementPlusChangeEntity;
-import edu.fdu.se.astdiff.miningchangeentity.member.ClassChangeEntity;
-import edu.fdu.se.astdiff.miningchangeentity.member.FieldChangeEntity;
-import edu.fdu.se.astdiff.miningchangeentity.member.MethodChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.member.*;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import org.eclipse.jdt.core.dom.MethodDeclaration;

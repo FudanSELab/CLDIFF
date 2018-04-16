@@ -64,7 +64,7 @@ public class RQ1 extends RQ{
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if (!file.endsWith(".java")) {
+                    if (this.isFilter(file)) {
                         continue;
                     }
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);
@@ -76,10 +76,9 @@ public class RQ1 extends RQ{
                     String dirName = parentCommitId + "-" + currCommitId;
 
 //                                diffMinerTest.runGumTree(new String(prevFile), new String(currFile));
-                    if(!file.toLowerCase().contains("test")) {
-                        baseDiffMiner.doo(fileName,prevFile,currFile,outputDir+"/"+dirName+"/"+fileName);
+//                    if(!file.toLowerCase().contains("test")) {
+                    baseDiffMiner.doo(fileName,prevFile,currFile,outputDir+"/"+dirName+"/"+fileName);
 //                        fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + currCommitId, fileName);
-                    }
                 }
             }
         }
@@ -93,7 +92,7 @@ public class RQ1 extends RQ{
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if (!file.endsWith(".java")) {
+                    if (this.isFilter(file)) {
                         continue;
                     }
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);
@@ -102,10 +101,9 @@ public class RQ1 extends RQ{
                     String fileName = file.substring(index + 1, file.length());
                     String dirName = parentCommitId + "-" +currCommitId;
                     System.out.println(fileName);
-                    if(!file.toLowerCase().contains("test")) {
+//                    if(!file.toLowerCase().contains("test")) {
 //                        if(fileName.equals("Pow2.java"))
-                            baseDiffMiner.doo(fileName,prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
-                    }
+                    baseDiffMiner.doo(fileName,prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
                 }
             }
         }

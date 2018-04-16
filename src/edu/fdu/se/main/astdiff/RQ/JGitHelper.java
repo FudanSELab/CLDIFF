@@ -32,7 +32,6 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 
 /**
  * Created by huangkaifeng on 2018/4/6.
- *
  */
 public class JGitHelper extends JGitCommand {
 
@@ -45,9 +44,9 @@ public class JGitHelper extends JGitCommand {
      */
     public void walkRepoFromBackwards(RQ rq) {
         try {
-        	//wang 4/11
-        	DiffMinerTest diffMinerTest = new DiffMinerTest();
-        	int commitNum = 0;
+            //wang 4/11
+            DiffMinerTest diffMinerTest = new DiffMinerTest();
+            int commitNum = 0;
             Queue<RevCommit> commitQueue = new LinkedList<>();
             Map<String, Boolean> isTraversed = new HashMap<>();
 
@@ -58,15 +57,15 @@ public class JGitHelper extends JGitCommand {
                 while (commitQueue.size() != 0) {
                     RevCommit queueCommitItem = commitQueue.poll();
                     //wang 4/11
-                	commitNum ++;
-                	
+                    commitNum++;
+
                     RevCommit[] parentCommits = queueCommitItem.getParents();
                     if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
                         continue;
                     }
                     Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(queueCommitItem.getName());
 
-                    rq.handleCommits(changedFiles,queueCommitItem.getName());
+                    rq.handleCommits(changedFiles, queueCommitItem.getName());
 
                     isTraversed.put(queueCommitItem.getName(), true);
                     for (RevCommit item2 : parentCommits) {
@@ -79,7 +78,7 @@ public class JGitHelper extends JGitCommand {
 //            System.out.println("CommitSum:" + isTraversed.size());
             System.out.println("commitNum:" + commitNum);
             System.out.println("wholeSize:" + diffMinerTest.wholeSize);
-            
+
         } catch (MissingObjectException e) {
             e.printStackTrace();
         } catch (IncorrectObjectTypeException e) {
@@ -93,9 +92,10 @@ public class JGitHelper extends JGitCommand {
 
     /**
      * 输出debug的文件
+     *
      * @param commitString
      */
-    public void analyzeOneCommit(RQ rq,String commitString) {
+    public void analyzeOneCommit(RQ rq, String commitString) {
         try {
 
             ObjectId commitId = ObjectId.fromString(commitString);
@@ -104,7 +104,7 @@ public class JGitHelper extends JGitCommand {
                 return;
             }
             Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(commit.getName());
-            rq.handleCommit(changedFiles,commitString);
+            rq.handleCommit(changedFiles, commitString);
 
         } catch (MissingObjectException e) {
             e.printStackTrace();
@@ -116,7 +116,6 @@ public class JGitHelper extends JGitCommand {
     }
 
 
-
     /**
      * 输出output即可
      */
@@ -125,8 +124,7 @@ public class JGitHelper extends JGitCommand {
             int commitNum = 0;
             Queue<RevCommit> commitQueue = new LinkedList<>();
             Map<String, Boolean> isTraversed = new HashMap<>();
-            long startTime=System.nanoTime();   //获取开始时间
-
+            long startTime = System.nanoTime();   //获取开始时间
 
 
             List<Ref> mList = this.git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
@@ -135,7 +133,7 @@ public class JGitHelper extends JGitCommand {
                 commitQueue.offer(commit);
                 while (commitQueue.size() != 0) {
                     RevCommit queueCommitItem = commitQueue.poll();
-                    commitNum ++;
+                    commitNum++;
                     RevCommit[] parentCommits = queueCommitItem.getParents();
                     if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
                         continue;
@@ -149,11 +147,11 @@ public class JGitHelper extends JGitCommand {
                     }
                 }
             }
-            long endTime=System.nanoTime(); //获取结束时间
+            long endTime = System.nanoTime(); //获取结束时间
 //            System.out.println("CommitSum:" + isTraversed.size());
             System.out.println("totalCommitNum: " + commitNum);
-            System.out.println("totalChangedLineNumber: "+totalChangedLineNumber);
-            System.out.println("totalExecTime: " +(endTime-startTime));
+            System.out.println("totalChangedLineNumber: " + totalChangedLineNumber);
+            System.out.println("totalExecTime: " + (endTime - startTime));
 
         } catch (MissingObjectException e) {
             e.printStackTrace();
@@ -168,16 +166,28 @@ public class JGitHelper extends JGitCommand {
 
     private long totalChangedLineNumber;
 
-
+    public boolean isFilter(String filePathName) {
+        String name = filePathName.toLowerCase();
+        if (!name.endsWith("java")) {
+            return false;
+        }
+        if (name.contains("\\test\\") || name.contains("/test/")) {
+            return false;
+        }
+        String[] data = filePathName.split("/");
+        String fileName = data[data.length - 1];
+        if (filePathName.endsWith("Test.java") || fileName.startsWith("Test")) {
+            return false;
+        }
+        return true;
+    }
 
 
     public int getCommitFileEditLineNumber(RevCommit commit) {
         try {
-            System.out.println("CommitId: "+commit.getName());
+            System.out.println("CommitId: " + commit.getName());
             int count = 0;
-            long startTime=System.nanoTime();   //获取开始时间
-
-
+            long startTime = System.nanoTime();   //获取开始时间
 
 
             RevCommit[] parentsCommits = commit.getParents();
@@ -199,16 +209,16 @@ public class JGitHelper extends JGitCommand {
                     switch (entry.getChangeType()) {
                         case MODIFY:
                             String mOldPath = entry.getOldPath();
-                            if(!mOldPath.toLowerCase().contains("test")&&mOldPath.endsWith(".java")){
-                                FileHeader fileHeader = diffFormatter.toFileHeader(entry);
-                                EditList editList = fileHeader.toEditList();
-
-                                int temp =  lineNumber(editList);
-                                count += temp;
-                                System.out.println(mOldPath.substring(mOldPath.lastIndexOf("/")+1)+" "+count);
-                                diffFormatter.format(entry);
-                                out.reset();
+                            if (isFilter(mOldPath)) {
+                                continue;
                             }
+                            FileHeader fileHeader = diffFormatter.toFileHeader(entry);
+                            EditList editList = fileHeader.toEditList();
+                            int temp = lineNumber(editList);
+                            count += temp;
+                            System.out.println(mOldPath.substring(mOldPath.lastIndexOf("/") + 1) + " " + count);
+                            diffFormatter.format(entry);
+                            out.reset();
                             break;
                         case ADD:
                         case DELETE:
@@ -218,9 +228,9 @@ public class JGitHelper extends JGitCommand {
                 }
                 diffFormatter.close();
             }
-            long endTime=System.nanoTime(); //获取结束时间
+            long endTime = System.nanoTime(); //获取结束时间
 
-            System.out.println("timePerCommit:"+(endTime-startTime));
+            System.out.println("timePerCommit:" + (endTime - startTime));
             return count;
         } catch (MissingObjectException e) {
             e.printStackTrace();
@@ -232,16 +242,16 @@ public class JGitHelper extends JGitCommand {
         return 0;
     }
 
-    public int lineNumber(EditList edits){
+    public int lineNumber(EditList edits) {
         int cnt = 0;
-        for(Edit e:edits){
-            if(e.getBeginA()==e.getEndA()){
-                cnt += e.getEndB() -e.getBeginB();
+        for (Edit e : edits) {
+            if (e.getBeginA() == e.getEndA()) {
+                cnt += e.getEndB() - e.getBeginB();
 
-            }else if(e.getBeginB() == e.getEndB()){
-                cnt+= e.getEndA() - e.getBeginA();
-            }else if(e.getBeginA() < e.getEndA()&&e.getBeginB() < e.getEndB()){
-                cnt += e.getEndB() -e.getBeginB() +  e.getEndA() - e.getBeginA();
+            } else if (e.getBeginB() == e.getEndB()) {
+                cnt += e.getEndA() - e.getBeginA();
+            } else if (e.getBeginA() < e.getEndA() && e.getBeginB() < e.getEndB()) {
+                cnt += e.getEndB() - e.getBeginB() + e.getEndA() - e.getBeginA();
             }
         }
         return cnt;

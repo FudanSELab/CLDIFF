@@ -17,6 +17,7 @@ public class RQ3 extends RQ{
 
     private String projName;
     public static void main(String args[]){
+        Exception e = new Exception();
 //        generateCommitCache();
         generateDiffMinerOutput();
     }

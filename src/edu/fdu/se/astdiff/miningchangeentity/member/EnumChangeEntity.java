@@ -31,8 +31,6 @@ public class EnumChangeEntity extends MemberPlusChangeEntity{
         this.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_ENUM);
         this.stageIIBean.setThumbnail(ed.getName().toString());
 
-//        this.linkBean.methodDeclarations = MiningOperationBeanUtil.getNames(ed.bodyDeclarations());
-//        this.linkBean.methodDeclarations.add(ed.getName().toString());
 
     }
 
