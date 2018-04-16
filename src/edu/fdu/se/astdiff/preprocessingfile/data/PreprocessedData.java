@@ -2,15 +2,13 @@ package edu.fdu.se.astdiff.preprocessingfile.data;
 
 
 import edu.fdu.se.astdiff.associating.LayeredChangeEntityContainer;
+import edu.fdu.se.astdiff.miningactions.util.MyList;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.javaparser.JDTParserFactory;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by huangkaifeng on 2018/1/16.
@@ -28,6 +26,10 @@ public class PreprocessedData {
 
     public CompilationUnit dstCu;
     public CompilationUnit srcCu;
+
+    public Set<String> prevFieldNames;
+    public Set<String> currFieldNames;
+    public Set<String> prevCurrFieldNames;
 
     public CompilationUnit getDstCu() {
         return dstCu;
@@ -63,6 +65,9 @@ public class PreprocessedData {
         mBodiesDeleted = new ArrayList<>();
         classOrInterfaceOrEnum = new HashMap<>();
         entityContainer = new LayeredChangeEntityContainer();
+        prevFieldNames = new HashSet<>();
+        currFieldNames = new HashSet<>();
+        prevCurrFieldNames = new HashSet<>();
 
 
     }

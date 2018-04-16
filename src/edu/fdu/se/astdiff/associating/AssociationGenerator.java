@@ -9,6 +9,7 @@ import edu.fdu.se.astdiff.miningchangeentity.member.ClassChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.member.FieldChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.member.MethodChangeEntity;
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
+import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
@@ -38,8 +39,9 @@ public class AssociationGenerator {
         LayeredChangeEntityContainer container = this.changeEntityData.entityContainer;
         List<ChangeEntity> entities = this.changeEntityData.mad.getChangeEntityList();
 
-
-        entities.forEach(this::initLinkBean);
+        entities.forEach(a-> {
+            initLinkBean(a, changeEntityData.mad.preprocessedData);
+        });
 
 
         Map<BodyDeclarationPair, List<ChangeEntity>> mMap = container.getLayerMap();
@@ -103,7 +105,7 @@ public class AssociationGenerator {
 
     }
 
-    public void initLinkBean(ChangeEntity ce){
+    public void initLinkBean(ChangeEntity ce, PreprocessedData preprocessedData){
 
         if(ce instanceof ClassChangeEntity){
             ce.linkBean = new ClassData((ClassChangeEntity)ce);
@@ -112,7 +114,7 @@ public class AssociationGenerator {
         }else if(ce instanceof MethodChangeEntity){
             ce.linkBean = new MethodData((MethodChangeEntity)ce);
         }else if(ce instanceof StatementPlusChangeEntity){
-            ce.linkBean = new StmtData((StatementPlusChangeEntity)ce);
+            ce.linkBean = new StmtData((StatementPlusChangeEntity)ce,preprocessedData);
         }else{
             System.err.println("[ERR]not included");
         }

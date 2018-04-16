@@ -212,7 +212,7 @@ public class GenerateChangeEntityJson {
             jsonArray.put(jsonObject);
         }
 
-        return jsonArray.toString();
+        return jsonArray.toString(4);
     }
 
 

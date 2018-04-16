@@ -2,10 +2,12 @@ package edu.fdu.se.astdiff.associating.linkbean;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.miningactions.util.MyList;
 import edu.fdu.se.astdiff.miningchangeentity.base.StatementPlusChangeEntity;
+import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
@@ -19,22 +21,20 @@ public class StmtData extends LinkBean {
 
     public List<String> variableLocal;
 
-//    public List<String> variableField;
+    public List<String> variableField;
 
     public List<String> methodInvocation;
 
 
-    public StmtData(StatementPlusChangeEntity ce) {
+    public StmtData(StatementPlusChangeEntity ce, PreprocessedData preprocessedData) {
         this.variableLocal = new MyList<>();
         this.methodInvocation = new MyList<>();
-
+        this.variableField = new MyList<>();
         if (ce.clusteredActionBean.curAction instanceof Move) {
-            parseMove(ce.clusteredActionBean.curAction);
+            parseMove(ce.clusteredActionBean.curAction,preprocessedData);
         } else {
-            parseNonMove(ce.clusteredActionBean.actions);
+            parseNonMove(ce.clusteredActionBean.actions,preprocessedData);
         }
-//        this.variableField = new MyList<>();
-
     }
 
     public int isContainSameVar(StmtData stmtData) {
@@ -45,28 +45,25 @@ public class StmtData extends LinkBean {
                 flagA++;
             }
         }
-//        for(String tmp:stmtData.variableField){
-//            if(this.variableField.contains(tmp)){
-//                flagB ++;
-//            }
-//        }
-//        if(flagA ==0 &&flagB==0){
-//            return 0;
-//        }
-//        if(flagA !=0 && flagA==0){
-//            return 1;
-//        }
-//        if(flagA ==0 && flagB!=0){
-//            return 2;
-//        }
-        if (flagA != 0) {
+        for(String tmp:stmtData.variableField){
+            if(this.variableField.contains(tmp)){
+                flagB ++;
+            }
+        }
+        if(flagA !=0 &&flagB!=0){
+            return 3;
+        }
+        if(flagA !=0 && flagA==0){
             return 1;
+        }
+        if(flagA ==0 && flagB!=0){
+            return 2;
         }
         return 0;
     }
 
 
-    private void parseMove(Action a) {
+    private void parseMove(Action a, PreprocessedData preprocessedData) {
         Tree tree = (Tree) a.getNode();
         List<Tree> simpleNames = new ArrayList<>();
         for (ITree tmp : tree.preOrder()) {
@@ -81,7 +78,11 @@ public class StmtData extends LinkBean {
                     || aa.getAstNode().getClass().getSimpleName().endsWith("Literal")) {
                 ASTNode exp = findExpression(tree);
                 if (exp == null || !(exp instanceof MethodInvocation)) {
-                    variableLocal.add(tree.getLabel());
+                    if(preprocessedData.prevCurrFieldNames.contains(tree.getLabel())) {
+                        this.variableField.add(tree.getLabel());
+                    }else {
+                        variableLocal.add(tree.getLabel());
+                    }
                     continue;
                 }
                 if (isMethodInvocationName((MethodInvocation) exp, tree.getLabel())) {
@@ -91,32 +92,39 @@ public class StmtData extends LinkBean {
         }
     }
 
-    private void parseNonMove(List<Action> actions) {
-
-//        MyList<String> simpleNameList = new MyList<>();
-//        for(Action a:actions){
-//            Tree tree = (Tree)a.getNode();
-//            if(tree.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME
-//                    || tree.getAstNode().getClass().getSimpleName().endsWith("Literal")){
-//                simpleNameList.add(tree.getLabel());
-//            }
-//        }
-//        MyList<String> tmpMethodInvocations = new MyList<>();
-//        MyList<String> tmpVars = new MyList<>();
-
+    private void parseNonMove(List<Action> actions,PreprocessedData preprocessedData) {
         for (Action a : actions) {
             Tree tree = (Tree) a.getNode();
+            String updateVal = null;
+            if(a instanceof Update){
+                updateVal = ((Update)a).getValue();
+            }
             if (tree.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME
                     || tree.getAstNode().getClass().getSimpleName().endsWith("Literal")) {
                 ASTNode exp = findExpression(tree);
-                if (exp == null || !(exp instanceof MethodInvocation)) {
-                    variableLocal.add(tree.getLabel());
-                    continue;
+                boolean flag = true;
+                if(exp !=null && exp instanceof MethodInvocation){
+                    if (isMethodInvocationName((MethodInvocation) exp, tree.getLabel())) {
+                        methodInvocation.add(tree.getLabel());
+                        flag = false;
+                    }
                 }
-                if (isMethodInvocationName((MethodInvocation) exp, tree.getLabel())) {
-                    methodInvocation.add(tree.getLabel());
+                if(flag)
+                    if(preprocessedData.prevCurrFieldNames.contains(tree.getLabel())){
+                        variableField.add(tree.getLabel());
+                    }else {
+                        variableLocal.add(tree.getLabel());
+                    }
+                if(updateVal!=null) {
+                    if (preprocessedData.prevCurrFieldNames.contains(updateVal)){
+                        variableField.add(updateVal);
+                    }else {
+                        variableLocal.add(updateVal);
+                    }
                 }
+
             }
+
         }
     }
 

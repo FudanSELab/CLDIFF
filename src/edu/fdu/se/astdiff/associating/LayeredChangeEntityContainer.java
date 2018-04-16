@@ -154,6 +154,15 @@ public class LayeredChangeEntityContainer {
     }
 
 
+    public int getChangeEntitySize(){
+        int size =0;
+        for(Entry<BodyDeclarationPair,List<ChangeEntity>> entry:this.layerMap.entrySet()){
+            size += entry.getValue().size();
+        }
+        return size;
+    }
+
+
 
 
 }

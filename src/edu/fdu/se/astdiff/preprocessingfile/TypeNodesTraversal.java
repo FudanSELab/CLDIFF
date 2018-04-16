@@ -109,6 +109,8 @@ public class TypeNodesTraversal {
                 List<VariableDeclarationFragment> mmList = fd.fragments();
                 for (VariableDeclarationFragment vd : mmList) {
                     compareCache.addToMapBodyName(bdp, prefixClassName + vd.getName().toString());
+                    compareResult.prevFieldNames.add(vd.getName().toString());
+                    compareResult.prevCurrFieldNames.add(vd.getName().toString());
                 }
                 continue;
             }

@@ -25,6 +25,8 @@ public class DstBodyCheck {
         List<VariableDeclarationFragment> vdList = fd.fragments();
         for (VariableDeclarationFragment vd : vdList) {
             String key = prefix + vd.getName().toString();
+            compareResult.currFieldNames.add(vd.getName().toString());
+            compareResult.prevCurrFieldNames.add(vd.getName().toString());
 //            if(vd.getName().toString().equals("TAG")){
 //                System.out.println(vd.getName().toString());
 //            }

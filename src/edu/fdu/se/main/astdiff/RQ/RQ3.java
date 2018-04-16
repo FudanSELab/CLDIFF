@@ -63,7 +63,7 @@ public class RQ3 extends RQ{
                     });
                     for(int i =0;i<prevFiles.length;i++){
                         File a = prevFiles[i];
-                        if(!a.getName().equals("ConfigurationClass.java")){
+                        if(!a.getName().equals("ConditionEvaluator.java")){
                             continue;
                         }
                         File b = currFiles[i];

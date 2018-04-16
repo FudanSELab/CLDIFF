@@ -33,7 +33,8 @@ public class ChangeEntityPrinter {
     }
 
     public static void printContainerEntityNatural(LayeredChangeEntityContainer container,CompilationUnit cu) {
-        System.out.println("\nMember Key Size:" + container.getLayerMap().size());
+        System.out.println("\nMember key size:" + container.getLayerMap().size());
+        System.out.println("Change entity size:" + container.getChangeEntitySize());
         for (Map.Entry<BodyDeclarationPair, List<ChangeEntity>> entry : container.getLayerMap().entrySet()) {
             BodyDeclarationPair bodyDeclarationPair = entry.getKey();
             List<ChangeEntity> mList = container.getLayerMap().get(bodyDeclarationPair);
