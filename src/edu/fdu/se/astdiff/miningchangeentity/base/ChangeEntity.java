@@ -68,9 +68,10 @@ public class ChangeEntity {
         return changeEntityId+". "+this.stageIIBean.toString();
     }
 
-    // summary
+//    // summary
     public String toString2(){
-        return changeEntityId+". "+ this.stageIIBean.toString2();
+//        return changeEntityId+". "+ this.stageIIBean.toString2();
+        return null;
     }
 
 

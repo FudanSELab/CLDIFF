@@ -147,8 +147,9 @@ public class StageIIBean {
         sb.append(" ");
         sb.append(this.changeEntity);
         if(this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
+            sb.append(" ");
+            sb.append(this.getSubEntity());
             sb.append(" with/by");
-
         }
         return sb.toString();
     }

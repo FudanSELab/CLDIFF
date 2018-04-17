@@ -26,16 +26,16 @@ abstract public class RQ {
     public boolean isFilter(String filePathName){
         String name = filePathName.toLowerCase();
         if(!name.endsWith("java")){
-            return false;
+            return true;
         }
         if(name.contains("\\test\\")||name.contains("/test/")){
-            return false;
+            return true;
         }
         String[] data = filePathName.split("/");
         String fileName = data[data.length-1];
         if(filePathName.endsWith("Test.java")||fileName.startsWith("Test")){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }

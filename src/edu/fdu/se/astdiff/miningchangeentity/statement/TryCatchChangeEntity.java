@@ -31,6 +31,9 @@ public class TryCatchChangeEntity extends StatementPlusChangeEntity {
             sb.append(" ");
             sb.append(this.stageIIBean.getSubEntity());
             sb.append(" with insert/delete");
+        }else if(this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_INSERT)||this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_DELETE)){
+            sb.append(" ");
+            sb.append(this.stageIIBean.getSubEntity());
         }
         return sb.toString();
     }

@@ -34,7 +34,7 @@ public class MatchMethod {
 		code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_METHOD);
 //		code.stageIIBean.setOpt2(null);// 暂时不设置
-		code.stageIIBean.setSubEntity(null);
+//		code.stageIIBean.setSubEntity(null);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);
@@ -60,8 +60,9 @@ public class MatchMethod {
 			code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
 			code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_METHOD);
 		}
+		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_DECLARATION);
 //		code.stageIIBean.setOpt2(null);// 暂时不设置
-		code.stageIIBean.setSubEntity(null);
+
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
 		fp.addOneChangeEntity(code);

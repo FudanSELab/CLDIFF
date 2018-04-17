@@ -6,6 +6,7 @@ import edu.fdu.se.astdiff.miningchangeentity.base.StatementPlusChangeEntity;
 
 /**
  * Created by huangkaifeng on 2018/2/8.
+ *
  */
 public class BreakContinueEntity extends StatementPlusChangeEntity{
 

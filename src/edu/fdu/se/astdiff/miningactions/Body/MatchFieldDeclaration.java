@@ -33,7 +33,6 @@ public class MatchFieldDeclaration {
         code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_FIELD);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
-        code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
         fp.setActionTraversedMap(subActions);
@@ -59,8 +58,8 @@ public class MatchFieldDeclaration {
             code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_FIELD);
 
         }
+        code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_DECLARATION);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
-        code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
         fp.setActionTraversedMap(sameEdits);

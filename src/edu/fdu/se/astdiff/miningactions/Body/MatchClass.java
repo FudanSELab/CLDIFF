@@ -56,6 +56,7 @@ public class MatchClass {
             code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_CLASS);
             code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
         }
+
 //        code.stageIIBean.setOpt2(null);//暂时设为null
         code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_DECLARATION);
         code.stageIIBean.setLineRange(code.lineRange.toString());

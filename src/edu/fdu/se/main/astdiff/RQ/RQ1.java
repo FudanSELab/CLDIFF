@@ -48,11 +48,11 @@ public class RQ1 extends RQ{
     // 2. Debug抽取特定的commit
     public void oneCommit(){
         String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\RxJava\\.git";
-        outputDir = "";
+        outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ1";
         //5387e206af84b2dea77ecb1ed552b16dc1aed2c8
         //a267d7efdfe58b5727b5af22070ba3d953fe060a
         //d3455d0c9d57d522c31b5c25af83e8f2b8df12b6
-        String commitID = "d3455d0c9d57d522c31b5c25af83e8f2b8df12b6";
+        String commitID = "9564121e09616df909c2d23c4bba62734217bdd6";
         jGitHelper = new JGitHelper(repo);
         jGitHelper.analyzeOneCommit(this,commitID);
     }
@@ -101,9 +101,8 @@ public class RQ1 extends RQ{
                     String fileName = file.substring(index + 1, file.length());
                     String dirName = parentCommitId + "-" +currCommitId;
                     System.out.println(fileName);
-//                    if(!file.toLowerCase().contains("test")) {
-//                        if(fileName.equals("Pow2.java"))
-                    baseDiffMiner.doo(fileName,prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
+                    if(fileName.equals("SingleFromCallable.java"))
+                            baseDiffMiner.doo(fileName,prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
                 }
             }
         }

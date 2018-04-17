@@ -25,7 +25,7 @@ public class MatchInitializerBlock {
         code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
         code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_INITIALIZER);
 //        code.stageIIBean.setOpt2(null);// 暂时不设置
-        code.stageIIBean.setSubEntity(null);
+//        code.stageIIBean.setSubEntity(null);
         code.stageIIBean.setLineRange(code.lineRange.toString());
         code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
         fp.addOneChangeEntity(code);

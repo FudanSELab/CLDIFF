@@ -68,9 +68,9 @@ public class BaseDiffMiner {
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
         aag.doCluster(mad);
 //修正
-//        ChangeEntityData ced = new ChangeEntityData(mad);
-//        ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
-//        cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
+        ChangeEntityData ced = new ChangeEntityData(mad);
+        ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
+        cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
 //association
 //        FileInsideAssociationGenerator associationGenerator = new FileInsideAssociationGenerator(ced);
 //        associationGenerator.generateFile();

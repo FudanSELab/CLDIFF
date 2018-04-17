@@ -32,14 +32,7 @@ public class InitializerChangeEntity extends MemberPlusChangeEntity {
         StringBuilder sb = new StringBuilder();
         sb.append(this.changeEntityId);
         sb.append(". ");
-        sb.append(this.stageIIBean.getOpt());
-        sb.append(" ");
-        sb.append(this.stageIIBean.getChangeEntity());
-        if(this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
-            sb.append(" ");
-            sb.append(this.stageIIBean.getSubEntity());
-            sb.append("with/by...");
-        }
+        sb.append(this.stageIIBean.toString2());
         return sb.toString();
     }
 
