@@ -1,6 +1,8 @@
 package edu.fdu.se.astdiff.miningchangeentity.base;
 
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,10 @@ public class StageIIBean {
         @Override
         public int hashCode(){
             return (opt2+opt2Expression).hashCode();
+        }
+
+        public String toString(){
+            return opt2+" "+opt2Expression;
         }
     }
 
@@ -152,5 +158,16 @@ public class StageIIBean {
             sb.append(" with/by");
         }
         return sb.toString();
+    }
+
+    public JSONArray opt2ExpListToJSONArray(){
+        if(this.opt2List!=null){
+            JSONArray jsonArray = new JSONArray();
+            for(Opt2Tuple tmp:this.opt2List){
+                jsonArray.put(tmp.toString());
+            }
+            return jsonArray;
+        }
+        return null;
     }
 }

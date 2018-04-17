@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.github.gumtreediff.actions.model.*;
+import edu.fdu.se.astdiff.Global.Global;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
 
 import edu.fdu.se.astdiff.associating.LayeredChangeEntityContainer;
@@ -39,12 +37,16 @@ public class ChangeEntityPreprocess {
 
     public void preprocessChangeEntity() {
         this.initContainerEntityData();
-        this.printContainerEntityDataBefore();
+        if(Global.RQ2==0) {
+            this.printContainerEntityDataBefore();
+        }
         this.mergeMoveAndWrapper();
         this.setChangeEntitySub();
         this.setChangeEntityOpt2Opt2Exp();
 //        this.printContainerEntityDataAfter();
-        this.printNaturalEntityDesc();
+        if(Global.RQ2==0) {
+            this.printNaturalEntityDesc();
+        }
     }
 
 
@@ -58,7 +60,7 @@ public class ChangeEntityPreprocess {
                 if(!ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
                     if(ce.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
                         if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_CLASS)){
-                        	System.out.println(333333333);
+//                        	System.out.println(333333333);
                             // class signature 设置
 //                        	List<Action> actions = ce.clusteredActionBean.actions;
 //                        	for(Action a:actions){
@@ -68,13 +70,12 @@ public class ChangeEntityPreprocess {
 //                                System.out.println(tree.getType());
 //                                }
                         }else if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_MEMBER)){
-                        	System.out.println(444444444);
+//                        	System.out.println(444444444);
                             // method signature
                         }else if(ce.stageIIBean.getGranularity().equals(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT)){
-                        	System.out.println(555555555);
+//                        	System.out.println(555555555);
 
                             // stmt
-                            ChangeEntity a;
                             List<Action> actions = ce.clusteredActionBean.actions;
                             generatingExpressions(actions,ce.stageIIBean);
                         }
@@ -89,7 +90,7 @@ public class ChangeEntityPreprocess {
             Tree tree = (Tree) a.getNode();
             int nodeType = tree.getAstNode().getNodeType();
 //            System.out.println(tree.getAstNode());
-            boolean flag = false;
+            int flag = 0;
             switch(nodeType){
                 case ASTNode.NORMAL_ANNOTATION:
                 case ASTNode.MARKER_ANNOTATION:
@@ -98,9 +99,7 @@ public class ChangeEntityPreprocess {
                 case ASTNode.ARRAY_CREATION:
                 case ASTNode.ARRAY_INITIALIZER:
                 case ASTNode.ASSIGNMENT:
-                case ASTNode.BOOLEAN_LITERAL:
                 case ASTNode.CAST_EXPRESSION:
-                case ASTNode.CHARACTER_LITERAL:
                 case ASTNode.CLASS_INSTANCE_CREATION:
                 case ASTNode.CONDITIONAL_EXPRESSION:
                 case ASTNode.CREATION_REFERENCE:
@@ -110,27 +109,41 @@ public class ChangeEntityPreprocess {
                 case ASTNode.INSTANCEOF_EXPRESSION:
                 case ASTNode.LAMBDA_EXPRESSION:
                 case ASTNode.METHOD_INVOCATION:
-//                case ASTNode.SUPER_METHOD_REFERENCE:
-                case ASTNode.QUALIFIED_NAME:
-                case ASTNode.SIMPLE_NAME:
-                case ASTNode.NULL_LITERAL:
-                case ASTNode.NUMBER_LITERAL:
                 case ASTNode.PARENTHESIZED_EXPRESSION:
                 case ASTNode.POSTFIX_EXPRESSION:
                 case ASTNode.PREFIX_EXPRESSION:
-                case ASTNode.STRING_LITERAL:
                 case ASTNode.SUPER_FIELD_ACCESS:
                 case ASTNode.SUPER_METHOD_INVOCATION:
                 case ASTNode.SUPER_METHOD_REFERENCE:
                 case ASTNode.THIS_EXPRESSION:
-                case ASTNode.TYPE_LITERAL:
                 case ASTNode.TYPE_METHOD_REFERENCE:
                 case ASTNode.VARIABLE_DECLARATION_EXPRESSION:
-                flag=true;
-                break;
+                flag = 2; break;
+                case ASTNode.CHARACTER_LITERAL:
+                case ASTNode.BOOLEAN_LITERAL:
+                case ASTNode.TYPE_LITERAL:
+                case ASTNode.SIMPLE_NAME:
+                case ASTNode.STRING_LITERAL:
+                case ASTNode.NULL_LITERAL:
+                case ASTNode.NUMBER_LITERAL:
+                case ASTNode.QUALIFIED_NAME:
+                flag = 1;break;
                 default:break;
             }
-            if(flag){
+            if(flag==1){
+                String name =a.getClass().getSimpleName();
+                String exp = null;
+                if(a instanceof Update){
+                    Update up = (Update)a;
+                    exp = tree.getLabel()+"->"+up.getValue();
+//                    exp = tree.getAstNode().getClass().getSimpleName();
+                }else{
+                    exp = tree.getLabel();
+//                    String exp = tree.getAstNode().getClass().getSimpleName();
+                }
+
+                bean.addOpt2AndOpt2Expression(name,exp);
+            }else if(flag ==2){
                 String name =a.getClass().getSimpleName();
                 String exp = tree.getAstNode().getClass().getSimpleName();
 //            	System.out.println("-------------------------"+tree.getAstNode().getNodeType());

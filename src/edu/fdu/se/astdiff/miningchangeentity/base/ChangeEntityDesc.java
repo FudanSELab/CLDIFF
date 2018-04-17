@@ -226,6 +226,8 @@ public class ChangeEntityDesc {
         public static final String SUB_RANGE = "sub-range";
         public static final String SUB_RANGE_CODE = "sub-range-code";
         public static final String SUB_TYPE  = "sub-type";
+
+        public static final String OPT2EXP2 = "opt2-exp2";
     }
 
 

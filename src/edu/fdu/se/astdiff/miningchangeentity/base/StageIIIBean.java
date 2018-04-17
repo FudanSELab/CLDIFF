@@ -29,6 +29,8 @@ public class StageIIIBean {
 
     private List<SubRange> subRange;
 
+    private JSONArray opt2Exp2;
+
     public StageIIIBean() {
 
     }
@@ -142,6 +144,9 @@ public class StageIIIBean {
         this.range = range;
     }
 
+    public void setOpt2Exp2(JSONArray opt2Exp2) {
+        this.opt2Exp2 = opt2Exp2;
+    }
 
     public void setType1(String type) {
         this.type1 = type;
@@ -169,6 +174,9 @@ public class StageIIIBean {
                 jsonArray1.put(jsonObject1);
             }
             jsonObject.put(ChangeEntityDesc.StageIIIKeys.SUB_RANGE, jsonArray1);
+        }
+        if(this.opt2Exp2!=null){
+            jsonObject.put(ChangeEntityDesc.StageIIIKeys.OPT2EXP2, this.opt2Exp2);
         }
         return jsonObject;
     }

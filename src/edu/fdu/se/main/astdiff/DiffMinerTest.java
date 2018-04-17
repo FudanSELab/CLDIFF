@@ -21,8 +21,8 @@ public class DiffMinerTest extends BaseDiffMiner {
      * 使用gt的流程
      * test 单个文件
      */
-    public void runGumTree(String prevContent,String currContent) {
-        System.out.println("Step1 Generating Diff Actions:----------------------");
+    public int runGumTree(String prevContent,String currContent) {
+//        System.out.println("Step1 Generating Diff Actions:----------------------");
 //        String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
 //        String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
 //        GumTreeDiffParser his = new GumTreeDiffParser(new File(file1), new File(file2));
@@ -33,8 +33,9 @@ public class DiffMinerTest extends BaseDiffMiner {
         
         MyActionGenerator gen = new MyActionGenerator(his.src, his.dst, his.mapping);
         GeneratingActionsData data = gen.generate();
-        wholeSize += data.getAllActions().size();
-        System.out.println("size: "+data.getAllActions().size());
+//        wholeSize += data.getAllActions().size();
+//        System.out.println("size: "+data.getAllActions().size());
+        return data.getAllActions().size();
 //        SimpleActionPrinter.printMyActions();
         // package 2
 //        System.out.println("Step2 Begin to cluster actions:-------------------");

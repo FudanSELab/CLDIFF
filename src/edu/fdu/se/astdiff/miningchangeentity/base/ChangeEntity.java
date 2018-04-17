@@ -22,6 +22,8 @@ public class ChangeEntity {
     public LinkBean linkBean;
     public MyRange lineRange;
 
+
+
     private  void init(){
         changeEntityId = Global.changeEntityId;
         Global.changeEntityId++;

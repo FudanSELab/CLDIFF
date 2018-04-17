@@ -9,6 +9,7 @@ import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningchangeentity.base.StageIIIBean;
 import edu.fdu.se.astdiff.webapi.MergeIntervals;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import java.util.ArrayList;
@@ -52,6 +53,27 @@ public class ChangeEntityUtil {
         return 0;
     }
 
+    public static boolean simpleMoveWrapperDecision(MiningActionData fp,ChangeEntity move){
+        Tree t = (Tree) move.clusteredActionBean.curAction.getNode();
+        Tree dstt = (Tree)fp.getMappedDstOfSrcNode(t);
+        Tree par = (Tree) dstt.getParent();
+        boolean flag =false;
+        switch(par.getAstNode().getNodeType()){
+            case ASTNode.BLOCK:
+            case ASTNode.IF_STATEMENT:
+            case ASTNode.FOR_STATEMENT:
+            case ASTNode.ENHANCED_FOR_STATEMENT:
+            case ASTNode.SYNCHRONIZED_STATEMENT:
+            case ASTNode.WHILE_STATEMENT:
+            case ASTNode.DO_STATEMENT:
+                flag = true;
+                break;
+            default:break;
+        }
+
+        return flag;
+    }
+
     public static boolean isMoveInWrapper(MiningActionData fp, ChangeEntity wrapper, ChangeEntity move) {
         Integer[] range = null;
         if (wrapper.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_INSERT)) {
@@ -59,6 +81,7 @@ public class ChangeEntityUtil {
             if (dstITree == null) {
                 return false;
             }
+
             Tree dstTree = (Tree) dstITree;
             range = dstTree.getRange();
         } else if (wrapper.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_DELETE)) {
@@ -68,7 +91,10 @@ public class ChangeEntityUtil {
         }
         Integer[] wrapperRange = ((Tree) wrapper.clusteredActionBean.curAction.getNode()).getRange();
         if (wrapperRange[0] <= range[0] && wrapperRange[1] >= range[1]) {
-            return true;
+            if(simpleMoveWrapperDecision(fp,move)){
+                return true;
+            }
+            return false;
         }
         return false;
 

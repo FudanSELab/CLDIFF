@@ -45,7 +45,6 @@ public class JGitHelper extends JGitCommand {
     public void walkRepoFromBackwards(RQ rq) {
         try {
             //wang 4/11
-            DiffMinerTest diffMinerTest = new DiffMinerTest();
             int commitNum = 0;
             Queue<RevCommit> commitQueue = new LinkedList<>();
             Map<String, Boolean> isTraversed = new HashMap<>();
@@ -58,26 +57,20 @@ public class JGitHelper extends JGitCommand {
                     RevCommit queueCommitItem = commitQueue.poll();
                     //wang 4/11
                     commitNum++;
-
                     RevCommit[] parentCommits = queueCommitItem.getParents();
                     if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
                         continue;
                     }
                     Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(queueCommitItem.getName());
-
                     rq.handleCommits(changedFiles, queueCommitItem.getName());
-
                     isTraversed.put(queueCommitItem.getName(), true);
                     for (RevCommit item2 : parentCommits) {
                         RevCommit commit2 = revWalk.parseCommit(item2.getId());
                         commitQueue.offer(commit2);
                     }
-//                    break;
                 }
             }
-//            System.out.println("CommitSum:" + isTraversed.size());
-            System.out.println("commitNum:" + commitNum);
-            System.out.println("wholeSize:" + diffMinerTest.wholeSize);
+
 
         } catch (MissingObjectException e) {
             e.printStackTrace();
@@ -125,8 +118,6 @@ public class JGitHelper extends JGitCommand {
             Queue<RevCommit> commitQueue = new LinkedList<>();
             Map<String, Boolean> isTraversed = new HashMap<>();
             long startTime = System.nanoTime();   //获取开始时间
-
-
             List<Ref> mList = this.git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
             for (Ref item : mList) {
                 RevCommit commit = revWalk.parseCommit(item.getObjectId());
@@ -149,9 +140,9 @@ public class JGitHelper extends JGitCommand {
             }
             long endTime = System.nanoTime(); //获取结束时间
 //            System.out.println("CommitSum:" + isTraversed.size());
-            System.out.println("totalCommitNum: " + commitNum);
+//            System.out.println("totalCommitNum: " + commitNum);
             System.out.println("totalChangedLineNumber: " + totalChangedLineNumber);
-            System.out.println("totalExecTime: " + (endTime - startTime));
+            System.out.println("----total time:" + (endTime - startTime));
 
         } catch (MissingObjectException e) {
             e.printStackTrace();
@@ -185,7 +176,7 @@ public class JGitHelper extends JGitCommand {
 
     public int getCommitFileEditLineNumber(RevCommit commit) {
         try {
-            System.out.println("CommitId: " + commit.getName());
+            System.out.println("----commit id:" + commit.getName());
             int count = 0;
             long startTime = System.nanoTime();   //获取开始时间
 
@@ -216,7 +207,7 @@ public class JGitHelper extends JGitCommand {
                             EditList editList = fileHeader.toEditList();
                             int temp = lineNumber(editList);
                             count += temp;
-                            System.out.println(mOldPath.substring(mOldPath.lastIndexOf("/") + 1) + " " + count);
+                            System.out.println("----"+mOldPath.substring(mOldPath.lastIndexOf("/") + 1) + " " + count);
                             diffFormatter.format(entry);
                             out.reset();
                             break;
@@ -230,7 +221,7 @@ public class JGitHelper extends JGitCommand {
             }
             long endTime = System.nanoTime(); //获取结束时间
 
-            System.out.println("timePerCommit:" + (endTime - startTime));
+            System.out.println("----one commit time:" + (endTime - startTime));
             return count;
         } catch (MissingObjectException e) {
             e.printStackTrace();

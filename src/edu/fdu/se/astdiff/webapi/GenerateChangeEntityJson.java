@@ -84,6 +84,10 @@ public class GenerateChangeEntityJson {
                     changeEntity.stageIIIBean.setType1(changeEntity.stageIIBean.getGranularity());
                     changeEntity.stageIIIBean.setType2(changeEntity.stageIIBean.getOpt());
                     changeEntity.stageIIIBean.setRange(rangeStr);
+                    if(changeEntity.stageIIBean.getOpt2List()!=null){
+                        JSONArray jsonArray = changeEntity.stageIIBean.opt2ExpListToJSONArray();
+                        changeEntity.stageIIIBean.setOpt2Exp2(jsonArray);
+                    }
                     break;
             }
             changeEntity.stageIIIBean.setDisplayDesc(changeEntity.stageIIBean.toString2());
@@ -214,7 +218,7 @@ public class GenerateChangeEntityJson {
             jsonArray.put(jsonObject);
         }
 
-        return jsonArray.toString(4);
+        return jsonArray.toString();
     }
 
     public static String generateLinkJson(Map<String,ChangeEntityData> linkData,TotalFileAssociations totalAssos){

@@ -16,29 +16,16 @@ public class ActionAggregationGenerator {
 
     public void doCluster(MiningActionData fpd) {
         new ClusterUpDown(Move.class, fpd).doClusterUpDown();
-//        new ClusterDownUp(Move.class, fpd).doClusterDownUp();
+        new ClusterDownUp(Move.class, fpd).doClusterDownUp();
         new ClusterUpDown(Insert.class, fpd).doClusterUpDown();
         new ClusterUpDown(Delete.class, fpd).doClusterUpDown();
         new ClusterDownUp(Insert.class, fpd).doClusterDownUp();
         new ClusterDownUp(Delete.class, fpd).doClusterDownUp();
         new ClusterDownUp(Update.class, fpd).doClusterDownUp();
-//        iterateChangeEntityListSetChangePacket(fpd);
     }
 
 
 
-//    public static void iterateChangeEntityListSetChangePacket(MiningActionData mad){
-//        List<ChangeEntity> mList = mad.getChangeEntityList();
-//        for(ChangeEntity c : mList){
-//            if(c instanceof StatementPlusChangeEntity){
-//                StatementPlusChangeEntity s = (StatementPlusChangeEntity) c;
-//                s.refreshEntityValue();
-//            }else {
-//                MemberPlusChangeEntity m = (MemberPlusChangeEntity) c;
-//                m.refreshEntityValue();
-//            }
-//        }
-//    }
 
 
 
