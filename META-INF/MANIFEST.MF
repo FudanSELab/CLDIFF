@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: edu.fdu.se.main.astdiff.RQ.RQ3ToBat
+Main-Class: edu.fdu.se.main.astdiff.RQ.RQ2
 

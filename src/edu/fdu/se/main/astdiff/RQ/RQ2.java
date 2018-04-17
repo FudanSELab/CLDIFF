@@ -32,7 +32,9 @@ public class RQ2 extends RQ {
             rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ2";
             rq.rq2ProjPath = projPath;
             rq.baseDiffMiner = new DiffMinerTest();
-            rq.allCommits();
+            rq.jGitHelper = new JGitHelper(rq.rq2ProjPath);
+            rq.fileOutputLog = new FileOutputLog(rq.outputDir);
+            rq.jGitHelper.walkRepoFromBackwards(rq);
 
         }else if("lc".equals(args[0])){
             rq.jGitHelper = new JGitHelper(projPath);
@@ -44,11 +46,6 @@ public class RQ2 extends RQ {
 
     }
 
-    public void allCommits(){
-        jGitHelper = new JGitHelper(this.rq2ProjPath);
-        fileOutputLog = new FileOutputLog(outputDir);
-        jGitHelper.walkRepoFromBackwards(this);
-    }
 
     private long totalNumber;
 
