@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -23,11 +22,7 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.patch.FileHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.git.JGitCommand;
-import edu.fdu.se.main.astdiff.BaseDiffMiner;
-import edu.fdu.se.main.astdiff.DiffMiner;
-import edu.fdu.se.main.astdiff.DiffMinerTest;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 
 /**

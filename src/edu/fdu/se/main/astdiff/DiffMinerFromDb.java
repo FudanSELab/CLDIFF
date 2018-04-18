@@ -18,7 +18,7 @@ import java.util.Map;
  *
  * @author huangkaifeng
  */
-public class DiffMiner extends BaseDiffMiner {
+public class DiffMinerFromDb extends BaseDiffMiner {
 
     public List<String> readCompareList(int version, String prevPath, String currPath) {
         prevList = new ArrayList<>();
@@ -80,7 +80,7 @@ public class DiffMiner extends BaseDiffMiner {
         }
     }
     public static void main(String []args) {
-        DiffMiner i = new DiffMiner();
+        DiffMinerFromDb i = new DiffMinerFromDb();
 		i.runBatch();
     }
 

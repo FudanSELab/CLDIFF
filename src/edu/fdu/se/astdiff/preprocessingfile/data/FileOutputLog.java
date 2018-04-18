@@ -13,14 +13,28 @@ import java.io.File;
  */
 public class FileOutputLog {
 
-    public File srcDirFile;
-    public File dstDirFile;
-    public String path;
+    public String rootPath;
+    public String projName;
+    public String commitId;
+    public String metaLinkPath;
+    public String currSourceFile;
+    public String prevSourceFile;
+    public String currSourceGen;
+    public String prevSourceGen;
+    public FileOutputLog(String rootPath,String projName){
+        this.rootPath = rootPath;
+        this.projName = projName;
+    }
 
-    public FileOutputLog(String path){
-        srcDirFile = new File(path + "/prev/gen");
-        dstDirFile = new File(path + "/curr/gen");
-
+    public void setCommitId(String commit){
+        this.commitId = commit;
+        this.metaLinkPath = rootPath+"\\"+projName+"\\"+ commit;
+        this.prevSourceFile = metaLinkPath+"\\prev";
+        this.currSourceFile = metaLinkPath+"\\curr";
+        this.prevSourceGen = metaLinkPath+"\\prev\\gen";
+        this.currSourceGen = metaLinkPath +"\\curr\\gen";
+        File srcDirFile = new File(this.prevSourceGen);
+        File dstDirFile = new File(this.currSourceGen);
         if(!srcDirFile.exists()){
             srcDirFile.mkdirs();
         }
@@ -31,25 +45,34 @@ public class FileOutputLog {
 
 
     public void writeFileBeforeProcess(PreprocessedData preprocessedData){
-        FileWriter.writeInAll(srcDirFile.getAbsolutePath() + "/BeforeTrim"+Global.fileName, preprocessedData.srcLineList);
-        FileWriter.writeInAll(dstDirFile.getAbsolutePath() + "/BeforeTrim"+Global.fileName, preprocessedData.dstLineList);
+        FileWriter.writeInAll(this.prevSourceGen + "/BeforeTrim"+Global.fileName, preprocessedData.srcLineList);
+        FileWriter.writeInAll(this.currSourceGen + "/BeforeTrim"+Global.fileName, preprocessedData.dstLineList);
     }
 
     public void writeFileAfterProcess(PreprocessedData preprocessedData){
-        FileWriter.writeInAll(srcDirFile.getAbsolutePath() + "/AfterTrim"+Global.fileName, preprocessedData.srcLineList,preprocessedData.srcLines);
-        FileWriter.writeInAll(dstDirFile.getAbsolutePath() + "/AfterTrim"+Global.fileName, preprocessedData.dstLineList,preprocessedData.dstLines);
+        FileWriter.writeInAll(this.prevSourceGen + "/AfterTrim"+Global.fileName, preprocessedData.srcLineList,preprocessedData.srcLines);
+        FileWriter.writeInAll(this.currSourceGen + "/AfterTrim"+Global.fileName, preprocessedData.dstLineList,preprocessedData.dstLines);
     }
 
 
     public void writeTreeFile(String srcTree,String dstTree){
-        FileWriter.writeInAll(this.srcDirFile.getAbsolutePath() + "/Tree"+Global.fileName+".txt", srcTree);
-        FileWriter.writeInAll(this.dstDirFile.getAbsolutePath() + "/Tree"+Global.fileName+".txt", dstTree);
+        FileWriter.writeInAll(this.prevSourceGen + "/Tree"+Global.fileName+".txt", srcTree);
+        FileWriter.writeInAll(this.currSourceGen + "/Tree"+Global.fileName+".txt", dstTree);
     }
 
 
     public void writeEntityJson(String json){
-        FileWriter.writeInAll(this.srcDirFile.getAbsolutePath() +  "/Diff"+Global.fileName+".json", json);
-        FileWriter.writeInAll(this.dstDirFile.getAbsolutePath() +  "/Diff"+Global.fileName+".json", json);
+        FileWriter.writeInAll(this.prevSourceGen +  "/Diff"+Global.fileName+".json", json);
+        FileWriter.writeInAll(this.currSourceGen +  "/Diff"+Global.fileName+".json", json);
+    }
+
+    public void writeSourceFile(byte[] prev,byte[] curr,String fileName){
+        FileWriter.writeInAll(this.prevSourceFile + "\\"+fileName, prev);
+        FileWriter.writeInAll(this.currSourceFile + "\\"+fileName, curr);
+    }
+
+    public void writeMetaFile(String metaJson){
+        FileWriter.writeInAll(this.metaLinkPath+"\\meta.json",metaJson);
     }
 
 //    public void writeRQ1CommitFile(byte[] src,byte[] dst,String commitIdFileName,String fileName){

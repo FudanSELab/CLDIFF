@@ -118,10 +118,11 @@ public class ChangeEntityPreprocess {
                 case ASTNode.THIS_EXPRESSION:
                 case ASTNode.TYPE_METHOD_REFERENCE:
                 case ASTNode.VARIABLE_DECLARATION_EXPRESSION:
+                case ASTNode.TYPE_LITERAL:
                 flag = 2; break;
                 case ASTNode.CHARACTER_LITERAL:
                 case ASTNode.BOOLEAN_LITERAL:
-                case ASTNode.TYPE_LITERAL:
+
                 case ASTNode.SIMPLE_NAME:
                 case ASTNode.STRING_LITERAL:
                 case ASTNode.NULL_LITERAL:
@@ -141,7 +142,9 @@ public class ChangeEntityPreprocess {
                     exp = tree.getLabel();
 //                    String exp = tree.getAstNode().getClass().getSimpleName();
                 }
-
+                if(exp.equals("Object")){
+                    continue;//hot fix
+                }
                 bean.addOpt2AndOpt2Expression(name,exp);
             }else if(flag ==2){
                 String name =a.getClass().getSimpleName();

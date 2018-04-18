@@ -42,7 +42,6 @@ public class FilePairPreDiff {
 
     private PreprocessedData preprocessedData;
     private PreprocessedTempData preprocessedTempData;
-    private FileOutputLog fileOutputLog;
 
     class SrcDstPair{
         TypeDeclaration tpSrc;
@@ -65,17 +64,14 @@ public class FilePairPreDiff {
         }
     }
 
-    public FileOutputLog getFileOutputLog() {
-        return fileOutputLog;
-    }
 
     public int compareTwoFile(String outputDirName) {
         CompilationUnit cuSrc = preprocessedData.srcCu;
         CompilationUnit cuDst = preprocessedData.dstCu;
-        if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
-            fileOutputLog = new FileOutputLog(outputDirName);
+//        if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
+//            fileOutputLog = new FileOutputLog(outputDirName);
 //            fileOutputLog.writeFileBeforeProcess(preprocessedData);
-        }
+//        }
         preprocessedTempData.removeAllSrcComments(cuSrc, preprocessedData.srcLines);
         preprocessedTempData.removeAllDstComments(cuDst, preprocessedData.dstLines);
         if(cuSrc.types().size() != cuDst.types().size()){
@@ -112,9 +108,9 @@ public class FilePairPreDiff {
         iterateVisitingMap2LoadContainerMap();
 //        astTraversal.traverseSrcTypeDeclaration2Keys(preprocessedData,preprocessedTempData,tdSrc,tdSrc.getName().toString() + ".");
 
-        if (fileOutputLog != null) {
+//        if (fileOutputLog != null) {
 //            fileOutputLog.writeFileAfterProcess(preprocessedData);
-        }
+//        }
 
     }
 

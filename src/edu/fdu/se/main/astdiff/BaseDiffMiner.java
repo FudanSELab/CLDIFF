@@ -22,6 +22,11 @@ import edu.fdu.se.config.PropertyKeys;
  */
 public class BaseDiffMiner {
 
+
+    public ChangeEntityData changeEntityData;
+    public String mFileName;
+    public FileOutputLog mFileOutputLog;
+
     public void doo(String filePrev, String fileCurr, String output) {
         int index = filePrev.lastIndexOf('/');
         if(index ==-1) index = filePrev.lastIndexOf("\\");
@@ -49,8 +54,9 @@ public class BaseDiffMiner {
         runDiff(preDiff,fileName);
     }
 
-    public ChangeEntityData changeEntityData;
-    public String mFileName;
+
+
+
 
     private void runDiff(FilePairPreDiff preDiff,String fileName){
 
@@ -61,7 +67,7 @@ public class BaseDiffMiner {
         MyActionGenerator actionGenerator = new MyActionGenerator(treeGenerator);
         GeneratingActionsData actionsData = actionGenerator.generate();
         //print
-        printActions(actionsData,treeGenerator,preDiff.getFileOutputLog());
+        printActions(actionsData,treeGenerator);
 
         MiningActionData mad = new MiningActionData(preData,actionsData,treeGenerator);
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
@@ -78,9 +84,9 @@ public class BaseDiffMiner {
 //        associationGenerator.printAssociations();
 
 // json
-//        GenerateChangeEntityJson.setStageIIIBean(ced);
-//        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
-//        preDiff.getFileOutputLog().writeEntityJson(json);
+        GenerateChangeEntityJson.setStageIIIBean(ced);
+        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
+        this.mFileOutputLog.writeEntityJson(json);
 //        System.out.println(json);
 //        String assoa = GenerateChangeEntityJson.generateAssociationJson(ced.mAssociations);
 //        System.out.println(assoa);
@@ -88,13 +94,14 @@ public class BaseDiffMiner {
     }
 
 
-    private void printActions(GeneratingActionsData actionsData, JavaParserTreeGenerator treeGenerator, FileOutputLog fileOutputLog){
+    private void printActions(GeneratingActionsData actionsData, JavaParserTreeGenerator treeGenerator){
         if("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_SRC_DST_TREE))){
-            fileOutputLog.writeTreeFile(treeGenerator.getPrettyOldTreeString(),treeGenerator.getPrettyNewTreeString());
+            mFileOutputLog.writeTreeFile(treeGenerator.getPrettyOldTreeString(),treeGenerator.getPrettyNewTreeString());
             SimpleActionPrinter.printMyActions(actionsData.getAllActions());
         }
     }
-
+//rq4 数据check check完 check web
+    // rq3 数据check check完 link
 
 
 }

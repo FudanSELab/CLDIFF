@@ -1,8 +1,5 @@
 package edu.fdu.se.main.astdiff.RQ;
 
-import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
-import edu.fdu.se.main.astdiff.BaseDiffMiner;
-import edu.fdu.se.main.astdiff.DiffMiner;
 import edu.fdu.se.main.astdiff.DiffMinerTest;
 
 import java.util.List;
@@ -15,7 +12,7 @@ import java.util.Map;
 abstract public class RQ {
 
     JGitHelper jGitHelper;
-    FileOutputLog fileOutputLog;
+
     DiffMinerTest baseDiffMiner;
     String outputDir;
 

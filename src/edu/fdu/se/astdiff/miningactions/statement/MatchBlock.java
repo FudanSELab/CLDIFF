@@ -21,6 +21,7 @@ public class MatchBlock {
     public static void matchBlock(MiningActionData fp, Action a) {
         if(a instanceof Move){
             handleMoveOnBlock(fp,a);
+            fp.setActionTraversedMap(a);
             return;
         }
         Tree fatherNode = (Tree)a.getNode().getParent();

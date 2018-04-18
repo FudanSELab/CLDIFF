@@ -1,6 +1,7 @@
 package edu.fdu.se.main.astdiff.RQ;
 
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
+import edu.fdu.se.main.astdiff.DiffMinerTest;
 
 import java.util.List;
 import java.util.Map;
@@ -15,22 +16,8 @@ public class RQ1 extends RQ{
 
     public static void main(String args[]){
         RQ1 rq1 = new RQ1();
-//    	long startTime = System.currentTimeMillis();    //获取开始时间
-//    	System.out.println("开始时间：" + startTime + "ms");
-
 //        rq1.allCommits();
-
-//        long endTime = System.currentTimeMillis();    //获取结束时间
-//        System.out.println("结束时间：" + endTime + "ms");
-//
-//    	System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
-
         rq1.oneCommit();
-        // RQ1 准确性 ？GumTree(DiffMiner)/10proj*100commit*2file*10change entity
-        // RQ2 size  gumtree /linenumber /diff miner
-        // RQ3
-        // RQ4
-        // RQ5
     }
 
     // 1.抽取所有的commit filter掉不需要的
@@ -39,9 +26,14 @@ public class RQ1 extends RQ{
         String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\RxJava\\.git";
         outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ1";
         System.out.println("\n\n----------------------------"+repo);
+        baseDiffMiner = new DiffMinerTest();
+        String[] data = repo.split("\\\\");
+        String projName = data[data.length-2];
         jGitHelper = new JGitHelper(repo);
-        fileOutputLog = new FileOutputLog(outputDir);
+        baseDiffMiner.mFileOutputLog = new FileOutputLog(outputDir,projName);
         jGitHelper.walkRepoFromBackwards(this);
+
+
     }
 
 
@@ -74,9 +66,6 @@ public class RQ1 extends RQ{
                     System.out.println("CommitId: " + currCommitId);
                     System.out.println("fileName: " + fileName);
                     String dirName = parentCommitId + "-" + currCommitId;
-
-//                                diffMinerTest.runGumTree(new String(prevFile), new String(currFile));
-//                    if(!file.toLowerCase().contains("test")) {
                     baseDiffMiner.doo(fileName,prevFile,currFile,outputDir+"/"+dirName+"/"+fileName);
 //                        fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + currCommitId, fileName);
                 }

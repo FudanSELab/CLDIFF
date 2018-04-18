@@ -15,7 +15,6 @@ import edu.fdu.se.config.PropertyKeys;
  */
 public class DiffMinerTest extends BaseDiffMiner {
 
-	public int wholeSize = 0;
 
     /**
      * 使用gt的流程

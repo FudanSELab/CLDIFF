@@ -28,12 +28,14 @@ public class RQ2 extends RQ {
         long startTime = System.nanoTime();
         rq.argType = args[0];
         rq.totalNumber = 0;
+        String[] data = projPath.split("\\\\");
+        String projName = data[data.length-2];
         if("gt".equals(args[0]) || "df".equals(args[0])){
             rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ2";
             rq.rq2ProjPath = projPath;
             rq.baseDiffMiner = new DiffMinerTest();
             rq.jGitHelper = new JGitHelper(rq.rq2ProjPath);
-            rq.fileOutputLog = new FileOutputLog(rq.outputDir);
+            rq.baseDiffMiner.mFileOutputLog = new FileOutputLog(rq.outputDir,projName);
             rq.jGitHelper.walkRepoFromBackwards(rq);
 
         }else if("lc".equals(args[0])){
@@ -53,6 +55,7 @@ public class RQ2 extends RQ {
     public void handleCommits(Map<String, Map<String, List<String>>> changedFiles,String currCommitId){
         long start = System.nanoTime();
         System.out.println("----commit id:"+currCommitId);
+//        this.baseDiffMiner.mFileOutputLog.setCommitId(currCommitId);
         for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
             String parentCommitId = entry.getKey();
             Map<String, List<String>> changedFileEntry = entry.getValue();

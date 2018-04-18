@@ -2,13 +2,12 @@ package edu.fdu.se.main.astdiff.RQ;
 
 import edu.fdu.se.astdiff.Global.Global;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
-import edu.fdu.se.fileutil.FileWriter;
+import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
+import edu.fdu.se.main.astdiff.DiffMinerTest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.*;
-import java.util.Map.Entry;
 /**
  * Created by huangkaifeng on 2018/4/12.
  *
@@ -41,15 +40,19 @@ public class RQ3 extends RQ{
         RQ3 rq = new RQ3();
         String projName = "spring-framework";
         rq.repoPath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\"+projName+"\\.git";
-        rq.commitId = "ace6bd2418cba892f793e9e3666ac02a541074c7";
-        rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\"+projName;
+        rq.commitId = "fccec210b4fecbbc3ab758d127a95fb741b21175";
+        rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\";
+
         rq.jGitHelper = new JGitHelper(rq.repoPath);
+        rq.baseDiffMiner = new DiffMinerTest();
+        rq.baseDiffMiner.mFileOutputLog = new FileOutputLog(rq.outputDir,projName);
         rq.jGitHelper.analyzeOneCommit(rq,rq.commitId);
         rq.generateDiffMinerOutput();
 
     }
 
     public void handleCommit(Map<String, Map<String, List<String>>> changedFiles, String currCommitId){
+        this.baseDiffMiner.mFileOutputLog.setCommitId(currCommitId);
         String absolutePath = this.outputDir+"\\"+currCommitId;
         for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
             String parentCommitId = entry.getKey();
@@ -65,28 +68,22 @@ public class RQ3 extends RQ{
                 }
                 JSONObject jo = new JSONObject();
                 jo.put("files",ja);
-                File f = new File(absolutePath);
-                f.mkdirs();
-                FileWriter.writeInAll(absolutePath+"/meta.json",jo.toString());
+                this.baseDiffMiner.mFileOutputLog.writeMetaFile(jo.toString());
                 for (String file : modifiedFile) {
                     if(this.isFilter(file)){
                         continue;
                     }
+
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);
                     byte[] currFile = jGitHelper.extract(file, currCommitId);
                     int index = file.lastIndexOf("/");
                     String fileName = file.substring(index + 1, file.length());
-
+//                    if(!fileName.equals("ConfigurationClassParser.java")){
+//                        continue;
+//                    }
                     FilePairData fp = new FilePairData(prevFile,currFile,file,file,fileName);
                     filePairDatas.add(fp);
-                    String subPathCurr = absolutePath+"\\curr\\";
-                    String subPathPrev = absolutePath+"\\prev\\";
-                    File f1 = new File(subPathPrev);
-                    f1.mkdirs();
-                    File f2 = new File(subPathCurr);
-                    f2.mkdirs();
-                    FileWriter.writeInAll(subPathPrev+fileName,prevFile);
-                    FileWriter.writeInAll(subPathCurr+fileName,currFile);
+                    this.baseDiffMiner.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
                 }
             }
         }

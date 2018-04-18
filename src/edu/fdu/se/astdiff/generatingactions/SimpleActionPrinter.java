@@ -6,6 +6,7 @@ import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeUtils;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.SimpleType;
 
 import java.util.List;
 
@@ -29,6 +30,13 @@ public class SimpleActionPrinter {
 		}
 		if (a instanceof Insert) {
 			sb.append( " to " + prettyString((Tree)treeNode.getParent()) + " at " +((Insert)a).getPosition() +" "+ treeNode.getRangeString()+ "\n");
+//			Tree ttt = (Tree)a.getNode();
+//			if(ttt.getAstNode() instanceof SimpleType) {
+//				SimpleType st = (SimpleType) ttt.getAstNode();
+//				String aaaa = st.getName().toString();
+//				System.out.println(aaaa);
+//			}
+
 		}
 		if (a instanceof Move) {
 			Move move = (Move) a;

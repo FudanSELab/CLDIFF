@@ -74,7 +74,7 @@ public class JGitRepositoryCommand extends JGitCommand {
 
     public void walkRepoFromBackwards(String outDir) {
         try {
-            FileOutputLog fileOutputLog = new FileOutputLog(outDir);
+//            FileOutputLog fileOutputLog = new FileOutputLog(outDir);
             Queue<RevCommit> commitQueue = new LinkedList<>();
             Map<String, Boolean> isTraversed = new HashMap<>();
             List<Ref> mList = this.git.branchList().setListMode(ListMode.ALL).call();
@@ -170,40 +170,7 @@ public class JGitRepositoryCommand extends JGitCommand {
 //		}
     }
 
-    public void analyzeOneCommit(String commitString, String outDir) {
-        try {
-            FileOutputLog fileOutputLog = new FileOutputLog(outDir);
-            ObjectId commitId = ObjectId.fromString(commitString);
-            RevCommit commit = revWalk.parseCommit(commitId);
-            if (commit.getParents() == null) {
-                return;
-            }
-            Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(commit.getName());
-            for (Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
-                String parentCommitId = entry.getKey();
-                Map<String, List<String>> changedFileEntry = entry.getValue();
-                if (changedFileEntry.containsKey("modifiedFiles")) {
-                    List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
-                    for (String file : modifiedFile) {
-                        if (!file.endsWith(".java")) {
-                            continue;
-                        }
-                        byte[] prevFile = this.extract(file, parentCommitId);
-                        byte[] currFile = this.extract(file, commit.getName());
-                        int index = file.lastIndexOf("/");
-                        String fileName = file.substring(index + 1, file.length() - 1);
-//                        fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + commit.getName(), fileName);
-                    }
-                }
-            }
-        } catch (MissingObjectException e) {
-            e.printStackTrace();
-        } catch (IncorrectObjectTypeException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
 
     public static void main(String args[]) {
