@@ -1,5 +1,6 @@
 package edu.fdu.se.main.astdiff.RQ;
 
+import edu.fdu.se.astdiff.Global.Global;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.main.astdiff.DiffMinerTest;
 
@@ -39,13 +40,15 @@ public class RQ1 extends RQ{
 
     // 2. Debug抽取特定的commit
     public void oneCommit(){
-        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\RxJava\\.git";
+        String repo = "D:\\Workspace\\CodeDiff\\TestPro\\elasticsearch\\.git";
         outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ1";
         //5387e206af84b2dea77ecb1ed552b16dc1aed2c8
         //a267d7efdfe58b5727b5af22070ba3d953fe060a
         //d3455d0c9d57d522c31b5c25af83e8f2b8df12b6
-        String commitID = "9564121e09616df909c2d23c4bba62734217bdd6";
+        String commitID = "f057fc294af900078c1bc6b8bbb29c4ed0c8cc8d";
         jGitHelper = new JGitHelper(repo);
+        baseDiffMiner = new DiffMinerTest();
+        baseDiffMiner.mFileOutputLog = new FileOutputLog(outputDir,"elasticsearch");
         jGitHelper.analyzeOneCommit(this,commitID);
     }
 
@@ -75,6 +78,7 @@ public class RQ1 extends RQ{
     }
 
     public void handleCommit(Map<String, Map<String, List<String>>> changedFiles,String currCommitId) {
+        baseDiffMiner.mFileOutputLog.setCommitId(currCommitId);
         for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
             String parentCommitId = entry.getKey();
             Map<String, List<String>> changedFileEntry = entry.getValue();
@@ -90,8 +94,9 @@ public class RQ1 extends RQ{
                     String fileName = file.substring(index + 1, file.length());
                     String dirName = parentCommitId + "-" +currCommitId;
                     System.out.println(fileName);
-                    if(fileName.equals("SingleFromCallable.java"))
-                            baseDiffMiner.doo(fileName,prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
+//                    if(fileName.equals("SingleFromCallable.java"))
+                    Global.fileName = fileName;
+                    baseDiffMiner.doo(fileName,prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
                 }
             }
         }
