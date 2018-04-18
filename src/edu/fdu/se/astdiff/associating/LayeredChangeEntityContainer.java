@@ -22,11 +22,16 @@ public class LayeredChangeEntityContainer {
     protected Map<BodyDeclarationPair, List<ChangeEntity>> layerMap;
 
 
+
     protected List<BodyDeclarationPair> keyIndex;
 
 
     public Map<BodyDeclarationPair, List<ChangeEntity>> getLayerMap() {
         return layerMap;
+    }
+
+    public List<BodyDeclarationPair> getKeyIndex() {
+        return keyIndex;
     }
 
     public LayeredChangeEntityContainer() {

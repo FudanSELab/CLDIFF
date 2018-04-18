@@ -1,11 +1,13 @@
 package edu.fdu.se.main.astdiff.RQ;
 
 import edu.fdu.se.astdiff.Global.Global;
+import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.main.astdiff.DiffMinerTest;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.util.Map.Entry;
 
 import java.util.*;
 /**
@@ -40,9 +42,8 @@ public class RQ3 extends RQ{
         RQ3 rq = new RQ3();
         String projName = "spring-framework";
         rq.repoPath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\"+projName+"\\.git";
-        rq.commitId = "fccec210b4fecbbc3ab758d127a95fb741b21175";
+        rq.commitId = "3c1adf7f6af0dff9bda74f40dabe8cf428a62003";
         rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\";
-
         rq.jGitHelper = new JGitHelper(rq.repoPath);
         rq.baseDiffMiner = new DiffMinerTest();
         rq.baseDiffMiner.mFileOutputLog = new FileOutputLog(rq.outputDir,projName);
@@ -53,7 +54,6 @@ public class RQ3 extends RQ{
 
     public void handleCommit(Map<String, Map<String, List<String>>> changedFiles, String currCommitId){
         this.baseDiffMiner.mFileOutputLog.setCommitId(currCommitId);
-        String absolutePath = this.outputDir+"\\"+currCommitId;
         for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
             String parentCommitId = entry.getKey();
             Map<String, List<String>> changedFileEntry = entry.getValue();
@@ -73,7 +73,6 @@ public class RQ3 extends RQ{
                     if(this.isFilter(file)){
                         continue;
                     }
-
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);
                     byte[] currFile = jGitHelper.extract(file, currCommitId);
                     int index = file.lastIndexOf("/");
@@ -94,16 +93,19 @@ public class RQ3 extends RQ{
         int i =0;
         for(FilePairData fp:filePairDatas){
             System.out.println(fp.fileName);
-            runDiffMiner(fp.fileName,fp.prev,fp.curr,absolutePath);
+            Global.fileName = fp.fileName;
+            this.baseDiffMiner.doo(fp.fileName,fp.prev,fp.curr,absolutePath);
+            this.fileChangeEntityData.put(this.baseDiffMiner.mFileName,this.baseDiffMiner.changeEntityData);
         }
+//        for(Entry<String,ChangeEntityData> entry: this.fileChangeEntityData.entrySet()){
+//            //association
+//            FileInsideAssociationGenerator associationGenerator = new FileInsideAssociationGenerator(ced);
+//            associationGenerator.generateFile();
+//            associationGenerator.printAssociations();
+//        }
         fileChangeEntityData.clear();
     }
 
-    public void runDiffMiner(String fileName,byte[] prev,byte[] curr,String output){
-        Global.fileName = fileName;
-        this.baseDiffMiner.doo(fileName,prev,curr,output);
-        this.fileChangeEntityData.put(this.baseDiffMiner.mFileName,this.baseDiffMiner.changeEntityData);
-    }
 
 
 

@@ -1,6 +1,8 @@
 package edu.fdu.se.main.astdiff;
 
 import edu.fdu.se.astdiff.Global.Global;
+import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
+import edu.fdu.se.astdiff.associating.LayeredChangeEntityContainer;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
@@ -78,15 +80,11 @@ public class BaseDiffMiner {
         cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
         changeEntityData = ced;
         mFileName = fileName;
-//association
-//        FileInsideAssociationGenerator associationGenerator = new FileInsideAssociationGenerator(ced);
-//        associationGenerator.generateFile();
-//        associationGenerator.printAssociations();
 
 // json
-        GenerateChangeEntityJson.setStageIIIBean(ced);
-        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
-        this.mFileOutputLog.writeEntityJson(json);
+//        GenerateChangeEntityJson.setStageIIIBean(ced);
+//        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
+//        this.mFileOutputLog.writeEntityJson(json);
 //        System.out.println(json);
 //        String assoa = GenerateChangeEntityJson.generateAssociationJson(ced.mAssociations);
 //        System.out.println(assoa);

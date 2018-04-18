@@ -15,9 +15,10 @@ import java.util.Map;
 public class ChangeEntityPrinter {
 
     public static void printContainerEntity(LayeredChangeEntityContainer container,CompilationUnit cu) {
+
         System.out.println("\nMember Key Size:" + container.getLayerMap().size());
-        for (Map.Entry<BodyDeclarationPair, List<ChangeEntity>> entry : container.getLayerMap().entrySet()) {
-            BodyDeclarationPair bodyDeclarationPair = entry.getKey();
+        List<BodyDeclarationPair> keyList = container.getKeyIndex();
+        for(BodyDeclarationPair bodyDeclarationPair : keyList){
             List<ChangeEntity> mList = container.getLayerMap().get(bodyDeclarationPair);
             if (mList == null || mList.size() == 0) {
                 continue;
@@ -35,8 +36,8 @@ public class ChangeEntityPrinter {
     public static void printContainerEntityNatural(LayeredChangeEntityContainer container,CompilationUnit cu) {
         System.out.println("\nMember key size:" + container.getLayerMap().size());
         System.out.println("Change entity size:" + container.getChangeEntitySize());
-        for (Map.Entry<BodyDeclarationPair, List<ChangeEntity>> entry : container.getLayerMap().entrySet()) {
-            BodyDeclarationPair bodyDeclarationPair = entry.getKey();
+        List<BodyDeclarationPair> keyList = container.getKeyIndex();
+        for(BodyDeclarationPair bodyDeclarationPair : keyList){
             List<ChangeEntity> mList = container.getLayerMap().get(bodyDeclarationPair);
             if (mList == null || mList.size() == 0) {
                 continue;
