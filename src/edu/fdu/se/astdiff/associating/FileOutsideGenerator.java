@@ -16,27 +16,23 @@ import java.util.Set;
  */
 public class FileOutsideGenerator {
 
-    public static String fileA;
+    public String fileA;
+    public String fileB;
 
-    public static String fileB;
+    public ChangeEntityData ce1;
 
-    public static void generateOutsideAssociation(Map<String,ChangeEntityData> totalMapData){
-        Set<String> keys = totalMapData.keySet();
-        List<String> fileKeysList = new ArrayList<>(keys);
-        for(int i =0;i<fileKeysList.size();i++){
-            for(int j=i;j<fileKeysList.size();j++){
-                String a = fileKeysList.get(i);
-                String b = fileKeysList.get(j);
-                fileA = a;
-                fileB = b;
-                ChangeEntityData ca = totalMapData.get(a);
-                ChangeEntityData cb = totalMapData.get(b);
-                gen(ca,cb);
-            }
-        }
+    public ChangeEntityData ce2;
+    public List<Association> mAssos;
+    public FileOutsideGenerator(){
+        mAssos = new ArrayList<>();
     }
 
-    public static void gen(ChangeEntityData ca,ChangeEntityData cb){
-        
+
+    public void generateOutsideAssociation(ChangeEntityData ca,ChangeEntityData cb){
+        mAssos.clear();
+        ce1 = ca;
+        ce2 = cb;
+
+
     }
 }

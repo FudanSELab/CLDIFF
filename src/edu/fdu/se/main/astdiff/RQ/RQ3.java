@@ -1,7 +1,9 @@
 package edu.fdu.se.main.astdiff.RQ;
 
 import edu.fdu.se.astdiff.Global.Global;
+import edu.fdu.se.astdiff.associating.Association;
 import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
+import edu.fdu.se.astdiff.associating.FileOutsideGenerator;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.main.astdiff.DiffMinerTest;
@@ -90,19 +92,29 @@ public class RQ3 extends RQ{
 
     public void generateDiffMinerOutput(){
         String absolutePath = this.outputDir+"\\" + this.commitId;
-        int i =0;
         for(FilePairData fp:filePairDatas){
             System.out.println(fp.fileName);
             Global.fileName = fp.fileName;
             this.baseDiffMiner.doo(fp.fileName,fp.prev,fp.curr,absolutePath);
             this.fileChangeEntityData.put(this.baseDiffMiner.mFileName,this.baseDiffMiner.changeEntityData);
         }
-//        for(Entry<String,ChangeEntityData> entry: this.fileChangeEntityData.entrySet()){
-//            //association
-//            FileInsideAssociationGenerator associationGenerator = new FileInsideAssociationGenerator(ced);
-//            associationGenerator.generateFile();
-//            associationGenerator.printAssociations();
-//        }
+        List<String> fileNames = new ArrayList<>(this.fileChangeEntityData.keySet());
+        List<Association> mAssociations = new ArrayList<>();
+        for(int i =0;i<fileNames.size();i++){
+            String fileNameA = fileNames.get(i);
+            ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
+            FileInsideAssociationGenerator associationGenerator = new FileInsideAssociationGenerator(cedA);
+            associationGenerator.generateFile();
+            mAssociations.addAll(cedA.mAssociations);
+            FileOutsideGenerator fileOutsideGenerator = new FileOutsideGenerator();
+            for(int j =i+1;j<fileNames.size();j++){
+                String fileNameB = fileNames.get(j);
+                ChangeEntityData cedB = this.fileChangeEntityData.get(fileNameB);
+                fileOutsideGenerator.generateOutsideAssociation(cedA,cedB);
+                mAssociations.addAll(fileOutsideGenerator.mAssos);
+
+            }
+        }
         fileChangeEntityData.clear();
     }
 
