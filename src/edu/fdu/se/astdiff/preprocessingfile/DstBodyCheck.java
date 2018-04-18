@@ -17,6 +17,15 @@ import java.util.List;
  */
 public class DstBodyCheck {
 
+    public BodyDeclarationPair getExactBodyDeclarationPair(List<BodyDeclarationPair> bodyDeclarationPairs,Class clazz){
+        for(BodyDeclarationPair bodyDeclarationPair:bodyDeclarationPairs){
+            if(bodyDeclarationPair.getBodyDeclaration().getClass().equals(clazz)){
+                return bodyDeclarationPair;
+            }
+        }
+        return null;
+    }
+
     /**
      * visited
      */
@@ -27,13 +36,12 @@ public class DstBodyCheck {
             String key = prefix + vd.getName().toString();
             compareResult.currFieldNames.add(vd.getName().toString());
             compareResult.prevCurrFieldNames.add(vd.getName().toString());
-//            if(vd.getName().toString().equals("TAG")){
-//                System.out.println(vd.getName().toString());
-//            }
             if (compareCache.srcNodeBodyNameMap.containsKey(key)) {
                 List<BodyDeclarationPair> srcBodyPairs = compareCache.srcNodeBodyNameMap.get(key);
-                assert srcBodyPairs.size() <= 1;
-                BodyDeclarationPair srcBody = srcBodyPairs.get(0);
+                BodyDeclarationPair srcBody = getExactBodyDeclarationPair(srcBodyPairs,FieldDeclaration.class);
+                if(srcBody == null){
+                    System.err.println("[ERROR]");
+                }
                 if (srcBody.getBodyDeclaration().toString().hashCode() == fd.toString().hashCode()
                         && srcBody.getLocationClassString().hashCode() == prefix.hashCode()) {
                     compareCache.addToDstRemoveList(fd);
@@ -64,9 +72,10 @@ public class DstBodyCheck {
 
         if (compareCache.srcNodeBodyNameMap.containsKey(prefixClassName)) {
             List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(prefixClassName);
-            assert srcNodeList.size() <= 1;
-            BodyDeclarationPair srcBody = srcNodeList.get(0);
-
+            BodyDeclarationPair srcBody = getExactBodyDeclarationPair(srcNodeList,TypeDeclaration.class);
+            if(srcBody == null){
+                System.err.println("[ERROR]");
+            }
             if (srcBody.getBodyDeclaration().toString().hashCode() == cod.toString().hashCode()
                     && prefixClassName.hashCode() == srcBody.getLocationClassString().hashCode()) {
 //                System.out.println(srcBody.getBodyDeclaration().toString());
@@ -90,8 +99,10 @@ public class DstBodyCheck {
         String key = prefixClassName + ed.getName().toString();
         if(compareCache.srcNodeBodyNameMap.containsKey(key)){
             List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(key);
-            assert srcNodeList.size()<=1;
-            BodyDeclarationPair srcBody = srcNodeList.get(0);
+            BodyDeclarationPair srcBody = getExactBodyDeclarationPair(srcNodeList,EnumDeclaration.class);
+            if(srcBody == null){
+                System.err.println("[ERROR]");
+            }
             if(srcBody.getBodyDeclaration().toString().hashCode()== ed.toString().hashCode()
                     && prefixClassName.hashCode() == srcBody.getLocationClassString().hashCode()){
                 compareCache.addToDstRemoveList(ed);

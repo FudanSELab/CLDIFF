@@ -101,8 +101,8 @@ public class JavaParserFactory {
 			Node n = imports.get(i);
 			n.remove();
 		}
-		assert cu.getTypes() != null;
-		assert cu.getTypes().size() == 1;
+		assert(cu.getTypes() != null);
+		assert(cu.getTypes().size() == 1);
 		TypeDeclaration mTypeCurr = cu.getType(0);
 		ClassOrInterfaceDeclaration cod = (ClassOrInterfaceDeclaration) mTypeCurr;
 		traverseClassOrInterfaceDeclarationRemoveComment(cod);
@@ -167,8 +167,8 @@ public class JavaParserFactory {
 	 * @return
 	 */
 	public static List<BodyDeclaration> parseCompilationUnitGetAllMethodDeclaration(CompilationUnit compilationUnit){
-		assert compilationUnit.getTypes() != null;
-		assert compilationUnit.getTypes().size() == 1;
+		assert(compilationUnit.getTypes() != null);
+		assert(compilationUnit.getTypes().size() == 1);
 		TypeDeclaration mType = compilationUnit.getType(0);
 		NodeList nodeList = mType.getMembers();
 		List<BodyDeclaration> mMethodDeclarationList = new ArrayList<BodyDeclaration>();

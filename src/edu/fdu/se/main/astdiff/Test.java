@@ -144,8 +144,8 @@ public class Test {
         for (int i = imprortss.size() - 1; i >= 0; i--) {
             imprortss.get(i).delete();
         }
-        assert cu.types() != null;
-        assert cu.types().size() == 1;
+        assert(cu.types()!=null);
+        assert(cu.types().size() == 1);
     }
 }
 

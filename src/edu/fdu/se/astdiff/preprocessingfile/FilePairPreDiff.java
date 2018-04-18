@@ -68,9 +68,10 @@ public class FilePairPreDiff {
     public int compareTwoFile(String outputDirName) {
         CompilationUnit cuSrc = preprocessedData.srcCu;
         CompilationUnit cuDst = preprocessedData.dstCu;
+//        fileOutputLog.writeFileBeforeProcess(preprocessedData);
 //        if ("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_PREPROCESSING))) {
 //            fileOutputLog = new FileOutputLog(outputDirName);
-//            fileOutputLog.writeFileBeforeProcess(preprocessedData);
+//
 //        }
         preprocessedTempData.removeAllSrcComments(cuSrc, preprocessedData.srcLines);
         preprocessedTempData.removeAllDstComments(cuDst, preprocessedData.dstLines);

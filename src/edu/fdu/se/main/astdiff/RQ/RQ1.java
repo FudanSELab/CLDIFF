@@ -40,7 +40,7 @@ public class RQ1 extends RQ{
 
     // 2. Debug抽取特定的commit
     public void oneCommit(){
-        String repo = "D:\\Workspace\\CodeDiff\\TestPro\\elasticsearch\\.git";
+        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\elasticsearch\\.git";
         outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ1";
         //5387e206af84b2dea77ecb1ed552b16dc1aed2c8
         //a267d7efdfe58b5727b5af22070ba3d953fe060a
@@ -70,7 +70,6 @@ public class RQ1 extends RQ{
                     System.out.println("fileName: " + fileName);
                     String dirName = parentCommitId + "-" + currCommitId;
                     baseDiffMiner.doo(fileName,prevFile,currFile,outputDir+"/"+dirName+"/"+fileName);
-//                        fileOutputLog.writeRQ1CommitFile(prevFile, currFile, parentCommitId + "-" + currCommitId, fileName);
                 }
             }
         }
@@ -94,9 +93,10 @@ public class RQ1 extends RQ{
                     String fileName = file.substring(index + 1, file.length());
                     String dirName = parentCommitId + "-" +currCommitId;
                     System.out.println(fileName);
-//                    if(fileName.equals("SingleFromCallable.java"))
                     Global.fileName = fileName;
+                    if(fileName.equals("TopDocsCollectorContext.java"))
                     baseDiffMiner.doo(fileName,prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
+                    this.baseDiffMiner.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
                 }
             }
         }

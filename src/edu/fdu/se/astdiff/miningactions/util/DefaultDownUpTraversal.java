@@ -39,7 +39,7 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
     }
 
     public static void traverseMethodSignature(Tree node,List<Action> result1,ChangePacket changePacket){
-        assert node.getDoAction() == null;
+        assert(node.getDoAction() == null);
         if(changePacket.getChangeSet1()==null){
             changePacket.initChangeSet1();
         }
@@ -68,7 +68,7 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
     }
 
     public static void traverseIfPredicate(Tree node,List<Action> result1,ChangePacket changePacket){
-        assert node.getDoAction() == null;
+        assert(node.getDoAction() == null);
         if(changePacket.getChangeSet1()==null){
             changePacket.initChangeSet1();
         }
@@ -95,16 +95,16 @@ public class DefaultDownUpTraversal extends BasicTreeTraversal{
     }
 
     public static void traverseDoWhileCondition(Tree node,List<Action> result,ChangePacket changePacket){
-        assert node.getDoAction() == null;
-        assert node.getChildren().size()==2;
+//        assert(node.getDoAction() == null);
+//        assert(node.getChildren().size()==2);
         changePacket.initChangeSet1();
         Tree secondChild = (Tree) node.getChild(1);
         traverseNodeSubTree(secondChild,result,changePacket.getChangeSet1());
     }
 
     public static void traverseSwitchCondition(Tree node,List<Action> result,ChangePacket changePacket){
-        assert node.getDoAction() == null;
-        assert node.getChildren().size()==2;
+        assert(node.getDoAction() == null);
+        assert(node.getChildren().size()==2);
         changePacket.initChangeSet1();
         List<ITree> children = node.getChildren();
         for(ITree tmp:children){
