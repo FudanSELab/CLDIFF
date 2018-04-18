@@ -31,7 +31,7 @@ abstract public class RQ {
         }
         String[] data = filePathName.split("/");
         String fileName = data[data.length-1];
-        if(filePathName.endsWith("Test.java")||fileName.startsWith("Test")){
+        if(filePathName.endsWith("Test.java")||fileName.startsWith("Test")||filePathName.endsWith("Tests.java")){
             return true;
         }
         return false;

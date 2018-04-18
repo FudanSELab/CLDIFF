@@ -217,70 +217,8 @@ public class GenerateChangeEntityJson {
             JSONObject jsonObject = changeEntity.stageIIIBean.genJSonObject();
             jsonArray.put(jsonObject);
         }
-
         return jsonArray.toString();
     }
 
-    public static String generateLinkJson(Map<String,ChangeEntityData> linkData,TotalFileAssociations totalAssos){
-        JSONObject jsonObject = new JSONObject();
-        JSONArray ja1 = new JSONArray();
-        for(Entry<String,ChangeEntityData> entry:linkData.entrySet()){
-            JSONObject jo1 = new JSONObject();
-            jo1.put("file-name",entry.getKey());
-            List<ChangeEntity> mList = entry.getValue().mad.getChangeEntityList();
-            JSONArray entityArr = new JSONArray();
-            for(int i=0;i<mList.size();i++){
-                entityArr.put(mList.get(i).getChangeEntityId());
-            }
-            jo1.put("change-entity-id-list",entityArr);
-            ja1.put(jo1);
-        }
-        jsonObject.put("file-change-entity-list",ja1);
-        JSONArray ja2 =new JSONArray();
-        for(Entry<String,ChangeEntityData> entry:linkData.entrySet()){
-            JSONObject jo2 = new JSONObject();
-            jo2.put("link-type","one-file-link");
-            jo2.put("file-name",entry.getKey());
-            List<Association> assos = entry.getValue().mAssociations;
-            JSONArray linkArr = new JSONArray();
-            for(Association as :assos){
-                linkArr.put(as.linkJsonString());
-            }
-            jo2.put("links",linkArr);
-            ja2.put(jo2);
-        }
-        for(Entry<String,List<Association>> entry: totalAssos.file2fileAssos.entrySet()){
-            String[] data = entry.getKey().split("----");
-            List<Association> mList = entry.getValue();
-            JSONObject jo3 = new JSONObject();
-            jo3.put("link-type","two-file-link");
-            jo3.put("file-name",data[0]);
-            jo3.put("file-name2",data[1]);
-            JSONArray linkArr = new JSONArray();
-            for(Association as :mList){
-                linkArr.put(as.linkJsonString());
-            }
-            jo3.put("links",linkArr);
-            ja2.put(jo3);
-        }
-        jsonObject.put("links",ja2);
 
-
-        return jsonObject.toString();
-    }
-
-
-    public static String generateAssociationJson(List<Association> associationList) {
-        JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i < associationList.size(); i++) {
-            Association association = associationList.get(i);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", i);
-            jsonObject.put("a", association.getChangeEntity1().getChangeEntityId());
-            jsonObject.put("b", association.getChangeEntity2().getChangeEntityId());
-            jsonObject.put("type", association.getType());
-            jsonArray.put(jsonObject);
-        }
-        return jsonArray.toString();
-    }
 }

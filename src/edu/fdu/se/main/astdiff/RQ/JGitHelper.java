@@ -162,7 +162,7 @@ public class JGitHelper extends JGitCommand {
         }
         String[] data = filePathName.split("/");
         String fileName = data[data.length - 1];
-        if (filePathName.endsWith("Test.java") || fileName.startsWith("Test")) {
+        if (filePathName.endsWith("Test.java") || fileName.startsWith("Test")||filePathName.endsWith("Tests.java")) {
             return false;
         }
         return true;

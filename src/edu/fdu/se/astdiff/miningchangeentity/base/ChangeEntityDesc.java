@@ -209,6 +209,8 @@ public class ChangeEntityDesc {
 
         public static final String TYPE_CALL_METHOD = "a call method b";
 
+        public static final String TYPE_CROSS_FILE_CALL_METHOD = "a call method b";
+
         public static final String TYPE_PARAMETER_CHANGE_VAR_CHANGE = "a parameter change -> b variable change";
 
         public static final String TYPE_SHARE_FIELD = "a field acess same as b";

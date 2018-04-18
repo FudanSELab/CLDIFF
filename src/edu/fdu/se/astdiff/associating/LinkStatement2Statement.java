@@ -18,12 +18,23 @@ public class LinkStatement2Statement {
             Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_CONTROL);
             changeEntityData.mAssociations.add(association);
         }
-        LinkBean linkBean1 = ce1.linkBean;
-        LinkBean linkBean2 = ce2.linkBean;
-        if(isContainSameVar(linkBean1,linkBean2)!=0){
-            Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SAME_VARIABLE);
-            changeEntityData.mAssociations.add(association);
+        StmtData linkBean1 = (StmtData) ce1.linkBean;
+        StmtData linkBean2 = (StmtData) ce2.linkBean;
+        for(String tmp:linkBean1.variableField){
+            if(linkBean2.variableField.contains(tmp)){
+                Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SHARE_FIELD);
+                changeEntityData.mAssociations.add(association);
+                break;
+            }
         }
+        for(String tmp:linkBean1.variableLocal) {
+            if(linkBean2.variableLocal.contains(tmp)){
+                Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SAME_VARIABLE);
+                changeEntityData.mAssociations.add(association);
+                break;
+            }
+        }
+
 
     }
 
@@ -42,12 +53,4 @@ public class LinkStatement2Statement {
 
 
 
-    private static int isContainSameVar(LinkBean linkBean1,LinkBean linkBean2){
-        assert linkBean1 instanceof StmtData;
-        assert linkBean2 instanceof StmtData;
-        StmtData stmtData1 = (StmtData)linkBean1;
-        StmtData stmtData2 = (StmtData)linkBean2;
-        return stmtData1.isContainSameVar(stmtData2);
-
-    }
 }

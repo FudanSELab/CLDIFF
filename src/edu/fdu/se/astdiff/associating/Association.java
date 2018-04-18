@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.associating;
 
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
+import org.json.JSONObject;
 
 /**
  * Created by huangkaifeng on 4/7/18.
@@ -9,9 +10,9 @@ import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 public class Association {
 
 
-    public String fileA;
+    private String fileA;
 
-    public String fileB;
+    private String fileB;
 
     private ChangeEntity changeEntity1;
 
@@ -22,6 +23,28 @@ public class Association {
     public Association(ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type){
         this.changeEntity1 = changeEntity1;
         this.changeEntity2 = changeEntity2;
+        this.type = type;
+    }
+
+    /**
+     * file A B 按照字母顺序 固定
+     * @param fileA
+     * @param fileB
+     * @param changeEntity1
+     * @param changeEntity2
+     */
+    public Association(String fileA,String fileB,ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type){
+        if(fileA.compareTo(fileB)<0){
+            this.fileA = fileA;
+            this.fileB = fileB;
+            this.changeEntity1 = changeEntity1;
+            this.changeEntity2 = changeEntity2;
+        }else{
+            this.fileA = fileB;
+            this.fileB = fileA;
+            this.changeEntity1 = changeEntity2;
+            this.changeEntity2 = changeEntity1;
+        }
         this.type = type;
     }
 
@@ -55,7 +78,11 @@ public class Association {
                 +" -> "+changeEntity2.getChangeEntityId()+". "+changeEntity2.getClass().getSimpleName()+" : " +type;
     }
 
-    public String linkJsonString(){
-        return changeEntity1.getChangeEntityId()+","+changeEntity2.getChangeEntityId();
+    public JSONObject linkJsonString(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("from",changeEntity1.getChangeEntityId());
+        jsonObject.put("to",changeEntity2.getChangeEntityId());
+        jsonObject.put("desc",this.type);
+        return jsonObject;
     }
 }

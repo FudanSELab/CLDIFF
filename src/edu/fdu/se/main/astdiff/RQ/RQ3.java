@@ -4,8 +4,10 @@ import edu.fdu.se.astdiff.Global.Global;
 import edu.fdu.se.astdiff.associating.Association;
 import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
 import edu.fdu.se.astdiff.associating.FileOutsideGenerator;
+import edu.fdu.se.astdiff.associating.TotalFileAssociations;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
+import edu.fdu.se.astdiff.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.main.astdiff.DiffMinerTest;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -79,9 +81,9 @@ public class RQ3 extends RQ{
                     byte[] currFile = jGitHelper.extract(file, currCommitId);
                     int index = file.lastIndexOf("/");
                     String fileName = file.substring(index + 1, file.length());
-//                    if(!fileName.equals("ConfigurationClassParser.java")){
-//                        continue;
-//                    }
+                    if(fileName.equals("ExecutorConfigurationSupport.java")){
+                        continue;
+                    }
                     FilePairData fp = new FilePairData(prevFile,currFile,file,file,fileName);
                     filePairDatas.add(fp);
                     this.baseDiffMiner.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
@@ -96,25 +98,27 @@ public class RQ3 extends RQ{
             System.out.println(fp.fileName);
             Global.fileName = fp.fileName;
             this.baseDiffMiner.doo(fp.fileName,fp.prev,fp.curr,absolutePath);
-            this.fileChangeEntityData.put(this.baseDiffMiner.mFileName,this.baseDiffMiner.changeEntityData);
+            this.fileChangeEntityData.put(this.baseDiffMiner.changeEntityData.fileName,this.baseDiffMiner.changeEntityData);
         }
+//        if(true) return;
         List<String> fileNames = new ArrayList<>(this.fileChangeEntityData.keySet());
-        List<Association> mAssociations = new ArrayList<>();
+        TotalFileAssociations totalFileAssociations = new TotalFileAssociations() ;
         for(int i =0;i<fileNames.size();i++){
             String fileNameA = fileNames.get(i);
             ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
             FileInsideAssociationGenerator associationGenerator = new FileInsideAssociationGenerator(cedA);
             associationGenerator.generateFile();
-            mAssociations.addAll(cedA.mAssociations);
+            totalFileAssociations.addEntry(fileNameA,cedA.mAssociations);
             FileOutsideGenerator fileOutsideGenerator = new FileOutsideGenerator();
             for(int j =i+1;j<fileNames.size();j++){
                 String fileNameB = fileNames.get(j);
                 ChangeEntityData cedB = this.fileChangeEntityData.get(fileNameB);
                 fileOutsideGenerator.generateOutsideAssociation(cedA,cedB);
-                mAssociations.addAll(fileOutsideGenerator.mAssos);
-
+                totalFileAssociations.addFile2FileAssos(fileNameA,fileNameB,fileOutsideGenerator.mAssos);
             }
         }
+
+        System.out.println(totalFileAssociations.toAssoJSonString());
         fileChangeEntityData.clear();
     }
 

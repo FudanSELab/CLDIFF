@@ -94,7 +94,7 @@ public class RQ1 extends RQ{
                     String dirName = parentCommitId + "-" +currCommitId;
                     System.out.println(fileName);
                     Global.fileName = fileName;
-                    if(fileName.equals("TopDocsCollectorContext.java"))
+//                    if(fileName.equals("TopDocsCollectorContext.java"))
                     baseDiffMiner.doo(fileName,prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
                     this.baseDiffMiner.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
                 }

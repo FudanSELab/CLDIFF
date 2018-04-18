@@ -35,7 +35,7 @@ public class LinkStatement2Member {
         }else{
             // method name是否在invoke的list里面
             for(String methodInvokes:stmtData.methodInvocation){
-                if(methodInvokes.equals(methodData.methodName)){
+                if(methodData.methodName.contains(methodInvokes)){
                     Association association = new Association(stmt,method,ChangeEntityDesc.StageIIIAssociationType.TYPE_CALL_METHOD);
                     changeEntityData.mAssociations.add(association);
                 }

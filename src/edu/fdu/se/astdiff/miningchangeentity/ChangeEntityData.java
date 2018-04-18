@@ -22,6 +22,8 @@ import java.util.List;
  */
 public class ChangeEntityData {
 
+    public String fileName;
+
     public LayeredChangeEntityContainer entityContainer;
     public MiningActionData mad;
 

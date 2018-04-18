@@ -26,7 +26,6 @@ public class BaseDiffMiner {
 
 
     public ChangeEntityData changeEntityData;
-    public String mFileName;
     public FileOutputLog mFileOutputLog;
 
     public void doo(String filePrev, String fileCurr, String output) {
@@ -52,7 +51,6 @@ public class BaseDiffMiner {
         if(result ==-1){
             return;
         }
-
         runDiff(preDiff,fileName);
     }
 
@@ -69,7 +67,7 @@ public class BaseDiffMiner {
         MyActionGenerator actionGenerator = new MyActionGenerator(treeGenerator);
         GeneratingActionsData actionsData = actionGenerator.generate();
         //print
-        printActions(actionsData,treeGenerator);
+//        printActions(actionsData,treeGenerator);
 
         MiningActionData mad = new MiningActionData(preData,actionsData,treeGenerator);
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
@@ -79,15 +77,13 @@ public class BaseDiffMiner {
         ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
         cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub
         changeEntityData = ced;
-        mFileName = fileName;
-
+        changeEntityData.fileName = fileName;
 // json
 //        GenerateChangeEntityJson.setStageIIIBean(ced);
 //        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
 //        this.mFileOutputLog.writeEntityJson(json);
 //        System.out.println(json);
-//        String assoa = GenerateChangeEntityJson.generateAssociationJson(ced.mAssociations);
-//        System.out.println(assoa);
+
 
     }
 
