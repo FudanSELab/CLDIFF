@@ -94,8 +94,6 @@ public class BaseDiffMiner {
             SimpleActionPrinter.printMyActions(actionsData.getAllActions());
         }
     }
-//rq4 数据check check完 check web
-    // rq3 数据check check完 link
 
 
 }

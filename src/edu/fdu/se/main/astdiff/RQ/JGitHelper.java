@@ -66,7 +66,6 @@ public class JGitHelper extends JGitCommand {
                 }
             }
 
-
         } catch (MissingObjectException e) {
             e.printStackTrace();
         } catch (IncorrectObjectTypeException e) {
@@ -93,7 +92,6 @@ public class JGitHelper extends JGitCommand {
             }
             Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(commit.getName());
             rq.handleCommit(changedFiles, commitString);
-
         } catch (MissingObjectException e) {
             e.printStackTrace();
         } catch (IncorrectObjectTypeException e) {

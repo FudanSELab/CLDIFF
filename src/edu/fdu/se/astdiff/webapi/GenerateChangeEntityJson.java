@@ -217,7 +217,7 @@ public class GenerateChangeEntityJson {
             JSONObject jsonObject = changeEntity.stageIIIBean.genJSonObject();
             jsonArray.put(jsonObject);
         }
-        return jsonArray.toString();
+        return jsonArray.toString(4);
     }
 
 

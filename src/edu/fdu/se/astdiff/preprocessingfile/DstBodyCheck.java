@@ -36,25 +36,30 @@ public class DstBodyCheck {
             String key = prefix + vd.getName().toString();
             compareResult.currFieldNames.add(vd.getName().toString());
             compareResult.prevCurrFieldNames.add(vd.getName().toString());
+            boolean newFieldFlag = true;
             if (compareCache.srcNodeBodyNameMap.containsKey(key)) {
                 List<BodyDeclarationPair> srcBodyPairs = compareCache.srcNodeBodyNameMap.get(key);
                 BodyDeclarationPair srcBody = getExactBodyDeclarationPair(srcBodyPairs,FieldDeclaration.class);
-                if(srcBody == null){
+                if(srcBody != null){
+                    newFieldFlag = false;
+                    if (srcBody.getBodyDeclaration().toString().hashCode() == fd.toString().hashCode()
+                            && srcBody.getLocationClassString().hashCode() == prefix.hashCode()) {
+                        compareCache.addToDstRemoveList(fd);
+                        compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
+                        return 1;
+                    } else {
+                        // variable相同，设置为不删除
+                        if (PreprocessedTempData.BODY_SAME_REMOVE != compareCache.getNodeMapValue(srcBody)) {
+                            compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_DIFFERENT_RETAIN);
+                        }
+                        return 2;
+                    }
+                }else {
+                    newFieldFlag = true;
                     System.err.println("[ERROR]");
                 }
-                if (srcBody.getBodyDeclaration().toString().hashCode() == fd.toString().hashCode()
-                        && srcBody.getLocationClassString().hashCode() == prefix.hashCode()) {
-                    compareCache.addToDstRemoveList(fd);
-                    compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
-                    return 1;
-                } else {
-                    // variable相同， 设置为不删除
-                    if (PreprocessedTempData.BODY_SAME_REMOVE != compareCache.getNodeMapValue(srcBody)) {
-                        compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_DIFFERENT_RETAIN);
-                    }
-                    return 2;
-                }
-            } else {
+            }
+            if(newFieldFlag){
                 //new field
                 compareResult.addBodiesAdded(fd, prefix);
                 compareCache.addToDstRemoveList(fd);
@@ -73,20 +78,21 @@ public class DstBodyCheck {
         if (compareCache.srcNodeBodyNameMap.containsKey(prefixClassName)) {
             List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(prefixClassName);
             BodyDeclarationPair srcBody = getExactBodyDeclarationPair(srcNodeList,TypeDeclaration.class);
-            if(srcBody == null){
-                System.err.println("[ERROR]");
-            }
-            if (srcBody.getBodyDeclaration().toString().hashCode() == cod.toString().hashCode()
-                    && prefixClassName.hashCode() == srcBody.getLocationClassString().hashCode()) {
+            if(srcBody != null) {
+                if (srcBody.getBodyDeclaration().toString().hashCode() == cod.toString().hashCode()
+                        && prefixClassName.hashCode() == srcBody.getLocationClassString().hashCode()) {
 //                System.out.println(srcBody.getBodyDeclaration().toString());
 //                System.out.println(cod.toString());
-                compareCache.addToDstRemoveList(cod);
-                compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
-                TypeNodesTraversal.traverseTypeDeclarationSetVisited(compareCache, (TypeDeclaration) srcBody.getBodyDeclaration(), prefixClassName);
-                return 1;
-            } else {
-                compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_DIFFERENT_RETAIN);
-                return 2;
+                    compareCache.addToDstRemoveList(cod);
+                    compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
+                    TypeNodesTraversal.traverseTypeDeclarationSetVisited(compareCache, (TypeDeclaration) srcBody.getBodyDeclaration(), prefixClassName);
+                    return 1;
+                } else {
+                    compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_DIFFERENT_RETAIN);
+                    return 2;
+                }
+            }else{
+                System.err.println("[ERROR]");
             }
         }
         // new class
@@ -100,31 +106,32 @@ public class DstBodyCheck {
         if(compareCache.srcNodeBodyNameMap.containsKey(key)){
             List<BodyDeclarationPair> srcNodeList = compareCache.srcNodeBodyNameMap.get(key);
             BodyDeclarationPair srcBody = getExactBodyDeclarationPair(srcNodeList,EnumDeclaration.class);
-            if(srcBody == null){
-                System.err.println("[ERROR]");
-            }
-            if(srcBody.getBodyDeclaration().toString().hashCode()== ed.toString().hashCode()
-                    && prefixClassName.hashCode() == srcBody.getLocationClassString().hashCode()){
-                compareCache.addToDstRemoveList(ed);
-                compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
-                return 1;
-            }else{
-                MyRange myRange;
-                int s,e;
-                s = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition());
-                e = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition()+srcBody.getBodyDeclaration().getLength()-1);
-                myRange = new MyRange(s,e,ChangeEntityDesc.StageITreeType.DST_TREE_NODE);
-                EnumChangeEntity code = new EnumChangeEntity(srcBody, ChangeEntityDesc.StageIIOpt.OPT_CHANGE,myRange);
-                EnumDeclaration fd = (EnumDeclaration) srcBody.getBodyDeclaration();
-                PreprocessUtil.generateEnumChangeEntity(code,fd,ed);
-                if(compareResult.getPreprocessChangeEntity()==null){
-                    compareResult.setPreprocessChangeEntity(new ArrayList<>());
-                }
-                compareResult.getPreprocessChangeEntity().add(code);
-                compareCache.addToDstRemoveList(ed);
-                compareCache.setBodySrcNodeMap(srcBody,PreprocessedTempData.BODY_SAME_REMOVE);
+            if(srcBody != null) {
+                if (srcBody.getBodyDeclaration().toString().hashCode() == ed.toString().hashCode()
+                        && prefixClassName.hashCode() == srcBody.getLocationClassString().hashCode()) {
+                    compareCache.addToDstRemoveList(ed);
+                    compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
+                    return 1;
+                } else {
+                    MyRange myRange;
+                    int s, e;
+                    s = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition());
+                    e = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition() + srcBody.getBodyDeclaration().getLength() - 1);
+                    myRange = new MyRange(s, e, ChangeEntityDesc.StageITreeType.DST_TREE_NODE);
+                    EnumChangeEntity code = new EnumChangeEntity(srcBody, ChangeEntityDesc.StageIIOpt.OPT_CHANGE, myRange);
+                    EnumDeclaration fd = (EnumDeclaration) srcBody.getBodyDeclaration();
+                    PreprocessUtil.generateEnumChangeEntity(code, fd, ed);
+                    if (compareResult.getPreprocessChangeEntity() == null) {
+                        compareResult.setPreprocessChangeEntity(new ArrayList<>());
+                    }
+                    compareResult.getPreprocessChangeEntity().add(code);
+                    compareCache.addToDstRemoveList(ed);
+                    compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
 //                compareCache.setBodySrcNodeMap(srcBody,PreprocessedTempData.BODY_DIFFERENT_RETAIN);
-                return 2;
+                    return 2;
+                }
+            }else{
+                System.err.println("[ERROR]");
             }
         }
         compareResult.addBodiesAdded(ed,prefixClassName);

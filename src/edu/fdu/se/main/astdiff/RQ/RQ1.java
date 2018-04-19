@@ -40,12 +40,12 @@ public class RQ1 extends RQ{
 
     // 2. Debug抽取特定的commit
     public void oneCommit(){
-        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\elasticsearch\\.git";
+        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\RxJava\\.git";
         outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ1";
         //5387e206af84b2dea77ecb1ed552b16dc1aed2c8
         //a267d7efdfe58b5727b5af22070ba3d953fe060a
         //d3455d0c9d57d522c31b5c25af83e8f2b8df12b6
-        String commitID = "f057fc294af900078c1bc6b8bbb29c4ed0c8cc8d";
+        String commitID = "9f2c435756483bdfc59fecf4837e54eb9bf3d755";
         jGitHelper = new JGitHelper(repo);
         baseDiffMiner = new DiffMinerTest();
         baseDiffMiner.mFileOutputLog = new FileOutputLog(outputDir,"elasticsearch");
