@@ -44,10 +44,10 @@ public class RQ3 extends RQ{
 
     public static void main(String args[]){
         RQ3 rq = new RQ3();
-        String projName = "okhttp";
-//        String projName = "spring-framework";
+//        String projName = "okhttp";
+        String projName = "spring-framework";
         rq.repoPath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\"+projName+"\\.git";
-        rq.commitId = "3c1adf7f6af0dff9bda74f40dabe8cf428a62003";
+        rq.commitId = "6560aed1c85eef68faeb0356c34e12035a2826bf";
         rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\";
         rq.jGitHelper = new JGitHelper(rq.repoPath);
         rq.baseDiffMiner = new DiffMinerTest();
@@ -62,22 +62,14 @@ public class RQ3 extends RQ{
         for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
             String parentCommitId = entry.getKey();
             Map<String, List<String>> changedFileEntry = entry.getValue();
+            JSONArray ja = new JSONArray();
             if (changedFileEntry.containsKey("modifiedFiles")) {
-                JSONArray ja = new JSONArray();
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
                     if(this.isFilter(file)){
                         continue;
                     }
                     ja.put(file);
-                }
-                JSONObject jo = new JSONObject();
-                jo.put("files",ja);
-                this.baseDiffMiner.mFileOutputLog.writeMetaFile(jo.toString());
-                for (String file : modifiedFile) {
-                    if(this.isFilter(file)){
-                        continue;
-                    }
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);
                     byte[] currFile = jGitHelper.extract(file, currCommitId);
                     int index = file.lastIndexOf("/");
@@ -90,6 +82,24 @@ public class RQ3 extends RQ{
                     this.baseDiffMiner.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
                 }
             }
+            if(changedFileEntry.containsKey("addedFiles")){
+                List<String> addedFile = changedFileEntry.get("addedFiles");
+                for (String file : addedFile) {
+                    if(this.isFilter(file)){
+                        continue;
+                    }
+                    ja.put(file);
+                    byte[] currFile = jGitHelper.extract(file, currCommitId);
+                    int index = file.lastIndexOf("/");
+                    String fileName = file.substring(index + 1, file.length());
+                    FilePairData fp = new FilePairData(null,currFile,file,file,fileName);
+                    filePairDatas.add(fp);
+                    this.baseDiffMiner.mFileOutputLog.writeSourceFile(null,currFile,fileName);
+                }
+            }
+            JSONObject jo = new JSONObject();
+            jo.put("files",ja);
+            this.baseDiffMiner.mFileOutputLog.writeMetaFile(jo.toString());
         }
     }
 
@@ -98,7 +108,11 @@ public class RQ3 extends RQ{
         for(FilePairData fp:filePairDatas){
             System.out.println(fp.fileName);
             Global.fileName = fp.fileName;
-            this.baseDiffMiner.doo(fp.fileName,fp.prev,fp.curr,absolutePath);
+            if(fp.prev==null){
+                this.baseDiffMiner.dooNewFile(fp.fileName,fp.curr,absolutePath);
+            }else {
+                this.baseDiffMiner.doo(fp.fileName, fp.prev, fp.curr, absolutePath);
+            }
             this.fileChangeEntityData.put(this.baseDiffMiner.changeEntityData.fileName,this.baseDiffMiner.changeEntityData);
         }
 //        if(true) return;
@@ -110,6 +124,10 @@ public class RQ3 extends RQ{
             FileInsideAssociationGenerator associationGenerator = new FileInsideAssociationGenerator(cedA);
             associationGenerator.generateFile();
             totalFileAssociations.addEntry(fileNameA,cedA.mAssociations);
+        }
+        for(int i =0;i<fileNames.size();i++){
+            String fileNameA = fileNames.get(i);
+            ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
             FileOutsideGenerator fileOutsideGenerator = new FileOutsideGenerator();
             for(int j =i+1;j<fileNames.size();j++){
                 String fileNameB = fileNames.get(j);

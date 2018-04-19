@@ -28,6 +28,10 @@ public class MiningActionData {
 
 	public PreprocessedData preprocessedData;
 
+	public MiningActionData(List<ChangeEntity> mList){
+		this.mChangeEntityList = mList;
+	}
+
 	public MiningActionData(PreprocessedData preprocessedData, GeneratingActionsData agb, JavaParserTreeGenerator treeGenerator){
 		this.preprocessedData = preprocessedData;
 		this.mGeneratingActionsData = agb;

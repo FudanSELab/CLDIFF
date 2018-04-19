@@ -100,9 +100,14 @@ public class FileInsideAssociationGenerator {
     public void generateFile() {
         LayeredChangeEntityContainer container = this.changeEntityData.entityContainer;
         List<ChangeEntity> entities = this.changeEntityData.mad.getChangeEntityList();
-        entities.forEach(a-> {
+        for(ChangeEntity a:entities) {
+//        entities.forEach(a-> {
             initLinkBean(a, changeEntityData.mad);
-        });
+//        });
+        }
+        if(container==null){
+            return;
+        }
         Map<BodyDeclarationPair, List<ChangeEntity>> mMap = container.getLayerMap();
         List<ChangeEntity> methodChangeEntity = new ArrayList<>();
         List<ChangeEntity> fieldChangeEntity = new ArrayList<>();

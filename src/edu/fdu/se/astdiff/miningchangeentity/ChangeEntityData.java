@@ -30,7 +30,9 @@ public class ChangeEntityData {
     public List<Association> mAssociations;
 
     public ChangeEntityData(MiningActionData mad) {
-        this.entityContainer = mad.preprocessedData.entityContainer;
+        if(mad.preprocessedData!=null) {
+            this.entityContainer = mad.preprocessedData.entityContainer;
+        }
         this.mad = mad;
     }
 

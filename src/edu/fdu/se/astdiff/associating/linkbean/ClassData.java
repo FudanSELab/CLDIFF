@@ -24,7 +24,8 @@ public class ClassData extends LinkBean {
         methods = new MyList<>();
         fields = new MyList<>();
         fieldType = new MyList<>();
-        if(ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
+        if(ce.stageIIBean==null
+            || ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
             TypeDeclaration td = (TypeDeclaration)ce.bodyDeclarationPair.getBodyDeclaration();
             this.clazzName = td.getName().toString();
             List<Type> aa  = td.superInterfaceTypes();
@@ -52,8 +53,6 @@ public class ClassData extends LinkBean {
 
             }else{
                 parseNonMove(ce);
-
-
             }
         }
     }

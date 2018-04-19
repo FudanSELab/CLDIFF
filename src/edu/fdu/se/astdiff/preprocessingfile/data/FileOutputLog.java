@@ -67,7 +67,9 @@ public class FileOutputLog {
     }
 
     public void writeSourceFile(byte[] prev,byte[] curr,String fileName){
-        FileWriter.writeInAll(this.prevSourceFile + "\\"+fileName, prev);
+        if(prev!=null) {
+            FileWriter.writeInAll(this.prevSourceFile + "\\" + fileName, prev);
+        }
         FileWriter.writeInAll(this.currSourceFile + "\\"+fileName, curr);
     }
 

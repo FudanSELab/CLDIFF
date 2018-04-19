@@ -12,6 +12,7 @@ import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityPreprocess;
 import edu.fdu.se.astdiff.preprocessingfile.FilePairPreDiff;
+import edu.fdu.se.astdiff.preprocessingfile.NewFileProcessing;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import edu.fdu.se.astdiff.webapi.GenerateChangeEntityJson;
@@ -54,8 +55,12 @@ public class BaseDiffMiner {
         runDiff(preDiff,fileName);
     }
 
+    public void dooNewFile(String fileName,byte[] fileCurrContent,String output){
+        NewFileProcessing newFileProcessing = new NewFileProcessing(fileCurrContent);
+        changeEntityData = newFileProcessing.ced;
+        changeEntityData.fileName = fileName;
 
-
+    }
 
 
     private void runDiff(FilePairPreDiff preDiff,String fileName){
@@ -79,9 +84,9 @@ public class BaseDiffMiner {
         changeEntityData = ced;
         changeEntityData.fileName = fileName;
 // json
-//        GenerateChangeEntityJson.setStageIIIBean(ced);
-//        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
-//        this.mFileOutputLog.writeEntityJson(json);
+        GenerateChangeEntityJson.setStageIIIBean(ced);
+        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
+        this.mFileOutputLog.writeEntityJson(json);
 //        System.out.println(json);
 
 

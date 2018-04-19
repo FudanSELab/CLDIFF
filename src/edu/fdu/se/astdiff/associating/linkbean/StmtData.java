@@ -25,11 +25,14 @@ public class StmtData extends LinkBean {
 
     public List<String> methodInvocation;
 
+    public List<String> classCreation;
+
 
     public StmtData(StatementPlusChangeEntity ce, PreprocessedData preprocessedData) {
         this.variableLocal = new MyList<>();
         this.methodInvocation = new MyList<>();
         this.variableField = new MyList<>();
+        this.classCreation = new MyList<>();
         if (ce.clusteredActionBean.curAction instanceof Move) {
             parseMove(ce.clusteredActionBean.curAction,preprocessedData);
         } else {
@@ -106,6 +109,12 @@ public class StmtData extends LinkBean {
                 if(exp !=null && exp instanceof MethodInvocation){
                     if (isMethodInvocationName((MethodInvocation) exp, tree.getLabel())) {
                         methodInvocation.add(tree.getLabel());
+                        flag = false;
+                    }
+                }
+                if(exp !=null&& exp instanceof ClassInstanceCreation){
+                    if(isClassCreationName((ClassInstanceCreation)exp,tree.getLabel())){
+                        this.classCreation.add(tree.getLabel());
                         flag = false;
                     }
                 }
@@ -198,6 +207,14 @@ public class StmtData extends LinkBean {
 //            }
 //        }
 //    }
+
+    public boolean isClassCreationName(ClassInstanceCreation classInstanceCreation,String clazzName){
+        String clazz = classInstanceCreation.getType().toString();
+        if(clazzName.equals(clazz)){
+            return true;
+        }
+        return false;
+    }
 
     private boolean isMethodInvocationName(MethodInvocation methodInvocation, String methodName) {
         String methodName1 = methodInvocation.getName().toString();

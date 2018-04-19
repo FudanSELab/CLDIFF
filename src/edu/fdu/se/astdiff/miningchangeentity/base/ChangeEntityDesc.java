@@ -215,6 +215,8 @@ public class ChangeEntityDesc {
 
         public static final String TYPE_SHARE_FIELD = "a field acess same as b";
 
+        public static final String TYPE_CLASS_CREATION = "a class creation of b";
+
     }
 
     public static class StageIIIKeys{
