@@ -44,7 +44,6 @@ public class RQ3 extends RQ{
 
     public static void main(String args[]){
         RQ3 rq = new RQ3();
-//        String projName = "okhttp";
         String projName = "spring-framework";
         rq.repoPath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\"+projName+"\\.git";
         rq.commitId = "6560aed1c85eef68faeb0356c34e12035a2826bf";

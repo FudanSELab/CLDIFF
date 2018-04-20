@@ -24,7 +24,7 @@ public class RQ1 extends RQ{
     // 1.抽取所有的commit filter掉不需要的
 
     public void allCommits(){
-        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\RxJava\\.git";
+        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\MPAndroidChart\\.git";
         outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ1";
         System.out.println("\n\n----------------------------"+repo);
         baseDiffMiner = new DiffMinerTest();
@@ -40,7 +40,7 @@ public class RQ1 extends RQ{
 
     // 2. Debug抽取特定的commit
     public void oneCommit(){
-        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\RxJava\\.git";
+        String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\okhttp\\.git";
         outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ1";
         //5387e206af84b2dea77ecb1ed552b16dc1aed2c8
         //a267d7efdfe58b5727b5af22070ba3d953fe060a

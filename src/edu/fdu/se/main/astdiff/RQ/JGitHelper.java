@@ -51,13 +51,14 @@ public class JGitHelper extends JGitCommand {
                 while (commitQueue.size() != 0) {
                     RevCommit queueCommitItem = commitQueue.poll();
                     //wang 4/11
-                    commitNum++;
+
                     RevCommit[] parentCommits = queueCommitItem.getParents();
                     if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
                         continue;
                     }
                     Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(queueCommitItem.getName());
                     rq.handleCommits(changedFiles, queueCommitItem.getName());
+//                    commitNum++;
                     isTraversed.put(queueCommitItem.getName(), true);
                     for (RevCommit item2 : parentCommits) {
                         RevCommit commit2 = revWalk.parseCommit(item2.getId());
@@ -65,6 +66,7 @@ public class JGitHelper extends JGitCommand {
                     }
                 }
             }
+//            System.out.println("Commit sum:"+commitNum);
 
         } catch (MissingObjectException e) {
             e.printStackTrace();
