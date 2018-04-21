@@ -15,21 +15,21 @@ public class LinkStatement2Statement {
 
     public static void checkStmtAssociation(ChangeEntityData changeEntityData, ChangeEntity ce1, ChangeEntity ce2){
         if(LinkUtil.isRangeWithin(ce1,ce2)){
-            Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_CONTROL);
+            Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_CONTROL,null);
             changeEntityData.mAssociations.add(association);
         }
         StmtData linkBean1 = (StmtData) ce1.linkBean;
         StmtData linkBean2 = (StmtData) ce2.linkBean;
-        for(String tmp:linkBean1.variableField){
-            if(linkBean2.variableField.contains(tmp)){
-                Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SHARE_FIELD);
-                changeEntityData.mAssociations.add(association);
-                break;
-            }
-        }
+//        for(String tmp:linkBean1.variableField){
+//            if(linkBean2.variableField.contains(tmp)){
+//                Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SHARE_FIELD,tmp);
+//                changeEntityData.mAssociations.add(association);
+//                break;
+//            }
+//        }
         for(String tmp:linkBean1.variableLocal) {
             if(linkBean2.variableLocal.contains(tmp)){
-                Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SAME_VARIABLE);
+                Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SAME_VARIABLE,tmp);
                 changeEntityData.mAssociations.add(association);
                 break;
             }
@@ -44,7 +44,7 @@ public class LinkStatement2Statement {
         for(String l1:linkBean1.variableField){
             for(String l2:linkBean2.variableField){
                 if(l1.equals(l2)){
-                    Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SHARE_FIELD);
+                    Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SHARE_FIELD,l2);
                     changeEntityData.mAssociations.add(association);
                 }
             }

@@ -155,6 +155,9 @@ public class DstBodyCheck {
         } else if (bd instanceof MethodDeclaration) {
             MethodDeclaration md = (MethodDeclaration) bd;
             methodNameKey = prefixClassName + md.getName().toString();
+//            if(md.getName().toString().equals("cancelRemainingTask")){
+//                return 2;
+//            }
 
         } else if (bd instanceof EnumDeclaration) {
             EnumDeclaration ed = (EnumDeclaration) bd;

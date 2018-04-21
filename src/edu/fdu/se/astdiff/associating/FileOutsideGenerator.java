@@ -96,10 +96,10 @@ public class FileOutsideGenerator {
                     for (String s : stmtData.methodInvocation) {
                         if (mdata.methodName.contains(s)) {
                             if (flag == 1) {
-                                Association association = new Association(ce1.fileName, ce2.fileName, cmethod, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD);
+                                Association association = new Association(ce1.fileName, ce2.fileName, cmethod, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD,s);
                                 mAssos.add(association);
                             } else {
-                                Association association = new Association(ce2.fileName, ce1.fileName, cmethod, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD);
+                                Association association = new Association(ce2.fileName, ce1.fileName, cmethod, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD,s);
                                 mAssos.add(association);
                             }
                             break;
@@ -122,20 +122,20 @@ public class FileOutsideGenerator {
                     StmtData stmtData = (StmtData) stmt.linkBean;
                     if (stmtData.classCreation.contains(mdata.clazzName)) {
                         if (flag == 1) {
-                            Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CLASS_CREATION);
+                            Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CLASS_CREATION,mdata.clazzName);
                             mAssos.add(association);
                         } else {
-                            Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CLASS_CREATION);
+                            Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CLASS_CREATION,mdata.clazzName);
                             mAssos.add(association);
                         }
                     }
                     for (String s : stmtData.methodInvocation) {
                         if (mdata.methods.contains(s)) {
                             if (flag == 1) {
-                                Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD);
+                                Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD,mdata.clazzName);
                                 mAssos.add(association);
                             } else {
-                                Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD);
+                                Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD,mdata.clazzName);
                                 mAssos.add(association);
                             }
                             break;

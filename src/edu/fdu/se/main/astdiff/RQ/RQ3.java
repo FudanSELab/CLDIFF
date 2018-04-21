@@ -6,6 +6,7 @@ import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
 import edu.fdu.se.astdiff.associating.FileOutsideGenerator;
 import edu.fdu.se.astdiff.associating.TotalFileAssociations;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.astdiff.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.main.astdiff.DiffMinerTest;
@@ -46,13 +47,14 @@ public class RQ3 extends RQ{
         RQ3 rq = new RQ3();
         String projName = "spring-framework";
         rq.repoPath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\"+projName+"\\.git";
-        rq.commitId = "6560aed1c85eef68faeb0356c34e12035a2826bf";
+        rq.commitId = "90309ab0b5c5cc3b406825fd3f9db730db03ad36";
         rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\";
         rq.jGitHelper = new JGitHelper(rq.repoPath);
         rq.baseDiffMiner = new DiffMinerTest();
         rq.baseDiffMiner.mFileOutputLog = new FileOutputLog(rq.outputDir,projName);
         rq.jGitHelper.analyzeOneCommit(rq,rq.commitId);
         rq.generateDiffMinerOutput();
+//        ChangeEntityDesc.StageIIIAssociationType
 
     }
 
@@ -65,7 +67,7 @@ public class RQ3 extends RQ{
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if(this.isFilter(file)){
+                    if(this.isFilter(file)&&!file.endsWith("AbstractHttpServer.java")){
                         continue;
                     }
                     ja.put(file);
@@ -73,7 +75,7 @@ public class RQ3 extends RQ{
                     byte[] currFile = jGitHelper.extract(file, currCommitId);
                     int index = file.lastIndexOf("/");
                     String fileName = file.substring(index + 1, file.length());
-//                    if(fileName.equals("ExecutorConfigurationSupport.java")){
+//                    if(!fileName.equals("SubProtocolWebSocketHandler.java")){
 //                        continue;
 //                    }
                     FilePairData fp = new FilePairData(prevFile,currFile,file,file,fileName);

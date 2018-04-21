@@ -11,13 +11,7 @@ import org.eclipse.jdt.core.dom.SimpleType;
 import java.util.List;
 
 public class SimpleActionPrinter {
-	public static String tabs(int tabNum) {
-		String res = "";
-		for (int i = 0; i < tabNum; i++) {
-			res += "\t";
-		}
-		return res;
-	}
+
 
 	public static String getMyOneActionString(Action a) {
 		StringBuilder sb = new StringBuilder();
@@ -52,10 +46,13 @@ public class SimpleActionPrinter {
 	public static final String MOV = "M,";
 	public static final String UPD = "U,";
 	public static final String DEL = "D,";
+	public static int flag = 0;
 	public static String prettyString(Tree node) {
 		if(node.getDoAction()==null) {
-
-			return node.getId() + "." + node.getAstClass().getSimpleName() + ":" + node.getLabel()+ " "+node.getRangeString();
+			if(flag==1){
+				return node.getAstClass().getSimpleName() + ":" + node.getLabel();
+			}
+			return node.getId() + "." + node.getAstClass().getSimpleName() + ":" + node.getLabel()  + " "+node.getRangeString();
 		}else{
 			String res = "[";
 			for(Action a:node.getDoAction()){
@@ -71,7 +68,11 @@ public class SimpleActionPrinter {
 			}
 			res = res.substring(0,res.length()-1);
 			res +="]";
-			return node.getId() + "." + node.getAstClass().getSimpleName() + ":" + node.getLabel()+" "+res + " "+node.getRangeString();
+
+			if(flag==1){
+				return node.getAstClass().getSimpleName() + ":" + node.getLabel()+" "+res;
+			}
+			return node.getId() + "." + node.getAstClass().getSimpleName() + ":" + node.getLabel()+" "+res  + " "+node.getRangeString();
 		}
 	}
 
@@ -99,7 +100,7 @@ public class SimpleActionPrinter {
 	private static String indent(Tree t) {
 		StringBuilder b = new StringBuilder();
 		for (int i = 0; i < t.getDepth(); i++)
-			b.append("\t");
+			b.append("  ");
 		return b.toString();
 	}
 

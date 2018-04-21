@@ -20,10 +20,13 @@ public class Association {
 
     private String type;
 
-    public Association(ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type){
+    private String keyWord;
+
+    public Association(ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type,String keyWord){
         this.changeEntity1 = changeEntity1;
         this.changeEntity2 = changeEntity2;
         this.type = type;
+        this.keyWord = keyWord;
     }
 
     /**
@@ -33,7 +36,7 @@ public class Association {
      * @param changeEntity1
      * @param changeEntity2
      */
-    public Association(String fileA,String fileB,ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type){
+    public Association(String fileA,String fileB,ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type,String keyWord){
         if(fileA.compareTo(fileB)<0){
             this.fileA = fileA;
             this.fileB = fileB;
@@ -46,31 +49,9 @@ public class Association {
             this.changeEntity2 = changeEntity1;
         }
         this.type = type;
+        this.keyWord = keyWord;
     }
 
-    public ChangeEntity getChangeEntity1() {
-        return changeEntity1;
-    }
-
-    public void setChangeEntity1(ChangeEntity changeEntity1) {
-        this.changeEntity1 = changeEntity1;
-    }
-
-    public ChangeEntity getChangeEntity2() {
-        return changeEntity2;
-    }
-
-    public void setChangeEntity2(ChangeEntity changeEntity2) {
-        this.changeEntity2 = changeEntity2;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
 
     public String toString(){
@@ -82,7 +63,11 @@ public class Association {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("from",changeEntity1.getChangeEntityId());
         jsonObject.put("to",changeEntity2.getChangeEntityId());
-        jsonObject.put("desc",this.type);
+        if(this.keyWord==null){
+            jsonObject.put("desc",this.type);
+        }else{
+            jsonObject.put("desc",this.type+" "+this.keyWord);
+        }
         return jsonObject;
     }
 }

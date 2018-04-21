@@ -63,8 +63,11 @@ public class MethodData extends LinkBean {
         if(tree.getAstNode().getNodeType() == ASTNode.METHOD_DECLARATION) {
             if(tree.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE){
                 Tree dstTree = (Tree) fp.getMappedDstOfSrcNode(tree);
-                MethodDeclaration mdDst = (MethodDeclaration) dstTree.getAstNode();
-                methodName.add(mdDst.getName().toString());
+                if(dstTree!=null){
+                    MethodDeclaration mdDst = (MethodDeclaration) dstTree.getAstNode();
+                    methodName.add(mdDst.getName().toString());
+                }
+
             }
             MethodDeclaration md = (MethodDeclaration) tree.getAstNode();
             methodName.add(md.getName().toString());

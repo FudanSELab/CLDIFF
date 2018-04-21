@@ -8,7 +8,11 @@ import edu.fdu.se.astdiff.miningactions.Body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import org.eclipse.jdt.core.dom.ASTNode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/2/2.
@@ -33,6 +37,68 @@ public class ClusterUpDown extends AbstractCluster{
             }
         }
     }
+
+    public void passGumtreePalsePositiveMoves(){
+        int actionCnt = this.actionList.size();
+        for(int index =0; index!=actionCnt;index++){
+            Action a = this.actionList.get(index);
+            if (fp.mGeneratingActionsData.getAllActionMap().get(a) == 1) {
+                continue;
+            }
+            Move mv = (Move)a;
+            Tree movedNode = (Tree)fp.getMappedDstOfSrcNode(mv.getNode());
+//            Tree start = (Tree)(a.getNode()).getParent();
+//            Tree end = (Tree) mv.getParent();
+            List<Integer> posA = new ArrayList<>();
+            List<Integer> posB = new ArrayList<>();
+            List<Tree> treeListA = nonBlockParents((Tree)mv.getNode(),posA);
+            List<Tree> treeListB = nonBlockParents(movedNode,posB);
+            if(treeListA.size()!=treeListB.size()){
+                return;
+            }
+            Tree ta = null;
+            Tree tb = null;
+            for(int i=0;i<treeListA.size();i++){
+                ta = treeListA.get(i);
+                tb = treeListB.get(i);
+                if(ta.getAstNode().getNodeType() != tb.getAstNode().getNodeType()){
+                    return;
+                }
+                if(posA.get(i).intValue() !=posB.get(i).intValue()){
+                    return;
+                }
+            }
+            if(ta==null|| tb==null ){
+                return;
+            }
+            if(ta.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE){
+                if(fp.getMappedDstOfSrcNode(ta).equals(tb)){
+                    fp.setActionTraversedMap(a);
+                }
+            }
+
+
+
+        }
+
+    }
+
+    private List<Tree> nonBlockParents(Tree t,List<Integer> posList){
+        List<Tree> list = new ArrayList<>();
+        Tree parent = t;
+        while(true){
+            t = parent;
+            parent = (Tree) parent.getParent();
+            int pos = parent.getChildPosition(t);
+            posList.add(pos);
+            list.add(parent);
+            if(parent.getAstNode().getNodeType()!=ASTNode.BLOCK){
+                break;
+            }
+        }
+        return list;
+    }
+
 
 
     public int processBigAction(Action a,int type) {
