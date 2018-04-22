@@ -154,18 +154,18 @@ public class JGitHelper extends JGitCommand {
 
     public boolean isFilter(String filePathName) {
         String name = filePathName.toLowerCase();
-        if (!name.endsWith("java")) {
-            return false;
+        if (!name.endsWith(".java")) {
+            return true;
         }
         if (name.contains("\\test\\") || name.contains("/test/")) {
-            return false;
+            return true;
         }
         String[] data = filePathName.split("/");
         String fileName = data[data.length - 1];
         if (filePathName.endsWith("Test.java") || fileName.startsWith("Test")||filePathName.endsWith("Tests.java")) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
 
@@ -195,7 +195,7 @@ public class JGitHelper extends JGitCommand {
                     switch (entry.getChangeType()) {
                         case MODIFY:
                             String mOldPath = entry.getOldPath();
-                            if (isFilter(mOldPath)) {
+                            if (RQ.isFilter(mOldPath)) {
                                 continue;
                             }
                             FileHeader fileHeader = diffFormatter.toFileHeader(entry);

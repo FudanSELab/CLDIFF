@@ -19,14 +19,14 @@ import java.util.List;
 public class MatchBlock {
 
     public static void matchBlock(MiningActionData fp, Action a) {
-        if(a instanceof Move){
+
+        Tree fatherNode = (Tree)a.getNode().getParent();
+        int type = fatherNode.getAstNode().getNodeType();
+        if(a instanceof Move && type!= ASTNode.IF_STATEMENT){
             handleMoveOnBlock(fp,a);
             fp.setActionTraversedMap(a);
             return;
         }
-        Tree fatherNode = (Tree)a.getNode().getParent();
-        int type = fatherNode.getAstNode().getNodeType();
-
         switch (type) {
             case ASTNode.SWITCH_STATEMENT:
 //                MatchSwitch.matchSwitchCaseNewEntity(fp,a);

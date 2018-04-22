@@ -1,8 +1,6 @@
 package edu.fdu.se.astdiff.miningactions.Body;
 
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
@@ -18,6 +16,7 @@ public class MatchNonStatement {
 
 
     public static void matchNonStatement(MiningActionData fp, Action a) {
+
         ITree fafather1 = BasicTreeTraversal.findFafatherNode(a.getNode());
         ITree[] fathers = BasicTreeTraversal.getMappedFafatherNode(fp, a, fafather1);
         Tree srcFather = (Tree) fathers[0];

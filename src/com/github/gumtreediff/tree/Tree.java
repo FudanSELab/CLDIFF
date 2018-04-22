@@ -98,6 +98,7 @@ public class Tree extends AbstractTree implements ITree {
     }
 
     public String getRangeString(){
+        if(this.lineRange==null) return null;
         return "("+this.lineRange[0]+","+this.lineRange[1]+")";
     }
     public Integer[] getRange(){

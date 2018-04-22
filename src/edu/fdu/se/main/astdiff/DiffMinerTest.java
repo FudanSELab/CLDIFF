@@ -2,12 +2,15 @@ package edu.fdu.se.main.astdiff;
 
 import java.io.File;
 
+import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.GumTreeDiffParser;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
+import edu.fdu.se.astdiff.generatingactions.SimpleActionPrinter;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-
+import com.github.gumtreediff.actions.model.Action;
 
 /**
  * Created by huangkaifeng on 2018/2/27.
@@ -35,7 +38,6 @@ public class DiffMinerTest extends BaseDiffMiner {
 //        wholeSize += data.getAllActions().size();
 //        System.out.println("size: "+data.getAllActions().size());
         return data.getAllActions().size();
-//        SimpleActionPrinter.printMyActions();
         // package 2
 //        System.out.println("Step2 Begin to cluster actions:-------------------");
 //        MiningActionData mMiningActionData = new MiningActionData(data,his);
@@ -72,7 +74,7 @@ public class DiffMinerTest extends BaseDiffMiner {
             for (int i =0;i<files.length;i++){
                 File currf1 = files[i];
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
-                if(currf1.getName().startsWith("IfElseAddition.java")) {
+                if(currf1.getName().startsWith("AssertAddition.java")) {
                     //IfElseAddition
                     System.out.println(i+" "+currf1.getName());
                     doo(prevFile, currf1.getAbsolutePath(), outputDir);
@@ -87,7 +89,7 @@ public class DiffMinerTest extends BaseDiffMiner {
 
     public static void main(String[] args) {
         DiffMinerTest i = new DiffMinerTest();
-//        i.runGumTree();
+        i.runGumTree(null,null);
 //        i.runBatchTest();
 //        i.runSingleFilePair();
     }

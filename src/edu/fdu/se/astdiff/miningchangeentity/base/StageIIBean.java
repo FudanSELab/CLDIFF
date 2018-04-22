@@ -13,7 +13,6 @@ import java.util.List;
 public class StageIIBean {
 
     public StageIIBean(){
-
         this.opt2List = new ArrayList<>();
     }
 

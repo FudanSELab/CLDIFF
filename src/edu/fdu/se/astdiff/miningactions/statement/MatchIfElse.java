@@ -60,7 +60,11 @@ public class MatchIfElse {
 		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
 //		code.stageIIBean.setOpt(OperationTypeConstants.getChangeEntityDescString(a));
-		code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+		if(a instanceof Move){
+			code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+		}else {
+			code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+		}
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_IF_STMT);
 //		code.stageIIBean.setOpt2(OperationTypeConstants.getChangeEntityDescString(a));
 		code.stageIIBean.setSubEntity(ChangeEntityDesc.StageIISub.SUB_ELSE);

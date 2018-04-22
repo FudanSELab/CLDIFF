@@ -47,14 +47,13 @@ public class RQ3 extends RQ{
         RQ3 rq = new RQ3();
         String projName = "spring-framework";
         rq.repoPath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\"+projName+"\\.git";
-        rq.commitId = "90309ab0b5c5cc3b406825fd3f9db730db03ad36";
+        rq.commitId = "a6d527e57aedd94a2e23cc8d35572076dbf0e417";
         rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\";
         rq.jGitHelper = new JGitHelper(rq.repoPath);
         rq.baseDiffMiner = new DiffMinerTest();
         rq.baseDiffMiner.mFileOutputLog = new FileOutputLog(rq.outputDir,projName);
         rq.jGitHelper.analyzeOneCommit(rq,rq.commitId);
         rq.generateDiffMinerOutput();
-//        ChangeEntityDesc.StageIIIAssociationType
 
     }
 
@@ -75,7 +74,7 @@ public class RQ3 extends RQ{
                     byte[] currFile = jGitHelper.extract(file, currCommitId);
                     int index = file.lastIndexOf("/");
                     String fileName = file.substring(index + 1, file.length());
-//                    if(!fileName.equals("SubProtocolWebSocketHandler.java")){
+//                    if(!fileName.equals("MessagingMessageListenerAdapter.java")){
 //                        continue;
 //                    }
                     FilePairData fp = new FilePairData(prevFile,currFile,file,file,fileName);

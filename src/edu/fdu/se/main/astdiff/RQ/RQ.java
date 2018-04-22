@@ -21,9 +21,9 @@ abstract public class RQ {
 
     abstract public void handleCommit(Map<String, Map<String, List<String>>> mMap,String currCommitId);
 
-    public boolean isFilter(String filePathName){
+    public static boolean isFilter(String filePathName){
         String name = filePathName.toLowerCase();
-        if(!name.endsWith("java")){
+        if(!name.endsWith(".java")){
             return true;
         }
         if(name.contains("\\test\\")||name.contains("/test/")){

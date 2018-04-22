@@ -24,13 +24,6 @@ public class SimpleActionPrinter {
 		}
 		if (a instanceof Insert) {
 			sb.append( " to " + prettyString((Tree)treeNode.getParent()) + " at " +((Insert)a).getPosition() +" "+ treeNode.getRangeString()+ "\n");
-//			Tree ttt = (Tree)a.getNode();
-//			if(ttt.getAstNode() instanceof SimpleType) {
-//				SimpleType st = (SimpleType) ttt.getAstNode();
-//				String aaaa = st.getName().toString();
-//				System.out.println(aaaa);
-//			}
-
 		}
 		if (a instanceof Move) {
 			Move move = (Move) a;
@@ -46,7 +39,7 @@ public class SimpleActionPrinter {
 	public static final String MOV = "M,";
 	public static final String UPD = "U,";
 	public static final String DEL = "D,";
-	public static int flag = 0;
+	public static int flag = 1;
 	public static String prettyString(Tree node) {
 		if(node.getDoAction()==null) {
 			if(flag==1){

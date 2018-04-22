@@ -1,6 +1,8 @@
 package edu.fdu.se.main.astdiff.RQ;
 
 import edu.fdu.se.astdiff.Global.Global;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
+import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.main.astdiff.BaseDiffMiner;
 import edu.fdu.se.main.astdiff.DiffMinerTest;
@@ -62,7 +64,7 @@ public class RQ2 extends RQ {
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if (this.isFilter(file)) {
+                    if (RQ.isFilter(file)) {
                         continue;
                     }
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);
@@ -76,8 +78,9 @@ public class RQ2 extends RQ {
                     if(this.argType.equals("gt")){
                         num = baseDiffMiner.runGumTree(new String(prevFile), new String(currFile));
                     }else if(this.argType.equals("df")){
+                        Global.fileName = fileName;
                         baseDiffMiner.doo(fileName,prevFile,currFile,outputDir+"/"+fileName);
-                        num = baseDiffMiner.changeEntityData.mad.getChangeEntityList().size();
+                        num =changeEntitySize(baseDiffMiner.changeEntityData.mad.getChangeEntityList());
                     }
                     totalNumber += num;
                     System.out.println("----"+fileName+" "+num);
@@ -86,6 +89,23 @@ public class RQ2 extends RQ {
         }
         long end = System.nanoTime();
         System.out.println("----one commit time:" +(end-start));
+    }
+
+    private int changeEntitySize(List<ChangeEntity> mList){
+        int cnt = 0;
+        for(ChangeEntity ce:mList){
+            if(ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)
+                    ||ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD)){
+                cnt ++;
+            }else if(ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD)){
+                if(ce.stageIIBean.getOpt2List() ==null ){
+                    cnt++;
+                }else{
+                    cnt+=ce.stageIIBean.getOpt2List().size();
+                }
+            }
+        }
+        return cnt;
     }
 
     public void handleCommit(Map<String, Map<String, List<String>>> mMap,String currCommitId){

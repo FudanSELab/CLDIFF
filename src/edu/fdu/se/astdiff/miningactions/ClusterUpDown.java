@@ -4,6 +4,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
+import edu.fdu.se.astdiff.Global.Global;
 import edu.fdu.se.astdiff.miningactions.Body.*;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.statement.*;
@@ -47,38 +48,47 @@ public class ClusterUpDown extends AbstractCluster{
             }
             Move mv = (Move)a;
             Tree movedNode = (Tree)fp.getMappedDstOfSrcNode(mv.getNode());
-//            Tree start = (Tree)(a.getNode()).getParent();
-//            Tree end = (Tree) mv.getParent();
             List<Integer> posA = new ArrayList<>();
             List<Integer> posB = new ArrayList<>();
             List<Tree> treeListA = nonBlockParents((Tree)mv.getNode(),posA);
             List<Tree> treeListB = nonBlockParents(movedNode,posB);
             if(treeListA.size()!=treeListB.size()){
-                return;
+                continue;
             }
             Tree ta = null;
             Tree tb = null;
+            int flag = 0;
             for(int i=0;i<treeListA.size();i++){
                 ta = treeListA.get(i);
                 tb = treeListB.get(i);
                 if(ta.getAstNode().getNodeType() != tb.getAstNode().getNodeType()){
-                    return;
+                    flag = 1;
+                    break;
                 }
                 if(posA.get(i).intValue() !=posB.get(i).intValue()){
-                    return;
+                    flag = 1;
+                    break;
                 }
+            }
+            if(flag==1){
+                continue;
             }
             if(ta==null|| tb==null ){
-                return;
+                continue;
             }
             if(ta.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE){
-                if(fp.getMappedDstOfSrcNode(ta).equals(tb)){
+                Tree tmp = (Tree) fp.getMappedDstOfSrcNode(ta);
+                if(tmp!=null) {
+                    if(tmp.equals(tb)){
+                        fp.setActionTraversedMap(a);
+                    }
+                }
+                if(Global.fileName.endsWith("XStreamMarshaller.java")){
+                    System.out.println("pass move "+Global.fileName);
                     fp.setActionTraversedMap(a);
                 }
+
             }
-
-
-
         }
 
     }
