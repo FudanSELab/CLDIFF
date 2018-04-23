@@ -84,10 +84,10 @@ public class BaseDiffMiner {
         changeEntityData = ced;
         changeEntityData.fileName = fileName;
 // json
-//        GenerateChangeEntityJson.setStageIIIBean(ced);
-//        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
-//        this.mFileOutputLog.writeEntityJson(json);
-//        System.out.println(json);
+        GenerateChangeEntityJson.setStageIIIBean(ced);
+        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
+        this.mFileOutputLog.writeEntityJson(json);
+        System.out.println(json);
 
 
     }

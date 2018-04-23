@@ -47,7 +47,7 @@ public class RQ3 extends RQ{
         RQ3 rq = new RQ3();
         String projName = "spring-framework";
         rq.repoPath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\"+projName+"\\.git";
-        rq.commitId = "a6d527e57aedd94a2e23cc8d35572076dbf0e417";
+        rq.commitId = "3c1adf7f6af0dff9bda74f40dabe8cf428a62003";
         rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\";
         rq.jGitHelper = new JGitHelper(rq.repoPath);
         rq.baseDiffMiner = new DiffMinerTest();
@@ -85,7 +85,7 @@ public class RQ3 extends RQ{
             if(changedFileEntry.containsKey("addedFiles")){
                 List<String> addedFile = changedFileEntry.get("addedFiles");
                 for (String file : addedFile) {
-                    if(this.isFilter(file)){
+                    if(RQ.isFilter(file)){
                         continue;
                     }
                     ja.put(file);

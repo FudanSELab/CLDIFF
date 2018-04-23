@@ -5,6 +5,7 @@ import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedTempData;
 import org.eclipse.jdt.core.dom.*;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -49,6 +50,7 @@ public class TypeNodesTraversal {
                 System.err.println("[ERR]Error:" + node.getClass().getSimpleName());
             }
         }
+
     }
 
     /**

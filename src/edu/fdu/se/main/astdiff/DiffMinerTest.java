@@ -25,10 +25,10 @@ public class DiffMinerTest extends BaseDiffMiner {
      */
     public int runGumTree(String prevContent,String currContent) {
 //        System.out.println("Step1 Generating Diff Actions:----------------------");
-//        String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
-//        String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
-//        GumTreeDiffParser his = new GumTreeDiffParser(new File(file1), new File(file2));
-        GumTreeDiffParser his = new GumTreeDiffParser(prevContent, currContent);
+        String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
+        String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
+        GumTreeDiffParser his = new GumTreeDiffParser(new File(file1), new File(file2));
+//        GumTreeDiffParser his = new GumTreeDiffParser(prevContent, currContent);
 //        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", his.getPrettyOldTreeString());
 //        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", his.getPrettyNewTreeString());
         // package 1
@@ -37,6 +37,7 @@ public class DiffMinerTest extends BaseDiffMiner {
         GeneratingActionsData data = gen.generate();
 //        wholeSize += data.getAllActions().size();
 //        System.out.println("size: "+data.getAllActions().size());
+        SimpleActionPrinter.printMyActions(data.getAllActions());
         return data.getAllActions().size();
         // package 2
 //        System.out.println("Step2 Begin to cluster actions:-------------------");

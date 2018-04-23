@@ -12,8 +12,6 @@ import edu.fdu.se.astdiff.miningchangeentity.base.StatementPlusChangeEntity;
 public class WhileChangeEntity extends StatementPlusChangeEntity {
 
 
-    final static public String WHILE = "while";
-    final static public String DO_WHILE = "do while";
 
     public WhileChangeEntity(ClusteredActionBean bean) {
         super(bean);
@@ -30,7 +28,7 @@ public class WhileChangeEntity extends StatementPlusChangeEntity {
         if(this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
             sb.append("'s ");
             sb.append(this.stageIIBean.getSubEntity());
-            sb.append(" with/by...");
+            sb.append(" by ");
         }else{
             sb.append("'s ");
             sb.append(this.stageIIBean.getSubEntity());
