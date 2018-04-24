@@ -90,6 +90,7 @@ public class GenerateChangeEntityJson {
                     }
                     break;
             }
+
             changeEntity.stageIIIBean.setDisplayDesc(changeEntity.stageIIBean.toString2());
 
         }

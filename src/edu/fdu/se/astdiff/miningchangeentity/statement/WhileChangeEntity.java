@@ -26,8 +26,10 @@ public class WhileChangeEntity extends StatementPlusChangeEntity {
         sb.append(" ");
         sb.append(this.stageIIBean.getChangeEntity());
         if(this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
-            sb.append("'s ");
-            sb.append(this.stageIIBean.getSubEntity());
+            sb.append(" ");
+            if(this.stageIIBean.getSubEntity()!=null) {
+                sb.append(this.stageIIBean.getSubEntity());
+            }
             sb.append(" by ");
         }else{
             sb.append("'s ");

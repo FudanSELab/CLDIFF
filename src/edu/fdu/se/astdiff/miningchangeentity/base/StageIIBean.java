@@ -148,13 +148,19 @@ public class StageIIBean {
 
     public String toString2(){
         StringBuffer sb = new StringBuffer();
-        sb.append(this.opt);
+        if(this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)){
+            sb.append("Move");
+        }else {
+            sb.append(this.opt);
+        }
         sb.append(" ");
         sb.append(this.changeEntity);
         if(this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
             sb.append(" ");
-            sb.append(this.getSubEntity());
-            sb.append(" with/by");
+            if(this.getSubEntity()!=null) {
+                sb.append(this.getSubEntity());
+            }
+            sb.append(" with");
         }
         return sb.toString();
     }

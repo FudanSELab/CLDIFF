@@ -62,6 +62,28 @@ public class TotalFileAssociations {
         }
     }
 
+    public String toConsoleString(){
+        StringBuilder sb = new StringBuilder();
+        for(Map.Entry<String,List<Association>> entry:this.fileAndfileTpfileAssos.entrySet()){
+            String key = entry.getKey();
+            if(key.contains("----")) {
+                sb.append("File to File: "+key);
+            }else {
+                sb.append("File: "+key);
+            }
+            sb.append("  \n");
+            List<Association> assos = entry.getValue();
+            for(Association as : assos){
+                sb.append(as.toString());
+                sb.append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+
+
+
     public String toAssoJSonString(){
         JSONObject jsonObject = new JSONObject();
         JSONArray ja2 = new JSONArray();

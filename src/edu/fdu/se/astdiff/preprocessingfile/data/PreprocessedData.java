@@ -27,6 +27,8 @@ public class PreprocessedData {
     public CompilationUnit dstCu;
     public CompilationUnit srcCu;
 
+    public List<String> interfacesAndFathers;
+
     public Set<String> prevFieldNames;
     public Set<String> currFieldNames;
     public Set<String> prevCurrFieldNames;
@@ -68,6 +70,7 @@ public class PreprocessedData {
         prevFieldNames = new HashSet<>();
         currFieldNames = new HashSet<>();
         prevCurrFieldNames = new HashSet<>();
+        interfacesAndFathers = new ArrayList<>();
 
 
     }

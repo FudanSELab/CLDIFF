@@ -56,7 +56,7 @@ public class Association {
 
     public String toString(){
         return changeEntity1.getChangeEntityId()+". "+changeEntity1.getClass().getSimpleName()
-                +" -> "+changeEntity2.getChangeEntityId()+". "+changeEntity2.getClass().getSimpleName()+" : " +type;
+                +" -> "+changeEntity2.getChangeEntityId()+". "+changeEntity2.getClass().getSimpleName()+" : " +type +" "+keyWord;
     }
 
     public JSONObject linkJsonString(){

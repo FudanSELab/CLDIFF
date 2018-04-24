@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Queue;
 
-import org.eclipse.jdt.core.dom.BodyDeclaration;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.*;
 
 import edu.fdu.se.astdiff.preprocessingfile.data.BodyDeclarationPair;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
@@ -96,9 +93,23 @@ public class FilePairPreDiff {
         }
         return 0;
     }
+    public void addSuperClass(TypeDeclaration type,List<String> list){
+        List<Type> aa  = type.superInterfaceTypes();
+        if(aa!=null) {
+            for (Type aaa : aa) {
+                list.add(aaa.toString());
+            }
+        }
+        if(type.getSuperclassType()!=null) {
+            list.add(type.getSuperclassType().toString());
+        }
+    }
 
     private void compare(CompilationUnit cuSrc,CompilationUnit cuDst,TypeDeclaration tdSrc,TypeDeclaration tdDst){
         TypeNodesTraversal astTraversal = new TypeNodesTraversal();
+        addSuperClass(tdSrc,preprocessedData.interfacesAndFathers);
+        addSuperClass(tdDst,preprocessedData.interfacesAndFathers);
+
         astTraversal.traverseSrcTypeDeclarationInit(preprocessedData, preprocessedTempData, tdSrc, tdSrc.getName().toString() + ".");
         astTraversal.traverseDstTypeDeclarationCompareSrc(preprocessedData, preprocessedTempData, tdDst, tdDst.getName().toString() + ".");
         // 考虑后面的识别 method name变化，这里把remove的注释掉

@@ -217,6 +217,8 @@ public class ChangeEntityDesc {
 
         public static final String TYPE_CLASS_CREATION = "a class creation of b";
 
+        public static final String TYPE_METHOD_OVERRIDE = "a overrides method of b";
+
     }
 
     public static class StageIIIKeys{

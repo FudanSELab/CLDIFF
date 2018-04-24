@@ -84,7 +84,7 @@ public class RQ1 extends RQ{
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if (this.isFilter(file)) {
+                    if (RQ.isFilter(file)) {
                         continue;
                     }
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);
@@ -96,7 +96,7 @@ public class RQ1 extends RQ{
                     Global.fileName = fileName;
 //                    if(fileName.equals("TopDocsCollectorContext.java"))
                     baseDiffMiner.doo(fileName,prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
-                    this.baseDiffMiner.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
+//                    this.baseDiffMiner.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
                 }
             }
         }

@@ -26,9 +26,9 @@ public class VariableChangeEntity extends StatementPlusChangeEntity {
         sb.append(" ");
         sb.append(this.stageIIBean.getChangeEntity());
         if(this.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
-            sb.append("'s type/fragments ");
-//            sb.append("");
-            sb.append("with/by...");
+            sb.append("  ");
+
+            sb.append("with ");
         }
         return sb.toString();
     }

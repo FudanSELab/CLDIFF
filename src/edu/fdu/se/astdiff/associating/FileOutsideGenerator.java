@@ -10,6 +10,7 @@ import edu.fdu.se.astdiff.miningchangeentity.base.StatementPlusChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.member.ClassChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.member.MethodChangeEntity;
 import edu.fdu.se.handlefile.Method;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import java.util.ArrayList;
@@ -45,7 +46,9 @@ public class FileOutsideGenerator {
         List<ChangeEntity> classBList = classChange(cb);
         checkMethodInvokes(methodAList, stmtBList, 1);
         checkMethodInvokes(methodBList, stmtAList, 0);
-
+        //todo check 4-23
+//        checkMethodInheritage(methodAList,methodBList);
+ASTNode a;;
         checkClassInvokes(classAList, stmtBList, 1);
         checkClassInvokes(classBList, stmtAList, 0);
     }
@@ -104,6 +107,42 @@ public class FileOutsideGenerator {
                             }
                             break;
                         }
+                    }
+                }
+            }
+        }
+
+    }
+
+    public void checkMethodInheritage(List<ChangeEntity> methodListA,List<ChangeEntity> methodListB){
+        String classA = ce1.fileName.substring(0,ce1.fileName.length()-5);
+        String classB = ce2.fileName.substring(0,ce2.fileName.length()-5);
+        List<MethodChangeEntity> mc1 = new ArrayList<>();
+        List<MethodChangeEntity> mc2 = new ArrayList<>();
+        for(ChangeEntity ce:methodListA){
+            if(ce instanceof MethodChangeEntity){
+                MethodChangeEntity mce = (MethodChangeEntity) ce;
+                if(mce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
+                    mc1.add(mce);
+                }
+            }
+        }
+        for(ChangeEntity ce:methodListB){
+            if(ce instanceof MethodChangeEntity){
+                MethodChangeEntity mce = (MethodChangeEntity) ce;
+                if(mce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
+                    mc2.add(mce);
+                }
+            }
+        }
+        if(ce1.mad.preprocessedData.interfacesAndFathers.contains(classA)||ce2.mad.preprocessedData.interfacesAndFathers.contains(classB)){
+            for(MethodChangeEntity m:mc1){
+                for(MethodChangeEntity n:mc2){
+                    MethodData methodData1 = (MethodData) m.linkBean;
+                    MethodData methodData2 = (MethodData) n.linkBean;
+                    if(methodData1.methodName.get(0).equals(methodData2.methodName.get(0))){
+                        Association association = new Association(ce1.fileName, ce2.fileName, m, n, ChangeEntityDesc.StageIIIAssociationType.TYPE_METHOD_OVERRIDE,methodData1.methodName.get(0));
+                        mAssos.add(association);
                     }
                 }
             }
