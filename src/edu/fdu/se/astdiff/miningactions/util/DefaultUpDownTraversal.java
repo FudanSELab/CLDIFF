@@ -3,9 +3,11 @@ package edu.fdu.se.astdiff.miningactions.util;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
+import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +35,16 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         changePacket.initChangeSet2();
         changePacket.getChangeSet1().add(a.getClass().getSimpleName());
         traverseNodeSubTreeInRange(node,0,i-1,result1,changePacket.getChangeSet1());
-        traverseNodeSubTreeInRange(node,i,children.size()-1,result1,changePacket.getChangeSet2());
+
+        List<Action> group2 = new MyList<>();
+        List<String> changeType2 = new MyList<>();
+        traverseNodeSubTreeInRange(node,i,children.size()-1,group2,changeType2);
+        if(changeType2.contains(ActionConstants.NULLACTION)){
+
+        }else{
+            result1.addAll(group2);
+            changePacket.getChangeSet2().addAll(changeType2);
+        }
 
     }
 
@@ -59,45 +70,39 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         changePacket.initChangeSet2();
         changePacket.getChangeSet1().add(a.getClass().getSimpleName());
         traverseNodeSubTreeInRange(node,0,i-1,result1,changePacket.getChangeSet1());
-        traverseNodeSubTreeInRange(node,i,children.size()-1,result1,changePacket.getChangeSet2());
-    }
-    public static void traverseConstructor(Action a,List<Action> result1,ChangePacket changePacket){
-        ITree node = a.getNode();
-        result1.add(a);
-        List<ITree> children = node.getChildren();
-        int i=0;
-        for(;i<children.size();i++){
-            Tree t = (Tree) children.get(i);
-            if(t.getAstNode().getNodeType() == ASTNode.BLOCK ){
-                break;
-            }
+
+
+        List<Action> group2 = new MyList<>();
+        List<String> changeType2 = new MyList<>();
+        traverseNodeSubTreeInRange(node,i,children.size()-1,group2,changeType2);
+        if(changeType2.contains(ActionConstants.NULLACTION)){
+
+        }else{
+            result1.addAll(group2);
+            changePacket.getChangeSet2().addAll(changeType2);
         }
-        changePacket.initChangeSet1();
-        changePacket.initChangeSet2();
-        changePacket.getChangeSet1().add(a.getClass().getSimpleName());
-        traverseNodeSubTreeInRange(node,0,i-1,result1,changePacket.getChangeSet1());
-        traverseNodeSubTreeInRange(node,i,children.size()-1,result1,changePacket.getChangeSet2());
-    }
-
-
-    public static void traverseTypeIIStatements(Action a,List<Action> result1,ChangePacket changePacket){
-        ITree node = a.getNode();
-        result1.add(a);
-        List<ITree> children = node.getChildren();
-        int i=0;
-        for(;i<children.size();i++){
-            Tree t = (Tree) children.get(i);
-            if(t.getAstNode().getNodeType() == ASTNode.BLOCK  || t.getAstClass().getSimpleName().endsWith("Statement")){
-                break;
-            }
-        }
-        changePacket.initChangeSet1();
-        changePacket.initChangeSet2();
-        changePacket.getChangeSet1().add(a.getClass().getSimpleName());
-        traverseNodeSubTreeInRange(node,0,i-1,result1,changePacket.getChangeSet1());
-        traverseNodeSubTreeInRange(node,i,children.size()-1,result1,changePacket.getChangeSet2());
 
     }
+
+
+//    public static void traverseTypeIIStatements(Action a,List<Action> result1,ChangePacket changePacket){
+//        ITree node = a.getNode();
+//        result1.add(a);
+//        List<ITree> children = node.getChildren();
+//        int i=0;
+//        for(;i<children.size();i++){
+//            Tree t = (Tree) children.get(i);
+//            if(t.getAstNode().getNodeType() == ASTNode.BLOCK  || t.getAstClass().getSimpleName().endsWith("Statement")){
+//                break;
+//            }
+//        }
+//        changePacket.initChangeSet1();
+//        changePacket.initChangeSet2();
+//        changePacket.getChangeSet1().add(a.getClass().getSimpleName());
+//        traverseNodeSubTreeInRange(node,0,i-1,result1,changePacket.getChangeSet1());
+//        traverseNodeSubTreeInRange(node,i,children.size()-1,result1,changePacket.getChangeSet2());
+//
+//    }
 
     public static void traverseIf(Action a,List<Action> result1,ChangePacket changePacket){
         ITree node = a.getNode();
@@ -119,7 +124,8 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
         changePacket.initChangeSet2();
         changePacket.getChangeSet1().add(a.getClass().getSimpleName());
         traverseNodeSubTreeInRange(node,0,i-1,result1,changePacket.getChangeSet1());
-
+        List<Action> bodyResult = new ArrayList<>();
+        List<String> changesSet = new MyList<>();
         if(type==1){
             Tree block  = (Tree) node.getChild(i);
             if(block.getDoAction()!=null){
@@ -129,13 +135,21 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
                     }
                 }
             }
-            traverseNodeChildrenSubTree(block,result1,changePacket.getChangeSet2());
-            traverseNodeSubTreeInRange(node,i+1,children.size()-1,result1,changePacket.getChangeSet2());
+            traverseNodeChildrenSubTree(block,bodyResult,changesSet);
+            traverseNodeSubTreeInRange(node,i+1,children.size()-1,bodyResult,changesSet);
         }else{
-            traverseNodeSubTreeInRange(node,i,children.size()-1,result1,changePacket.getChangeSet2());
+            traverseNodeSubTreeInRange(node,i,children.size()-1,bodyResult,changesSet);
+        }
+        if(changesSet.contains(ActionConstants.NULLACTION)){
+
+        }else{
+            result1.addAll(bodyResult);
+            changePacket.getChangeSet2().addAll(changesSet);
         }
 
     }
+
+
     public static void traverseTypeIStatements(Action a,List<Action> result1,ChangePacket changePacket){
         traverseOneType(a,result1,changePacket);
     }
@@ -179,29 +193,12 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
 
     }
 
+
+
+
+
     public static void traverseSwitchCase(Action a,List<Action> result1,ChangePacket changePacket){
         traverseOneType(a,result1,changePacket);
-//        Set<String> type1 = new ArrayList<>();
-//        Tree switchCase = (Tree) a.getNode();
-//        Tree switchParent = (Tree) switchCase.getParent();
-//        result1.add(a);
-//        int pos = switchParent.getChildPosition(switchCase);
-//        int len = switchParent.getChildren().size();
-//        int i=pos+1;
-//        for(;i<=len-1;i++){
-//            Tree tmp = (Tree)switchParent.getChild(i);
-//            if(tmp.getAstNode().getNodeType() == ASTNode.SWITCH_CASE){
-//                break;
-//            }
-//
-//        }
-//        if(i>len){
-//            traverseNodeSubTreeInRange(switchParent,pos,len,result1,type1);
-//
-//        }else{
-//            traverseNodeSubTreeInRange(switchParent,pos,i-1,result1,type1);
-//        }
-//        changePacket.changeSet1 = type1;
     }
 
 

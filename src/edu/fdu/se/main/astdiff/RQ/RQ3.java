@@ -1,10 +1,12 @@
 package edu.fdu.se.main.astdiff.RQ;
 
+import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.Global.Global;
 import edu.fdu.se.astdiff.associating.Association;
 import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
 import edu.fdu.se.astdiff.associating.FileOutsideGenerator;
 import edu.fdu.se.astdiff.associating.TotalFileAssociations;
+import edu.fdu.se.astdiff.associating.similarity.TreeDistance;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
@@ -45,9 +47,9 @@ public class RQ3 extends RQ{
 
     public static void main(String args[]){
         RQ3 rq = new RQ3();
-        String projName = "MPAndroidChart";
+        String projName = "RxJava";
         rq.repoPath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\"+projName+"\\.git";
-        rq.commitId = "1c312e85a9c6f868f76e886386621ebd3555a7d7";
+        rq.commitId = "f51cd52c65be3b11a95890dd4aff90717a85daab";
         rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\";
         rq.jGitHelper = new JGitHelper(rq.repoPath);
         rq.baseDiffMiner = new DiffMinerTest();
@@ -140,6 +142,13 @@ public class RQ3 extends RQ{
 //        System.out.println(totalFileAssociations.toAssoJSonString());
         System.out.println(totalFileAssociations.toConsoleString());
         fileChangeEntityData.clear();
+    }
+
+
+    public float distance(Tree tree1,Tree tree2){
+        TreeDistance treeDistance = new TreeDistance(tree1,tree2);
+        float distance = treeDistance.calculateTreeDistance();
+        return distance;
     }
 
 

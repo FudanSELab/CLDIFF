@@ -44,7 +44,7 @@ public class Test {
     private void testDoo(String filePrev, String fileCurr, String output){
         FilePairPreDiff psc = new FilePairPreDiff();
         psc.initFile(filePrev, fileCurr);
-        psc.compareTwoFile(output);
+        psc.compareTwoFile();
         PreprocessedData preData = psc.getPreprocessedData();
         JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
 
@@ -52,5 +52,7 @@ public class Test {
         float distance = treeDistance.calculateTreeDistance();
         System.out.println(distance);
     }
+
+
 
 }

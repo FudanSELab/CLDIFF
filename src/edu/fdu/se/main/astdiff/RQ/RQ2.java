@@ -1,12 +1,18 @@
 package edu.fdu.se.main.astdiff.RQ;
 
 import edu.fdu.se.astdiff.Global.Global;
+import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
+import edu.fdu.se.astdiff.associating.FileOutsideGenerator;
+import edu.fdu.se.astdiff.associating.TotalFileAssociations;
+import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.main.astdiff.BaseDiffMiner;
 import edu.fdu.se.main.astdiff.DiffMinerTest;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -79,16 +85,76 @@ public class RQ2 extends RQ {
                         num = baseDiffMiner.runGumTree(new String(prevFile), new String(currFile));
                     }else if(this.argType.equals("df")){
                         Global.fileName = fileName;
-                        baseDiffMiner.doo(fileName,prevFile,currFile,outputDir+"/"+fileName);
-                        num =changeEntitySize(baseDiffMiner.changeEntityData.mad.getChangeEntityList());
+                        FilePairData fp = new FilePairData(prevFile,currFile,file,file,fileName);
+                        filePairDatas.add(fp);
+//                        this.baseDiffMiner.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
+
+//                        baseDiffMiner.doo(fileName,prevFile,currFile,outputDir+"/"+fileName);
+//                        num =changeEntitySize(baseDiffMiner.changeEntityData.mad.getChangeEntityList());
                     }
                     totalNumber += num;
                     System.out.println("----"+fileName+" "+num);
                 }
             }
         }
+        generateDiffMinerOutput();
         long end = System.nanoTime();
         System.out.println("----one commit time:" +(end-start));
+    }
+    class FilePairData{
+        public FilePairData(byte[] prevv,byte[] currr,String prevPathh,String currPathh,String fileNamee) {
+            prev = prevv;
+            curr = currr;
+            prevPath = prevPathh;
+            currPath = currPathh;
+            fileName = fileNamee;
+        }
+        private byte[] prev;
+        private byte[] curr;
+        private String prevPath;
+        private String currPath;
+        private String fileName;
+    }
+
+    private List<FilePairData> filePairDatas = new ArrayList<>();
+    private Map<String,ChangeEntityData> fileChangeEntityData = new HashMap<>();
+
+
+    public void generateDiffMinerOutput(){
+        long start = System.nanoTime();
+        for(FilePairData fp:filePairDatas){
+//            System.out.println(fp.fileName);
+            Global.fileName = fp.fileName;
+            if(fp.prev==null){
+                this.baseDiffMiner.dooNewFile(fp.fileName,fp.curr,null);
+            }else {
+                this.baseDiffMiner.doo(fp.fileName, fp.prev, fp.curr, null);
+            }
+            this.fileChangeEntityData.put(this.baseDiffMiner.changeEntityData.fileName,this.baseDiffMiner.changeEntityData);
+        }
+        List<String> fileNames = new ArrayList<>(this.fileChangeEntityData.keySet());
+        TotalFileAssociations totalFileAssociations = new TotalFileAssociations() ;
+        for(int i =0;i<fileNames.size();i++){
+            String fileNameA = fileNames.get(i);
+            ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
+            FileInsideAssociationGenerator associationGenerator = new FileInsideAssociationGenerator(cedA);
+            associationGenerator.generateFile();
+            totalFileAssociations.addEntry(fileNameA,cedA.mAssociations);
+        }
+        for(int i =0;i<fileNames.size();i++){
+            String fileNameA = fileNames.get(i);
+            ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
+            FileOutsideGenerator fileOutsideGenerator = new FileOutsideGenerator();
+            for(int j =i+1;j<fileNames.size();j++){
+                String fileNameB = fileNames.get(j);
+                ChangeEntityData cedB = this.fileChangeEntityData.get(fileNameB);
+                fileOutsideGenerator.generateOutsideAssociation(cedA,cedB);
+                totalFileAssociations.addFile2FileAssos(fileNameA,fileNameB,fileOutsideGenerator.mAssos);
+            }
+        }
+        long end = System.nanoTime();
+        System.out.println("----linking " +(end-start));
+        fileChangeEntityData.clear();
     }
 
     private int changeEntitySize(List<ChangeEntity> mList){

@@ -6,13 +6,14 @@ import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
  * Created by huangkaifeng on 2018/4/16.
  */
 public class LinkUtil {
-    public static boolean isRangeWithin(ChangeEntity ce1, ChangeEntity ce2) {
+    public static int isRangeWithin(ChangeEntity ce1, ChangeEntity ce2) {
         MyRange myRange1 = ce1.getLineRange();
         MyRange myRange2 = ce2.getLineRange();
-        if (myRange1.isRangeWithin(myRange2) != 0) {
-            return true;
+        int res= myRange1.isRangeWithin(myRange2);
+        if ( res!= 0) {
+            return res;
         } else {
-            return false;
+            return res;
         }
     }
 }

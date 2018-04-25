@@ -42,9 +42,6 @@ public class MatchIfElse {
 
 //		if (AstRelations.isFatherXXXStatement(a, ASTNode.IF_STATEMENT)) {
 //			//code.changeEntity = IfChangeEntity.ELSE_IF;
-//		} else {
-////			code.changeEntity = IfChangeEntity.IF;
-//		}
 	}
 	
 
