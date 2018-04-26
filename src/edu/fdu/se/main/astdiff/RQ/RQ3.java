@@ -14,6 +14,8 @@ import edu.fdu.se.astdiff.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.main.astdiff.DiffMinerTest;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
 import java.util.Map.Entry;
 
 import java.util.*;
@@ -47,9 +49,9 @@ public class RQ3 extends RQ{
 
     public static void main(String args[]){
         RQ3 rq = new RQ3();
-        String projName = "RxJava";
+        String projName = "spring-framework";
         rq.repoPath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\"+projName+"\\.git";
-        rq.commitId = "f51cd52c65be3b11a95890dd4aff90717a85daab";
+        rq.commitId = "3c1adf7f6af0dff9bda74f40dabe8cf428a62003";
         rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\";
         rq.jGitHelper = new JGitHelper(rq.repoPath);
         rq.baseDiffMiner = new DiffMinerTest();
@@ -76,9 +78,6 @@ public class RQ3 extends RQ{
                     byte[] currFile = jGitHelper.extract(file, currCommitId);
                     int index = file.lastIndexOf("/");
                     String fileName = file.substring(index + 1, file.length());
-//                    if(!fileName.equals("MessagingMessageListenerAdapter.java")){
-//                        continue;
-//                    }
                     FilePairData fp = new FilePairData(prevFile,currFile,file,file,fileName);
                     filePairDatas.add(fp);
                     this.baseDiffMiner.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
@@ -138,6 +137,7 @@ public class RQ3 extends RQ{
                 totalFileAssociations.addFile2FileAssos(fileNameA,fileNameB,fileOutsideGenerator.mAssos);
             }
         }
+        new FileOutsideGenerator().checkDuplicateSimilarity(this.fileChangeEntityData);
         baseDiffMiner.mFileOutputLog.writeLinkJson(totalFileAssociations.toAssoJSonString());
 //        System.out.println(totalFileAssociations.toAssoJSonString());
         System.out.println(totalFileAssociations.toConsoleString());

@@ -40,7 +40,7 @@ public class ChangeEntityPreprocess {
         if(Global.RQ2==0) {
 //            this.printContainerEntityDataBefore();
         }
-        this.mergeMoveAndWrapper();
+//        this.mergeMoveAndWrapper();
         this.setChangeEntitySub();
         this.setChangeEntityOpt2Opt2Exp();
 //        this.printContainerEntityDataAfter();

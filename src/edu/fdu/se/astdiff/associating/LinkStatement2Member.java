@@ -21,7 +21,7 @@ public class LinkStatement2Member {
         MethodData methodData = (MethodData) method.linkBean;
         if(method.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
             // method 是否在一个range 以及parameter
-            if(LinkUtil.isRangeWithin(stmt,method)){
+            if(LinkUtil.isRangeWithin(stmt,method)==1){
                 for(String params:methodData.parameterName){
                     for(String vars:stmtData.variableLocal){
                         if(params.equals(vars)){

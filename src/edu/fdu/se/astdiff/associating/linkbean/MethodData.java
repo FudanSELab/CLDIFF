@@ -49,8 +49,9 @@ public class MethodData extends LinkBean {
             parameterName.add(svd.getName().toString());
             parameterType.add(svd.getType().toString());
         }
-        returnType = md.getReturnType2().toString();
-
+        if(md.getReturnType2()!=null){
+            returnType = md.getReturnType2().toString();
+        }
     }
 
 
@@ -77,7 +78,9 @@ public class MethodData extends LinkBean {
                 tempParameterName.add(svd.getName().toString());
                 tempParameterType.add(svd.getType().toString());
             }
-            tempReturn = md.getReturnType2().toString();
+            if(md.getReturnType2()!=null) {
+                tempReturn = md.getReturnType2().toString();
+            }
         }
 
         for(Action a:ce.clusteredActionBean.actions){

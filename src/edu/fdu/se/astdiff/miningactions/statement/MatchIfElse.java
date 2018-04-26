@@ -1,12 +1,17 @@
 package edu.fdu.se.astdiff.miningactions.statement;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 
+import edu.fdu.se.astdiff.generatingactions.ActionConstants;
 import edu.fdu.se.astdiff.miningactions.bean.ChangePacket;
 import edu.fdu.se.astdiff.miningactions.bean.MiningActionData;
 import edu.fdu.se.astdiff.miningactions.util.AstRelations;
@@ -17,11 +22,13 @@ import edu.fdu.se.astdiff.miningchangeentity.ClusteredActionBean;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.miningchangeentity.statement.IfChangeEntity;
+import org.eclipse.jdt.core.dom.ASTNode;
 
 public class MatchIfElse {
 
 
 	public static void matchIf(MiningActionData fp, Action a) {
+//		checkExample(a);
 		ChangePacket changePacket = new ChangePacket();
 		List<Action> subActions = new ArrayList<>();
 		if(!BasicTreeTraversal.traverseWhenActionIsMove(a,subActions,changePacket,true)){
@@ -42,6 +49,34 @@ public class MatchIfElse {
 
 //		if (AstRelations.isFatherXXXStatement(a, ASTNode.IF_STATEMENT)) {
 //			//code.changeEntity = IfChangeEntity.ELSE_IF;
+	}
+	public static void checkExample(Action a){
+		if(!(a instanceof Insert)){
+			return;
+		}
+		List<ITree> children = a.getNode().getChildren();
+		if(children.size()!=2){
+			return;
+		}
+		Tree block = (Tree)children.get(1);
+		if(block.getAstNode().getNodeType()!= ASTNode.BLOCK){
+			return;
+		}
+		List<ITree> children2 =block.getChildren();
+		Set<String> tmp = new HashSet<>();
+		for(ITree tree:children2){
+			Tree t= (Tree)tree;
+			if(t.getDoAction()==null){
+				tmp.add(ActionConstants.NULLACTION);
+				continue;
+			}
+			for(Action b:t.getDoAction()){
+				tmp.add(b.getClass().getSimpleName());
+			}
+		}
+		if(tmp.size()==2 && tmp.contains(ActionConstants.NULLACTION) && tmp.contains(Insert.class.getSimpleName())){
+			System.out.println("[Find] find Example--------------------------------------");
+		}
 	}
 	
 

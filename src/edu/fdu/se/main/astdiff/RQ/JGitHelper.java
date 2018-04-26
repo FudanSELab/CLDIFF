@@ -51,14 +51,13 @@ public class JGitHelper extends JGitCommand {
                 while (commitQueue.size() != 0) {
                     RevCommit queueCommitItem = commitQueue.poll();
                     //wang 4/11
-
                     RevCommit[] parentCommits = queueCommitItem.getParents();
                     if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
                         continue;
                     }
                     Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(queueCommitItem.getName());
                     rq.handleCommits(changedFiles, queueCommitItem.getName());
-//                    commitNum++;
+                    commitNum++;
                     isTraversed.put(queueCommitItem.getName(), true);
                     for (RevCommit item2 : parentCommits) {
                         RevCommit commit2 = revWalk.parseCommit(item2.getId());
@@ -119,13 +118,16 @@ public class JGitHelper extends JGitCommand {
                 commitQueue.offer(commit);
                 while (commitQueue.size() != 0) {
                     RevCommit queueCommitItem = commitQueue.poll();
-                    commitNum++;
+
                     RevCommit[] parentCommits = queueCommitItem.getParents();
                     if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
                         continue;
                     }
                     int temp2 = getCommitFileEditLineNumber(queueCommitItem);
-                    totalChangedLineNumber += temp2;
+//                    totalChangedLineNumber += temp2;
+                    if(temp2==1) {
+                        commitNum++;
+                    }
                     isTraversed.put(queueCommitItem.getName(), true);
                     for (RevCommit item2 : parentCommits) {
                         RevCommit commit2 = revWalk.parseCommit(item2.getId());
@@ -138,7 +140,7 @@ public class JGitHelper extends JGitCommand {
 //            System.out.println("totalCommitNum: " + commitNum);
             System.out.println("totalChangedLineNumber: " + totalChangedLineNumber);
             System.out.println("----total time:" + (endTime - startTime));
-
+            System.out.println("----commitnum "+commitNum);
         } catch (MissingObjectException e) {
             e.printStackTrace();
         } catch (IncorrectObjectTypeException e) {
@@ -152,21 +154,7 @@ public class JGitHelper extends JGitCommand {
 
     private long totalChangedLineNumber;
 
-    public boolean isFilter(String filePathName) {
-        String name = filePathName.toLowerCase();
-        if (!name.endsWith(".java")) {
-            return true;
-        }
-        if (name.contains("\\test\\") || name.contains("/test/")) {
-            return true;
-        }
-        String[] data = filePathName.split("/");
-        String fileName = data[data.length - 1];
-        if (filePathName.endsWith("Test.java") || fileName.startsWith("Test")||filePathName.endsWith("Tests.java")) {
-            return true;
-        }
-        return false;
-    }
+
 
 
     public int getCommitFileEditLineNumber(RevCommit commit) {
@@ -174,8 +162,6 @@ public class JGitHelper extends JGitCommand {
             System.out.println("----commit id:" + commit.getName());
             int count = 0;
             long startTime = System.nanoTime();   //获取开始时间
-
-
             RevCommit[] parentsCommits = commit.getParents();
             for (RevCommit parent : parentsCommits) {
                 ObjectReader reader = git.getRepository().newObjectReader();
@@ -197,15 +183,18 @@ public class JGitHelper extends JGitCommand {
                             String mOldPath = entry.getOldPath();
                             if (RQ.isFilter(mOldPath)) {
                                 continue;
+                            }else{
+                                //at least one file is changed
+                                return 1;
                             }
-                            FileHeader fileHeader = diffFormatter.toFileHeader(entry);
-                            EditList editList = fileHeader.toEditList();
-                            int temp = lineNumber(editList);
-                            count += temp;
-                            System.out.println("----"+mOldPath.substring(mOldPath.lastIndexOf("/") + 1) + " " + count);
-                            diffFormatter.format(entry);
-                            out.reset();
-                            break;
+//                            FileHeader fileHeader = diffFormatter.toFileHeader(entry);
+//                            EditList editList = fileHeader.toEditList();
+//                            int temp = lineNumber(editList);
+//                            count += temp;
+//                            System.out.println("----"+mOldPath.substring(mOldPath.lastIndexOf("/") + 1) + " " + count);
+//                            diffFormatter.format(entry);
+//                            out.reset();
+//                            break;
                         case ADD:
                         case DELETE:
                         default:
@@ -217,7 +206,7 @@ public class JGitHelper extends JGitCommand {
             long endTime = System.nanoTime(); //获取结束时间
 
             System.out.println("----one commit time:" + (endTime - startTime));
-            return count;
+            return 0;
         } catch (MissingObjectException e) {
             e.printStackTrace();
         } catch (IncorrectObjectTypeException e) {

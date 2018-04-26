@@ -20,10 +20,10 @@ public class MatchBlock {
 
     public static void matchBlock(MiningActionData fp, Action a) {
 
-        Tree fatherNode = (Tree)a.getNode().getParent();
+        Tree fatherNode = (Tree) a.getNode().getParent();
         int type = fatherNode.getAstNode().getNodeType();
-        if(a instanceof Move && type!= ASTNode.IF_STATEMENT){
-            handleMoveOnBlock(fp,a);
+        if (a instanceof Move && type != ASTNode.IF_STATEMENT) {
+            handleMoveOnBlock(fp, a);
             fp.setActionTraversedMap(a);
             return;
         }
@@ -34,14 +34,14 @@ public class MatchBlock {
                 break;
             case ASTNode.IF_STATEMENT:
                 //Pattern 1.2 Match else
-                if(fatherNode.getChildPosition(a.getNode())==2){
+                if (fatherNode.getChildPosition(a.getNode()) == 2) {
                     MatchIfElse.matchElse(fp, a);
                 }
                 fp.setActionTraversedMap(a);
                 break;
             case ASTNode.TRY_STATEMENT:
                 ////Finally块
-                if(fatherNode.getChildPosition(a.getNode()) == fatherNode.getChildren().size()-1){
+                if (fatherNode.getChildPosition(a.getNode()) == fatherNode.getChildren().size() - 1) {
                     MatchTry.matchFinally(fp, a);
                 }
                 fp.setActionTraversedMap(a);
@@ -52,30 +52,31 @@ public class MatchBlock {
         }
     }
 
-    public static void handleMoveOnBlock(MiningActionData fp,Action a){
+    public static void handleMoveOnBlock(MiningActionData fp, Action a) {
         System.err.println("[WARNING]Move block");
-        Tree movedBlock = (Tree)a.getNode();
-        List<ITree> children = movedBlock.getChildren();
-        for(int i =0;i<children.size();i++){
-            Tree childd = (Tree) children.get(i);
-            if(fp.getEntityByNode(childd)!=null){
-                continue;
-            }
-            if(childd.getDoAction()!=null && childd.getDoAction().size()!=0){
-                continue;
-            }
-            ChangePacket changePacket = new ChangePacket();
-            changePacket.initChangeSet1();
-            List<Action> subActions = new ArrayList<>();
-            ClusteredActionBean clusteredActionBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN,new Move(childd,null,0),subActions,changePacket,childd,ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
-            ChangeEntity changeEntity = new StatementPlusChangeEntity(clusteredActionBean);
-            changeEntity.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
-            changeEntity.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
-            changeEntity.stageIIBean.setChangeEntity(childd.getAstNode().getClass().getSimpleName());
-            changeEntity.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_MOVE);
-            changeEntity.stageIIBean.setLineRange(AstRelations.getMyRange(childd, ChangeEntityDesc.StageITreeType.SRC_TREE_NODE).toString());
-            fp.addOneChangeEntity(changeEntity);
-        }
+        Tree movedBlock = (Tree) a.getNode();
+//        List<ITree> children = movedBlock.getChildren();
+//        for(int i =0;i<children.size();i++){
+//            Tree childd = (Tree) children.get(i);
+//            if(fp.getEntityByNode(childd)!=null){
+//                continue;
+//            }
+//            if(childd.getDoAction()!=null && childd.getDoAction().size()!=0){
+//                continue;
+//            }
+        ChangePacket changePacket = new ChangePacket();
+        changePacket.initChangeSet1();
+        List<Action> subActions = new ArrayList<>();
+        subActions.add(a);
+        ClusteredActionBean clusteredActionBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_UP_DOWN, a, subActions, changePacket, movedBlock, ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
+        ChangeEntity changeEntity = new StatementPlusChangeEntity(clusteredActionBean);
+        changeEntity.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD);
+        changeEntity.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
+        changeEntity.stageIIBean.setChangeEntity(movedBlock.getAstNode().getClass().getSimpleName());
+        changeEntity.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_MOVE);
+        changeEntity.stageIIBean.setLineRange(AstRelations.getMyRange(movedBlock, ChangeEntityDesc.StageITreeType.SRC_TREE_NODE).toString());
+        fp.addOneChangeEntity(changeEntity);
+//        }
     }
 
 }

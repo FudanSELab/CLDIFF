@@ -1,5 +1,6 @@
 package edu.fdu.se.main.astdiff.RQ;
 
+import com.github.javaparser.printer.lexicalpreservation.changes.Change;
 import edu.fdu.se.astdiff.Global.Global;
 import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
 import edu.fdu.se.astdiff.associating.FileOutsideGenerator;
@@ -59,10 +60,9 @@ public class RQ2 extends RQ {
 
     private long totalNumber;
 
-
     public void handleCommits(Map<String, Map<String, List<String>>> changedFiles,String currCommitId){
-        long start = System.nanoTime();
         System.out.println("----commit id:"+currCommitId);
+        long time = 0l;
 //        this.baseDiffMiner.mFileOutputLog.setCommitId(currCommitId);
         for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
             String parentCommitId = entry.getKey();
@@ -77,29 +77,31 @@ public class RQ2 extends RQ {
                     byte[] currFile = jGitHelper.extract(file, currCommitId);
                     int index = file.lastIndexOf("/");
                     String fileName = file.substring(index + 1, file.length());
-//                    System.out.println("CommitId: " + currCommitId);
-//                    System.out.println("fileName: " + fileName);
-//                    String dirName = parentCommitId + "-" + currCommitId;
                     int num=0;
                     if(this.argType.equals("gt")){
+                        long start = System.nanoTime();
                         num = baseDiffMiner.runGumTree(new String(prevFile), new String(currFile));
+                        totalNumber += num;
+                        long end = System.nanoTime();
+                        System.out.println("----"+fileName+" "+num);
+                        time += (end-start);
                     }else if(this.argType.equals("df")){
                         Global.fileName = fileName;
                         FilePairData fp = new FilePairData(prevFile,currFile,file,file,fileName);
                         filePairDatas.add(fp);
-//                        this.baseDiffMiner.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
-
-//                        baseDiffMiner.doo(fileName,prevFile,currFile,outputDir+"/"+fileName);
-//                        num =changeEntitySize(baseDiffMiner.changeEntityData.mad.getChangeEntityList());
                     }
-                    totalNumber += num;
-                    System.out.println("----"+fileName+" "+num);
+
                 }
             }
         }
-        generateDiffMinerOutput();
-        long end = System.nanoTime();
-        System.out.println("----one commit time:" +(end-start));
+        if(this.argType.equals("gt")){
+            System.out.println("----one commit time:" + time);
+        }else if(this.argType.equals("df")){
+            long start = System.nanoTime();
+            generateDiffMinerOutput();
+            long end = System.nanoTime();
+            System.out.println("----one commit time:" + (end-start));
+        }
     }
     class FilePairData{
         public FilePairData(byte[] prevv,byte[] currr,String prevPathh,String currPathh,String fileNamee) {
@@ -121,7 +123,6 @@ public class RQ2 extends RQ {
 
 
     public void generateDiffMinerOutput(){
-        long start = System.nanoTime();
         for(FilePairData fp:filePairDatas){
 //            System.out.println(fp.fileName);
             Global.fileName = fp.fileName;
@@ -131,7 +132,11 @@ public class RQ2 extends RQ {
                 this.baseDiffMiner.doo(fp.fileName, fp.prev, fp.curr, null);
             }
             this.fileChangeEntityData.put(this.baseDiffMiner.changeEntityData.fileName,this.baseDiffMiner.changeEntityData);
+            int num  = changeEntitySize(this.baseDiffMiner.changeEntityData.mad.getChangeEntityList());
+            totalNumber+=num;
+            System.out.println("----"+fp.fileName+" "+num);
         }
+        long start = System.nanoTime();
         List<String> fileNames = new ArrayList<>(this.fileChangeEntityData.keySet());
         TotalFileAssociations totalFileAssociations = new TotalFileAssociations() ;
         for(int i =0;i<fileNames.size();i++){
@@ -154,7 +159,21 @@ public class RQ2 extends RQ {
         }
         long end = System.nanoTime();
         System.out.println("----linking " +(end-start));
+
+        for(int i =0;i<fileNames.size();i++){
+            String fileNameA = fileNames.get(i);
+            ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
+            for(ChangeEntity ce:cedA.mad.getChangeEntityList()){
+                if(ce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_UD)){
+                    if(ce.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_INSERT)
+                            ||ce.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_DELETE)) {
+                        System.out.println("----"+ce.stageIIBean.getOpt() + " "+ ce.clusteredActionBean.actions.size());
+                    }
+                }
+            }
+        }
         fileChangeEntityData.clear();
+        filePairDatas.clear();
     }
 
     private int changeEntitySize(List<ChangeEntity> mList){
@@ -167,7 +186,11 @@ public class RQ2 extends RQ {
                 if(ce.stageIIBean.getOpt2List() ==null ){
                     cnt++;
                 }else{
-                    cnt+=ce.stageIIBean.getOpt2List().size();
+                    if(ce.stageIIBean.getOpt2List()==null||ce.stageIIBean.getOpt2List().size()==0){
+                        cnt++;
+                    }else {
+                        cnt += ce.stageIIBean.getOpt2List().size();
+                    }
                 }
             }
         }

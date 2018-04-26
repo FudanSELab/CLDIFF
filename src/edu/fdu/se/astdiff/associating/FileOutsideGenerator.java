@@ -1,8 +1,10 @@
 package edu.fdu.se.astdiff.associating;
 
+import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.associating.linkbean.ClassData;
 import edu.fdu.se.astdiff.associating.linkbean.MethodData;
 import edu.fdu.se.astdiff.associating.linkbean.StmtData;
+import edu.fdu.se.astdiff.associating.similarity.TreeDistance;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
@@ -46,11 +48,12 @@ public class FileOutsideGenerator {
         List<ChangeEntity> classBList = classChange(cb);
         checkMethodInvokes(methodAList, stmtBList, 1);
         checkMethodInvokes(methodBList, stmtAList, 0);
-        //todo check 4-23
-//        checkMethodInheritage(methodAList,methodBList);
-ASTNode a;;
         checkClassInvokes(classAList, stmtBList, 1);
         checkClassInvokes(classBList, stmtAList, 0);
+        //todo check 4-23
+        checkMethodInheritage(methodAList,methodBList);
+
+
     }
 
     public List<ChangeEntity> methodDeclarations(ChangeEntityData ced) {
@@ -74,6 +77,59 @@ ASTNode a;;
         }
         return stmtList;
     }
+
+    public  void checkDuplicateSimilarity(Map<String,ChangeEntityData> mMap){
+        List<ChangeEntity> totalEntityList = new ArrayList<>();
+        List<Integer> indexList = new ArrayList<>();
+        for(Entry<String,ChangeEntityData> entry:mMap.entrySet()){
+            for(ChangeEntity tmp:entry.getValue().mad.getChangeEntityList()){
+                if(indexList.contains(tmp.getChangeEntityId())){
+                    continue;
+                }
+                totalEntityList.add(tmp);
+                indexList.add(tmp.getChangeEntityId());
+            }
+        }
+        List<Class> instances = new ArrayList<>();
+        totalEntityList.forEach(a->{
+            if(!instances.contains(a.getClass())) {
+                instances.add(a.getClass());
+            }
+        });
+        for(Class clazz:instances){
+            List<ChangeEntity> someTypeOfChangeClassA = new ArrayList<>();
+            for(ChangeEntity c:totalEntityList){
+                if(c.getClass().equals(clazz)){
+                    someTypeOfChangeClassA.add(c);
+                }
+            }
+            for(int i =0;i<someTypeOfChangeClassA.size();i++){
+                for(int j =i+1;j<someTypeOfChangeClassA.size();j++){
+                    ChangeEntity a = someTypeOfChangeClassA.get(i);
+                    ChangeEntity b = someTypeOfChangeClassA.get(j);
+                    if(!a.stageIIBean.getOpt().equals(b.stageIIBean.getOpt())){
+                        continue;
+                    }
+                    if(a.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)){
+                        continue;
+                    }
+                    if(a.clusteredActionBean!=null && b.clusteredActionBean!=null) {
+
+                        if (a.clusteredActionBean.fafather.getAstClass().equals(b.clusteredActionBean.fafather.getAstClass())
+                        && a.clusteredActionBean.actions.size() == b.clusteredActionBean.actions.size()) {
+                            TreeDistance treeDistance = new TreeDistance(a.clusteredActionBean.fafather, b.clusteredActionBean.fafather);
+                            float distance = treeDistance.calculateTreeDistance();
+                            if(distance<=1.0)
+                                System.out.println(a.getChangeEntityId() + " " + b.changeEntityId + " " + distance);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+
 
     public List<ChangeEntity> classChange(ChangeEntityData ced) {
         List<ChangeEntity> mList = ced.mad.getChangeEntityList();
