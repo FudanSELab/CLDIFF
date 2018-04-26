@@ -18,25 +18,25 @@ public class LinkStatement2Statement {
 
 
     public static void checkStmtAssociation(ChangeEntityData changeEntityData, ChangeEntity ce1, ChangeEntity ce2){
-        int res = LinkUtil.isRangeWithin(ce1,ce2);
-        if(res != 0) {
-            int flag = 0;
-            if (res == -1) {
-                if(ce1 instanceof IfChangeEntity|| ce1 instanceof SynchronizedChangeEntity
-                        ||ce1 instanceof WhileChangeEntity || ce1 instanceof ForChangeEntity){
-                    flag = 1;
-                }
-            }else if(res ==1){
-                if(ce2 instanceof IfChangeEntity|| ce2 instanceof SynchronizedChangeEntity
-                        ||ce2 instanceof WhileChangeEntity || ce2 instanceof ForChangeEntity){
-                    flag = 1;
-                }
-            }
-            if(flag ==1) {
-                Association association = new Association(ce1, ce2, ChangeEntityDesc.StageIIIAssociationType.TYPE_CONTROL, null);
-                changeEntityData.mAssociations.add(association);
-            }
-        }
+//        int res = LinkUtil.isRangeWithin(ce1,ce2);
+//        if(res != 0) {
+//            int flag = 0;
+//            if (res == -1) {
+//                if(ce1 instanceof IfChangeEntity|| ce1 instanceof SynchronizedChangeEntity
+//                        ||ce1 instanceof WhileChangeEntity || ce1 instanceof ForChangeEntity){
+//                    flag = 1;
+//                }
+//            }else if(res ==1){
+//                if(ce2 instanceof IfChangeEntity|| ce2 instanceof SynchronizedChangeEntity
+//                        ||ce2 instanceof WhileChangeEntity || ce2 instanceof ForChangeEntity){
+//                    flag = 1;
+//                }
+//            }
+//            if(flag ==1) {
+//                Association association = new Association(ce1, ce2, ChangeEntityDesc.StageIIIAssociationType.TYPE_CONTROL, null);
+//                changeEntityData.mAssociations.add(association);
+//            }
+//        }
         StmtData linkBean1 = (StmtData) ce1.linkBean;
         StmtData linkBean2 = (StmtData) ce2.linkBean;
 //        for(String tmp:linkBean1.variableField){

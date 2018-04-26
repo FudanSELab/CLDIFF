@@ -49,9 +49,9 @@ public class RQ3 extends RQ{
 
     public static void main(String args[]){
         RQ3 rq = new RQ3();
-        String projName = "spring-framework";
+        String projName = "RxJava";
         rq.repoPath = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\"+projName+"\\.git";
-        rq.commitId = "3c1adf7f6af0dff9bda74f40dabe8cf428a62003";
+        rq.commitId = "8af2bc96808267b3e3d07021ab4e95a8467a05b9";
         rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\";
         rq.jGitHelper = new JGitHelper(rq.repoPath);
         rq.baseDiffMiner = new DiffMinerTest();
