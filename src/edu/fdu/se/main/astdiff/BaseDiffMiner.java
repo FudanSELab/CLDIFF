@@ -79,7 +79,7 @@ public class BaseDiffMiner {
         long end = System.nanoTime();
         System.out.println("----mapping " +(end-start));
 
-//        printActions(actionsData,treeGenerator);
+        printActions(actionsData,treeGenerator);
         long start2 = System.nanoTime();
         MiningActionData mad = new MiningActionData(preData,actionsData,treeGenerator);
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
