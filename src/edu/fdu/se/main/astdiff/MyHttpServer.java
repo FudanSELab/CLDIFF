@@ -35,6 +35,7 @@ public class MyHttpServer {
             }
             String[] data = postString.split("&");
             System.out.println(postString);
+            //TODO 前后分开 这部分负责response
             String response = postString;
             os.write(response.getBytes());
             os.close();
