@@ -23,6 +23,7 @@ public class MyHttpServer {
     static  class TestHandler implements HttpHandler{
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+
             exchange.sendResponseHeaders(200, 0);
             OutputStream os = exchange.getResponseBody();
             
@@ -31,6 +32,8 @@ public class MyHttpServer {
             int res;
             String postString = "";
             while((res = is.read(cache))!=-1){
+                //todo
+                //这里字符串拼接最好改成StringBuilder拼接，在循环里做str+str操作可能会有内存问题
             	postString += (new String(cache)).substring(0,res);
             }
             String[] data = postString.split("&");
