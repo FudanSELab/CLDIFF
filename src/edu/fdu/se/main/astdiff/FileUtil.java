@@ -19,6 +19,7 @@ public class FileUtil {
 
     /**
      * 创建文件
+     *
      * @param name
      * @param codeContent
      * @param folder
@@ -69,11 +70,16 @@ public class FileUtil {
 
     /**
      * 把代码写入文件
+     *
      * @param data
      */
-    public static void convertCodeToFile(String[] data,File folder) {
+    public static void convertCodeToFile(String[] data, File folder) {
         for (String content : data) {
-            String info = content.split("\n\n")[0];//标题
+            if (content.isEmpty()) {
+                //过滤掉第一个空string
+                continue;
+            }
+            String info = content.split("\r\n")[1];//标题
             String codeContent = content.substring(info.length()); //正文
             // "Content-Disposition: form-data; name=\"https://github.com/amitshekhariitbhu/Android-Debug-Database/commit/43e48d15e6ee435
             // ed0b1abc6d76638dc8bf0217d/debug-db/src/main/java/com/amitshekhar/server/RequestHandler.java\"
