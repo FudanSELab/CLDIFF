@@ -1680,7 +1680,7 @@ public class TestMain {
         Meta meta = filterMeta(data[size - 2]);
         //建立一个文件夹
         File folder = createDirectory("data/" + meta.getCommit_hash());
-        createFile("meta", new Gson().toJson(meta), folder);
+        createFile("meta", new Gson().toJson(meta), folder,"");
         for (String content : data) {
             String info = content.split("\n\n")[0];//标题
             String codeContent = content.substring(info.length()); //正文
@@ -1692,7 +1692,7 @@ public class TestMain {
             Matcher matcher = pattern.matcher(info);
             if (matcher.find()) {
                 String name = matcher.group();
-                createFile(name, codeContent, folder);
+                createFile(name, codeContent, folder,"");
             }
         }
     }
@@ -1725,7 +1725,7 @@ public class TestMain {
      * @param content
      * @param folder
      */
-    private static void createFile(String fileName, String codeContent, File folder) {
+    private static void createFile(String fileName, String codeContent, File folder,String path) {
         FileUtil.createFile(fileName, codeContent, folder);
 
     }

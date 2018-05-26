@@ -9,6 +9,7 @@ import org.apache.http.util.TextUtils;
 
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,16 +26,21 @@ public class MyHttpServer {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             System.out.println("123");
-            exchange.sendResponseHeaders(200, 0);
+
             OutputStream os = exchange.getResponseBody();
+            exchange.sendResponseHeaders(200, 1);
             InputStream is = exchange.getRequestBody();
-            byte[] cache = new byte[1000*1024];
+            byte[] cache = new byte[1000 * 1024];
             int res;
             StringBuilder postString = new StringBuilder();
             while ((res = is.read(cache)) != -1) {
-                postString.append(new String(cache).substring(0, res));
+                //todo
+                //这里字符串拼接最好改成StringBuilder拼接，在循环里做str+str操作可能会有内存问题
+                String a = new String(cache).substring(0, res);
+                postString.append(a);
+                // postString += (new String(cache)).substring(0, res);
             }
-            System.out.println(postString.toString());
+            System.out.println(postString);
 
             //保存为文件
             String[] data = postString.toString().split(DIVIDER);
@@ -50,11 +56,18 @@ public class MyHttpServer {
             File folder = FileUtil.createFolder("data/" + meta.getCommit_hash());
             //meta 文件
             FileUtil.createFile("meta", new Gson().toJson(meta), folder);
+            //根据parent commit id创建文件夹
+            List<String> parentCommits = meta.getParents();
+            for (String parent : parentCommits) {
+                FileUtil.createFolder(folder.getPath() + "/" + parent + "/prev/");
+                FileUtil.createFolder(folder.getPath() + "/" + parent + "/curr/");
+            }
             //代码文件
-            FileUtil.convertCodeToFile(data, folder);
-            String response = "success";
-            os.write(response.getBytes());
-            os.close();
+            FileUtil.convertCodeToFile(data, folder,meta);
+//            //TODO 前后分开 这部分负责response
+//            String response = postString;
+//            os.write(response.getBytes());
+//            os.close();
         }
 
     }
