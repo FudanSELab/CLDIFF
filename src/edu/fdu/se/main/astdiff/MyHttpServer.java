@@ -27,20 +27,17 @@ public class MyHttpServer {
             System.out.println("123");
             exchange.sendResponseHeaders(200, 0);
             OutputStream os = exchange.getResponseBody();
-
             InputStream is = exchange.getRequestBody();
-            byte[] cache = new byte[10];
+            byte[] cache = new byte[1000*1024];
             int res;
-            String postString = "";
+            StringBuilder postString = new StringBuilder();
             while ((res = is.read(cache)) != -1) {
-                //todo
-                //这里字符串拼接最好改成StringBuilder拼接，在循环里做str+str操作可能会有内存问题
-                postString += (new String(cache)).substring(0, res);
+                postString.append(new String(cache).substring(0, res));
             }
-            System.out.println(postString);
+            System.out.println(postString.toString());
 
             //保存为文件
-            String[] data = postString.split(DIVIDER);
+            String[] data = postString.toString().split(DIVIDER);
             if (data.length <= 1) {
                 return;
             }
@@ -55,10 +52,7 @@ public class MyHttpServer {
             FileUtil.createFile("meta", new Gson().toJson(meta), folder);
             //代码文件
             FileUtil.convertCodeToFile(data, folder);
-
-
-            //TODO 前后分开 这部分负责response
-            String response = postString;
+            String response = "success";
             os.write(response.getBytes());
             os.close();
         }
