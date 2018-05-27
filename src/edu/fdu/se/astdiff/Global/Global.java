@@ -12,4 +12,6 @@ public class Global {
     public static int RQ2 = 0;
 
     public static String fileName;
+
+    public static String parentCommit;
 }

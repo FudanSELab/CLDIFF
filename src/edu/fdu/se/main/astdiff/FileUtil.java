@@ -1,6 +1,7 @@
 package edu.fdu.se.main.astdiff;
 
 import com.google.gson.Gson;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.util.List;
@@ -68,6 +69,19 @@ public class FileUtil {
                 //找到当前meta信息
                 Meta metaObj = new Gson().fromJson(meta, Meta.class);
                 return metaObj;
+            }
+        }
+        return null;
+    }
+
+    public static JSONObject filterMeta2(String datum){
+        //{"autho
+        String[] metaInfo = datum.split("\r\n");
+        //匹配
+        for (String meta : metaInfo) {
+            if (meta.startsWith("{\"")) {
+                //找到当前meta信息
+                return new JSONObject(meta);
             }
         }
         return null;

@@ -28,7 +28,21 @@ public class Meta {
         String currFilePath;
     }
 
+    public String getProjName() {
+        return projName;
+    }
 
+    public void setProjName(String projName) {
+        this.projName = projName;
+    }
+
+    public List<FilePair> getFilePairs() {
+        return filePairs;
+    }
+
+    public void setFilePairs(List<FilePair> filePairs) {
+        this.filePairs = filePairs;
+    }
 
     public String getAuthor() {
         return author;

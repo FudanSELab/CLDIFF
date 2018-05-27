@@ -18,4 +18,5 @@ public class FilePairData {
     public String prevPath;
     public String currPath;
     public String fileName;
+    public String parentCommit;
 }

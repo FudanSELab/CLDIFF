@@ -29,29 +29,30 @@ public class DiffMinerGitHubAPI {
     private String commitId;
     private List<FilePairData> filePairDatas;
 
-    public DiffMinerGitHubAPI(String path) {
+    /**
+     * output path +"proj_name" + "commit_id"
+     * @param path
+     */
+    public DiffMinerGitHubAPI(String path,JSONObject meta){
         filePairDatas = new ArrayList<>();
         baseDiffMiner = new BaseDiffMiner();
-        File file = new File(path+"/meta.json");
-        String content = "";
-        try {
-            content = FileUtils.readFileToString(file, "UTF-8");
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        JSONObject jsonObject=new JSONObject(content);
-        String commit = jsonObject.getString("commit_hash");
-        String projName = jsonObject.getString("proj_name");
+        commitId = meta.getString("commit_hash");
+        String projName = meta.getString("proj_name");
         baseDiffMiner.mFileOutputLog = new FileOutputLog(path, projName);
-        baseDiffMiner.mFileOutputLog.setCommitId(commit);
-        this.commitId = commit;
+        JSONArray jsonArray = meta.getJSONArray("parents");
+        Iterator iter = jsonArray.iterator();
+        List<String > parentCommits = new ArrayList<>();
+        while(iter.hasNext()){
+            parentCommits.add((String)iter.next());
+        }
+        baseDiffMiner.mFileOutputLog.setCommitId(commitId,parentCommits);
         this.outputDir = path;
-        initData(jsonObject);
+        initDataFromJson(meta);
     }
 
 
-    public void initData(JSONObject jsonObject) {
-        JSONArray jsonArray = jsonObject.getJSONArray("files");
+    public void initDataFromJson(JSONObject meta) {
+        JSONArray jsonArray = meta.getJSONArray("files");
         Iterator iter = jsonArray.iterator();
         while(iter.hasNext()){
             JSONObject jo = (JSONObject) iter.next();
@@ -60,15 +61,19 @@ public class DiffMinerGitHubAPI {
             String fileName = fileFullName.substring(index+ 1, fileFullName.length());
             String prevFilePath = jo.getString("prev_file_path");
             String currFilePath = jo.getString("curr_file_path");
-            FilePairData fp = new FilePairData(null,null,prevFilePath,currFilePath,fileName);
+            String parentCommit = jo.getString("parent_commit");
+            String basePath = baseDiffMiner.mFileOutputLog.metaLinkPath;
+            FilePairData fp = new FilePairData(null,null,basePath +"/"+prevFilePath,basePath+"/"+currFilePath,fileName);
+            fp.parentCommit = parentCommit;
             filePairDatas.add(fp);
         }
     }
 
 
     public void generateDiffMinerOutput(){
-        String absolutePath = this.outputDir+"\\" + this.commitId;
+        String absolutePath = this.baseDiffMiner.mFileOutputLog.metaLinkPath;
         for(FilePairData fp:filePairDatas){
+            Global.parentCommit = fp.parentCommit;
             System.out.println(fp.fileName);
             Global.fileName = fp.fileName;
             if(fp.prev==null && fp.curr==null){
@@ -81,7 +86,7 @@ public class DiffMinerGitHubAPI {
                 if(fp.prev==null){
                     this.baseDiffMiner.dooNewFile(fp.fileName,fp.curr,absolutePath);
                 }else {
-                    this.baseDiffMiner.doo(fp.fileName, fp.prev, fp.curr, absolutePath);
+                    this.baseDiffMiner.doo(fp.fileName, fp.prev, fp.curr,absolutePath);
                 }
             }
 
