@@ -20,6 +20,15 @@ public class Meta {
     private String commit_log;
     private Object children;
     private List<String> parents;
+    private String projName;
+    private List<FilePair> filePairs;
+    class FilePair{
+        String fileName;
+        String prevFilePath;
+        String currFilePath;
+    }
+
+
 
     public String getAuthor() {
         return author;

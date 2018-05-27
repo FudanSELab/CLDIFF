@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import edu.fdu.se.defaultdiffminer.DiffMinerGitHubAPI;
 import org.apache.http.util.TextUtils;
 
 import java.io.*;
@@ -16,17 +17,22 @@ import java.util.regex.Pattern;
 public class MyHttpServer {
     static final String DIVIDER = "--xxx---------------xxx";
 
+    private static String outputPath;
     public static void main(String[] arg) throws Exception {
-        HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
-        server.createContext("/DiffMiner/main", new TestHandler());
-        server.start();
+        outputPath = arg[0];
+//        HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
+//        server.createContext("/DiffMiner/main", new TestHandler());
+//        server.start();
+        //test
+
+        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(outputPath+"3c1adf7f6af0dff9bda74f40dabe8cf428a62003");
+        diff.generateDiffMinerOutput();
     }
 
     static class TestHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             System.out.println("123");
-
             OutputStream os = exchange.getResponseBody();
             exchange.sendResponseHeaders(200, 1);
             InputStream is = exchange.getRequestBody();
@@ -34,11 +40,8 @@ public class MyHttpServer {
             int res;
             StringBuilder postString = new StringBuilder();
             while ((res = is.read(cache)) != -1) {
-                //todo
-                //这里字符串拼接最好改成StringBuilder拼接，在循环里做str+str操作可能会有内存问题
                 String a = new String(cache).substring(0, res);
                 postString.append(a);
-                // postString += (new String(cache)).substring(0, res);
             }
             System.out.println(postString);
 
@@ -53,7 +56,7 @@ public class MyHttpServer {
             //建立一个文件夹
             //文件夹命名为commit_hash
             //文件名以name字段的hash值
-            File folder = FileUtil.createFolder("data/" + meta.getCommit_hash());
+            File folder = FileUtil.createFolder(outputPath + meta.getCommit_hash());
             //meta 文件
             FileUtil.createFile("meta", new Gson().toJson(meta), folder);
             //根据parent commit id创建文件夹
@@ -64,7 +67,9 @@ public class MyHttpServer {
             }
             //代码文件
             FileUtil.convertCodeToFile(data, folder,meta);
-//            //TODO 前后分开 这部分负责response
+//            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(outputPath+meta.getCommit_hash());
+//            diff.generateDiffMinerOutput();
+            //读取输出文件
 //            String response = postString;
 //            os.write(response.getBytes());
 //            os.close();

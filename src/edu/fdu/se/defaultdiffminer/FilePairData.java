@@ -15,7 +15,7 @@ public class FilePairData {
 
     public byte[] prev;
     public byte[] curr;
-    private String prevPath;
-    private String currPath;
+    public String prevPath;
+    public String currPath;
     public String fileName;
 }

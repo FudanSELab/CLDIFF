@@ -81,19 +81,7 @@ public class FileOutputLog {
     public void writeLinkJson(String link){
         FileWriter.writeInAll(this.metaLinkPath+"\\link.json", link);
     }
-//    public void writeRQ1CommitFile(byte[] src,byte[] dst,String commitIdFileName,String fileName){
-//        File prev = new File(path+"/"+commitIdFileName);
-//        File curr = new File(path+"/"+commitIdFileName);
-//        if (!prev.exists()) {
-//            prev.mkdirs();
-//        }
-//        if (!curr.exists()) {
-//            curr.mkdirs();
-//        }
-//
-//        FileWriter.writeInAll(srcDirFile.getAbsolutePath()+"/"+commitIdFileName+"/"+fileName,src);
-//        FileWriter.writeInAll(dstDirFile.getAbsolutePath()+"/"+commitIdFileName+"/"+fileName,dst);
-//    }
+
 
 
 }
