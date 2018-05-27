@@ -21,6 +21,9 @@ public class FileOutputLog {
     public String currSourceFile;
     public String prevSourceFile;
     public String sourceGen;
+
+    public String middleGenPathPrev;
+    public String middleGenPathCurr;
     public FileOutputLog(String rootPath,String projName){
         this.rootPath = rootPath;
         this.projName = projName;
@@ -39,6 +42,12 @@ public class FileOutputLog {
             temp = new File(this.currSourceFile+"/"+s);
             temp.mkdirs();
             temp = new File(this.sourceGen+"/"+s);
+            temp.mkdirs();
+            this.middleGenPathPrev = temp.getAbsolutePath() +"/prev";
+            this.middleGenPathCurr = temp.getAbsolutePath() +"/curr";
+            temp = new File(this.middleGenPathPrev);
+            temp.mkdirs();
+            temp = new File(this.middleGenPathCurr);
             temp.mkdirs();
         }
     }
@@ -73,13 +82,15 @@ public class FileOutputLog {
 //
 
     public void writeTreeFile(String srcTree,String dstTree){
-        FileWriter.writeInAll(this.prevSourceFile + "/Tree"+Global.fileName+".txt", srcTree);
-        FileWriter.writeInAll(this.currSourceFile + "/Tree"+Global.fileName+".txt", dstTree);
+        FileWriter.writeInAll(this.middleGenPathPrev + "/Tree"+Global.fileName+".txt", srcTree);
+        FileWriter.writeInAll(this.middleGenPathCurr + "/Tree"+Global.fileName+".txt", dstTree);
     }
 
 
     public void writeEntityJson(String json){
-        FileWriter.writeInAll(this.sourceGen +"/"+Global.parentCommit+"/Diff"+Global.fileName+".json", json);
+        String path = this.sourceGen +"/"+Global.parentCommit+"/Diff"+Global.fileName+".json";
+        Global.outputFilePathList.add(path);
+        FileWriter.writeInAll(path, json);
     }
 
     public void writeSourceFile(byte[] prev,byte[] curr,String fileName){
@@ -90,12 +101,16 @@ public class FileOutputLog {
     }
 
     public void writeMetaFile(String metaJson){
-        FileWriter.writeInAll(this.metaLinkPath+"\\meta.json",metaJson);
+        String path = this.metaLinkPath+"\\meta.json";
+        Global.outputFilePathList.add(path);
+        FileWriter.writeInAll(path,metaJson);
     }
 
 
     public void writeLinkJson(String link){
-        FileWriter.writeInAll(this.metaLinkPath+"\\link.json", link);
+        String path = this.metaLinkPath+"\\link.json";
+        Global.outputFilePathList.add(path);
+        FileWriter.writeInAll(path, link);
     }
 
 
