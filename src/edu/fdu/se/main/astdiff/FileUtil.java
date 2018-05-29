@@ -111,7 +111,7 @@ public class FileUtil {
                 String filePath = "";
                 if (isParent) {
                     //如果是parentcommit,只需要在commit_id/parent_commit_id/prev/下新建
-                    filePath = folder.getPath() + "/" + commitId + "/prev/" + path;
+                    filePath = folder.getPath() +    "/" + commitId + "/prev/" + path;
                     //如果是parent,需要将文件名形式A.java____parent0改为A.java
                     fileName = fileName.split(PARENT_DIVIDER)[0];
                     File directory = FileUtil.createFolder(filePath);
