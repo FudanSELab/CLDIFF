@@ -138,7 +138,6 @@ public class FileUtil {
                         commitFile.setPrev_file_path("prev/" + parentCommitId + path + fileName);
                         meta.addFile(commitFile);
                     }
-
                 }
             }
         }
