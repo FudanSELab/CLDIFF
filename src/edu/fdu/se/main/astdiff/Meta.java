@@ -1,5 +1,6 @@
 package edu.fdu.se.main.astdiff;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Meta {
@@ -13,6 +14,7 @@ public class Meta {
      * parents : ["52d1cbab7903ff3dda0dbdb8eb7e21f6ed6f0413"]
      */
 
+    private String project_name;
     private String author;
     private String date_time;
     private String committer;
@@ -20,6 +22,37 @@ public class Meta {
     private String commit_log;
     private Object children;
     private List<String> parents;
+    private List<CommitFile> files;
+
+
+    /**
+     * 添加一个文件
+     *
+     * @param file
+     */
+    public void addFile(CommitFile file) {
+        if (files == null) {
+            files = new ArrayList<>();
+        }
+
+        files.add(file);
+    }
+
+    public List<CommitFile> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<CommitFile> files) {
+        this.files = files;
+    }
+
+    public String getProject_name() {
+        return project_name;
+    }
+
+    public void setProject_name(String project_name) {
+        this.project_name = project_name;
+    }
 
     public String getAuthor() {
         return author;

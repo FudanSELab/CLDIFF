@@ -5,13 +5,9 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import org.apache.http.util.TextUtils;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MyHttpServer {
     static final String DIVIDER = "--xxx---------------xxx";
@@ -26,7 +22,7 @@ public class MyHttpServer {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             System.out.println("123");
-
+            String output = "output/";
             OutputStream os = exchange.getResponseBody();
             exchange.sendResponseHeaders(200, 1);
             InputStream is = exchange.getRequestBody();
@@ -51,19 +47,19 @@ public class MyHttpServer {
             //找到meta信息
             Meta meta = FileUtil.filterMeta(data[size - 2]);
             //建立一个文件夹
-            //文件夹命名为commit_hash
+            //文件夹命名为project_name/commit_hash
             //文件名以name字段的hash值
-            File folder = FileUtil.createFolder("data/" + meta.getCommit_hash());
+            File folder = FileUtil.createFolder(output + meta.getProject_name() + "/" + meta.getCommit_hash());
+            //根据parent commit id创建文件夹
+//            List<String> parentCommits = meta.getParents();
+//            for (String parent : parentCommits) {
+//                FileUtil.createFolder(folder.getPath() + "/" + parent + "/prev/");
+//                FileUtil.createFolder(folder.getPath() + "/" + parent + "/curr/");
+//            }
+            //代码文件
+            FileUtil.convertCodeToFile(data, folder, meta);
             //meta 文件
             FileUtil.createFile("meta", new Gson().toJson(meta), folder);
-            //根据parent commit id创建文件夹
-            List<String> parentCommits = meta.getParents();
-            for (String parent : parentCommits) {
-                FileUtil.createFolder(folder.getPath() + "/" + parent + "/prev/");
-                FileUtil.createFolder(folder.getPath() + "/" + parent + "/curr/");
-            }
-            //代码文件
-            FileUtil.convertCodeToFile(data, folder,meta);
 //            //TODO 前后分开 这部分负责response
 //            String response = postString;
 //            os.write(response.getBytes());

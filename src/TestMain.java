@@ -57,7 +57,7 @@ public class TestMain {
             "import net.sqlcipher.database.SQLiteDatabase;\n" +
             "\n" +
             "import java.io.BufferedReader;\n" +
-            "import java.io.File;\n" +
+            "import java.io.CommitFile;\n" +
             "import java.io.IOException;\n" +
             "import java.io.InputStreamReader;\n" +
             "import java.io.PrintStream;\n" +
@@ -183,7 +183,7 @@ public class TestMain {
             "\n" +
             "    private void openDatabase(String database) {\n" +
             "        closeDatabase();\n" +
-            "        File databaseFile = mDatabaseFiles.get(database).first;\n" +
+            "        CommitFile databaseFile = mDatabaseFiles.get(database).first;\n" +
             "        String password = mDatabaseFiles.get(database).second;\n" +
             "\n" +
             "        SQLiteDatabase.loadLibs(mContext);\n" +
@@ -423,7 +423,7 @@ public class TestMain {
             "import net.sqlcipher.database.SQLiteDatabase;\n" +
             "\n" +
             "import java.io.BufferedReader;\n" +
-            "import java.io.File;\n" +
+            "import java.io.CommitFile;\n" +
             "import java.io.IOException;\n" +
             "import java.io.InputStreamReader;\n" +
             "import java.io.PrintStream;\n" +
@@ -549,7 +549,7 @@ public class TestMain {
             "\n" +
             "    private void openDatabase(String database) {\n" +
             "        closeDatabase();\n" +
-            "        File databaseFile = mDatabaseFiles.get(database).first;\n" +
+            "        CommitFile databaseFile = mDatabaseFiles.get(database).first;\n" +
             "        String password = mDatabaseFiles.get(database).second;\n" +
             "\n" +
             "        SQLiteDatabase.loadLibs(mContext);\n" +

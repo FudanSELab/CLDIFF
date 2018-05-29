@@ -85,7 +85,11 @@ public class FileUtil {
                 //过滤掉第一个空string
                 continue;
             }
-            String info = content.split("\r\n")[1];//标题
+            String[] infos = content.split("\r\n");//标题
+            if (infos.length < 2) {
+                return;
+            }
+            String info = infos[1];
             String codeContent = content.substring(info.length()); //正文
             // "Content-Disposition: form-data; name=\"https://github.com/amitshekhariitbhu/Android
             // -Debug-Database/commit/43e48d15e6ee435
@@ -104,27 +108,36 @@ public class FileUtil {
                 path = path.substring(0, path.length() - fileName.length());
                 //去除最后的引号
                 fileName = fileName.substring(0, fileName.length() - 1);
-                //如果是parentcommit,只需要在commit_id/parent_commit_id/prev/下新建
-                //如果是childCommit，需要在所有的commit_id/parent_commit/curr/新建
+                //如果是parentcommit,只需要在project_name/commit_id/prev/parent_commit_id/src/xx/xx下新建
+                //如果是childCommit，需要在所有的commit_id/curr/parent_commit_id/src/xx/xx新建
 
                 boolean isParent = !commitId.equals(meta.getCommit_hash());
                 String filePath = "";
+                CommitFile commitFile;
                 if (isParent) {
-                    //如果是parentcommit,只需要在commit_id/parent_commit_id/prev/下新建
-                    filePath = folder.getPath() +    "/" + commitId + "/prev/" + path;
+                    //如果是parentcommit,只需要在project_name/commit_id/prev/parent_commit_id/src/xx/xx下新建
+                    filePath = folder.getPath() + "/prev/" + commitId + "/" + path;
                     //如果是parent,需要将文件名形式A.java____parent0改为A.java
                     fileName = fileName.split(PARENT_DIVIDER)[0];
+                    //先创建文件
                     File directory = FileUtil.createFolder(filePath);
                     FileUtil.createFile(fileName, codeContent, directory);
                 } else {
-                    //如果是childCommit，需要在所有的commit_id/parent_commit_id/curr/新建
+                    //如果是childCommit，需要在所有的commit_id/curr/parent_commit_id/src/xx/xx新建
                     List<String> parentCommitIds = meta.getParents();
                     for (String parentCommitId : parentCommitIds) {
-                        filePath = folder.getPath() + "/" + parentCommitId + "/curr/" + path;
+                        filePath = folder.getPath() + "/curr/" + parentCommitId + "/" + path;
                         File directory = FileUtil.createFolder(filePath);
                         FileUtil.createFile(fileName, codeContent, directory);
+
+                        //添加到Meta中
+                        commitFile = new CommitFile();
+                        commitFile.setFile_name(fileName);
+                        commitFile.setParent_commit(parentCommitId);
+                        commitFile.setCurr_file_path("curr/" + parentCommitId + path + fileName);
+                        commitFile.setPrev_file_path("prev/" + parentCommitId + path + fileName);
+                        meta.addFile(commitFile);
                     }
-                    // FileUtil.createFile(fileName, codeContent, folder, filePath);
 
                 }
             }
