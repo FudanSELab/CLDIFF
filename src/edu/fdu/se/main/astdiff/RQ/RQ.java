@@ -11,10 +11,10 @@ import java.util.Map;
  */
 abstract public class RQ {
 
-    JGitHelper jGitHelper;
+    public JGitHelper jGitHelper;
 
-    DiffMinerTest baseDiffMiner;
-    String outputDir;
+    public DiffMinerTest baseDiffMiner;
+    public String outputDir;
 
     abstract public void handleCommits(Map<String, Map<String, List<String>>> mMap,String currCommitId);
 

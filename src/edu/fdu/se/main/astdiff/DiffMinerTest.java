@@ -98,8 +98,6 @@ public class DiffMinerTest extends BaseDiffMiner {
 
         i.runSingleFilePair();
     }
-    // 3.Human study
-    // 4.Link
 
 }
 

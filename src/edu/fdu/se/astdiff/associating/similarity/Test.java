@@ -42,15 +42,15 @@ public class Test {
 
     //测试相似度检测测试
     private void testDoo(String filePrev, String fileCurr, String output){
-        FilePairPreDiff psc = new FilePairPreDiff();
-        psc.initFile(filePrev, fileCurr);
-        psc.compareTwoFile();
-        PreprocessedData preData = psc.getPreprocessedData();
-        JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
-
-        TreeDistance treeDistance = new TreeDistance((Tree)jtg.src,(Tree)jtg.dst);
-        float distance = treeDistance.calculateTreeDistance();
-        System.out.println(distance);
+//        FilePairPreDiff psc = new FilePairPreDiff();
+//        psc.initFile(filePrev, fileCurr);
+//        psc.compareTwoFile();
+//        PreprocessedData preData = psc.getPreprocessedData();
+//        JavaParserTreeGenerator jtg = new JavaParserTreeGenerator(preData.getSrcCu(),preData.getDstCu());
+//
+//        TreeDistance treeDistance = new TreeDistance((Tree)jtg.src,(Tree)jtg.dst);
+//        float distance = treeDistance.calculateTreeDistance();
+//        System.out.println(distance);
     }
 
 

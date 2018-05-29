@@ -36,7 +36,7 @@ public class BaseDiffMiner {
         String fileName = filePrev.substring(index+1,filePrev.length());
         Global.fileName = fileName;
         FilePairPreDiff preDiff = new FilePairPreDiff();
-        preDiff.initFile(filePrev,fileCurr);
+        preDiff.initFilePath(filePrev,fileCurr);
         int result = preDiff.compareTwoFile();
         if(result ==-1){
             return;
@@ -49,7 +49,7 @@ public class BaseDiffMiner {
         long start = System.nanoTime();
         // 1.pre
         FilePairPreDiff preDiff = new FilePairPreDiff();
-        preDiff.initFile(filePrevContent,fileCurrContent);
+        preDiff.initFileContent(filePrevContent,fileCurrContent);
         int result = preDiff.compareTwoFile();
         long end = System.nanoTime();
         System.out.println("----pre-processing " +(end-start));
@@ -65,6 +65,9 @@ public class BaseDiffMiner {
         changeEntityData.fileName = fileName;
 
     }
+
+
+
 
 
     private void runDiff(FilePairPreDiff preDiff,String fileName){
@@ -93,10 +96,10 @@ public class BaseDiffMiner {
         long end2 = System.nanoTime();
         System.out.println("----grouping " +(end2-start2));
 // json
-//        GenerateChangeEntityJson.setStageIIIBean(ced);
-//        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
-//        this.mFileOutputLog.writeEntityJson(json);
-//        System.out.println(json);
+        GenerateChangeEntityJson.setStageIIIBean(ced);
+        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
+        this.mFileOutputLog.writeEntityJson(json);
+        System.out.println(json);
 
 
     }

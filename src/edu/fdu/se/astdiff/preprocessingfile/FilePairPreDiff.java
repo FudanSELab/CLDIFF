@@ -46,12 +46,12 @@ public class FilePairPreDiff {
     }
     private Queue<SrcDstPair> queue;
 
-    public void initFile(String prevPath,String currPath){
+    public void initFilePath(String prevPath,String currPath){
         preprocessedData.srcCu = JDTParserFactory.getCompilationUnit(prevPath);
         preprocessedData.dstCu = JDTParserFactory.getCompilationUnit(currPath);
         preprocessedData.loadTwoCompilationUnits(preprocessedData.srcCu, preprocessedData.dstCu, prevPath, currPath);
     }
-    public void initFile(byte[] prevContent,byte[] currContent){
+    public void initFileContent(byte[] prevContent,byte[] currContent){
         try {
             preprocessedData.srcCu = JDTParserFactory.getCompilationUnit(prevContent);
             preprocessedData.dstCu = JDTParserFactory.getCompilationUnit(currContent);
