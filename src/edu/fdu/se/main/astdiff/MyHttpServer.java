@@ -43,16 +43,17 @@ public class MyHttpServer {
                 // postString += (new String(cache)).substring(0, res);
             }
             System.out.println(postString);
+            JSONObject postJson = new JSONObject(postString.toString());
             // author、commit_hash、parent_commit_hash、project_name、prev_file_path、curr_file_path
             String author = "";
-            String commit_hash = "";
-            String parent_commit_hash = "";
-            String project_name = "";
-            String prev_file_path = "";
-            String curr_file_path = "";
+            String commit_hash = postJson.getString("commit_hash");
+            String parent_commit_hash = postJson.getString("parent_commit_hash");
+            String project_name = postJson.getString("project_name");
+            String prev_file_path = postJson.getString("prev_file_path");
+            String curr_file_path = postJson.getString("curr_file_path");
 
-            String currFileContent = FileUtil.read(project_name + "/" + commit_hash + "/" + curr_file_path);
-            String prevFileContent = FileUtil.read(project_name + "/" + commit_hash + "/" + prev_file_path);
+            String currFileContent = FileUtil.read(global_Path+project_name + "/" + commit_hash + "/" + curr_file_path+".txt");
+            String prevFileContent = FileUtil.read(global_Path+project_name + "/" + commit_hash + "/" + prev_file_path+".txt");
             String diff = "";
             String link = "";
             Content content = new Content(prevFileContent, currFileContent, diff, link);
