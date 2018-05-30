@@ -20,7 +20,47 @@ public class MyHttpServer {
         HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
         server.createContext("/DiffMiner/main", new TestHandler());
         server.createContext("/DiffMiner/main/fetchMetaCache", new MetaCacheHandler());
+        server.createContext("/DiffMiner/main/fetchContent", new ContentHandler());
         server.start();
+    }
+
+    /**
+     * 获取文件内容 link diff
+     */
+    static class ContentHandler implements HttpHandler {
+
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            System.out.println("ContentHandler");
+            InputStream is = exchange.getRequestBody();
+            OutputStream os = exchange.getResponseBody();
+            byte[] cache = new byte[100];
+            int res;
+            StringBuilder postString = new StringBuilder();
+            while ((res = is.read(cache)) != -1) {
+                String a = new String(cache).substring(0, res);
+                postString.append(a);
+                // postString += (new String(cache)).substring(0, res);
+            }
+            System.out.println(postString);
+            // author、commit_hash、parent_commit_hash、project_name、prev_file_path、curr_file_path
+            String author = "";
+            String commit_hash = "";
+            String parent_commit_hash = "";
+            String project_name = "";
+            String prev_file_path = "";
+            String curr_file_path = "";
+
+            String currFileContent = FileUtil.read(project_name + "/" + commit_hash + "/" + curr_file_path);
+            String prevFileContent = FileUtil.read(project_name + "/" + commit_hash + "/" + prev_file_path);
+            String diff = "";
+            String link = "";
+            Content content = new Content(prevFileContent, currFileContent, diff, link);
+            String contentResultStr = new Gson().toJson(content);
+            exchange.sendResponseHeaders(200, contentResultStr.length());
+            os.write(contentResultStr.getBytes());
+            os.close();
+        }
     }
 
     /**
