@@ -5,28 +5,60 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import org.apache.http.util.TextUtils;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class MyHttpServer {
     static final String DIVIDER = "--xxx---------------xxx";
+    static final String global_Path = "output/";
 
     public static void main(String[] arg) throws Exception {
+
         HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
         server.createContext("/DiffMiner/main", new TestHandler());
+        server.createContext("/DiffMiner/main/fetchMetaCache", new MetaCacheHandler());
         server.start();
+    }
+
+    /**
+     * 获取Meta缓存
+     */
+    static class MetaCacheHandler implements HttpHandler {
+
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            System.out.println("MetaCacheHandler");
+            InputStream is = exchange.getRequestBody();
+            OutputStream os = exchange.getResponseBody();
+            byte[] cache = new byte[100];
+            int res;
+            StringBuilder postString = new StringBuilder();
+            while ((res = is.read(cache)) != -1) {
+                String a = new String(cache).substring(0, res);
+                postString.append(a);
+                // postString += (new String(cache)).substring(0, res);
+            }
+            System.out.println(postString);
+            //获得commit_hash
+            String commitHash = new JSONObject(postString.toString()).getString("commit_hash");
+            String projectName = new JSONObject(postString.toString()).getString("project_name");
+            //读取文件
+            //文件路径为global_Path/project_name/meta.txt
+            String meta = FileUtil.read(global_Path + projectName + "/" + "meta.txt");
+            System.out.println(meta);
+            exchange.sendResponseHeaders(200, meta.length());
+            os.write(meta.getBytes());
+            os.close();
+        }
     }
 
     static class TestHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            System.out.println("123");
-
+            System.out.println("TestHandler");
             OutputStream os = exchange.getResponseBody();
             InputStream is = exchange.getRequestBody();
             byte[] cache = new byte[1000 * 1024];
@@ -52,17 +84,11 @@ public class MyHttpServer {
             //建立一个文件夹
             //文件夹命名为commit_hash
             //文件名以name字段的hash值
-            File folder = FileUtil.createFolder("data/" + meta.getCommit_hash());
-            //meta 文件
-            FileUtil.createFile("meta", new Gson().toJson(meta), folder);
-            //根据parent commit id创建文件夹
-            List<String> parentCommits = meta.getParents();
-            for (String parent : parentCommits) {
-                FileUtil.createFolder(folder.getPath() + "/" + parent + "/prev/");
-                FileUtil.createFolder(folder.getPath() + "/" + parent + "/curr/");
-            }
+            File folder = FileUtil.createFolder(global_Path + meta.getProject_name());
             //代码文件
             FileUtil.convertCodeToFile(data, folder, meta);
+            //meta 文件
+            FileUtil.createFile("meta", new Gson().toJson(meta), folder);
 //            //TODO 前后分开 这部分负责response
             String response = new Gson().toJson(meta);
             exchange.sendResponseHeaders(200, response.length());
