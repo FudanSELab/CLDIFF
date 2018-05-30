@@ -46,8 +46,8 @@ public class MyHttpServer {
             String commitHash = new JSONObject(postString.toString()).getString("commit_hash");
             String projectName = new JSONObject(postString.toString()).getString("project_name");
             //读取文件
-            //文件路径为global_Path/project_name/meta.txt
-            String meta = FileUtil.read(global_Path + projectName + "/" + "meta.txt");
+            //文件路径为global_Path/project_name/commit_id/meta.txt
+            String meta = FileUtil.read(global_Path + projectName + "/" + commitHash + "/meta.txt");
             System.out.println(meta);
             exchange.sendResponseHeaders(200, meta.length());
             os.write(meta.getBytes());
@@ -84,7 +84,7 @@ public class MyHttpServer {
             //建立一个文件夹
             //文件夹命名为commit_hash
             //文件名以name字段的hash值
-            File folder = FileUtil.createFolder(global_Path + meta.getProject_name());
+            File folder = FileUtil.createFolder(global_Path + meta.getProject_name() + "/" + meta.getCommit_hash());
             //代码文件
             FileUtil.convertCodeToFile(data, folder, meta);
             //meta 文件
