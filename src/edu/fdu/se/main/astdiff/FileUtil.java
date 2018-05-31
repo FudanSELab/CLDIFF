@@ -46,6 +46,7 @@ public class FileUtil {
             e.printStackTrace();
         } finally {
             try {
+                w.flush();
                 w.close();
             } catch (IOException e) {
                 e.printStackTrace();

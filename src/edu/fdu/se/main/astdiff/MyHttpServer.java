@@ -67,8 +67,8 @@ public class MyHttpServer {
             //文件路径为global_Path/project_name/commit_id/meta.txt
             String metaStr = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/meta");
             Meta meta = new Gson().fromJson(metaStr, Meta.class);
-            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path, meta);
-            diff.generateDiffMinerOutput();
+//            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path, meta);
+//            diff.generateDiffMinerOutput();
             String link = "";
             //String diffStr = FileUtil.read()
            // Content content = new Content(prevFileContent, currFileContent, diff, link);
@@ -148,6 +148,7 @@ public class MyHttpServer {
 
 //            //TODO 前后分开 这部分负责response
             DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
+            diff.generateDiffMinerOutput();
             String response = new Gson().toJson(meta);
             exchange.sendResponseHeaders(200, response.length());
             os.write(response.getBytes());
