@@ -150,6 +150,7 @@ public class MyHttpServer {
             DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
             diff.generateDiffMinerOutput();
             String response = new Gson().toJson(meta);
+            System.out.println(response);
             exchange.sendResponseHeaders(200, response.length());
             os.write(response.getBytes());
             os.close();
