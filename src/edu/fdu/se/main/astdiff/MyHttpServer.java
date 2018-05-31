@@ -23,14 +23,14 @@ public class MyHttpServer {
     private static String outputPath;
     public static void main(String[] arg) throws Exception {
         outputPath = arg[0];
-//        HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
-//        server.createContext("/DiffMiner/main", new TestHandler());
-//        server.start();
+        HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
+        server.createContext("/DiffMiner/main", new TestHandler());
+        server.start();
         //test
-        String s = readMetaJson(outputPath+"/spring-framework/3c1adf7f6af0dff9bda74f40dabe8cf428a62003/meta.json");
-        JSONObject jo = new JSONObject(s);
-        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(outputPath, jo);
-        diff.generateDiffMinerOutput();
+//        String s = readMetaJson(outputPath+"/spring-framework/3c1adf7f6af0dff9bda74f40dabe8cf428a62003/meta.json");
+//        JSONObject jo = new JSONObject(s);
+//        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(outputPath, jo);
+//        diff.generateDiffMinerOutput();
     }
     public static String readMetaJson(String path){
         StringBuilder sb = new StringBuilder();
@@ -90,7 +90,7 @@ public class MyHttpServer {
 //            diff.generateDiffMinerOutput();
             //读取输出文件
 //            String response = postString;
-//            os.write(response.getBytes());
+//            os.write(response.getBytes());555555555
 //            os.close();
         }
 
