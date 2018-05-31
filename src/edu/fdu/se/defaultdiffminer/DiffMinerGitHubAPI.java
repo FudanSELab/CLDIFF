@@ -31,6 +31,7 @@ public class DiffMinerGitHubAPI {
      * @param path
      */
     public DiffMinerGitHubAPI(String path,Meta meta){
+        Global.outputFilePathList = new ArrayList<>();
         filePairDatas = new ArrayList<>();
         baseDiffMiner = new BaseDiffMiner();
         commitId = meta.getCommit_hash();

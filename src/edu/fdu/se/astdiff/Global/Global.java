@@ -18,4 +18,6 @@ public class Global {
     public static String parentCommit;
 
     public static List<String> outputFilePathList;
+
+    public static String globalPath;
 }

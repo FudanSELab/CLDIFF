@@ -15,14 +15,16 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.util.List;
 
 
 public class MyHttpServer {
     static final String DIVIDER = "--xxx---------------xxx";
-    static final String global_Path = "output/";
+    static String global_Path;
 
     public static void main(String[] arg) throws Exception {
-
+        global_Path = arg[0];
+        Global.globalPath = arg[0];
         HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
         server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
         server.createContext("/DiffMiner/main/fetchMetaCache", new MetaCacheHandler());
@@ -146,7 +148,6 @@ public class MyHttpServer {
             //meta 文件
             FileUtil.createFile("meta", new Gson().toJson(meta), folder);
 
-//            //TODO 前后分开 这部分负责response
             DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
             diff.generateDiffMinerOutput();
             String response = new Gson().toJson(meta);

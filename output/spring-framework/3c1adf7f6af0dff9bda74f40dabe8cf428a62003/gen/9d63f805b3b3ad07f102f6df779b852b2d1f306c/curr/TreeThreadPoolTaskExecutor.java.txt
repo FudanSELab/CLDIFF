@@ -1,0 +1,198 @@
+CompilationUnit:
+  TypeDeclaration:
+    SingleMemberAnnotation:
+      SimpleName:SuppressWarnings
+      StringLiteral:"serial"
+    Modifier:public
+    SimpleName:ThreadPoolTaskExecutor
+    SimpleType:ExecutorConfigurationSupport
+      SimpleName:ExecutorConfigurationSupport
+    SimpleType:AsyncListenableTaskExecutor
+      SimpleName:AsyncListenableTaskExecutor
+    SimpleType:SchedulingTaskExecutor
+      SimpleName:SchedulingTaskExecutor
+    FieldDeclaration: [I]
+      Modifier:private [I]
+      Modifier:final [I]
+      SimpleType:Map [I]
+        SimpleName:Map [I]
+      VariableDeclarationFragment: [I]
+        SimpleName:decoratedTaskMap [I]
+        ClassInstanceCreation: [I]
+          ParameterizedType:ConcurrentReferenceHashMap<> [I]
+            SimpleType:ConcurrentReferenceHashMap [I]
+              SimpleName:ConcurrentReferenceHashMap [I]
+          NumberLiteral:16 [I]
+          QualifiedName:ConcurrentReferenceHashMap.ReferenceType.WEAK [I]
+    MethodDeclaration:
+      MarkerAnnotation:
+        SimpleName:Override
+      Modifier:protected
+      SimpleType:ExecutorService
+        SimpleName:ExecutorService
+      SimpleName:initializeExecutor
+      SingleVariableDeclaration:
+        SimpleType:ThreadFactory
+          SimpleName:ThreadFactory
+        SimpleName:threadFactory
+      SingleVariableDeclaration:
+        SimpleType:RejectedExecutionHandler
+          SimpleName:RejectedExecutionHandler
+        SimpleName:rejectedExecutionHandler
+      Block:
+        VariableDeclarationStatement:
+          SimpleType:BlockingQueue
+            SimpleName:BlockingQueue
+          VariableDeclarationFragment:
+            SimpleName:queue
+            MethodInvocation:
+              SimpleName:createQueue
+              FieldAccess:
+                ThisExpression:
+                SimpleName:queueCapacity
+        VariableDeclarationStatement:
+          SimpleType:ThreadPoolExecutor
+            SimpleName:ThreadPoolExecutor
+          VariableDeclarationFragment:
+            SimpleName:executor
+        IfStatement:
+          InfixExpression:!=
+            FieldAccess:
+              ThisExpression:
+              SimpleName:taskDecorator
+            NullLiteral:
+          Block:
+            ExpressionStatement:
+              Assignment:=
+                SimpleName:executor
+                ClassInstanceCreation:
+                  SimpleType:ThreadPoolExecutor
+                    SimpleName:ThreadPoolExecutor
+                  FieldAccess:
+                    ThisExpression:
+                    SimpleName:corePoolSize
+                  FieldAccess:
+                    ThisExpression:
+                    SimpleName:maxPoolSize
+                  FieldAccess:
+                    ThisExpression:
+                    SimpleName:keepAliveSeconds
+                  QualifiedName:TimeUnit.SECONDS
+                  SimpleName:queue
+                  SimpleName:threadFactory
+                  SimpleName:rejectedExecutionHandler
+                  AnonymousClassDeclaration:
+                    MethodDeclaration:
+                      MarkerAnnotation:
+                        SimpleName:Override
+                      Modifier:public
+                      PrimitiveType:void
+                      SimpleName:execute
+                      SingleVariableDeclaration:
+                        SimpleType:Runnable
+                          SimpleName:Runnable
+                        SimpleName:command
+                      Block:
+                        VariableDeclarationStatement: [I]
+                          SimpleType:Runnable [I]
+                            SimpleName:Runnable [I]
+                          VariableDeclarationFragment: [I]
+                            SimpleName:decorated [I]
+                            MethodInvocation:
+                              SimpleName:taskDecorator
+                              SimpleName:decorate
+                              SimpleName:command
+                        IfStatement: [I]
+                          InfixExpression:!= [I]
+                            SimpleName:decorated [I]
+                            SimpleName:command [I]
+                          Block: [I]
+                            ExpressionStatement: [I]
+                              MethodInvocation: [I]
+                                SimpleName:decoratedTaskMap [I]
+                                SimpleName:put [I]
+                                SimpleName:decorated [I]
+                                SimpleName:command [I]
+                        ExpressionStatement:
+                          SuperMethodInvocation:
+                            SimpleName:execute
+                            SimpleName:decorated [I]
+          Block:
+            ExpressionStatement:
+              Assignment:=
+                SimpleName:executor
+                ClassInstanceCreation:
+                  SimpleType:ThreadPoolExecutor
+                    SimpleName:ThreadPoolExecutor
+                  FieldAccess:
+                    ThisExpression:
+                    SimpleName:corePoolSize
+                  FieldAccess:
+                    ThisExpression:
+                    SimpleName:maxPoolSize
+                  FieldAccess:
+                    ThisExpression:
+                    SimpleName:keepAliveSeconds
+                  QualifiedName:TimeUnit.SECONDS
+                  SimpleName:queue
+                  SimpleName:threadFactory
+                  SimpleName:rejectedExecutionHandler
+        IfStatement:
+          FieldAccess:
+            ThisExpression:
+            SimpleName:allowCoreThreadTimeOut
+          Block:
+            ExpressionStatement:
+              MethodInvocation:
+                SimpleName:executor
+                SimpleName:allowCoreThreadTimeOut
+                BooleanLiteral:true
+        ExpressionStatement:
+          Assignment:=
+            FieldAccess:
+              ThisExpression:
+              SimpleName:threadPoolExecutor
+            SimpleName:executor
+        ReturnStatement:
+          SimpleName:executor
+    MethodDeclaration: [I]
+      MarkerAnnotation: [I]
+        SimpleName:Override [I]
+      Modifier:protected [I]
+      PrimitiveType:void [I]
+      SimpleName:cancelRemainingTask [I]
+      SingleVariableDeclaration: [I]
+        SimpleType:Runnable [I]
+          SimpleName:Runnable [I]
+        SimpleName:task [I]
+      Block: [I]
+        ExpressionStatement: [I]
+          SuperMethodInvocation: [I]
+            SimpleName:cancelRemainingTask [I]
+            SimpleName:task [I]
+        VariableDeclarationStatement: [I]
+          SimpleType:Object [I]
+            SimpleName:Object [I]
+          VariableDeclarationFragment: [I]
+            SimpleName:original [I]
+            MethodInvocation: [I]
+              FieldAccess: [I]
+                ThisExpression: [I]
+                SimpleName:decoratedTaskMap [I]
+              SimpleName:get [I]
+              SimpleName:task [I]
+        IfStatement: [I]
+          InstanceofExpression: [I]
+            SimpleName:original [I]
+            SimpleType:Future [I]
+              SimpleName:Future [I]
+          Block: [I]
+            ExpressionStatement: [I]
+              MethodInvocation: [I]
+                ParenthesizedExpression: [I]
+                  CastExpression: [I]
+                    SimpleType:Future [I]
+                      SimpleName:Future [I]
+                    SimpleName:original [I]
+                SimpleName:cancel [I]
+                BooleanLiteral:true [I]

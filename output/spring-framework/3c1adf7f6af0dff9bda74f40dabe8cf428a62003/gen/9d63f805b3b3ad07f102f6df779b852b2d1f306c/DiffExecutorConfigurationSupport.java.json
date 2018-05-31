@@ -1,0 +1,69 @@
+[
+    {
+        "file": "src-dst",
+        "type2": "Move",
+        "range": "(212,212)-(214,214)",
+        "description": "Move Expression Statement",
+        "id": 0,
+        "type1": "Statement",
+        "key": "gumtree"
+    },
+    {
+        "file": "src-dst",
+        "type2": "Change.Move",
+        "sub-range": [
+            {
+                "file": "src",
+                "sub-range-code": "212,4,31",
+                "sub-type": "move"
+            },
+            {
+                "file": "dst",
+                "sub-range-code": "213,34,61",
+                "sub-type": "move"
+            }
+        ],
+        "range": "(212,212)-(213,213)",
+        "description": "Move MethodInvocation",
+        "id": 1,
+        "type1": "Statement",
+        "key": "gumtree"
+    },
+    {
+        "file": "dst",
+        "type2": "Insert",
+        "range": "(221,233)",
+        "description": "Insert Method",
+        "id": 2,
+        "type1": "Member",
+        "key": "gumtree"
+    },
+    {
+        "file": "dst",
+        "type2": "Insert",
+        "range": "(213,215)",
+        "description": "Insert Enhanced For",
+        "id": 3,
+        "type1": "Statement",
+        "key": "gumtree"
+    },
+    {
+        "file": "src-dst",
+        "type2": "Change",
+        "sub-range": [{
+            "file": "dst",
+            "sub-range-code": "214,5,39",
+            "sub-type": "insert"
+        }],
+        "range": "(212,212)-(214,214)",
+        "description": "Change Expression Statement  with",
+        "id": 4,
+        "type1": "Statement",
+        "opt2-exp2": [
+            "Insert MethodInvocation",
+            "Insert cancelRemainingTask",
+            "Insert remainingTask"
+        ],
+        "key": "gumtree"
+    }
+]

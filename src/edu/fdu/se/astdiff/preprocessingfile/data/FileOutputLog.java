@@ -31,11 +31,11 @@ public class FileOutputLog {
 
     public void setCommitId(String commit,List<String> parentCommits){
         this.commitId = commit;
-        this.metaLinkPath = rootPath+"\\"+projName+"\\"+ commit;
+        this.metaLinkPath = rootPath+projName+"/"+ commit;
 
-        this.prevSourceFile = metaLinkPath+"\\prev";
-        this.currSourceFile = metaLinkPath+"\\curr";
-        this.sourceGen = metaLinkPath+"\\gen";
+        this.prevSourceFile = metaLinkPath+"/prev";
+        this.currSourceFile = metaLinkPath+"/curr";
+        this.sourceGen = metaLinkPath+"/gen";
         for(String s:parentCommits){
             File temp = new File(this.prevSourceFile+"/"+s);
             temp.mkdirs();

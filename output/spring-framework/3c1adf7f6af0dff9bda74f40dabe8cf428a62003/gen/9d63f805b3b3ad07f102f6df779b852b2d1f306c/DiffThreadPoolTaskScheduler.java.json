@@ -1,0 +1,222 @@
+[
+    {
+        "file": "src-dst",
+        "type2": "Change.Move",
+        "sub-range": [
+            {
+                "file": "src",
+                "sub-range-code": "257,38,44",
+                "sub-type": "move"
+            },
+            {
+                "file": "dst",
+                "sub-range-code": "263,29,45",
+                "sub-type": "move"
+            }
+        ],
+        "range": "(257,257)-(263,263)",
+        "description": "Move SimpleName",
+        "id": 11,
+        "type1": "Statement",
+        "key": "gumtree"
+    },
+    {
+        "file": "src-dst",
+        "type2": "Change.Move",
+        "sub-range": [
+            {
+                "file": "src",
+                "sub-range-code": "270,38,44",
+                "sub-type": "move"
+            },
+            {
+                "file": "dst",
+                "sub-range-code": "276,29,45",
+                "sub-type": "move"
+            }
+        ],
+        "range": "(270,270)-(276,276)",
+        "description": "Move SimpleName",
+        "id": 12,
+        "type1": "Statement",
+        "key": "gumtree"
+    },
+    {
+        "file": "dst",
+        "type2": "Insert",
+        "range": "(284,289)",
+        "description": "Insert Method",
+        "id": 13,
+        "type1": "Member",
+        "key": "gumtree"
+    },
+    {
+        "file": "dst",
+        "type2": "Insert",
+        "range": "(291,299)",
+        "description": "Insert Method",
+        "id": 14,
+        "type1": "Member",
+        "key": "gumtree"
+    },
+    {
+        "file": "src-dst",
+        "type2": "Change",
+        "sub-range": [
+            {
+                "file": "dst",
+                "sub-range-code": "73,1,8",
+                "sub-type": "insert"
+            },
+            {
+                "file": "dst",
+                "sub-range-code": "73,9,14",
+                "sub-type": "insert"
+            }
+        ],
+        "range": "(71,82)-(73,88)",
+        "description": "Change Method declaration with",
+        "id": 15,
+        "type1": "Member",
+        "opt2-exp2": [],
+        "key": "gumtree"
+    },
+    {
+        "file": "src-dst",
+        "type2": "Change",
+        "sub-range": [
+            {
+                "file": "src",
+                "sub-range-code": "257,20,52",
+                "sub-type": "delete"
+            },
+            {
+                "file": "src",
+                "sub-range-code": "257,3,11",
+                "sub-type": "update"
+            },
+            {
+                "file": "src",
+                "sub-range-code": "257,12,19",
+                "sub-type": "update"
+            },
+            {
+                "file": "src",
+                "sub-range-code": "257,38,44",
+                "sub-type": "update"
+            }
+        ],
+        "range": "(257,257)-(263,263)",
+        "description": "Change Expression Statement  with",
+        "id": 16,
+        "type1": "Statement",
+        "opt2-exp2": [
+            "Update executor->executeAndTrack",
+            "Update execute->executor",
+            "Delete MethodInvocation",
+            "Delete errorHandlingTask",
+            "Update future->listenableFuture",
+            "Delete false"
+        ],
+        "key": "gumtree"
+    },
+    {
+        "file": "src-dst",
+        "type2": "Change",
+        "sub-range": [
+            {
+                "file": "src",
+                "sub-range-code": "270,20,52",
+                "sub-type": "delete"
+            },
+            {
+                "file": "src",
+                "sub-range-code": "270,3,11",
+                "sub-type": "update"
+            },
+            {
+                "file": "src",
+                "sub-range-code": "270,12,19",
+                "sub-type": "update"
+            },
+            {
+                "file": "src",
+                "sub-range-code": "270,38,44",
+                "sub-type": "update"
+            }
+        ],
+        "range": "(270,270)-(276,276)",
+        "description": "Change Expression Statement  with",
+        "id": 17,
+        "type1": "Statement",
+        "opt2-exp2": [
+            "Update executor->executeAndTrack",
+            "Update execute->executor",
+            "Delete MethodInvocation",
+            "Delete errorHandlingTask",
+            "Update future->listenableFuture",
+            "Delete false"
+        ],
+        "key": "gumtree"
+    },
+    {
+        "file": "src-dst",
+        "type2": "Change",
+        "sub-range": [{
+            "file": "src",
+            "sub-range-code": "258,10,16",
+            "sub-type": "update"
+        }],
+        "range": "(258,258)-(264,264)",
+        "description": "Change Return  with",
+        "id": 18,
+        "type1": "Statement",
+        "opt2-exp2": ["Update future->listenableFuture"],
+        "key": "gumtree"
+    },
+    {
+        "file": "src-dst",
+        "type2": "Change",
+        "sub-range": [{
+            "file": "src",
+            "sub-range-code": "271,10,16",
+            "sub-type": "update"
+        }],
+        "range": "(271,271)-(277,277)",
+        "description": "Change Return  with",
+        "id": 19,
+        "type1": "Statement",
+        "opt2-exp2": ["Update future->listenableFuture"],
+        "key": "gumtree"
+    },
+    {
+        "file": "src-dst",
+        "type2": "Change",
+        "sub-range": [{
+            "file": "src",
+            "sub-range-code": "256,24,30",
+            "sub-type": "update"
+        }],
+        "range": "(256,256)-(262,262)",
+        "description": "Change Variable Declaration  with",
+        "id": 20,
+        "type1": "Statement",
+        "opt2-exp2": ["Update future->listenableFuture"],
+        "key": "gumtree"
+    },
+    {
+        "file": "src-dst",
+        "type2": "Change",
+        "sub-range": [{
+            "file": "src",
+            "sub-range-code": "269,24,30",
+            "sub-type": "update"
+        }],
+        "range": "(269,269)-(275,275)",
+        "description": "Change Variable Declaration  with",
+        "id": 21,
+        "type1": "Statement",
+        "opt2-exp2": ["Update future->listenableFuture"],
+        "key": "gumtree"
+    }
+]

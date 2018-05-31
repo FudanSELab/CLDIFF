@@ -1,0 +1,171 @@
+CompilationUnit:
+  TypeDeclaration:
+    SingleMemberAnnotation:
+      SimpleName:SuppressWarnings
+      StringLiteral:"serial"
+    Modifier:public
+    SimpleName:ThreadPoolTaskScheduler
+    SimpleType:ExecutorConfigurationSupport
+      SimpleName:ExecutorConfigurationSupport
+    SimpleType:AsyncListenableTaskExecutor
+      SimpleName:AsyncListenableTaskExecutor
+    SimpleType:SchedulingTaskExecutor
+      SimpleName:SchedulingTaskExecutor
+    SimpleType:TaskScheduler
+      SimpleName:TaskScheduler
+    MethodDeclaration:
+      Modifier:public
+      PrimitiveType:void
+      SimpleName:setPoolSize
+      SingleVariableDeclaration:
+        PrimitiveType:int
+        SimpleName:poolSize
+      Block:
+        ExpressionStatement:
+          MethodInvocation:
+            SimpleName:Assert
+            SimpleName:isTrue
+            InfixExpression:>
+              SimpleName:poolSize
+              NumberLiteral:0
+            StringLiteral:"'poolSize' must be 1 or higher"
+        ExpressionStatement:
+          Assignment:=
+            FieldAccess:
+              ThisExpression:
+              SimpleName:poolSize
+            SimpleName:poolSize
+        IfStatement:
+          InstanceofExpression:
+            FieldAccess:
+              ThisExpression:
+              SimpleName:scheduledExecutor
+            SimpleType:ScheduledThreadPoolExecutor
+              SimpleName:ScheduledThreadPoolExecutor
+          Block:
+            ExpressionStatement:
+              MethodInvocation:
+                ParenthesizedExpression:
+                  CastExpression:
+                    SimpleType:ScheduledThreadPoolExecutor
+                      SimpleName:ScheduledThreadPoolExecutor
+                    FieldAccess:
+                      ThisExpression:
+                      SimpleName:scheduledExecutor
+                SimpleName:setCorePoolSize
+                SimpleName:poolSize
+    MethodDeclaration:
+      MarkerAnnotation:
+        SimpleName:Override
+      Modifier:public
+      SimpleType:ListenableFuture
+        SimpleName:ListenableFuture
+      SimpleName:submitListenable
+      SingleVariableDeclaration:
+        SimpleType:Runnable
+          SimpleName:Runnable
+        SimpleName:task
+      Block:
+        VariableDeclarationStatement:
+          SimpleType:ExecutorService
+            SimpleName:ExecutorService
+          VariableDeclarationFragment:
+            SimpleName:executor
+            MethodInvocation:
+              SimpleName:getScheduledExecutor
+        TryStatement:
+          Block:
+            VariableDeclarationStatement:
+              SimpleType:ListenableFutureTask
+                SimpleName:ListenableFutureTask
+              VariableDeclarationFragment:
+                SimpleName:future [U]
+                ClassInstanceCreation:
+                  ParameterizedType:ListenableFutureTask<>
+                    SimpleType:ListenableFutureTask
+                      SimpleName:ListenableFutureTask
+                  SimpleName:task
+                  NullLiteral:
+            ExpressionStatement:
+              MethodInvocation:
+                SimpleName:executor [U]
+                SimpleName:execute [U]
+                MethodInvocation: [D]
+                  SimpleName:errorHandlingTask [D]
+                  SimpleName:future [U,M]
+                  BooleanLiteral:false [D]
+            ReturnStatement:
+              SimpleName:future [U]
+          CatchClause:
+            SingleVariableDeclaration:
+              SimpleType:RejectedExecutionException
+                SimpleName:RejectedExecutionException
+              SimpleName:ex
+            Block:
+              ThrowStatement:
+                ClassInstanceCreation:
+                  SimpleType:TaskRejectedException
+                    SimpleName:TaskRejectedException
+                  InfixExpression:+
+                    StringLiteral:"Executor ["
+                    SimpleName:executor
+                    StringLiteral:"] did not accept task: "
+                    SimpleName:task
+                  SimpleName:ex
+    MethodDeclaration:
+      MarkerAnnotation:
+        SimpleName:Override
+      Modifier:public
+      SimpleType:ListenableFuture
+        SimpleName:ListenableFuture
+      SimpleName:submitListenable
+      SingleVariableDeclaration:
+        SimpleType:Callable
+          SimpleName:Callable
+        SimpleName:task
+      Block:
+        VariableDeclarationStatement:
+          SimpleType:ExecutorService
+            SimpleName:ExecutorService
+          VariableDeclarationFragment:
+            SimpleName:executor
+            MethodInvocation:
+              SimpleName:getScheduledExecutor
+        TryStatement:
+          Block:
+            VariableDeclarationStatement:
+              SimpleType:ListenableFutureTask
+                SimpleName:ListenableFutureTask
+              VariableDeclarationFragment:
+                SimpleName:future [U]
+                ClassInstanceCreation:
+                  ParameterizedType:ListenableFutureTask<>
+                    SimpleType:ListenableFutureTask
+                      SimpleName:ListenableFutureTask
+                  SimpleName:task
+            ExpressionStatement:
+              MethodInvocation:
+                SimpleName:executor [U]
+                SimpleName:execute [U]
+                MethodInvocation: [D]
+                  SimpleName:errorHandlingTask [D]
+                  SimpleName:future [U,M]
+                  BooleanLiteral:false [D]
+            ReturnStatement:
+              SimpleName:future [U]
+          CatchClause:
+            SingleVariableDeclaration:
+              SimpleType:RejectedExecutionException
+                SimpleName:RejectedExecutionException
+              SimpleName:ex
+            Block:
+              ThrowStatement:
+                ClassInstanceCreation:
+                  SimpleType:TaskRejectedException
+                    SimpleName:TaskRejectedException
+                  InfixExpression:+
+                    StringLiteral:"Executor ["
+                    SimpleName:executor
+                    StringLiteral:"] did not accept task: "
+                    SimpleName:task
+                  SimpleName:ex
