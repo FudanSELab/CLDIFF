@@ -199,7 +199,7 @@ public class SDKFileToRepoFilePath {
 			flag = "NO";
 		}
 		
-		System.err.println("write new File");
+		System.err.println("write new CommitFile");
 		
 		FileWriter.writeInAll(writeFile, gitFile);
 		AndroidSDKJavaFileTagSnapshot a = new AndroidSDKJavaFileTagSnapshot(0, file, tagStr, flag);

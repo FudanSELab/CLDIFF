@@ -67,9 +67,9 @@ public class TotalFileAssociations {
         for(Map.Entry<String,List<Association>> entry:this.fileAndfileTpfileAssos.entrySet()){
             String key = entry.getKey();
             if(key.contains("----")) {
-                sb.append("File to File: "+key);
+                sb.append("CommitFile to CommitFile: "+key);
             }else {
-                sb.append("File: "+key);
+                sb.append("CommitFile: "+key);
             }
             sb.append("  \n");
             List<Association> assos = entry.getValue();

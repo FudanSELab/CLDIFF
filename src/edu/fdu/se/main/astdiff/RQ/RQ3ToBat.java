@@ -68,7 +68,7 @@ public class RQ3ToBat {
 //        for (int i=0;i<files.size();i++){
 //
 //            String filename = files.get(i);
-//            File file = new File(filename);
+//            CommitFile file = new CommitFile(filename);
 //            String name = file.getName();
 //            //String repath  = filename.substring(filename.lastIndexOf("RQ3"), filename.length());
 //
@@ -77,7 +77,7 @@ public class RQ3ToBat {
 //            String currfile = "";
 //
 //
-////            File directory = new File(filename);
+////            CommitFile directory = new CommitFile(filename);
 //            if(filename.contains("\\curr\\")){
 //                filepath = filename.substring(0, filename.lastIndexOf("curr"));
 //                prevfile = filepath + "\\pre\\" + name;
@@ -125,8 +125,8 @@ public class RQ3ToBat {
 
 //    public static List<String> getFiles(String path,String filetype) {
 //        List<String> files = new ArrayList<String>();
-//        File file = new File(path);
-//        File[] tempList = file.listFiles();
+//        CommitFile file = new CommitFile(path);
+//        CommitFile[] tempList = file.listFiles();
 //
 //        for (int i = 0; i < tempList.length; i++) {
 //            if (tempList[i].isFile()) {

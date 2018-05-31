@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import org.json.JSONObject;
 import edu.fdu.se.defaultdiffminer.DiffMinerGitHubAPI;
 import edu.fdu.se.fileutil.*;
 import edu.fdu.se.fileutil.FileWriter;
@@ -13,55 +14,108 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class MyHttpServer {
     static final String DIVIDER = "--xxx---------------xxx";
+    static final String global_Path = "output/";
 
-    private static String outputPath;
     public static void main(String[] arg) throws Exception {
-        outputPath = arg[0];
+
         HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
         server.createContext("/DiffMiner/main", new TestHandler());
+        server.createContext("/DiffMiner/main/fetchMetaCache", new MetaCacheHandler());
+        server.createContext("/DiffMiner/main/fetchContent", new ContentHandler());
         server.start();
-        //test
-//        String s = readMetaJson(outputPath+"/spring-framework/3c1adf7f6af0dff9bda74f40dabe8cf428a62003/meta.json");
-//        JSONObject jo = new JSONObject(s);
-//        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(outputPath, jo);
-//        diff.generateDiffMinerOutput();
-    }
-    public static String readMetaJson(String path){
-        StringBuilder sb = new StringBuilder();
-        try {
-            FileInputStream fis = new FileInputStream(path);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            String line;
-            while((line = br.readLine())!=null){
-                sb.append(line);
-            }
-            return sb.toString();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
-    static class TestHandler implements HttpHandler {
+    /**
+     * 获取文件内容 link diff
+     */
+    static class ContentHandler implements HttpHandler {
+
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            System.out.println("123");
-            OutputStream os = exchange.getResponseBody();
-            exchange.sendResponseHeaders(200, 1);
+            System.out.println("ContentHandler");
             InputStream is = exchange.getRequestBody();
-            byte[] cache = new byte[1000 * 1024];
+            OutputStream os = exchange.getResponseBody();
+            byte[] cache = new byte[100];
             int res;
             StringBuilder postString = new StringBuilder();
             while ((res = is.read(cache)) != -1) {
                 String a = new String(cache).substring(0, res);
                 postString.append(a);
+                // postString += (new String(cache)).substring(0, res);
+            }
+            System.out.println(postString);
+            JSONObject postJson = new JSONObject(postString.toString());
+            // author、commit_hash、parent_commit_hash、project_name、prev_file_path、curr_file_path
+            String author = "";
+            String commit_hash = postJson.getString("commit_hash");
+            String parent_commit_hash = postJson.getString("parent_commit_hash");
+            String project_name = postJson.getString("project_name");
+            String prev_file_path = postJson.getString("prev_file_path");
+            String curr_file_path = postJson.getString("curr_file_path");
+
+            String currFileContent = FileUtil.read(global_Path+project_name + "/" + commit_hash + "/" + curr_file_path+".txt");
+            String prevFileContent = FileUtil.read(global_Path+project_name + "/" + commit_hash + "/" + prev_file_path+".txt");
+            String diff = "";
+            String link = "";
+            Content content = new Content(prevFileContent, currFileContent, diff, link);
+            String contentResultStr = new Gson().toJson(content);
+            exchange.sendResponseHeaders(200, contentResultStr.length());
+            os.write(contentResultStr.getBytes());
+            os.close();
+        }
+    }
+
+    /**
+     * 获取Meta缓存
+     */
+    static class MetaCacheHandler implements HttpHandler {
+
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            System.out.println("MetaCacheHandler");
+            InputStream is = exchange.getRequestBody();
+            OutputStream os = exchange.getResponseBody();
+            byte[] cache = new byte[100];
+            int res;
+            StringBuilder postString = new StringBuilder();
+            while ((res = is.read(cache)) != -1) {
+                String a = new String(cache).substring(0, res);
+                postString.append(a);
+                // postString += (new String(cache)).substring(0, res);
+            }
+            System.out.println(postString);
+            //获得commit_hash
+            String commitHash = new JSONObject(postString.toString()).getString("commit_hash");
+            String projectName = new JSONObject(postString.toString()).getString("project_name");
+            //读取文件
+            //文件路径为global_Path/project_name/commit_id/meta.txt
+            String meta = FileUtil.read(global_Path + projectName + "/" + commitHash + "/meta.txt");
+            System.out.println(meta);
+            exchange.sendResponseHeaders(200, meta.length());
+            os.write(meta.getBytes());
+            os.close();
+        }
+    }
+
+    static class TestHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            System.out.println("TestHandler");
+            OutputStream os = exchange.getResponseBody();
+            InputStream is = exchange.getRequestBody();
+            byte[] cache = new byte[1000 * 1024];
+            int res;
+            StringBuilder postString = new StringBuilder();
+            while ((res = is.read(cache)) != -1) {
+                //todo
+                //这里字符串拼接最好改成StringBuilder拼接，在循环里做str+str操作可能会有内存问题
+                String a = new String(cache).substring(0, res);
+                postString.append(a);
+                // postString += (new String(cache)).substring(0, res);
             }
             System.out.println(postString);
 
@@ -72,26 +126,20 @@ public class MyHttpServer {
             }
             int size = data.length;
             //找到meta信息
-//            Meta meta = FileUtil.filterMeta(data[size - 2]);
-            JSONObject meta = FileUtil.filterMeta2(data[size-2]);
+            Meta meta = FileUtil.filterMeta(data[size - 2]);
             //建立一个文件夹
             //文件夹命名为commit_hash
             //文件名以name字段的hash值
-//            File folder = FileUtil.createFolder(outputPath + meta.getCommit_hash());
-            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(outputPath,meta);
-            //meta文件
-            edu.fdu.se.fileutil.FileWriter.writeInAll(diff.baseDiffMiner.mFileOutputLog.metaLinkPath+"/meta.json",meta.toString(4));
-            //meta 文件
-//            FileUtil.createFile("meta", new Gson().toJson(meta), folder);
+            File folder = FileUtil.createFolder(global_Path + meta.getProject_name() + "/" + meta.getCommit_hash());
             //代码文件
-            File metaDir = new File(diff.baseDiffMiner.mFileOutputLog.metaLinkPath);
-//todo //            FileUtil.convertCodeToFile(data, metaDir,meta);
-//            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(outputPath+meta.getCommit_hash());
-//            diff.generateDiffMinerOutput();
-            //读取输出文件
-//            String response = postString;
-//            os.write(response.getBytes());555555555
-//            os.close();
+            FileUtil.convertCodeToFile(data, folder, meta);
+            //meta 文件
+            FileUtil.createFile("meta", new Gson().toJson(meta), folder);
+//            //TODO 前后分开 这部分负责response
+            String response = new Gson().toJson(meta);
+            exchange.sendResponseHeaders(200, response.length());
+            os.write(response.getBytes());
+            os.close();
         }
 
     }

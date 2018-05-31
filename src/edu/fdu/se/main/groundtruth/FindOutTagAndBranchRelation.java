@@ -102,7 +102,7 @@ public class FindOutTagAndBranchRelation {
 	public static void run2(){
 		File f = new File("D:/sort_tag_branch/which_branch_tag_in2");
 		File[] files = f.listFiles();
-//		File newFile = new File("D:/tag_relation.txt");
+//		CommitFile newFile = new CommitFile("D:/tag_relation.txt");
 //		String prefix = "android-8.1.0";
 		Map<String,Integer> mList = new HashMap<String,Integer>();
 		for(File tmp:files){

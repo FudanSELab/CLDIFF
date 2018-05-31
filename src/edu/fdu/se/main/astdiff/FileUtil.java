@@ -99,7 +99,11 @@ public class FileUtil {
                 //过滤掉第一个空string
                 continue;
             }
-            String info = content.split("\r\n")[1];//标题
+            String[] infos = content.split("\r\n");//标题
+            if (infos.length < 2) {
+                return;
+            }
+            String info = infos[1];
             String codeContent = content.substring(info.length()); //正文
             // "Content-Disposition: form-data; name=\"https://github.com/amitshekhariitbhu/Android
             // -Debug-Database/commit/43e48d15e6ee435
@@ -118,31 +122,70 @@ public class FileUtil {
                 path = path.substring(0, path.length() - fileName.length());
                 //去除最后的引号
                 fileName = fileName.substring(0, fileName.length() - 1);
-                //如果是parentcommit,只需要在commit_id/parent_commit_id/prev/下新建
-                //如果是childCommit，需要在所有的commit_id/parent_commit/curr/新建
+                //如果是parentcommit,只需要在project_name/commit_id/prev/parent_commit_id/src/xx/xx下新建
+                //如果是childCommit，需要在所有的commit_id/curr/parent_commit_id/src/xx/xx新建
 
                 boolean isParent = !commitId.equals(meta.getCommit_hash());
                 String filePath = "";
+                CommitFile commitFile;
                 if (isParent) {
-                    //如果是parentcommit,只需要在commit_id/parent_commit_id/prev/下新建
-                    filePath = folder.getPath() + "/" + commitId + "/prev/" + path;
+                    //如果是parentcommit,只需要在project_name/commit_id/prev/parent_commit_id/src/xx/xx下新建
+                    filePath = folder.getPath() + "/prev/" + commitId + "/" + path;
                     //如果是parent,需要将文件名形式A.java____parent0改为A.java
                     fileName = fileName.split(PARENT_DIVIDER)[0];
+                    //先创建文件
                     File directory = FileUtil.createFolder(filePath);
                     FileUtil.createFile(fileName, codeContent, directory);
                 } else {
-                    //如果是childCommit，需要在所有的commit_id/parent_commit_id/curr/新建
+                    //如果是childCommit，需要在所有的commit_id/curr/parent_commit_id/src/xx/xx新建
                     List<String> parentCommitIds = meta.getParents();
                     for (String parentCommitId : parentCommitIds) {
-                        filePath = folder.getPath() + "/" + parentCommitId + "/curr/" + path;
+                        filePath = folder.getPath() + "/curr/" + parentCommitId + "/" + path;
                         File directory = FileUtil.createFolder(filePath);
                         FileUtil.createFile(fileName, codeContent, directory);
-                    }
-                    // FileUtil.createFile(fileName, codeContent, folder, filePath);
 
+                        //添加到Meta中
+                        commitFile = new CommitFile();
+                        commitFile.setFile_name(fileName);
+                        commitFile.setParent_commit(parentCommitId);
+                        commitFile.setCurr_file_path("curr/" + parentCommitId + path + fileName);
+                        commitFile.setPrev_file_path("prev/" + parentCommitId + path + fileName);
+                        meta.addFile(commitFile);
+                    }
+                }
+            }
+        }
+    }
+
+    public static String read(String path) {
+        File file = new File(path);
+        BufferedReader reader = null;
+        StringBuilder result = new StringBuilder();
+        try {
+            // System.out.println("以行为单位读取文件内容，一次读一整行：");
+            reader = new BufferedReader(new FileReader(file));
+
+            String tempString = "";
+            int line = 1;
+            // 一次读入一行，直到读入null为文件结束
+            while ((tempString = reader.readLine()) != null) {
+                // 显示行号
+                result.append(tempString);
+                line++;
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                    return result.toString();
+                } catch (IOException e1) {
                 }
             }
         }
 
+        return null;
     }
 }

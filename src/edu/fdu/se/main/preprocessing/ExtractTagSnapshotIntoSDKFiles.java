@@ -55,8 +55,8 @@ public class ExtractTagSnapshotIntoSDKFiles {
 		System.out.println("-----------------------------------------");
 		System.out.println("Sum:"+mList.size());
 		System.out.println("Path not correct:"+wrongedFile.size());
-		System.out.println("File Diffrent："+diffFile.size());
-		System.out.println("Test File:"+testFile.size());
+		System.out.println("CommitFile Diffrent："+diffFile.size());
+		System.out.println("Test CommitFile:"+testFile.size());
 	}
 
 }
