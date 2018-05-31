@@ -23,7 +23,15 @@ public class Meta {
     private Object children;
     private List<String> parents;
     private List<CommitFile> files;
+    private String linkPath;
 
+    public String getLinkPath() {
+        return linkPath;
+    }
+
+    public void setLinkPath(String linkPath) {
+        this.linkPath = linkPath;
+    }
 
     /**
      * 添加一个文件

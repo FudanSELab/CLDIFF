@@ -64,20 +64,29 @@ public class MyHttpServer {
             String prev_file_path = postJson.getString("prev_file_path");
             String curr_file_path = postJson.getString("curr_file_path");
 
-            String currFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + curr_file_path );
-            String prevFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + prev_file_path );
+            String currFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + curr_file_path);
+            String prevFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + prev_file_path);
             //文件路径为global_Path/project_name/commit_id/meta.txt
             String metaStr = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/meta");
             Meta meta = new Gson().fromJson(metaStr, Meta.class);
 //            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path, meta);
 //            diff.generateDiffMinerOutput();
-            String link = "";
-            //String diffStr = FileUtil.read()
-           // Content content = new Content(prevFileContent, currFileContent, diff, link);
-           // String contentResultStr = new Gson().toJson(content);
-            //exchange.sendResponseHeaders(200, contentResultStr.length());
-          //  os.write(contentResultStr.getBytes());
-            //os.close();
+            List<CommitFile> commitFileList = meta.getFiles();
+            String diffPath = "";
+            for (CommitFile commitFile : commitFileList) {
+                if (commitFile.getCurr_file_path().equals(curr_file_path)) {
+                    diffPath = commitFile.getDiffPath();
+                    break;
+                }
+            }
+            String diff = FileUtil.read(diffPath);
+            String link = FileUtil.read(meta.getLinkPath());
+            Content content = new Content(prevFileContent, currFileContent, diff, link);
+            String contentResultStr = new Gson().toJson(content);
+            System.out.println(contentResultStr);
+            exchange.sendResponseHeaders(200, contentResultStr.length());
+            os.write(contentResultStr.getBytes());
+            os.close();
         }
     }
 
@@ -145,11 +154,19 @@ public class MyHttpServer {
             File folder = FileUtil.createFolder(global_Path + meta.getProject_name() + "/" + meta.getCommit_hash());
             //代码文件
             FileUtil.convertCodeToFile(data, folder, meta);
-            //meta 文件
-            FileUtil.createFile("meta", new Gson().toJson(meta), folder);
-
-            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
+            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path, meta);
             diff.generateDiffMinerOutput();
+            List<String> filePathList = Global.outputFilePathList;
+            //diff
+            int diffFileSize = filePathList.size() - 1;
+            for (int i = 0; i < diffFileSize; i++) {
+                String diffPath = filePathList.get(i);
+                meta.getFiles().get(i).setDiffPath(diffPath);
+            }
+            //link
+            meta.setLinkPath(filePathList.get(diffFileSize));
+            //写入meta文件
+            FileUtil.createFile("meta", new Gson().toJson(meta), folder);
             String response = new Gson().toJson(meta);
             System.out.println(response);
             exchange.sendResponseHeaders(200, response.length());

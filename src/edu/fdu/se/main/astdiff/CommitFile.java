@@ -17,6 +17,15 @@ public class CommitFile {
     private String prev_file_path;
     private String curr_file_path;
     private String parent_commit;
+    private String diffPath;
+
+    public String getDiffPath() {
+        return diffPath;
+    }
+
+    public void setDiffPath(String diffPath) {
+        this.diffPath = diffPath;
+    }
 
     public String getFile_name() {
         return file_name;
