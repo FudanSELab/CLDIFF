@@ -104,7 +104,8 @@ public class FileUtil {
                 return;
             }
             String info = infos[1];
-            String codeContent = content.substring(info.length()); //正文
+            String codeContent = content.substring(info.length()+"\r\n".length()*3);
+            codeContent = codeContent.substring(0,codeContent.length()-1);//正文
             // "Content-Disposition: form-data; name=\"https://github.com/amitshekhariitbhu/Android
             // -Debug-Database/commit/43e48d15e6ee435
             // ed0b1abc6d76638dc8bf0217d/debug-db/src/main/java/com/amitshekhar/server/RequestHandler.java\"

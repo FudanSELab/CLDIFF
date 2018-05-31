@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import edu.fdu.se.astdiff.Global.Global;
 import org.json.JSONObject;
 import edu.fdu.se.defaultdiffminer.DiffMinerGitHubAPI;
 import edu.fdu.se.fileutil.*;
@@ -57,9 +58,13 @@ public class MyHttpServer {
             String prev_file_path = postJson.getString("prev_file_path");
             String curr_file_path = postJson.getString("curr_file_path");
 
-            String currFileContent = FileUtil.read(global_Path+project_name + "/" + commit_hash + "/" + curr_file_path+".txt");
-            String prevFileContent = FileUtil.read(global_Path+project_name + "/" + commit_hash + "/" + prev_file_path+".txt");
-            String diff = "";
+            String currFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + curr_file_path + ".txt");
+            String prevFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + prev_file_path + ".txt");
+            //文件路径为global_Path/project_name/commit_id/meta.txt
+            String metaStr = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/meta.txt");
+            Meta meta = new Gson().fromJson(metaStr, Meta.class);
+            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path, meta);
+            diff.generateDiffMinerOutput();
             String link = "";
             Content content = new Content(prevFileContent, currFileContent, diff, link);
             String contentResultStr = new Gson().toJson(content);
