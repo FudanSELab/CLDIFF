@@ -23,10 +23,14 @@ public class MyHttpServer {
     public static void main(String[] arg) throws Exception {
 
         HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
-        server.createContext("/DiffMiner/main", new TestHandler());
+        server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
         server.createContext("/DiffMiner/main/fetchMetaCache", new MetaCacheHandler());
         server.createContext("/DiffMiner/main/fetchContent", new ContentHandler());
         server.start();
+
+        //test
+//        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
+//        diff.generateDiffMinerOutput();
     }
 
     /**
@@ -101,10 +105,10 @@ public class MyHttpServer {
         }
     }
 
-    static class TestHandler implements HttpHandler {
+    static class CacheGeneratorHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            System.out.println("TestHandler");
+            System.out.println("CacheHandler");
             OutputStream os = exchange.getResponseBody();
             InputStream is = exchange.getRequestBody();
             byte[] cache = new byte[1000 * 1024];
@@ -135,7 +139,9 @@ public class MyHttpServer {
             FileUtil.convertCodeToFile(data, folder, meta);
             //meta 文件
             FileUtil.createFile("meta", new Gson().toJson(meta), folder);
+
 //            //TODO 前后分开 这部分负责response
+            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
             String response = new Gson().toJson(meta);
             exchange.sendResponseHeaders(200, response.length());
             os.write(response.getBytes());
