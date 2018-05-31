@@ -9,11 +9,8 @@ import edu.fdu.se.astdiff.associating.similarity.TreeDistance;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.main.astdiff.BaseDiffMiner;
-import org.apache.commons.io.FileUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.File;
+import edu.fdu.se.main.astdiff.CommitFile;
+import edu.fdu.se.main.astdiff.Meta;
 import java.util.*;
 
 /**
@@ -33,35 +30,28 @@ public class DiffMinerGitHubAPI {
      * output path +"proj_name" + "commit_id"
      * @param path
      */
-    public DiffMinerGitHubAPI(String path,JSONObject meta){
+    public DiffMinerGitHubAPI(String path,Meta meta){
         filePairDatas = new ArrayList<>();
         baseDiffMiner = new BaseDiffMiner();
-        commitId = meta.getString("commit_hash");
-        String projName = meta.getString("proj_name");
+        commitId = meta.getCommit_hash();
+        String projName = meta.getProject_name();
         baseDiffMiner.mFileOutputLog = new FileOutputLog(path, projName);
-        JSONArray jsonArray = meta.getJSONArray("parents");
-        Iterator iter = jsonArray.iterator();
-        List<String > parentCommits = new ArrayList<>();
-        while(iter.hasNext()){
-            parentCommits.add((String)iter.next());
-        }
-        baseDiffMiner.mFileOutputLog.setCommitId(commitId,parentCommits);
+        List<String> parents = meta.getParents();
+        baseDiffMiner.mFileOutputLog.setCommitId(commitId,parents);
         this.outputDir = path;
         initDataFromJson(meta);
     }
 
 
-    public void initDataFromJson(JSONObject meta) {
-        JSONArray jsonArray = meta.getJSONArray("files");
-        Iterator iter = jsonArray.iterator();
-        while(iter.hasNext()){
-            JSONObject jo = (JSONObject) iter.next();
-            String fileFullName = jo.getString("file_name");
+    public void initDataFromJson(Meta meta) {
+        List<CommitFile> commitFiles = meta.getFiles();
+        for(CommitFile file:commitFiles){
+            String fileFullName = file.getFile_name();
             int index = fileFullName.lastIndexOf("/");
             String fileName = fileFullName.substring(index+ 1, fileFullName.length());
-            String prevFilePath = jo.getString("prev_file_path");
-            String currFilePath = jo.getString("curr_file_path");
-            String parentCommit = jo.getString("parent_commit");
+            String prevFilePath = file.getPrev_file_path();
+            String currFilePath = file.getCurr_file_path();
+            String parentCommit = file.getParent_commit();
             String basePath = baseDiffMiner.mFileOutputLog.metaLinkPath;
             FilePairData fp = new FilePairData(null,null,basePath +"/"+prevFilePath,basePath+"/"+currFilePath,fileName);
             fp.parentCommit = parentCommit;
