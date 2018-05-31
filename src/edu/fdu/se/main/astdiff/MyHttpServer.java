@@ -62,19 +62,20 @@ public class MyHttpServer {
             String prev_file_path = postJson.getString("prev_file_path");
             String curr_file_path = postJson.getString("curr_file_path");
 
-            String currFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + curr_file_path + ".txt");
-            String prevFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + prev_file_path + ".txt");
+            String currFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + curr_file_path );
+            String prevFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + prev_file_path );
             //文件路径为global_Path/project_name/commit_id/meta.txt
-            String metaStr = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/meta.txt");
+            String metaStr = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/meta");
             Meta meta = new Gson().fromJson(metaStr, Meta.class);
             DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path, meta);
             diff.generateDiffMinerOutput();
             String link = "";
-            Content content = new Content(prevFileContent, currFileContent, diff, link);
-            String contentResultStr = new Gson().toJson(content);
-            exchange.sendResponseHeaders(200, contentResultStr.length());
-            os.write(contentResultStr.getBytes());
-            os.close();
+            //String diffStr = FileUtil.read()
+           // Content content = new Content(prevFileContent, currFileContent, diff, link);
+           // String contentResultStr = new Gson().toJson(content);
+            //exchange.sendResponseHeaders(200, contentResultStr.length());
+          //  os.write(contentResultStr.getBytes());
+            //os.close();
         }
     }
 
@@ -102,7 +103,7 @@ public class MyHttpServer {
             String projectName = new JSONObject(postString.toString()).getString("project_name");
             //读取文件
             //文件路径为global_Path/project_name/commit_id/meta.txt
-            String meta = FileUtil.read(global_Path + projectName + "/" + commitHash + "/meta.txt");
+            String meta = FileUtil.read(global_Path + projectName + "/" + commitHash + "/meta");
             System.out.println(meta);
             exchange.sendResponseHeaders(200, meta.length());
             os.write(meta.getBytes());

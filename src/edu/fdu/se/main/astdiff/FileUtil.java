@@ -31,7 +31,7 @@ public class FileUtil {
      * @param folder
      */
     public static void createFile(String name, String codeContent, File folder) {
-        File file = new File(folder.getPath() + "/" + name + ".txt");
+        File file = new File(folder.getPath() + "/" + name);
         FileOutputStream is = null;
         try {
             is = new FileOutputStream(file);
@@ -120,9 +120,16 @@ public class FileUtil {
                 String path = fileInfo.substring(("commit/").length() + commitId.length());
                 String[] pathList = path.split("/");
                 String fileName = pathList[pathList.length - 1];
+                if (fileName.startsWith("AbstractSchedulingTaskExecutorTests")){
+                    int a = 1;
+                }
                 path = path.substring(0, path.length() - fileName.length());
+                if (path.startsWith("/...")){
+                    path= "/"+path.substring(4);
+                }
                 //去除最后的引号
                 fileName = fileName.substring(0, fileName.length() - 1);
+
                 //如果是parentcommit,只需要在project_name/commit_id/prev/parent_commit_id/src/xx/xx下新建
                 //如果是childCommit，需要在所有的commit_id/curr/parent_commit_id/src/xx/xx新建
 
