@@ -43,6 +43,21 @@ public class DiffMinerGitHubAPI {
         initDataFromJson(meta);
     }
 
+    public static boolean isFilter(String filePathName){
+        String name = filePathName.toLowerCase();
+        if(!name.endsWith(".java")){
+            return true;
+        }
+        if(name.contains("\\test\\")||name.contains("/test/")){
+            return true;
+        }
+        String[] data = filePathName.split("/");
+        String fileName = data[data.length-1];
+        if(filePathName.endsWith("Test.java")||fileName.startsWith("Test")||filePathName.endsWith("Tests.java")){
+            return true;
+        }
+        return false;
+    }
 
     public void initDataFromJson(Meta meta) {
         List<CommitFile> commitFiles = meta.getFiles();
@@ -51,6 +66,9 @@ public class DiffMinerGitHubAPI {
             int index = fileFullName.lastIndexOf("/");
             String fileName = fileFullName.substring(index+ 1, fileFullName.length());
             String prevFilePath = file.getPrev_file_path();
+            if(DiffMinerGitHubAPI.isFilter(prevFilePath)){
+                continue;
+            }
             String currFilePath = file.getCurr_file_path();
             String parentCommit = file.getParent_commit();
             String basePath = baseDiffMiner.mFileOutputLog.metaLinkPath;

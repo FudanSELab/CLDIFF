@@ -69,17 +69,18 @@ public class MyHttpServer {
             //文件路径为global_Path/project_name/commit_id/meta.txt
             String metaStr = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/meta");
             Meta meta = new Gson().fromJson(metaStr, Meta.class);
-//            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path, meta);
-//            diff.generateDiffMinerOutput();
-            List<CommitFile> commitFileList = meta.getFiles();
-            String diffPath = "";
-            for (CommitFile commitFile : commitFileList) {
-                if (commitFile.getCurr_file_path().equals(curr_file_path)) {
-                    diffPath = commitFile.getDiffPath();
-                    break;
+            String diff = null;
+            if(!DiffMinerGitHubAPI.isFilter(prev_file_path)){
+                List<CommitFile> commitFileList = meta.getFiles();
+                String diffPath = "";
+                for (CommitFile commitFile : commitFileList) {
+                    if (commitFile.getCurr_file_path().equals(curr_file_path)) {
+                        diffPath = commitFile.getDiffPath();
+                        break;
+                    }
                 }
+                diff = FileUtil.read(diffPath);
             }
-            String diff = FileUtil.read(diffPath);
             String link = FileUtil.read(meta.getLinkPath());
             Content content = new Content(prevFileContent, currFileContent, diff, link);
             String contentResultStr = new Gson().toJson(content);
