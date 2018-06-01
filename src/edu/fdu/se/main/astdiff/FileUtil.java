@@ -75,7 +75,7 @@ public class FileUtil {
         return null;
     }
 
-    public static JSONObject filterMeta2(String datum){
+    public static JSONObject filterMeta2(String datum) {
         //{"autho
         String[] metaInfo = datum.split("\r\n");
         //匹配
@@ -105,8 +105,8 @@ public class FileUtil {
                 return;
             }
             String info = infos[1];
-            String codeContent = content.substring(info.length()+"\r\n".length()*3);
-            codeContent = codeContent.substring(0,codeContent.length()-1);//正文
+            String codeContent = content.substring(info.length() + "\r\n".length() * 3);
+            codeContent = codeContent.substring(0, codeContent.length() - 1);//正文
             // "Content-Disposition: form-data; name=\"https://github.com/amitshekhariitbhu/Android
             // -Debug-Database/commit/43e48d15e6ee435
             // ed0b1abc6d76638dc8bf0217d/debug-db/src/main/java/com/amitshekhar/server/RequestHandler.java\"
@@ -121,12 +121,12 @@ public class FileUtil {
                 String path = fileInfo.substring(("commit/").length() + commitId.length());
                 String[] pathList = path.split("/");
                 String fileName = pathList[pathList.length - 1];
-                if (fileName.startsWith("AbstractSchedulingTaskExecutorTests")){
+                if (fileName.startsWith("AbstractSchedulingTaskExecutorTests")) {
                     int a = 1;
                 }
                 path = path.substring(0, path.length() - fileName.length());
-                if (path.startsWith("/...")){
-                    path= "/"+path.substring(4);
+                if (path.startsWith("/...")) {
+                    path = "/" + path.substring(4);
                 }
                 //去除最后的引号
                 fileName = fileName.substring(0, fileName.length() - 1);
@@ -179,9 +179,10 @@ public class FileUtil {
             // 一次读入一行，直到读入null为文件结束
             while ((tempString = reader.readLine()) != null) {
                 // 显示行号
-                result.append(tempString);
+                result.append(tempString).append("\r\n");
                 line++;
             }
+            System.out.println(result);
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
