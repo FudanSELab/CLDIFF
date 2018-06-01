@@ -99,7 +99,7 @@ public class DiffMinerGitHubAPI {
                 }
             }
 
-            this.fileChangeEntityData.put(this.baseDiffMiner.changeEntityData.fileName,this.baseDiffMiner.changeEntityData);
+            this.fileChangeEntityData.put(fp.parentCommit +"@@@"+ this.baseDiffMiner.changeEntityData.fileName,this.baseDiffMiner.changeEntityData);
         }
         List<String> fileNames = new ArrayList<>(this.fileChangeEntityData.keySet());
         TotalFileAssociations totalFileAssociations = new TotalFileAssociations() ;
