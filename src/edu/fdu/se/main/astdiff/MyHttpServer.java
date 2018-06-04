@@ -25,15 +25,34 @@ public class MyHttpServer {
     public static void main(String[] arg) throws Exception {
         global_Path = arg[0];
         Global.globalPath = arg[0];
-        HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
-        server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
-        server.createContext("/DiffMiner/main/fetchMetaCache", new MetaCacheHandler());
-        server.createContext("/DiffMiner/main/fetchContent", new ContentHandler());
-        server.start();
+//        HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
+//        server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
+//        server.createContext("/DiffMiner/main/fetchMetaCache", new MetaCacheHandler());
+//        server.createContext("/DiffMiner/main/fetchContent", new ContentHandler());
+//        server.start();
 
         //test
-//        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
-//        diff.generateDiffMinerOutput();
+        Meta meta = readFromMeta(global_Path+"spring-framework/3c1adf7f6af0dff9bda74f40dabe8cf428a62003/meta");
+        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
+        diff.generateDiffMinerOutput();
+    }
+    static Meta readFromMeta(String path){
+        try {
+            FileInputStream fis = new FileInputStream(path);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            StringBuffer sb = new StringBuffer();
+            while((line = br.readLine())!= null){
+                sb.append(line);
+            }
+            Meta obj = new Gson().fromJson(sb.toString(), Meta.class);
+            return obj;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+
     }
 
     /**

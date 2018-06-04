@@ -61,8 +61,8 @@ public class DstBodyCheck {
             }
             if(newFieldFlag){
                 //new field
-//                compareResult.addBodiesAdded(fd, prefix);
-//                compareCache.addToDstRemoveList(fd);
+                compareResult.addBodiesAdded(fd, prefix);
+                compareCache.addToDstRemoveList(fd);
             }
         }
         return 33;
@@ -96,8 +96,8 @@ public class DstBodyCheck {
             }
         }
         // new class
-//        compareResult.addBodiesAdded(cod, prefixClassName);
-//        compareCache.addToDstRemoveList(cod);
+        compareResult.addBodiesAdded(cod, prefixClassName);
+        compareCache.addToDstRemoveList(cod);
         return 3;
     }
 
@@ -134,8 +134,8 @@ public class DstBodyCheck {
                 System.err.println("[ERROR]");
             }
         }
-//        compareResult.addBodiesAdded(ed,prefixClassName);
-//        compareCache.addToDstRemoveList(ed);
+        compareResult.addBodiesAdded(ed,prefixClassName);
+        compareCache.addToDstRemoveList(ed);
         return 3;
     }
 
@@ -155,9 +155,9 @@ public class DstBodyCheck {
         } else if (bd instanceof MethodDeclaration) {
             MethodDeclaration md = (MethodDeclaration) bd;
             methodNameKey = prefixClassName + md.getName().toString();
-//            if(md.getName().toString().equals("cancelRemainingTask")){
-//                return 2;
-//            }
+            if(md.getName().toString().equals("setPoolSize")){
+                System.out.print("a");
+            }
 
         } else if (bd instanceof EnumDeclaration) {
             EnumDeclaration ed = (EnumDeclaration) bd;
@@ -190,8 +190,8 @@ public class DstBodyCheck {
 
         } else {
             //new method
-//            compareResult.addBodiesAdded(bd, prefixClassName);
-//            compareCache.addToDstRemoveList(bd);
+            compareResult.addBodiesAdded(bd, prefixClassName);
+            compareCache.addToDstRemoveList(bd);
             return 5;
         }
     }

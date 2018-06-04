@@ -93,11 +93,18 @@ public class TotalFileAssociations {
             if(key.contains("----")) {
                 jo2.put("link-type","two-file-link");
                 String[] data = key.split("----");
-                jo2.put("file-name",data[0]);
-                jo2.put("file-name2",data[1]);
+                String [] data21 = data[0].split("@@@");
+                String [] data22 = data[1].split("@@@");
+                jo2.put("file-name",data21[1]);
+                jo2.put("file-name2",data22[1]);
+                jo2.put("parent-commit",data21[0]);
+                jo2.put("parent-commit2",data22[0]);
             }else {
                 jo2.put("link-type","one-file-link");
-                jo2.put("file-name",key);
+                String[] data2 = key.split("@@@");
+                jo2.put("file-name",data2[1]);
+                jo2.put("parent-commit",data2[0]);
+
             }
             List<Association> assos = entry.getValue();
             JSONArray linkArr = new JSONArray();
