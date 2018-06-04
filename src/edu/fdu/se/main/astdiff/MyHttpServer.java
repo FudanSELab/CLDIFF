@@ -19,7 +19,7 @@ import java.util.List;
 
 
 public class MyHttpServer {
-    static final String DIVIDER = "--xxx---------------xxx";
+    static final String DIVIDER = "--xxx---fdse---xxx";
     static String global_Path;
 
     public static void main(String[] arg) throws Exception {
