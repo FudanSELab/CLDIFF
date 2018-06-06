@@ -182,6 +182,7 @@ public class FileUtil {
                 result.append(tempString).append("\r\n");
                 line++;
             }
+            result = new StringBuilder(result.substring(0,result.length()-2));
             System.out.println(result);
             reader.close();
         } catch (IOException e) {

@@ -25,16 +25,16 @@ public class MyHttpServer {
     public static void main(String[] arg) throws Exception {
         global_Path = arg[0];
         Global.globalPath = arg[0];
-//        HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
-//        server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
-//        server.createContext("/DiffMiner/main/fetchMetaCache", new MetaCacheHandler());
-//        server.createContext("/DiffMiner/main/fetchContent", new ContentHandler());
-//        server.start();
+        HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
+        server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
+        server.createContext("/DiffMiner/main/fetchMetaCache", new MetaCacheHandler());
+        server.createContext("/DiffMiner/main/fetchContent", new ContentHandler());
+        server.start();
 
         //test
-        Meta meta = readFromMeta(global_Path+"spring-framework/3c1adf7f6af0dff9bda74f40dabe8cf428a62003/meta");
-        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
-        diff.generateDiffMinerOutput();
+//        Meta meta = readFromMeta(global_Path+"spring-framework/3c1adf7f6af0dff9bda74f40dabe8cf428a62003/meta");
+//        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
+//        diff.generateDiffMinerOutput();
     }
     static Meta readFromMeta(String path){
         try {
@@ -64,7 +64,6 @@ public class MyHttpServer {
         public void handle(HttpExchange exchange) throws IOException {
             System.out.println("ContentHandler");
             InputStream is = exchange.getRequestBody();
-            OutputStream os = exchange.getResponseBody();
             byte[] cache = new byte[100];
             int res;
             StringBuilder postString = new StringBuilder();
@@ -104,9 +103,19 @@ public class MyHttpServer {
             Content content = new Content(prevFileContent, currFileContent, diff, link);
             String contentResultStr = new Gson().toJson(content);
             System.out.println(contentResultStr);
-            exchange.sendResponseHeaders(200, contentResultStr.length());
-            os.write(contentResultStr.getBytes());
-            os.close();
+            System.out.println(String.valueOf(contentResultStr.length()));
+            byte[] bytes = contentResultStr.getBytes();
+            exchange.sendResponseHeaders(201, bytes.length);
+            try (BufferedOutputStream out = new BufferedOutputStream(exchange.getResponseBody())) {
+                try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes)) {
+                    byte [] buffer = new byte [1000];
+                    int count ;
+                    while ((count = bis.read(buffer)) != -1) {
+                        out.write(buffer, 0, count);
+                    }
+                    out.close();
+                }
+            }
         }
     }
 
@@ -146,7 +155,6 @@ public class MyHttpServer {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             System.out.println("CacheHandler");
-            OutputStream os = exchange.getResponseBody();
             InputStream is = exchange.getRequestBody();
             byte[] cache = new byte[1000 * 1024];
             int res;
@@ -190,6 +198,7 @@ public class MyHttpServer {
             String response = new Gson().toJson(meta);
             System.out.println(response);
             exchange.sendResponseHeaders(200, response.length());
+            OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
         }
