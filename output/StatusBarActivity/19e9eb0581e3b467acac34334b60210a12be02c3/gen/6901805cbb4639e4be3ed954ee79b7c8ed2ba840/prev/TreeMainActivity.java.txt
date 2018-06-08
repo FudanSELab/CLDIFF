@@ -1,0 +1,46 @@
+CompilationUnit:
+  TypeDeclaration:
+    Modifier:public
+    SimpleName:MainActivity
+    SimpleType:AppCompatActivity
+      SimpleName:AppCompatActivity
+    MethodDeclaration:
+      MarkerAnnotation:
+        SimpleName:Override
+      Modifier:protected
+      PrimitiveType:void
+      SimpleName:onCreate
+      SingleVariableDeclaration:
+        SimpleType:Bundle
+          SimpleName:Bundle
+        SimpleName:savedInstanceState
+      Block:
+        ExpressionStatement:
+          SuperMethodInvocation:
+            SimpleName:onCreate
+            SimpleName:savedInstanceState
+        ExpressionStatement:
+          MethodInvocation:
+            SimpleName:setContentView
+            QualifiedName:R.layout.activity_main
+        VariableDeclarationStatement: [D]
+          SimpleType:Toolbar [D]
+            SimpleName:Toolbar [D]
+          VariableDeclarationFragment: [D]
+            SimpleName:toolbar [D]
+            CastExpression: [D]
+              SimpleType:Toolbar [D]
+                SimpleName:Toolbar [D]
+              MethodInvocation: [D]
+                SimpleName:findViewById [D]
+                QualifiedName:R.id.toolbar [D]
+        ExpressionStatement: [D]
+          MethodInvocation: [D]
+            SimpleName:setSupportActionBar [D]
+            SimpleName:toolbar [D]
+        ExpressionStatement:
+          MethodInvocation:
+            MethodInvocation: [M]
+              SimpleName:getSupportActionBar [U]
+            SimpleName:setDisplayHomeAsUpEnabled [U]
+            BooleanLiteral:true [D]
