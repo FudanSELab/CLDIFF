@@ -148,19 +148,27 @@ public class StageIIBean {
 
     public String toString2(){
         StringBuffer sb = new StringBuffer();
-        if(this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)){
-            sb.append("Move");
-        }else {
-            sb.append(this.opt);
+        if(this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)||this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_MOVE)){
+            sb.append("move");
+        }else if(this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_INSERT)){
+            sb.append("add");
+        }else if(this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_DELETE)){
+            sb.append("delete");
+        }else if(this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
+            sb.append("update");
         }
-        sb.append(" ");
-        sb.append(this.changeEntity);
+//        sb.append(" "); update add delete move
+        String entity = this.changeEntity;
+        String[] tmp = entity.split(" ");
+        for(String tmp2:tmp) {
+            sb.append(tmp2);
+        }
         if(this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
             sb.append(" ");
             if(this.getSubEntity()!=null) {
                 sb.append(this.getSubEntity());
             }
-            sb.append(" with");
+            sb.append("  by");
         }
         return sb.toString();
     }

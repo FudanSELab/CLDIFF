@@ -32,6 +32,7 @@ public class ChangeEntityDesc {
         public static final String OPT_CHANGE_MOVE = "Change.Move";
     }
 
+
     public static class StageIIENTITY {
 
         public static final String ENTITY_CLASS = "Class";
