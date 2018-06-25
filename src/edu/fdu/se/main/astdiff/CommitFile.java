@@ -12,12 +12,20 @@ public class CommitFile {
      * curr_file_path : curr/9d63f805b3b3ad07f102f6df779b852b2d1f306c/ExecutorConfigurationSupport.java
      * parent_commit : 9d63f805b3b3ad07f102f6df779b852b2d1f306c
      */
-
+    private int id;
     private String file_name;
     private String prev_file_path;
     private String curr_file_path;
     private String parent_commit;
     private String diffPath;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDiffPath() {
         return diffPath;

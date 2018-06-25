@@ -95,6 +95,7 @@ public class FileUtil {
      * @param meta
      */
     public static void convertCodeToFile(String[] data, File folder, Meta meta) {
+        int cnt = 0;
         for (String content : data) {
             if (content.isEmpty()) {
                 //过滤掉第一个空string
@@ -155,6 +156,8 @@ public class FileUtil {
 
                         //添加到Meta中
                         commitFile = new CommitFile();
+                        commitFile.setId(cnt);
+                        cnt++;
                         commitFile.setFile_name(fileName);
                         commitFile.setParent_commit(parentCommitId);
                         commitFile.setCurr_file_path("curr/" + parentCommitId + path + fileName);
@@ -183,7 +186,7 @@ public class FileUtil {
                 line++;
             }
             result = new StringBuilder(result.substring(0,result.length()-2));
-            System.out.println(result);
+//            System.out.println(result);
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();

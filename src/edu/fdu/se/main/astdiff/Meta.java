@@ -24,6 +24,15 @@ public class Meta {
     private List<String> parents;
     private List<CommitFile> files;
     private String linkPath;
+    private List<String> actions;
+
+    public List<String> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<String> actions) {
+        this.actions = actions;
+    }
 
     public String getLinkPath() {
         return linkPath;
