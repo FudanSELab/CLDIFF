@@ -2,6 +2,7 @@ package edu.fdu.se.main.astdiff;
 
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -25,16 +26,17 @@ public class MyHttpServer {
     public static void main(String[] arg) throws Exception {
         global_Path = arg[0];
         Global.globalPath = arg[0];
-//        HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
-//        server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
-//        server.createContext("/DiffMiner/main/fetchMetaCache", new MetaCacheHandler());
-//        server.createContext("/DiffMiner/main/fetchContent", new ContentHandler());
-//        server.start();
+        HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
+        server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
+        server.createContext("/DiffMiner/main/fetchMetaCache", new MetaCacheHandler());
+        server.createContext("/DiffMiner/main/fetchContent", new ContentHandler());
+        server.createContext("/DiffMiner/main/clearCache",new ClearCacheHandler());
+        server.start();
 
         //test
-        Meta meta = readFromMeta(global_Path+"spring-framework/3c1adf7f6af0dff9bda74f40dabe8cf428a62003/meta");
-        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
-        diff.generateDiffMinerOutput();
+//        Meta meta = readFromMeta(global_Path+"spring-framework/3c1adf7f6af0dff9bda74f40dabe8cf428a62003/meta");
+//        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
+//        diff.generateDiffMinerOutput();
     }
     static Meta readFromMeta(String path){
         try {
@@ -85,7 +87,7 @@ public class MyHttpServer {
             String currFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + curr_file_path);
             String prevFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + prev_file_path);
             //文件路径为global_Path/project_name/commit_id/meta.txt
-            String metaStr = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/meta");
+            String metaStr = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/meta.json");
             Meta meta = new Gson().fromJson(metaStr, Meta.class);
             String diff = null;
             if(!DiffMinerGitHubAPI.isFilter(prev_file_path)){
@@ -119,6 +121,14 @@ public class MyHttpServer {
         }
     }
 
+    static class ClearCacheHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            System.out.println("clear cache");
+            //todo
+        }
+    }
+
     /**
      * 获取Meta缓存
      */
@@ -143,7 +153,7 @@ public class MyHttpServer {
             String projectName = new JSONObject(postString.toString()).getString("project_name");
             //读取文件
             //文件路径为global_Path/project_name/commit_id/meta.txt
-            String meta = FileUtil.read(global_Path + projectName + "/" + commitHash + "/meta");
+            String meta = FileUtil.read(global_Path + projectName + "/" + commitHash + "/meta.json");
             System.out.println(meta);
             exchange.sendResponseHeaders(200, meta.length());
             os.write(meta.getBytes());
@@ -194,7 +204,7 @@ public class MyHttpServer {
             //link
             meta.setLinkPath(filePathList.get(diffFileSize));
             //写入meta文件
-            FileUtil.createFile("meta", new Gson().toJson(meta), folder);
+            FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta), folder);
             String response = new Gson().toJson(meta);
             System.out.println(response);
             exchange.sendResponseHeaders(200, response.length());

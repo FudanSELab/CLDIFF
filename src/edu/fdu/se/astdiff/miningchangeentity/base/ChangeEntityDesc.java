@@ -202,23 +202,28 @@ public class ChangeEntityDesc {
 
     public static class StageIIIAssociationType{
 
-        public static final String TYPE_SAME_VARIABLE = "a same variable as b";
-
-        public static final String TYPE_CONTROL = "a control dependency b";
-
-        public static final String TYPE_FIELD_ACCESS = "a access field b";
-
-        public static final String TYPE_CALL_METHOD = "a call method b";
-
-        public static final String TYPE_CROSS_FILE_CALL_METHOD = "a call method b";
-
-        public static final String TYPE_PARAMETER_CHANGE_VAR_CHANGE = "a parameter change -> b variable change";
-
-        public static final String TYPE_SHARE_FIELD = "a field acess same as b";
-
-        public static final String TYPE_CLASS_CREATION = "a class creation of b";
-
-        public static final String TYPE_METHOD_OVERRIDE = "a overrides method of b";
+//        public static final String TYPE_SAME_VARIABLE = "a same variable as b";
+//
+//        public static final String TYPE_CONTROL = "a control dependency b";
+//
+//        public static final String TYPE_FIELD_ACCESS = "a access field b";
+//
+//        public static final String TYPE_CALL_METHOD = "a call method b";
+//
+//        public static final String TYPE_CROSS_FILE_CALL_METHOD = "a call method b";
+//
+//        public static final String TYPE_PARAMETER_CHANGE_VAR_CHANGE = "a parameter change -> b variable change";
+//
+//        public static final String TYPE_SHARE_FIELD = "a field acess same as b";
+//
+//        public static final String TYPE_CLASS_CREATION = "a class creation of b";
+//
+//        public static final String TYPE_METHOD_OVERRIDE = "a overrides method of b";
+        public static final String DEF_USE = "Def-Use: %s invoked in %s";
+        public static final String ABSTRACT_METHOD = "Abstract-Method: %s";
+        public static final String OVERRIDE_METHOD = "Override-Method: %s overridden in %s";
+        public static final String IMPLEMENT_METHOD = "Implement-Method: %s";
+        public static final String SYSTEMATIC_CHANGE = "Systematic-Change: similar change";
 
     }
 

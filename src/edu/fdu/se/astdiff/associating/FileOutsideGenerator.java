@@ -154,11 +154,12 @@ public class FileOutsideGenerator {
                     StmtData stmtData = (StmtData) stmt.linkBean;
                     for (String s : stmtData.methodInvocation) {
                         if (mdata.methodName.contains(s)) {
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,s,s);
                             if (flag == 1) {
-                                Association association = new Association(ce1.fileName, ce2.fileName, cmethod, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD,s);
+                                Association association = new Association(ce1.fileName, ce2.fileName, cmethod, cstmt, desc,s);
                                 mAssos.add(association);
                             } else {
-                                Association association = new Association(ce2.fileName, ce1.fileName, cmethod, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD,s);
+                                Association association = new Association(ce2.fileName, ce1.fileName, cmethod, cstmt, desc,s);
                                 mAssos.add(association);
                             }
                             break;
@@ -197,7 +198,8 @@ public class FileOutsideGenerator {
                     MethodData methodData1 = (MethodData) m.linkBean;
                     MethodData methodData2 = (MethodData) n.linkBean;
                     if(methodData1.methodName.get(0).equals(methodData2.methodName.get(0))){
-                        Association association = new Association(ce1.fileName, ce2.fileName, m, n, ChangeEntityDesc.StageIIIAssociationType.TYPE_METHOD_OVERRIDE,methodData1.methodName.get(0));
+                        String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD,methodData1.methodName.get(0));
+                        Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc,methodData1.methodName.get(0));
                         mAssos.add(association);
                     }
                 }
@@ -216,21 +218,24 @@ public class FileOutsideGenerator {
                 if (stmt.linkBean != null) {
                     StmtData stmtData = (StmtData) stmt.linkBean;
                     if (stmtData.classCreation.contains(mdata.clazzName)) {
+                        String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,mdata.clazzName);
                         if (flag == 1) {
-                            Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CLASS_CREATION,mdata.clazzName);
+                            Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, desc,mdata.clazzName);
                             mAssos.add(association);
                         } else {
-                            Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CLASS_CREATION,mdata.clazzName);
+                            Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, desc,mdata.clazzName);
                             mAssos.add(association);
                         }
                     }
                     for (String s : stmtData.methodInvocation) {
+
                         if (mdata.methods.contains(s)) {
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,s,s);
                             if (flag == 1) {
-                                Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD,mdata.clazzName);
+                                Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, desc,mdata.clazzName);
                                 mAssos.add(association);
                             } else {
-                                Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, ChangeEntityDesc.StageIIIAssociationType.TYPE_CROSS_FILE_CALL_METHOD,mdata.clazzName);
+                                Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, desc,mdata.clazzName);
                                 mAssos.add(association);
                             }
                             break;

@@ -25,7 +25,8 @@ public class LinkStatement2Member {
                 for(String params:methodData.parameterName){
                     for(String vars:stmtData.variableLocal){
                         if(params.equals(vars)){
-                            Association association = new Association(stmt,method,ChangeEntityDesc.StageIIIAssociationType.TYPE_PARAMETER_CHANGE_VAR_CHANGE,vars);
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,vars,vars);
+                            Association association = new Association(stmt,method, desc,vars);
                             changeEntityData.mAssociations.add(association);
                             return;
                         }
@@ -36,7 +37,8 @@ public class LinkStatement2Member {
             // method name是否在invoke的list里面
             for(String methodInvokes:stmtData.methodInvocation){
                 if(methodData.methodName.contains(methodInvokes)){
-                    Association association = new Association(stmt,method,ChangeEntityDesc.StageIIIAssociationType.TYPE_CALL_METHOD,methodInvokes);
+                    String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,methodInvokes, methodInvokes);
+                    Association association = new Association(stmt,method, desc,methodInvokes);
                     changeEntityData.mAssociations.add(association);
                 }
             }
@@ -51,7 +53,8 @@ public class LinkStatement2Member {
         for(String a:fieldData.fieldName){
             for(String b:stmtData.variableField){
                 if(a.equals(b)){
-                    Association association = new Association(stmt,field,ChangeEntityDesc.StageIIIAssociationType.TYPE_FIELD_ACCESS,b);
+                    String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,a,a);
+                    Association association = new Association(stmt,field,desc,b);
                     changeEntityData.mAssociations.add(association);
                 }
             }
