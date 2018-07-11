@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.associating;
 
 import com.github.gumtreediff.tree.Tree;
+import edu.fdu.se.astdiff.Global.Global;
 import edu.fdu.se.astdiff.associating.linkbean.ClassData;
 import edu.fdu.se.astdiff.associating.linkbean.MethodData;
 import edu.fdu.se.astdiff.associating.linkbean.StmtData;

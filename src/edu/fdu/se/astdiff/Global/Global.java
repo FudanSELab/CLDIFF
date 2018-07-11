@@ -1,6 +1,7 @@
 package edu.fdu.se.astdiff.Global;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by huangkaifeng on 2018/4/7.
@@ -20,4 +21,6 @@ public class Global {
     public static List<String> outputFilePathList;
 
     public static String globalPath;
+
+    public static Map<Integer,String> changeEntityFileNameMap;
 }

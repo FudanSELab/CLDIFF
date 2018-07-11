@@ -71,6 +71,15 @@ public class StageIIBean {
 
     public void addOpt2AndOpt2Expression(String opt2,String opt2Expression) {
         Opt2Tuple opt2Class = new Opt2Tuple();
+        if("Insert".equals(opt2)){
+            opt2 = "add";
+        }else if("Delete".equals(opt2)){
+            opt2 = "delete";
+        }else if("Update".equals(opt2)){
+            opt2 = "update";
+        }else if("Move".equals(opt2)){
+            opt2 = "move";
+        }
         opt2Class.opt2 = opt2;
         opt2Class.opt2Expression = opt2Expression;
         for(Opt2Tuple tmp:this.opt2List){

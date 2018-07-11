@@ -11,6 +11,8 @@ import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.main.astdiff.BaseDiffMiner;
 import edu.fdu.se.main.astdiff.CommitFile;
 import edu.fdu.se.main.astdiff.Meta;
+import org.eclipse.jgit.internal.storage.file.GlobalAttributesNode;
+
 import java.util.*;
 
 /**
@@ -81,6 +83,7 @@ public class DiffMinerGitHubAPI {
 
     public void generateDiffMinerOutput(){
         String absolutePath = this.baseDiffMiner.mFileOutputLog.metaLinkPath;
+        Global.changeEntityFileNameMap = new HashMap<>();
         for(FilePairData fp:filePairDatas){
             Global.parentCommit = fp.parentCommit;
             System.out.println(fp.fileName);
