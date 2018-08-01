@@ -1,6 +1,6 @@
 package edu.fdu.se.RQ;
 
-import edu.fdu.se.main.astdiff.DiffMinerTest;
+import edu.fdu.se.cldiff.DiffMinerTest;
 
 import java.util.List;
 import java.util.Map;

@@ -10,6 +10,7 @@ import java.util.Set;
 
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
+import edu.fdu.se.git.FileChangeEditList;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.diff.EditList;
 
@@ -18,7 +19,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 
-import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
 
 public class JavaParserFactory {
 	

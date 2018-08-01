@@ -6,9 +6,10 @@ import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import edu.fdu.se.astdiff.Global.Global;
-import edu.fdu.se.main.astdiff.FileUtil;
-import edu.fdu.se.main.astdiff.Meta;
+import edu.fdu.se.base.Global.Global;
+import edu.fdu.se.cldiff.DiffMinerGitHubAPI;
+import edu.fdu.se.cldiff.FileUtil;
+import edu.fdu.se.cldiff.Meta;
 import org.json.JSONObject;
 
 import java.io.*;

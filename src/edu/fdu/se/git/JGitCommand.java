@@ -40,7 +40,6 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import edu.fdu.se.fileutil.FileUtil;
-import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 
 public class JGitCommand {
 
@@ -48,6 +47,7 @@ public class JGitCommand {
 	public RevWalk revWalk;
 	public String repoPath;
 	public Git git;
+
 	final static public int ALL_FILE = 0;
 	final static public int JAVA_FILE = 1;
 	final static public int CORE_JAVA_FILE = 2;
@@ -391,8 +391,7 @@ public class JGitCommand {
 		return null;
 	}
 
-	
-	
+
 	public boolean filterRule(int flag,String oldPath){
 		if (JGitCommand.ALL_FILE == flag) {
 			return true;

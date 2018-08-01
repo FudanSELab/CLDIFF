@@ -1,14 +1,14 @@
 package edu.fdu.se.RQ;
 
-import edu.fdu.se.astdiff.Global.Global;
-import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
-import edu.fdu.se.astdiff.associating.FileOutsideGenerator;
-import edu.fdu.se.astdiff.associating.TotalFileAssociations;
-import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
-import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
-import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
-import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
-import edu.fdu.se.main.astdiff.DiffMinerTest;
+import edu.fdu.se.base.Global.Global;
+import edu.fdu.se.base.associating.FileInsideAssociationGenerator;
+import edu.fdu.se.base.associating.FileOutsideGenerator;
+import edu.fdu.se.base.associating.TotalFileAssociations;
+import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
+import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
+import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
+import edu.fdu.se.base.preprocessingfile.data.FileOutputLog;
+import edu.fdu.se.cldiff.DiffMinerTest;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -49,7 +49,6 @@ public class JGitHelper extends JGitCommand {
                 commitQueue.offer(commit);
                 while (commitQueue.size() != 0) {
                     RevCommit queueCommitItem = commitQueue.poll();
-                    //wang 4/11
                     RevCommit[] parentCommits = queueCommitItem.getParents();
                     if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
                         continue;
