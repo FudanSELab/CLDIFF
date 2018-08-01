@@ -17,11 +17,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevTag;
 
-import edu.fdu.se.bean.AndroidBranch;
-import edu.fdu.se.bean.AndroidPlatformFrameworkProject;
-import edu.fdu.se.bean.AndroidTag;
-import edu.fdu.se.dao.AndroidBranchDAO;
-import edu.fdu.se.dao.AndroidTagDAO;
+
 
 public class JGitTagCommand extends JGitCommand {
 
@@ -59,12 +55,7 @@ public class JGitTagCommand extends JGitCommand {
 
 
 
-	/**
-	 * return revcommit
-	 * 
-	 * @param branchId
-	 * @return
-	 */
+
 	public RevCommit revCommitOfCommitId(String commit) {
 		try {
 			ObjectId commitId = ObjectId.fromString(commit);
@@ -79,37 +70,6 @@ public class JGitTagCommand extends JGitCommand {
 		return null;
 	}
 
-	/**
-	 * list项目所有的tag，并存数据库
-	 * 
-	 * @param project
-	 * @return
-	 */
-	public int listTagsAndSaveToDb(AndroidPlatformFrameworkProject project) {
-		List<Ref> call = null;
-		try {
-			call = git.tagList().call();
-		} catch (GitAPIException e) {
-			e.printStackTrace();
-		}
-		for (Ref ref : call) {
-			String tagName = ref.getName();
-			String[] data = tagName.split("/");
-			String tagShortName = data[data.length - 1];
-			String tagSha = ref.getObjectId().getName();
-			AndroidTag at = new AndroidTag(0, tagName, tagShortName, tagSha, project.getProjectSubPath());
-			AndroidTagDAO.insert(at);
-			// System.out.println(ref.getName() + "\n" +
-			// ref.getObjectId().getName() + "\n");
-		}
-		return call.size();
-		// LogCommand log = git.log();
-		// Ref peeledRef = repository.peel(ref);
-		// if(peeledRef.getPeeledObjectId() != null) {
-		// log.add(peeledRef.getPeeledObjectId());
-		// log.add(ref.getObjectId());
-		// Iterable<RevCommit> logs = log.call();
-	}
 
 	/**
 	 * true 如果是重叠的 false则不在时间线上
@@ -215,42 +175,6 @@ public class JGitTagCommand extends JGitCommand {
 		return null;
 	}
 
-	/**
-	 * list项目所有的branch，并存数据库
-	 * 
-	 * @param project
-	 * @return
-	 */
-	public int listBranchesAndSaveToDb(AndroidPlatformFrameworkProject project) {
-		List<Ref> call = null;
-		try {
-			call = git.branchList().call();
-		} catch (GitAPIException e) {
-			e.printStackTrace();
-		}
-		for (Ref ref : call) {
-			String branchName = ref.getName();
-			String[] data = branchName.split("/");
-			String branchShortName = data[data.length - 1];
-			RevObject object = null;
-			String commitSha = null;
-			try {
-				object = revWalk.parseAny(ref.getObjectId());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if (object instanceof RevCommit) {
-				RevCommit commit = (RevCommit) object;
-				commitSha = commit.getName();
-			} else {
-				System.err.println("invalid");
-			}
-			AndroidBranch ab = new AndroidBranch(0, branchName, branchShortName, commitSha,
-					project.getProjectSubPath());
-			AndroidBranchDAO.insert(ab);
-		}
-		return call.size();
-	}
 
 	public void walkRepoBackwardsStartFromTag(String tagSHA) {
 		RevCommit rc = this.revCommitOfTag(tagSHA);

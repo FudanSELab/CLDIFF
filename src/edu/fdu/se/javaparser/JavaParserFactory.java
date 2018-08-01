@@ -25,7 +25,6 @@ import edu.fdu.se.fileutil.FileWriter;
 import edu.fdu.se.git.JGitCommand;
 import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
-import edu.fdu.se.main.gitgui.RepoDataHelper;
 
 public class JavaParserFactory {
 	

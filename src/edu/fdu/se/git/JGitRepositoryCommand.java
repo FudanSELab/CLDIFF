@@ -23,10 +23,8 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 
-import edu.fdu.se.bean.AndroidRepoCommitWithBLOBs;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-import edu.fdu.se.dao.AndroidRepoCommitDAO;
 
 public class JGitRepositoryCommand extends JGitCommand {
 
@@ -34,42 +32,7 @@ public class JGitRepositoryCommand extends JGitCommand {
         super(repopath);
     }
 
-    public void walkRepoFromBackwardsToDB() {
-        try {
-            Queue<RevCommit> commitQueue = new LinkedList<RevCommit>();
-            Map<String, Boolean> isTraversed = new HashMap<String, Boolean>();
-            List<Ref> mList = this.git.branchList().setListMode(ListMode.ALL).call();
-            for (Ref item : mList) {
-                RevCommit commit = revWalk.parseCommit(item.getObjectId());
-                commitQueue.offer(commit);
-                while (commitQueue.size() != 0) {
-                    RevCommit queueCommitItem = commitQueue.poll();
-                    RevCommit[] parentCommits = queueCommitItem.getParents();
-                    if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
-                        continue;
-                    }
-                    Map<String, List<String>> changedFiles = this.getCommitFileList(queueCommitItem.getName());
-                    visit(queueCommitItem, changedFiles);
-                    System.out.println(queueCommitItem.getName());
-                    isTraversed.put(queueCommitItem.getName(), true);
-                    for (RevCommit item2 : parentCommits) {
-                        RevCommit commit2 = revWalk.parseCommit(item2.getId());
-                        commitQueue.offer(commit2);
-                    }
-                }
-            }
-            System.out.println("CommitSum:" + isTraversed.size());
-        } catch (MissingObjectException e) {
-            e.printStackTrace();
-        } catch (IncorrectObjectTypeException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (GitAPIException e1) {
-            e1.printStackTrace();
-        }
 
-    }
 
 
     public void walkRepoFromBackwards(String outDir) {
@@ -126,59 +89,11 @@ public class JGitRepositoryCommand extends JGitCommand {
 
     }
 
-
-    public void visit(RevCommit commit, Map<String, List<String>> mMap) {
-        boolean flag = false;
-        AndroidRepoCommitWithBLOBs dbCommit = new AndroidRepoCommitWithBLOBs();
-
-        dbCommit.setCommitId(commit.getName());
-        dbCommit.setCommitLog(commit.getShortMessage());
-        dbCommit.setCommitLogFull(commit.getFullMessage());
-        Long l = new Long(commit.getCommitTime() * 1000L);
-//		l = l*1000;
-        Date date = new Date(l);
-        dbCommit.setCommitDatetime(date);
-        dbCommit.setCommitTimestamp(date);
-        System.out.println(commit.getName());
-        for (Entry<String, List<String>> item : mMap.entrySet()) {
-            // System.out.println(item.getKey());
-            for (String filePath : item.getValue()) {
-                if (filePath.startsWith("core/java/android")) {
-                    flag = true;
-                }
-                // System.out.println(filePath);
-            }
-        }
-        if (flag == true) {
-            dbCommit.setIssdkfile(1);
-        } else {
-            dbCommit.setIssdkfile(0);
-        }
-//		if(mList == null){
-//			mList = new ArrayList<AndroidRepoCommitWithBLOBs>();
-//		}
-//		mList.add(dbCommit);
-        try {
-            AndroidRepoCommitDAO.insert(dbCommit);
-        } catch (Exception e) {
-            System.err.println(dbCommit.getCommitId());
-            e.printStackTrace();
-        }
-//		if(mList.size()>1000){
-//			AndroidRepoCommitDAO.insertBatch(mList);
-//			mList.clear();
-//		}
-    }
-
-
-
-
     public static void main(String args[]) {
         JGitRepositoryCommand cmd = new JGitRepositoryCommand(
                 ProjectProperties.getInstance().getValue(PropertyKeys.ANDROID_REPO_PATH2) + RepoConstants.platform_frameworks_base_ + ".git");
 //		cmd.getCommitParentMappedFileList2("cd97c0e935d13bbd29dce0417093ec694c3ddd76");
 //		CommitCodeInfo cci = cmd.getCommitFileEditSummary("c7f502947b5b80baca084101fb7a0aaa74db9974", JGitCommand.JAVA_FILE);
-        cmd.walkRepoFromBackwardsToDB();
     }
 
 
