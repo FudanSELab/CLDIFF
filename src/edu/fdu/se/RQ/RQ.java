@@ -1,4 +1,4 @@
-package edu.fdu.se.main.astdiff.RQ;
+package edu.fdu.se.RQ;
 
 import edu.fdu.se.main.astdiff.DiffMinerTest;
 

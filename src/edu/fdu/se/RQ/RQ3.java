@@ -1,22 +1,16 @@
-package edu.fdu.se.main.astdiff.RQ;
+package edu.fdu.se.RQ;
 
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.Global.Global;
-import edu.fdu.se.astdiff.associating.Association;
 import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
 import edu.fdu.se.astdiff.associating.FileOutsideGenerator;
 import edu.fdu.se.astdiff.associating.TotalFileAssociations;
 import edu.fdu.se.astdiff.associating.similarity.TreeDistance;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
-import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
-import edu.fdu.se.astdiff.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.main.astdiff.DiffMinerTest;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.File;
-import java.util.Map.Entry;
 
 import java.util.*;
 /**
@@ -85,7 +79,7 @@ public class RQ3 extends RQ{
             if(changedFileEntry.containsKey("addedFiles")){
                 List<String> addedFile = changedFileEntry.get("addedFiles");
                 for (String file : addedFile) {
-                    if(RQ.isFilter(file)){
+                    if(isFilter(file)){
                         continue;
                     }
                     ja.put(file);

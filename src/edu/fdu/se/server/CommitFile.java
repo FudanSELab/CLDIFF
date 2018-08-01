@@ -1,4 +1,4 @@
-package edu.fdu.se.main.astdiff;
+package edu.fdu.se.server;
 
 /**
  * 用于生成

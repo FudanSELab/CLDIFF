@@ -1,6 +1,5 @@
-package edu.fdu.se.main.astdiff.RQ;
+package edu.fdu.se.RQ;
 
-import com.github.javaparser.printer.lexicalpreservation.changes.Change;
 import edu.fdu.se.astdiff.Global.Global;
 import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
 import edu.fdu.se.astdiff.associating.FileOutsideGenerator;
@@ -9,7 +8,6 @@ import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.astdiff.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
-import edu.fdu.se.main.astdiff.BaseDiffMiner;
 import edu.fdu.se.main.astdiff.DiffMinerTest;
 
 import java.util.ArrayList;
@@ -70,7 +68,7 @@ public class RQ2 extends RQ {
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if (RQ.isFilter(file)) {
+                    if (isFilter(file)) {
                         continue;
                     }
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);

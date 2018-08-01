@@ -1,8 +1,6 @@
 package edu.fdu.se.main.astdiff;
 
 import edu.fdu.se.astdiff.Global.Global;
-import edu.fdu.se.astdiff.associating.FileInsideAssociationGenerator;
-import edu.fdu.se.astdiff.associating.LayeredChangeEntityContainer;
 import edu.fdu.se.astdiff.generatingactions.GeneratingActionsData;
 import edu.fdu.se.astdiff.generatingactions.JavaParserTreeGenerator;
 import edu.fdu.se.astdiff.generatingactions.MyActionGenerator;
@@ -18,7 +16,6 @@ import edu.fdu.se.astdiff.preprocessingfile.data.PreprocessedData;
 import edu.fdu.se.astdiff.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-import org.eclipse.jdt.core.dom.NullLiteral;
 
 /**
  * Created by huangkaifeng on 2018/2/27.
@@ -65,9 +62,6 @@ public class BaseDiffMiner {
         changeEntityData.fileName = fileName;
 
     }
-
-
-
 
 
     private void runDiff(FilePairPreDiff preDiff,String fileName){

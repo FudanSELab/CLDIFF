@@ -1,7 +1,5 @@
-package edu.fdu.se.main.astdiff.RQ;
-import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
+package edu.fdu.se.RQ;
 
-import javax.swing.text.html.HTMLDocument;
 import java.io.*;
 import java.net.URL;
 import java.net.URLDecoder;

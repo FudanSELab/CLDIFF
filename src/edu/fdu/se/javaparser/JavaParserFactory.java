@@ -6,24 +6,18 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.Set;
 
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.diff.EditList;
-import org.eclipse.jgit.revwalk.RevCommit;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 
-import edu.fdu.se.fileutil.FileWriter;
-import edu.fdu.se.git.JGitCommand;
-import edu.fdu.se.git.commitcodeinfo.CommitCodeInfo;
 import edu.fdu.se.git.commitcodeinfo.FileChangeEditList;
 
 public class JavaParserFactory {

@@ -1,4 +1,4 @@
-package edu.fdu.se.main.astdiff.RQ;
+package edu.fdu.se.RQ;
 
 import edu.fdu.se.astdiff.Global.Global;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
@@ -84,7 +84,7 @@ public class RQ1 extends RQ{
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if (RQ.isFilter(file)) {
+                    if (isFilter(file)) {
                         continue;
                     }
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);

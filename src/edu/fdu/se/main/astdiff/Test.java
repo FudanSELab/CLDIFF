@@ -1,6 +1,5 @@
 package edu.fdu.se.main.astdiff;
 
-import edu.fdu.se.defaultdiffminer.DiffMinerGitHubAPI;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;

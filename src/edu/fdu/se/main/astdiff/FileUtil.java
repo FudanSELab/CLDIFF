@@ -1,6 +1,7 @@
 package edu.fdu.se.main.astdiff;
 
 import com.google.gson.Gson;
+import edu.fdu.se.server.CommitFile;
 import org.json.JSONObject;
 
 import java.io.*;

@@ -1,4 +1,4 @@
-package edu.fdu.se.defaultdiffminer;
+package edu.fdu.se.server;
 
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.astdiff.Global.Global;
@@ -9,9 +9,7 @@ import edu.fdu.se.astdiff.associating.similarity.TreeDistance;
 import edu.fdu.se.astdiff.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.astdiff.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.main.astdiff.BaseDiffMiner;
-import edu.fdu.se.main.astdiff.CommitFile;
 import edu.fdu.se.main.astdiff.Meta;
-import org.eclipse.jgit.internal.storage.file.GlobalAttributesNode;
 
 import java.util.*;
 

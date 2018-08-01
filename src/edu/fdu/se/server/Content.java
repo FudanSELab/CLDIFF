@@ -1,4 +1,4 @@
-package edu.fdu.se.main.astdiff;
+package edu.fdu.se.server;
 
 /**
  * 请求文件 diff link 的返回结果

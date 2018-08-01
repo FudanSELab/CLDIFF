@@ -1,5 +1,7 @@
 package edu.fdu.se.main.astdiff;
 
+import edu.fdu.se.server.CommitFile;
+
 import java.util.ArrayList;
 import java.util.List;
 
