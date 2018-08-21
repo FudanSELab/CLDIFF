@@ -1,6 +1,7 @@
 package edu.fdu.se.RQ;
 
-import edu.fdu.se.cldiff.DiffMinerTest;
+import edu.fdu.se.cldiff.CLDiffTest;
+import edu.fdu.se.git.JGitHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ abstract public class RQ {
 
     public JGitHelper jGitHelper;
 
-    public DiffMinerTest baseDiffMiner;
+    public CLDiffTest baseDiffMiner;
     public String outputDir;
 
     abstract public void handleCommits(Map<String, Map<String, List<String>>> mMap,String currCommitId);
@@ -21,19 +22,5 @@ abstract public class RQ {
 
     abstract public void handleCommit(Map<String, Map<String, List<String>>> mMap,String currCommitId);
 
-    public static boolean isFilter(String filePathName){
-        String name = filePathName.toLowerCase();
-        if(!name.endsWith(".java")){
-            return true;
-        }
-        if(name.contains("\\test\\")||name.contains("/test/")){
-            return true;
-        }
-        String[] data = filePathName.split("/");
-        String fileName = data[data.length-1];
-        if(filePathName.endsWith("Test.java")||fileName.startsWith("Test")||filePathName.endsWith("Tests.java")){
-            return true;
-        }
-        return false;
-    }
+
 }

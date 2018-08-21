@@ -2,7 +2,9 @@ package edu.fdu.se.RQ;
 
 import edu.fdu.se.base.Global.Global;
 import edu.fdu.se.base.preprocessingfile.data.FileOutputLog;
-import edu.fdu.se.cldiff.DiffMinerTest;
+import edu.fdu.se.cldiff.BaseCLDiff;
+import edu.fdu.se.cldiff.CLDiffTest;
+import edu.fdu.se.git.JGitHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -12,8 +14,6 @@ import java.util.Map;
  *
  */
 public class RQ1 extends RQ{
-
-
 
     public static void main(String args[]){
         RQ1 rq1 = new RQ1();
@@ -27,7 +27,7 @@ public class RQ1 extends RQ{
         String repo = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\Evaluation\\MPAndroidChart\\.git";
         outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ1";
         System.out.println("\n\n----------------------------"+repo);
-        baseDiffMiner = new DiffMinerTest();
+        baseDiffMiner = new CLDiffTest();
         String[] data = repo.split("\\\\");
         String projName = data[data.length-2];
         jGitHelper = new JGitHelper(repo);
@@ -47,7 +47,7 @@ public class RQ1 extends RQ{
         //d3455d0c9d57d522c31b5c25af83e8f2b8df12b6
         String commitID = "9f2c435756483bdfc59fecf4837e54eb9bf3d755";
         jGitHelper = new JGitHelper(repo);
-        baseDiffMiner = new DiffMinerTest();
+        baseDiffMiner = new CLDiffTest();
         baseDiffMiner.mFileOutputLog = new FileOutputLog(outputDir,"elasticsearch");
         jGitHelper.analyzeOneCommit(this,commitID);
     }
@@ -59,7 +59,7 @@ public class RQ1 extends RQ{
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if (this.isFilter(file)) {
+                    if (BaseCLDiff.isFilter(file)) {
                         continue;
                     }
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);
@@ -84,7 +84,7 @@ public class RQ1 extends RQ{
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if (isFilter(file)) {
+                    if (BaseCLDiff.isFilter(file)) {
                         continue;
                     }
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);
@@ -96,7 +96,7 @@ public class RQ1 extends RQ{
                     Global.fileName = fileName;
 //                    if(fileName.equals("TopDocsCollectorContext.java"))
                     baseDiffMiner.doo(fileName,prevFile,currFile,this.outputDir+"/"+dirName+"/"+fileName);
-//                    this.baseDiffMiner.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
+//                    this.baseCLDiff.mFileOutputLog.writeSourceFile(prevFile,currFile,fileName);
                 }
             }
         }

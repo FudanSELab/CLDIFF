@@ -1,4 +1,4 @@
-package edu.fdu.se.RQ;
+package edu.fdu.se.git;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import edu.fdu.se.RQ.RQ;
+import edu.fdu.se.RQ.RQ2;
+import edu.fdu.se.cldiff.BaseCLDiff;
 import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -26,6 +29,7 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 
 /**
  * Created by huangkaifeng on 2018/4/6.
+ *
  */
 public class JGitHelper extends JGitCommand {
 
@@ -179,7 +183,7 @@ public class JGitHelper extends JGitCommand {
                     switch (entry.getChangeType()) {
                         case MODIFY:
                             String mOldPath = entry.getOldPath();
-                            if (RQ.isFilter(mOldPath)) {
+                            if (BaseCLDiff.isFilter(mOldPath)) {
                                 continue;
                             }else{
                                 //at least one file is changed

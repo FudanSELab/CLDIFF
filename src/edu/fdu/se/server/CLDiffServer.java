@@ -7,9 +7,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import edu.fdu.se.base.Global.Global;
-import edu.fdu.se.cldiff.DiffMinerGitHubAPI;
+import edu.fdu.se.cldiff.CLDiffOnlineAPI;
 import edu.fdu.se.fileutil.FileUtil;
-import edu.fdu.se.cldiff.Meta;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -35,7 +34,7 @@ public class CLDiffServer {
 
         //test
 //        Meta meta = readFromMeta(global_Path+"spring-framework/3c1adf7f6af0dff9bda74f40dabe8cf428a62003/meta");
-//        DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path,meta);
+//        CLDiffOnlineAPI diff = new CLDiffOnlineAPI(global_Path,meta);
 //        diff.generateDiffMinerOutput();
     }
 
@@ -111,7 +110,7 @@ public class CLDiffServer {
                 curr_file_path = file.getCurr_file_path();
                 currFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + curr_file_path);
                 prevFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + prev_file_path);
-                if(!DiffMinerGitHubAPI.isFilter(prev_file_path)){
+                if(!CLDiffOnlineAPI.isFilter(prev_file_path)){
                     List<CommitFile> commitFileList = meta.getFiles();
                     String diffPath = "";
                     for (CommitFile commitFile : commitFileList) {
@@ -227,7 +226,7 @@ public class CLDiffServer {
             File folder = FileUtil.createFolder(global_Path + meta.getProject_name() + "/" + meta.getCommit_hash());
             //代码文件
             FileUtil.convertCodeToFile(data, folder, meta);
-            DiffMinerGitHubAPI diff = new DiffMinerGitHubAPI(global_Path, meta);
+            CLDiffOnlineAPI diff = new CLDiffOnlineAPI(global_Path, meta);
             diff.generateDiffMinerOutput();
             List<String> filePathList = Global.outputFilePathList;
             //diff

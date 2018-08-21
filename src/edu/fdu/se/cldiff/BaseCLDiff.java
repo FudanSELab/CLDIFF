@@ -21,8 +21,7 @@ import edu.fdu.se.config.PropertyKeys;
  * Created by huangkaifeng on 2018/2/27.
  *
  */
-public class BaseDiffMiner {
-
+public class BaseCLDiff {
 
     public ChangeEntityData changeEntityData;
     public FileOutputLog mFileOutputLog;
@@ -39,6 +38,22 @@ public class BaseDiffMiner {
             return;
         }
         runDiff(preDiff,fileName);
+    }
+
+    public static boolean isFilter(String filePathName){
+        String name = filePathName.toLowerCase();
+        if(!name.endsWith(".java")){
+            return true;
+        }
+        if(name.contains("\\test\\")||name.contains("/test/")){
+            return true;
+        }
+        String[] data = filePathName.split("/");
+        String fileName = data[data.length-1];
+        if(filePathName.endsWith("Test.java")||fileName.startsWith("Test")||filePathName.endsWith("Tests.java")){
+            return true;
+        }
+        return false;
     }
 
 
@@ -81,7 +96,7 @@ public class BaseDiffMiner {
         MiningActionData mad = new MiningActionData(preData,actionsData,treeGenerator);
         ActionAggregationGenerator aag = new ActionAggregationGenerator();
         aag.doCluster(mad);
-//修正
+//correcting
         ChangeEntityData ced = new ChangeEntityData(mad);
         ChangeEntityPreprocess cep = new ChangeEntityPreprocess(ced);
         cep.preprocessChangeEntity();//1.init 2.merge 3.set 4.sub

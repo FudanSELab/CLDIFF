@@ -1,7 +1,7 @@
 package edu.fdu.se.fileutil;
 
 import com.google.gson.Gson;
-import edu.fdu.se.cldiff.Meta;
+import edu.fdu.se.server.Meta;
 import edu.fdu.se.server.CommitFile;
 import org.json.JSONObject;
 

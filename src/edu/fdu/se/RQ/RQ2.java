@@ -8,7 +8,9 @@ import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.base.preprocessingfile.data.FileOutputLog;
-import edu.fdu.se.cldiff.DiffMinerTest;
+import edu.fdu.se.cldiff.BaseCLDiff;
+import edu.fdu.se.cldiff.CLDiffTest;
+import edu.fdu.se.git.JGitHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ public class RQ2 extends RQ {
 
     private String rq2ProjPath;
     private String argType;
+
     public static void main(String args[]){
         Global.RQ2 = 1;
         if(!(args[0]!=null && args[1]!=null)){
@@ -40,7 +43,7 @@ public class RQ2 extends RQ {
         if("gt".equals(args[0]) || "df".equals(args[0])){
             rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ2";
             rq.rq2ProjPath = projPath;
-            rq.baseDiffMiner = new DiffMinerTest();
+            rq.baseDiffMiner = new CLDiffTest();
             rq.jGitHelper = new JGitHelper(rq.rq2ProjPath);
             rq.baseDiffMiner.mFileOutputLog = new FileOutputLog(rq.outputDir,projName);
             rq.jGitHelper.walkRepoFromBackwards(rq);
@@ -61,14 +64,14 @@ public class RQ2 extends RQ {
     public void handleCommits(Map<String, Map<String, List<String>>> changedFiles,String currCommitId){
         System.out.println("----commit id:"+currCommitId);
         long time = 0l;
-//        this.baseDiffMiner.mFileOutputLog.setCommitId(currCommitId);
+//        this.baseCLDiff.mFileOutputLog.setCommitId(currCommitId);
         for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
             String parentCommitId = entry.getKey();
             Map<String, List<String>> changedFileEntry = entry.getValue();
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if (isFilter(file)) {
+                    if (BaseCLDiff.isFilter(file)) {
                         continue;
                     }
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);

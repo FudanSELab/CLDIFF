@@ -8,7 +8,9 @@ import edu.fdu.se.base.associating.TotalFileAssociations;
 import edu.fdu.se.base.associating.similarity.TreeDistance;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.preprocessingfile.data.FileOutputLog;
-import edu.fdu.se.cldiff.DiffMinerTest;
+import edu.fdu.se.cldiff.BaseCLDiff;
+import edu.fdu.se.cldiff.CLDiffTest;
+import edu.fdu.se.git.JGitHelper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -40,6 +42,8 @@ public class RQ3 extends RQ{
     private String commitId;
 
     private List<FilePairData> filePairDatas = new ArrayList<>();
+
+
     public static void main(String args[]){
         RQ3 rq = new RQ3();
         String projName = "zxing";
@@ -47,7 +51,7 @@ public class RQ3 extends RQ{
         rq.commitId = "379e18daf44c5cb9d3a5387a35a997fa1f08b6ab";
         rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ3\\";
         rq.jGitHelper = new JGitHelper(rq.repoPath);
-        rq.baseDiffMiner = new DiffMinerTest();
+        rq.baseDiffMiner = new CLDiffTest();
         rq.baseDiffMiner.mFileOutputLog = new FileOutputLog(rq.outputDir,projName);
         rq.jGitHelper.analyzeOneCommit(rq,rq.commitId);
         rq.generateDiffMinerOutput();
@@ -63,9 +67,6 @@ public class RQ3 extends RQ{
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if(this.isFilter(file)&&!file.endsWith("AbstractHttpServer.java")){
-                        continue;
-                    }
                     ja.put(file);
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);
                     byte[] currFile = jGitHelper.extract(file, currCommitId);
@@ -79,7 +80,7 @@ public class RQ3 extends RQ{
             if(changedFileEntry.containsKey("addedFiles")){
                 List<String> addedFile = changedFileEntry.get("addedFiles");
                 for (String file : addedFile) {
-                    if(isFilter(file)){
+                    if(BaseCLDiff.isFilter(file)){
                         continue;
                     }
                     ja.put(file);

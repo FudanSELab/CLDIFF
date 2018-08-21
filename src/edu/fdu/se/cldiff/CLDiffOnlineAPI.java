@@ -8,6 +8,7 @@ import edu.fdu.se.base.associating.TotalFileAssociations;
 import edu.fdu.se.base.associating.similarity.TreeDistance;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.preprocessingfile.data.FileOutputLog;
+import edu.fdu.se.server.Meta;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.FilePairData;
 
@@ -18,10 +19,10 @@ import java.util.*;
  *
  *
  */
-public class DiffMinerGitHubAPI {
+public class CLDiffOnlineAPI {
 
     private Map<String,ChangeEntityData> fileChangeEntityData = new HashMap<>();
-    public BaseDiffMiner baseDiffMiner;
+    public BaseCLDiff baseCLDiff;
     public String outputDir;
     private String commitId;
     private List<FilePairData> filePairDatas;
@@ -30,34 +31,20 @@ public class DiffMinerGitHubAPI {
      * output path +"proj_name" + "commit_id"
      * @param path
      */
-    public DiffMinerGitHubAPI(String path,Meta meta){
+    public CLDiffOnlineAPI(String path, Meta meta){
         Global.outputFilePathList = new ArrayList<>();
         filePairDatas = new ArrayList<>();
-        baseDiffMiner = new BaseDiffMiner();
+        baseCLDiff = new BaseCLDiff();
         commitId = meta.getCommit_hash();
         String projName = meta.getProject_name();
-        baseDiffMiner.mFileOutputLog = new FileOutputLog(path, projName);
+        baseCLDiff.mFileOutputLog = new FileOutputLog(path, projName);
         List<String> parents = meta.getParents();
-        baseDiffMiner.mFileOutputLog.setCommitId(commitId,parents);
+        baseCLDiff.mFileOutputLog.setCommitId(commitId,parents);
         this.outputDir = path;
         initDataFromJson(meta);
     }
 
-    public static boolean isFilter(String filePathName){
-        String name = filePathName.toLowerCase();
-        if(!name.endsWith(".java")){
-            return true;
-        }
-        if(name.contains("\\test\\")||name.contains("/test/")){
-            return true;
-        }
-        String[] data = filePathName.split("/");
-        String fileName = data[data.length-1];
-        if(filePathName.endsWith("Test.java")||fileName.startsWith("Test")||filePathName.endsWith("Tests.java")){
-            return true;
-        }
-        return false;
-    }
+
 
     public void initDataFromJson(Meta meta) {
         List<CommitFile> commitFiles = meta.getFiles();
@@ -66,12 +53,12 @@ public class DiffMinerGitHubAPI {
             int index = fileFullName.lastIndexOf("/");
             String fileName = fileFullName.substring(index+ 1, fileFullName.length());
             String prevFilePath = file.getPrev_file_path();
-            if(DiffMinerGitHubAPI.isFilter(prevFilePath)){
+            if(BaseCLDiff.isFilter(prevFilePath)){
                 continue;
             }
             String currFilePath = file.getCurr_file_path();
             String parentCommit = file.getParent_commit();
-            String basePath = baseDiffMiner.mFileOutputLog.metaLinkPath;
+            String basePath = baseCLDiff.mFileOutputLog.metaLinkPath;
             FilePairData fp = new FilePairData(null,null,basePath +"/"+prevFilePath,basePath+"/"+currFilePath,fileName);
             fp.parentCommit = parentCommit;
             filePairDatas.add(fp);
@@ -80,7 +67,7 @@ public class DiffMinerGitHubAPI {
 
 
     public void generateDiffMinerOutput(){
-        String absolutePath = this.baseDiffMiner.mFileOutputLog.metaLinkPath;
+        String absolutePath = this.baseCLDiff.mFileOutputLog.metaLinkPath;
         Global.changeEntityFileNameMap = new HashMap<>();
         for(FilePairData fp:filePairDatas){
             Global.parentCommit = fp.parentCommit;
@@ -88,19 +75,19 @@ public class DiffMinerGitHubAPI {
             Global.fileName = fp.fileName;
             if(fp.prev==null && fp.curr==null){
                 if(fp.prevPath==null){
-//                    this.baseDiffMiner.dooNewFile(fp.currPath,absolutePath);
+//                    this.baseCLDiff.dooNewFile(fp.currPath,absolutePath);
                 }else {
-                    this.baseDiffMiner.doo(fp.prevPath, fp.currPath, absolutePath);
+                    this.baseCLDiff.doo(fp.prevPath, fp.currPath, absolutePath);
                 }
             }else{
                 if(fp.prev==null){
-                    this.baseDiffMiner.dooNewFile(fp.fileName,fp.curr,absolutePath);
+                    this.baseCLDiff.dooNewFile(fp.fileName,fp.curr,absolutePath);
                 }else {
-                    this.baseDiffMiner.doo(fp.fileName, fp.prev, fp.curr,absolutePath);
+                    this.baseCLDiff.doo(fp.fileName, fp.prev, fp.curr,absolutePath);
                 }
             }
 
-            this.fileChangeEntityData.put(fp.parentCommit +"@@@"+ this.baseDiffMiner.changeEntityData.fileName,this.baseDiffMiner.changeEntityData);
+            this.fileChangeEntityData.put(fp.parentCommit +"@@@"+ this.baseCLDiff.changeEntityData.fileName,this.baseCLDiff.changeEntityData);
         }
         List<String> fileNames = new ArrayList<>(this.fileChangeEntityData.keySet());
         TotalFileAssociations totalFileAssociations = new TotalFileAssociations() ;
@@ -123,7 +110,7 @@ public class DiffMinerGitHubAPI {
             }
         }
         new FileOutsideGenerator().checkDuplicateSimilarity(this.fileChangeEntityData);
-        baseDiffMiner.mFileOutputLog.writeLinkJson(totalFileAssociations.toAssoJSonString());
+        baseCLDiff.mFileOutputLog.writeLinkJson(totalFileAssociations.toAssoJSonString());
         System.out.println(totalFileAssociations.toConsoleString());
         fileChangeEntityData.clear();
     }
