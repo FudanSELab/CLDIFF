@@ -14,8 +14,6 @@ import edu.fdu.se.config.PropertyKeys;
  *
  */
 public class DiffMinerTest extends BaseDiffMiner {
-
-
     /**
      * 使用gt的流程
      * test 单个文件
@@ -91,8 +89,7 @@ public class DiffMinerTest extends BaseDiffMiner {
         DiffMinerTest i = new DiffMinerTest();
 //        i.runGumTree(null,null);
 //        i.runBatchTest();
-
-        i.runSingleFilePair();
+//        i.runSingleFilePair();
     }
 
 }

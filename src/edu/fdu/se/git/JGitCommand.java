@@ -39,7 +39,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
-import edu.fdu.se.fileutil.FileUtil;
+import edu.fdu.se.fileutil.FileRWUtil;
 
 public class JGitCommand {
 
@@ -319,8 +319,8 @@ public class JGitCommand {
 				TreeWalk treeWalk = TreeWalk.forPath(repository, fileName, tree);
 				ObjectId id = treeWalk.getObjectId(0);
 
-				InputStream is = FileUtil.open(id, repository);
-				byte[] res = FileUtil.toByteArray(is);
+				InputStream is = FileRWUtil.open(id, repository);
+				byte[] res = FileRWUtil.toByteArray(is);
 				return res;
 			} else {
 				System.err.println("Cannot found file(" + fileName + ") in revision(" + revisionId + "): " + revWalk);
@@ -371,7 +371,7 @@ public class JGitCommand {
 				TreeWalk treeWalk = TreeWalk.forPath(repository, fileName, tree);
 				ObjectId id = treeWalk.getObjectId(0);
 
-				InputStream is = FileUtil.open(id, repository);
+				InputStream is = FileRWUtil.open(id, repository);
 				return is;
 			} else {
 				System.err.println("Cannot found file(" + fileName + ") in revision(" + revisionId + "): " + revWalk);

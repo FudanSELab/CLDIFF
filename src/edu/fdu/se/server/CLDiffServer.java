@@ -8,7 +8,7 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import edu.fdu.se.base.Global.Global;
 import edu.fdu.se.cldiff.DiffMinerGitHubAPI;
-import edu.fdu.se.cldiff.FileUtil;
+import edu.fdu.se.fileutil.FileUtil;
 import edu.fdu.se.cldiff.Meta;
 import org.json.JSONObject;
 
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MyHttpServer {
+public class CLDiffServer {
     static final String DIVIDER = "--xxx---fdse---xxx";
     static String global_Path;
 
