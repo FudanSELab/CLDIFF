@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.gumtreediff.actions.model.*;
-import edu.fdu.se.base.Global.Global;
+import edu.fdu.se.base.common.Global;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 

@@ -1,6 +1,6 @@
 package edu.fdu.se.base.preprocessingfile.data;
 
-import edu.fdu.se.base.Global.Global;
+import edu.fdu.se.base.common.Global;
 import edu.fdu.se.fileutil.FileWriter;
 
 import java.io.File;

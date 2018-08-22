@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import edu.fdu.se.RQ.RQ;
-import edu.fdu.se.RQ.RQ2;
-import edu.fdu.se.cldiff.BaseCLDiff;
+import edu.fdu.se.cldiff.CLDiffCore;
 import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -24,7 +22,6 @@ import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import edu.fdu.se.git.JGitCommand;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 
 /**
@@ -40,13 +37,11 @@ public class JGitHelper extends JGitCommand {
     /**
      * 输出output即可
      */
-    public void walkRepoFromBackwards(RQ rq) {
+    public void walkRepoFromBackwards(IHandleCommit iHandleCommit) {
         try {
-            //wang 4/11
             int commitNum = 0;
             Queue<RevCommit> commitQueue = new LinkedList<>();
             Map<String, Boolean> isTraversed = new HashMap<>();
-
             List<Ref> mList = this.git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
             for (Ref item : mList) {
                 RevCommit commit = revWalk.parseCommit(item.getObjectId());
@@ -58,7 +53,7 @@ public class JGitHelper extends JGitCommand {
                         continue;
                     }
                     Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(queueCommitItem.getName());
-                    rq.handleCommits(changedFiles, queueCommitItem.getName());
+                    iHandleCommit.handleCommit(changedFiles, queueCommitItem.getName());
                     commitNum++;
                     isTraversed.put(queueCommitItem.getName(), true);
                     for (RevCommit item2 : parentCommits) {
@@ -67,8 +62,6 @@ public class JGitHelper extends JGitCommand {
                     }
                 }
             }
-//            System.out.println("Commit sum:"+commitNum);
-
         } catch (MissingObjectException e) {
             e.printStackTrace();
         } catch (IncorrectObjectTypeException e) {
@@ -85,7 +78,7 @@ public class JGitHelper extends JGitCommand {
      *
      * @param commitString
      */
-    public void analyzeOneCommit(RQ rq, String commitString) {
+    public void analyzeOneCommit(IHandleCommit iHandleCommit, String commitString) {
         try {
 
             ObjectId commitId = ObjectId.fromString(commitString);
@@ -94,7 +87,7 @@ public class JGitHelper extends JGitCommand {
                 return;
             }
             Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(commit.getName());
-            rq.handleCommit(changedFiles, commitString);
+            iHandleCommit.handleCommit(changedFiles, commitString);
         } catch (MissingObjectException e) {
             e.printStackTrace();
         } catch (IncorrectObjectTypeException e) {
@@ -108,7 +101,7 @@ public class JGitHelper extends JGitCommand {
     /**
      * 输出output即可
      */
-    public void walkRepoFromBackwardsCountLineNumber(RQ2 rq) {
+    public void walkRepoFromBackwardsCountLineNumber(IHandleCommit iHandleCommit) {
         try {
             int commitNum = 0;
             Queue<RevCommit> commitQueue = new LinkedList<>();
@@ -183,7 +176,7 @@ public class JGitHelper extends JGitCommand {
                     switch (entry.getChangeType()) {
                         case MODIFY:
                             String mOldPath = entry.getOldPath();
-                            if (BaseCLDiff.isFilter(mOldPath)) {
+                            if (CLDiffCore.isFilter(mOldPath)) {
                                 continue;
                             }else{
                                 //at least one file is changed

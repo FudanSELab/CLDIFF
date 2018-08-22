@@ -1,6 +1,10 @@
 package edu.fdu.se.cldiff;
 
-import edu.fdu.se.base.Global.Global;
+import edu.fdu.se.base.associating.FileInsideAssociationGenerator;
+import edu.fdu.se.base.associating.FileOutsideGenerator;
+import edu.fdu.se.base.associating.TotalFileAssociations;
+import edu.fdu.se.base.common.FilePairData;
+import edu.fdu.se.base.common.Global;
 import edu.fdu.se.base.generatingactions.GeneratingActionsData;
 import edu.fdu.se.base.generatingactions.JavaParserTreeGenerator;
 import edu.fdu.se.base.generatingactions.MyActionGenerator;
@@ -17,11 +21,15 @@ import edu.fdu.se.base.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Created by huangkaifeng on 2018/2/27.
  *
  */
-public class BaseCLDiff {
+public class CLDiffCore {
 
     public ChangeEntityData changeEntityData;
     public FileOutputLog mFileOutputLog;

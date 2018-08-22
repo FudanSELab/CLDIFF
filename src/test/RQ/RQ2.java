@@ -1,6 +1,7 @@
-package edu.fdu.se.RQ;
+package RQ;
 
-import edu.fdu.se.base.Global.Global;
+import edu.fdu.se.base.common.FilePairData;
+import edu.fdu.se.base.common.Global;
 import edu.fdu.se.base.associating.FileInsideAssociationGenerator;
 import edu.fdu.se.base.associating.FileOutsideGenerator;
 import edu.fdu.se.base.associating.TotalFileAssociations;
@@ -8,8 +9,9 @@ import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.base.preprocessingfile.data.FileOutputLog;
-import edu.fdu.se.cldiff.BaseCLDiff;
+import edu.fdu.se.cldiff.CLDiffCore;
 import edu.fdu.se.cldiff.CLDiffTest;
+import edu.fdu.se.git.IHandleCommit;
 import edu.fdu.se.git.JGitHelper;
 
 import java.util.ArrayList;
@@ -21,36 +23,32 @@ import java.util.Map;
  * Created by huangkaifeng on 2018/4/12.
  *
  */
-public class RQ2 extends RQ {
+public class RQ2 implements IHandleCommit{
 
-    private String rq2ProjPath;
+    private String projPath;
     private String argType;
+    private CLDiffTest cldiff = new CLDiffTest();
+    public JGitHelper jGitHelper;
+
 
     public static void main(String args[]){
-        Global.RQ2 = 1;
         if(!(args[0]!=null && args[1]!=null)){
             return;
         }
+        Global.RQ2 = 1;
         RQ2 rq = new RQ2();
-        String projPath = args[1];
-        System.out.println("----"+projPath);
-        System.out.println("----"+args[0]);
-        long startTime = System.nanoTime();
         rq.argType = args[0];
+        rq.projPath = args[1];
         rq.totalNumber = 0;
-        String[] data = projPath.split("\\\\");
+        long startTime = System.nanoTime();
+        String[] data = rq.projPath.split("\\\\");
         String projName = data[data.length-2];
         if("gt".equals(args[0]) || "df".equals(args[0])){
-            rq.outputDir = "D:\\Workspace\\DiffMiner\\November-GT-Extend\\11-8-GumTree\\RQ2";
-            rq.rq2ProjPath = projPath;
-            rq.baseDiffMiner = new CLDiffTest();
-            rq.jGitHelper = new JGitHelper(rq.rq2ProjPath);
-            rq.baseDiffMiner.mFileOutputLog = new FileOutputLog(rq.outputDir,projName);
+            String outputDir = "C:\\Users\\huangkaifeng\\Desktop\\output\\";
+            rq.cldiff = new CLDiffTest();
+            rq.jGitHelper = new JGitHelper(rq.projPath);
+            rq.cldiff.mFileOutputLog = new FileOutputLog(outputDir,projName);
             rq.jGitHelper.walkRepoFromBackwards(rq);
-
-        }else if("lc".equals(args[0])){
-            rq.jGitHelper = new JGitHelper(projPath);
-            rq.jGitHelper.walkRepoFromBackwardsCountLineNumber(rq);
         }
         long endTime = System.nanoTime();
         System.out.println("----total number:" + (endTime-startTime));
@@ -61,17 +59,17 @@ public class RQ2 extends RQ {
 
     private long totalNumber;
 
-    public void handleCommits(Map<String, Map<String, List<String>>> changedFiles,String currCommitId){
+    public void handleCommit(Map<String, Map<String, List<String>>> changedFiles,String currCommitId){
         System.out.println("----commit id:"+currCommitId);
         long time = 0l;
-//        this.baseCLDiff.mFileOutputLog.setCommitId(currCommitId);
+//        this.CLDiffCore.mFileOutputLog.setCommitId(currCommitId);
         for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
             String parentCommitId = entry.getKey();
             Map<String, List<String>> changedFileEntry = entry.getValue();
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
                 for (String file : modifiedFile) {
-                    if (BaseCLDiff.isFilter(file)) {
+                    if (CLDiffCore.isFilter(file)) {
                         continue;
                     }
                     byte[] prevFile = jGitHelper.extract(file, parentCommitId);
@@ -81,7 +79,7 @@ public class RQ2 extends RQ {
                     int num=0;
                     if(this.argType.equals("gt")){
                         long start = System.nanoTime();
-                        num = baseDiffMiner.runGumTree(new String(prevFile), new String(currFile));
+                        num = cldiff.runGumTree(new String(prevFile), new String(currFile));
                         totalNumber += num;
                         long end = System.nanoTime();
                         System.out.println("----"+fileName+" "+num);
@@ -104,20 +102,6 @@ public class RQ2 extends RQ {
             System.out.println("----one commit time:" + (end-start));
         }
     }
-    class FilePairData{
-        public FilePairData(byte[] prevv,byte[] currr,String prevPathh,String currPathh,String fileNamee) {
-            prev = prevv;
-            curr = currr;
-            prevPath = prevPathh;
-            currPath = currPathh;
-            fileName = fileNamee;
-        }
-        private byte[] prev;
-        private byte[] curr;
-        private String prevPath;
-        private String currPath;
-        private String fileName;
-    }
 
     private List<FilePairData> filePairDatas = new ArrayList<>();
     private Map<String,ChangeEntityData> fileChangeEntityData = new HashMap<>();
@@ -125,17 +109,16 @@ public class RQ2 extends RQ {
 
     public void generateDiffMinerOutput(){
         for(FilePairData fp:filePairDatas){
-//            System.out.println(fp.fileName);
-            Global.fileName = fp.fileName;
-            if(fp.prev==null){
-                this.baseDiffMiner.dooNewFile(fp.fileName,fp.curr,null);
+            Global.fileName = fp.getFileName();
+            if(fp.getPrev()==null){
+                this.cldiff.dooNewFile(fp.getFileName(),fp.getCurr(),null);
             }else {
-                this.baseDiffMiner.doo(fp.fileName, fp.prev, fp.curr, null);
+                this.cldiff.doo(fp.getFileName(), fp.getPrev(), fp.getCurr(), null);
             }
-            this.fileChangeEntityData.put(this.baseDiffMiner.changeEntityData.fileName,this.baseDiffMiner.changeEntityData);
-            int num  = changeEntitySize(this.baseDiffMiner.changeEntityData.mad.getChangeEntityList());
+            this.fileChangeEntityData.put(this.cldiff.changeEntityData.fileName,this.cldiff.changeEntityData);
+            int num  = changeEntitySize(this.cldiff.changeEntityData.mad.getChangeEntityList());
             totalNumber+=num;
-            System.out.println("----"+fp.fileName+" "+num);
+            System.out.println("----"+fp.getFileName()+" "+num);
         }
         long start = System.nanoTime();
         List<String> fileNames = new ArrayList<>(this.fileChangeEntityData.keySet());
@@ -147,6 +130,7 @@ public class RQ2 extends RQ {
             associationGenerator.generateFile();
             totalFileAssociations.addEntry(fileNameA,cedA.mAssociations);
         }
+
         for(int i =0;i<fileNames.size();i++){
             String fileNameA = fileNames.get(i);
             ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
@@ -198,7 +182,4 @@ public class RQ2 extends RQ {
         return cnt;
     }
 
-    public void handleCommit(Map<String, Map<String, List<String>>> mMap,String currCommitId){
-
-    }
 }

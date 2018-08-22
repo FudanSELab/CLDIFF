@@ -3,7 +3,7 @@ package edu.fdu.se.base.miningactions;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
-import edu.fdu.se.base.Global.Global;
+import edu.fdu.se.base.common.Global;
 import edu.fdu.se.base.miningactions.Body.*;
 import edu.fdu.se.base.miningactions.bean.MiningActionData;
 import edu.fdu.se.base.miningactions.statement.*;

@@ -12,15 +12,15 @@ import edu.fdu.se.config.PropertyKeys;
 /**
  * Created by huangkaifeng on 2018/2/27.
  */
-public class CLDiffTest extends BaseCLDiff {
+public class CLDiffTest extends CLDiffCore {
 
 
     public int runGumTree(String prevContent, String currContent) {
 //        String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
 //        String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
         GumTreeDiffParser gt = new GumTreeDiffParser(prevContent, currContent);
-//        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", his.getPrettyOldTreeString());
-//        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", his.getPrettyNewTreeString());
+//        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/srcTree.txt", gt.getPrettyOldTreeString());
+//        FileWriter.writeInAll(ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_OUTPUT_DIR) + "/dstTree.txt", gt.getPrettyNewTreeString());
         MyActionGenerator gen = new MyActionGenerator(gt.src, gt.dst, gt.mapping);
         GeneratingActionsData data = gen.generate();
 //        System.out.println("size: "+data.getAllActions().size());

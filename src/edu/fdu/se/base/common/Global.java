@@ -1,4 +1,4 @@
-package edu.fdu.se.base.Global;
+package edu.fdu.se.base.common;
 
 import java.util.List;
 import java.util.Map;
