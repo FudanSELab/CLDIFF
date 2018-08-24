@@ -26,6 +26,11 @@ public class Meta {
     private List<String> parents;
     private List<CommitFile> files;
     private String linkPath;
+    private String outputDir;
+
+    /**
+     * modified / added / removed
+     */
     private List<String> actions;
 
     public List<String> getActions() {
@@ -64,6 +69,7 @@ public class Meta {
     public void setFiles(List<CommitFile> files) {
         this.files = files;
     }
+
 
     public String getProject_name() {
         return project_name;
@@ -127,5 +133,20 @@ public class Meta {
 
     public void setParents(List<String> parents) {
         this.parents = parents;
+    }
+
+    public void addParentCommit(String commitId){
+        if(this.parents == null){
+            this.parents = new ArrayList<>();
+        }
+        this.parents.add(commitId);
+    }
+
+    public String getOutputDir() {
+        return outputDir;
+    }
+
+    public void setOutputDir(String outputDir) {
+        this.outputDir = outputDir;
     }
 }

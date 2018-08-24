@@ -22,26 +22,39 @@ import java.util.*;
 public class CLDiffAPI {
 
     private Map<String,ChangeEntityData> fileChangeEntityData = new HashMap<>();
-    public CLDiffCore CLDiffCore;
+    public CLDiffCore clDiffCore;
     public String outputDir;
     private String commitId;
     private List<FilePairData> filePairDatas;
-    public Meta meta;
+//    public Meta meta;
 
     /**
      * output path +"proj_name" + "commit_id"
-     * @param path
+     * @param outputDir
      */
-    public CLDiffAPI(String path, Meta meta){
+    public CLDiffAPI(String outputDir, Meta meta){
         Global.outputFilePathList = new ArrayList<>();
         filePairDatas = new ArrayList<>();
-        CLDiffCore = new CLDiffCore();
+        clDiffCore = new CLDiffCore();
         commitId = meta.getCommit_hash();
         String projName = meta.getProject_name();
-        CLDiffCore.mFileOutputLog = new FileOutputLog(path, projName);
+        clDiffCore.mFileOutputLog = new FileOutputLog(outputDir, projName);
         List<String> parents = meta.getParents();
-        CLDiffCore.mFileOutputLog.setCommitId(commitId,parents);
-        this.outputDir = path;
+        clDiffCore.mFileOutputLog.setCommitId(commitId,parents);
+        this.outputDir = outputDir;
+        initDataFromJson(meta);
+    }
+
+    public CLDiffAPI(Meta meta){
+        Global.outputFilePathList = new ArrayList<>();
+        filePairDatas = new ArrayList<>();
+        clDiffCore = new CLDiffCore();
+        commitId = meta.getCommit_hash();
+        String projName = meta.getProject_name();
+        clDiffCore.mFileOutputLog = new FileOutputLog(meta.getOutputDir(), projName);
+        List<String> parents = meta.getParents();
+        clDiffCore.mFileOutputLog.setCommitId(commitId,parents);
+        this.outputDir = meta.getOutputDir();
         initDataFromJson(meta);
     }
 
@@ -59,7 +72,7 @@ public class CLDiffAPI {
             }
             String currFilePath = file.getCurr_file_path();
             String parentCommit = file.getParent_commit();
-            String basePath = CLDiffCore.mFileOutputLog.metaLinkPath;
+            String basePath = clDiffCore.mFileOutputLog.metaLinkPath;
             FilePairData fp = new FilePairData(null,null,basePath +"/"+prevFilePath,basePath+"/"+currFilePath,fileName);
             fp.setParentCommit(parentCommit);
             filePairDatas.add(fp);
@@ -68,7 +81,7 @@ public class CLDiffAPI {
 
 
     public void generateDiffMinerOutput(){
-        String absolutePath = this.CLDiffCore.mFileOutputLog.metaLinkPath;
+        String absolutePath = this.clDiffCore.mFileOutputLog.metaLinkPath;
         Global.changeEntityFileNameMap = new HashMap<>();
         for(FilePairData fp:filePairDatas){
             Global.parentCommit = fp.getParentCommit();
@@ -76,19 +89,19 @@ public class CLDiffAPI {
             Global.fileName = fp.getFileName();
             if(fp.getPrev()==null && fp.getCurr()==null){
                 if(fp.getPrevPath()==null){
-//                    this.CLDiffCore.dooNewFile(fp.currPath,absolutePath);
+//                    this.clDiffCore.dooNewFile(fp.currPath,absolutePath);
                 }else {
-                    this.CLDiffCore.doo(fp.getPrevPath(), fp.getCurrPath(), absolutePath);
+                    this.clDiffCore.doo(fp.getPrevPath(), fp.getCurrPath(), absolutePath);
                 }
             }else{
                 if(fp.getPrev()==null){
-                    this.CLDiffCore.dooNewFile(fp.getFileName(),fp.getCurr(),absolutePath);
+                    this.clDiffCore.dooNewFile(fp.getFileName(),fp.getCurr(),absolutePath);
                 }else {
-                    this.CLDiffCore.doo(fp.getFileName(), fp.getPrev(), fp.getCurr(),absolutePath);
+                    this.clDiffCore.doo(fp.getFileName(), fp.getPrev(), fp.getCurr(),absolutePath);
                 }
             }
 
-            this.fileChangeEntityData.put(fp.getParentCommit() +"@@@"+ this.CLDiffCore.changeEntityData.fileName,this.CLDiffCore.changeEntityData);
+            this.fileChangeEntityData.put(fp.getParentCommit() +"@@@"+ this.clDiffCore.changeEntityData.fileName,this.clDiffCore.changeEntityData);
         }
         List<String> fileNames = new ArrayList<>(this.fileChangeEntityData.keySet());
         TotalFileAssociations totalFileAssociations = new TotalFileAssociations() ;
@@ -111,7 +124,7 @@ public class CLDiffAPI {
             }
         }
         new FileOutsideGenerator().checkDuplicateSimilarity(this.fileChangeEntityData);
-        CLDiffCore.mFileOutputLog.writeLinkJson(totalFileAssociations.toAssoJSonString());
+        clDiffCore.mFileOutputLog.writeLinkJson(totalFileAssociations.toAssoJSonString());
         System.out.println(totalFileAssociations.toConsoleString());
         fileChangeEntityData.clear();
     }

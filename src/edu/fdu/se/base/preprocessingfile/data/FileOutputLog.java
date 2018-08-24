@@ -22,6 +22,7 @@ public class FileOutputLog {
 
     public String middleGenPathPrev;
     public String middleGenPathCurr;
+
     public FileOutputLog(String rootPath,String projName){
         this.rootPath = rootPath;
         this.projName = projName;

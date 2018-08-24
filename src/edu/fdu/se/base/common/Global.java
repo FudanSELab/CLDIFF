@@ -1,5 +1,7 @@
 package edu.fdu.se.base.common;
 
+import edu.fdu.se.server.Meta;
+
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +11,8 @@ import java.util.Map;
  *
  */
 public class Global {
+
+    public static Meta mmeta;
 
     public static int changeEntityId = 0;
 

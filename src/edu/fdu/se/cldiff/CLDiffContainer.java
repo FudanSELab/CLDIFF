@@ -76,7 +76,7 @@ public class CLDiffContainer {
             Global.fileName = fp.getFileName();
             if(fp.getPrev()==null && fp.getCurr()==null){
                 if(fp.getPrevPath()==null){
-//                    this.CLDiffCore.dooNewFile(fp.currPath,absolutePath);
+//                    this.clDiffCore.dooNewFile(fp.currPath,absolutePath);
                 }else {
                     this.CLDiffCore.doo(fp.getPrevPath(), fp.getCurrPath(), absolutePath);
                 }
