@@ -1,9 +1,5 @@
 package edu.fdu.se.cldiff;
 
-import edu.fdu.se.base.associating.FileInsideAssociationGenerator;
-import edu.fdu.se.base.associating.FileOutsideGenerator;
-import edu.fdu.se.base.associating.TotalFileAssociations;
-import edu.fdu.se.base.common.FilePairData;
 import edu.fdu.se.base.common.Global;
 import edu.fdu.se.base.generatingactions.GeneratingActionsData;
 import edu.fdu.se.base.generatingactions.JavaParserTreeGenerator;
@@ -13,17 +9,14 @@ import edu.fdu.se.base.miningactions.ActionAggregationGenerator;
 import edu.fdu.se.base.miningactions.bean.MiningActionData;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityPreprocess;
+import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.base.preprocessingfile.FilePairPreDiff;
-import edu.fdu.se.base.preprocessingfile.NewFileProcessing;
+import edu.fdu.se.base.preprocessingfile.AddOrRemoveFileProcessing;
 import edu.fdu.se.base.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.base.preprocessingfile.data.PreprocessedData;
 import edu.fdu.se.base.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/2/27.
@@ -36,7 +29,6 @@ public class CLDiffCore {
 
     public void doo(String filePrev, String fileCurr, String output) {
         int index = filePrev.lastIndexOf('/');
-        if(index ==-1) index = filePrev.lastIndexOf("\\");
         String fileName = filePrev.substring(index+1,filePrev.length());
         Global.fileName = fileName;
         FilePairPreDiff preDiff = new FilePairPreDiff();
@@ -79,11 +71,17 @@ public class CLDiffCore {
         runDiff(preDiff,fileName);
     }
 
-    public void dooNewFile(String fileName,byte[] fileCurrContent,String output){
-        NewFileProcessing newFileProcessing = new NewFileProcessing(fileCurrContent);
-        changeEntityData = newFileProcessing.ced;
+    public void dooAddFile(String fileName, byte[] fileCurrContent, String output){
+        AddOrRemoveFileProcessing addOrRemoveFileProcessing = new AddOrRemoveFileProcessing(fileCurrContent, ChangeEntityDesc.StageIIIFile.DST);
+        changeEntityData = addOrRemoveFileProcessing.ced;
         changeEntityData.fileName = fileName;
 
+    }
+
+    public void dooRemoveFile(String fileName,byte[] fileCurrContent,String output){
+        AddOrRemoveFileProcessing addOrRemoveFileProcessing = new AddOrRemoveFileProcessing(fileCurrContent,ChangeEntityDesc.StageIIIFile.SRC);
+        changeEntityData = addOrRemoveFileProcessing.ced;
+        changeEntityData.fileName = fileName;
     }
 
 

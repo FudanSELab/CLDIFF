@@ -18,20 +18,22 @@ import java.util.List;
  * Created by huangkaifeng on 2018/4/19.
  *
  */
-public class NewFileProcessing {
+public class AddOrRemoveFileProcessing {
 
     public ChangeEntityData ced;
 
-
     public CompilationUnit cu;
 
-    public List<String> dstLineList;
+    public List<String> linesList;
 
-    public NewFileProcessing(byte[] content){
+    public String FILE_TYPE;
+
+
+    public AddOrRemoveFileProcessing(byte[] content, String fileType){
         try {
-
+            FILE_TYPE = fileType;
             cu = JDTParserFactory.getCompilationUnit(content);
-            this.dstLineList = new ArrayList<>();
+            this.linesList = new ArrayList<>();
             BodyDeclaration bodyDeclaration = (BodyDeclaration) cu.types().get(0);
             if(bodyDeclaration instanceof TypeDeclaration){
                 init((TypeDeclaration)bodyDeclaration);
@@ -42,10 +44,16 @@ public class NewFileProcessing {
     }
 
     public void init(TypeDeclaration typeDeclaration){
+        int treeType =0;
+        if(FILE_TYPE.equals(ChangeEntityDesc.StageIIIFile.DST)){
+            treeType = ChangeEntityDesc.StageITreeType.DST_TREE_NODE;
+        }else{
+            treeType = ChangeEntityDesc.StageITreeType.SRC_TREE_NODE;
+        }
         ClassChangeEntity classChangeEntity = new ClassChangeEntity(new BodyDeclarationPair(typeDeclaration,typeDeclaration.getName().toString()+"."),
                 Insert.class.getSimpleName(),
                 new MyRange(cu.getLineNumber(typeDeclaration.getStartPosition()),cu.getLineNumber(typeDeclaration.getStartPosition()+typeDeclaration.getLength()),
-                        ChangeEntityDesc.StageITreeType.DST_TREE_NODE));
+                        treeType ));
         List<ChangeEntity> mList = new ArrayList<>();
         mList.add(classChangeEntity);
         ced = new ChangeEntityData(new MiningActionData(mList));

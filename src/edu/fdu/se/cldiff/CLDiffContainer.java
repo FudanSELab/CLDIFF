@@ -76,13 +76,13 @@ public class CLDiffContainer {
             Global.fileName = fp.getFileName();
             if(fp.getPrev()==null && fp.getCurr()==null){
                 if(fp.getPrevPath()==null){
-//                    this.clDiffCore.dooNewFile(fp.currPath,absolutePath);
+//                    this.clDiffCore.dooAddFile(fp.currPath,absolutePath);
                 }else {
                     this.CLDiffCore.doo(fp.getPrevPath(), fp.getCurrPath(), absolutePath);
                 }
             }else{
                 if(fp.getPrev()==null){
-                    this.CLDiffCore.dooNewFile(fp.getFileName(),fp.getCurr(),absolutePath);
+                    this.CLDiffCore.dooAddFile(fp.getFileName(),fp.getCurr(),absolutePath);
                 }else {
                     this.CLDiffCore.doo(fp.getFileName(), fp.getPrev(), fp.getCurr(),absolutePath);
                 }

@@ -38,12 +38,8 @@ public class CmdTest implements IHandleCommit {
         jGitHelper = new JGitHelper(repo);
         initMeta(repo,commitId,outputDir);
         jGitHelper.analyzeOneCommit(this,commitId);
-
-
-        CLDiffAPI clDiffAPI = new CLDiffAPI(meta);
+        CLDiffAPI clDiffAPI = new CLDiffAPI(outputDir,meta);
         clDiffAPI.generateDiffMinerOutput();
-//        cldiff.doo(fileName,prevFile,currFile,cldiff.mFileOutputLog.rootPath+"/"+dirName+"/"+fileName);
-//        cldiff.mFileOutputLog.setCommitId(commitId);
 
     }
 
@@ -110,11 +106,10 @@ public class CmdTest implements IHandleCommit {
             Files.write(prevFilePath, prevFile);
             Files.write(currFilePath, currFile);
             String fileName = filePath.substring(index + 1, filePath.length());
-            System.out.println(fileName);
             Global.fileName = fileName;
             commitFile.setId(cnt);
-            commitFile.setCurr_file_path(prevFilePath.toFile().getAbsolutePath());
-            commitFile.setPrev_file_path(currFilePath.toFile().getAbsolutePath());
+            commitFile.setPrev_file_path("prev/" + parentCommitId + "/" + filePath);
+            commitFile.setCurr_file_path("curr/" + parentCommitId + "/" + filePath);
             commitFile.setDiffPath(meta.getOutputDir() + "/gen/"+parentCommitId+"/Diff"+fileName+".json");
             commitFile.setFile_name(fileName);
             commitFile.setParent_commit(parentCommitId);
@@ -122,6 +117,7 @@ public class CmdTest implements IHandleCommit {
         }catch (Exception e){
             e.printStackTrace();
         }
+
     }
 }
 
