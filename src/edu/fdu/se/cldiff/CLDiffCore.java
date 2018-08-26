@@ -121,10 +121,8 @@ public class CLDiffCore {
 
 
     private void printActions(GeneratingActionsData actionsData, JavaParserTreeGenerator treeGenerator){
-        if("true".equals(ProjectProperties.getInstance().getValue(PropertyKeys.DEBUG_SRC_DST_TREE))){
-            mFileOutputLog.writeTreeFile(treeGenerator.getPrettyOldTreeString(),treeGenerator.getPrettyNewTreeString());
-            SimpleActionPrinter.printMyActions(actionsData.getAllActions());
-        }
+        mFileOutputLog.writeTreeFile(treeGenerator.getPrettyOldTreeString(),treeGenerator.getPrettyNewTreeString());
+        SimpleActionPrinter.printMyActions(actionsData.getAllActions());
     }
 
 

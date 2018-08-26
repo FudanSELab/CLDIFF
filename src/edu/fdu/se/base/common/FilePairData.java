@@ -2,6 +2,7 @@ package edu.fdu.se.base.common;
 
 /**
  * Created by huangkaifeng on 2018/8/21.
+ *
  */
 public class FilePairData {
 

@@ -168,10 +168,7 @@ public class StageIIBean {
         }
 //        sb.append(" "); update add delete move
         String entity = this.changeEntity;
-        String[] tmp = entity.split(" ");
-        for(String tmp2:tmp) {
-            sb.append(tmp2);
-        }
+        sb.append(entity);
         if(this.opt.equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)){
             sb.append(" ");
             if(this.getSubEntity()!=null) {

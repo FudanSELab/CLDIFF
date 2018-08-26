@@ -35,19 +35,19 @@ public class ChangeEntityDesc {
 
     public static class StageIIENTITY {
 
-        public static final String ENTITY_CLASS = "Class";
+        public static final String ENTITY_CLASS = "ClassDeclaration";
 
-        public static final String ENTITY_INNER_CLASS = "Inner Class";
+        public static final String ENTITY_INNER_CLASS = "InnerClassDeclaration";
 
         public static final String ENTITY_INTERFACE = "Interface";
 
-        public static final String ENTITY_FIELD = "Field";
+        public static final String ENTITY_FIELD = "FieldDeclaration";
 
         public static final String ENTITY_ENUM = "Enum";
 
         public static final String ENTITY_INITIALIZER = "Initializer";
 
-        public static final String ENTITY_METHOD = "Method";
+        public static final String ENTITY_METHOD = "MethodDeclaration";
 
         public static final String ENTITY_ASSERT = "Assert";
 
