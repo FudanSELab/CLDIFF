@@ -60,9 +60,10 @@ public class Association {
                 +" -> "+changeEntity2.getChangeEntityId()+". "+changeEntity2.getClass().getSimpleName()+" : " +type ;//+" "+keyWord;
         if(this.fileB==null){
             result+=" in " + fileA;
-        }else{
-            result+= " among "+ fileA + " and " + fileB;
         }
+//        else{
+//            result+= " among "+ fileA + " and " + fileB;
+//        }
         return result;
 
     }

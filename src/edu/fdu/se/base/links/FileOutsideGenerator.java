@@ -196,19 +196,22 @@ public class FileOutsideGenerator {
             for (MethodChangeEntity n : mc2) {
                 MethodData methodData1 = (MethodData) m.linkBean;
                 MethodData methodData2 = (MethodData) n.linkBean;
+                //Override-Method: methodName overriden in B.java
+                //Abstract-Method: methodName implemented in A.java
+                //Implement-Method: methodName implemented interface A.java
                 if (methodData1.methodName.get(0).equals(methodData2.methodName.get(0))) {
                     if (superClasses1.contains("superclass---"+classB)) { // B是A的父类
                         if(superClasses2.contains("abstract---"+classB)) {
-                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0));
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0),classB);
                             Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
                             mAssos.add(association);
                         }else{
-                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0));
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0),classB);
                             Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
                             mAssos.add(association);
                         }
                     } else if(superClasses1.contains("interface---"+classB)){ // B是A的接口
-                        String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.IMPLEMENT_METHOD, methodData1.methodName.get(0));
+                        String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.IMPLEMENT_METHOD, methodData1.methodName.get(0),classB);
                         Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
                         mAssos.add(association);
 
@@ -216,11 +219,11 @@ public class FileOutsideGenerator {
 
                     if(superClasses2.contains("superclass---"+classA)) { // A是B的父类
                         if(superClasses1.contains("abstract---"+classA)){
-                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0));
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0),classA);
                             Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
                             mAssos.add(association);
                         }else{
-                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0));
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0),classA);
                             Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
                             mAssos.add(association);
                         }
