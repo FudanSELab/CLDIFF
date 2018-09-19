@@ -1,5 +1,7 @@
 package edu.fdu.se.base.links;
 
+import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.base.links.linkbean.ClassData;
 import edu.fdu.se.base.links.linkbean.MethodData;
 import edu.fdu.se.base.links.linkbean.StmtData;
@@ -149,7 +151,10 @@ public class FileOutsideGenerator {
                     StmtData stmtData = (StmtData) stmt.linkBean;
                     for (String s : stmtData.methodInvocation) {
                         if (mdata.methodName.contains(s)) {
-                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,s,s);
+                            Action curAction = stmt.clusteredActionBean.curAction;
+                            Tree node = (Tree) curAction.getNode();
+                            String methodName = LinkUtil.findResidingMethodName(node);
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,s,methodName);
                             if (flag == 1) {
                                 Association association = new Association(ce1.fileName, ce2.fileName, cmethod, cstmt, desc,s);
                                 mAssos.add(association);

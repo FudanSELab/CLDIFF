@@ -65,21 +65,21 @@ public class TotalFileAssociations {
         for(Map.Entry<String,List<Association>> entry:this.fileAndfileTpfileAssos.entrySet()){
             String key = entry.getKey();
             List<Association> assos = entry.getValue();
-            if(assos.size()<=0){
-                continue;
-            }
-            if(key.contains("----")) {
-                sb.append("Links among files: "+key);
-            }else {
-                sb.append("Links within file: "+key);
-            }
-            sb.append("  \n");
+//            if(assos.size()<=0){
+//                continue;
+//            }
+//            if(key.contains("----")) {
+//                sb.append("Links among files: "+key);
+//            }else {
+//                sb.append("Links within file: "+key);
+//            }
+//            sb.append("  \n");
 
             for(Association as : assos){
                 sb.append(as.toString());
                 sb.append("\n");
             }
-            sb.append("\n");
+//            sb.append("\n");
         }
         return sb.toString();
     }

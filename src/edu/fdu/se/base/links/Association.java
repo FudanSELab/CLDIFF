@@ -56,8 +56,15 @@ public class Association {
 
 
     public String toString(){
-        return changeEntity1.getChangeEntityId()+". "+changeEntity1.getClass().getSimpleName()
-                +" -> "+changeEntity2.getChangeEntityId()+". "+changeEntity2.getClass().getSimpleName()+" : " +type +" "+keyWord;
+        String result = changeEntity1.getChangeEntityId()+". "+changeEntity1.getClass().getSimpleName()
+                +" -> "+changeEntity2.getChangeEntityId()+". "+changeEntity2.getClass().getSimpleName()+" : " +type ;//+" "+keyWord;
+        if(this.fileB==null){
+            result+=" in " + fileA;
+        }else{
+            result+= " among "+ fileA + " and " + fileB;
+        }
+        return result;
+
     }
 
     public JSONObject linkJsonString(){

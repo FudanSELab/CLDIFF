@@ -1,5 +1,6 @@
 package edu.fdu.se.base.links;
 
+import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.base.links.linkbean.FieldData;
 import edu.fdu.se.base.links.linkbean.MethodData;
 import edu.fdu.se.base.links.linkbean.StmtData;
@@ -8,7 +9,7 @@ import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.base.miningchangeentity.member.FieldChangeEntity;
 import edu.fdu.se.base.miningchangeentity.member.MethodChangeEntity;
-
+import com.github.gumtreediff.actions.model.Action;
 /**
  * Created by huangkaifeng on 2018/4/7.
  *
@@ -25,9 +26,11 @@ public class LinkStatement2Member {
                 for(String params:methodData.parameterName){
                     for(String vars:stmtData.variableLocal){
                         if(params.equals(vars)){
-
-                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,vars,null);
-                            Association association = new Association(stmt,method, desc,vars,changeEntityData.fileName);
+                            Action curAction = stmt.clusteredActionBean.curAction;
+                            Tree node = (Tree) curAction.getNode();
+                            String methodName = LinkUtil.findResidingMethodName(node);
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,vars,methodName);
+                            Association association = new Association(stmt,method, desc,null,changeEntityData.fileName);
                             changeEntityData.mAssociations.add(association);
                             return;
                         }
@@ -38,9 +41,11 @@ public class LinkStatement2Member {
             // method name是否在invoke的list里面
             for(String methodInvokes:stmtData.methodInvocation){
                 if(methodData.methodName.contains(methodInvokes)){
-
-                    String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,methodInvokes, null);
-                    Association association = new Association(stmt,method, desc,methodInvokes,changeEntityData.fileName);
+                    Action curAction = stmt.clusteredActionBean.curAction;
+                    Tree node = (Tree) curAction.getNode();
+                    String methodName = LinkUtil.findResidingMethodName(node);
+                    String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,methodInvokes, methodName);
+                    Association association = new Association(stmt,method, desc,null,changeEntityData.fileName);
                     changeEntityData.mAssociations.add(association);
                 }
             }
@@ -55,8 +60,11 @@ public class LinkStatement2Member {
         for(String a:fieldData.fieldName){
             for(String b : stmtData.variableField){
                 if(a.equals(b)){
-                    String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,a,null);
-                    Association association = new Association(stmt,field,desc,b,changeEntityData.fileName);
+                    Action curAction = stmt.clusteredActionBean.curAction;
+                    Tree node = (Tree) curAction.getNode();
+                    String methodName = LinkUtil.findResidingMethodName(node);
+                    String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,a,methodName);
+                    Association association = new Association(stmt,field,desc,null,changeEntityData.fileName);
                     changeEntityData.mAssociations.add(association);
                 }
             }
