@@ -35,4 +35,21 @@ public class LinkUtil {
         return null;
 
     }
+
+
+    public static String[] findResidingClassAndSuperClass(Tree t){
+
+        while(true){
+            if(t.getAstNode().getClass().toString().endsWith("CompilationUnit")){
+                break;
+            }
+            if(t.getAstNode().getClass().toString().endsWith("Declaration")){
+                MethodDeclaration md = (MethodDeclaration) t.getAstNode();
+//                return md.getName().toString();
+            }
+            t = (Tree) t.getParent();
+        }
+        return null;
+
+    }
 }

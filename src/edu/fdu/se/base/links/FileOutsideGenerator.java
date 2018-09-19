@@ -43,12 +43,11 @@ public class FileOutsideGenerator {
         List<ChangeEntity> stmtBList = stmtChange(cb);
         List<ChangeEntity> classAList = classChange(ca);
         List<ChangeEntity> classBList = classChange(cb);
-        checkMethodInvokes(methodAList, stmtBList, 1);
-        checkMethodInvokes(methodBList, stmtAList, 0);
-        checkClassInvokes(classAList, stmtBList, 1);
-        checkClassInvokes(classBList, stmtAList, 0);
-        //todo check 4-23
-        checkMethodInheritage(methodAList,methodBList);
+//        checkMethodInvokes(methodAList, stmtBList, 1);
+//        checkMethodInvokes(methodBList, stmtAList, 0);
+//        checkClassInvokes(classAList, stmtBList, 1);
+//        checkClassInvokes(classBList, stmtAList, 0);
+        checkMethodInheritage(methodAList, methodBList);
 
 
     }
@@ -75,12 +74,12 @@ public class FileOutsideGenerator {
         return stmtList;
     }
 
-    public  void checkDuplicateSimilarity(Map<String,ChangeEntityData> mMap){
+    public void checkDuplicateSimilarity(Map<String, ChangeEntityData> mMap) {
         List<ChangeEntity> totalEntityList = new ArrayList<>();
         List<Integer> indexList = new ArrayList<>();
-        for(Entry<String,ChangeEntityData> entry:mMap.entrySet()){
-            for(ChangeEntity tmp:entry.getValue().mad.getChangeEntityList()){
-                if(indexList.contains(tmp.getChangeEntityId())){
+        for (Entry<String, ChangeEntityData> entry : mMap.entrySet()) {
+            for (ChangeEntity tmp : entry.getValue().mad.getChangeEntityList()) {
+                if (indexList.contains(tmp.getChangeEntityId())) {
                     continue;
                 }
                 totalEntityList.add(tmp);
@@ -88,35 +87,35 @@ public class FileOutsideGenerator {
             }
         }
         List<Class> instances = new ArrayList<>();
-        totalEntityList.forEach(a->{
-            if(!instances.contains(a.getClass())) {
+        totalEntityList.forEach(a -> {
+            if (!instances.contains(a.getClass())) {
                 instances.add(a.getClass());
             }
         });
-        for(Class clazz:instances){
+        for (Class clazz : instances) {
             List<ChangeEntity> someTypeOfChangeClassA = new ArrayList<>();
-            for(ChangeEntity c:totalEntityList){
-                if(c.getClass().equals(clazz)){
+            for (ChangeEntity c : totalEntityList) {
+                if (c.getClass().equals(clazz)) {
                     someTypeOfChangeClassA.add(c);
                 }
             }
-            for(int i =0;i<someTypeOfChangeClassA.size();i++){
-                for(int j =i+1;j<someTypeOfChangeClassA.size();j++){
+            for (int i = 0; i < someTypeOfChangeClassA.size(); i++) {
+                for (int j = i + 1; j < someTypeOfChangeClassA.size(); j++) {
                     ChangeEntity a = someTypeOfChangeClassA.get(i);
                     ChangeEntity b = someTypeOfChangeClassA.get(j);
-                    if(!a.stageIIBean.getOpt().equals(b.stageIIBean.getOpt())){
+                    if (!a.stageIIBean.getOpt().equals(b.stageIIBean.getOpt())) {
                         continue;
                     }
-                    if(a.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)){
+                    if (a.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)) {
                         continue;
                     }
-                    if(a.clusteredActionBean!=null && b.clusteredActionBean!=null) {
+                    if (a.clusteredActionBean != null && b.clusteredActionBean != null) {
 
                         if (a.clusteredActionBean.fafather.getAstClass().equals(b.clusteredActionBean.fafather.getAstClass())
-                        && a.clusteredActionBean.actions.size() == b.clusteredActionBean.actions.size()) {
+                                && a.clusteredActionBean.actions.size() == b.clusteredActionBean.actions.size()) {
                             TreeDistance treeDistance = new TreeDistance(a.clusteredActionBean.fafather, b.clusteredActionBean.fafather);
                             float distance = treeDistance.calculateTreeDistance();
-                            if(distance<=1.0)
+                            if (distance <= 1.0)
                                 System.out.println(a.getChangeEntityId() + " " + b.changeEntityId + " " + distance);
                         }
                     }
@@ -125,7 +124,6 @@ public class FileOutsideGenerator {
 
         }
     }
-
 
 
     public List<ChangeEntity> classChange(ChangeEntityData ced) {
@@ -154,12 +152,12 @@ public class FileOutsideGenerator {
                             Action curAction = stmt.clusteredActionBean.curAction;
                             Tree node = (Tree) curAction.getNode();
                             String methodName = LinkUtil.findResidingMethodName(node);
-                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,s,methodName);
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE, s, methodName);
                             if (flag == 1) {
-                                Association association = new Association(ce1.fileName, ce2.fileName, cmethod, cstmt, desc,s);
+                                Association association = new Association(ce1.fileName, ce2.fileName, cmethod, cstmt, desc, s);
                                 mAssos.add(association);
                             } else {
-                                Association association = new Association(ce2.fileName, ce1.fileName, cmethod, cstmt, desc,s);
+                                Association association = new Association(ce2.fileName, ce1.fileName, cmethod, cstmt, desc, s);
                                 mAssos.add(association);
                             }
                             break;
@@ -171,36 +169,65 @@ public class FileOutsideGenerator {
 
     }
 
-    public void checkMethodInheritage(List<ChangeEntity> methodListA,List<ChangeEntity> methodListB){
-        String classA = ce1.fileName.substring(0,ce1.fileName.length()-5);
-        String classB = ce2.fileName.substring(0,ce2.fileName.length()-5);
+    public void checkMethodInheritage(List<ChangeEntity> methodListA, List<ChangeEntity> methodListB) {
+        String classA = ce1.fileName.substring(0, ce1.fileName.length() - 5);
+        String classB = ce2.fileName.substring(0, ce2.fileName.length() - 5);
         List<MethodChangeEntity> mc1 = new ArrayList<>();
         List<MethodChangeEntity> mc2 = new ArrayList<>();
-        for(ChangeEntity ce:methodListA){
-            if(ce instanceof MethodChangeEntity){
+        for (ChangeEntity ce : methodListA) {
+            if (ce instanceof MethodChangeEntity) {
                 MethodChangeEntity mce = (MethodChangeEntity) ce;
-                if(mce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
-                    mc1.add(mce);
-                }
+//                if(mce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
+                mc1.add(mce);
+//                }
             }
         }
-        for(ChangeEntity ce:methodListB){
-            if(ce instanceof MethodChangeEntity){
+        for (ChangeEntity ce : methodListB) {
+            if (ce instanceof MethodChangeEntity) {
                 MethodChangeEntity mce = (MethodChangeEntity) ce;
-                if(mce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
-                    mc2.add(mce);
-                }
+//                if(mce.stageIIBean.getEntityCreationStage().equals(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_PRE_DIFF)){
+                mc2.add(mce);
+//                }
             }
         }
-        if(ce1.mad.preprocessedData.interfacesAndFathers.contains(classA)||ce2.mad.preprocessedData.interfacesAndFathers.contains(classB)){
-            for(MethodChangeEntity m:mc1){
-                for(MethodChangeEntity n:mc2){
-                    MethodData methodData1 = (MethodData) m.linkBean;
-                    MethodData methodData2 = (MethodData) n.linkBean;
-                    if(methodData1.methodName.get(0).equals(methodData2.methodName.get(0))){
-                        String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD,methodData1.methodName.get(0));
-                        Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc,methodData1.methodName.get(0));
+        List<String> superClasses1 = ce1.mad.preprocessedData.getInterfacesAndFathers();
+        List<String> superClasses2 = ce2.mad.preprocessedData.getInterfacesAndFathers();
+        for (MethodChangeEntity m : mc1) {
+            for (MethodChangeEntity n : mc2) {
+                MethodData methodData1 = (MethodData) m.linkBean;
+                MethodData methodData2 = (MethodData) n.linkBean;
+                if (methodData1.methodName.get(0).equals(methodData2.methodName.get(0))) {
+                    if (superClasses1.contains("superclass---"+classB)) { // B是A的父类
+                        if(superClasses2.contains("abstract---"+classB)) {
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0));
+                            Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(association);
+                        }else{
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0));
+                            Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(association);
+                        }
+                    } else if(superClasses1.contains("interface---"+classB)){ // B是A的接口
+                        String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.IMPLEMENT_METHOD, methodData1.methodName.get(0));
+                        Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
                         mAssos.add(association);
+
+                    }
+
+                    if(superClasses2.contains("superclass---"+classA)) { // A是B的父类
+                        if(superClasses1.contains("abstract---"+classA)){
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0));
+                            Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(association);
+                        }else{
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0));
+                            Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(association);
+                        }
+                    } else if(superClasses2.contains("interface---"+classA)) { // A是B的接口
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.IMPLEMENT_METHOD, methodData1.methodName.get(0),classA);
+                            Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(association);
                     }
                 }
             }
@@ -218,24 +245,24 @@ public class FileOutsideGenerator {
                 if (stmt.linkBean != null) {
                     StmtData stmtData = (StmtData) stmt.linkBean;
                     if (stmtData.classCreation.contains(mdata.clazzName)) {
-                        String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,mdata.clazzName);
+                        String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE, mdata.clazzName);
                         if (flag == 1) {
-                            Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, desc,mdata.clazzName);
+                            Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, desc, mdata.clazzName);
                             mAssos.add(association);
                         } else {
-                            Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, desc,mdata.clazzName);
+                            Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, desc, mdata.clazzName);
                             mAssos.add(association);
                         }
                     }
                     for (String s : stmtData.methodInvocation) {
 
                         if (mdata.methods.contains(s)) {
-                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,s,s);
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE, s, s);
                             if (flag == 1) {
-                                Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, desc,mdata.clazzName);
+                                Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, desc, mdata.clazzName);
                                 mAssos.add(association);
                             } else {
-                                Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, desc,mdata.clazzName);
+                                Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, desc, mdata.clazzName);
                                 mAssos.add(association);
                             }
                             break;
