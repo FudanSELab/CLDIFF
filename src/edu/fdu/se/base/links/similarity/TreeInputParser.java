@@ -1,4 +1,4 @@
-package edu.fdu.se.base.associating.similarity;
+package edu.fdu.se.base.links.similarity;
 
 import at.unisalzburg.dbresearch.apted.node.Node;
 import at.unisalzburg.dbresearch.apted.node.StringNodeData;

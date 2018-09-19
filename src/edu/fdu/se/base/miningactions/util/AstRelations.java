@@ -4,7 +4,7 @@ package edu.fdu.se.base.miningactions.util;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
-import edu.fdu.se.base.associating.MyRange;
+import edu.fdu.se.base.links.MyRange;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;

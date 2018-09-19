@@ -1,8 +1,8 @@
-package edu.fdu.se.base.associating;
+package edu.fdu.se.base.links;
 
-import edu.fdu.se.base.associating.linkbean.FieldData;
-import edu.fdu.se.base.associating.linkbean.MethodData;
-import edu.fdu.se.base.associating.linkbean.StmtData;
+import edu.fdu.se.base.links.linkbean.FieldData;
+import edu.fdu.se.base.links.linkbean.MethodData;
+import edu.fdu.se.base.links.linkbean.StmtData;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
@@ -25,8 +25,9 @@ public class LinkStatement2Member {
                 for(String params:methodData.parameterName){
                     for(String vars:stmtData.variableLocal){
                         if(params.equals(vars)){
-                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,vars,vars);
-                            Association association = new Association(stmt,method, desc,vars);
+
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,vars,null);
+                            Association association = new Association(stmt,method, desc,vars,changeEntityData.fileName);
                             changeEntityData.mAssociations.add(association);
                             return;
                         }
@@ -37,8 +38,9 @@ public class LinkStatement2Member {
             // method name是否在invoke的list里面
             for(String methodInvokes:stmtData.methodInvocation){
                 if(methodData.methodName.contains(methodInvokes)){
-                    String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,methodInvokes, methodInvokes);
-                    Association association = new Association(stmt,method, desc,methodInvokes);
+
+                    String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,methodInvokes, null);
+                    Association association = new Association(stmt,method, desc,methodInvokes,changeEntityData.fileName);
                     changeEntityData.mAssociations.add(association);
                 }
             }
@@ -51,10 +53,10 @@ public class LinkStatement2Member {
         StmtData stmtData = (StmtData) stmt.linkBean;
         FieldData fieldData = (FieldData) field.linkBean;
         for(String a:fieldData.fieldName){
-            for(String b:stmtData.variableField){
+            for(String b : stmtData.variableField){
                 if(a.equals(b)){
-                    String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,a,a);
-                    Association association = new Association(stmt,field,desc,b);
+                    String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,a,null);
+                    Association association = new Association(stmt,field,desc,b,changeEntityData.fileName);
                     changeEntityData.mAssociations.add(association);
                 }
             }

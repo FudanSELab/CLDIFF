@@ -1,9 +1,9 @@
-package edu.fdu.se.base.associating;
+package edu.fdu.se.base.links;
 
-import edu.fdu.se.base.associating.linkbean.ClassData;
-import edu.fdu.se.base.associating.linkbean.MethodData;
-import edu.fdu.se.base.associating.linkbean.StmtData;
-import edu.fdu.se.base.associating.similarity.TreeDistance;
+import edu.fdu.se.base.links.linkbean.ClassData;
+import edu.fdu.se.base.links.linkbean.MethodData;
+import edu.fdu.se.base.links.linkbean.StmtData;
+import edu.fdu.se.base.links.similarity.TreeDistance;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;

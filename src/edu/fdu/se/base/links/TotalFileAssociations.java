@@ -1,4 +1,4 @@
-package edu.fdu.se.base.associating;
+package edu.fdu.se.base.links;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -64,17 +64,22 @@ public class TotalFileAssociations {
         StringBuilder sb = new StringBuilder();
         for(Map.Entry<String,List<Association>> entry:this.fileAndfileTpfileAssos.entrySet()){
             String key = entry.getKey();
+            List<Association> assos = entry.getValue();
+            if(assos.size()<=0){
+                continue;
+            }
             if(key.contains("----")) {
-                sb.append("CommitFile to CommitFile: "+key);
+                sb.append("Links among files: "+key);
             }else {
-                sb.append("CommitFile: "+key);
+                sb.append("Links within file: "+key);
             }
             sb.append("  \n");
-            List<Association> assos = entry.getValue();
+
             for(Association as : assos){
                 sb.append(as.toString());
                 sb.append("\n");
             }
+            sb.append("\n");
         }
         return sb.toString();
     }

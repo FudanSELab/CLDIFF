@@ -1,6 +1,6 @@
 package edu.fdu.se.base.preprocessingfile;
 
-import edu.fdu.se.base.associating.MyRange;
+import edu.fdu.se.base.links.MyRange;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.base.miningchangeentity.member.EnumChangeEntity;
 import edu.fdu.se.base.preprocessingfile.data.BodyDeclarationPair;

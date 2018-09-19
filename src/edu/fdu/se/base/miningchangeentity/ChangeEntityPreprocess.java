@@ -11,7 +11,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import com.github.gumtreediff.tree.Tree;
 
-import edu.fdu.se.base.associating.LayeredChangeEntityContainer;
+import edu.fdu.se.base.links.LayeredChangeEntityContainer;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.base.miningchangeentity.base.StageIIBean;

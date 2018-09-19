@@ -1,7 +1,7 @@
 package edu.fdu.se.base.miningchangeentity.member;
 
 
-import edu.fdu.se.base.associating.MyRange;
+import edu.fdu.se.base.links.MyRange;
 import edu.fdu.se.base.miningchangeentity.ClusteredActionBean;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.base.miningchangeentity.base.MemberPlusChangeEntity;

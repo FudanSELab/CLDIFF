@@ -1,6 +1,6 @@
 package edu.fdu.se.base.miningchangeentity;
 
-import edu.fdu.se.base.associating.LayeredChangeEntityContainer;
+import edu.fdu.se.base.links.LayeredChangeEntityContainer;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.base.preprocessingfile.data.BodyDeclarationPair;
 import org.eclipse.jdt.core.dom.CompilationUnit;

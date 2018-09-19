@@ -1,4 +1,4 @@
-package edu.fdu.se.base.associating;
+package edu.fdu.se.base.links;
 
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 

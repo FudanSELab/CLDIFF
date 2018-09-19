@@ -1,4 +1,4 @@
-package edu.fdu.se.base.associating.linkbean;
+package edu.fdu.se.base.links.linkbean;
 
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;

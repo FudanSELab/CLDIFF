@@ -1,4 +1,4 @@
-package edu.fdu.se.base.associating;
+package edu.fdu.se.base.links;
 
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import org.json.JSONObject;
@@ -22,11 +22,12 @@ public class Association {
 
     private String keyWord;
 
-    public Association(ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type,String keyWord){
+    public Association(ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type,String keyWord,String fileName){
         this.changeEntity1 = changeEntity1;
         this.changeEntity2 = changeEntity2;
         this.type = type;
         this.keyWord = keyWord;
+        this.fileA = fileName;
     }
 
     /**

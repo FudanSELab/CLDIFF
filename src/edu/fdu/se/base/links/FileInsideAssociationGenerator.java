@@ -1,6 +1,6 @@
-package edu.fdu.se.base.associating;
+package edu.fdu.se.base.links;
 
-import edu.fdu.se.base.associating.linkbean.*;
+import edu.fdu.se.base.links.linkbean.*;
 import edu.fdu.se.base.miningactions.bean.MiningActionData;
 import edu.fdu.se.base.miningactions.util.MyList;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
@@ -100,9 +100,7 @@ public class FileInsideAssociationGenerator {
         LayeredChangeEntityContainer container = this.changeEntityData.entityContainer;
         List<ChangeEntity> entities = this.changeEntityData.mad.getChangeEntityList();
         for(ChangeEntity a:entities) {
-//        entities.forEach(a-> {
             initLinkBean(a, changeEntityData.mad);
-//        });
         }
         if(container==null){
             return;
@@ -121,7 +119,7 @@ public class FileInsideAssociationGenerator {
                         stmtChangeEntity.add(a);
                     }
                 });
-                checkStatement2StatementAssoInMethod(mList);// method内stmt之间
+                checkStatement2StatementAssoInMethod(mList);// method内stmt之间 定义本地变量 随后被use
             }
             if(key.getBodyDeclaration() instanceof TypeDeclaration){
                 List<ChangeEntity> mList = entry.getValue();
@@ -138,10 +136,10 @@ public class FileInsideAssociationGenerator {
                 }
             }
         }
-        checkMethod2MethodAssoInClass(methodChangeEntity); // method之间
-        checkStmt2Field(stmtChangeEntity,fieldChangeEntity); // stmt field access 与field insert
-        checkStatement2StatementShareField(stmtChangeEntity); // stmt跨方法之间 共享field
-        checkStmt2Method(stmtChangeEntity,methodChangeEntity);// stmt invoke method
+        checkStmt2Field(stmtChangeEntity,fieldChangeEntity); // stmt field access 与field insert 定义field，随后被use
+        checkStmt2Method(stmtChangeEntity,methodChangeEntity);// stmt invoke method 定义method，然后调用method
+//        checkMethod2MethodAssoInClass(methodChangeEntity); // method之间
+//        checkStatement2StatementShareField(stmtChangeEntity); // stmt跨方法之间 共享field
 
     }
 

@@ -3,8 +3,8 @@ package edu.fdu.se.base.miningchangeentity.base;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.base.common.Global;
-import edu.fdu.se.base.associating.linkbean.LinkBean;
-import edu.fdu.se.base.associating.MyRange;
+import edu.fdu.se.base.links.linkbean.LinkBean;
+import edu.fdu.se.base.links.MyRange;
 import edu.fdu.se.base.miningactions.util.AstRelations;
 import edu.fdu.se.base.miningchangeentity.ClusteredActionBean;
 

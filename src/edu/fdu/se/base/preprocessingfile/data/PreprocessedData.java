@@ -1,7 +1,7 @@
 package edu.fdu.se.base.preprocessingfile.data;
 
 
-import edu.fdu.se.base.associating.LayeredChangeEntityContainer;
+import edu.fdu.se.base.links.LayeredChangeEntityContainer;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.javaparser.JDTParserFactory;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
