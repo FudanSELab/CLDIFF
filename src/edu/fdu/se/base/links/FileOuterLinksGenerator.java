@@ -21,14 +21,14 @@ import java.util.Map.Entry;
 /**
  * Created by huangkaifeng on 2018/4/16.
  */
-public class FileOutsideGenerator {
+public class FileOuterLinksGenerator {
 
     public ChangeEntityData ce1;
 
     public ChangeEntityData ce2;
-    public List<Association> mAssos;
+    public List<Link> mAssos;
 
-    public FileOutsideGenerator() {
+    public FileOuterLinksGenerator() {
         mAssos = new ArrayList<>();
     }
 
@@ -154,11 +154,11 @@ public class FileOutsideGenerator {
                             String methodName = LinkUtil.findResidingMethodName(node);
                             String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE, s, methodName);
                             if (flag == 1) {
-                                Association association = new Association(ce1.fileName, ce2.fileName, cmethod, cstmt, desc, s);
-                                mAssos.add(association);
+                                Link link = new Link(ce1.fileName, ce2.fileName, cmethod, cstmt, desc, s);
+                                mAssos.add(link);
                             } else {
-                                Association association = new Association(ce2.fileName, ce1.fileName, cmethod, cstmt, desc, s);
-                                mAssos.add(association);
+                                Link link = new Link(ce2.fileName, ce1.fileName, cmethod, cstmt, desc, s);
+                                mAssos.add(link);
                             }
                             break;
                         }
@@ -203,34 +203,34 @@ public class FileOutsideGenerator {
                     if (superClasses1.contains("superclass---"+classB)) { // B是A的父类
                         if(superClasses2.contains("abstract---"+classB)) {
                             String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0),classB);
-                            Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
-                            mAssos.add(association);
+                            Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(link);
                         }else{
                             String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0),classB);
-                            Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
-                            mAssos.add(association);
+                            Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(link);
                         }
                     } else if(superClasses1.contains("interface---"+classB)){ // B是A的接口
                         String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.IMPLEMENT_METHOD, methodData1.methodName.get(0),classB);
-                        Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
-                        mAssos.add(association);
+                        Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
+                        mAssos.add(link);
 
                     }
 
                     if(superClasses2.contains("superclass---"+classA)) { // A是B的父类
                         if(superClasses1.contains("abstract---"+classA)){
                             String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0),classA);
-                            Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
-                            mAssos.add(association);
+                            Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(link);
                         }else{
                             String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0),classA);
-                            Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
-                            mAssos.add(association);
+                            Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(link);
                         }
                     } else if(superClasses2.contains("interface---"+classA)) { // A是B的接口
                             String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.IMPLEMENT_METHOD, methodData1.methodName.get(0),classA);
-                            Association association = new Association(ce1.fileName, ce2.fileName, m, n, desc, null);
-                            mAssos.add(association);
+                            Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(link);
                     }
                 }
             }
@@ -250,11 +250,11 @@ public class FileOutsideGenerator {
                     if (stmtData.classCreation.contains(mdata.clazzName)) {
                         String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE, mdata.clazzName);
                         if (flag == 1) {
-                            Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, desc, mdata.clazzName);
-                            mAssos.add(association);
+                            Link link = new Link(ce1.fileName, ce2.fileName, cclass, cstmt, desc, mdata.clazzName);
+                            mAssos.add(link);
                         } else {
-                            Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, desc, mdata.clazzName);
-                            mAssos.add(association);
+                            Link link = new Link(ce2.fileName, ce1.fileName, cclass, cstmt, desc, mdata.clazzName);
+                            mAssos.add(link);
                         }
                     }
                     for (String s : stmtData.methodInvocation) {
@@ -262,11 +262,11 @@ public class FileOutsideGenerator {
                         if (mdata.methods.contains(s)) {
                             String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE, s, s);
                             if (flag == 1) {
-                                Association association = new Association(ce1.fileName, ce2.fileName, cclass, cstmt, desc, mdata.clazzName);
-                                mAssos.add(association);
+                                Link link = new Link(ce1.fileName, ce2.fileName, cclass, cstmt, desc, mdata.clazzName);
+                                mAssos.add(link);
                             } else {
-                                Association association = new Association(ce2.fileName, ce1.fileName, cclass, cstmt, desc, mdata.clazzName);
-                                mAssos.add(association);
+                                Link link = new Link(ce2.fileName, ce1.fileName, cclass, cstmt, desc, mdata.clazzName);
+                                mAssos.add(link);
                             }
                             break;
                         }

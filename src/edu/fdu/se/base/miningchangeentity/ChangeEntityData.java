@@ -2,7 +2,7 @@ package edu.fdu.se.base.miningchangeentity;
 
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
-import edu.fdu.se.base.links.Association;
+import edu.fdu.se.base.links.Link;
 import edu.fdu.se.base.links.MyRange;
 import edu.fdu.se.base.miningactions.bean.MiningActionData;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
@@ -26,7 +26,7 @@ public class ChangeEntityData {
     public LayeredChangeEntityContainer entityContainer;
     public MiningActionData mad;
 
-    public List<Association> mAssociations;
+    public List<Link> mLinks;
 
     public ChangeEntityData(MiningActionData mad) {
         if(mad.preprocessedData!=null) {

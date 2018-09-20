@@ -30,8 +30,8 @@ public class LinkStatement2Member {
                             Tree node = (Tree) curAction.getNode();
                             String methodName = LinkUtil.findResidingMethodName(node);
                             String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,vars,methodName);
-                            Association association = new Association(stmt,method, desc,null,changeEntityData.fileName);
-                            changeEntityData.mAssociations.add(association);
+                            Link link = new Link(stmt,method, desc,null,changeEntityData.fileName);
+                            changeEntityData.mLinks.add(link);
                             return;
                         }
                     }
@@ -45,8 +45,8 @@ public class LinkStatement2Member {
                     Tree node = (Tree) curAction.getNode();
                     String methodName = LinkUtil.findResidingMethodName(node);
                     String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,methodInvokes, methodName);
-                    Association association = new Association(stmt,method, desc,null,changeEntityData.fileName);
-                    changeEntityData.mAssociations.add(association);
+                    Link link = new Link(stmt,method, desc,null,changeEntityData.fileName);
+                    changeEntityData.mLinks.add(link);
                 }
             }
 
@@ -64,8 +64,8 @@ public class LinkStatement2Member {
                     Tree node = (Tree) curAction.getNode();
                     String methodName = LinkUtil.findResidingMethodName(node);
                     String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,a,methodName);
-                    Association association = new Association(stmt,field,desc,null,changeEntityData.fileName);
-                    changeEntityData.mAssociations.add(association);
+                    Link link = new Link(stmt,field,desc,null,changeEntityData.fileName);
+                    changeEntityData.mLinks.add(link);
                 }
             }
         }

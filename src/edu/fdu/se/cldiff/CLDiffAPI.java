@@ -3,9 +3,9 @@ package edu.fdu.se.cldiff;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.base.common.FilePairData;
 import edu.fdu.se.base.common.Global;
-import edu.fdu.se.base.links.FileInsideAssociationGenerator;
-import edu.fdu.se.base.links.FileOutsideGenerator;
-import edu.fdu.se.base.links.TotalFileAssociations;
+import edu.fdu.se.base.links.FileInnerLinksGenerator;
+import edu.fdu.se.base.links.FileOuterLinksGenerator;
+import edu.fdu.se.base.links.TotalFileLinks;
 import edu.fdu.se.base.links.similarity.TreeDistance;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.preprocessingfile.data.FileOutputLog;
@@ -93,28 +93,28 @@ public class CLDiffAPI {
             this.fileChangeEntityData.put(fp.getParentCommit() + "@@@" + this.clDiffCore.changeEntityData.fileName, this.clDiffCore.changeEntityData);
         }
         List<String> fileNames = new ArrayList<>(this.fileChangeEntityData.keySet());
-        TotalFileAssociations totalFileAssociations = new TotalFileAssociations();
+        TotalFileLinks totalFileLinks = new TotalFileLinks();
         for (int i = 0; i < fileNames.size(); i++) {
             String fileNameA = fileNames.get(i);
             ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
-            FileInsideAssociationGenerator associationGenerator = new FileInsideAssociationGenerator(cedA);
+            FileInnerLinksGenerator associationGenerator = new FileInnerLinksGenerator(cedA);
             associationGenerator.generateFile();
-            totalFileAssociations.addEntry(fileNameA, cedA.mAssociations);
+            totalFileLinks.addEntry(fileNameA, cedA.mLinks);
         }
         for (int i = 0; i < fileNames.size(); i++) {
             String fileNameA = fileNames.get(i);
             ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
-            FileOutsideGenerator fileOutsideGenerator = new FileOutsideGenerator();
+            FileOuterLinksGenerator fileOuterLinksGenerator = new FileOuterLinksGenerator();
             for (int j = i + 1; j < fileNames.size(); j++) {
                 String fileNameB = fileNames.get(j);
                 ChangeEntityData cedB = this.fileChangeEntityData.get(fileNameB);
-                fileOutsideGenerator.generateOutsideAssociation(cedA, cedB);
-                totalFileAssociations.addFile2FileAssos(fileNameA, fileNameB, fileOutsideGenerator.mAssos);
+                fileOuterLinksGenerator.generateOutsideAssociation(cedA, cedB);
+                totalFileLinks.addFile2FileAssos(fileNameA, fileNameB, fileOuterLinksGenerator.mAssos);
             }
         }
-        new FileOutsideGenerator().checkDuplicateSimilarity(this.fileChangeEntityData);
-        clDiffCore.mFileOutputLog.writeLinkJson(totalFileAssociations.toAssoJSonString());
-        System.out.println(totalFileAssociations.toConsoleString());
+        new FileOuterLinksGenerator().checkDuplicateSimilarity(this.fileChangeEntityData);
+        clDiffCore.mFileOutputLog.writeLinkJson(totalFileLinks.toAssoJSonString());
+        System.out.println(totalFileLinks.toConsoleString());
         fileChangeEntityData.clear();
     }
 

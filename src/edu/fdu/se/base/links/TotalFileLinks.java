@@ -11,45 +11,45 @@ import java.util.Map;
  * Created by huangkaifeng on 2018/4/16.
  *
  */
-public class TotalFileAssociations {
+public class TotalFileLinks {
 
-    public Map<String,List<Association>> fileAndfileTpfileAssos;
+    public Map<String,List<Link>> fileAndfileTpfileAssos;
 
-    public TotalFileAssociations(){
+    public TotalFileLinks(){
         fileAndfileTpfileAssos = new HashMap<>();
     }
 
-    public void addEntry(String fileName,List<Association> assos){
+    public void addEntry(String fileName,List<Link> assos){
         if(fileAndfileTpfileAssos.containsKey(fileName)){
-            List<Association> associations = fileAndfileTpfileAssos.get(fileName);
-            associations.addAll(assos);
+            List<Link> links = fileAndfileTpfileAssos.get(fileName);
+            links.addAll(assos);
         }else{
-            List<Association> associations = new ArrayList<>();
-            associations.addAll(assos);
-            fileAndfileTpfileAssos.put(fileName,associations);
+            List<Link> links = new ArrayList<>();
+            links.addAll(assos);
+            fileAndfileTpfileAssos.put(fileName, links);
         }
     }
 
-    public void addEntry(String fileName,Association asso){
+    public void addEntry(String fileName,Link asso){
         if(fileAndfileTpfileAssos.containsKey(fileName)){
-            List<Association> associations = fileAndfileTpfileAssos.get(fileName);
-            associations.add(asso);
+            List<Link> links = fileAndfileTpfileAssos.get(fileName);
+            links.add(asso);
         }else{
-            List<Association> associations = new ArrayList<>();
-            associations.add(asso);
-            fileAndfileTpfileAssos.put(fileName,associations);
+            List<Link> links = new ArrayList<>();
+            links.add(asso);
+            fileAndfileTpfileAssos.put(fileName, links);
         }
     }
 
 
-    public void addFile2FileAssos(String fileA,String fileB,List<Association> a){
+    public void addFile2FileAssos(String fileA,String fileB,List<Link> a){
         String key;
         if(fileA.compareTo(fileB)<0){
             key = fileA +"----"+fileB;
         }else{
             key = fileB +"----"+fileA;
         }
-        List<Association> mList;
+        List<Link> mList;
         if(fileAndfileTpfileAssos.containsKey(key)) {
             mList = fileAndfileTpfileAssos.get(key);
             mList.addAll(a);
@@ -62,9 +62,9 @@ public class TotalFileAssociations {
 
     public String toConsoleString(){
         StringBuilder sb = new StringBuilder();
-        for(Map.Entry<String,List<Association>> entry:this.fileAndfileTpfileAssos.entrySet()){
+        for(Map.Entry<String,List<Link>> entry:this.fileAndfileTpfileAssos.entrySet()){
             String key = entry.getKey();
-            List<Association> assos = entry.getValue();
+            List<Link> assos = entry.getValue();
 //            if(assos.size()<=0){
 //                continue;
 //            }
@@ -75,7 +75,7 @@ public class TotalFileAssociations {
 //            }
 //            sb.append("  \n");
 
-            for(Association as : assos){
+            for(Link as : assos){
                 sb.append(as.toString());
                 sb.append("\n");
             }
@@ -90,7 +90,7 @@ public class TotalFileAssociations {
     public String toAssoJSonString(){
         JSONObject jsonObject = new JSONObject();
         JSONArray ja2 = new JSONArray();
-        for(Map.Entry<String,List<Association>> entry:this.fileAndfileTpfileAssos.entrySet()){
+        for(Map.Entry<String,List<Link>> entry:this.fileAndfileTpfileAssos.entrySet()){
             JSONObject jo2 = new JSONObject();
             String key = entry.getKey();
             if(key.contains("----")) {
@@ -109,9 +109,9 @@ public class TotalFileAssociations {
                 jo2.put("parent-commit",data2[0]);
 
             }
-            List<Association> assos = entry.getValue();
+            List<Link> assos = entry.getValue();
             JSONArray linkArr = new JSONArray();
-            for(Association as : assos){
+            for(Link as : assos){
                 linkArr.put(as.linkJsonString());
             }
             jo2.put("links",linkArr);

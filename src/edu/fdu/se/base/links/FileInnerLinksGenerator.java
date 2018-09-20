@@ -19,13 +19,13 @@ import java.util.Map;
  * Created by huangkaifeng on 2018/3/19.
  *
  */
-public class FileInsideAssociationGenerator {
+public class FileInnerLinksGenerator {
 
     private ChangeEntityData changeEntityData;
 
-    public FileInsideAssociationGenerator(ChangeEntityData mod){
+    public FileInnerLinksGenerator(ChangeEntityData mod){
         this.changeEntityData = mod;
-        this.changeEntityData.mAssociations = new MyList<>();
+        this.changeEntityData.mLinks = new MyList<>();
     }
 
     public void initLinkBean(ChangeEntity ce, MiningActionData miningActionData){

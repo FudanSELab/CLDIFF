@@ -7,7 +7,7 @@ import org.json.JSONObject;
  * Created by huangkaifeng on 4/7/18.
  *
  */
-public class Association {
+public class Link {
 
 
     private String fileA;
@@ -22,7 +22,7 @@ public class Association {
 
     private String keyWord;
 
-    public Association(ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type,String keyWord,String fileName){
+    public Link(ChangeEntity changeEntity1, ChangeEntity changeEntity2, String type, String keyWord, String fileName){
         this.changeEntity1 = changeEntity1;
         this.changeEntity2 = changeEntity2;
         this.type = type;
@@ -37,7 +37,7 @@ public class Association {
      * @param changeEntity1
      * @param changeEntity2
      */
-    public Association(String fileA,String fileB,ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type,String keyWord){
+    public Link(String fileA, String fileB, ChangeEntity changeEntity1, ChangeEntity changeEntity2, String type, String keyWord){
         if(fileA.compareTo(fileB)<0){
             this.fileA = fileA;
             this.fileB = fileB;
