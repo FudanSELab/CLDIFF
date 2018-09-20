@@ -110,7 +110,7 @@ public class CLDiffContainer {
                 totalFileLinks.addFile2FileAssos(fileNameA,fileNameB, fileOuterLinksGenerator.mAssos);
             }
         }
-        new FileOuterLinksGenerator().checkDuplicateSimilarity(this.fileChangeEntityData);
+        new FileOuterLinksGenerator().checkSimilarity(this.fileChangeEntityData);
         CLDiffCore.mFileOutputLog.writeLinkJson(totalFileLinks.toAssoJSonString());
         System.out.println(totalFileLinks.toConsoleString());
         fileChangeEntityData.clear();

@@ -74,7 +74,7 @@ public class FileOuterLinksGenerator {
         return stmtList;
     }
 
-    public void checkDuplicateSimilarity(Map<String, ChangeEntityData> mMap) {
+    public void checkSimilarity(Map<String, ChangeEntityData> mMap) {
         List<ChangeEntity> totalEntityList = new ArrayList<>();
         List<Integer> indexList = new ArrayList<>();
         for (Entry<String, ChangeEntityData> entry : mMap.entrySet()) {
