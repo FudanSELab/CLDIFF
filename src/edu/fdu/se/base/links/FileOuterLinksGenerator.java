@@ -39,10 +39,10 @@ public class FileOuterLinksGenerator {
         ce2 = cb;
         List<ChangeEntity> methodAList = methodDeclarations(ca);
         List<ChangeEntity> methodBList = methodDeclarations(cb);
-        List<ChangeEntity> stmtAList = stmtChange(ca);
-        List<ChangeEntity> stmtBList = stmtChange(cb);
-        List<ChangeEntity> classAList = classChange(ca);
-        List<ChangeEntity> classBList = classChange(cb);
+//        List<ChangeEntity> stmtAList = stmtChange(ca);
+//        List<ChangeEntity> stmtBList = stmtChange(cb);
+//        List<ChangeEntity> classAList = classChange(ca);
+//        List<ChangeEntity> classBList = classChange(cb);
 //        checkMethodInvokes(methodAList, stmtBList, 1);
 //        checkMethodInvokes(methodBList, stmtAList, 0);
 //        checkClassInvokes(classAList, stmtBList, 1);
