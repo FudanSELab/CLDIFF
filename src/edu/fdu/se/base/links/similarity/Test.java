@@ -1,4 +1,4 @@
-package edu.fdu.se.base.associating.similarity;
+package edu.fdu.se.base.links.similarity;
 
 import java.io.File;
 

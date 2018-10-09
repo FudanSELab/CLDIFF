@@ -1,7 +1,8 @@
 package edu.fdu.se.base.preprocessingfile.data;
 
 
-import edu.fdu.se.base.associating.LayeredChangeEntityContainer;
+import edu.fdu.se.base.links.LayeredChangeEntityContainer;
+import edu.fdu.se.base.miningactions.util.MyList;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.javaparser.JDTParserFactory;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
@@ -26,7 +27,7 @@ public class PreprocessedData {
     public CompilationUnit dstCu;
     public CompilationUnit srcCu;
 
-    public List<String> interfacesAndFathers;
+    private List<String> interfacesAndFathers;
 
     public Set<String> prevFieldNames;
     public Set<String> currFieldNames;
@@ -69,7 +70,7 @@ public class PreprocessedData {
         prevFieldNames = new HashSet<>();
         currFieldNames = new HashSet<>();
         prevCurrFieldNames = new HashSet<>();
-        interfacesAndFathers = new ArrayList<>();
+        interfacesAndFathers = new MyList<>();
 
 
     }
@@ -144,4 +145,7 @@ public class PreprocessedData {
     }
 
 
+    public List<String> getInterfacesAndFathers() {
+        return interfacesAndFathers;
+    }
 }

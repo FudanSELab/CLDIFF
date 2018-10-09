@@ -1,4 +1,4 @@
-package edu.fdu.se.base.associating;
+package edu.fdu.se.base.links;
 
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;

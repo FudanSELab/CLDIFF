@@ -220,9 +220,9 @@ public class ChangeEntityDesc {
 //
 //        public static final String TYPE_METHOD_OVERRIDE = "a overrides method of b";
         public static final String DEF_USE = "Def-Use: %s invoked in %s";
-        public static final String ABSTRACT_METHOD = "Abstract-Method: %s";
-        public static final String OVERRIDE_METHOD = "Override-Method: %s overridden in %s";
-        public static final String IMPLEMENT_METHOD = "Implement-Method: %s";
+        public static final String ABSTRACT_METHOD = "Abstract-Method: %s implemented abstract method in %s";
+        public static final String OVERRIDE_METHOD = "Override-Method: %s overridden method in %s";
+        public static final String IMPLEMENT_METHOD = "Implement-Method: %s implemented interface in %s";
         public static final String SYSTEMATIC_CHANGE = "Systematic-Change: similar change";
 
     }

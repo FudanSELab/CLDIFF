@@ -1,6 +1,6 @@
-package edu.fdu.se.base.associating;
+package edu.fdu.se.base.links;
 
-import edu.fdu.se.base.associating.linkbean.StmtData;
+import edu.fdu.se.base.links.linkbean.StmtData;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 
@@ -17,8 +17,8 @@ public class LinkStatement2Statement {
         StmtData linkBean2 = (StmtData) ce2.linkBean;
 //        for(String tmp:linkBean1.variableField){
 //            if(linkBean2.variableField.contains(tmp)){
-//                Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SHARE_FIELD,tmp);
-//                changeEntityData.mAssociations.add(association);
+//                Link association = new Link(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SHARE_FIELD,tmp);
+//                changeEntityData.mLinks.add(association);
 //                break;
 //            }
 //        }
@@ -27,8 +27,8 @@ public class LinkStatement2Statement {
 //                if("".equals(tmp)){
 //                    continue;
 //                }
-//                Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SAME_VARIABLE,tmp);
-//                changeEntityData.mAssociations.add(association);
+//                Link association = new Link(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SAME_VARIABLE,tmp);
+//                changeEntityData.mLinks.add(association);
 //                break;
 //            }
 //        }
@@ -43,8 +43,8 @@ public class LinkStatement2Statement {
 //        for(String l1:linkBean1.variableField){
 //            for(String l2:linkBean2.variableField){
 //                if(l1.equals(l2)){
-//                    Association association = new Association(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SHARE_FIELD,l2);
-//                    changeEntityData.mAssociations.add(association);
+//                    Link association = new Link(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SHARE_FIELD,l2);
+//                    changeEntityData.mLinks.add(association);
 //                }
 //            }
 //        }

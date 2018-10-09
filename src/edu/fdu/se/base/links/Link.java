@@ -1,4 +1,4 @@
-package edu.fdu.se.base.associating;
+package edu.fdu.se.base.links;
 
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import org.json.JSONObject;
@@ -7,7 +7,7 @@ import org.json.JSONObject;
  * Created by huangkaifeng on 4/7/18.
  *
  */
-public class Association {
+public class Link {
 
 
     private String fileA;
@@ -22,11 +22,12 @@ public class Association {
 
     private String keyWord;
 
-    public Association(ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type,String keyWord){
+    public Link(ChangeEntity changeEntity1, ChangeEntity changeEntity2, String type, String keyWord, String fileName){
         this.changeEntity1 = changeEntity1;
         this.changeEntity2 = changeEntity2;
         this.type = type;
         this.keyWord = keyWord;
+        this.fileA = fileName;
     }
 
     /**
@@ -36,7 +37,7 @@ public class Association {
      * @param changeEntity1
      * @param changeEntity2
      */
-    public Association(String fileA,String fileB,ChangeEntity changeEntity1,ChangeEntity changeEntity2,String type,String keyWord){
+    public Link(String fileA, String fileB, ChangeEntity changeEntity1, ChangeEntity changeEntity2, String type, String keyWord){
         if(fileA.compareTo(fileB)<0){
             this.fileA = fileA;
             this.fileB = fileB;
@@ -55,8 +56,16 @@ public class Association {
 
 
     public String toString(){
-        return changeEntity1.getChangeEntityId()+". "+changeEntity1.getClass().getSimpleName()
-                +" -> "+changeEntity2.getChangeEntityId()+". "+changeEntity2.getClass().getSimpleName()+" : " +type +" "+keyWord;
+        String result = changeEntity1.getChangeEntityId()+". "+changeEntity1.getClass().getSimpleName()
+                +" -> "+changeEntity2.getChangeEntityId()+". "+changeEntity2.getClass().getSimpleName()+" : " +type ;//+" "+keyWord;
+        if(this.fileB==null){
+            result+=" in " + fileA;
+        }
+//        else{
+//            result+= " among "+ fileA + " and " + fileB;
+//        }
+        return result;
+
     }
 
     public JSONObject linkJsonString(){

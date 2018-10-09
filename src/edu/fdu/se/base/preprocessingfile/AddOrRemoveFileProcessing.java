@@ -1,7 +1,7 @@
 package edu.fdu.se.base.preprocessingfile;
 
 import com.github.gumtreediff.actions.model.Insert;
-import edu.fdu.se.base.associating.MyRange;
+import edu.fdu.se.base.links.MyRange;
 import edu.fdu.se.base.miningactions.bean.MiningActionData;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;

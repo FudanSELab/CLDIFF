@@ -1,6 +1,6 @@
 package edu.fdu.se.base.miningchangeentity.base;
 
-import edu.fdu.se.base.associating.MyRange;
+import edu.fdu.se.base.links.MyRange;
 import edu.fdu.se.base.miningchangeentity.ClusteredActionBean;
 import edu.fdu.se.base.preprocessingfile.data.BodyDeclarationPair;
 

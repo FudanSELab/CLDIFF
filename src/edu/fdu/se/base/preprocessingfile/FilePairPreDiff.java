@@ -92,20 +92,30 @@ public class FilePairPreDiff {
     }
     public void addSuperClass(TypeDeclaration type,List<String> list){
         List<Type> aa  = type.superInterfaceTypes();
-        if(aa!=null) {
-            for (Type aaa : aa) {
-                list.add(aaa.toString());
+        List<ASTNode> modifiers = type.modifiers();
+        for(ASTNode node:modifiers){
+            if(node instanceof Modifier){
+                Modifier modifier = (Modifier)node;
+                if(modifier.toString().equals("abstract")){
+                    list.add("abstract---"+type.getName().toString());
+                }
             }
         }
+        if(aa!=null) {
+            for (Type aaa : aa) {
+                list.add("interface---"+aaa.toString());
+            }
+        }
+
         if(type.getSuperclassType()!=null) {
-            list.add(type.getSuperclassType().toString());
+            list.add("superclass---"+type.getSuperclassType().toString());
         }
     }
 
     private void compare(CompilationUnit cuSrc,CompilationUnit cuDst,TypeDeclaration tdSrc,TypeDeclaration tdDst){
         TypeNodesTraversal astTraversal = new TypeNodesTraversal();
-        addSuperClass(tdSrc,preprocessedData.interfacesAndFathers);
-        addSuperClass(tdDst,preprocessedData.interfacesAndFathers);
+        addSuperClass(tdSrc,preprocessedData.getInterfacesAndFathers());
+        addSuperClass(tdDst,preprocessedData.getInterfacesAndFathers());
 
         astTraversal.traverseSrcTypeDeclarationInit(preprocessedData, preprocessedTempData, tdSrc, tdSrc.getName().toString() + ".");
         astTraversal.traverseDstTypeDeclarationCompareSrc(preprocessedData, preprocessedTempData, tdDst, tdDst.getName().toString() + ".");

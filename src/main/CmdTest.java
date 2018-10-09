@@ -32,9 +32,9 @@ public class CmdTest implements IHandleCommit {
     }
 
     public void run(){
-        String repo = "D:/Workspace/CLDiff-2018-7-12/spring-framework/.git";
-        String commitId = "3c1adf7f6af0dff9bda74f40dabe8cf428a62003";
-        String outputDir = "C:/Users/huangkaifeng/Desktop/output";
+        String repo = "your/selected/git/repo/path";
+        String commitId = "commitId";
+        String outputDir = "outputDir";
         jGitHelper = new JGitHelper(repo);
         initMeta(repo,commitId,outputDir);
         jGitHelper.analyzeOneCommit(this,commitId);
