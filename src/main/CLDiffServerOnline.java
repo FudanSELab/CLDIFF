@@ -1,4 +1,4 @@
-package edu.fdu.se.server;
+package main;
 
 
 import com.google.gson.Gson;
@@ -10,6 +10,9 @@ import edu.fdu.se.base.common.Global;
 import edu.fdu.se.cldiff.CLDiffCore;
 import edu.fdu.se.cldiff.CLDiffAPI;
 import edu.fdu.se.fileutil.FileUtil;
+import edu.fdu.se.server.CommitFile;
+import edu.fdu.se.server.Content;
+import edu.fdu.se.server.Meta;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -18,8 +21,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-public class CLDiffServer {
+/**
+ * Created by huangkaifeng on 2018/8/23.
+ *
+ * html api for CLDIFF. Only works when CLDIFF-WEB and CommitCrawler is on.
+ *
+ */
+public class CLDiffServerOnline {
     static final String DIVIDER = "--xxx---fdse---xxx";
     static String global_Path;
 
