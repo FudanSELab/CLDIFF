@@ -11,8 +11,7 @@ CLDIFF aims to generate code differences whose granularity  is in between the ex
 See our paper in [ACM digital library](https://dl.acm.org/citation.cfm?id=3238219)
 
 ### Web GUI
-Visualization for CLDIFF can be found [here](https://github.com/FudanSELab/CLDIFF-WEB). (TODO. We are working to make it easy to deploy.)
-
+Visualization for CLDIFF can be found [here](https://github.com/FudanSELab/CLDIFF-WEB).
 ### Supported languages
 Currently it only supports java files.
 
