@@ -7,13 +7,12 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import edu.fdu.se.base.common.Global;
-import edu.fdu.se.cldiff.CLDiffAPI;
 import edu.fdu.se.cldiff.CLDiffCore;
+import edu.fdu.se.cldiff.CLDiffOffline;
 import edu.fdu.se.fileutil.FileUtil;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Content;
 import edu.fdu.se.server.Meta;
-import org.json.JSONObject;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -29,19 +28,16 @@ import java.util.Map;
  *
  */
 public class CLDIFFServerOffline {
-    static final String DIVIDER = "--xxx---fdse---xxx";
-    static String globalPath;
-    static String repoPath;
-    static String projectName;
+
 
     public static void main(String[] arg) throws Exception {
-        globalPath = arg[0];
-        Global.globalPath = arg[0];
-        repoPath = arg[1]; // XXX/.git
-        String[] data = repoPath.split("/");
-        projectName = data[data.length-2];
+        Global.outputDir = arg[0];
+        Global.repoPath = arg[1]; // XXX/.git
+        String[] data = Global.repoPath.split("/");
+        Global.projectName = data[data.length-2];
         HttpServer server = HttpServer.create(new InetSocketAddress(8082), 0);
-        server.createContext("/", new FetchMetaCacheHandler());
+        //传meta文件，如果没有meta，则调用生成
+        server.createContext("/fetchMeta", new FetchMetaCacheHandler());
         server.createContext("/fetchFile", new FetchFileContentHandler());
         server.start();
     }
@@ -81,7 +77,7 @@ public class CLDIFFServerOffline {
             String[] fileNames = fileName.split("---");
             int id = Integer.valueOf(fileNames[0]);
             //文件路径为global_Path/project_name/commit_id/meta.json
-            String metaStr = FileUtil.read(globalPath + project_name + "/" + commit_hash + "/meta.json");
+            String metaStr = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/meta.json");
             Meta meta = new Gson().fromJson(metaStr, Meta.class);
             CommitFile file = meta.getFiles().get(id);
             String action = meta.getActions().get(id);
@@ -93,8 +89,8 @@ public class CLDIFFServerOffline {
             if ("modified".equals(action)) {
                 prev_file_path = file.getPrev_file_path();
                 curr_file_path = file.getCurr_file_path();
-                currFileContent = FileUtil.read(globalPath + project_name + "/" + commit_hash + "/" + curr_file_path);
-                prevFileContent = FileUtil.read(globalPath + project_name + "/" + commit_hash + "/" + prev_file_path);
+                currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
+                prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
                 if (!CLDiffCore.isFilter(prev_file_path)) {
                     List<CommitFile> commitFileList = meta.getFiles();
                     String diffPath = "";
@@ -108,10 +104,10 @@ public class CLDIFFServerOffline {
                 }
             } else if ("added".equals(action)) {
                 curr_file_path = file.getCurr_file_path();
-                currFileContent = FileUtil.read(globalPath + project_name + "/" + commit_hash + "/" + curr_file_path);
+                currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
             } else if ("deleted".equals(action)) {
                 prev_file_path = file.getPrev_file_path();
-                prevFileContent = FileUtil.read(globalPath + project_name + "/" + commit_hash + "/" + prev_file_path);
+                prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
             }
             String link = FileUtil.read(meta.getLinkPath());
             Content content = new Content(prevFileContent, currFileContent, diff, link);
@@ -133,8 +129,6 @@ public class CLDIFFServerOffline {
         }
     }
 
-
-
     /**
      * 获取Meta缓存
      */
@@ -154,13 +148,15 @@ public class CLDIFFServerOffline {
             }
             System.out.println("PostContent: "+postString);
             String commitHash = postString.toString().substring(4);
-            File metaFile = new File(globalPath + projectName + "/" + commitHash + "/meta.json");
+            File metaFile = new File(Global.outputDir + Global.projectName + "/" + commitHash + "/meta.json");
+            String meta = null;
             if (!metaFile.exists()) {
                 //生成文件
                 //文件路径为global_Path/project_name/commit_id/meta.txt
-                String result = generateCLDIFFResult(commitHash,metaFile);
+                meta = generateCLDIFFResult(commitHash,metaFile,Global.outputDir);
+            }else {
+                meta = FileUtil.read(Global.outputDir + Global.projectName + "/" + commitHash + "/meta.json");
             }
-            String meta = FileUtil.read(globalPath + projectName + "/" + commitHash + "/meta.json");
             System.out.println(meta);
             exchange.sendResponseHeaders(200, meta.length());
             os.write(meta.getBytes());
@@ -168,11 +164,11 @@ public class CLDIFFServerOffline {
         }
     }
 
-    public static String generateCLDIFFResult(String commitHash,File metaFile) {
+    public static String generateCLDIFFResult(String commitHash,File metaFile,String outputDir) {
         Meta meta = new Meta();
+        CLDiffOffline CLDiffOffline = new CLDiffOffline();
+        CLDiffOffline.run(commitHash,Global.repoPath,outputDir);
         //git 读取保存，生成meta
-        CLDiffAPI diff = new CLDiffAPI(globalPath, meta);
-        diff.generateDiffMinerOutput();
         List<String> filePathList = Global.outputFilePathList;
         //diff
         int diffFileSize = filePathList.size() - 1;
@@ -188,14 +184,13 @@ public class CLDIFFServerOffline {
         return response;
     }
 
-
     static class ClearCacheHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             System.out.println("clear cache");
             Runtime runtime = Runtime.getRuntime();
 //            String[] args = new String[] {"rm -rf", "/c", String.format("rm -rf %s", global_Path)};
-            runtime.exec("rm -rf " + globalPath);
+            runtime.exec("rm -rf " + Global.outputDir);
             OutputStream os = exchange.getResponseBody();
             String success = "SUCCESS\n";
             exchange.sendResponseHeaders(200, success.length());

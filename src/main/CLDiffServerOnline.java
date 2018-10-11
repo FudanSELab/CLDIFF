@@ -29,11 +29,9 @@ import java.util.Map;
  */
 public class CLDiffServerOnline {
     static final String DIVIDER = "--xxx---fdse---xxx";
-    static String global_Path;
 
     public static void main(String[] arg) throws Exception {
-        global_Path = arg[0];
-        Global.globalPath = arg[0];
+        Global.outputDir = arg[0];
         HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
         server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
         server.createContext("/DiffMiner/main/fetchMetaCache", new FetchMetaCacheHandler());
@@ -105,7 +103,7 @@ public class CLDiffServerOnline {
             String[] fileNames = fileName.split("---");
             int id = Integer.valueOf(fileNames[0]);
             //文件路径为global_Path/project_name/commit_id/meta.json
-            String metaStr = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/meta.json");
+            String metaStr = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/meta.json");
             Meta meta = new Gson().fromJson(metaStr, Meta.class);
             CommitFile file = meta.getFiles().get(id);
             String action = meta.getActions().get(id);
@@ -117,8 +115,8 @@ public class CLDiffServerOnline {
             if("modified".equals(action)){
                 prev_file_path = file.getPrev_file_path();
                 curr_file_path = file.getCurr_file_path();
-                currFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + curr_file_path);
-                prevFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + prev_file_path);
+                currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
+                prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
                 if(!CLDiffCore.isFilter(prev_file_path)){
                     List<CommitFile> commitFileList = meta.getFiles();
                     String diffPath = "";
@@ -132,10 +130,10 @@ public class CLDiffServerOnline {
                 }
             }else if("added".equals(action)){
                 curr_file_path = file.getCurr_file_path();
-                currFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + curr_file_path);
+                currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
             }else if("deleted".equals(action)){
                 prev_file_path = file.getPrev_file_path();
-                prevFileContent = FileUtil.read(global_Path + project_name + "/" + commit_hash + "/" + prev_file_path);
+                prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
             }
             String link = FileUtil.read(meta.getLinkPath());
             Content content = new Content(prevFileContent, currFileContent, diff, link);
@@ -163,7 +161,7 @@ public class CLDiffServerOnline {
             System.out.println("clear cache");
             Runtime runtime = Runtime.getRuntime();
 //            String[] args = new String[] {"rm -rf", "/c", String.format("rm -rf %s", global_Path)};
-            runtime.exec("rm -rf " + global_Path);
+            runtime.exec("rm -rf " + Global.outputDir);
             OutputStream os = exchange.getResponseBody();
             String success = "SUCCESS\n";
             exchange.sendResponseHeaders(200,success.length());
@@ -196,7 +194,7 @@ public class CLDiffServerOnline {
             String projectName = new JSONObject(postString.toString()).getString("project_name");
             //读取文件
             //文件路径为global_Path/project_name/commit_id/meta.txt
-            String meta = FileUtil.read(global_Path + projectName + "/" + commitHash + "/meta.json");
+            String meta = FileUtil.read(Global.outputDir + projectName + "/" + commitHash + "/meta.json");
             System.out.println(meta);
             exchange.sendResponseHeaders(200, meta.length());
             os.write(meta.getBytes());
@@ -232,10 +230,10 @@ public class CLDiffServerOnline {
             //建立一个文件夹
             //文件夹命名为commit_hash
             //文件名以name字段的hash值
-            File folder = FileUtil.createFolder(global_Path + meta.getProject_name() + "/" + meta.getCommit_hash());
+            File folder = FileUtil.createFolder(Global.outputDir + meta.getProject_name() + "/" + meta.getCommit_hash());
             //代码文件
             FileUtil.convertCodeToFile(data, folder, meta);
-            CLDiffAPI diff = new CLDiffAPI(global_Path, meta);
+            CLDiffAPI diff = new CLDiffAPI(Global.outputDir, meta);
             diff.generateDiffMinerOutput();
             List<String> filePathList = Global.outputFilePathList;
             //diff

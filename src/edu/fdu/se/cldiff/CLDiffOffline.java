@@ -1,8 +1,6 @@
-package main;
+package edu.fdu.se.cldiff;
 
 import edu.fdu.se.base.common.Global;
-import edu.fdu.se.cldiff.CLDiffAPI;
-import edu.fdu.se.cldiff.CLDiffCore;
 import edu.fdu.se.fileutil.PathUtil;
 import edu.fdu.se.git.IHandleCommit;
 import edu.fdu.se.git.JGitHelper;
@@ -18,29 +16,37 @@ import java.util.Map;
 
 /**
  * Created by huangkaifeng on 2018/8/23.
- *
+ * cmd entrance for cldiff
  */
-public class CmdTest implements IHandleCommit {
+public class CLDiffOffline implements IHandleCommit {
 
-    JGitHelper jGitHelper;
-    Meta meta;
+    public JGitHelper jGitHelper;
+    public Meta meta;
 
     public static void main(String args[]){
-        CmdTest cmdTest = new CmdTest();
-        cmdTest.run();
+        CLDiffOffline CLDiffOffline = new CLDiffOffline();
+        CLDiffOffline.run();
 
     }
 
     public void run(){
-        String repo = "your/selected/git/repo/path";
-        String commitId = "commitId";
-        String outputDir = "outputDir";
+        String repo = "D:/Workspace/CLDiff-2018-7-12/spring-framework/.git";
+//        String commitId = "3c1adf7f6af0dff9bda74f40dabe8cf428a62003";
+        String commitId = "65b17b80ba353d3c21ab392d711d347bcbcce42b";
+        String outputDir = "C:/Users/huangkaifeng/Desktop/output";
         jGitHelper = new JGitHelper(repo);
         initMeta(repo,commitId,outputDir);
         jGitHelper.analyzeOneCommit(this,commitId);
         CLDiffAPI clDiffAPI = new CLDiffAPI(outputDir,meta);
         clDiffAPI.generateDiffMinerOutput();
+    }
 
+    public void run(String commitId,String repo,String outputDir){
+        jGitHelper = new JGitHelper(repo);
+        initMeta(repo,commitId,outputDir);
+        jGitHelper.analyzeOneCommit(this,commitId);
+        CLDiffAPI clDiffAPI = new CLDiffAPI(outputDir,meta);
+        clDiffAPI.generateDiffMinerOutput();
     }
 
 
