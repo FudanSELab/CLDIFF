@@ -6,11 +6,14 @@ import edu.fdu.se.git.IHandleCommit;
 import edu.fdu.se.git.JGitHelper;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Meta;
+import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -66,9 +69,24 @@ public class CLDiffOffline implements IHandleCommit {
 
     }
 
+    public void loadCommitMeta(String author,int timeSeconds,String committer,String commitLog){
+        meta.setAuthor(author);
+        meta.setCommitter(committer);
+        meta.setCommit_log(commitLog);
+        Calendar c=Calendar.getInstance();
+        long millions=new Long(timeSeconds).longValue()*1000;
+        c.setTimeInMillis(millions);
+        System.out.println(""+c.getTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = sdf.format(c.getTime());
+        meta.setDate_time(dateString);
+        System.out.println(dateString);
+    }
 
 
-    public void handleCommit(Map<String, Map<String, List<String>>> changedFiles, String commitId){
+
+    public void handleCommit(Map<String, Map<String, List<String>>> changedFiles, String commitId,RevCommit commit){
+        loadCommitMeta(commit.getAuthorIdent().getName(),commit.getCommitTime(),commit.getCommitterIdent().getName(),commit.getShortMessage()+"\n\n\n"+commit.getFullMessage());
         int cnt = 0;
         for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
             String parentCommitId = entry.getKey();

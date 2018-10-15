@@ -53,7 +53,7 @@ public class JGitHelper extends JGitCommand {
                         continue;
                     }
                     Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(queueCommitItem.getName());
-                    iHandleCommit.handleCommit(changedFiles, queueCommitItem.getName());
+                    iHandleCommit.handleCommit(changedFiles, queueCommitItem.getName(),commit);
                     commitNum++;
                     isTraversed.put(queueCommitItem.getName(), true);
                     for (RevCommit item2 : parentCommits) {
@@ -87,7 +87,8 @@ public class JGitHelper extends JGitCommand {
                 return;
             }
             Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(commit.getName());
-            iHandleCommit.handleCommit(changedFiles, commitString);
+            iHandleCommit.handleCommit(changedFiles, commitString,commit);
+
         } catch (MissingObjectException e) {
             e.printStackTrace();
         } catch (IncorrectObjectTypeException e) {

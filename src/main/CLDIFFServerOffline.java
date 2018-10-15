@@ -148,14 +148,14 @@ public class CLDIFFServerOffline {
             }
             System.out.println("PostContent: "+postString);
             String commitHash = postString.toString().substring(4);
-            File metaFile = new File(Global.outputDir + Global.projectName + "/" + commitHash + "/meta.json");
+            File metaFile = new File(Global.outputDir +"/"+ Global.projectName + "/" + commitHash + "/meta.json");
             String meta = null;
             if (!metaFile.exists()) {
                 //生成文件
                 //文件路径为global_Path/project_name/commit_id/meta.txt
                 meta = generateCLDIFFResult(commitHash,metaFile,Global.outputDir);
             }else {
-                meta = FileUtil.read(Global.outputDir + Global.projectName + "/" + commitHash + "/meta.json");
+                meta = FileUtil.read(Global.outputDir +"/"+ Global.projectName + "/" + commitHash + "/meta.json");
             }
             System.out.println(meta);
             exchange.sendResponseHeaders(200, meta.length());
@@ -165,21 +165,15 @@ public class CLDIFFServerOffline {
     }
 
     public static String generateCLDIFFResult(String commitHash,File metaFile,String outputDir) {
-        Meta meta = new Meta();
-        CLDiffOffline CLDiffOffline = new CLDiffOffline();
-        CLDiffOffline.run(commitHash,Global.repoPath,outputDir);
+        CLDiffOffline clDiffOffline = new CLDiffOffline();
+        clDiffOffline.run(commitHash,Global.repoPath,outputDir);
+        Meta meta =  clDiffOffline.meta;
         //git 读取保存，生成meta
         List<String> filePathList = Global.outputFilePathList;
         //diff
         int diffFileSize = filePathList.size() - 1;
-        for (int i = 0; i < diffFileSize; i++) {
-            String diffPath = filePathList.get(i);
-            meta.getFiles().get(i).setDiffPath(diffPath);
-        }
-        //link
-        meta.setLinkPath(filePathList.get(diffFileSize));
         //写入meta文件
-        FileUtil.createFile(metaFile.getAbsolutePath(), new GsonBuilder().setPrettyPrinting().create().toJson(meta),new File(metaFile.getParent()));
+        FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta),new File(metaFile.getParent()));
         String response = new Gson().toJson(meta);
         return response;
     }
