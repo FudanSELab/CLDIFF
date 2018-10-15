@@ -76,11 +76,9 @@ public class CLDiffOffline implements IHandleCommit {
         Calendar c=Calendar.getInstance();
         long millions=new Long(timeSeconds).longValue()*1000;
         c.setTimeInMillis(millions);
-        System.out.println(""+c.getTime());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = sdf.format(c.getTime());
         meta.setDate_time(dateString);
-        System.out.println(dateString);
     }
 
 
@@ -99,11 +97,32 @@ public class CLDiffOffline implements IHandleCommit {
                         continue;
                     }
                     setCommitFile(cnt,parentCommitId,commitId,file);
+                    meta.addAction("modified");
                     cnt+=1;
                 }
             }
+//            if(changedFileEntry.containsKey("addedFiles")){
+//                List<String> addedFile = changedFileEntry.get("addedFiles");
+//                for(String file : addedFile){
+//                    meta.addAction("added");
+//                    setAddedCommitFile(cnt,parentCommitId,commitId,file);
+//                    cnt+=1;
+//                }
+//
+//            }
+//            if(changedFileEntry.containsKey("deletedFiles")){
+//                List<String> deleted = changedFileEntry.get("deletedFiles");
+//                for(String file : deleted) {
+//                    setDeletedCommitFile(cnt, parentCommitId, commitId, file);
+//                    cnt+=1;
+//                    meta.addAction("removed");
+//                }
+//            }
+
         }
     }
+
+
 
     public void setCommitFile(int cnt,String parentCommitId,String commitId,String filePath){
         try {
@@ -141,7 +160,61 @@ public class CLDiffOffline implements IHandleCommit {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    public void setAddedCommitFile(int cnt,String parentCommitId,String commitId,String filePath){
+        try {
+            CommitFile commitFile = new CommitFile();
+            byte[] currFile = jGitHelper.extract(filePath, commitId);
+            int index = filePath.lastIndexOf("/");
+            Path currFilePath = Paths.get(meta.getOutputDir() + "/curr/" + parentCommitId + "/" + filePath);
+            if(!currFilePath.toFile().exists()) {
+                int index2 = currFilePath.toFile().getAbsolutePath().lastIndexOf(File.separator);
+                String currDir = currFilePath.toFile().getAbsolutePath().substring(0,index2);
+                File curr = new File(currDir);
+                if(!curr.exists()){
+                    curr.mkdirs();
+                }
+            }
+            Files.write(currFilePath, currFile);
+            String fileName = filePath.substring(index + 1, filePath.length());
+            Global.fileName = fileName;
+            commitFile.setId(cnt);
+            commitFile.setCurr_file_path("curr/" + parentCommitId + "/" + filePath);
+//            commitFile.setDiffPath(meta.getOutputDir() + "/gen/"+parentCommitId+"/Diff"+fileName+".json");
+            commitFile.setFile_name(fileName);
+            commitFile.setParent_commit(parentCommitId);
+            meta.addFile(commitFile);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void setDeletedCommitFile(int cnt,String parentCommitId,String commitId,String filePath){
+        try {
+            CommitFile commitFile = new CommitFile();
+            byte[] prevFile = jGitHelper.extract(filePath, parentCommitId);
+            int index = filePath.lastIndexOf("/");
+            Path prevFilePath = Paths.get(meta.getOutputDir() + "/prev/" + parentCommitId + "/" + filePath);
+            if(!prevFilePath.toFile().exists()) {
+                int index2 = prevFilePath.toFile().getAbsolutePath().lastIndexOf(File.separator);
+                String prevDir = prevFilePath.toFile().getAbsolutePath().substring(0,index2);
+                File prev = new File(prevDir);
+                if(!prev.exists()){
+                    prev.mkdirs();
+                }
+            }
+            Files.write(prevFilePath, prevFile);
+            String fileName = filePath.substring(index + 1, filePath.length());
+            Global.fileName = fileName;
+            commitFile.setId(cnt);
+            commitFile.setPrev_file_path("prev/" + parentCommitId + "/" + filePath);
+            commitFile.setFile_name(fileName);
+            commitFile.setParent_commit(parentCommitId);
+            meta.addFile(commitFile);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
 

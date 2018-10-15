@@ -77,7 +77,7 @@ public class CLDIFFServerOffline {
             String[] fileNames = fileName.split("---");
             int id = Integer.valueOf(fileNames[0]);
             //文件路径为global_Path/project_name/commit_id/meta.json
-            String metaStr = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/meta.json");
+            String metaStr = FileUtil.read(Global.outputDir+"/" + project_name + "/" + commit_hash + "/meta.json");
             Meta meta = new Gson().fromJson(metaStr, Meta.class);
             CommitFile file = meta.getFiles().get(id);
             String action = meta.getActions().get(id);
@@ -89,8 +89,8 @@ public class CLDIFFServerOffline {
             if ("modified".equals(action)) {
                 prev_file_path = file.getPrev_file_path();
                 curr_file_path = file.getCurr_file_path();
-                currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
-                prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
+                currFileContent = FileUtil.read(Global.outputDir +"/"+ project_name + "/" + commit_hash + "/" + curr_file_path);
+                prevFileContent = FileUtil.read(Global.outputDir +"/"+ project_name + "/" + commit_hash + "/" + prev_file_path);
                 if (!CLDiffCore.isFilter(prev_file_path)) {
                     List<CommitFile> commitFileList = meta.getFiles();
                     String diffPath = "";
@@ -104,18 +104,18 @@ public class CLDIFFServerOffline {
                 }
             } else if ("added".equals(action)) {
                 curr_file_path = file.getCurr_file_path();
-                currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
+                currFileContent = FileUtil.read(Global.outputDir +"/"+ project_name + "/" + commit_hash + "/" + curr_file_path);
             } else if ("deleted".equals(action)) {
                 prev_file_path = file.getPrev_file_path();
-                prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
+                prevFileContent = FileUtil.read(Global.outputDir+"/" + project_name + "/" + commit_hash + "/" + prev_file_path);
             }
             String link = FileUtil.read(meta.getLinkPath());
             Content content = new Content(prevFileContent, currFileContent, diff, link);
             String contentResultStr = new Gson().toJson(content);
-//            System.out.println(contentResultStr);
+            System.out.println(contentResultStr);
 //            System.out.println(String.valueOf(contentResultStr.length()));
             byte[] bytes = contentResultStr.getBytes();
-            exchange.sendResponseHeaders(201, bytes.length);
+            exchange.sendResponseHeaders(200, bytes.length);
             try (BufferedOutputStream out = new BufferedOutputStream(exchange.getResponseBody())) {
                 try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes)) {
                     byte[] buffer = new byte[1000];

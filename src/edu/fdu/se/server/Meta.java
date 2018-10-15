@@ -62,6 +62,17 @@ public class Meta {
         files.add(file);
     }
 
+    /**
+     * add action    modified / added / removed
+     * @return
+     */
+    public void addAction(String action){
+        if(actions == null){
+            actions = new ArrayList<>();
+        }
+        actions.add(action);
+    }
+
     public List<CommitFile> getFiles() {
         return files;
     }
