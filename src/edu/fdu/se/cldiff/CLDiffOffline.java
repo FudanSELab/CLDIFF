@@ -33,10 +33,9 @@ public class CLDiffOffline implements IHandleCommit {
     }
 
     public void run(){
-        String repo = "D:/Workspace/CLDiff-2018-7-12/spring-framework/.git";
-//        String commitId = "3c1adf7f6af0dff9bda74f40dabe8cf428a62003";
-        String commitId = "65b17b80ba353d3c21ab392d711d347bcbcce42b";
-        String outputDir = "C:/Users/huangkaifeng/Desktop/output";
+        String repo = "/path/to/git/repo/.git";
+        String commitId = "commit id";
+        String outputDir = "/path/to/output/dir";
         jGitHelper = new JGitHelper(repo);
         initMeta(repo,commitId,outputDir);
         jGitHelper.analyzeOneCommit(this,commitId);
