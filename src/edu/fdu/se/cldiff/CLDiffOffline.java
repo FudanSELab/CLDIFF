@@ -91,39 +91,54 @@ public class CLDiffOffline implements IHandleCommit {
             Map<String, List<String>> changedFileEntry = entry.getValue();
             if (changedFileEntry.containsKey("modifiedFiles")) {
                 List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
-                for (String file : modifiedFile) {
-                    if (CLDiffCore.isFilter(file)) {
-                        continue;
+                if(modifiedFile !=null && modifiedFile.size()!=0) {
+                    for (String file : modifiedFile) {
+                        if (CLDiffCore.isFilter(file)) {
+                            setCommitFile(cnt, parentCommitId, commitId, file, false);
+                        }else {
+                            setCommitFile(cnt, parentCommitId, commitId, file, true);
+                        }
+                        meta.addAction("modified");
+                        cnt += 1;
                     }
-                    setCommitFile(cnt,parentCommitId,commitId,file);
-                    meta.addAction("modified");
-                    cnt+=1;
                 }
             }
-//            if(changedFileEntry.containsKey("addedFiles")){
-//                List<String> addedFile = changedFileEntry.get("addedFiles");
-//                for(String file : addedFile){
-//                    meta.addAction("added");
-//                    setAddedCommitFile(cnt,parentCommitId,commitId,file);
-//                    cnt+=1;
-//                }
-//
-//            }
-//            if(changedFileEntry.containsKey("deletedFiles")){
-//                List<String> deleted = changedFileEntry.get("deletedFiles");
-//                for(String file : deleted) {
-//                    setDeletedCommitFile(cnt, parentCommitId, commitId, file);
-//                    cnt+=1;
-//                    meta.addAction("removed");
-//                }
-//            }
+            if(changedFileEntry.containsKey("addedFiles")){
+                List<String> addedFile = changedFileEntry.get("addedFiles");
+                if(addedFile!=null && addedFile.size()!=0) {
+                    for (String file : addedFile) {
+                        if (CLDiffCore.isFilter(file)) {
+                            setAddedCommitFile(cnt, parentCommitId, commitId, file,false);
+                        }else {
+                            setAddedCommitFile(cnt, parentCommitId, commitId, file,true);
+                        }
+                        meta.addAction("added");
+                        cnt += 1;
+                    }
+                }
+
+            }
+            if(changedFileEntry.containsKey("deletedFiles")){
+                List<String> deleted = changedFileEntry.get("deletedFiles");
+                if(deleted!=null && deleted.size()!=0) {
+                    for (String file : deleted) {
+                        if (CLDiffCore.isFilter(file)) {
+                            setDeletedCommitFile(cnt, parentCommitId, commitId, file,false);
+                        }else {
+                            setDeletedCommitFile(cnt, parentCommitId, commitId, file,true);
+                        }
+                        cnt += 1;
+                        meta.addAction("removed");
+                    }
+                }
+            }
 
         }
     }
 
 
 
-    public void setCommitFile(int cnt,String parentCommitId,String commitId,String filePath){
+    public void setCommitFile(int cnt,String parentCommitId,String commitId,String filePath,boolean doesGenDiffFile){
         try {
             CommitFile commitFile = new CommitFile();
             byte[] prevFile = jGitHelper.extract(filePath, parentCommitId);
@@ -152,7 +167,9 @@ public class CLDiffOffline implements IHandleCommit {
             commitFile.setId(cnt);
             commitFile.setPrev_file_path("prev/" + parentCommitId + "/" + filePath);
             commitFile.setCurr_file_path("curr/" + parentCommitId + "/" + filePath);
-            commitFile.setDiffPath(meta.getOutputDir() + "/gen/"+parentCommitId+"/Diff"+fileName+".json");
+            if(doesGenDiffFile) {
+                commitFile.setDiffPath(meta.getOutputDir() + "/gen/" + parentCommitId + "/Diff" + fileName + ".json");
+            }
             commitFile.setFile_name(fileName);
             commitFile.setParent_commit(parentCommitId);
             meta.addFile(commitFile);
@@ -161,7 +178,7 @@ public class CLDiffOffline implements IHandleCommit {
         }
     }
 
-    public void setAddedCommitFile(int cnt,String parentCommitId,String commitId,String filePath){
+    public void setAddedCommitFile(int cnt,String parentCommitId,String commitId,String filePath,boolean doesGenDiffFile){
         try {
             CommitFile commitFile = new CommitFile();
             byte[] currFile = jGitHelper.extract(filePath, commitId);
@@ -180,7 +197,9 @@ public class CLDiffOffline implements IHandleCommit {
             Global.fileName = fileName;
             commitFile.setId(cnt);
             commitFile.setCurr_file_path("curr/" + parentCommitId + "/" + filePath);
-//            commitFile.setDiffPath(meta.getOutputDir() + "/gen/"+parentCommitId+"/Diff"+fileName+".json");
+            if(doesGenDiffFile) {
+                commitFile.setDiffPath(meta.getOutputDir() + "/gen/"+parentCommitId+"/Diff"+fileName+".json");
+            }
             commitFile.setFile_name(fileName);
             commitFile.setParent_commit(parentCommitId);
             meta.addFile(commitFile);
@@ -189,7 +208,7 @@ public class CLDiffOffline implements IHandleCommit {
         }
     }
 
-    public void setDeletedCommitFile(int cnt,String parentCommitId,String commitId,String filePath){
+    public void setDeletedCommitFile(int cnt,String parentCommitId,String commitId,String filePath,boolean doesGenDiffFile){
         try {
             CommitFile commitFile = new CommitFile();
             byte[] prevFile = jGitHelper.extract(filePath, parentCommitId);
@@ -210,6 +229,9 @@ public class CLDiffOffline implements IHandleCommit {
             commitFile.setPrev_file_path("prev/" + parentCommitId + "/" + filePath);
             commitFile.setFile_name(fileName);
             commitFile.setParent_commit(parentCommitId);
+            if(doesGenDiffFile) {
+                commitFile.setDiffPath(meta.getOutputDir() + "/gen/"+parentCommitId+"/Diff"+fileName+".json");
+            }
             meta.addFile(commitFile);
         }catch (Exception e){
             e.printStackTrace();
