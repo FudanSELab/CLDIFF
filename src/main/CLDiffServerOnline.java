@@ -75,98 +75,106 @@ public class CLDiffServerOnline {
     static class FetchFileContentHandler implements HttpHandler {
 
         @Override
-        public void handle(HttpExchange exchange) throws IOException {
+        public void handle(HttpExchange exchange) {
             System.out.println("FetchFileContentHandler");
-            InputStream is = exchange.getRequestBody();
-            byte[] cache = new byte[100];
-            int res;
-            StringBuilder postString = new StringBuilder();
-            while ((res = is.read(cache)) != -1) {
-                String a = new String(cache).substring(0, res);
-                postString.append(a);
-            }
-            System.out.println(postString);
-            String[] entries = postString.toString().split("&");
-            Map<String,String> mMap = new HashMap<>();
-
-            for(String entry: entries){
-                String[] kvs = entry.split("=");
-                mMap.put(kvs[0],kvs[1]);
-            }
-            // author、commit_hash、parent_commit_hash、project_name、prev_file_path、curr_file_path
-            String author = "";
-
-            String commit_hash = mMap.get("commit_hash");
-            String parent_commit_hash = mMap.get("parent_commit_hash");
-            String project_name = mMap.get("project_name");
-            String fileName = mMap.get("file_name");
-            String[] fileNames = fileName.split("---");
-            int id = Integer.valueOf(fileNames[0]);
-            //文件路径为global_Path/project_name/commit_id/meta.json
-            String metaStr = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/meta.json");
-            Meta meta = new Gson().fromJson(metaStr, Meta.class);
-            CommitFile file = meta.getFiles().get(id);
-            String action = meta.getActions().get(id);
-            String curr_file_path = "";
-            String prev_file_path = "";
-            String currFileContent = "";
-            String prevFileContent = "";
-            String diff = null;
-            if("modified".equals(action)){
-                prev_file_path = file.getPrev_file_path();
-                curr_file_path = file.getCurr_file_path();
-                currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
-                prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
-                if(!CLDiffCore.isFilter(prev_file_path)){
-                    List<CommitFile> commitFileList = meta.getFiles();
-                    String diffPath = "";
-                    for (CommitFile commitFile : commitFileList) {
-                        if (commitFile.getCurr_file_path().equals(curr_file_path)) {
-                            diffPath = commitFile.getDiffPath();
-                            break;
-                        }
-                    }
-                    diff = FileUtil.read(diffPath);
+            try {
+                InputStream is = exchange.getRequestBody();
+                byte[] cache = new byte[100];
+                int res;
+                StringBuilder postString = new StringBuilder();
+                while ((res = is.read(cache)) != -1) {
+                    String a = new String(cache).substring(0, res);
+                    postString.append(a);
                 }
-            }else if("added".equals(action)){
-                curr_file_path = file.getCurr_file_path();
-                currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
-            }else if("deleted".equals(action)){
-                prev_file_path = file.getPrev_file_path();
-                prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
-            }
-            String link = FileUtil.read(meta.getLinkPath());
-            Content content = new Content(prevFileContent, currFileContent, diff, link);
-            String contentResultStr = new Gson().toJson(content);
+                System.out.println(postString);
+                String[] entries = postString.toString().split("&");
+                Map<String, String> mMap = new HashMap<>();
+
+                for (String entry : entries) {
+                    String[] kvs = entry.split("=");
+                    mMap.put(kvs[0], kvs[1]);
+                }
+                // author、commit_hash、parent_commit_hash、project_name、prev_file_path、curr_file_path
+                String author = "";
+
+                String commit_hash = mMap.get("commit_hash");
+                String parent_commit_hash = mMap.get("parent_commit_hash");
+                String project_name = mMap.get("project_name");
+                String fileName = mMap.get("file_name");
+                String[] fileNames = fileName.split("---");
+                int id = Integer.valueOf(fileNames[0]);
+                //文件路径为global_Path/project_name/commit_id/meta.json
+                String metaStr = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/meta.json");
+                Meta meta = new Gson().fromJson(metaStr, Meta.class);
+                CommitFile file = meta.getFiles().get(id);
+                String action = meta.getActions().get(id);
+                String curr_file_path = "";
+                String prev_file_path = "";
+                String currFileContent = "";
+                String prevFileContent = "";
+                String diff = null;
+                if ("modified".equals(action)) {
+                    prev_file_path = file.getPrev_file_path();
+                    curr_file_path = file.getCurr_file_path();
+                    currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
+                    prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
+                    if (!CLDiffCore.isFilter(prev_file_path)) {
+                        List<CommitFile> commitFileList = meta.getFiles();
+                        String diffPath = "";
+                        for (CommitFile commitFile : commitFileList) {
+                            if (commitFile.getCurr_file_path().equals(curr_file_path)) {
+                                diffPath = commitFile.getDiffPath();
+                                break;
+                            }
+                        }
+                        diff = FileUtil.read(diffPath);
+                    }
+                } else if ("added".equals(action)) {
+                    curr_file_path = file.getCurr_file_path();
+                    currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
+                } else if ("deleted".equals(action)) {
+                    prev_file_path = file.getPrev_file_path();
+                    prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
+                }
+                String link = FileUtil.read(meta.getLinkPath());
+                Content content = new Content(prevFileContent, currFileContent, diff, link);
+                String contentResultStr = new Gson().toJson(content);
 //            System.out.println(contentResultStr);
 //            System.out.println(String.valueOf(contentResultStr.length()));
-            byte[] bytes = contentResultStr.getBytes();
-            exchange.sendResponseHeaders(201, bytes.length);
-            try (BufferedOutputStream out = new BufferedOutputStream(exchange.getResponseBody())) {
-                try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes)) {
-                    byte [] buffer = new byte [1000];
-                    int count ;
-                    while ((count = bis.read(buffer)) != -1) {
-                        out.write(buffer, 0, count);
+                byte[] bytes = contentResultStr.getBytes();
+                exchange.sendResponseHeaders(201, bytes.length);
+                try (BufferedOutputStream out = new BufferedOutputStream(exchange.getResponseBody())) {
+                    try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes)) {
+                        byte[] buffer = new byte[1000];
+                        int count;
+                        while ((count = bis.read(buffer)) != -1) {
+                            out.write(buffer, 0, count);
+                        }
+                        out.close();
                     }
-                    out.close();
                 }
+            }catch(Exception e){
+                e.printStackTrace();
             }
         }
     }
 
     static class ClearCacheHandler implements HttpHandler {
         @Override
-        public void handle(HttpExchange exchange) throws IOException {
+        public void handle(HttpExchange exchange) {
             System.out.println("clear cache");
-            Runtime runtime = Runtime.getRuntime();
+            try {
+                Runtime runtime = Runtime.getRuntime();
 //            String[] args = new String[] {"rm -rf", "/c", String.format("rm -rf %s", global_Path)};
-            runtime.exec("rm -rf " + Global.outputDir);
-            OutputStream os = exchange.getResponseBody();
-            String success = "SUCCESS\n";
-            exchange.sendResponseHeaders(200,success.length());
-            os.write(success.getBytes());
-            os.close();
+                runtime.exec("rm -rf " + Global.outputDir);
+                OutputStream os = exchange.getResponseBody();
+                String success = "SUCCESS\n";
+                exchange.sendResponseHeaders(200, success.length());
+                os.write(success.getBytes());
+                os.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -176,82 +184,91 @@ public class CLDiffServerOnline {
     static class FetchMetaCacheHandler implements HttpHandler {
 
         @Override
-        public void handle(HttpExchange exchange) throws IOException {
+        public void handle(HttpExchange exchange) {
             System.out.println("FetchMetaCacheHandler");
-            InputStream is = exchange.getRequestBody();
-            OutputStream os = exchange.getResponseBody();
-            byte[] cache = new byte[100];
-            int res;
-            StringBuilder postString = new StringBuilder();
-            while ((res = is.read(cache)) != -1) {
-                String a = new String(cache).substring(0, res);
-                postString.append(a);
-                // postString += (new String(cache)).substring(0, res);
+            try {
+                InputStream is = exchange.getRequestBody();
+                OutputStream os = exchange.getResponseBody();
+                byte[] cache = new byte[100];
+                int res;
+                StringBuilder postString = new StringBuilder();
+                while ((res = is.read(cache)) != -1) {
+                    String a = new String(cache).substring(0, res);
+                    postString.append(a);
+                    // postString += (new String(cache)).substring(0, res);
+                }
+                System.out.println(postString);
+                //获得commit_hash
+                String commitHash = new JSONObject(postString.toString()).getString("commit_hash");
+                String projectName = new JSONObject(postString.toString()).getString("project_name");
+                //读取文件
+                //文件路径为global_Path/project_name/commit_id/meta.txt
+                String meta = FileUtil.read(Global.outputDir + projectName + "/" + commitHash + "/meta.json");
+                System.out.println(meta);
+                exchange.sendResponseHeaders(200, meta.length());
+                os.write(meta.getBytes());
+                os.close();
+            }catch (Exception e){
+                e.printStackTrace();
             }
-            System.out.println(postString);
-            //获得commit_hash
-            String commitHash = new JSONObject(postString.toString()).getString("commit_hash");
-            String projectName = new JSONObject(postString.toString()).getString("project_name");
-            //读取文件
-            //文件路径为global_Path/project_name/commit_id/meta.txt
-            String meta = FileUtil.read(Global.outputDir + projectName + "/" + commitHash + "/meta.json");
-            System.out.println(meta);
-            exchange.sendResponseHeaders(200, meta.length());
-            os.write(meta.getBytes());
-            os.close();
         }
     }
 
     static class CacheGeneratorHandler implements HttpHandler {
         @Override
-        public void handle(HttpExchange exchange) throws IOException {
+        public void handle(HttpExchange exchange) {
             System.out.println("CacheHandler");
-            InputStream is = exchange.getRequestBody();
-            byte[] cache = new byte[1000 * 1024];
-            int res;
-            StringBuilder postString = new StringBuilder();
-            while ((res = is.read(cache)) != -1) {
-                //todo
-                //这里字符串拼接最好改成StringBuilder拼接，在循环里做str+str操作可能会有内存问题
-                String a = new String(cache).substring(0, res);
-                postString.append(a);
-                // postString += (new String(cache)).substring(0, res);
-            }
-            System.out.println(postString);
+            try {
+                InputStream is = exchange.getRequestBody();
+                byte[] cache = new byte[1000 * 1024];
+                int res;
+                StringBuilder postString = new StringBuilder();
+                while ((res = is.read(cache)) != -1) {
+                    //todo
+                    //这里字符串拼接最好改成StringBuilder拼接，在循环里做str+str操作可能会有内存问题
+                    String a = new String(cache).substring(0, res);
+                    postString.append(a);
+                    // postString += (new String(cache)).substring(0, res);
+                }
+                System.out.println(postString);
 
-            //保存为文件
-            String[] data = postString.toString().split(DIVIDER);
-            if (data.length <= 1) {
-                return;
+                //保存为文件
+                String[] data = postString.toString().split(DIVIDER);
+                if (data.length <= 1) {
+                    return;
+                }
+                int size = data.length;
+                //找到meta信息
+                Meta meta = FileUtil.filterMeta(data[size - 2]);
+                //建立一个文件夹
+                //文件夹命名为commit_hash
+                //文件名以name字段的hash值
+                File folder = FileUtil.createFolder(Global.outputDir + meta.getProject_name() + "/" + meta.getCommit_hash());
+                //代码文件
+                FileUtil.convertCodeToFile(data, folder, meta);
+                CLDiffAPI diff = new CLDiffAPI(Global.outputDir, meta);
+                diff.generateDiffMinerOutput();
+                List<String> filePathList = Global.outputFilePathList;
+                //diff
+                int diffFileSize = filePathList.size() - 1;
+                for (int i = 0; i < diffFileSize; i++) {
+                    String diffPath = filePathList.get(i);
+                    meta.getFiles().get(i).setDiffPath(diffPath);
+                }
+                //link
+                meta.setLinkPath(filePathList.get(diffFileSize));
+                //写入meta文件
+                meta.setOutputDir(Global.outputDir);
+                FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta), folder);
+                String response = new Gson().toJson(meta);
+                System.out.println(response);
+                exchange.sendResponseHeaders(200, response.length());
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            }catch(Exception e){
+                e.printStackTrace();
             }
-            int size = data.length;
-            //找到meta信息
-            Meta meta = FileUtil.filterMeta(data[size - 2]);
-            //建立一个文件夹
-            //文件夹命名为commit_hash
-            //文件名以name字段的hash值
-            File folder = FileUtil.createFolder(Global.outputDir + meta.getProject_name() + "/" + meta.getCommit_hash());
-            //代码文件
-            FileUtil.convertCodeToFile(data, folder, meta);
-            CLDiffAPI diff = new CLDiffAPI(Global.outputDir, meta);
-            diff.generateDiffMinerOutput();
-            List<String> filePathList = Global.outputFilePathList;
-            //diff
-            int diffFileSize = filePathList.size() - 1;
-            for (int i = 0; i < diffFileSize; i++) {
-                String diffPath = filePathList.get(i);
-                meta.getFiles().get(i).setDiffPath(diffPath);
-            }
-            //link
-            meta.setLinkPath(filePathList.get(diffFileSize));
-            //写入meta文件
-            FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta), folder);
-            String response = new Gson().toJson(meta);
-            System.out.println(response);
-            exchange.sendResponseHeaders(200, response.length());
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
         }
 
     }

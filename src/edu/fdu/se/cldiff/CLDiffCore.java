@@ -27,7 +27,7 @@ public class CLDiffCore {
     public ChangeEntityData changeEntityData;
     public FileOutputLog mFileOutputLog;
 
-    public void doo(String filePrev, String fileCurr, String output) {
+    public void dooDiffFile(String filePrev, String fileCurr, String output) {
         int index = filePrev.lastIndexOf('/');
         String fileName = filePrev.substring(index+1,filePrev.length());
         Global.fileName = fileName;
@@ -40,6 +40,11 @@ public class CLDiffCore {
         runDiff(preDiff,fileName);
     }
 
+    /**
+     * filter out non-java files or test files
+     * @param filePathName
+     * @return true: non-java files or test files, false:java files
+     */
     public static boolean isFilter(String filePathName){
         String name = filePathName.toLowerCase();
         if(!name.endsWith(".java")){
@@ -57,7 +62,7 @@ public class CLDiffCore {
     }
 
 
-    public void doo(String fileName,byte[] filePrevContent, byte[] fileCurrContent, String output) {
+    public void dooDiffFile(String fileName, byte[] filePrevContent, byte[] fileCurrContent, String output) {
         long start = System.nanoTime();
         // 1.pre
         FilePairPreDiff preDiff = new FilePairPreDiff();

@@ -22,7 +22,7 @@ public class Test {
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
                 if(currf1.getName().startsWith("TestMove.java")) {
                     System.out.println(currf1.getName());
-//                    doo(prevFile, currf1.getAbsolutePath(), outputDir);
+//                    dooDiffFile(prevFile, currf1.getAbsolutePath(), outputDir);
                     testDoo(prevFile, currf1.getAbsolutePath(), outputDir);
                     System.out.println();
                 }

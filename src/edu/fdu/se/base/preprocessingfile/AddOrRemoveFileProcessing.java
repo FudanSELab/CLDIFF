@@ -44,7 +44,7 @@ public class AddOrRemoveFileProcessing {
     }
 
     public void init(TypeDeclaration typeDeclaration){
-        int treeType =0;
+        int treeType = 0;
         if(FILE_TYPE.equals(ChangeEntityDesc.StageIIIFile.DST)){
             treeType = ChangeEntityDesc.StageITreeType.DST_TREE_NODE;
         }else{

@@ -43,9 +43,9 @@ public class CLDiffAPI {
     public void initDataFromJson(Meta meta) {
         List<CommitFile> commitFiles = meta.getFiles();
         List<String> actions = meta.getActions();
-        for (int i =0;i<commitFiles.size();i++){
+        for (int i = 0; i < commitFiles.size(); i++) {
             CommitFile file = commitFiles.get(i);
-            if(file.getDiffPath()==null){
+            if (file.getDiffPath() == null) {
                 continue;
             }
             String action = actions.get(i);
@@ -59,10 +59,10 @@ public class CLDiffAPI {
             byte[] prevBytes = null;
             byte[] currBytes = null;
             try {
-                if(prevFilePath != null){
+                if (prevFilePath != null) {
                     prevBytes = Files.readAllBytes(Paths.get(basePath + "/" + prevFilePath));
                 }
-                if(currFilePath !=null) {
+                if (currFilePath != null) {
                     currBytes = Files.readAllBytes(Paths.get(basePath + "/" + currFilePath));
                 }
             } catch (Exception e) {
@@ -86,15 +86,12 @@ public class CLDiffAPI {
                 continue;
             }
             if (fp.getPrev() == null) {
-                //todo test
                 this.clDiffCore.dooAddFile(fp.getFileName(), fp.getCurr(), absolutePath);
-            } else if(fp.getCurr() == null){
-                //todo test
+            } else if (fp.getCurr() == null) {
                 this.clDiffCore.dooRemoveFile(fp.getFileName(), fp.getPrev(), absolutePath);
-            } else{
-                this.clDiffCore.doo(fp.getFileName(), fp.getPrev(), fp.getCurr(), absolutePath);
+            } else {
+                this.clDiffCore.dooDiffFile(fp.getFileName(), fp.getPrev(), fp.getCurr(), absolutePath);
             }
-
             this.fileChangeEntityData.put(fp.getParentCommit() + "@@@" + this.clDiffCore.changeEntityData.fileName, this.clDiffCore.changeEntityData);
         }
         List<String> fileNames = new ArrayList<>(this.fileChangeEntityData.keySet());
