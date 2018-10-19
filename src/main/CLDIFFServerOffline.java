@@ -7,8 +7,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import edu.fdu.se.base.common.Global;
-import edu.fdu.se.cldiff.CLDiffCore;
-import edu.fdu.se.cldiff.CLDiffOffline;
+import edu.fdu.se.cldiff.CLDiffLocal;
 import edu.fdu.se.fileutil.FileUtil;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Content;
@@ -31,6 +30,7 @@ public class CLDIFFServerOffline {
 
 
     public static void main(String[] arg) throws Exception {
+        Global.runningMode = 1;
         Global.outputDir = arg[0];
         Global.repoPath = arg[1]; // XXX/.git
         String[] data = Global.repoPath.split("/");
@@ -174,9 +174,9 @@ public class CLDIFFServerOffline {
     }
 
     public static String generateCLDIFFResult(String commitHash,File metaFile,String outputDir) {
-        CLDiffOffline clDiffOffline = new CLDiffOffline();
-        clDiffOffline.run(commitHash,Global.repoPath,outputDir);
-        Meta meta =  clDiffOffline.meta;
+        CLDiffLocal clDiffLocal = new CLDiffLocal();
+        clDiffLocal.run(commitHash,Global.repoPath,outputDir);
+        Meta meta =  clDiffLocal.meta;
         //git 读取保存，生成meta
         List<String> filePathList = Global.outputFilePathList;
         //diff

@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -206,7 +207,7 @@ public class GenerateChangeEntityJson {
     }
 
 
-    public static String generateEntityJson(MiningActionData miningActionData) {
+    public static JSONArray generateEntityJson(MiningActionData miningActionData) {
         List<ChangeEntity> changeEntityList = miningActionData.getChangeEntityList();
         JSONArray jsonArray = new JSONArray();
         for (int i = 0; i < changeEntityList.size(); i++) {
@@ -214,7 +215,35 @@ public class GenerateChangeEntityJson {
             JSONObject jsonObject = changeEntity.stageIIIBean.genJSonObject();
             jsonArray.put(jsonObject);
         }
-        return jsonArray.toString(4);
+        return jsonArray;
+    }
+
+
+    public static String toConsoleString(JSONArray jsonArray){
+        StringBuffer sb = new StringBuffer();
+        sb.append("Concise Code Differences:\n");
+        Iterator iter = jsonArray.iterator();
+        while(iter.hasNext()){
+            JSONObject jo = (JSONObject) iter.next();
+            sb.append(jo.get("id"));
+            sb.append(". ");
+            sb.append(jo.get("description"));
+
+            sb.append("\n");
+            if(jo.has("opt2-exp2")){
+                JSONArray arr = (JSONArray) jo.get("opt2-exp2");
+                Iterator iter2 = arr.iterator();
+                while(iter2.hasNext()){
+                    String s = (String) iter2.next();
+                    sb.append("\t"+s);
+                    sb.append("\n");
+                }
+            }
+            sb.append("\t"+jo.get("range"));
+            sb.append("\n");
+        }
+        sb.append("\n");
+        return sb.toString();
     }
 
 

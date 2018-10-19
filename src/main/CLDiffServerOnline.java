@@ -32,6 +32,7 @@ public class CLDiffServerOnline {
 
     public static void main(String[] arg) throws Exception {
         Global.outputDir = arg[0];
+        Global.runningMode = 2;
         HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
         server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
         server.createContext("/DiffMiner/main/fetchMetaCache", new FetchMetaCacheHandler());

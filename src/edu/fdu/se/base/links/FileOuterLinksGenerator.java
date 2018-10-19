@@ -14,6 +14,7 @@ import edu.fdu.se.base.miningchangeentity.member.ClassChangeEntity;
 import edu.fdu.se.base.miningchangeentity.member.MethodChangeEntity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -74,8 +75,9 @@ public class FileOuterLinksGenerator {
         return stmtList;
     }
 
-    public void checkSimilarity(Map<String, ChangeEntityData> mMap) {
+    public void checkSimilarity(Map<String, ChangeEntityData> mMap,TotalFileLinks totalFileLinks) {
         List<ChangeEntity> totalEntityList = new ArrayList<>();
+        Map<Integer,String> changeEntityDataDict = new HashMap<>();
         List<Integer> indexList = new ArrayList<>();
         for (Entry<String, ChangeEntityData> entry : mMap.entrySet()) {
             for (ChangeEntity tmp : entry.getValue().mad.getChangeEntityList()) {
@@ -83,6 +85,7 @@ public class FileOuterLinksGenerator {
                     continue;
                 }
                 totalEntityList.add(tmp);
+                changeEntityDataDict.put(tmp.getChangeEntityId(),entry.getKey());
                 indexList.add(tmp.getChangeEntityId());
             }
         }
@@ -103,20 +106,26 @@ public class FileOuterLinksGenerator {
                 for (int j = i + 1; j < someTypeOfChangeClassA.size(); j++) {
                     ChangeEntity a = someTypeOfChangeClassA.get(i);
                     ChangeEntity b = someTypeOfChangeClassA.get(j);
-                    if (!a.stageIIBean.getOpt().equals(b.stageIIBean.getOpt())) {
-                        continue;
-                    }
-                    if (a.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)) {
+                    if (!a.stageIIBean.getOpt().equals(b.stageIIBean.getOpt())
+                            || a.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)) {
                         continue;
                     }
                     if (a.clusteredActionBean != null && b.clusteredActionBean != null) {
-
                         if (a.clusteredActionBean.fafather.getAstClass().equals(b.clusteredActionBean.fafather.getAstClass())
                                 && a.clusteredActionBean.actions.size() == b.clusteredActionBean.actions.size()) {
                             TreeDistance treeDistance = new TreeDistance(a.clusteredActionBean.fafather, b.clusteredActionBean.fafather);
                             float distance = treeDistance.calculateTreeDistance();
-                            if (distance <= 1.0)
-                                System.out.println(a.getChangeEntityId() + " " + b.changeEntityId + " " + distance);
+                            if (distance <= 1.0) {
+                                String fileNameA = changeEntityDataDict.get(a.getChangeEntityId()).split("@@@")[1];
+                                String fileNameB = changeEntityDataDict.get(b.getChangeEntityId()).split("@@@")[1];
+                                if(fileNameA.equals(fileNameB)){
+                                    Link link = new Link(fileNameA,a,b,ChangeEntityDesc.StageIIIAssociationType.SYSTEMATIC_CHANGE,null);
+                                    totalFileLinks.addEntry(changeEntityDataDict.get(a.getChangeEntityId()),link);
+                                }else{
+                                    Link link = new Link(fileNameA,fileNameB,a,b,ChangeEntityDesc.StageIIIAssociationType.SYSTEMATIC_CHANGE,null);
+                                    totalFileLinks.addFile2FileAssos(changeEntityDataDict.get(a.getChangeEntityId()),changeEntityDataDict.get(b.getChangeEntityId()),link);
+                                }
+                            }
                         }
                     }
                 }

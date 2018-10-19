@@ -13,31 +13,31 @@ import java.util.Map;
  */
 public class TotalFileLinks {
 
-    public Map<String,List<Link>> fileAndfileTpfileAssos;
+    public Map<String,List<Link>> linksInFileAndWithFiles;
 
     public TotalFileLinks(){
-        fileAndfileTpfileAssos = new HashMap<>();
+        linksInFileAndWithFiles = new HashMap<>();
     }
 
     public void addEntry(String fileName,List<Link> assos){
-        if(fileAndfileTpfileAssos.containsKey(fileName)){
-            List<Link> links = fileAndfileTpfileAssos.get(fileName);
+        if(linksInFileAndWithFiles.containsKey(fileName)){
+            List<Link> links = linksInFileAndWithFiles.get(fileName);
             links.addAll(assos);
         }else{
             List<Link> links = new ArrayList<>();
             links.addAll(assos);
-            fileAndfileTpfileAssos.put(fileName, links);
+            linksInFileAndWithFiles.put(fileName, links);
         }
     }
 
     public void addEntry(String fileName,Link asso){
-        if(fileAndfileTpfileAssos.containsKey(fileName)){
-            List<Link> links = fileAndfileTpfileAssos.get(fileName);
+        if(linksInFileAndWithFiles.containsKey(fileName)){
+            List<Link> links = linksInFileAndWithFiles.get(fileName);
             links.add(asso);
         }else{
             List<Link> links = new ArrayList<>();
             links.add(asso);
-            fileAndfileTpfileAssos.put(fileName, links);
+            linksInFileAndWithFiles.put(fileName, links);
         }
     }
 
@@ -50,19 +50,38 @@ public class TotalFileLinks {
             key = fileB +"----"+fileA;
         }
         List<Link> mList;
-        if(fileAndfileTpfileAssos.containsKey(key)) {
-            mList = fileAndfileTpfileAssos.get(key);
+        if(linksInFileAndWithFiles.containsKey(key)) {
+            mList = linksInFileAndWithFiles.get(key);
             mList.addAll(a);
         }else{
             mList = new ArrayList<>();
             mList.addAll(a);
-            fileAndfileTpfileAssos.put(key,mList);
+            linksInFileAndWithFiles.put(key,mList);
+        }
+    }
+
+    public void addFile2FileAssos(String fileA,String fileB,Link a){
+        String key;
+        if(fileA.compareTo(fileB)<0){
+            key = fileA +"----"+fileB;
+        }else{
+            key = fileB +"----"+fileA;
+        }
+        List<Link> mList;
+        if(linksInFileAndWithFiles.containsKey(key)) {
+            mList = linksInFileAndWithFiles.get(key);
+            mList.add(a);
+        }else{
+            mList = new ArrayList<>();
+            mList.add(a);
+            linksInFileAndWithFiles.put(key,mList);
         }
     }
 
     public String toConsoleString(){
         StringBuilder sb = new StringBuilder();
-        for(Map.Entry<String,List<Link>> entry:this.fileAndfileTpfileAssos.entrySet()){
+        sb.append("Links:\n");
+        for(Map.Entry<String,List<Link>> entry:this.linksInFileAndWithFiles.entrySet()){
             String key = entry.getKey();
             List<Link> assos = entry.getValue();
 //            if(assos.size()<=0){
@@ -90,7 +109,7 @@ public class TotalFileLinks {
     public String toAssoJSonString(){
         JSONObject jsonObject = new JSONObject();
         JSONArray ja2 = new JSONArray();
-        for(Map.Entry<String,List<Link>> entry:this.fileAndfileTpfileAssos.entrySet()){
+        for(Map.Entry<String,List<Link>> entry:this.linksInFileAndWithFiles.entrySet()){
             JSONObject jo2 = new JSONObject();
             String key = entry.getKey();
             if(key.contains("----")) {
@@ -109,9 +128,9 @@ public class TotalFileLinks {
                 jo2.put("parent-commit",data2[0]);
 
             }
-            List<Link> assos = entry.getValue();
+            List<Link> links = entry.getValue();
             JSONArray linkArr = new JSONArray();
-            for(Link as : assos){
+            for(Link as : links){
                 linkArr.put(as.linkJsonString());
             }
             jo2.put("links",linkArr);

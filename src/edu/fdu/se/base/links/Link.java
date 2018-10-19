@@ -22,7 +22,7 @@ public class Link {
 
     private String keyWord;
 
-    public Link(ChangeEntity changeEntity1, ChangeEntity changeEntity2, String type, String keyWord, String fileName){
+    public Link(String fileName,ChangeEntity changeEntity1, ChangeEntity changeEntity2, String type, String keyWord){
         this.changeEntity1 = changeEntity1;
         this.changeEntity2 = changeEntity2;
         this.type = type;

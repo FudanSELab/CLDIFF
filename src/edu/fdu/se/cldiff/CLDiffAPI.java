@@ -114,7 +114,7 @@ public class CLDiffAPI {
                 totalFileLinks.addFile2FileAssos(fileNameA, fileNameB, fileOuterLinksGenerator.mAssos);
             }
         }
-        new FileOuterLinksGenerator().checkSimilarity(this.fileChangeEntityData);
+        new FileOuterLinksGenerator().checkSimilarity(this.fileChangeEntityData,totalFileLinks);
         clDiffCore.mFileOutputLog.writeLinkJson(totalFileLinks.toAssoJSonString());
         System.out.println(totalFileLinks.toConsoleString());
         fileChangeEntityData.clear();

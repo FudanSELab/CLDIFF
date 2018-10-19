@@ -27,8 +27,13 @@ public class Global {
 
 
     public static Map<Integer,String> changeEntityFileNameMap;
-
-
+    /**
+     * running mode
+     * 0 command mode
+     * 1 offline mode
+     * 2 online mode
+     */
+    public static int runningMode;
     /**
      * input configs
      */

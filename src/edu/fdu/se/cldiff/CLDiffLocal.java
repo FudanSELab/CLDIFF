@@ -21,27 +21,10 @@ import java.util.Map;
  * Created by huangkaifeng on 2018/8/23.
  * cmd entrance for cldiff
  */
-public class CLDiffOffline implements IHandleCommit {
+public class CLDiffLocal implements IHandleCommit {
 
     public JGitHelper jGitHelper;
     public Meta meta;
-
-    public static void main(String args[]){
-        CLDiffOffline CLDiffOffline = new CLDiffOffline();
-        CLDiffOffline.run();
-
-    }
-
-    public void run(){
-        String repo = "/path/to/git/repo/.git";
-        String commitId = "commit id";
-        String outputDir = "/path/to/output/dir";
-        jGitHelper = new JGitHelper(repo);
-        initMeta(repo,commitId,outputDir);
-        jGitHelper.analyzeOneCommit(this,commitId);
-        CLDiffAPI clDiffAPI = new CLDiffAPI(outputDir,meta);
-        clDiffAPI.generateDiffMinerOutput();
-    }
 
     public void run(String commitId,String repo,String outputDir){
         jGitHelper = new JGitHelper(repo);
@@ -50,8 +33,6 @@ public class CLDiffOffline implements IHandleCommit {
         CLDiffAPI clDiffAPI = new CLDiffAPI(outputDir,meta);
         clDiffAPI.generateDiffMinerOutput();
     }
-
-
 
     public void initMeta(String repo,String commitId,String outputDir){
         meta = new Meta();
@@ -79,8 +60,6 @@ public class CLDiffOffline implements IHandleCommit {
         String dateString = sdf.format(c.getTime());
         meta.setDate_time(dateString);
     }
-
-
 
     public void handleCommit(Map<String, Map<String, List<String>>> changedFiles, String commitId,RevCommit commit){
         loadCommitMeta(commit.getAuthorIdent().getName(),commit.getCommitTime(),commit.getCommitterIdent().getName(),commit.getShortMessage()+"\n\n\n"+commit.getFullMessage());
@@ -126,8 +105,6 @@ public class CLDiffOffline implements IHandleCommit {
 
         }
     }
-
-
 
     public void setCommitFile(int cnt,String parentCommitId,String commitId,String filePath,boolean isFiltered){
         try {

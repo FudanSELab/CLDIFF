@@ -223,7 +223,7 @@ public class ChangeEntityDesc {
         public static final String ABSTRACT_METHOD = "Abstract-Method: %s implemented abstract method in %s";
         public static final String OVERRIDE_METHOD = "Override-Method: %s overridden method in %s";
         public static final String IMPLEMENT_METHOD = "Implement-Method: %s implemented interface in %s";
-        public static final String SYSTEMATIC_CHANGE = "Systematic-Change: similar change";
+        public static final String SYSTEMATIC_CHANGE = "Systematic-Change";
 
     }
 

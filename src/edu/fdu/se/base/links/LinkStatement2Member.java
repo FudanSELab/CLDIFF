@@ -30,7 +30,7 @@ public class LinkStatement2Member {
                             Tree node = (Tree) curAction.getNode();
                             String methodName = LinkUtil.findResidingMethodName(node);
                             String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,vars,methodName);
-                            Link link = new Link(stmt,method, desc,null,changeEntityData.fileName);
+                            Link link = new Link(changeEntityData.fileName,stmt,method, desc,null);
                             changeEntityData.mLinks.add(link);
                             return;
                         }
@@ -45,7 +45,7 @@ public class LinkStatement2Member {
                     Tree node = (Tree) curAction.getNode();
                     String methodName = LinkUtil.findResidingMethodName(node);
                     String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,methodInvokes, methodName);
-                    Link link = new Link(stmt,method, desc,null,changeEntityData.fileName);
+                    Link link = new Link(changeEntityData.fileName,stmt,method, desc,null);
                     changeEntityData.mLinks.add(link);
                 }
             }
@@ -64,7 +64,7 @@ public class LinkStatement2Member {
                     Tree node = (Tree) curAction.getNode();
                     String methodName = LinkUtil.findResidingMethodName(node);
                     String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,a,methodName);
-                    Link link = new Link(stmt,field,desc,null,changeEntityData.fileName);
+                    Link link = new Link(changeEntityData.fileName,stmt,field,desc,null);
                     changeEntityData.mLinks.add(link);
                 }
             }

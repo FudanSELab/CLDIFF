@@ -17,6 +17,7 @@ import edu.fdu.se.base.preprocessingfile.data.PreprocessedData;
 import edu.fdu.se.base.webapi.GenerateChangeEntityJson;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
+import org.json.JSONArray;
 
 /**
  * Created by huangkaifeng on 2018/2/27.
@@ -116,10 +117,13 @@ public class CLDiffCore {
         System.out.println("----grouping " +(end2-start2));
 // json
         GenerateChangeEntityJson.setStageIIIBean(ced);
-        String json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
-        this.mFileOutputLog.writeEntityJson(json);
-        System.out.println(json);
-
+        JSONArray json = GenerateChangeEntityJson.generateEntityJson(ced.mad);
+        this.mFileOutputLog.writeEntityJson(json.toString(4));
+        if(Global.runningMode==0){
+            System.out.println(GenerateChangeEntityJson.toConsoleString(json));
+        }else {
+            System.out.println(json.toString(4));
+        }
 
     }
 
