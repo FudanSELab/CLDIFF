@@ -55,13 +55,13 @@ public class ChangeEntityDesc {
 
         public static final String ENTITY_CONTINUE = "Continue";
 
-        public static final String ENTITY_EXPRESSION_STMT = "Expression Statement";
+        public static final String ENTITY_EXPRESSION_STMT = "ExpressionStatement";
 
-        public static final String ENTITY_CONSTRUCTOR_INVOCATION = "Constructor Invocation";
+        public static final String ENTITY_CONSTRUCTOR_INVOCATION = "ConstructorInvocation";
 
-        public static final String ENTITY_SUPER_CONSTRUCTOR_INVOCATION = "Super Constructor Invocation";
+        public static final String ENTITY_SUPER_CONSTRUCTOR_INVOCATION = "SuperConstructorInvocation";
 
-        public static final String ENTITY_LABELED_STATEMENT = "Labeled Statement";
+        public static final String ENTITY_LABELED_STATEMENT = "LabeledStatement";
 
         public static final String ENTITY_FOR_STMT = "For";
 
@@ -71,13 +71,13 @@ public class ChangeEntityDesc {
 
         public static final String ENTITY_SWITCH_STMT = "Switch";
 
-        public static final String ENTITY_SWITCH_CASE = "Switch Case";
+        public static final String ENTITY_SWITCH_CASE = "SwitchCase";
 
         public static final String ENTITY_SYNCHRONIZED_STMT = "Synchronized";
 
         public static final String ENTITY_TRY_STMT = "Try";
 
-        public static final String ENTITY_VARIABLE_STMT = "Variable Declaration";
+        public static final String ENTITY_VARIABLE_STMT = "VariableDeclaration";
 
         public static final String ENTITY_WHILE_STMT = "While";
 
@@ -89,9 +89,9 @@ public class ChangeEntityDesc {
 
         public static final String ENTITY_THROW_STMT = "Throw";
 
-        public static final String ENTITY_ENHANCED_FOR_STMT = "Enhanced For";
+        public static final String ENTITY_ENHANCED_FOR_STMT = "EnhancedFor";
 
-        public static final String ENTITY_TYPE_DECLARATION_STMT = "Type Declaration";
+        public static final String ENTITY_TYPE_DECLARATION_STMT = "TypeDeclaration(ClassDeclaration)";
 
     }
 
