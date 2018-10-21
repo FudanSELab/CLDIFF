@@ -9,13 +9,13 @@ import com.sun.net.httpserver.HttpServer;
 import edu.fdu.se.base.common.Global;
 import edu.fdu.se.cldiff.CLDiffLocal;
 import edu.fdu.se.fileutil.FileUtil;
+import edu.fdu.se.net.MyNetUtil;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Content;
 import edu.fdu.se.server.Meta;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,26 +39,54 @@ public class CLDIFFServerOffline {
         //传meta文件，如果没有meta，则调用生成
         server.createContext("/fetchMeta", new FetchMetaCacheHandler());
         server.createContext("/fetchFile", new FetchFileContentHandler());
+        server.createContext("/clearCommitRecord",new ClearCacheHandler());
         server.start();
     }
 
-    static Map<String,String> parsePostedKeys(InputStream is) throws IOException{
-        byte[] cache = new byte[100];
-        int res;
-        StringBuilder postString = new StringBuilder();
-        while ((res = is.read(cache)) != -1) {
-            String a = new String(cache).substring(0, res);
-            postString.append(a);
-        }
-        System.out.println(postString);
-        String[] entries = postString.toString().split("&");
-        Map<String, String> mMap = new HashMap<>();
+    /**
+     * 获取Meta缓存
+     */
+    static class FetchMetaCacheHandler implements HttpHandler {
 
-        for (String entry : entries) {
-            String[] kvs = entry.split("=");
-            mMap.put(kvs[0], kvs[1]);
+        @Override
+        public void handle(HttpExchange exchange) {
+            System.out.println("FetchMetaCacheHandler");
+            try {
+                InputStream is = exchange.getRequestBody();
+                String postString = MyNetUtil.getPostString(is);
+                OutputStream os = exchange.getResponseBody();
+                System.out.println("PostContent: " + postString);
+                String commitHash = postString.substring(4);
+                File metaFile = new File(Global.outputDir + "/" + Global.projectName + "/" + commitHash + "/meta.json");
+                String meta = null;
+                if (!metaFile.exists()) {
+                    //生成文件
+                    //文件路径为global_Path/project_name/commit_id/meta.txt
+                    meta = generateCLDIFFResult(commitHash, metaFile, Global.outputDir);
+                } else {
+                    meta = FileUtil.read(Global.outputDir + "/" + Global.projectName + "/" + commitHash + "/meta.json");
+                }
+                System.out.println(meta);
+                exchange.sendResponseHeaders(200, meta.length());
+                os.write(meta.getBytes());
+                os.close();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
-        return mMap;
+    }
+
+    public static String generateCLDIFFResult(String commitHash,File metaFile,String outputDir) {
+        CLDiffLocal clDiffLocal = new CLDiffLocal();
+        clDiffLocal.run(commitHash,Global.repoPath,outputDir);
+        Meta meta =  clDiffLocal.meta;
+        //git 读取保存，生成meta
+//        List<String> filePathList = Global.outputFilePathList;
+//        int diffFileSize = filePathList.size() - 1;
+        //写入meta文件
+        FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta),new File(metaFile.getParent()));
+        String response = new Gson().toJson(meta);
+        return response;
     }
 
 
@@ -72,7 +100,7 @@ public class CLDIFFServerOffline {
             System.out.println("FetchFileContentHandler");
             try {
                 InputStream is = exchange.getRequestBody();
-                Map<String,String> mMap = parsePostedKeys(is);
+                Map<String,String> mMap = MyNetUtil.parsePostedKeys(is);
                 // mMap keys: author,file_name,parent_commit_hash,project_name,commit_hash
                 String commit_hash = mMap.get("commit_hash");
                 String project_name = mMap.get("project_name");
@@ -84,8 +112,8 @@ public class CLDIFFServerOffline {
                 Meta meta = new Gson().fromJson(metaStr, Meta.class);
                 CommitFile file = meta.getFiles().get(id);
                 String action = meta.getActions().get(id);
-                String curr_file_path = "";
-                String prev_file_path = "";
+                String curr_file_path;
+                String prev_file_path;
                 String currFileContent = "";
                 String prevFileContent = "";
                 String diff = null;
@@ -113,79 +141,15 @@ public class CLDIFFServerOffline {
                 byte[] bytes = contentResultStr.getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 OutputStream os = exchange.getResponseBody();
-                writeResponseInBytes(os,bytes);
+                MyNetUtil.writeResponseInBytes(os,bytes);
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
     }
 
-    static void writeResponseInBytes(OutputStream os,byte[] bytes) throws IOException{
 
-        try (BufferedOutputStream out = new BufferedOutputStream(os)) {
-            try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes)) {
-                byte[] buffer = new byte[1000];
-                int count;
-                while ((count = bis.read(buffer)) != -1) {
-                    out.write(buffer, 0, count);
-                }
-                out.close();
-            }
-        }
-    }
 
-    /**
-     * 获取Meta缓存
-     */
-    static class FetchMetaCacheHandler implements HttpHandler {
-
-        @Override
-        public void handle(HttpExchange exchange) {
-            System.out.println("FetchMetaCacheHandler");
-            try {
-                InputStream is = exchange.getRequestBody();
-                OutputStream os = exchange.getResponseBody();
-                byte[] cache = new byte[100];
-                int res;
-                StringBuilder postString = new StringBuilder();
-                while ((res = is.read(cache)) != -1) {
-                    String a = new String(cache).substring(0, res);
-                    postString.append(a);
-                }
-                System.out.println("PostContent: " + postString);
-                String commitHash = postString.toString().substring(4);
-                File metaFile = new File(Global.outputDir + "/" + Global.projectName + "/" + commitHash + "/meta.json");
-                String meta = null;
-                if (!metaFile.exists()) {
-                    //生成文件
-                    //文件路径为global_Path/project_name/commit_id/meta.txt
-                    meta = generateCLDIFFResult(commitHash, metaFile, Global.outputDir);
-                } else {
-                    meta = FileUtil.read(Global.outputDir + "/" + Global.projectName + "/" + commitHash + "/meta.json");
-                }
-                System.out.println(meta);
-                exchange.sendResponseHeaders(200, meta.length());
-                os.write(meta.getBytes());
-                os.close();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static String generateCLDIFFResult(String commitHash,File metaFile,String outputDir) {
-        CLDiffLocal clDiffLocal = new CLDiffLocal();
-        clDiffLocal.run(commitHash,Global.repoPath,outputDir);
-        Meta meta =  clDiffLocal.meta;
-        //git 读取保存，生成meta
-        List<String> filePathList = Global.outputFilePathList;
-        //diff
-        int diffFileSize = filePathList.size() - 1;
-        //写入meta文件
-        FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta),new File(metaFile.getParent()));
-        String response = new Gson().toJson(meta);
-        return response;
-    }
 
     static class ClearCacheHandler implements HttpHandler {
         @Override

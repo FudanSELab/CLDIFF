@@ -10,6 +10,7 @@ import edu.fdu.se.base.common.Global;
 import edu.fdu.se.cldiff.CLDiffCore;
 import edu.fdu.se.cldiff.CLDiffAPI;
 import edu.fdu.se.fileutil.FileUtil;
+import edu.fdu.se.net.MyNetUtil;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Content;
 import edu.fdu.se.server.Meta;
@@ -31,8 +32,8 @@ public class CLDiffServerOnline {
     static final String DIVIDER = "--xxx---fdse---xxx";
 
     public static void main(String[] arg) throws Exception {
-        Global.outputDir = arg[0];
         Global.runningMode = 2;
+        Global.outputDir = arg[0];
         HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
         server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
         server.createContext("/DiffMiner/main/fetchMetaCache", new FetchMetaCacheHandler());
@@ -40,179 +41,6 @@ public class CLDiffServerOnline {
         server.createContext("/DiffMiner/main/clearCache",new ClearCacheHandler());
         server.start();
 
-        //test
-//        Meta meta = readFromMeta(global_Path+"spring-framework/3c1adf7f6af0dff9bda74f40dabe8cf428a62003/meta");
-//        CLDiffAPI diff = new CLDiffAPI(global_Path,meta);
-//        diff.generateDiffMinerOutput();
-    }
-
-    /**
-     * invoked from test
-     * @param path
-     * @return
-     */
-    static Meta readFromMeta(String path){
-        try {
-            FileInputStream fis = new FileInputStream(path);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            String line;
-            StringBuffer sb = new StringBuffer();
-            while((line = br.readLine())!= null){
-                sb.append(line);
-            }
-            Meta obj = new Gson().fromJson(sb.toString(), Meta.class);
-            return obj;
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return null;
-
-    }
-
-    /**
-     * 获取文件内容 link diff
-     */
-    static class FetchFileContentHandler implements HttpHandler {
-
-        @Override
-        public void handle(HttpExchange exchange) {
-            System.out.println("FetchFileContentHandler");
-            try {
-                InputStream is = exchange.getRequestBody();
-                byte[] cache = new byte[100];
-                int res;
-                StringBuilder postString = new StringBuilder();
-                while ((res = is.read(cache)) != -1) {
-                    String a = new String(cache).substring(0, res);
-                    postString.append(a);
-                }
-                System.out.println(postString);
-                String[] entries = postString.toString().split("&");
-                Map<String, String> mMap = new HashMap<>();
-
-                for (String entry : entries) {
-                    String[] kvs = entry.split("=");
-                    mMap.put(kvs[0], kvs[1]);
-                }
-                // author、commit_hash、parent_commit_hash、project_name、prev_file_path、curr_file_path
-                String author = "";
-
-                String commit_hash = mMap.get("commit_hash");
-                String parent_commit_hash = mMap.get("parent_commit_hash");
-                String project_name = mMap.get("project_name");
-                String fileName = mMap.get("file_name");
-                String[] fileNames = fileName.split("---");
-                int id = Integer.valueOf(fileNames[0]);
-                //文件路径为global_Path/project_name/commit_id/meta.json
-                String metaStr = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/meta.json");
-                Meta meta = new Gson().fromJson(metaStr, Meta.class);
-                CommitFile file = meta.getFiles().get(id);
-                String action = meta.getActions().get(id);
-                String curr_file_path = "";
-                String prev_file_path = "";
-                String currFileContent = "";
-                String prevFileContent = "";
-                String diff = null;
-                if ("modified".equals(action)) {
-                    prev_file_path = file.getPrev_file_path();
-                    curr_file_path = file.getCurr_file_path();
-                    currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
-                    prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
-                    if (!CLDiffCore.isFilter(prev_file_path)) {
-                        List<CommitFile> commitFileList = meta.getFiles();
-                        String diffPath = "";
-                        for (CommitFile commitFile : commitFileList) {
-                            if (commitFile.getCurr_file_path().equals(curr_file_path)) {
-                                diffPath = commitFile.getDiffPath();
-                                break;
-                            }
-                        }
-                        diff = FileUtil.read(diffPath);
-                    }
-                } else if ("added".equals(action)) {
-                    curr_file_path = file.getCurr_file_path();
-                    currFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + curr_file_path);
-                } else if ("deleted".equals(action)) {
-                    prev_file_path = file.getPrev_file_path();
-                    prevFileContent = FileUtil.read(Global.outputDir + project_name + "/" + commit_hash + "/" + prev_file_path);
-                }
-                String link = FileUtil.read(meta.getLinkPath());
-                Content content = new Content(prevFileContent, currFileContent, diff, link);
-                String contentResultStr = new Gson().toJson(content);
-//            System.out.println(contentResultStr);
-//            System.out.println(String.valueOf(contentResultStr.length()));
-                byte[] bytes = contentResultStr.getBytes();
-                exchange.sendResponseHeaders(201, bytes.length);
-                try (BufferedOutputStream out = new BufferedOutputStream(exchange.getResponseBody())) {
-                    try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes)) {
-                        byte[] buffer = new byte[1000];
-                        int count;
-                        while ((count = bis.read(buffer)) != -1) {
-                            out.write(buffer, 0, count);
-                        }
-                        out.close();
-                    }
-                }
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    static class ClearCacheHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) {
-            System.out.println("clear cache");
-            try {
-                Runtime runtime = Runtime.getRuntime();
-//            String[] args = new String[] {"rm -rf", "/c", String.format("rm -rf %s", global_Path)};
-                runtime.exec("rm -rf " + Global.outputDir);
-                OutputStream os = exchange.getResponseBody();
-                String success = "SUCCESS\n";
-                exchange.sendResponseHeaders(200, success.length());
-                os.write(success.getBytes());
-                os.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * 获取Meta缓存
-     */
-    static class FetchMetaCacheHandler implements HttpHandler {
-
-        @Override
-        public void handle(HttpExchange exchange) {
-            System.out.println("FetchMetaCacheHandler");
-            try {
-                InputStream is = exchange.getRequestBody();
-                OutputStream os = exchange.getResponseBody();
-                byte[] cache = new byte[100];
-                int res;
-                StringBuilder postString = new StringBuilder();
-                while ((res = is.read(cache)) != -1) {
-                    String a = new String(cache).substring(0, res);
-                    postString.append(a);
-                    // postString += (new String(cache)).substring(0, res);
-                }
-                System.out.println(postString);
-                //获得commit_hash
-                String commitHash = new JSONObject(postString.toString()).getString("commit_hash");
-                String projectName = new JSONObject(postString.toString()).getString("project_name");
-                //读取文件
-                //文件路径为global_Path/project_name/commit_id/meta.txt
-                String meta = FileUtil.read(Global.outputDir + projectName + "/" + commitHash + "/meta.json");
-                System.out.println(meta);
-                exchange.sendResponseHeaders(200, meta.length());
-                os.write(meta.getBytes());
-                os.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
     }
 
     static class CacheGeneratorHandler implements HttpHandler {
@@ -221,20 +49,10 @@ public class CLDiffServerOnline {
             System.out.println("CacheHandler");
             try {
                 InputStream is = exchange.getRequestBody();
-                byte[] cache = new byte[1000 * 1024];
-                int res;
-                StringBuilder postString = new StringBuilder();
-                while ((res = is.read(cache)) != -1) {
-                    //todo
-                    //这里字符串拼接最好改成StringBuilder拼接，在循环里做str+str操作可能会有内存问题
-                    String a = new String(cache).substring(0, res);
-                    postString.append(a);
-                    // postString += (new String(cache)).substring(0, res);
-                }
+                String postString = MyNetUtil.getPostString(is);
                 System.out.println(postString);
-
                 //保存为文件
-                String[] data = postString.toString().split(DIVIDER);
+                String[] data = postString.split(DIVIDER);
                 if (data.length <= 1) {
                     return;
                 }
@@ -273,4 +91,116 @@ public class CLDiffServerOnline {
         }
 
     }
+
+    /**
+     * 获取Meta缓存
+     */
+    static class FetchMetaCacheHandler implements HttpHandler {
+
+        @Override
+        public void handle(HttpExchange exchange) {
+            System.out.println("FetchMetaCacheHandler");
+            try {
+                InputStream is = exchange.getRequestBody();
+                String postString = MyNetUtil.getPostString(is);
+                OutputStream os = exchange.getResponseBody();
+                System.out.println(postString);
+                //获得commit_hash
+                String commitHash = new JSONObject(postString).getString("commit_hash");
+                String projectName = new JSONObject(postString).getString("project_name");
+                //读取文件 文件路径为global_Path/project_name/commit_id/meta.txt
+                String meta = FileUtil.read(Global.outputDir + projectName + "/" + commitHash + "/meta.json");
+                System.out.println(meta);
+                exchange.sendResponseHeaders(200, meta.length());
+                os.write(meta.getBytes());
+                os.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+    /**
+     * 获取文件内容 link diff
+     */
+    static class FetchFileContentHandler implements HttpHandler {
+
+        @Override
+        public void handle(HttpExchange exchange) {
+            System.out.println("FetchFileContentHandler");
+            try {
+                InputStream is = exchange.getRequestBody();
+                Map<String,String> mMap = MyNetUtil.parsePostedKeys(is);
+                // mMap keys: author,file_name,parent_commit_hash,project_name,commit_hash
+                // author、commit_hash、parent_commit_hash、project_name、prev_file_path、curr_file_path
+                String commit_hash = mMap.get("commit_hash");
+                String project_name = mMap.get("project_name");
+                String fileName = mMap.get("file_name");
+                String[] fileNames = fileName.split("---");
+                int id = Integer.valueOf(fileNames[0]);
+                //文件路径为global_Path/project_name/commit_id/meta.json
+                String metaStr = FileUtil.read(Global.outputDir+"/" + project_name + "/" + commit_hash + "/meta.json");
+                Meta meta = new Gson().fromJson(metaStr, Meta.class);
+                CommitFile file = meta.getFiles().get(id);
+                String action = meta.getActions().get(id);
+                String curr_file_path;
+                String prev_file_path;
+                String currFileContent = "";
+                String prevFileContent = "";
+                String diff = null;
+                if ("modified".equals(action)) {
+                    prev_file_path = file.getPrev_file_path();
+                    curr_file_path = file.getCurr_file_path();
+                    currFileContent = FileUtil.read(Global.outputDir +"/"+ project_name + "/" + commit_hash + "/" + curr_file_path);
+                    prevFileContent = FileUtil.read(Global.outputDir +"/"+ project_name + "/" + commit_hash + "/" + prev_file_path);
+                } else if ("added".equals(action)) {
+                    curr_file_path = file.getCurr_file_path();
+                    currFileContent = FileUtil.read(Global.outputDir +"/"+ project_name + "/" + commit_hash + "/" + curr_file_path);
+                } else if ("deleted".equals(action)) {
+                    prev_file_path = file.getPrev_file_path();
+                    prevFileContent = FileUtil.read(Global.outputDir +"/"+ project_name + "/" + commit_hash + "/" + prev_file_path);
+                }
+                if(file.getDiffPath()!=null){
+                    diff = FileUtil.read(file.getDiffPath());
+                }
+                String link = FileUtil.read(meta.getLinkPath());
+                Content content = new Content(prevFileContent, currFileContent, diff, link);
+                String contentResultStr = new Gson().toJson(content);
+//              System.out.println(contentResultStr);
+//              System.out.println(String.valueOf(contentResultStr.length()));
+                byte[] bytes = contentResultStr.getBytes();
+                exchange.sendResponseHeaders(200, bytes.length);
+                OutputStream os = exchange.getResponseBody();
+                MyNetUtil.writeResponseInBytes(os,bytes);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    static class ClearCacheHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) {
+            System.out.println("clear cache");
+            try {
+                Runtime runtime = Runtime.getRuntime();
+//            String[] args = new String[] {"rm -rf", "/c", String.format("rm -rf %s", global_Path)};
+                runtime.exec("rm -rf " + Global.outputDir);
+                OutputStream os = exchange.getResponseBody();
+                String success = "SUCCESS\n";
+                exchange.sendResponseHeaders(200, success.length());
+                os.write(success.getBytes());
+                os.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+
+
 }
