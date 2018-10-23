@@ -39,7 +39,7 @@ public class CLDiffTest extends CLDiffCore {
         String outputDir = rootOutPath;
         this.mFileOutputLog = new FileOutputLog(rootOutPath, "tes");
         this.mFileOutputLog.setCommitId("null");
-        doo(file1, file2, outputDir);
+        dooDiffFile(file1, file2, outputDir);
     }
 
     /**
@@ -55,7 +55,7 @@ public class CLDiffTest extends CLDiffCore {
                 File currf1 = files[i];
                 String prevFile = batchTestFilePath + "\\prev\\" + currf1.getName();
                 System.out.println(i + " " + currf1.getName());
-                doo(prevFile, currf1.getAbsolutePath(), outputDir);
+                dooDiffFile(prevFile, currf1.getAbsolutePath(), outputDir);
                 System.out.println();
             }
         } catch (Exception e) {
