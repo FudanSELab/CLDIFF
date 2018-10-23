@@ -62,7 +62,7 @@ public class CLDiffServerOnline {
                 //建立一个文件夹
                 //文件夹命名为commit_hash
                 //文件名以name字段的hash值
-                File folder = FileUtil.createFolder(Global.outputDir + meta.getProject_name() + "/" + meta.getCommit_hash());
+                File folder = FileUtil.createFolder(Global.outputDir+"/" + meta.getProject_name() + "/" + meta.getCommit_hash());
                 //代码文件
                 FileUtil.convertCodeToFile(data, folder, meta);
                 CLDiffAPI diff = new CLDiffAPI(Global.outputDir, meta);
@@ -109,7 +109,7 @@ public class CLDiffServerOnline {
                 String commitHash = new JSONObject(postString).getString("commit_hash");
                 String projectName = new JSONObject(postString).getString("project_name");
                 //读取文件 文件路径为global_Path/project_name/commit_id/meta.txt
-                String meta = FileUtil.read(Global.outputDir + projectName + "/" + commitHash + "/meta.json");
+                String meta = FileUtil.read(Global.outputDir +"/"+ projectName + "/" + commitHash + "/meta.json");
                 System.out.println(meta);
                 exchange.sendResponseHeaders(200, meta.length());
                 os.write(meta.getBytes());
