@@ -10,6 +10,7 @@ import edu.fdu.se.base.common.Global;
 import edu.fdu.se.cldiff.CLDiffCore;
 import edu.fdu.se.cldiff.CLDiffAPI;
 import edu.fdu.se.fileutil.FileUtil;
+import edu.fdu.se.fileutil.PathUtil;
 import edu.fdu.se.net.MyNetUtil;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Content;
@@ -33,7 +34,7 @@ public class CLDiffServerOnline {
 
     public static void main(String[] arg) throws Exception {
         Global.runningMode = 2;
-        Global.outputDir = arg[0];
+        Global.outputDir = PathUtil.unifyPathSeparator(arg[0]);
         HttpServer server = HttpServer.create(new InetSocketAddress(12007), 0);
         server.createContext("/DiffMiner/main/genCache", new CacheGeneratorHandler());
         server.createContext("/DiffMiner/main/fetchMetaCache", new FetchMetaCacheHandler());

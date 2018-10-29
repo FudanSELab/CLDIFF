@@ -5,7 +5,6 @@ import edu.fdu.se.cldiff.CLDiffLocal;
 
 /**
  * Created by huangkaifeng on 2018/10/11.
- *
  */
 public class CLDIFFCmd {
 
@@ -16,6 +15,5 @@ public class CLDIFFCmd {
         String outputDir = "/path/to/output/dir";
         CLDiffLocal CLDiffLocal = new CLDiffLocal();
         CLDiffLocal.run(commitId,repo,outputDir);
-
     }
 }

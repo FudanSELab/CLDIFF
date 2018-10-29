@@ -9,6 +9,7 @@ import com.sun.net.httpserver.HttpServer;
 import edu.fdu.se.base.common.Global;
 import edu.fdu.se.cldiff.CLDiffLocal;
 import edu.fdu.se.fileutil.FileUtil;
+import edu.fdu.se.fileutil.PathUtil;
 import edu.fdu.se.net.MyNetUtil;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Content;
@@ -31,8 +32,8 @@ public class CLDIFFServerOffline {
 
     public static void main(String[] arg) throws Exception {
         Global.runningMode = 1;
-        Global.outputDir = arg[0];
-        Global.repoPath = arg[1]; // XXX/.git
+        Global.outputDir = PathUtil.unifyPathSeparator(arg[0]);
+        Global.repoPath = PathUtil.unifyPathSeparator(arg[1]); // XXX/.git
         String[] data = Global.repoPath.split("/");
         Global.projectName = data[data.length-2];
         HttpServer server = HttpServer.create(new InetSocketAddress(8082), 0);
