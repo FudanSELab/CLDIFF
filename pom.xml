@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>DiffMiner</groupId>
-    <artifactId>DiffMiner</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <groupId>CLDIFF</groupId>
+    <artifactId>CLDIFF</artifactId>
+    <version>0.0.1</version>
     <build>
         <sourceDirectory>src</sourceDirectory>
         <plugins>
@@ -15,6 +15,21 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <finalName>CLDIFFTest</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <archive>
+                        <manifest>
+                            <mainClass>edu.fdu.se.cldiff.CLDiffTest</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                 </configuration>
             </plugin>
         </plugins>
