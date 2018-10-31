@@ -60,12 +60,18 @@ public class FileOutputLog {
         this.currSourceFile = metaLinkPath+"/curr";
         this.sourceGen = metaLinkPath+"/gen";
 
-            File temp = new File(this.prevSourceFile);
-            temp.mkdirs();
-            temp = new File(this.currSourceFile);
-            temp.mkdirs();
-            temp = new File(this.sourceGen);
-            temp.mkdirs();
+        File temp = new File(this.prevSourceFile);
+        temp.mkdirs();
+        temp = new File(this.currSourceFile);
+        temp.mkdirs();
+        temp = new File(this.sourceGen);
+        temp.mkdirs();
+        this.middleGenPathPrev = temp.getAbsolutePath() +"/prev";
+        this.middleGenPathCurr = temp.getAbsolutePath() +"/curr";
+        temp = new File(this.middleGenPathPrev);
+        temp.mkdirs();
+        temp = new File(this.middleGenPathCurr);
+        temp.mkdirs();
     }
 
 
@@ -87,8 +93,12 @@ public class FileOutputLog {
 
 
     public void writeEntityJson(String json){
-        String path = this.sourceGen +"/"+Global.parentCommit+"/Diff"+Global.fileName+".json";
-//        Global.outputFilePathList.add(path);
+        String path = null;
+        if("null".equals(Global.parentCommit)){
+            path = this.sourceGen +"/Diff"+Global.fileName+".json";
+        } else {
+            path = this.sourceGen + "/" + Global.parentCommit + "/Diff" + Global.fileName + ".json";
+        }
         FileWriter.writeInAll(path, json);
     }
 

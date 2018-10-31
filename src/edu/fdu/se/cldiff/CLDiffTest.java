@@ -2,12 +2,14 @@ package edu.fdu.se.cldiff;
 
 import java.io.File;
 
+import edu.fdu.se.base.common.Global;
 import edu.fdu.se.base.generatingactions.GeneratingActionsData;
 import edu.fdu.se.base.generatingactions.GumTreeDiffParser;
 import edu.fdu.se.base.generatingactions.MyActionGenerator;
 import edu.fdu.se.base.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.config.ProjectProperties;
 import edu.fdu.se.config.PropertyKeys;
+import edu.fdu.se.fileutil.PathUtil;
 
 /**
  * Created by huangkaifeng on 2018/2/27.
@@ -32,13 +34,10 @@ public class CLDiffTest extends CLDiffCore {
     /**
      * 使用修改简化之后的流程，测试单个文件的功能
      */
-    private void runSingleFilePair() {
-        String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
-        String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);
-        String rootOutPath = ProjectProperties.getInstance().getValue(PropertyKeys.DIFF_MINER_GUMTREE_OUTPUT_DIR);
-        String outputDir = rootOutPath;
-        this.mFileOutputLog = new FileOutputLog(rootOutPath, "tes");
-        this.mFileOutputLog.setCommitId("null");
+    private void runSingleFilePair(String file1,String file2,String outputDir) {
+        this.mFileOutputLog = new FileOutputLog(outputDir, "testproject");
+        this.mFileOutputLog.setCommitId("commitid");
+        Global.parentCommit = "null";
         dooDiffFile(file1, file2, outputDir);
     }
 
@@ -68,7 +67,10 @@ public class CLDiffTest extends CLDiffCore {
         CLDiffTest i = new CLDiffTest();
 //        i.runGumTree(null,null);
 //        i.runBatchTest();
-//        i.runSingleFilePair();
+        String filePrev = PathUtil.unifyPathSeparator(args[0]);
+        String fileCurr = PathUtil.unifyPathSeparator(args[1]);
+        String outputDir = PathUtil.unifyPathSeparator(args[2]);
+        i.runSingleFilePair(filePrev,fileCurr,outputDir);
     }
 
 }
