@@ -23,7 +23,7 @@ public class Global {
 
     public static String parentCommit;
 
-    public static List<String> outputFilePathList;
+//    public static List<String> outputFilePathList;
 
 
     public static Map<Integer,String> changeEntityFileNameMap;

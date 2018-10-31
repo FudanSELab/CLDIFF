@@ -150,21 +150,18 @@ public class CLDIFFServerOffline {
     }
 
 
-
-
     static class ClearCacheHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) {
+            System.out.println("clear cache");
             try {
-                System.out.println("clear cache");
-                Runtime runtime = Runtime.getRuntime();
-//            String[] args = new String[] {"rm -rf", "/c", String.format("rm -rf %s", global_Path)};
-                runtime.exec("rm -rf " + Global.outputDir);
-                OutputStream os = exchange.getResponseBody();
+                File f = new File(Global.outputDir);
+                f.delete();
+                OutputStream outs = exchange.getResponseBody();
                 String success = "SUCCESS\n";
                 exchange.sendResponseHeaders(200, success.length());
-                os.write(success.getBytes());
-                os.close();
+                outs.write(success.getBytes());
+                outs.close();
             }catch (Exception e){
                 e.printStackTrace();
             }

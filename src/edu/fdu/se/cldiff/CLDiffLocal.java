@@ -89,7 +89,6 @@ public class CLDiffLocal implements IHandleCommit {
                         cnt += 1;
                     }
                 }
-
             }
             if(changedFileEntry.containsKey("deletedFiles")){
                 List<String> deleted = changedFileEntry.get("deletedFiles");

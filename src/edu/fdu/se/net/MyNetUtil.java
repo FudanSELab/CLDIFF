@@ -38,7 +38,6 @@ public class MyNetUtil {
             String a = new String(cache).substring(0, res);
             postString.append(a);
         }
-        System.out.println(postString);
         return postString.toString();
     }
 

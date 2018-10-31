@@ -7,19 +7,23 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import edu.fdu.se.base.common.Global;
-import edu.fdu.se.cldiff.CLDiffCore;
 import edu.fdu.se.cldiff.CLDiffAPI;
+import edu.fdu.se.cldiff.CLDiffCore;
 import edu.fdu.se.fileutil.FileUtil;
 import edu.fdu.se.fileutil.PathUtil;
 import edu.fdu.se.net.MyNetUtil;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Content;
 import edu.fdu.se.server.Meta;
+import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.internal.storage.file.GlobalAttributesNode;
 import org.json.JSONObject;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.util.HashMap;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -51,35 +55,26 @@ public class CLDiffServerOnline {
             try {
                 InputStream is = exchange.getRequestBody();
                 String postString = MyNetUtil.getPostString(is);
-                System.out.println(postString);
+//                System.out.println(postString);
                 //保存为文件
                 String[] data = postString.split(DIVIDER);
                 if (data.length <= 1) {
                     return;
                 }
                 int size = data.length;
-                //找到meta信息
                 Meta meta = FileUtil.filterMeta(data[size - 2]);
                 //建立一个文件夹
                 //文件夹命名为commit_hash
                 //文件名以name字段的hash值
                 File folder = FileUtil.createFolder(Global.outputDir+"/" + meta.getProject_name() + "/" + meta.getCommit_hash());
                 //代码文件
+                meta.setOutputDir(Global.outputDir+'/'+ meta.getProject_name()+'/'+meta.getCommit_hash());
+                meta.setLinkPath(meta.getOutputDir()+"/link.json");
                 FileUtil.convertCodeToFile(data, folder, meta);
+                //写入meta文件
+                FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta), folder);
                 CLDiffAPI diff = new CLDiffAPI(Global.outputDir, meta);
                 diff.generateDiffMinerOutput();
-                List<String> filePathList = Global.outputFilePathList;
-                //diff
-                int diffFileSize = filePathList.size() - 1;
-                for (int i = 0; i < diffFileSize; i++) {
-                    String diffPath = filePathList.get(i);
-                    meta.getFiles().get(i).setDiffPath(diffPath);
-                }
-                //link
-                meta.setLinkPath(filePathList.get(diffFileSize));
-                //写入meta文件
-                meta.setOutputDir(Global.outputDir);
-                FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta), folder);
                 String response = new Gson().toJson(meta);
                 System.out.println(response);
                 exchange.sendResponseHeaders(200, response.length());
@@ -186,22 +181,20 @@ public class CLDiffServerOnline {
         public void handle(HttpExchange exchange) {
             System.out.println("clear cache");
             try {
-                Runtime runtime = Runtime.getRuntime();
-//            String[] args = new String[] {"rm -rf", "/c", String.format("rm -rf %s", global_Path)};
-                runtime.exec("rm -rf " + Global.outputDir);
-                OutputStream os = exchange.getResponseBody();
+//                Files.delete(Paths.get((Global.outputDir)));
+                File f = new File(Global.outputDir);
+                if(f.exists()) {
+                    FileUtils.forceDelete(new File(Global.outputDir));
+                }
+                OutputStream outs = exchange.getResponseBody();
                 String success = "SUCCESS\n";
                 exchange.sendResponseHeaders(200, success.length());
-                os.write(success.getBytes());
-                os.close();
+                outs.write(success.getBytes());
+                outs.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
     }
-
-
-
-
 
 }

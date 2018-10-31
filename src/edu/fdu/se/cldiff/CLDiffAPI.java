@@ -31,7 +31,7 @@ public class CLDiffAPI {
      * @param outputDir
      */
     public CLDiffAPI(String outputDir, Meta meta) {
-        Global.outputFilePathList = new ArrayList<>();
+//        Global.outputFilePathList = new ArrayList<>();
         filePairDatas = new ArrayList<>();
         clDiffCore = new CLDiffCore();
         clDiffCore.mFileOutputLog = new FileOutputLog(outputDir, meta.getProject_name());

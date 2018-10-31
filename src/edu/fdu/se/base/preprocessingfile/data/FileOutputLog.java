@@ -88,7 +88,7 @@ public class FileOutputLog {
 
     public void writeEntityJson(String json){
         String path = this.sourceGen +"/"+Global.parentCommit+"/Diff"+Global.fileName+".json";
-        Global.outputFilePathList.add(path);
+//        Global.outputFilePathList.add(path);
         FileWriter.writeInAll(path, json);
     }
 
@@ -101,14 +101,14 @@ public class FileOutputLog {
 
     public void writeMetaFile(String metaJson){
         String path = this.metaLinkPath+"/meta.json";
-        Global.outputFilePathList.add(path);
+//        Global.outputFilePathList.add(path);
         FileWriter.writeInAll(path,metaJson);
     }
 
 
     public void writeLinkJson(String link){
         String path = this.metaLinkPath+"/link.json";
-        Global.outputFilePathList.add(path);
+//        Global.outputFilePathList.add(path);
         FileWriter.writeInAll(path, link);
     }
 

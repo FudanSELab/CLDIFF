@@ -1,6 +1,7 @@
 package edu.fdu.se.fileutil;
 
 import com.google.gson.Gson;
+import edu.fdu.se.cldiff.CLDiffCore;
 import edu.fdu.se.server.Meta;
 import edu.fdu.se.server.CommitFile;
 import org.json.JSONObject;
@@ -114,35 +115,28 @@ public class FileUtil {
             // -Debug-Database/commit/43e48d15e6ee435
             // ed0b1abc6d76638dc8bf0217d/debug-db/src/main/java/com/amitshekhar/server/RequestHandler.java\"
             //匹配name字段
-            String regex = "commit/[\\s\\S]+";
+            String regex = "commit/(\\w+)/(.*java)";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(info);
             if (matcher.find()) {
-                //name: commit/commit_id/src/xxx/xxx/A.java
-                String fileInfo = matcher.group();
-                String commitId = fileInfo.split("/")[1];
-                String path = fileInfo.substring(("commit/").length() + commitId.length());
+                // name: commit/commit_id/src/xxx/xxx/A.java
+                String commitId = matcher.group(1);
+                String path = matcher.group(2);
+                boolean isFiltered = CLDiffCore.isFilter(path);
                 String[] pathList = path.split("/");
                 String fileName = pathList[pathList.length - 1];
-                if (fileName.startsWith("AbstractSchedulingTaskExecutorTests")) {
-                    int a = 1;
+                String dir = path.substring(0, path.length() - fileName.length());
+                if (dir.startsWith("/...")) {
+                    dir = dir.substring(4);
                 }
-                path = path.substring(0, path.length() - fileName.length());
-                if (path.startsWith("/...")) {
-                    path = "/" + path.substring(4);
-                }
-                //去除最后的引号
-                fileName = fileName.substring(0, fileName.length() - 1);
-
                 //如果是parentcommit,只需要在project_name/commit_id/prev/parent_commit_id/src/xx/xx下新建
                 //如果是childCommit，需要在所有的commit_id/curr/parent_commit_id/src/xx/xx新建
-
                 boolean isParent = !commitId.equals(meta.getCommit_hash());
                 String filePath = "";
                 CommitFile commitFile;
                 if (isParent) {
                     //如果是parentcommit,只需要在project_name/commit_id/prev/parent_commit_id/src/xx/xx下新建
-                    filePath = folder.getPath() + "/prev/" + commitId + "/" + path;
+                    filePath = folder.getPath() + "/prev/" + commitId + "/" + dir;
                     //如果是parent,需要将文件名形式A.java____parent0改为A.java
                     fileName = fileName.split(PARENT_DIVIDER)[0];
                     //先创建文件
@@ -152,19 +146,30 @@ public class FileUtil {
                     //如果是childCommit，需要在所有的commit_id/curr/parent_commit_id/src/xx/xx新建
                     List<String> parentCommitIds = meta.getParents();
                     for (String parentCommitId : parentCommitIds) {
-                        filePath = folder.getPath() + "/curr/" + parentCommitId + "/" + path;
+                        filePath = folder.getPath() + "/curr/" + parentCommitId  +"/"+ dir;
                         File directory = FileUtil.createFolder(filePath);
                         FileUtil.createFile(fileName, codeContent, directory);
-
                         //添加到Meta中
                         commitFile = new CommitFile();
                         commitFile.setId(cnt);
-                        cnt++;
                         commitFile.setFile_name(fileName);
                         commitFile.setParent_commit(parentCommitId);
-                        commitFile.setCurr_file_path("curr/" + parentCommitId + path + fileName);
-                        commitFile.setPrev_file_path("prev/" + parentCommitId + path + fileName);
+                        commitFile.setDiffPath(null);
+                        if("added".equals(meta.getActions().get(cnt/2))){
+                            commitFile.setCurr_file_path("curr/" + parentCommitId +"/"+ dir + fileName);
+                            commitFile.setPrev_file_path(null);
+                        }else if("removed".equals(meta.getActions().get(cnt/2))){
+                            commitFile.setPrev_file_path("prev/" + parentCommitId +"/"+ dir + fileName);
+                            commitFile.setCurr_file_path(null);
+                        }else if("modified".equals(meta.getActions().get(cnt/2))){
+                            commitFile.setCurr_file_path("curr/" + parentCommitId +"/"+ dir + fileName);
+                            commitFile.setPrev_file_path("prev/" + parentCommitId +"/"+ dir + fileName);
+                        }
+                        if(!isFiltered) {
+                            commitFile.setDiffPath(meta.getOutputDir() + "/gen/"+parentCommitId+"/Diff"+fileName+".json");
+                        }
                         meta.addFile(commitFile);
+                        cnt++;
                     }
                 }
             }
