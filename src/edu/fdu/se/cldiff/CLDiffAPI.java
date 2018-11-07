@@ -1,6 +1,7 @@
 package edu.fdu.se.cldiff;
 
 import com.github.gumtreediff.tree.Tree;
+import com.google.gson.GsonBuilder;
 import edu.fdu.se.base.common.FilePairData;
 import edu.fdu.se.base.common.Global;
 import edu.fdu.se.base.links.FileInnerLinksGenerator;
@@ -9,9 +10,11 @@ import edu.fdu.se.base.links.TotalFileLinks;
 import edu.fdu.se.base.links.similarity.TreeDistance;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.preprocessingfile.data.FileOutputLog;
+import edu.fdu.se.fileutil.FileUtil;
 import edu.fdu.se.server.Meta;
 import edu.fdu.se.server.CommitFile;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -37,6 +40,7 @@ public class CLDiffAPI {
         clDiffCore.mFileOutputLog = new FileOutputLog(outputDir, meta.getProject_name());
         clDiffCore.mFileOutputLog.setCommitId(meta.getCommit_hash(), meta.getParents());
         initDataFromJson(meta);
+        FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta), new File(clDiffCore.mFileOutputLog.metaLinkPath));
     }
 
 

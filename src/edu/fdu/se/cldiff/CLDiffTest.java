@@ -17,7 +17,6 @@ import edu.fdu.se.fileutil.PathUtil;
  */
 public class CLDiffTest extends CLDiffCore {
 
-
     public int runGumTree(String prevContent, String currContent) {
 //        String file1 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_PREV_FILE);
 //        String file2 = ProjectProperties.getInstance().getValue(PropertyKeys.AST_PARSER_CURR_FILE);

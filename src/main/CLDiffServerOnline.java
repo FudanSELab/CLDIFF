@@ -72,7 +72,7 @@ public class CLDiffServerOnline {
                 meta.setLinkPath(meta.getOutputDir()+"/link.json");
                 FileUtil.convertCodeToFile(data, folder, meta);
                 //写入meta文件
-                FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta), folder);
+                //FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta), folder);
                 CLDiffAPI diff = new CLDiffAPI(Global.outputDir, meta);
                 diff.generateDiffMinerOutput();
                 String response = new Gson().toJson(meta);
