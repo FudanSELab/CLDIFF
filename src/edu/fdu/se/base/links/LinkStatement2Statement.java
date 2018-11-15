@@ -1,8 +1,12 @@
 package edu.fdu.se.base.links;
 
+import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.base.links.linkbean.StmtData;
 import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
+import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
+import edu.fdu.se.base.miningchangeentity.statement.VariableChangeEntity;
 
 /**
  * Created by huangkaifeng on 2018/4/7.
@@ -22,16 +26,22 @@ public class LinkStatement2Statement {
 //                break;
 //            }
 //        }
-//        for(String tmp:linkBean1.variableLocal) {
-//            if(linkBean2.variableLocal.contains(tmp)){
-//                if("".equals(tmp)){
-//                    continue;
-//                }
-//                Link association = new Link(ce1,ce2,ChangeEntityDesc.StageIIIAssociationType.TYPE_SAME_VARIABLE,tmp);
-//                changeEntityData.mLinks.add(association);
-//                break;
-//            }
-//        }
+        for(String tmp:linkBean1.variableLocal) {
+            if(linkBean2.variableLocal.contains(tmp)){
+                if("".equals(tmp)){
+                    continue;
+                }
+                if(ce1 instanceof VariableChangeEntity || ce2 instanceof VariableChangeEntity) {
+                    Action curAction = ce1.clusteredActionBean.curAction;
+                    Tree node = (Tree) curAction.getNode();
+                    String methodName = LinkUtil.findResidingMethodName(node);
+                    String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.DEF_USE,tmp,methodName);
+                    Link link = new Link(changeEntityData.fileName,ce1,ce2, desc,tmp);
+                    changeEntityData.mLinks.add(link);
+                }
+                break;
+            }
+        }
 
 
     }
