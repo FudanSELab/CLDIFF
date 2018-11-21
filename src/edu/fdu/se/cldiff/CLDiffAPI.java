@@ -13,6 +13,7 @@ import edu.fdu.se.base.preprocessingfile.data.FileOutputLog;
 import edu.fdu.se.fileutil.FileUtil;
 import edu.fdu.se.server.Meta;
 import edu.fdu.se.server.CommitFile;
+import org.eclipse.jgit.internal.storage.file.GlobalAttributesNode;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -103,6 +104,7 @@ public class CLDiffAPI {
         for (int i = 0; i < fileNames.size(); i++) {
             String fileNameA = fileNames.get(i);
             ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
+            Global.ced = cedA;
             FileInnerLinksGenerator associationGenerator = new FileInnerLinksGenerator(cedA);
             associationGenerator.generateFile();
             totalFileLinks.addEntry(fileNameA, cedA.mLinks);

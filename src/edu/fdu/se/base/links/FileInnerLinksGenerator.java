@@ -1,5 +1,6 @@
 package edu.fdu.se.base.links;
 
+import edu.fdu.se.base.common.Global;
 import edu.fdu.se.base.links.linkbean.*;
 import edu.fdu.se.base.miningactions.bean.MiningActionData;
 import edu.fdu.se.base.miningactions.util.MyList;
@@ -79,9 +80,9 @@ public class FileInnerLinksGenerator {
 
     public void checkStmt2Method(List<ChangeEntity> stmts,List<ChangeEntity> methods){
         for(ChangeEntity ce:stmts) {
-            methods.forEach(a -> {
-                LinkStatement2Member.checkStmtMethodAssociation(changeEntityData, ce, (MethodChangeEntity) a);
-            });
+            for(ChangeEntity methodEntity:methods) {
+                LinkStatement2Member.checkStmtMethodAssociation(changeEntityData, ce, (MethodChangeEntity) methodEntity);
+            }
         }
     }
 

@@ -1,8 +1,8 @@
 ## This is readme about CLDiff
 
 ### TODOs
-* A lot of refactoring work need to be done.
-* Detailed documentation of project
+
+* Documentation of CLDiff
 
 ### How to start
 1. start CLDiff in command line mode:
@@ -11,6 +11,7 @@
 2. start CLDiff with CLDiff-Web
     * Deploy [CLDiff-Web](https://github.com/FudanSELab/CLDIFF-WEB) to web container(e.g. Tomcat)
     * In CLDiff, run main.CLDIFFServerOffline.java. Remember to pass two arguments: repository path(ends with "/.git") and CLDiff cache directory(/foo/bar).
+    * Enter http://localhost:8080/indexoffline.html in your browser. Start with one commit id.
 
 ### Description
 CLDiff aims to generate code differences whose granularity  is in between the existing code differencing and code change summarization methods.

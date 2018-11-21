@@ -5,6 +5,7 @@ import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.actions.model.Update;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
+import edu.fdu.se.base.common.Global;
 import edu.fdu.se.base.miningactions.util.MyList;
 import edu.fdu.se.base.miningchangeentity.base.StatementPlusChangeEntity;
 import edu.fdu.se.base.preprocessingfile.data.PreprocessedData;
@@ -15,7 +16,6 @@ import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/4/7.
- *
  */
 public class StmtData extends LinkBean {
 
@@ -34,9 +34,9 @@ public class StmtData extends LinkBean {
         this.variableField = new MyList<>();
         this.classCreation = new MyList<>();
         if (ce.clusteredActionBean.curAction instanceof Move) {
-            parseMove(ce.clusteredActionBean.curAction,preprocessedData);
+            parseMove(ce.clusteredActionBean.curAction, preprocessedData);
         } else {
-            parseNonMove(ce.clusteredActionBean.actions,preprocessedData);
+            parseNonMove(ce.clusteredActionBean.actions, preprocessedData);
         }
     }
 
@@ -48,18 +48,18 @@ public class StmtData extends LinkBean {
                 flagA++;
             }
         }
-        for(String tmp:stmtData.variableField){
-            if(this.variableField.contains(tmp)){
-                flagB ++;
+        for (String tmp : stmtData.variableField) {
+            if (this.variableField.contains(tmp)) {
+                flagB++;
             }
         }
-        if(flagA !=0 &&flagB!=0){
+        if (flagA != 0 && flagB != 0) {
             return 3;
         }
-        if(flagA !=0 && flagA==0){
+        if (flagA != 0 && flagA == 0) {
             return 1;
         }
-        if(flagA ==0 && flagB!=0){
+        if (flagA == 0 && flagB != 0) {
             return 2;
         }
         return 0;
@@ -81,9 +81,9 @@ public class StmtData extends LinkBean {
                     || aa.getAstNode().getClass().getSimpleName().endsWith("Literal")) {
                 ASTNode exp = findExpression(tree);
                 if (exp == null || !(exp instanceof MethodInvocation)) {
-                    if(preprocessedData.prevCurrFieldNames.contains(tree.getLabel())) {
+                    if (preprocessedData.prevCurrFieldNames.contains(tree.getLabel())) {
                         this.variableField.add(tree.getLabel());
-                    }else {
+                    } else {
                         variableLocal.add(tree.getLabel());
                     }
                     continue;
@@ -95,43 +95,64 @@ public class StmtData extends LinkBean {
         }
     }
 
-    private void parseNonMove(List<Action> actions,PreprocessedData preprocessedData) {
+    private void parseNonMove(List<Action> actions, PreprocessedData preprocessedData) {
         for (Action a : actions) {
             Tree tree = (Tree) a.getNode();
             String updateVal = null;
-            if(a instanceof Update){
-                updateVal = ((Update)a).getValue();
+            boolean updateFlag = false;
+            if (a instanceof Update) {
+                updateVal = ((Update) a).getValue();
+                updateFlag = true;
             }
+            ITree dstNode = Global.ced.mad.getMappedDstOfSrcNode(tree);
+
             if (tree.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME
                     || tree.getAstNode().getClass().getSimpleName().endsWith("Literal")) {
                 ASTNode exp = findExpression(tree);
                 boolean flag = true;
-                if(exp !=null && exp instanceof MethodInvocation){
+                if (exp != null && exp instanceof MethodInvocation) {
                     if (isMethodInvocationName((MethodInvocation) exp, tree.getLabel())) {
+                        if (updateVal != null) {
+                            methodInvocation.add(updateVal);
+                        }
                         methodInvocation.add(tree.getLabel());
                         flag = false;
                     }
                 }
-                if(exp !=null&& exp instanceof ClassInstanceCreation){
-                    if(isClassCreationName((ClassInstanceCreation)exp,tree.getLabel())){
+                if (exp != null && exp instanceof ClassInstanceCreation) {
+                    if (isClassCreationName((ClassInstanceCreation) exp, tree.getLabel())) {
                         this.classCreation.add(tree.getLabel());
                         flag = false;
                     }
                 }
-                if(flag)
-                    if(preprocessedData.prevCurrFieldNames.contains(tree.getLabel())){
+                if (flag)
+                    if (preprocessedData.prevCurrFieldNames.contains(tree.getLabel())) {
                         variableField.add(tree.getLabel());
-                    }else {
+                    } else {
                         variableLocal.add(tree.getLabel());
                     }
-                if(updateVal!=null) {
-                    if (preprocessedData.prevCurrFieldNames.contains(updateVal)){
+                if (updateVal != null) {
+                    if (preprocessedData.prevCurrFieldNames.contains(updateVal)) {
                         variableField.add(updateVal);
-                    }else {
+                    } else {
                         variableLocal.add(updateVal);
                     }
                 }
 
+            }
+            if (updateFlag) {
+                Tree dstTree = (Tree) dstNode;
+                if (dstTree.getAstNode().getNodeType() == ASTNode.SIMPLE_NAME
+                        || dstTree.getAstNode().getClass().getSimpleName().endsWith("Literal")) {
+                    ASTNode exp = findExpression(dstTree);
+                    if (exp != null && exp instanceof MethodInvocation) {
+                        if (isMethodInvocationName((MethodInvocation) exp, updateVal)) {
+                            if (updateVal != null) {
+                                methodInvocation.add(updateVal);
+                            }
+                        }
+                    }
+                }
             }
 
         }
@@ -208,9 +229,9 @@ public class StmtData extends LinkBean {
 //        }
 //    }
 
-    public boolean isClassCreationName(ClassInstanceCreation classInstanceCreation,String clazzName){
+    public boolean isClassCreationName(ClassInstanceCreation classInstanceCreation, String clazzName) {
         String clazz = classInstanceCreation.getType().toString();
-        if(clazzName.equals(clazz)){
+        if (clazzName.equals(clazz)) {
             return true;
         }
         return false;

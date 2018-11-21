@@ -1,5 +1,6 @@
 package edu.fdu.se.base.common;
 
+import edu.fdu.se.base.miningchangeentity.ChangeEntityData;
 import edu.fdu.se.server.Meta;
 
 import java.util.List;
@@ -40,5 +41,10 @@ public class Global {
     public static String outputDir;
     public static String repoPath; // null in online mode
     public static String projectName;
+
+    /**
+     * running vars
+     */
+    public static ChangeEntityData ced;
 
 }
