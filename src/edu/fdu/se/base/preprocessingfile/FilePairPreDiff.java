@@ -126,7 +126,6 @@ public class FilePairPreDiff {
         preprocessedTempData.removeDstRemovalList(cuDst, preprocessedData.dstLines);
         iterateVisitingMap2LoadContainerMap();
 //        astTraversal.traverseSrcTypeDeclaration2Keys(preprocessedData,preprocessedTempData,tdSrc,tdSrc.getName().toString() + ".");
-
 //        if (fileOutputLog != null) {
 //            fileOutputLog.writeFileAfterProcess(preprocessedData);
 //        }

@@ -113,12 +113,15 @@ public class DstBodyCheck {
                     compareCache.setBodySrcNodeMap(srcBody, PreprocessedTempData.BODY_SAME_REMOVE);
                     return 1;
                 } else {
-                    MyRange myRange;
-                    int s, e;
-                    s = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition());
-                    e = compareResult.getDstCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition() + srcBody.getBodyDeclaration().getLength() - 1);
-                    myRange = new MyRange(s, e, ChangeEntityDesc.StageITreeType.DST_TREE_NODE);
-                    EnumChangeEntity code = new EnumChangeEntity(srcBody, ChangeEntityDesc.StageIIOpt.OPT_CHANGE, myRange);
+                    MyRange myRange1,myRange2;
+                    int s1, e1,s2,e2;
+                    s1 = compareResult.getSrcCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition());
+                    e1 = compareResult.getSrcCu().getLineNumber(srcBody.getBodyDeclaration().getStartPosition() + srcBody.getBodyDeclaration().getLength() - 1);
+                    s2 = compareResult.getDstCu().getLineNumber(ed.getStartPosition());
+                    e2 = compareResult.getDstCu().getLineNumber(ed.getStartPosition() + ed.getLength() - 1);
+                    myRange1= new MyRange(s1, e1, ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
+                    myRange2 = new MyRange(s2, e2, ChangeEntityDesc.StageITreeType.SRC_TREE_NODE);
+                    EnumChangeEntity code = new EnumChangeEntity(srcBody, ChangeEntityDesc.StageIIOpt.OPT_CHANGE, myRange1,myRange2);
                     EnumDeclaration fd = (EnumDeclaration) srcBody.getBodyDeclaration();
                     PreprocessUtil.generateEnumChangeEntity(code, fd, ed);
                     if (compareResult.getPreprocessChangeEntity() == null) {

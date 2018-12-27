@@ -8,6 +8,7 @@ import edu.fdu.se.base.miningchangeentity.ClusteredActionBean;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.base.miningchangeentity.base.StageIIIBean;
+import edu.fdu.se.base.miningchangeentity.member.EnumChangeEntity;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -68,15 +69,20 @@ public class GenerateChangeEntityJson {
                     }
                     break;
                 case ChangeEntityDesc.StageIIOpt.OPT_CHANGE:
+
                     changeEntity.stageIIIBean.setFile(ChangeEntityDesc.StageIIIFile.SRC_DST);
                     //todo 可能还会变 仅仅获取其change的那几行
                     String rangeStr = null;
-                    if (changeEntity.clusteredActionBean.fafather.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE) {
-                        Tree dstNode = (Tree) miningActionData.getMappedDstOfSrcNode(changeEntity.clusteredActionBean.fafather);
-                        rangeStr = changeEntity.clusteredActionBean.fafather.getRangeString() + "-" + dstNode.getRangeString();
-                    } else {
-                        srcNode = (Tree) miningActionData.getMappedSrcOfDstNode(changeEntity.clusteredActionBean.fafather);
-                        rangeStr = srcNode.getRangeString() + "-" + changeEntity.clusteredActionBean.fafather.getRangeString();
+                    if(changeEntity instanceof EnumChangeEntity){
+                        rangeStr = changeEntity.lineRange.toString() +"-"+((EnumChangeEntity) changeEntity).dstRange;
+                    }else {
+                        if (changeEntity.clusteredActionBean.fafather.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE) {
+                            Tree dstNode = (Tree) miningActionData.getMappedDstOfSrcNode(changeEntity.clusteredActionBean.fafather);
+                            rangeStr = changeEntity.clusteredActionBean.fafather.getRangeString() + "-" + dstNode.getRangeString();
+                        } else {
+                            srcNode = (Tree) miningActionData.getMappedSrcOfDstNode(changeEntity.clusteredActionBean.fafather);
+                            rangeStr = srcNode.getRangeString() + "-" + changeEntity.clusteredActionBean.fafather.getRangeString();
+                        }
                     }
                     changeEntity.stageIIIBean.setType1(changeEntity.stageIIBean.getGranularity());
                     changeEntity.stageIIIBean.setType2(changeEntity.stageIIBean.getOpt());
@@ -105,9 +111,15 @@ public class GenerateChangeEntityJson {
         for (ChangeEntity tmp : mList) {
             if (tmp.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)) {
                 // 设置sub
-                setStageIIIBeanSubRangeDetail(tmp.stageIIIBean, tmp.clusteredActionBean.actions, mad);
+                if(tmp instanceof EnumChangeEntity){
+                    //TODO
+                }else {
+                    setStageIIIBeanSubRangeDetail(tmp.stageIIIBean, tmp.clusteredActionBean.actions, mad);
+                }
+
             } else if (tmp.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)) {
                 // 设置move
+
                 setStageIIIBeanSubRangeDetailMove(tmp.stageIIIBean, tmp.clusteredActionBean, mad);
             }
         }

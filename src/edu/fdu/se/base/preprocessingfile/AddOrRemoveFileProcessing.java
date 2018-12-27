@@ -8,6 +8,7 @@ import edu.fdu.se.base.miningchangeentity.base.ChangeEntity;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.base.miningchangeentity.member.ClassChangeEntity;
 import edu.fdu.se.base.preprocessingfile.data.BodyDeclarationPair;
+import edu.fdu.se.base.preprocessingfile.data.PreprocessedData;
 import edu.fdu.se.javaparser.JDTParserFactory;
 import org.eclipse.jdt.core.dom.*;
 
@@ -57,5 +58,8 @@ public class AddOrRemoveFileProcessing {
         List<ChangeEntity> mList = new ArrayList<>();
         mList.add(classChangeEntity);
         ced = new ChangeEntityData(new MiningActionData(mList));
+        FilePairPreDiff diff = new FilePairPreDiff();
+        ced.mad.preprocessedData = diff.getPreprocessedData();
+        diff.addSuperClass(typeDeclaration,ced.mad.preprocessedData.getInterfacesAndFathers());
     }
 }

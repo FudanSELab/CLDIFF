@@ -37,8 +37,10 @@ public class FileInnerLinksGenerator {
             ce.linkBean = new FieldData((FieldChangeEntity)ce);
         }else if(ce instanceof MethodChangeEntity){
             ce.linkBean = new MethodData((MethodChangeEntity)ce,miningActionData);
-        }else if(ce instanceof StatementPlusChangeEntity){
-            ce.linkBean = new StmtData((StatementPlusChangeEntity)ce,miningActionData.preprocessedData);
+        }else if(ce instanceof StatementPlusChangeEntity) {
+            ce.linkBean = new StmtData((StatementPlusChangeEntity) ce, miningActionData.preprocessedData);
+        }else if(ce instanceof EnumChangeEntity){
+            ce.linkBean = null;
         }else{
             System.err.println("[ERR]not included");
         }
