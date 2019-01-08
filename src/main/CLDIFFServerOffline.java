@@ -52,10 +52,10 @@ public class CLDIFFServerOffline {
         @Override
         public void handle(HttpExchange exchange) {
             System.out.println("FetchMetaCacheHandler");
+            OutputStream os = exchange.getResponseBody();
             try {
                 InputStream is = exchange.getRequestBody();
                 String postString = MyNetUtil.getPostString(is);
-                OutputStream os = exchange.getResponseBody();
                 System.out.println("PostContent: " + postString);
                 String commitHash = postString.substring(4);
                 File metaFile = new File(Global.outputDir + "/" + Global.projectName + "/" + commitHash + "/meta.json");
@@ -73,6 +73,13 @@ public class CLDIFFServerOffline {
                 os.close();
             }catch(Exception e){
                 e.printStackTrace();
+                try {
+                    exchange.sendResponseHeaders(200, "error".length());
+                    os.write("error".getBytes());
+                    os.close();
+                }catch (Exception e2){
+                    e2.printStackTrace();
+                }
             }
         }
     }
@@ -99,6 +106,7 @@ public class CLDIFFServerOffline {
         @Override
         public void handle(HttpExchange exchange) {
             System.out.println("FetchFileContentHandler");
+            OutputStream os = exchange.getResponseBody();
             try {
                 InputStream is = exchange.getRequestBody();
                 Map<String,String> mMap = MyNetUtil.parsePostedKeys(is);
@@ -141,10 +149,16 @@ public class CLDIFFServerOffline {
 //              System.out.println(String.valueOf(contentResultStr.length()));
                 byte[] bytes = contentResultStr.getBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
-                OutputStream os = exchange.getResponseBody();
                 MyNetUtil.writeResponseInBytes(os,bytes);
             }catch (Exception e){
                 e.printStackTrace();
+                byte[] bytes2= "error".getBytes();
+                try {
+                    exchange.sendResponseHeaders(200, bytes2.length);
+                    MyNetUtil.writeResponseInBytes(os, bytes2);
+                }catch (Exception e2){
+                    e2.printStackTrace();
+                }
             }
         }
     }

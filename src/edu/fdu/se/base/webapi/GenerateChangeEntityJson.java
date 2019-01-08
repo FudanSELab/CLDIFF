@@ -78,10 +78,18 @@ public class GenerateChangeEntityJson {
                     }else {
                         if (changeEntity.clusteredActionBean.fafather.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE) {
                             Tree dstNode = (Tree) miningActionData.getMappedDstOfSrcNode(changeEntity.clusteredActionBean.fafather);
-                            rangeStr = changeEntity.clusteredActionBean.fafather.getRangeString() + "-" + dstNode.getRangeString();
+                            if(dstNode == null){
+                                rangeStr = changeEntity.clusteredActionBean.fafather.getRangeString()+"-";
+                            }else {
+                                rangeStr = changeEntity.clusteredActionBean.fafather.getRangeString() + "-" + dstNode.getRangeString();
+                            }
                         } else {
                             srcNode = (Tree) miningActionData.getMappedSrcOfDstNode(changeEntity.clusteredActionBean.fafather);
-                            rangeStr = srcNode.getRangeString() + "-" + changeEntity.clusteredActionBean.fafather.getRangeString();
+                            if(srcNode==null) {
+                                rangeStr = "-"+changeEntity.clusteredActionBean.fafather.getRangeString();
+                            }else {
+                                rangeStr = srcNode.getRangeString() + "-" + changeEntity.clusteredActionBean.fafather.getRangeString();
+                            }
                         }
                     }
                     changeEntity.stageIIIBean.setType1(changeEntity.stageIIBean.getGranularity());
