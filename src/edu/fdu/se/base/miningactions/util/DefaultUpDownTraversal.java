@@ -193,10 +193,6 @@ public class DefaultUpDownTraversal extends BasicTreeTraversal{
 
     }
 
-
-
-
-
     public static void traverseSwitchCase(Action a,List<Action> result1,ChangePacket changePacket){
         traverseOneType(a,result1,changePacket);
     }
