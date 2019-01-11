@@ -98,6 +98,30 @@ public class JGitHelper extends JGitCommand {
         }
     }
 
+    /**
+     * 输出debug的文件
+     *
+     * @param currentCommitString,nexCommitString
+     */
+    public void analyzeTwoCommits(HandleDiffCommits handleDiffCommits, String currentCommitString, String nexCommitString) {
+        try {
+
+            ObjectId currCommitId = ObjectId.fromString(currentCommitString);
+            RevCommit currCommit = revWalk.parseCommit(currCommitId);
+            ObjectId nextCommitId = ObjectId.fromString(nexCommitString);
+            RevCommit nextCommit = revWalk.parseCommit(nextCommitId);
+            Map<String, Map<String, List<String>>> changedFiles = this.getTwoCommitsMappedFileList(currCommit.getName(),nextCommit.getName());
+            handleDiffCommits.handleCommit(changedFiles, currentCommitString,currCommit,nexCommitString,nextCommit);
+
+        } catch (MissingObjectException e) {
+            e.printStackTrace();
+        } catch (IncorrectObjectTypeException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 输出output即可

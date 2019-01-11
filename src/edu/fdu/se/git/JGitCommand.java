@@ -195,6 +195,68 @@ public class JGitCommand {
 		return null;
 	}
 
+
+	/**
+	 *  比对两个commit,寻找出其中不同的files
+	 */
+	public Map<String, Map<String, List<String>>> getTwoCommitsMappedFileList(String currCommitIdInString, String nextCommitIdInString) {
+		Map<String, Map<String, List<String>>> result = new HashMap<String, Map<String, List<String>>>();
+		ObjectId currCommitId = ObjectId.fromString(currCommitIdInString);
+		ObjectId nextCommitId = ObjectId.fromString(nextCommitIdInString);
+		RevCommit currCommit = null;
+		RevCommit nextCommit = null;
+		Map<String, List<String>> fileList = new HashMap<String, List<String>>();
+		List<String> addList = new ArrayList<String>();
+		List<String> modifyList = new ArrayList<String>();
+		List<String> deleteList = new ArrayList<String>();
+		DiffFormatter diffFormatter = null;
+
+		try {
+			currCommit = revWalk.parseCommit(currCommitId);
+			nextCommit = revWalk.parseCommit(nextCommitId);
+			ObjectReader reader = git.getRepository().newObjectReader();
+			CanonicalTreeParser currTreeIter = new CanonicalTreeParser();
+			ObjectId currTree = currCommit.getTree().getId();
+			currTreeIter.reset(reader, currTree);
+			CanonicalTreeParser nextTreeIter = new CanonicalTreeParser();
+			ObjectId nextTree = nextCommit.getTree().getId();
+			nextTreeIter.reset(reader, nextTree);
+			diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
+			diffFormatter.setRepository(git.getRepository());
+			List<DiffEntry> entries = diffFormatter.scan(currTreeIter, nextTreeIter);
+			for (DiffEntry entry : entries) {
+				switch (entry.getChangeType()) {
+					case ADD:
+						addList.add(entry.getNewPath());
+						break;
+					case MODIFY:
+						modifyList.add(entry.getNewPath());
+						break;
+					case DELETE:
+						deleteList.add(entry.getNewPath());
+						break;
+					default:
+						break;
+				}
+			}
+			fileList.put("addedFiles", addList);
+			fileList.put("modifiedFiles", modifyList);
+			fileList.put("deletedFiles", deleteList);
+			result.put(currCommit.getName(), fileList);
+			return result;
+		} catch (MissingObjectException e) {
+			e.printStackTrace();
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			diffFormatter.close();
+		}
+		return null;
+	}
+
+
 	/**
 	 * read commit time
 	 * 
