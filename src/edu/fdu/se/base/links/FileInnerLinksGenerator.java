@@ -103,6 +103,7 @@ public class FileInnerLinksGenerator {
         LayeredChangeEntityContainer container = this.changeEntityData.entityContainer;
         List<ChangeEntity> entities = this.changeEntityData.mad.getChangeEntityList();
         for(ChangeEntity a:entities) {
+
             initLinkBean(a, changeEntityData.mad);
         }
         if(container==null){

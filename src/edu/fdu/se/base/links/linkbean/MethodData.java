@@ -4,6 +4,7 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.tree.Tree;
 import edu.fdu.se.base.miningactions.bean.MiningActionData;
+import edu.fdu.se.base.miningactions.util.BasicTreeTraversal;
 import edu.fdu.se.base.miningactions.util.MyList;
 import edu.fdu.se.base.miningchangeentity.base.ChangeEntityDesc;
 import edu.fdu.se.base.miningchangeentity.member.MethodChangeEntity;
@@ -61,27 +62,30 @@ public class MethodData extends LinkBean {
         List<String> tempParameterType = new MyList<>();
         List<String> tempParameterName = new MyList<>();
         String tempReturn = null;
-        if(tree.getAstNode().getNodeType() == ASTNode.METHOD_DECLARATION) {
-            if(tree.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE){
-                Tree dstTree = (Tree) fp.getMappedDstOfSrcNode(tree);
-                if(dstTree!=null){
-                    MethodDeclaration mdDst = (MethodDeclaration) dstTree.getAstNode();
-                    methodName.add(mdDst.getName().toString());
-                }
-
-            }
-            MethodDeclaration md = (MethodDeclaration) tree.getAstNode();
-            methodName.add(md.getName().toString());
-            List<SingleVariableDeclaration> params = md.parameters();
-            for(SingleVariableDeclaration svd :params){
-                svd.getName();
-                tempParameterName.add(svd.getName().toString());
-                tempParameterType.add(svd.getType().toString());
-            }
-            if(md.getReturnType2()!=null) {
-                tempReturn = md.getReturnType2().toString();
-            }
+        if(tree.getAstNode().getNodeType() != ASTNode.METHOD_DECLARATION) {
+            tree = BasicTreeTraversal.findFafatherNode(ce.clusteredActionBean.curAction.getNode());
         }
+        //*** start of retrieving methodName
+        if(tree.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE){
+            Tree dstTree = (Tree) fp.getMappedDstOfSrcNode(tree);
+            if(dstTree!=null){
+                MethodDeclaration mdDst = (MethodDeclaration) dstTree.getAstNode();
+                methodName.add(mdDst.getName().toString());
+            }
+
+        }
+        MethodDeclaration md = (MethodDeclaration) tree.getAstNode();
+        methodName.add(md.getName().toString());
+        List<SingleVariableDeclaration> params = md.parameters();
+        for(SingleVariableDeclaration svd :params){
+            svd.getName();
+            tempParameterName.add(svd.getName().toString());
+            tempParameterType.add(svd.getType().toString());
+        }
+        if(md.getReturnType2()!=null) {
+            tempReturn = md.getReturnType2().toString();
+        }
+        //***End
 
         for(Action a:ce.clusteredActionBean.actions){
             Tree t = (Tree) a.getNode();
