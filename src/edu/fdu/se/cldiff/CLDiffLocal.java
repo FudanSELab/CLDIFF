@@ -38,7 +38,7 @@ public class CLDiffLocal implements IHandleCommit, HandleDiffCommits {
     public void run(String currCommitId, String nextCommitId,String repo,String outputDir){
         jGitHelper = new JGitHelper(repo);
         initMeta(repo,nextCommitId,outputDir);
-        meta.addParentCommit(nextCommitId);
+        meta.addParentCommit(currCommitId);
         jGitHelper.analyzeTwoCommits(this,currCommitId,nextCommitId);
         CLDiffAPI clDiffAPI = new CLDiffAPI(outputDir,meta);
         clDiffAPI.generateDiffMinerOutput();
@@ -127,7 +127,7 @@ public class CLDiffLocal implements IHandleCommit, HandleDiffCommits {
                 if(modifiedFile !=null && modifiedFile.size()!=0) {
                     for (String file : modifiedFile) {
                         boolean isFiltered = CLDiffCore.isFilter(file);
-                        setCommitFile(cnt, nextCommitId, currCommitId, file,isFiltered);
+                        setCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
                         meta.addAction("modified");
                         cnt += 1;
                     }
@@ -138,7 +138,7 @@ public class CLDiffLocal implements IHandleCommit, HandleDiffCommits {
                 if(addedFile!=null && addedFile.size()!=0) {
                     for (String file : addedFile) {
                         boolean isFiltered = CLDiffCore.isFilter(file);
-                        setAddedCommitFile(cnt, nextCommitId, currCommitId, file,isFiltered);
+                        setAddedCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
                         meta.addAction("added");
                         cnt += 1;
                     }
@@ -149,7 +149,7 @@ public class CLDiffLocal implements IHandleCommit, HandleDiffCommits {
                 if(deleted!=null && deleted.size()!=0) {
                     for (String file : deleted) {
                         boolean isFiltered = CLDiffCore.isFilter(file);
-                        setDeletedCommitFile(cnt, nextCommitId, currCommitId, file,isFiltered);
+                        setDeletedCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
                         cnt += 1;
                         meta.addAction("removed");
                     }
