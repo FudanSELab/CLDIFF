@@ -6,6 +6,7 @@ import edu.fdu.se.git.IHandleCommit;
 import edu.fdu.se.git.JGitHelper;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Meta;
+import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.File;
@@ -61,44 +62,32 @@ public class CLDiffLocal implements IHandleCommit {
         meta.setDate_time(dateString);
     }
 
-    public void handleCommit(Map<String, Map<String, List<String>>> changedFiles, String commitId,RevCommit commit){
+    public void handleCommit(Map<String, List<DiffEntry>> changedFiles, String commitId, RevCommit commit){
         loadCommitMeta(commit.getAuthorIdent().getName(),commit.getCommitTime(),commit.getCommitterIdent().getName(),commit.getShortMessage()+"\n\n\n"+commit.getFullMessage());
         int cnt = 0;
-        for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
+        for (Map.Entry<String, List<DiffEntry>> entry : changedFiles.entrySet()) {
             String parentCommitId = entry.getKey();
             meta.addParentCommit(parentCommitId);
-            Map<String, List<String>> changedFileEntry = entry.getValue();
-            if (changedFileEntry.containsKey("modifiedFiles")) {
-                List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
-                if(modifiedFile !=null && modifiedFile.size()!=0) {
-                    for (String file : modifiedFile) {
-                        boolean isFiltered = CLDiffCore.isFilter(file);
-                        setCommitFile(cnt, parentCommitId, commitId, file,isFiltered);
-                        meta.addAction("modified");
-                        cnt += 1;
-                    }
-                }
-            }
-            if(changedFileEntry.containsKey("addedFiles")){
-                List<String> addedFile = changedFileEntry.get("addedFiles");
-                if(addedFile!=null && addedFile.size()!=0) {
-                    for (String file : addedFile) {
-                        boolean isFiltered = CLDiffCore.isFilter(file);
-                        setAddedCommitFile(cnt, parentCommitId, commitId, file,isFiltered);
-                        meta.addAction("added");
-                        cnt += 1;
-                    }
-                }
-            }
-            if(changedFileEntry.containsKey("deletedFiles")){
-                List<String> deleted = changedFileEntry.get("deletedFiles");
-                if(deleted!=null && deleted.size()!=0) {
-                    for (String file : deleted) {
-                        boolean isFiltered = CLDiffCore.isFilter(file);
-                        setDeletedCommitFile(cnt, parentCommitId, commitId, file,isFiltered);
-                        cnt += 1;
-                        meta.addAction("removed");
-                    }
+            List<DiffEntry> changedFileEntry = entry.getValue();
+            for(DiffEntry de: changedFileEntry) {
+                if (de.getChangeType() == DiffEntry.ChangeType.MODIFY) {
+                    String file = de.getNewPath();
+                    boolean isFiltered = CLDiffCore.isFilter(file);
+                    setCommitFile(cnt, parentCommitId, commitId, file,isFiltered);
+                    meta.addAction("modified");
+                    cnt += 1;
+                }else if(de.getChangeType() == DiffEntry.ChangeType.ADD){
+                    String file = de.getNewPath();
+                    boolean isFiltered = CLDiffCore.isFilter(file);
+                    setAddedCommitFile(cnt, parentCommitId, commitId, file,isFiltered);
+                    meta.addAction("added");
+                    cnt += 1;
+                }else{
+                    String file = de.getOldPath();
+                    boolean isFiltered = CLDiffCore.isFilter(file);
+                    setDeletedCommitFile(cnt, parentCommitId, commitId, file,isFiltered);
+                    cnt += 1;
+                    meta.addAction("removed");
                 }
             }
 

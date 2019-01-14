@@ -52,7 +52,7 @@ public class JGitHelper extends JGitCommand {
                     if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
                         continue;
                     }
-                    Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(queueCommitItem.getName());
+                    Map<String, List<DiffEntry>> changedFiles = this.getCommitParentMappedDiffEntry(queueCommitItem.getName());
                     iHandleCommit.handleCommit(changedFiles, queueCommitItem.getName(),commit);
                     commitNum++;
                     isTraversed.put(queueCommitItem.getName(), true);
@@ -86,7 +86,7 @@ public class JGitHelper extends JGitCommand {
             if (commit.getParents() == null) {
                 return;
             }
-            Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(commit.getName());
+            Map<String,List<DiffEntry>> changedFiles = this.getCommitParentMappedDiffEntry(commit.getName());
             iHandleCommit.handleCommit(changedFiles, commitString,commit);
 
         } catch (MissingObjectException e) {
