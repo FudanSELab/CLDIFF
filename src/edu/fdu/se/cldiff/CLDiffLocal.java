@@ -118,7 +118,7 @@ public class CLDiffLocal implements IHandleCommit, HandleDiffCommits {
     }
 
     public  void handleCommit(Map<String, Map<String, List<String>>> changedFiles, String currCommitId,RevCommit currCommit, String nextCommitId,RevCommit nextCommit){
-        loadCommitMeta(currCommit.getAuthorIdent().getName(),currCommit.getCommitTime(),currCommit.getCommitterIdent().getName(),currCommit.getShortMessage()+"\n\n\n"+currCommit.getFullMessage());
+        loadCommitMeta(nextCommit.getAuthorIdent().getName(),nextCommit.getCommitTime(),nextCommit.getCommitterIdent().getName(),nextCommit.getShortMessage()+"\n\n\n"+nextCommit.getFullMessage());
         int cnt = 0;
         for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
             Map<String, List<String>> changedFileEntry = entry.getValue();
