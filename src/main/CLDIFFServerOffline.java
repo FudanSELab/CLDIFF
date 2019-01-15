@@ -1,5 +1,6 @@
 package main;
 
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
@@ -13,14 +14,12 @@ import edu.fdu.se.net.MyNetUtil;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Content;
 import edu.fdu.se.server.Meta;
-//import org.json.JSONArray;
-//import org.json.JSONObject;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 /**
  * Created by huangkaifeng on 2018/8/23.
  *
@@ -29,17 +28,14 @@ import java.util.Map;
  *
  */
 public class CLDIFFServerOffline {
-    public static String repoDetailPath = "" ;
+
 
     public static void main(String[] arg) throws Exception {
         Global.runningMode = 1;
         Global.outputDir = PathUtil.unifyPathSeparator(arg[0]);
-        repoDetailPath = PathUtil.unifyPathSeparator(arg[1]);
-
-
-//        Global.repoPath = PathUtil.unifyPathSeparator("D:/testCLDiff/spring-framework"); // XXX/.git
-//        String[] data = Global.repoPath.split("/");
-//        Global.projectName = data[data.length-2];
+        Global.repoPath = PathUtil.unifyPathSeparator(arg[1]); // XXX/.git
+        String[] data = Global.repoPath.split("/");
+        Global.projectName = data[data.length-2];
         HttpServer server = HttpServer.create(new InetSocketAddress(8082), 0);
         //传meta文件，如果没有meta，则调用生成
         server.createContext("/fetchMeta", new FetchMetaCacheHandler());
@@ -55,114 +51,42 @@ public class CLDIFFServerOffline {
 
         @Override
         public void handle(HttpExchange exchange) {
-            String repoDetailPath = CLDIFFServerOffline.repoDetailPath;
-            OutputStream os = null;
-            InputStream is = null;
             System.out.println("FetchMetaCacheHandler");
+            OutputStream os = exchange.getResponseBody();
             try {
-                os = exchange.getResponseBody();
-                is = exchange.getRequestBody();
+                InputStream is = exchange.getRequestBody();
                 String postString = MyNetUtil.getPostString(is);
                 System.out.println("PostContent: " + postString);
-                Gson gson = new Gson();
-                Map<String, Object> map = new HashMap<String, Object>();
-                map = gson.fromJson(postString, map.getClass());
-                //String commitHash = postString.substring(4);
-
-                //String[] cr = postString.split(" ");
-                String repoPath = map.get("repoPath").toString();
-                String commitId = map.get("commitId").toString();
-                String isSolved = map.get("isSolved").toString();
-
-                System.out.println("repoPath: "+ map.get("repoPath"));
-                System.out.println("commitId: "+ map.get("commitId"));
-                System.out.println("isSolved: "+ map.get("isSolved"));
-
-
-                String realRepoPath= "";
-                String[] repoPaths = repoPath.split("/");
-                for(int i=0;i<2;i++){
-                    realRepoPath += repoPaths[i];
-                    realRepoPath += "/";
-                }
-                //应为绝对路径
-                realRepoPath =  realRepoPath + ".git";
-
-                String[] data = realRepoPath.split("/");
-                Global.projectName = data[data.length-2];
-
-                Global.repoPath = repoDetailPath + realRepoPath;
-
-                System.out.println("Global.projectName:"+Global.projectName);
-                System.out.println("Global.repoPath:"+Global.repoPath);
-
+                String commitHash = postString.substring(4);
+                File metaFile = new File(Global.outputDir + "/" + Global.projectName + "/" + commitHash + "/meta.json");
                 String meta = null;
-                /*
-                    当isSolved的为false的时候只需要一个commit跟repoPath
-                 */
-                if(!Boolean.parseBoolean(isSolved)){
-                    File metaFile = new File(Global.outputDir + "/" + Global.projectName + "/" + commitId + "/meta.json");
-
-                    if (!metaFile.exists()) {
-                        //生成文件
-                        //文件路径为global_Path/project_name/commit_id/meta.txt
-                        meta = generateCLDIFFResult(commitId, metaFile, Global.outputDir);
-                    } else {
-                        meta = FileUtil.read(Global.outputDir + "/" + Global.projectName + "/" + commitId + "/meta.json");
-                    }
-                }else{
-                    String nextScan = map.get("nextScan").toString();
-                    System.out.println("nextScan: "+ map.get("nextScan"));
-                    File metaFile = new File(Global.outputDir + "/" + Global.projectName + "/" + nextScan + "/meta.json");
-
-                    if (!metaFile.exists()) {
-                        //生成文件
-                        //文件路径为global_Path/project_name/commit_id/meta.txt
-                        meta = generateTwoCommitsCLDIFFResult(commitId,nextScan,metaFile,Global.outputDir);
-                    } else {
-                        meta = FileUtil.read(Global.outputDir + "/" + Global.projectName + "/" + nextScan + "/meta.json");
-                    }
+                if (!metaFile.exists()) {
+                    //生成文件
+                    //文件路径为global_Path/project_name/commit_id/meta.txt
+                    meta = generateCLDIFFResult(commitHash, metaFile, Global.outputDir);
+                } else {
+                    meta = FileUtil.read(Global.outputDir + "/" + Global.projectName + "/" + commitHash + "/meta.json");
                 }
                 System.out.println(meta);
                 exchange.sendResponseHeaders(200, meta.length());
                 os.write(meta.getBytes());
+                os.close();
             }catch(Exception e){
                 e.printStackTrace();
                 try {
                     exchange.sendResponseHeaders(200, "error".length());
                     os.write("error".getBytes());
-
+                    os.close();
                 }catch (Exception e2){
                     e2.printStackTrace();
-                }
-            }finally {
-                try{
-                    os.close();
-                    is.close();
-                }catch(IOException e){
-                    e.printStackTrace();
                 }
             }
         }
     }
 
-
     public static String generateCLDIFFResult(String commitHash,File metaFile,String outputDir) {
         CLDiffLocal clDiffLocal = new CLDiffLocal();
         clDiffLocal.run(commitHash,Global.repoPath,outputDir);
-        Meta meta =  clDiffLocal.meta;
-        //git 读取保存，生成meta
-//        List<String> filePathList = Global.outputFilePathList;
-//        int diffFileSize = filePathList.size() - 1;
-        //写入meta文件
-        FileUtil.createFile("meta.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta),new File(metaFile.getParent()));
-        String response = new Gson().toJson(meta);
-        return response;
-    }
-
-    public static String generateTwoCommitsCLDIFFResult(String currCommitId,String nextCommitId,File metaFile,String outputDir) {
-        CLDiffLocal clDiffLocal = new CLDiffLocal();
-        clDiffLocal.run(currCommitId,nextCommitId,Global.repoPath,Global.outputDir);
         Meta meta =  clDiffLocal.meta;
         //git 读取保存，生成meta
 //        List<String> filePathList = Global.outputFilePathList;
