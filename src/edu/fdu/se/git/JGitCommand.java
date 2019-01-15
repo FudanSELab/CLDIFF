@@ -235,18 +235,13 @@ public class JGitCommand {
 	/**
 	 *  比对两个commit,寻找出其中不同的files
 	 */
-	public Map<String, Map<String, List<String>>> getTwoCommitsMappedFileList(String currCommitIdInString, String nextCommitIdInString) {
-		Map<String, Map<String, List<String>>> result = new HashMap<String, Map<String, List<String>>>();
+	public Map<String, List<DiffEntry>> getTwoCommitsMappedFileList(String currCommitIdInString, String nextCommitIdInString) {
+		Map<String, List<DiffEntry>> result = new HashMap<>();
 		ObjectId currCommitId = ObjectId.fromString(currCommitIdInString);
 		ObjectId nextCommitId = ObjectId.fromString(nextCommitIdInString);
 		RevCommit currCommit = null;
 		RevCommit nextCommit = null;
-		Map<String, List<String>> fileList = new HashMap<String, List<String>>();
-		List<String> addList = new ArrayList<String>();
-		List<String> modifyList = new ArrayList<String>();
-		List<String> deleteList = new ArrayList<String>();
 		DiffFormatter diffFormatter = null;
-
 		try {
 			currCommit = revWalk.parseCommit(currCommitId);
 			nextCommit = revWalk.parseCommit(nextCommitId);
@@ -260,25 +255,7 @@ public class JGitCommand {
 			diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
 			diffFormatter.setRepository(git.getRepository());
 			List<DiffEntry> entries = diffFormatter.scan(currTreeIter, nextTreeIter);
-			for (DiffEntry entry : entries) {
-				switch (entry.getChangeType()) {
-					case ADD:
-						addList.add(entry.getNewPath());
-						break;
-					case MODIFY:
-						modifyList.add(entry.getNewPath());
-						break;
-					case DELETE:
-						deleteList.add(entry.getNewPath());
-						break;
-					default:
-						break;
-				}
-			}
-			fileList.put("addedFiles", addList);
-			fileList.put("modifiedFiles", modifyList);
-			fileList.put("deletedFiles", deleteList);
-			result.put(currCommit.getName(), fileList);
+			result.put(currCommit.getName(), entries);
 			return result;
 		} catch (MissingObjectException e) {
 			e.printStackTrace();

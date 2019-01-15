@@ -10,13 +10,10 @@ public class CLDIFFCmd {
 
     public static void main(String args[]){
         Global.runningMode = 0;
-        String repo = "E:\\school\\repo\\FudanSELab\\IssueTracker-Master-master\\.git";
-        String commitId = "0097a5548381b52f6bec68ec739dc1294f718d3f";  //有错误的commit
-        String currCommitId = "3fa6e8e11e85e353093d481bae82e769b70c99f3";  //mayuyukirinn committed on 3 Dec 2018
-        String nextCommitId = "e172091f374057aa5626cd5f02dbfff54204ab3b";  //linshengwang committed on 5 Dec 2018
-        String outputDir = "E:\\school\\DiffResult";
+        String repo = "/path/to/git/repo/.git";
+        String commitId = "commit id";
+        String outputDir = "/path/to/output/dir";
         CLDiffLocal CLDiffLocal = new CLDiffLocal();
-//        CLDiffLocal.run(commitId,repo,outputDir);
-        CLDiffLocal.run(currCommitId,nextCommitId,repo,outputDir);
+        CLDiffLocal.run(commitId,repo,outputDir);
     }
 }

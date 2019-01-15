@@ -2,7 +2,6 @@ package edu.fdu.se.cldiff;
 
 import edu.fdu.se.base.common.Global;
 import edu.fdu.se.fileutil.PathUtil;
-import edu.fdu.se.git.HandleDiffCommits;
 import edu.fdu.se.git.IHandleCommit;
 import edu.fdu.se.git.JGitHelper;
 import edu.fdu.se.server.CommitFile;
@@ -23,11 +22,17 @@ import java.util.Map;
  * Created by huangkaifeng on 2018/8/23.
  * cmd entrance for cldiff
  */
-public class CLDiffLocal implements IHandleCommit, HandleDiffCommits {
+public class CLDiffLocal extends IHandleCommit {
 
     public JGitHelper jGitHelper;
     public Meta meta;
 
+    /**
+     * run diff / one commit
+     * @param commitId
+     * @param repo
+     * @param outputDir
+     */
     public void run(String commitId,String repo,String outputDir){
         jGitHelper = new JGitHelper(repo);
         initMeta(repo,commitId,outputDir);
@@ -36,6 +41,13 @@ public class CLDiffLocal implements IHandleCommit, HandleDiffCommits {
         clDiffAPI.generateDiffMinerOutput();
     }
 
+    /**
+     * run diff / two commits
+     * @param currCommitId
+     * @param nextCommitId
+     * @param repo
+     * @param outputDir
+     */
     public void run(String currCommitId, String nextCommitId,String repo,String outputDir){
         jGitHelper = new JGitHelper(repo);
         initMeta(repo,nextCommitId,outputDir);
@@ -106,45 +118,32 @@ public class CLDiffLocal implements IHandleCommit, HandleDiffCommits {
         }
     }
 
-    public  void handleCommit(Map<String, Map<String, List<String>>> changedFiles, String currCommitId,RevCommit currCommit, String nextCommitId,RevCommit nextCommit){
+    public  void handleCommit(Map<String,List<DiffEntry>> changedFiles, String currCommitId,RevCommit currCommit, String nextCommitId,RevCommit nextCommit){
         loadCommitMeta(nextCommit.getAuthorIdent().getName(),nextCommit.getCommitTime(),nextCommit.getCommitterIdent().getName(),nextCommit.getShortMessage()+"\n\n\n"+nextCommit.getFullMessage());
         int cnt = 0;
-        for (Map.Entry<String, Map<String, List<String>>> entry : changedFiles.entrySet()) {
-            Map<String, List<String>> changedFileEntry = entry.getValue();
-            if (changedFileEntry.containsKey("modifiedFiles")) {
-                List<String> modifiedFile = changedFileEntry.get("modifiedFiles");
-                if(modifiedFile !=null && modifiedFile.size()!=0) {
-                    for (String file : modifiedFile) {
-                        boolean isFiltered = CLDiffCore.isFilter(file);
-                        setCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
-                        meta.addAction("modified");
-                        cnt += 1;
-                    }
+        for (Map.Entry<String, List<DiffEntry>> entry : changedFiles.entrySet()) {
+            List<DiffEntry> changedFileEntry = entry.getValue();
+            for(DiffEntry de:changedFileEntry){
+                if(de.getChangeType() == DiffEntry.ChangeType.MODIFY){
+                    String file = de.getNewPath();
+                    boolean isFiltered = CLDiffCore.isFilter(file);
+                    setCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
+                    meta.addAction("modified");
+                    cnt += 1;
+                }else if(de.getChangeType() == DiffEntry.ChangeType.ADD){
+                    String file = de.getNewPath();
+                    boolean isFiltered = CLDiffCore.isFilter(file);
+                    setAddedCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
+                    meta.addAction("added");
+                    cnt += 1;
+                }else{
+                    String file = de.getOldPath();
+                    boolean isFiltered = CLDiffCore.isFilter(file);
+                    setDeletedCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
+                    cnt += 1;
+                    meta.addAction("removed");
                 }
             }
-            if(changedFileEntry.containsKey("addedFiles")){
-                List<String> addedFile = changedFileEntry.get("addedFiles");
-                if(addedFile!=null && addedFile.size()!=0) {
-                    for (String file : addedFile) {
-                        boolean isFiltered = CLDiffCore.isFilter(file);
-                        setAddedCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
-                        meta.addAction("added");
-                        cnt += 1;
-                    }
-                }
-            }
-            if(changedFileEntry.containsKey("deletedFiles")){
-                List<String> deleted = changedFileEntry.get("deletedFiles");
-                if(deleted!=null && deleted.size()!=0) {
-                    for (String file : deleted) {
-                        boolean isFiltered = CLDiffCore.isFilter(file);
-                        setDeletedCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
-                        cnt += 1;
-                        meta.addAction("removed");
-                    }
-                }
-            }
-
         }
     }
 
