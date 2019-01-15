@@ -78,14 +78,14 @@ public class GenerateChangeEntityJson {
                     }else {
                         if (changeEntity.clusteredActionBean.fafather.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE) {
                             Tree dstNode = (Tree) miningActionData.getMappedDstOfSrcNode(changeEntity.clusteredActionBean.fafather);
-                            if(dstNode == null){
+                            if(dstNode ==null){
                                 rangeStr = changeEntity.clusteredActionBean.fafather.getRangeString()+"-";
                             }else {
                                 rangeStr = changeEntity.clusteredActionBean.fafather.getRangeString() + "-" + dstNode.getRangeString();
                             }
                         } else {
                             srcNode = (Tree) miningActionData.getMappedSrcOfDstNode(changeEntity.clusteredActionBean.fafather);
-                            if(srcNode==null) {
+                            if(srcNode == null){
                                 rangeStr = "-"+changeEntity.clusteredActionBean.fafather.getRangeString();
                             }else {
                                 rangeStr = srcNode.getRangeString() + "-" + changeEntity.clusteredActionBean.fafather.getRangeString();

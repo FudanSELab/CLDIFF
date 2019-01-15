@@ -110,15 +110,27 @@ public class CLDiffAPI {
             totalFileLinks.addEntry(fileNameA, cedA.mLinks);
         }
         for (int i = 0; i < fileNames.size(); i++) {
+
             String fileNameA = fileNames.get(i);
-            ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
-            FileOuterLinksGenerator fileOuterLinksGenerator = new FileOuterLinksGenerator();
-            for (int j = i + 1; j < fileNames.size(); j++) {
-                String fileNameB = fileNames.get(j);
-                ChangeEntityData cedB = this.fileChangeEntityData.get(fileNameB);
-                fileOuterLinksGenerator.generateOutsideAssociation(cedA, cedB);
-                totalFileLinks.addFile2FileAssos(fileNameA, fileNameB, fileOuterLinksGenerator.mAssos);
+            //存在fileName为null的情况，处理fileName为何为null的情况之后再做处理。
+            if(fileNameA == null){
+                continue;
+            }else{
+                ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
+                FileOuterLinksGenerator fileOuterLinksGenerator = new FileOuterLinksGenerator();
+                for (int j = i + 1; j < fileNames.size(); j++) {
+                    String fileNameB = fileNames.get(j);
+                    //存在fileName为null的情况
+                    if(fileNameB == null){
+                        continue;
+                    }else{
+                        ChangeEntityData cedB = this.fileChangeEntityData.get(fileNameB);
+                        fileOuterLinksGenerator.generateOutsideAssociation(cedA, cedB);
+                        totalFileLinks.addFile2FileAssos(fileNameA, fileNameB, fileOuterLinksGenerator.mAssos);
+                    }
+                }
             }
+
         }
         new FileOuterLinksGenerator().checkSimilarity(this.fileChangeEntityData,totalFileLinks);
         clDiffCore.mFileOutputLog.writeLinkJson(totalFileLinks.toAssoJSonString());

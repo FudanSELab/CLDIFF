@@ -2,10 +2,12 @@ package edu.fdu.se.cldiff;
 
 import edu.fdu.se.base.common.Global;
 import edu.fdu.se.fileutil.PathUtil;
+import edu.fdu.se.git.HandleDiffCommits;
 import edu.fdu.se.git.IHandleCommit;
 import edu.fdu.se.git.JGitHelper;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Meta;
+import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.File;
@@ -21,7 +23,7 @@ import java.util.Map;
  * Created by huangkaifeng on 2018/8/23.
  * cmd entrance for cldiff
  */
-public class CLDiffLocal implements IHandleCommit {
+public class CLDiffLocal implements IHandleCommit, HandleDiffCommits {
 
     public JGitHelper jGitHelper;
     public Meta meta;
@@ -33,6 +35,17 @@ public class CLDiffLocal implements IHandleCommit {
         CLDiffAPI clDiffAPI = new CLDiffAPI(outputDir,meta);
         clDiffAPI.generateDiffMinerOutput();
     }
+
+    public void run(String currCommitId, String nextCommitId,String repo,String outputDir){
+        jGitHelper = new JGitHelper(repo);
+        initMeta(repo,nextCommitId,outputDir);
+        meta.addParentCommit(currCommitId);
+        jGitHelper.analyzeTwoCommits(this,currCommitId,nextCommitId);
+        CLDiffAPI clDiffAPI = new CLDiffAPI(outputDir,meta);
+        clDiffAPI.generateDiffMinerOutput();
+    }
+
+
 
     public void initMeta(String repo,String commitId,String outputDir){
         meta = new Meta();
@@ -96,6 +109,52 @@ public class CLDiffLocal implements IHandleCommit {
                     for (String file : deleted) {
                         boolean isFiltered = CLDiffCore.isFilter(file);
                         setDeletedCommitFile(cnt, parentCommitId, commitId, file,isFiltered);
+                        cnt += 1;
+                        meta.addAction("removed");
+                    }
+                }
+            }
+
+        }
+    }
+
+    public  void handleCommit(Map<String, Map<String, List<DiffEntry>>> changedFiles, String currCommitId, RevCommit currCommit, String nextCommitId, RevCommit nextCommit){
+        loadCommitMeta(nextCommit.getAuthorIdent().getName(),nextCommit.getCommitTime(),nextCommit.getCommitterIdent().getName(),nextCommit.getShortMessage()+"\n\n\n"+nextCommit.getFullMessage());
+        int cnt = 0;
+        for (Map.Entry<String, Map<String, List<DiffEntry>>> entry : changedFiles.entrySet()) {
+            Map<String, List<DiffEntry>> changedFileEntry = entry.getValue();
+            if (changedFileEntry.containsKey("modifiedFiles")) {
+                List<DiffEntry> modifiedFile = changedFileEntry.get("modifiedFiles");
+                if(modifiedFile !=null && modifiedFile.size()!=0) {
+
+                    for (DiffEntry fileEntry : modifiedFile) {
+                        String file = fileEntry.getOldPath();
+                        boolean isFiltered = CLDiffCore.isFilter(file);
+                        setCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
+                        meta.addAction("modified");
+                        cnt += 1;
+                    }
+                }
+            }
+            if(changedFileEntry.containsKey("addedFiles")){
+                List<DiffEntry> addedFile = changedFileEntry.get("addedFiles");
+                if(addedFile!=null && addedFile.size()!=0) {
+                    for (DiffEntry fileEntry : addedFile) {
+                        String file = fileEntry.getNewPath();
+                        boolean isFiltered = CLDiffCore.isFilter(file);
+                        setAddedCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
+                        meta.addAction("added");
+                        cnt += 1;
+                    }
+                }
+            }
+            if(changedFileEntry.containsKey("deletedFiles")){
+                List<DiffEntry> deleted = changedFileEntry.get("deletedFiles");
+                if(deleted!=null && deleted.size()!=0) {
+                    for (DiffEntry fileEntry : deleted) {
+                        String file = fileEntry.getOldPath();
+                        boolean isFiltered = CLDiffCore.isFilter(file);
+                        setDeletedCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
                         cnt += 1;
                         meta.addAction("removed");
                     }
