@@ -99,38 +99,33 @@ public class CLDiffAPI {
             }
             this.fileChangeEntityData.put(fp.getParentCommit() + "@@@" + this.clDiffCore.changeEntityData.fileName, this.clDiffCore.changeEntityData);
         }
-        List<String> fileNames = new ArrayList<>(this.fileChangeEntityData.keySet());
         TotalFileLinks totalFileLinks = new TotalFileLinks();
-        for (int i = 0; i < fileNames.size(); i++) {
-            String fileNameA = fileNames.get(i);
+        int fileNumber = 0;
+        Map<Integer,String> mapKey = new HashMap<Integer, String>();
+        for(Map.Entry entry : fileChangeEntityData.entrySet()){
+            mapKey.put(fileNumber,(String)entry.getKey());
+            fileNumber++;
+        }
+
+        for (int i = 0; i < mapKey.size(); i++) {
+            String fileNameA = mapKey.get(i);
             ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
             Global.ced = cedA;
             FileInnerLinksGenerator associationGenerator = new FileInnerLinksGenerator(cedA);
             associationGenerator.generateFile();
             totalFileLinks.addEntry(fileNameA, cedA.mLinks);
         }
-        for (int i = 0; i < fileNames.size(); i++) {
+        for (int i = 0; i < mapKey.size(); i++) {
+            String fileNameA = mapKey.get(i);
+            ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
+            FileOuterLinksGenerator fileOuterLinksGenerator = new FileOuterLinksGenerator();
+            for (int j = i + 1; j < mapKey.size(); j++) {
+                String fileNameB = mapKey.get(j);
+                ChangeEntityData cedB = this.fileChangeEntityData.get(fileNameB);
+                fileOuterLinksGenerator.generateOutsideAssociation(cedA, cedB);
+                totalFileLinks.addFile2FileAssos(fileNameA, fileNameB, fileOuterLinksGenerator.mAssos);
 
-            String fileNameA = fileNames.get(i);
-            //存在fileName为null的情况，处理fileName为何为null的情况之后再做处理。
-            if(fileNameA == null){
-                continue;
-            }else{
-                ChangeEntityData cedA = this.fileChangeEntityData.get(fileNameA);
-                FileOuterLinksGenerator fileOuterLinksGenerator = new FileOuterLinksGenerator();
-                for (int j = i + 1; j < fileNames.size(); j++) {
-                    String fileNameB = fileNames.get(j);
-                    //存在fileName为null的情况
-                    if(fileNameB == null){
-                        continue;
-                    }else{
-                        ChangeEntityData cedB = this.fileChangeEntityData.get(fileNameB);
-                        fileOuterLinksGenerator.generateOutsideAssociation(cedA, cedB);
-                        totalFileLinks.addFile2FileAssos(fileNameA, fileNameB, fileOuterLinksGenerator.mAssos);
-                    }
-                }
             }
-
         }
         new FileOuterLinksGenerator().checkSimilarity(this.fileChangeEntityData,totalFileLinks);
         clDiffCore.mFileOutputLog.writeLinkJson(totalFileLinks.toAssoJSonString());
