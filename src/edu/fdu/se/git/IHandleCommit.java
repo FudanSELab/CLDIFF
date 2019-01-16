@@ -11,11 +11,11 @@ import java.util.Map;
  */
 public class IHandleCommit {
 
-    void handleCommit(Map<String, List<DiffEntry>> changedFiles, String commitId, RevCommit commit){
+    public void handleCommit(Map<String, List<DiffEntry>> changedFiles, String commitId, RevCommit commit) {
 
     }
 
-    void handleCommit(Map<String, List<DiffEntry>> changedFiles, String currCommitId,RevCommit currCommit, String nextCommitId,RevCommit nextCommit){
+    public void handleCommit(Map<String, List<DiffEntry>> changedFiles, String currCommitId, RevCommit currCommit, String nextCommitId, RevCommit nextCommit) {
 
     }
 

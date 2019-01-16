@@ -86,6 +86,7 @@ public class CLDiffLocal extends IHandleCommit {
         meta.setDate_time(dateString);
     }
 
+    @Override
     public void handleCommit(Map<String, List<DiffEntry>> changedFiles, String commitId, RevCommit commit){
         loadCommitMeta(commit.getAuthorIdent().getName(),commit.getCommitTime(),commit.getCommitterIdent().getName(),commit.getShortMessage()+"\n\n\n"+commit.getFullMessage());
         int cnt = 0;
@@ -118,6 +119,7 @@ public class CLDiffLocal extends IHandleCommit {
         }
     }
 
+    @Override
     public  void handleCommit(Map<String,List<DiffEntry>> changedFiles, String currCommitId,RevCommit currCommit, String nextCommitId,RevCommit nextCommit){
         loadCommitMeta(nextCommit.getAuthorIdent().getName(),nextCommit.getCommitTime(),nextCommit.getCommitterIdent().getName(),nextCommit.getShortMessage()+"\n\n\n"+nextCommit.getFullMessage());
         int cnt = 0;
