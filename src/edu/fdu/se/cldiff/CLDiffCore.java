@@ -91,7 +91,7 @@ public class CLDiffCore {
     public void dooRemoveFile(String fileName,byte[] fileCurrContent,String output){
         AddOrRemoveFileProcessing addOrRemoveFileProcessing = new AddOrRemoveFileProcessing(fileCurrContent,ChangeEntityDesc.StageIIIFile.SRC);
         //may cause series of issues for types such like enum haven't been handled now.
-        if(addOrRemoveFileProcessing == null){
+        if (addOrRemoveFileProcessing.ced == null) {
             return;
         }
         changeEntityData = addOrRemoveFileProcessing.ced;
