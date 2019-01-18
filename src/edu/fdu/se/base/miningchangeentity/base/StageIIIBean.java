@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * Created by huangkaifeng on 2018/3/28.
- *
  */
 public class StageIIIBean {
 
@@ -84,7 +83,7 @@ public class StageIIIBean {
 
     private void addRangesResultList(List<Integer[]> ranges, CompilationUnit cu, String file, String type) {
         for (Integer[] range : ranges) {
-            addRangeResultList(range,cu,file,type);
+            addRangeResultList(range, cu, file, type);
         }
     }
 
@@ -106,13 +105,13 @@ public class StageIIIBean {
         addRangesResultList(ranges, cu, file, type);
     }
 
-    public void addMoveListSrc(Integer[] range,CompilationUnit cu){
+    public void addMoveListSrc(Integer[] range, CompilationUnit cu) {
         String file = ChangeEntityDesc.StageIIIFile.SRC;
         String type = "move";
         addRangeResultList(range, cu, file, type);
     }
 
-    public void addMoveListDst(Integer[] range,CompilationUnit cu){
+    public void addMoveListDst(Integer[] range, CompilationUnit cu) {
         String file = ChangeEntityDesc.StageIIIFile.DST;
         String type = "move";
         addRangeResultList(range, cu, file, type);
@@ -150,6 +149,7 @@ public class StageIIIBean {
     public void setType1(String type) {
         this.type1 = type;
     }
+
     public void setType2(String type) {
         this.type2 = type;
     }
@@ -162,7 +162,7 @@ public class StageIIIBean {
         jsonObject.put(ChangeEntityDesc.StageIIIKeys.TYPE1, type1);
         jsonObject.put(ChangeEntityDesc.StageIIIKeys.TYPE2, type2);
         jsonObject.put(ChangeEntityDesc.StageIIIKeys.DESCRIPTION, displayDesc);
-        jsonObject.put(ChangeEntityDesc.StageIIIKeys.ID,changeEntityId);
+        jsonObject.put(ChangeEntityDesc.StageIIIKeys.ID, changeEntityId);
         if (subRange != null) {
             JSONArray jsonArray1 = new JSONArray();
             for (SubRange subRange1 : subRange) {
@@ -174,7 +174,7 @@ public class StageIIIBean {
             }
             jsonObject.put(ChangeEntityDesc.StageIIIKeys.SUB_RANGE, jsonArray1);
         }
-        if(this.opt2Exp2!=null){
+        if (this.opt2Exp2 != null) {
             jsonObject.put(ChangeEntityDesc.StageIIIKeys.OPT2EXP2, this.opt2Exp2);
         }
         return jsonObject;

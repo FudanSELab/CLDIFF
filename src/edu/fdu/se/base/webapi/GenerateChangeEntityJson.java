@@ -69,25 +69,24 @@ public class GenerateChangeEntityJson {
                     }
                     break;
                 case ChangeEntityDesc.StageIIOpt.OPT_CHANGE:
-
                     changeEntity.stageIIIBean.setFile(ChangeEntityDesc.StageIIIFile.SRC_DST);
                     //todo 可能还会变 仅仅获取其change的那几行
                     String rangeStr = null;
-                    if(changeEntity instanceof EnumChangeEntity){
-                        rangeStr = changeEntity.lineRange.toString() +"-"+((EnumChangeEntity) changeEntity).dstRange;
-                    }else {
+                    if (changeEntity instanceof EnumChangeEntity) {
+                        rangeStr = changeEntity.lineRange.toString() + "-" + ((EnumChangeEntity) changeEntity).dstRange;
+                    } else {
                         if (changeEntity.clusteredActionBean.fafather.getTreeSrcOrDst() == ChangeEntityDesc.StageITreeType.SRC_TREE_NODE) {
                             Tree dstNode = (Tree) miningActionData.getMappedDstOfSrcNode(changeEntity.clusteredActionBean.fafather);
-                            if(dstNode ==null){
-                                rangeStr = changeEntity.clusteredActionBean.fafather.getRangeString()+"-";
-                            }else {
+                            if (dstNode == null) {
+                                rangeStr = changeEntity.clusteredActionBean.fafather.getRangeString() + "-";
+                            } else {
                                 rangeStr = changeEntity.clusteredActionBean.fafather.getRangeString() + "-" + dstNode.getRangeString();
                             }
                         } else {
                             srcNode = (Tree) miningActionData.getMappedSrcOfDstNode(changeEntity.clusteredActionBean.fafather);
-                            if(srcNode == null){
-                                rangeStr = "-"+changeEntity.clusteredActionBean.fafather.getRangeString();
-                            }else {
+                            if (srcNode == null) {
+                                rangeStr = "-" + changeEntity.clusteredActionBean.fafather.getRangeString();
+                            } else {
                                 rangeStr = srcNode.getRangeString() + "-" + changeEntity.clusteredActionBean.fafather.getRangeString();
                             }
                         }
@@ -95,7 +94,7 @@ public class GenerateChangeEntityJson {
                     changeEntity.stageIIIBean.setType1(changeEntity.stageIIBean.getGranularity());
                     changeEntity.stageIIIBean.setType2(changeEntity.stageIIBean.getOpt());
                     changeEntity.stageIIIBean.setRange(rangeStr);
-                    if(changeEntity.stageIIBean.getOpt2List()!=null){
+                    if (changeEntity.stageIIBean.getOpt2List() != null) {
                         JSONArray jsonArray = changeEntity.stageIIBean.opt2ExpListToJSONArray();
                         changeEntity.stageIIIBean.setOpt2Exp2(jsonArray);
                     }
@@ -119,9 +118,9 @@ public class GenerateChangeEntityJson {
         for (ChangeEntity tmp : mList) {
             if (tmp.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE)) {
                 // 设置sub
-                if(tmp instanceof EnumChangeEntity){
+                if (tmp instanceof EnumChangeEntity) {
                     //TODO
-                }else {
+                } else {
                     setStageIIIBeanSubRangeDetail(tmp.stageIIIBean, tmp.clusteredActionBean.actions, mad);
                 }
             } else if (tmp.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)) {
@@ -141,11 +140,11 @@ public class GenerateChangeEntityJson {
         CompilationUnit dst = mad.preprocessedData.dstCu;
         Move mv = (Move) a;
 
-        Tree moveNode = (Tree)mv.getNode();
+        Tree moveNode = (Tree) mv.getNode();
         Tree movedDstNode = (Tree) mad.getMappedDstOfSrcNode(moveNode);
         stageIIIBean.setRange(moveNode.getRangeString() + "-" + movedDstNode.getRangeString());
-        Integer[] m = {moveNode.getPos(),moveNode.getPos()+moveNode.getLength()};
-        Integer[] n = {movedDstNode.getPos(),movedDstNode.getPos()+movedDstNode.getLength()};
+        Integer[] m = {moveNode.getPos(), moveNode.getPos() + moveNode.getLength()};
+        Integer[] n = {movedDstNode.getPos(), movedDstNode.getPos() + movedDstNode.getLength()};
         stageIIIBean.addMoveListSrc(m, src);
         stageIIIBean.addMoveListDst(n, dst);
     }
@@ -157,39 +156,39 @@ public class GenerateChangeEntityJson {
         MergeIntervals mi = new MergeIntervals();
         actions.forEach(a -> {
             if (a instanceof Insert) {
-                Tree temp = (Tree)a.getNode();
-                Integer[] tempArr = {temp.getPos(),temp.getPos()+temp.getLength()};
+                Tree temp = (Tree) a.getNode();
+                Integer[] tempArr = {temp.getPos(), temp.getPos() + temp.getLength()};
                 rangeList.add(tempArr);
             }
         });
         List<Integer[]> insertResult = mi.merge(rangeList);
 //        int[] insertRange = maxminLineNumber(insertResult, dst);
-        if(insertResult != null && insertResult.size()!=0)
+        if (insertResult != null && insertResult.size() != 0)
             stageIIIBean.addInsertList(insertResult, dst);
 //        String dstRangeStr = "(" + insertRange[0] + "," + insertRange[1] + ")";
         rangeList.clear();
         actions.forEach(a -> {
             if (a instanceof Delete) {
-                Tree temp = (Tree)a.getNode();
-                Integer[] tempArr = {temp.getPos(),temp.getPos()+temp.getLength()};
+                Tree temp = (Tree) a.getNode();
+                Integer[] tempArr = {temp.getPos(), temp.getPos() + temp.getLength()};
                 rangeList.add(tempArr);
             }
 
         });
         List<Integer[]> deleteResult = mi.merge(rangeList);
-        if(deleteResult != null && deleteResult.size()!=0)
+        if (deleteResult != null && deleteResult.size() != 0)
             stageIIIBean.addDeleteList(deleteResult, src);
 //        int[] deleteRange = maxminLineNumber(deleteResult, src);
         rangeList.clear();
         actions.forEach(a -> {
             if (a instanceof Update) {
-                Tree temp = (Tree)a.getNode();
-                Integer[] tempArr = {temp.getPos(),temp.getPos()+temp.getLength()};
+                Tree temp = (Tree) a.getNode();
+                Integer[] tempArr = {temp.getPos(), temp.getPos() + temp.getLength()};
                 rangeList.add(tempArr);
             }
         });
         List<Integer[]> updateResult = mi.merge(rangeList);
-        if(updateResult != null && updateResult.size()!=0)
+        if (updateResult != null && updateResult.size() != 0)
             stageIIIBean.addUpdateList(updateResult, src);
 //        int[] updateRange = maxminLineNumber(updateResult, src);
 //        int max, min;
@@ -238,27 +237,27 @@ public class GenerateChangeEntityJson {
     }
 
 
-    public static String toConsoleString(JSONArray jsonArray){
+    public static String toConsoleString(JSONArray jsonArray) {
         StringBuffer sb = new StringBuffer();
         sb.append("Concise Code Differences:\n");
         Iterator iter = jsonArray.iterator();
-        while(iter.hasNext()){
+        while (iter.hasNext()) {
             JSONObject jo = (JSONObject) iter.next();
             sb.append(jo.get("id"));
             sb.append(". ");
             sb.append(jo.get("description"));
 
             sb.append("\n");
-            if(jo.has("opt2-exp2")){
+            if (jo.has("opt2-exp2")) {
                 JSONArray arr = (JSONArray) jo.get("opt2-exp2");
                 Iterator iter2 = arr.iterator();
-                while(iter2.hasNext()){
+                while (iter2.hasNext()) {
                     String s = (String) iter2.next();
-                    sb.append("\t"+s);
+                    sb.append("\t" + s);
                     sb.append("\n");
                 }
             }
-            sb.append("\t"+jo.get("range"));
+            sb.append("\t" + jo.get("range"));
             sb.append("\n");
         }
         sb.append("\n");
