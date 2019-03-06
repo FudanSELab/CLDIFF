@@ -120,6 +120,9 @@ public class MatchNonStatement {
             case ASTNode.LABELED_STATEMENT:
                 MatchLabeledStatement.matchLabeledStatementNewEntity(fp,a,queryFather,treeType,traverseFather);
                 break;
+            case ASTNode.THROW_STATEMENT:
+                MatchTry.matchThrowStatementNewEntity(fp, a, queryFather, treeType, traverseFather);
+                break;
             default:
                 break;
         }
@@ -194,6 +197,9 @@ public class MatchNonStatement {
                 break;
             case ASTNode.LABELED_STATEMENT:
                 MatchLabeledStatement.matchLabeledStatementCurrEntity(fp,a,changeEntity,traverseFather);
+                break;
+            case ASTNode.THROW_STATEMENT:
+                MatchTry.matchThrowStatementCurrEntity(fp, a, changeEntity, traverseFather);
                 break;
             default:
                 break;

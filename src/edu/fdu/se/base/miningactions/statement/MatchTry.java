@@ -80,7 +80,6 @@ public class MatchTry {
 		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
 		code.stageIIBean.setOpt(ChangeEntityDesc.getChangeEntityDescString(a));
 		code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_THROW_STMT);
-//		code.stageIIBean.setOpt2(null);
 		code.stageIIBean.setSubEntity(null);
 		code.stageIIBean.setLineRange(code.lineRange.toString());
 		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
@@ -150,6 +149,48 @@ public class MatchTry {
 //		changeEntity.linkBean.addAppendedActions(newActions);
 		fp.setActionTraversedMap(newActions);
 
+	}
+
+	public static void matchThrowStatementNewEntity(MiningActionData fp, Action a, Tree queryFather, int treeType, Tree traverseFather) {
+		ChangePacket changePacket = new ChangePacket();
+		List<Action> sameEdits = new ArrayList<>();
+		if (!BasicTreeTraversal.traverseWhenActionIsMove(a, sameEdits, changePacket, false)) {
+			DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather, sameEdits, changePacket);
+		}
+		ClusteredActionBean mBean = new ClusteredActionBean(ChangeEntityDesc.StageITraverseType.TRAVERSE_DOWN_UP, a, sameEdits, changePacket, queryFather, treeType);
+		TryCatchChangeEntity code = new TryCatchChangeEntity(mBean);
+		code.stageIIBean.setEntityCreationStage(ChangeEntityDesc.StageIIGenStage.ENTITY_GENERATION_STAGE_GT_DUD);
+		code.stageIIBean.setGranularity(ChangeEntityDesc.StageIIGranularity.GRANULARITY_STATEMENT);
+		if (a instanceof Move) {
+			code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE);
+			code.stageIIBean.setChangeEntity(((Tree) a.getNode()).getAstClass().getSimpleName());
+		} else {
+			code.stageIIBean.setOpt(ChangeEntityDesc.StageIIOpt.OPT_CHANGE);
+			code.stageIIBean.setChangeEntity(ChangeEntityDesc.StageIIENTITY.ENTITY_THROW_STMT);
+		}
+//		code.stageIIBean.setOpt2(null);
+		code.stageIIBean.setSubEntity(null);
+		code.stageIIBean.setLineRange(code.lineRange.toString());
+		code.stageIIBean.setLocation(AstRelations.getLocationString(a.getNode()));
+		fp.setActionTraversedMap(sameEdits);
+		fp.addOneChangeEntity(code);
+	}
+
+	public static void matchThrowStatementCurrEntity(MiningActionData fp, Action a, ChangeEntity changeEntity, Tree traverseFather) {
+		ChangePacket changePacket = changeEntity.clusteredActionBean.changePacket;
+		List<Action> actions = changeEntity.clusteredActionBean.actions;
+		List<Action> newActions = new ArrayList<>();
+		if (!BasicTreeTraversal.traverseWhenActionIsMove(a, newActions, changePacket, false)) {
+			DefaultDownUpTraversal.traverseFatherNodeGetSameNodeActions(traverseFather, newActions, changePacket);
+		}
+		for (Action tmp : newActions) {
+			if (fp.mGeneratingActionsData.getAllActionMap().get(tmp) == 1) {
+				continue;
+			}
+			actions.add(tmp);
+		}
+//		changeEntity.linkBean.addAppendedActions(newActions);
+		fp.setActionTraversedMap(newActions);
 	}
 
 
