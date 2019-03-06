@@ -87,7 +87,10 @@ public class CLDiffLocal extends IHandleCommit {
         meta.setDate_time(dateString);
     }
 
+<<<<<<< HEAD
     @Override
+=======
+>>>>>>> 4a95d713a79aac47a7539d3b9808a21dfc33b18c
     public void handleCommit(Map<String, List<DiffEntry>> changedFiles, String commitId, RevCommit commit){
         loadCommitMeta(commit.getAuthorIdent().getName(),commit.getCommitTime(),commit.getCommitterIdent().getName(),commit.getShortMessage()+"\n\n\n"+commit.getFullMessage());
         int cnt = 0;
@@ -114,9 +117,41 @@ public class CLDiffLocal extends IHandleCommit {
                     setDeletedCommitFile(cnt, parentCommitId, commitId, file,isFiltered);
                     cnt += 1;
                     meta.addAction("removed");
+<<<<<<< HEAD
+=======
                 }
             }
 
+        }
+    }
+
+    public  void handleCommit(Map<String,List<DiffEntry>> changedFiles, String currCommitId,RevCommit currCommit, String nextCommitId,RevCommit nextCommit){
+        loadCommitMeta(nextCommit.getAuthorIdent().getName(),nextCommit.getCommitTime(),nextCommit.getCommitterIdent().getName(),nextCommit.getShortMessage()+"\n\n\n"+nextCommit.getFullMessage());
+        int cnt = 0;
+        for (Map.Entry<String, List<DiffEntry>> entry : changedFiles.entrySet()) {
+            List<DiffEntry> changedFileEntry = entry.getValue();
+            for(DiffEntry de:changedFileEntry){
+                if(de.getChangeType() == DiffEntry.ChangeType.MODIFY){
+                    String file = de.getNewPath();
+                    boolean isFiltered = CLDiffCore.isFilter(file);
+                    setCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
+                    meta.addAction("modified");
+                    cnt += 1;
+                }else if(de.getChangeType() == DiffEntry.ChangeType.ADD){
+                    String file = de.getNewPath();
+                    boolean isFiltered = CLDiffCore.isFilter(file);
+                    setAddedCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
+                    meta.addAction("added");
+                    cnt += 1;
+                }else{
+                    String file = de.getOldPath();
+                    boolean isFiltered = CLDiffCore.isFilter(file);
+                    setDeletedCommitFile(cnt, currCommitId, nextCommitId, file,isFiltered);
+                    cnt += 1;
+                    meta.addAction("removed");
+>>>>>>> 4a95d713a79aac47a7539d3b9808a21dfc33b18c
+                }
+            }
         }
     }
 

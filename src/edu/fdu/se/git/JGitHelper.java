@@ -103,16 +103,26 @@ public class JGitHelper extends JGitCommand {
      *
      * @param currentCommitString,nexCommitString
      */
+<<<<<<< HEAD
     public void analyzeTwoCommits(IHandleCommit handleDiffCommits, String currentCommitString, String nexCommitString) {
+=======
+
+    public void analyzeTwoCommits(HandleDiffCommits handleDiffCommits, String currentCommitString, String nexCommitString) {
+
+>>>>>>> 4a95d713a79aac47a7539d3b9808a21dfc33b18c
         try {
 
             ObjectId currCommitId = ObjectId.fromString(currentCommitString);
             RevCommit currCommit = revWalk.parseCommit(currCommitId);
             ObjectId nextCommitId = ObjectId.fromString(nexCommitString);
             RevCommit nextCommit = revWalk.parseCommit(nextCommitId);
+<<<<<<< HEAD
             Map<String, List<DiffEntry>> changedFiles = this.getTwoCommitsMappedFileList(currCommit.getName(),nextCommit.getName());
-            handleDiffCommits.handleCommit(changedFiles, currentCommitString,currCommit,nexCommitString,nextCommit);
+=======
 
+            Map<String, Map<String, List<DiffEntry>>> changedFiles = this.getTwoCommitsMappedFileList(currCommit.getName(),nextCommit.getName());
+>>>>>>> 4a95d713a79aac47a7539d3b9808a21dfc33b18c
+            handleDiffCommits.handleCommit(changedFiles, currentCommitString,currCommit,nexCommitString,nextCommit);
         } catch (MissingObjectException e) {
             e.printStackTrace();
         } catch (IncorrectObjectTypeException e) {

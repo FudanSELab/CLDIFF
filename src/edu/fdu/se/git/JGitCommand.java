@@ -241,6 +241,14 @@ public class JGitCommand {
 		ObjectId nextCommitId = ObjectId.fromString(nextCommitIdInString);
 		RevCommit currCommit = null;
 		RevCommit nextCommit = null;
+<<<<<<< HEAD
+=======
+
+		Map<String, List<DiffEntry>> fileList = new HashMap<String, List<DiffEntry>>();
+		List<DiffEntry> addList = new ArrayList<DiffEntry>();
+		List<DiffEntry> modifyList = new ArrayList<DiffEntry>();
+		List<DiffEntry> deleteList = new ArrayList<DiffEntry>();
+>>>>>>> 4a95d713a79aac47a7539d3b9808a21dfc33b18c
 		DiffFormatter diffFormatter = null;
 		try {
 			currCommit = revWalk.parseCommit(currCommitId);
