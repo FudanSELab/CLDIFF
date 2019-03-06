@@ -33,11 +33,11 @@ public class CLDiffTest extends CLDiffCore {
     /**
      * 使用修改简化之后的流程，测试单个文件的功能
      */
-    private void runSingleFilePair(String file1,String file2,String outputDir) {
-        this.mFileOutputLog = new FileOutputLog(outputDir, "testproject");
+    private void runSingleFilePair(String file1,String file2,String outputDir,String projectOwnerName) {
+        this.mFileOutputLog = new FileOutputLog(outputDir, "testproject",projectOwnerName);
         this.mFileOutputLog.setCommitId("commitid");
         Global.parentCommit = "null";
-        dooDiffFile(file1, file2, outputDir);
+        dooDiffFile(file1, file2, outputDir+projectOwnerName);
     }
 
     /**
@@ -69,7 +69,8 @@ public class CLDiffTest extends CLDiffCore {
         String filePrev = PathUtil.unifyPathSeparator(args[0]);
         String fileCurr = PathUtil.unifyPathSeparator(args[1]);
         String outputDir = PathUtil.unifyPathSeparator(args[2]);
-        i.runSingleFilePair(filePrev,fileCurr,outputDir);
+        String projectOwnerName = PathUtil.unifyPathSeparator(args[3]);
+        i.runSingleFilePair(filePrev,fileCurr,outputDir,projectOwnerName);
     }
 
 }

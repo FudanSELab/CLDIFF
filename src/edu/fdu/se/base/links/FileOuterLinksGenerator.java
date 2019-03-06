@@ -75,9 +75,9 @@ public class FileOuterLinksGenerator {
         return stmtList;
     }
 
-    public void checkSimilarity(Map<String, ChangeEntityData> mMap,TotalFileLinks totalFileLinks) {
+    public void checkSimilarity(Map<String, ChangeEntityData> mMap, TotalFileLinks totalFileLinks) {
         List<ChangeEntity> totalEntityList = new ArrayList<>();
-        Map<Integer,String> changeEntityDataDict = new HashMap<>();
+        Map<Integer, String> changeEntityDataDict = new HashMap<>();
         List<Integer> indexList = new ArrayList<>();
         for (Entry<String, ChangeEntityData> entry : mMap.entrySet()) {
             for (ChangeEntity tmp : entry.getValue().mad.getChangeEntityList()) {
@@ -85,7 +85,7 @@ public class FileOuterLinksGenerator {
                     continue;
                 }
                 totalEntityList.add(tmp);
-                changeEntityDataDict.put(tmp.getChangeEntityId(),entry.getKey());
+                changeEntityDataDict.put(tmp.getChangeEntityId(), entry.getKey());
                 indexList.add(tmp.getChangeEntityId());
             }
         }
@@ -118,12 +118,12 @@ public class FileOuterLinksGenerator {
                             if (distance <= 1.0) {
                                 String fileNameA = changeEntityDataDict.get(a.getChangeEntityId()).split("@@@")[1];
                                 String fileNameB = changeEntityDataDict.get(b.getChangeEntityId()).split("@@@")[1];
-                                if(fileNameA.equals(fileNameB)){
-                                    Link link = new Link(fileNameA,a,b,ChangeEntityDesc.StageIIIAssociationType.SYSTEMATIC_CHANGE,null);
-                                    totalFileLinks.addEntry(changeEntityDataDict.get(a.getChangeEntityId()),link);
-                                }else{
-                                    Link link = new Link(fileNameA,fileNameB,a,b,ChangeEntityDesc.StageIIIAssociationType.SYSTEMATIC_CHANGE,null);
-                                    totalFileLinks.addFile2FileAssos(changeEntityDataDict.get(a.getChangeEntityId()),changeEntityDataDict.get(b.getChangeEntityId()),link);
+                                if (fileNameA.equals(fileNameB)) {
+                                    Link link = new Link(fileNameA, a, b, ChangeEntityDesc.StageIIIAssociationType.SYSTEMATIC_CHANGE, null);
+                                    totalFileLinks.addEntry(changeEntityDataDict.get(a.getChangeEntityId()), link);
+                                } else {
+                                    Link link = new Link(fileNameA, fileNameB, a, b, ChangeEntityDesc.StageIIIAssociationType.SYSTEMATIC_CHANGE, null);
+                                    totalFileLinks.addFile2FileAssos(changeEntityDataDict.get(a.getChangeEntityId()), changeEntityDataDict.get(b.getChangeEntityId()), link);
                                 }
                             }
                         }
@@ -208,42 +208,42 @@ public class FileOuterLinksGenerator {
                 //Override-Method: methodName overriden in B.java
                 //Abstract-Method: methodName implemented in A.java
                 //Implement-Method: methodName implemented interface A.java
-                if(methodData1.methodName == null || methodData1.methodName.isEmpty() || methodData2.methodName == null || methodData2.methodName.isEmpty()){
+                if (methodData1.methodName == null || methodData1.methodName.isEmpty() || methodData2.methodName == null || methodData2.methodName.isEmpty()) {
+                    System.err.println("Method name null-- FileOuterLinksGenerator");
                     continue;
-                }else{
-                    if (methodData1.methodName.get(0).equals(methodData2.methodName.get(0))) {
-                        if (superClasses1.contains("superclass---"+classB)) { // B是A的父类
-                            if(superClasses2.contains("abstract---"+classB)) {
-                                String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0),classB);
-                                Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
-                                mAssos.add(link);
-                            }else{
-                                String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0),classB);
-                                Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
-                                mAssos.add(link);
-                            }
-                        } else if(superClasses1.contains("interface---"+classB)){ // B是A的接口
-                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.IMPLEMENT_METHOD, methodData1.methodName.get(0),classB);
+                }
+                if (methodData1.methodName.get(0).equals(methodData2.methodName.get(0))) {
+                    if (superClasses1.contains("superclass---" + classB)) { // B是A的父类
+                        if (superClasses2.contains("abstract---" + classB)) {
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0), classB);
                             Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
                             mAssos.add(link);
-
-                        }
-
-                        if(superClasses2.contains("superclass---"+classA)) { // A是B的父类
-                            if(superClasses1.contains("abstract---"+classA)){
-                                String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0),classA);
-                                Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
-                                mAssos.add(link);
-                            }else{
-                                String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0),classA);
-                                Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
-                                mAssos.add(link);
-                            }
-                        } else if(superClasses2.contains("interface---"+classA)) { // A是B的接口
-                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.IMPLEMENT_METHOD, methodData1.methodName.get(0),classA);
+                        } else {
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0), classB);
                             Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
                             mAssos.add(link);
                         }
+                    } else if (superClasses1.contains("interface---" + classB)) { // B是A的接口
+                        String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.IMPLEMENT_METHOD, methodData1.methodName.get(0), classB);
+                        Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
+                        mAssos.add(link);
+
+                    }
+
+                    if (superClasses2.contains("superclass---" + classA)) { // A是B的父类
+                        if (superClasses1.contains("abstract---" + classA)) {
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.ABSTRACT_METHOD, methodData1.methodName.get(0), classA);
+                            Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(link);
+                        } else {
+                            String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.OVERRIDE_METHOD, methodData1.methodName.get(0), classA);
+                            Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
+                            mAssos.add(link);
+                        }
+                    } else if (superClasses2.contains("interface---" + classA)) { // A是B的接口
+                        String desc = String.format(ChangeEntityDesc.StageIIIAssociationType.IMPLEMENT_METHOD, methodData1.methodName.get(0), classA);
+                        Link link = new Link(ce1.fileName, ce2.fileName, m, n, desc, null);
+                        mAssos.add(link);
                     }
                 }
             }

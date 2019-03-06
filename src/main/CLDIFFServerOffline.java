@@ -13,14 +13,17 @@ import edu.fdu.se.net.MyNetUtil;
 import edu.fdu.se.server.CommitFile;
 import edu.fdu.se.server.Content;
 import edu.fdu.se.server.Meta;
-//import org.json.JSONArray;
-//import org.json.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+//import org.json.JSONArray;
+//import org.json.JSONObject;
 /**
  * Created by huangkaifeng on 2018/8/23.
  *
@@ -45,6 +48,8 @@ public class CLDIFFServerOffline {
         server.createContext("/fetchMeta", new FetchMetaCacheHandler());
         server.createContext("/fetchFile", new FetchFileContentHandler());
         server.createContext("/clearCommitRecord",new ClearCacheHandler());
+        server.createContext("/clearCache",new ClearCacheHandler());
+
         server.start();
     }
 
@@ -90,6 +95,8 @@ public class CLDIFFServerOffline {
 
                 String[] data = realRepoPath.split("/");
                 Global.projectName = data[data.length-2];
+                String projectOwnerName = data[data.length-3];
+
 
                 Global.repoPath = repoDetailPath + realRepoPath;
 
@@ -101,26 +108,49 @@ public class CLDIFFServerOffline {
                     当isSolved的为false的时候只需要一个commit跟repoPath
                  */
                 if(!Boolean.parseBoolean(isSolved)){
-                    File metaFile = new File(Global.outputDir + "/" + Global.projectName + "/" + commitId + "/meta.json");
+                    Object prevScanObject = map.get("prevScan");
+                    if(prevScanObject == null){
+                        File metaFile = new File(Global.outputDir + "/" + projectOwnerName + "/" + Global.projectName + "/" + commitId + "/meta.json");
 
-                    if (!metaFile.exists()) {
-                        //生成文件
-                        //文件路径为global_Path/project_name/commit_id/meta.txt
-                        try{
-                            meta = generateCLDIFFResult(commitId, metaFile, Global.outputDir);
-                        }catch(Exception e){
-                            exchange.sendResponseHeaders(200, "Error in invoking tool".length());
-                            os.write("Error in invoking tool".getBytes());
-                            return;
+                        if (!metaFile.exists()) {
+                            //生成文件
+                            //文件路径为global_Path/project_name/commit_id/meta.txt
+                            try{
+                                meta = generateCLDIFFResult(commitId, metaFile, Global.outputDir);
+                            }catch(Exception e){
+                                exchange.sendResponseHeaders(200, "Error in invoking tool".length());
+                                os.write("Error in invoking tool".getBytes());
+                                return;
+                            }
+
+                        } else {
+                            meta = FileUtil.read(Global.outputDir + "/" + projectOwnerName + "/" + Global.projectName + "/" + commitId + "/meta.json");
                         }
+                    }else {
+                        String prevScan = prevScanObject.toString();
+                        System.out.println("prevScan: "+ map.get("prevScan"));
+                        File metaFile = new File(Global.outputDir + "/" + projectOwnerName + "/" + Global.projectName + "/" + commitId + "/meta.json");
 
-                    } else {
-                        meta = FileUtil.read(Global.outputDir + "/" + Global.projectName + "/" + commitId + "/meta.json");
+                        if (!metaFile.exists()) {
+                            //生成文件
+                            //文件路径为global_Path/project_name/commitId/meta.txt
+                            try{
+                                meta = generateTwoCommitsCLDIFFResult(prevScan,commitId,metaFile,Global.outputDir);
+                            }catch(Exception e){
+                                exchange.sendResponseHeaders(200, "Error in invoking tool".length());
+                                os.write("Error in invoking tool".getBytes());
+                                return;
+                            }
+
+                        } else {
+                            meta = FileUtil.read(Global.outputDir + "/" + projectOwnerName + "/" + Global.projectName + "/" + commitId + "/meta.json");
+                        }
                     }
+
                 }else{
                     String nextScan = map.get("nextScan").toString();
                     System.out.println("nextScan: "+ map.get("nextScan"));
-                    File metaFile = new File(Global.outputDir + "/" + Global.projectName + "/" + nextScan + "/meta.json");
+                    File metaFile = new File(Global.outputDir + "/" + projectOwnerName + "/" + Global.projectName + "/" + nextScan + "/meta.json");
 
                     if (!metaFile.exists()) {
                         //生成文件
@@ -134,11 +164,12 @@ public class CLDIFFServerOffline {
                         }
 
                     } else {
-                        meta = FileUtil.read(Global.outputDir + "/" + Global.projectName + "/" + nextScan + "/meta.json");
+                        meta = FileUtil.read(Global.outputDir + "/" + projectOwnerName + "/" + Global.projectName + "/" + nextScan + "/meta.json");
                     }
                 }
                 System.out.println(meta);
-                exchange.sendResponseHeaders(200, meta.length());
+
+                exchange.sendResponseHeaders(200, meta.getBytes().length);
                 os.write(meta.getBytes());
             }catch(Exception e){
                 e.printStackTrace();
@@ -196,18 +227,21 @@ public class CLDIFFServerOffline {
         @Override
         public void handle(HttpExchange exchange) {
             System.out.println("FetchFileContentHandler");
-            OutputStream os = exchange.getResponseBody();
+            OutputStream os = null;
+            InputStream is = null;
             try {
-                InputStream is = exchange.getRequestBody();
+                os = exchange.getResponseBody();
+                is = exchange.getRequestBody();
                 Map<String,String> mMap = MyNetUtil.parsePostedKeys(is);
                 // mMap keys: author,file_name,parent_commit_hash,project_name,commit_hash
                 String commit_hash = mMap.get("commit_hash");
                 String project_name = mMap.get("project_name");
                 String fileName = mMap.get("file_name");
+                String projectOwnerName = mMap.get("project_owner_name");
                 String[] fileNames = fileName.split("---");
                 int id = Integer.valueOf(fileNames[0]);
                 //文件路径为global_Path/project_name/commit_id/meta.json
-                String metaStr = FileUtil.read(Global.outputDir + "/" + project_name + "/" + commit_hash + "/meta.json");
+                String metaStr = FileUtil.read(Global.outputDir + "/" + projectOwnerName + "/" + project_name + "/" + commit_hash + "/meta.json");
                 Meta meta = new Gson().fromJson(metaStr, Meta.class);
                 CommitFile file = meta.getFiles().get(id);
                 String action = meta.getActions().get(id);
@@ -220,14 +254,14 @@ public class CLDIFFServerOffline {
                 if ("modified".equals(action)) {
                     prev_file_path = file.getPrev_file_path();
                     curr_file_path = file.getCurr_file_path();
-                    currFileContent = FileUtil.read(Global.outputDir + "/" + project_name + "/" + commit_hash + "/" + curr_file_path);
-                    prevFileContent = FileUtil.read(Global.outputDir + "/" + project_name + "/" + commit_hash + "/" + prev_file_path);
+                    currFileContent = FileUtil.read(Global.outputDir + "/" + projectOwnerName + "/" + project_name + "/" + commit_hash + "/" + curr_file_path);
+                    prevFileContent = FileUtil.read(Global.outputDir + "/" + projectOwnerName + "/" + project_name + "/" + commit_hash + "/" + prev_file_path);
                 } else if ("added".equals(action)) {
                     curr_file_path = file.getCurr_file_path();
-                    currFileContent = FileUtil.read(Global.outputDir + "/" + project_name + "/" + commit_hash + "/" + curr_file_path);
+                    currFileContent = FileUtil.read(Global.outputDir + "/" + projectOwnerName + "/" + project_name + "/" + commit_hash + "/" + curr_file_path);
                 } else if ("deleted".equals(action)) {
                     prev_file_path = file.getPrev_file_path();
-                    prevFileContent = FileUtil.read(Global.outputDir + "/" + project_name + "/" + commit_hash + "/" + prev_file_path);
+                    prevFileContent = FileUtil.read(Global.outputDir +  "/" + projectOwnerName + "/" + project_name + "/" + commit_hash + "/" + prev_file_path);
                 }
                 if(file.getDiffPath()!=null){
                     diff = FileUtil.read(file.getDiffPath());
@@ -249,6 +283,13 @@ public class CLDIFFServerOffline {
                 }catch (Exception e2){
                     e2.printStackTrace();
                 }
+            }finally {
+                try{
+                    is.close();
+                    os.close();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -258,18 +299,76 @@ public class CLDIFFServerOffline {
         @Override
         public void handle(HttpExchange exchange) {
             System.out.println("clear cache");
+            InputStream is = null;
+            OutputStream outs = null;
             try {
-                File f = new File(Global.outputDir);
-                f.delete();
-                OutputStream outs = exchange.getResponseBody();
+                is = exchange.getRequestBody();
+                String postString = MyNetUtil.getPostString(is);
+                System.out.println("PostContent: " + postString);
+                Gson gson = new Gson();
+                Map<String, Object> map = new HashMap<String, Object>();
+                map = gson.fromJson(postString, map.getClass());
+
+                String projectOwnerName = map.get("projectOwnerName").toString();
+                String projectName = map.get("projectName").toString();
+                String branch = map.get("branch").toString();
+
+
+                String folderPath = projectOwnerName + File.separator + projectName + "-" + branch;
+                String folderDetailPath = Global.outputDir + File.separator + folderPath;
+                delFolder(folderDetailPath);
+                outs = exchange.getResponseBody();
                 String success = "SUCCESS\n";
                 exchange.sendResponseHeaders(200, success.length());
                 outs.write(success.getBytes());
-                outs.close();
             }catch (Exception e){
                 e.printStackTrace();
+            }finally {
+                try{
+                    is.close();
+                    outs.close();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
             }
         }
+    }
+
+    public static void delFolder(String folderPath) throws Exception{
+        delAllFile(folderPath); // 删除完里面所有内容
+        String filePath = folderPath;
+        java.io.File myFilePath = new java.io.File(filePath);
+        myFilePath.delete(); // 删除空文件夹
+    }
+
+    public static boolean delAllFile (String folderPath) throws Exception{
+        boolean flag = false;
+        File file = new File(folderPath);
+        if (!file.exists()) {
+            return flag;
+        }
+        if (!file.isDirectory()) {
+            return flag;
+        }
+        String[] tempList = file.list();
+        File temp = null;
+        for (int i = 0; i < tempList.length; i++) {
+            if (folderPath.endsWith(File.separator)) {
+                temp = new File(folderPath + tempList[i]);
+            } else {
+                temp = new File(folderPath + File.separator + tempList[i]);
+            }
+            if (temp.isFile()) {
+                temp.delete();
+            }
+            if (temp.isDirectory()) {
+                delAllFile(folderPath + "/" + tempList[i]);// 先删除文件夹里面的文件
+                delFolder(folderPath + "/" + tempList[i]);// 再删除空文件夹
+                flag = true;
+            }
+        }
+        return flag;
     }
 
 }

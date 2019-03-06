@@ -174,7 +174,9 @@ public class StageIIBean {
             if(this.getSubEntity()!=null) {
                 sb.append(this.getSubEntity());
             }
-            sb.append("  by");
+            if(this.opt2List.size() != 0){
+                sb.append("  by");
+            }
         }
         return sb.toString();
     }

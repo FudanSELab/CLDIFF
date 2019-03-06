@@ -19,18 +19,20 @@ public class FileOutputLog {
     public String currSourceFile;
     public String prevSourceFile;
     public String sourceGen;
+    public String projectOwnerName;
 
     public String middleGenPathPrev;
     public String middleGenPathCurr;
 
-    public FileOutputLog(String rootPath,String projName){
+    public FileOutputLog(String rootPath,String projName,String projectOwnerName){
         this.rootPath = rootPath;
         this.projName = projName;
+        this.projectOwnerName = projectOwnerName;
     }
 
     public void setCommitId(String commit,List<String> parentCommits){
         this.commitId = commit;
-        this.metaLinkPath = rootPath+"/"+projName+"/"+ commit;
+        this.metaLinkPath = rootPath+"/"+projectOwnerName+"/"+projName+"/"+ commit;
 
         this.prevSourceFile = metaLinkPath+"/prev";
         this.currSourceFile = metaLinkPath+"/curr";
@@ -54,7 +56,7 @@ public class FileOutputLog {
 
     public void setCommitId(String commit){
         this.commitId = commit;
-        this.metaLinkPath = rootPath+"/"+projName+"/"+ commit;
+        this.metaLinkPath = rootPath+"/"+projectOwnerName+"/"+projName+"/"+ commit;
 
         this.prevSourceFile = metaLinkPath+"/prev";
         this.currSourceFile = metaLinkPath+"/curr";

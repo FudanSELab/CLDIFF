@@ -41,6 +41,7 @@ public class Global {
     public static String outputDir;
     public static String repoPath; // null in online mode
     public static String projectName;
+    public static String projectOwnerName;
 
     /**
      * running vars

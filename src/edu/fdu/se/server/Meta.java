@@ -27,6 +27,8 @@ public class Meta {
     private List<CommitFile> files;
     private String linkPath;
     private String outputDir;
+    private String projectOwnerName;
+
 
     /**
      * modified / added / removed
@@ -159,5 +161,13 @@ public class Meta {
 
     public void setOutputDir(String outputDir) {
         this.outputDir = outputDir;
+    }
+
+    public String getProjectOwnerName() {
+        return projectOwnerName;
+    }
+
+    public void setProjectOwnerName(String projectOwnerName) {
+        this.projectOwnerName = projectOwnerName;
     }
 }

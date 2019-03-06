@@ -17,6 +17,17 @@ public class PathUtil {
         return null;
     }
 
+    public static String getGitProjectOwnerNameFromGitFullPath(String path){
+        if(path.contains("\\")){
+            path = path.replace('\\','/');
+        }
+        if(path.endsWith("/.git")){
+            String[] data = path.split("/");
+            return data[data.length-3];
+        }
+        return null;
+    }
+
     /**
      * replacing "\\" with "/"
      *

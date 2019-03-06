@@ -52,7 +52,7 @@ public class JGitHelper extends JGitCommand {
                     if (isTraversed.containsKey(queueCommitItem.getName()) || parentCommits == null) {
                         continue;
                     }
-                    Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(queueCommitItem.getName());
+                    Map<String, List<DiffEntry>> changedFiles = this.getCommitParentMappedDiffEntry(queueCommitItem.getName());
                     iHandleCommit.handleCommit(changedFiles, queueCommitItem.getName(),commit);
                     commitNum++;
                     isTraversed.put(queueCommitItem.getName(), true);
@@ -86,7 +86,7 @@ public class JGitHelper extends JGitCommand {
             if (commit.getParents() == null) {
                 return;
             }
-            Map<String, Map<String, List<String>>> changedFiles = this.getCommitParentMappedFileList(commit.getName());
+            Map<String,List<DiffEntry>> changedFiles = this.getCommitParentMappedDiffEntry(commit.getName());
             iHandleCommit.handleCommit(changedFiles, commitString,commit);
 
         } catch (MissingObjectException e) {
@@ -103,14 +103,14 @@ public class JGitHelper extends JGitCommand {
      *
      * @param currentCommitString,nexCommitString
      */
-    public void analyzeTwoCommits(HandleDiffCommits handleDiffCommits, String currentCommitString, String nexCommitString) {
+    public void analyzeTwoCommits(IHandleCommit handleDiffCommits, String currentCommitString, String nexCommitString) {
         try {
 
             ObjectId currCommitId = ObjectId.fromString(currentCommitString);
             RevCommit currCommit = revWalk.parseCommit(currCommitId);
             ObjectId nextCommitId = ObjectId.fromString(nexCommitString);
             RevCommit nextCommit = revWalk.parseCommit(nextCommitId);
-            Map<String, Map<String, List<DiffEntry>>> changedFiles = this.getTwoCommitsMappedFileList(currCommit.getName(),nextCommit.getName());
+            Map<String, List<DiffEntry>> changedFiles = this.getTwoCommitsMappedFileList(currCommit.getName(),nextCommit.getName());
             handleDiffCommits.handleCommit(changedFiles, currentCommitString,currCommit,nexCommitString,nextCommit);
 
         } catch (MissingObjectException e) {

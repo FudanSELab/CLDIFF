@@ -124,7 +124,6 @@ public class GenerateChangeEntityJson {
                 }else {
                     setStageIIIBeanSubRangeDetail(tmp.stageIIIBean, tmp.clusteredActionBean.actions, mad);
                 }
-
             } else if (tmp.stageIIBean.getOpt().equals(ChangeEntityDesc.StageIIOpt.OPT_CHANGE_MOVE)) {
                 // 设置move
 
