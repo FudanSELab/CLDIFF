@@ -82,10 +82,7 @@ public class ClusterUpDown extends AbstractCluster{
                         fp.setActionTraversedMap(a);
                     }
                 }
-                if(Global.fileName.endsWith("XStreamMarshaller.java")){
-                    System.out.println("pass move "+Global.fileName);
-                    fp.setActionTraversedMap(a);
-                }
+
 
             }
         }
