@@ -68,8 +68,10 @@ public class CLDIFFServerOffline {
                     meta = FileUtil.read(Global.outputDir + "/" + Global.projectName + "/" + commitHash + "/meta.json");
                 }
                 System.out.println(meta);
-                exchange.sendResponseHeaders(200, meta.length());
-                os.write(meta.getBytes());
+                //support chinese
+                byte[] bs=meta.getBytes();
+                exchange.sendResponseHeaders(200, bs.length);
+                os.write(bs);
                 os.close();
             }catch(Exception e){
                 e.printStackTrace();
