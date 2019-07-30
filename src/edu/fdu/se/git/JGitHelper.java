@@ -251,5 +251,9 @@ public class JGitHelper extends JGitCommand {
         }
         return cnt;
     }
+    public void closeGit() {
+    	this.repository.close();
+    	this.git.close();
+    }
 
 }

@@ -39,6 +39,8 @@ public class CLDiffLocal extends IHandleCommit {
         jGitHelper.analyzeOneCommit(this,commitId);
         CLDiffAPI clDiffAPI = new CLDiffAPI(outputDir,meta);
         clDiffAPI.generateDiffMinerOutput();
+        jGitHelper.closeGit();
+        
     }
 
     /**

@@ -17,6 +17,8 @@ import edu.fdu.se.server.Meta;
 
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,12 +30,29 @@ import java.util.Map;
  *
  */
 public class CLDIFFServerOffline {
-
+	
+	private static String cheWorkspacesPath = "/home/xie/Workspace/Eclipse-Che/Eclipse-Che-6.16.0/instance/data/workspaces";
 
     public static void main(String[] arg) throws Exception {
         Global.runningMode = 1;
-        Global.outputDir = PathUtil.unifyPathSeparator(arg[0]);
-        Global.repoPath = PathUtil.unifyPathSeparator(arg[1]); // XXX/.git
+
+    	if (arg.length == 2) {
+            Global.outputDir = PathUtil.unifyPathSeparator(arg[0]);
+            Global.repoPath = PathUtil.unifyPathSeparator(arg[1]); // XXX/.git
+    	}
+    	else if (arg.length == 3) {
+            Global.outputDir = PathUtil.unifyPathSeparator(arg[0]);
+            Global.repoPath = PathUtil.unifyPathSeparator(arg[1]); // XXX/.git
+            cheWorkspacesPath = arg[2];
+    	}
+        else {
+            Global.outputDir = "cache/";
+            Global.repoPath = "/home/xie/Workspace/Eclipse-Che/Eclipse-Che-6.16.0/instance/data/workspaces/workspace6m3ocjril90evzpf/javatest1/.git"; // XXX/.git
+    	}
+    	System.out.println("Cache: " + Global.outputDir);
+    	System.out.println("RepoPath: " + Global.repoPath);
+    	System.out.println("CheWorkspacesPath: " + cheWorkspacesPath);
+    	
         String[] data = Global.repoPath.split("/");
         Global.projectName = data[data.length-2];
         HttpServer server = HttpServer.create(new InetSocketAddress(8082), 0);
@@ -42,11 +61,39 @@ public class CLDIFFServerOffline {
         server.createContext("/fetchFile", new FetchFileContentHandler());
         server.createContext("/clearCommitRecord",new ClearCacheHandler());
         server.start();
+        System.out.println("Server Started.");
     }
 
     /**
      * 获取Meta缓存
      */
+    
+    static Map<String,String> parseContent(String postString){
+    	Map<String,String> mMap = new HashMap<String,String>();
+    	String[] data = postString.split(";");
+    	for(String t:data) {
+    		String[] kv = t.split("=");
+    		mMap.put(kv[0],kv[1]);
+    	}
+    	return mMap;
+    }
+    
+    static String getRepoPath(String projectName) {
+    	String repoPath = null;
+    	
+		File workspacesPath = new File(cheWorkspacesPath);
+		String[] workspaces = workspacesPath.list();
+		for(String workspace : workspaces) {
+			File workspacePath = new File(workspacesPath, workspace);
+			if(!workspacePath.isDirectory()) continue;
+			String[] projects = workspacePath.list();
+			if(!Arrays.asList(projects).contains(projectName)) continue;
+			repoPath = (new File(workspacePath, projectName)).toString();
+			repoPath = (new File(repoPath, ".git")).toString();
+		}
+		return repoPath;
+    }
+    
     static class FetchMetaCacheHandler implements HttpHandler {
 
         @Override
@@ -57,7 +104,20 @@ public class CLDIFFServerOffline {
                 InputStream is = exchange.getRequestBody();
                 String postString = MyNetUtil.getPostString(is);
                 System.out.println("PostContent: " + postString);
-                String commitHash = postString.substring(4);
+                Map<String,String> kvMap = parseContent(postString);
+                if(!kvMap.containsKey("commit_url")) {
+                	err(exchange);
+                }
+                String commitHash = kvMap.get("commit_url");
+                if(kvMap.containsKey("project_path")) {
+                	Global.projectName = kvMap.get("project_path");
+                	Global.repoPath = getRepoPath(Global.projectName);
+                	if (Global.repoPath == null) {
+                		System.out.println("repoPath error");
+                		return;
+                	}
+                	else System.out.println("Project Path: " + Global.repoPath);
+                }
                 File metaFile = new File(Global.outputDir + "/" + Global.projectName + "/" + commitHash + "/meta.json");
                 String meta = null;
                 if (!metaFile.exists()) {
@@ -75,13 +135,18 @@ public class CLDIFFServerOffline {
                 os.close();
             }catch(Exception e){
                 e.printStackTrace();
-                try {
-                    exchange.sendResponseHeaders(200, "error".length());
-                    os.write("error".getBytes());
-                    os.close();
-                }catch (Exception e2){
-                    e2.printStackTrace();
-                }
+                err(exchange);
+            }
+        }
+        
+        public void err(HttpExchange exchange) {
+        	try {
+        		OutputStream os = exchange.getResponseBody();
+                exchange.sendResponseHeaders(200, "error".length());
+                os.write("error".getBytes());
+                os.close();
+            }catch (Exception e2){
+                e2.printStackTrace();
             }
         }
     }
