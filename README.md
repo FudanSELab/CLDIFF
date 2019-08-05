@@ -10,7 +10,7 @@
     * As you can see in CLDIFFCmd.run(),CLDiff accepts three arguments: repository path(ends with "/.git"), commit id and CLDiff cache directory(/foo/bar).
 2. start CLDiff with CLDiff-Web
     * Deploy [CLDiff-Web](https://github.com/FudanSELab/CLDIFF-WEB) to web container(e.g. Tomcat)
-    * In CLDiff, run main.CLDIFFServerOffline.java. Remember to pass two arguments: repository path(ends with "/.git") and CLDiff cache directory(/foo/bar).
+    * In CLDiff, run main.CLDIFFServerOffline.java. Pass two arguments in the following order: CLDiff cache directory(/foo/bar) and a git repository path(ends with "/.git").
     * Enter http://localhost:8080/indexoffline.html in your browser. Start with one commit id.
 
 ### Description
