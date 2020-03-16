@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import edu.fdu.se.git.FileChangeEditList;
@@ -22,12 +23,12 @@ import com.github.javaparser.ast.NodeList;
 
 public class JavaParserFactory {
 	
-	public static CompilationUnit getCompilationUnit(InputStream is){
+	public static CompilationUnit getCompilationUnit(InputStream is) throws ParseProblemException {
 		CompilationUnit compilationUnit = JavaParser.parse(is);
 		return compilationUnit;
 	}
 	
-	public static CompilationUnit getCompilationUnit(String filePath){
+	public static CompilationUnit getCompilationUnit(String filePath) throws ParseProblemException{
 		CompilationUnit compilationUnit = null;
 		try {
 			compilationUnit = JavaParser.parse(new File(filePath));
