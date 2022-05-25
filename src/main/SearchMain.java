@@ -2,13 +2,11 @@ package main;
 
 import edu.ucla.se.GenerateRegex;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import edu.ucla.se.GitHandler;
 import edu.ucla.se.P_LANG;
+import edu.ucla.se.SearchEngine;
 
 import java.nio.file.Paths;
 
@@ -49,11 +47,17 @@ public class SearchMain {
 
         System.out.printf("Start missing change search for git repo %s and commit %s...\n", repoPath, commitId);
 
-        GitHandler handler = new GitHandler(repoPath, commitId, P_LANG.JAVASCRIPT);
+        SearchEngine engine = new SearchEngine(repoPath, commitId, P_LANG.JAVASCRIPT);
 
-        List<String> oldVersionFiles =  handler.getOldFiles();
+        List<String> regex = new ArrayList<>();
+        regex.add(".*db.*\r\n");
 
-        for (String file : oldVersionFiles) System.out.println(file);
+        Map<String, List<String>> possibleRs = engine.run(regex);
+
+        for (Map.Entry<String, List<String>> entry : possibleRs.entrySet()) {
+            System.out.printf("Possible Missing Changes in %s:\n", entry.getKey());
+            for (String match : entry.getValue()) System.out.println(match);
+        }
 
     }
 }

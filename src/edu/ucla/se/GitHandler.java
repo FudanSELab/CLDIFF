@@ -16,14 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GitHandler {
-    private String repoPath;
-    private String commitId;
-    private P_LANG lang;
-
     private Repository repository;
     private RevWalk revWalk;
     private RevCommit curCommit;
     private Git git;
+    private P_LANG lang;
 
     public GitHandler(String repoPath, String commitId, P_LANG lang) {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -32,8 +29,6 @@ public class GitHandler {
             revWalk = new RevWalk(repository);
             curCommit = revWalk.parseCommit(ObjectId.fromString(commitId));
             git = new Git(repository);
-            this.repoPath = repoPath;
-            this.commitId = commitId;
             this.lang = lang;
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,17 +65,25 @@ public class GitHandler {
         return allSrcFiles;
     }
 
-    public void getFiles() {
+    public List<String> getFiles() {
         RevTree tree = curCommit.getTree();
+        String fileExtension = lang.getExtension();
+        List<String> allSrcFiles = new ArrayList<>();
+
         try {
             TreeWalk treeWalk = new TreeWalk(repository);
             treeWalk.addTree(tree);
             treeWalk.setRecursive(true);
             while (treeWalk.next()) {
-                System.out.println(treeWalk.getPathString());
+                String filePath = treeWalk.getPathString();
+                int dotIdx = filePath.lastIndexOf(".");
+                if (dotIdx > 0 && filePath.substring(dotIdx + 1).equals(fileExtension))
+                    allSrcFiles.add(filePath);
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
+
+        return allSrcFiles;
     }
 }
