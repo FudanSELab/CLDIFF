@@ -4,7 +4,7 @@ import edu.ucla.se.GenerateRegex;
 
 import java.util.*;
 
-import edu.ucla.se.GitHandler;
+import edu.ucla.se.MissingChangeInfo;
 import edu.ucla.se.P_LANG;
 import edu.ucla.se.SearchEngine;
 
@@ -50,13 +50,14 @@ public class SearchMain {
         SearchEngine engine = new SearchEngine(repoPath, commitId, P_LANG.JAVASCRIPT);
 
         List<String> regex = new ArrayList<>();
-        regex.add(".*db.*\r\n");
+        regex.add(".*const.*\r\n.*db.*");
 
-        Map<String, List<String>> possibleRs = engine.run(regex);
+        Map<String, List<MissingChangeInfo>> possibleRs = engine.run(regex);
 
-        for (Map.Entry<String, List<String>> entry : possibleRs.entrySet()) {
+        for (Map.Entry<String, List<MissingChangeInfo>> entry : possibleRs.entrySet()) {
             System.out.printf("Possible Missing Changes in %s:\n", entry.getKey());
-            for (String match : entry.getValue()) System.out.println(match);
+            for (MissingChangeInfo info : entry.getValue())
+                System.out.printf("(Line%d, Line%d), %s\n", info.getStartLine(), info.getEndLine(), info.getContent());
         }
 
     }
