@@ -7,6 +7,7 @@ class UnionFind {
     private HashMap<Integer, Integer> sizeOfSet;
     private int numOfSet;
 
+
     public UnionFind() {
         father = new HashMap<>();
         sizeOfSet = new HashMap<>();

@@ -3,15 +3,15 @@ package edu.ucla.se.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Component {
+public class MethodComponent {
     private List<Integer> changeItems;
-    private List<Integer> changeIndex;
-    private List<Integer> roots;
+    private List<Integer> changeIndex; // the list of links within each function group
+    private List<Integer> roots;       // the roots of changedIndex
     private String description;
     private String functionName;
-    public UnionFind uf;
+    public UnionFind uf;               // call api here to find unionId
 
-    public Component(UnionFind uf) {
+    public MethodComponent(UnionFind uf) {
         changeItems = new ArrayList<>();
         changeIndex = new ArrayList<>();
         description = "";

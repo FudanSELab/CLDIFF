@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public class ParserHelper {
     private UnionFind uf;
-    private List<Component> listOfComponent;
+    private List<MethodComponent> listOfComponent;
     public ParserHelper() {
         uf = new UnionFind();
         listOfComponent = new ArrayList<>();
@@ -46,7 +46,7 @@ public class ParserHelper {
 
     public List<List<Integer>> parseDiffFile(String filename) {
         boolean flag = true;
-        Component currComponent = new Component(uf);
+        MethodComponent currComponent = new MethodComponent(uf);
         try {
             File myObj = new File(filename);
             Scanner myReader = new Scanner(myObj);
@@ -61,7 +61,7 @@ public class ParserHelper {
                 } else if (list.get(0).equals("CLDIFFCmd.")) {
                     // start a new component
                     flag = true;
-                    currComponent = new Component(uf);
+                    currComponent = new MethodComponent(uf);
                     currComponent.setFunctionName(list.get(2));
                     continue;
                 }
@@ -85,7 +85,7 @@ public class ParserHelper {
         }
 
         List<List<Integer>> result = new ArrayList<>();
-        for (Component c : listOfComponent) {
+        for (MethodComponent c : listOfComponent) {
             result.add(new ArrayList<>(c.getRoots()));
         }
         return result;
@@ -100,7 +100,6 @@ public class ParserHelper {
         ParserHelper ph = new ParserHelper();
         ph.parseLinkJson(linkFileName);
         List<List<Integer>> result = ph.parseDiffFile(groupingFileName);
-        System.out.println(result);
     }
 }
 
