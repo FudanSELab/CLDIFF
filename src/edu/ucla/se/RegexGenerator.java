@@ -29,12 +29,18 @@ public class RegexGenerator {
     //       }
     // }
 
-    HashMap<String, HashMap<Integer, String>>  dict;                // filename -> (line_num: code)
+    Map<String, Map<Integer, String>>  dict;                // filename -> (line_num: code)
+    GitHandler gitHandler;
 
-    public RegexGenerator(HashMap<Integer, HashMap<String, List<Integer>>> _grouping, HashMap<String,
-            HashMap<Integer, String>> _dict){
+    public RegexGenerator(HashMap<Integer, HashMap<String, List<Integer>>> _grouping, Map<String,
+            Map<Integer, String>> _dict){
         this.grouping = _grouping;
         this.dict = _dict;
+    }
+
+    public RegexGenerator(HashMap<Integer, HashMap<String, List<Integer>>> grouping, GitHandler gitHandler) {
+        this.grouping = grouping;
+        this.gitHandler = gitHandler;
     }
 
     /**
@@ -46,6 +52,7 @@ public class RegexGenerator {
 
         for (Integer g : grouping.keySet()) {
             HashMap<String, List<Integer>> files = grouping.get(g);
+            this.dict = gitHandler.getOldFileContentByLine(files);
             ArrayList<String> val = new ArrayList<>();
 
             for (Map.Entry f: files.entrySet()){
@@ -53,7 +60,7 @@ public class RegexGenerator {
                 if (!dict.containsKey(fileName)){
                     continue;
                 }
-                HashMap<Integer, String> fileCodeDict = dict.get(fileName);
+                Map<Integer, String> fileCodeDict = dict.get(fileName);
                 String code = "";
                 for (int i = 0; i < files.get(fileName).size(); ++i){
                     Integer idx = files.get(fileName).get(i);
