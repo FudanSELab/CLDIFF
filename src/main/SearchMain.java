@@ -21,12 +21,12 @@ public class SearchMain {
         group.put(1, fileToLine);
 
         HashMap<Integer, String> a = new HashMap<>();
-        a.put(7, "else if (a && b) {");
-        a.put(8, "b++;");
+        a.put(7, "for (int i = 0; i < n; ++i){");
+        a.put(8, "sendEvent(true, event);");
 
         HashMap<Integer, String> b = new HashMap<>();
-        b.put(7, "else if (a && d) {");
-        b.put(8, "d++;");
+        b.put(7, "for (int j = 0; j < arr.length(); j++){");
+        b.put(8, "sendEvent(true, ev);");
 
         HashMap<String, HashMap<Integer, String>> dict = new HashMap<>();
         dict.put("a.java", a);

@@ -100,17 +100,18 @@ public class RegexGenerator {
         char [] math = {'+','-','*','/','%','&','^','|','='};
         for (int i = 0; i < tokens.size(); ++i){
             String s = tokens.get(i);
+            if (s.length() == 0){
+                continue;
+            }
             if(s.charAt(0) == '.'){
                 regex += "\\\\";
                 regex += s;
             }else if (s.equals("funcstart")){
                 Integer argsNum = Integer.parseInt(tokens.get(i+1));
-                if (tokens.get(i+2).equals("if")){
-                    regex = "if"+unit;
-                }else if (tokens.get(i+2).equals("elseif")){
+                if (tokens.get(i+2).equals("elseif")){
                     regex = regex + "else\\\\sif.*";
                 }else{
-                    regex += tokens.get(i+2);
+                    regex = regex + tokens.get(i+2) + unit;
                 }
                 regex += "(";
                 for (int j = 0; j < argsNum; ++j){
@@ -143,9 +144,9 @@ public class RegexGenerator {
 
         System.out.println(codes);
 
-        String delimiter = "((?=\\.|=|\\+|-|\\*|/|%|\\^)|(;|\\{|\\})|(?<=\\+|-|\\*|/|%|\\^))";
+        String delimiter = "((?=\\.|=|\\+|-|\\*|/|%|\\^|<|>|<=|>=)|(;|\\{|\\})|(?<=\\+|-|\\*|/|%|\\^|<|>|<=|>=))";
         ArrayList<ArrayList<String>> tokens = new ArrayList<>();
-        int longest = 0;
+        int shortest = 0;
         // Step1: split
         for (int i = 0; i < codes.size(); ++i){ // ((?=\.|=)|(;|,)|(?<=\(|\)))
             String striped = codes.get(i);
@@ -157,25 +158,31 @@ public class RegexGenerator {
                     for (String p: processed){
                         token.add(p.replaceAll("[\\s\\n]*",""));
                     }
+                }else if (raw.get(j).contains("(")){        // extract possible function name
+                    token.add(raw.get(j).substring(0,raw.get(j).indexOf("(")));
+                }else if (raw.get(j).contains(")")){
+                    continue;
                 }else{
                     token.add(raw.get(j).replaceAll("[\\s\\n]*",""));
                 }
             }
             tokens.add(token);
-            if (token.size() > longest){
-                longest = i;
+            if (token.size() < shortest){
+                shortest = i;
             }
         }
         System.out.println(tokens);
 
         //Step2: union set
-        ArrayList<String> based = tokens.get(longest);
+        ArrayList<String> based = tokens.get(shortest);
         for (ArrayList<String> other: tokens){
             based.retainAll(other);
         }
         System.out.println(based);
 
         String regex = generator(based);
+
+        regex = regex.replaceAll("[\\s\\n]*","");
 
         return regex;
     }
