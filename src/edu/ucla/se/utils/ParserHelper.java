@@ -94,9 +94,8 @@ public class ParserHelper {
 
 
     public static void main(String[] args) throws IOException, ParseException, org.json.simple.parser.ParseException {
-
-        String linkFileName = "/Users/junyu/Desktop/CLDIFF/output/JavaCLIDiff/785b5c927f4396e6b2562e617492904a7664c853/link.json";
-        String groupingFileName = "/Users/junyu/Desktop/CLDIFF/src/edu/ucla/se/utils/grouping.txt";
+        String linkFileName = "/Users/jiayuesun/2022/SP-2022/CLDIFF/output/JavaCLIDiff/785b5c927f4396e6b2562e617492904a7664c853/link.json";
+        String groupingFileName = "/Users/jiayuesun/2022/SP-2022/CLDIFF/src/edu/ucla/se/utils/grouping.txt";
         ParserHelper ph = new ParserHelper();
         ph.parseLinkJson(linkFileName);
         List<List<Integer>> result = ph.parseDiffFile(groupingFileName);

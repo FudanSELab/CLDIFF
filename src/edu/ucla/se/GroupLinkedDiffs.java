@@ -6,19 +6,26 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
+// m1, m2, m3
+// 0   3   0
+// 1   0   1
+// 3   1   3
+// 0
+// 1
+
 public class GroupLinkedDiffs {
-    private ArrayList<ArrayList<Integer>> setIds;
+    private List<List<Integer>> setIds;
     private HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> group2Loc = new HashMap<>();
 
     private int nStatementGroup;
     private int minMethodEditLen;
 
-    public GroupLinkedDiffs(ArrayList<ArrayList<Integer>> setIds){
+    public GroupLinkedDiffs(List<List<Integer>> setIds){
         this.setIds = setIds;
         this.populateGroup2Locations(setIds);
     }
 
-    private void populateGroup2Locations(ArrayList<ArrayList<Integer>> setIds){
+    private void populateGroup2Locations(List<List<Integer>> setIds){
         this.nStatementGroup = -1;
         this.minMethodEditLen = Integer.MAX_VALUE;
         for (int i=0; i< setIds.size(); i++){
@@ -38,8 +45,8 @@ public class GroupLinkedDiffs {
                     }
                 }
 
-                group2Loc.get(group_i).get(new Integer(0)).add(new Integer(i));
-                group2Loc.get(group_i).get(new Integer(1)).add(new Integer(j));
+                group2Loc.get(group_i).get((Integer) 0).add( (Integer) i);
+                group2Loc.get(group_i).get((Integer) 1).add( (Integer) j);
 
                 if (this.nStatementGroup < group_i) {
                     this.nStatementGroup = group_i;
@@ -57,7 +64,7 @@ public class GroupLinkedDiffs {
         }
     }
 
-    public ArrayList<Set<Integer>> getLinkedStmtGroups(ArrayList<ArrayList<Integer>> setIds){
+    public ArrayList<Set<Integer>> getLinkedStmtGroups(List<List<Integer>> setIds){
         this.populateGroup2Locations(setIds);
         ArrayList<Set<Integer>> resultEditGroups = new ArrayList<> ();
 
@@ -67,7 +74,7 @@ public class GroupLinkedDiffs {
             if (visitedGroups.contains(i)){
                 continue;
             }
-            visitedGroups.add(new Integer(i));
+            visitedGroups.add((Integer) i);
 
             ArrayList<Integer> method_locs = group2Loc.get(i).get(0);
             ArrayList<Integer> init_locs = group2Loc.get(i).get(1);
@@ -100,7 +107,8 @@ public class GroupLinkedDiffs {
 
     }
 
-    public HashMap<Integer, Integer> populateStmtGroupMap(ArrayList<Set<Integer>> groupedStmtGroups){
+    public HashMap<Integer, Integer> getStmtGroupMap(){
+        ArrayList<Set<Integer>> groupedStmtGroups = this.getLinkedStmtGroups(this.setIds);
         HashMap<Integer, Integer> linkedStmt2Group = new HashMap<> ();
         for (int i = 0; i < groupedStmtGroups.size(); i++){
             Set<Integer> curGroup = groupedStmtGroups.get(i);
