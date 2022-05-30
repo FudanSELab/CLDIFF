@@ -10,10 +10,12 @@ public class CLDIFFCmd {
 
     public static void main(String args[]){
         Global.runningMode = 0;
-        String repo = "D:/Study/CS 230/repos/kafka/.git";
-        String commitId = "2429b2d692174e1bf15cd920bc6be3767260d50e";
+        String repo = "/Users/jiayuesun/2022/SP-2022/JavaCLIDiff/.git";
+        String commitId = "785b5c927f4396e6b2562e617492904a7664c853";
         String outputDir = "./output";
         CLDiffLocal CLDiffLocal = new CLDiffLocal();
         CLDiffLocal.run(commitId,repo,outputDir);
     }
 }
+
+

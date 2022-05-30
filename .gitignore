@@ -6,3 +6,6 @@
 *.iml
 resource/test/
 src/test/
+*.ipynb*
+Dataset/
+output/
