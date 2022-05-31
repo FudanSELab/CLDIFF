@@ -28,7 +28,7 @@ public class SearchEngine {
         this.gitHandler = new GitHandler(repoPath, commitId, lang);
     }
 
-    public Map<String, List<MissingChangeInfo>> run(List<String> regex) {
+    private Map<String, List<MissingChangeInfo>> match_regex(List<String> regex) {
         List<String> allSrcFiles = gitHandler.getFiles();
         Map<String, List<MissingChangeInfo>> rs = new HashMap<>();
 
@@ -41,11 +41,6 @@ public class SearchEngine {
                     Path curFilePath = Paths.get(repoPath, filePath);
                     List<GitHandler.Line> curAllLines = new ArrayList<>();
                     String contents = gitHandler.getFileContentWithLines(curAllLines, curFilePath.toString());
-//                    System.out.println(curFilePath);
-//                    int idx = 0;
-//                    for (Line line : curAllLines) System.out.printf("Line %d, Start: %d, End: %d, %s\n", idx++, line.start, line.end,
-//                            contents.substring(line.start, line.end+1));
-//                    System.out.println();
                     Matcher curMatcher = curPattern.matcher(contents);
                     while (curMatcher.find()) {
                         int startIdx = curMatcher.start();
