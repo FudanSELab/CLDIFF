@@ -16,7 +16,7 @@ public class RegexGenerator {
     //
     //{ 1:
     //      {
-    //          a.java: [3,7,8], // being deleted
+    //          a.java: [[3,7,8],[0,1,2]], // being deleted
     //          b.java: [10,11,12],
     //          c.java: [4,5,6],
     //      }
