@@ -105,6 +105,26 @@ public class GitCreator {
         return;
     }
 
+    /**
+     * Get the path to the specified repository
+     * @param repoName the name of the repo
+     * @return the path to the specified repo
+     */
+    public String getRepoPath(String repoName) {
+        if (!repos.containsKey(repoName)) {
+            System.out.printf("Repo %s does not exist!\n", repoName);
+            return null;
+        }
+
+        return Paths.get(REPO_PATH, repoName).toString();
+    }
+
+
+    /**
+     * Get the Repository object of the specified repo
+     * @param repoName the name of the repo
+     * @return the Repository object
+     */
     public Repository getRepo(String repoName) {
         return repos.get(repoName);
     }

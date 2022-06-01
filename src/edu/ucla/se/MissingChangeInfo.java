@@ -1,21 +1,11 @@
 package edu.ucla.se;
 
 public class MissingChangeInfo {
-    private int startLine;
-    private int endLine;
-    private String content;
-
-    public int getStartLine() {
-        return startLine;
-    }
-
-    public int getEndLine() {
-        return endLine;
-    }
-
-    public String getContent() {
-        return content;
-    }
+    public int startLine;
+    public int endLine;
+    public String content;
+    public boolean foundByRegex;
+    public boolean foundByToken;
 
     MissingChangeInfo (int s, int e, String c) {
         startLine = s;

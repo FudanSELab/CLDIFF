@@ -36,20 +36,22 @@ public class SearchEngine {
         GitCreator gitCreator = new GitCreator();
         gitCreator.deleteRepo(repoName);
         gitCreator.createNewRepo(repoName);
+        this.repoPath = gitCreator.getRepoPath(repoName);
         gitCreator.commitFilesToRepo(repoName, oldPath);
         String commitId = gitCreator.commitFilesToRepo(repoName, newPath);
         this.gitHandler = new GitHandler(gitCreator.getRepo(repoName), commitId, lang);
     }
 
-    public void run() {
-        HashMap<Integer, HashMap<String, List<List<Integer>>>> groups = new HashMap<>();
+    public void run(HashMap<Integer, HashMap<String, List<List<Integer>>>> groups) {
         List<String> regex = generateRegex(groups);
+//        List<String> regex = new ArrayList<>();
+//        regex.add(".*.*=.*.*\\.getStringNumber.*().*.*");
         Map<String, List<MissingChangeInfo>> results = matchRegex(regex);
 
         for (Map.Entry<String, List<MissingChangeInfo>> entry : results.entrySet()) {
             System.out.printf("Possible Missing Changes in %s:\n", entry.getKey());
             for (MissingChangeInfo info : entry.getValue())
-                System.out.printf("(Line%d, Line%d), %s\n", info.getStartLine(), info.getEndLine(), info.getContent());
+                System.out.printf("(Line%d, Line%d), %s\n", info.startLine, info.endLine, info.content);
             System.out.println();
         }
     }
@@ -64,6 +66,7 @@ public class SearchEngine {
         Map<String, List<MissingChangeInfo>> rs = new HashMap<>();
 
         for (String r : regex) {
+            System.out.printf("Matching regex %s\n", r);
             Pattern curPattern = Pattern.compile(r);
 
             for (String filePath : allSrcFiles) {
