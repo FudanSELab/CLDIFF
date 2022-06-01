@@ -39,7 +39,7 @@ public class RegexGenerator {
 
 
     /**
-     * TODO: read from file
+     *
      * @return: HashMap (group -> [[code snippet1],[code snippet2]])
      * */
     public HashMap<Integer,ArrayList<String>> getCodeSnippet(){

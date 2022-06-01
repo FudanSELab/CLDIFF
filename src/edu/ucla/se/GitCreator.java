@@ -14,9 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GitCreator {
-    final static String REPO_PATH = Paths.get("./repos").toString();
+    private final static String REPO_PATH = Paths.get("./repos").toString();
 
-    Map<String, Repository> repos;
+    private Map<String, Repository> repos;
 
     public GitCreator () {
         File repoDir = new File(REPO_PATH);
@@ -103,5 +103,9 @@ public class GitCreator {
         }
         repos.remove(repoName);
         return;
+    }
+
+    public Repository getRepo(String repoName) {
+        return repos.get(repoName);
     }
 }

@@ -48,6 +48,18 @@ public class GitHandler {
         }
     }
 
+    public GitHandler(Repository repository, String commitId, P_LANG lang) {
+        this.repository = repository;
+        try {
+            this.revWalk = new RevWalk(repository);
+            curCommit = revWalk.parseCommit(ObjectId.fromString(commitId));
+            git = new Git(repository);
+            this.lang = lang;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * get the path of all files in the older version
      */
