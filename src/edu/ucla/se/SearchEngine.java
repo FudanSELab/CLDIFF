@@ -31,8 +31,8 @@ public class SearchEngine {
     }
 
     public SearchEngine(String oldPath, String newPath, String repoName, P_LANG lang) {
-        this.oldPath = oldPath;
-        this.newPath = newPath;
+        this.oldPath = Paths.get(oldPath).toString();
+        this.newPath = Paths.get(newPath).toString();
         GitCreator gitCreator = new GitCreator();
         gitCreator.deleteRepo(repoName);
         gitCreator.createNewRepo(repoName);
@@ -42,7 +42,7 @@ public class SearchEngine {
     }
 
     public void run() {
-        HashMap<Integer, HashMap<String, List<Integer>>> groups = new HashMap<>();
+        HashMap<Integer, HashMap<String, List<List<Integer>>>> groups = new HashMap<>();
         List<String> regex = generateRegex(groups);
         Map<String, List<MissingChangeInfo>> results = matchRegex(regex);
 
@@ -54,7 +54,7 @@ public class SearchEngine {
         }
     }
 
-    private List<String> generateRegex(HashMap<Integer, HashMap<String, List<Integer>>> grouping) {
+    private List<String> generateRegex(HashMap<Integer, HashMap<String, List<List<Integer>>>> grouping) {
         RegexGenerator regexGenerator = new RegexGenerator(grouping, this.gitHandler);
         return regexGenerator.generateRegex();
     }

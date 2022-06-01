@@ -47,7 +47,7 @@ public class RegexGenerator {
 
         for (Integer g : grouping.keySet()) {           // group
             HashMap<String, List<List<Integer>>> files = grouping.get(g);
-//            this.dict = gitHandler.getOldFileContentByLine(files);
+            this.dict = gitHandler.getOldFileContentByLine(files);
             ArrayList<String> val = new ArrayList<>();
 
             for (Map.Entry f: files.entrySet()){        // file
