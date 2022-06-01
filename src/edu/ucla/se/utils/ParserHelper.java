@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -52,7 +53,7 @@ public class ParserHelper {
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                List<String> list = List.of(data.split(" "));
+                List<String> list = Arrays.asList(data.split(" "));
                 if (list.size() == 1) {
                     // finish reading a component
                     flag = false;

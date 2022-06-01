@@ -18,21 +18,55 @@ public class SearchEngine {
 
     private String repoPath;
     private String commitId;
-    private P_LANG lang;
+
+    private String oldPath;
+    private String newPath;
+
     private GitHandler gitHandler;
 
     public SearchEngine(String repoPath, String commitId, P_LANG lang) {
         this.repoPath = repoPath.substring(0, repoPath.length() - 5);
         this.commitId = commitId;
-        this.lang = lang;
         this.gitHandler = new GitHandler(repoPath, commitId, lang);
     }
 
-    public Map<String, List<MissingChangeInfo>> run(List<String> regex) {
+    public SearchEngine(String oldPath, String newPath, String repoName, P_LANG lang) {
+        this.oldPath = Paths.get(oldPath).toString();
+        this.newPath = Paths.get(newPath).toString();
+        GitCreator gitCreator = new GitCreator();
+        gitCreator.deleteRepo(repoName);
+        gitCreator.createNewRepo(repoName);
+        this.repoPath = gitCreator.getRepoPath(repoName);
+        gitCreator.commitFilesToRepo(repoName, oldPath);
+        String commitId = gitCreator.commitFilesToRepo(repoName, newPath);
+        this.gitHandler = new GitHandler(gitCreator.getRepo(repoName), commitId, lang);
+    }
+
+    public void run(HashMap<Integer, HashMap<String, List<List<Integer>>>> groups) {
+        List<String> regex = generateRegex(groups);
+//        List<String> regex = new ArrayList<>();
+//        regex.add(".*.*=.*.*\\.getStringNumber.*().*.*");
+        Map<String, List<MissingChangeInfo>> results = matchRegex(regex);
+
+        for (Map.Entry<String, List<MissingChangeInfo>> entry : results.entrySet()) {
+            System.out.printf("Possible Missing Changes in %s:\n", entry.getKey());
+            for (MissingChangeInfo info : entry.getValue())
+                System.out.printf("(Line%d, Line%d), %s\n", info.startLine, info.endLine, info.content);
+            System.out.println();
+        }
+    }
+
+    private List<String> generateRegex(HashMap<Integer, HashMap<String, List<List<Integer>>>> grouping) {
+        RegexGenerator regexGenerator = new RegexGenerator(grouping, this.gitHandler);
+        return regexGenerator.generateRegex();
+    }
+
+    private Map<String, List<MissingChangeInfo>> matchRegex(List<String> regex) {
         List<String> allSrcFiles = gitHandler.getFiles();
         Map<String, List<MissingChangeInfo>> rs = new HashMap<>();
 
         for (String r : regex) {
+            System.out.printf("Matching regex %s\n", r);
             Pattern curPattern = Pattern.compile(r);
 
             for (String filePath : allSrcFiles) {
@@ -41,11 +75,6 @@ public class SearchEngine {
                     Path curFilePath = Paths.get(repoPath, filePath);
                     List<GitHandler.Line> curAllLines = new ArrayList<>();
                     String contents = gitHandler.getFileContentWithLines(curAllLines, curFilePath.toString());
-//                    System.out.println(curFilePath);
-//                    int idx = 0;
-//                    for (Line line : curAllLines) System.out.printf("Line %d, Start: %d, End: %d, %s\n", idx++, line.start, line.end,
-//                            contents.substring(line.start, line.end+1));
-//                    System.out.println();
                     Matcher curMatcher = curPattern.matcher(contents);
                     while (curMatcher.find()) {
                         int startIdx = curMatcher.start();

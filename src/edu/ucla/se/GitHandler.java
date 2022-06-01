@@ -48,6 +48,18 @@ public class GitHandler {
         }
     }
 
+    public GitHandler(Repository repository, String commitId, P_LANG lang) {
+        this.repository = repository;
+        try {
+            this.revWalk = new RevWalk(repository);
+            curCommit = revWalk.parseCommit(ObjectId.fromString(commitId));
+            git = new Git(repository);
+            this.lang = lang;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * get the path of all files in the older version
      */
@@ -83,7 +95,17 @@ public class GitHandler {
      * @param lines the map from file name to a list of line numbers
      * @return the map from file name to a map from line number to contents
      */
-    public Map<String, Map<Integer, String>> getOldFileContentByLine(Map<String, List<Integer>> lines) {
+    public Map<String, Map<Integer, String>> getOldFileContentByLine(Map<String, List<List<Integer>>> lines) {
+        // flatten the lines
+        Map<String, List<Integer>> allLines = new HashMap<>();
+        for (Map.Entry<String, List<List<Integer>>> entry : lines.entrySet()) {
+            List<List<Integer>> curGroupedLines = entry.getValue();
+            List<Integer> curAllLines = new ArrayList<>();
+            for (List<Integer> curGroupLine : curGroupedLines) curAllLines.addAll(curGroupLine);
+            allLines.put(entry.getKey(), curAllLines);
+        }
+
+
         Map<String, Map<Integer, String>> fileLineContentMap = new HashMap<>();
         RevCommit[] parents = curCommit.getParents();
 
@@ -95,13 +117,13 @@ public class GitHandler {
                 treeWalk.addTree(tree);
                 treeWalk.setRecursive(true);
                 while (treeWalk.next()) {
-                    if (!lines.containsKey(treeWalk.getNameString())) continue;
+                    if (!allLines.containsKey(treeWalk.getNameString())) continue;
                     ObjectId curEntryId = treeWalk.getObjectId(0);
                     try (ObjectReader objectReader = repository.newObjectReader()) {
                         ObjectLoader objectLoader = objectReader.open(curEntryId);
                         InputStream in = objectLoader.openStream();
                         fileLineContentMap.put(treeWalk.getNameString(),
-                                getLineContentMap(lines.get(treeWalk.getNameString()), in));
+                                getLineContentMap(allLines.get(treeWalk.getNameString()), in));
                     }
                 }
             } catch (Exception e) {
