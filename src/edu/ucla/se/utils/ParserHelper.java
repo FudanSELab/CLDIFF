@@ -162,6 +162,21 @@ public class ParserHelper {
         // parse function and generate function groups
         List<List<Integer>> result = ph.parseDiffFile(groupingFileName, sourceCodeFile+".");
 
+        /**
+         *
+         *
+         previous result:
+
+         0: [0， 2， 3， 4, 6， 7】
+
+         1: [1, 5]
+
+         addNumber1: 0, 1
+         addNumber2: 0, 0
+         addNumber3: 0, 1
+         addNumber4: 0, 0
+
+         */
 
         // TODO Get disjoint id --> higher-level group id
         HashMap<Integer, Integer> linkToHigerLevel = new HashMap<>();
