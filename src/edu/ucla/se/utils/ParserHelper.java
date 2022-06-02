@@ -19,6 +19,24 @@ public class ParserHelper {
         uf = new UnionFind();
         listOfComponent = new ArrayList<>();
     }
+
+    public static  HashMap<Integer, HashMap<String, List<List<Integer>>>>  mapConverter( HashMap<String, HashMap<Integer, List<List<Integer>>>> origin) {
+        HashMap<Integer, HashMap<String, List<List<Integer>>>> result = new HashMap<>();
+        for (String fileName : origin.keySet()) {
+            String[] namePath = fileName.split("/");
+            String subFileName = namePath[namePath.length - 1];
+            // for each file name
+            HashMap<Integer, List<List<Integer>>> temp = origin.get(fileName);
+            for (Integer k : temp.keySet()) {
+                List<List<Integer>> changes = temp.get(k);
+                HashMap<String, List<List<Integer>>> tempMap = new HashMap<>();
+                tempMap.put(subFileName, changes);
+                result.put(k, tempMap);
+            }
+        }
+
+        return result;
+    }
     public static List<String> parseMetaJson(String repoName, String commitId) throws IOException, ParseException, org.json.simple.parser.ParseException {
         String fileName = "./output/" + repoName + "/" + commitId + "/meta.json";
         System.out.println("Link json path " + fileName);

@@ -59,6 +59,8 @@ public class SearchMain {
         return resultOfGroup;
     }
 
+
+
     public static void main(String[] args) throws IOException, ParseException, org.json.simple.parser.ParseException {
         System.out.println("Start running search...");
 
@@ -77,7 +79,8 @@ public class SearchMain {
             systematicChangeGroup.put(file, SearchMain.parseSingleFile(commitId, file, repoName));
         }
         System.out.println("All grouped changes : " + systematicChangeGroup);
-
+        HashMap<Integer, HashMap<String, List<List<Integer>>>> groupChanges = ParserHelper.mapConverter(systematicChangeGroup);
+        System.out.println("All grouped changes after converting : " + groupChanges);
         SearchEngine searchEngine = new SearchEngine(oldPath, newPath, "abc", P_LANG.JAVA);
         HashMap<Integer, HashMap<String, List<List<Integer>>>> groups = new HashMap<>();
         HashMap<String, List<List<Integer>>> curGroup = new HashMap<>();
