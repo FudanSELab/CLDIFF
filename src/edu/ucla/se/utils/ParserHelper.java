@@ -56,23 +56,25 @@ public class ParserHelper {
 
     public void parseLinkJson(String fileName) throws IOException, ParseException, org.json.simple.parser.ParseException {
         JSONArray ob = (JSONArray)((JSONObject) new JSONParser().parse(new FileReader(fileName))).get("links");
-        JSONArray subob = (JSONArray) ((JSONObject) ob.get(0)).get("links");
+        for (int j = 0; j < ob.size(); j ++) {
+            JSONArray subob = (JSONArray) ((JSONObject) ob.get(j)).get("links");
+            for (int i = 0; i < subob.size(); i++) {
+                JSONObject temp = (JSONObject) subob.get(i);
+                int from = ((Long) temp.get("from")).intValue();
+                int to = ((Long) temp.get("to")).intValue();
+                String changeType =(String) temp.get("desc");
+                if (changeType.contains("Systematic")) {
+                    uf.add(from);
+                    uf.add(to);
+                    uf.merge(from, to);
+//                System.out.println(changeType);
+                }
 
+            }
+        }
         //        JsonObject jsonObject = new JsonParser().parse(fileName).getAsJsonObject();
 //        Object obj = parser.parse(new FileReader());
-        for (int i = 0; i < subob.size(); i++) {
-            JSONObject temp = (JSONObject) subob.get(i);
-            int from = ((Long) temp.get("from")).intValue();
-            int to = ((Long) temp.get("to")).intValue();
-            String changeType =(String) temp.get("desc");
-            if (changeType.contains("Systematic")) {
-                uf.add(from);
-                uf.add(to);
-                uf.merge(from, to);
-//                System.out.println(changeType);
-            }
 
-        }
 
         System.out.println();
     }
