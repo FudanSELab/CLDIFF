@@ -69,7 +69,7 @@ public class ParserHelper {
 
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                System.out.println(data);
+
                 List<String> list = Arrays.asList(data.split(" "));
                 if (list.size() == 1) {
                     // finish reading a component

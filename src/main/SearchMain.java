@@ -38,8 +38,15 @@ public class SearchMain {
          addNumber3: 0, 1
          addNumber4: 0, 0
 
+         1. [5, 5]
+         2. [0, 2, 3]
+         3. [0, 2]
          */
 
+
+        // [0 -> 4]
+        // [2 -> 4]
+        // [3 -> 5]
         // TODO Get disjoint id --> higher-level group id
         HashMap<Integer, Integer> linkToHigerLevel = new HashMap<>();
         // TODO Add some fake data
@@ -59,6 +66,7 @@ public class SearchMain {
         String newPath = "./DataSet/testPatch/new";
 
         // Get all changed old file names
+        // TOOD
         String repoName = "CLIDIFFTEST";
         String commitId = "9dfd6f7e97adf435c8d3bfe61d42b43e0b4e0713";
 
@@ -69,6 +77,7 @@ public class SearchMain {
             systematicChangeGroup.put(file, SearchMain.parseSingleFile(commitId, file, repoName));
         }
         System.out.println("All grouped changes : " + systematicChangeGroup);
+
         SearchEngine searchEngine = new SearchEngine(oldPath, newPath, "abc", P_LANG.JAVA);
         HashMap<Integer, HashMap<String, List<List<Integer>>>> groups = new HashMap<>();
         HashMap<String, List<List<Integer>>> curGroup = new HashMap<>();
