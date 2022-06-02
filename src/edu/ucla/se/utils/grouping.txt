@@ -1,17 +1,15 @@
-CLDIFFCmd. MethodDeclaration: keyDownEvent (2,11) listSize:4
-3. Delete VariableDeclaration (3,3)
-9. Change ExpressionStatement's expression with/by... (8,8)
-6. Change ExpressionStatement's expression with/by... (9,9)
-0. Insert ExpressionStatement (11,11)
+A. MethodDeclaration: getANumber (5,12) listSize:2
+0. Change VariableDeclaration  with  (8,8)
+1. Change VariableDeclaration  with  (9,9)
 
-CLDIFFCmd. MethodDeclaration: keyReleaseEvent (14,23) listSize:4
-4. Delete VariableDeclaration (15,15)
-10. Change ExpressionStatement's expression with/by... (20,20)
-7. Change ExpressionStatement's expression with/by... (21,21)
-1. Insert ExpressionStatement (24,24)
+A. MethodDeclaration: addTwoNumbers (14,21) listSize:2
+2. Change VariableDeclaration  with  (17,17)
+3. Change VariableDeclaration  with  (18,18)
 
-CLDIFFCmd. MethodDeclaration: buttonUpEvent (25,32) listSize:4
-5. Delete VariableDeclaration (26,26)
-11. Change ExpressionStatement's expression with/by... (29,29)
-8. Change ExpressionStatement's expression with/by... (30,30)
-2. Insert ExpressionStatement (34,34)
+A. MethodDeclaration: addThreeNumbers (23,33) listSize:2
+4. Change VariableDeclaration  with  (29,29)
+5. Change VariableDeclaration  with  (30,30)
+
+A. MethodDeclaration: addFourNumbers (35,45) listSize:2
+6. Change VariableDeclaration  with  (38,38)
+7. Change VariableDeclaration  with  (39,39)
