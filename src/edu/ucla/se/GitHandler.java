@@ -13,10 +13,14 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GitHandler {
     public class Line {
@@ -105,7 +109,6 @@ public class GitHandler {
             allLines.put(entry.getKey(), curAllLines);
         }
 
-
         Map<String, Map<Integer, String>> fileLineContentMap = new HashMap<>();
         RevCommit[] parents = curCommit.getParents();
 
@@ -192,12 +195,11 @@ public class GitHandler {
     /**
      * Retrieves the contents of a file in current commit and the range of each line
      * @param lines the list of range (start index, end index) of each line
-     * @param filePath the path of the file
+     * @param in the input stream of the file
      * @return the contents of the file as a String
      */
-    public String getFileContentWithLines(List<Line> lines, String filePath) {
+    public String getFileContentWithLines(List<Line> lines, InputStream in) {
         try {
-            FileInputStream in = new FileInputStream(filePath);
             StringBuilder sb = new StringBuilder();
             InputStreamReader reader = new InputStreamReader(in);
             BufferedReader br = new BufferedReader(reader);
@@ -275,5 +277,45 @@ public class GitHandler {
             e.printStackTrace();
         }
         return lcMap;
+    }
+
+    public Map<String, List<MissingChangeInfo>> matchRegex(List<String> regex) throws IOException {
+        Map<String, List<MissingChangeInfo>> rs = new HashMap<>();
+
+        for (String r : regex) {
+            System.out.printf("Matching regex %s\n", r);
+            java.util.regex.Pattern curPattern = Pattern.compile(r);
+            RevTree tree = curCommit.getTree();
+            TreeWalk treeWalk = new TreeWalk(repository);
+            treeWalk.addTree(tree);
+            treeWalk.setRecursive(true);
+
+            while (treeWalk.next()) {
+                String curFileName = treeWalk.getNameString();
+                int dotIdx = curFileName.lastIndexOf(".");
+                if (dotIdx < 0 || !curFileName.substring(dotIdx + 1).equals(lang.getExtension())) continue;
+                try {
+                    ObjectId curEntryId = treeWalk.getObjectId(0);
+                    ObjectReader objectReader = repository.newObjectReader();
+                    ObjectLoader objectLoader = objectReader.open(curEntryId);
+                    InputStream in = objectLoader.openStream();
+                    List<Line> curAllLines = new ArrayList<>();
+                    String contents = getFileContentWithLines(curAllLines, in);
+                    Matcher curMatcher = curPattern.matcher(contents);
+                    while (curMatcher.find()) {
+                        int startIdx = curMatcher.start();
+                        int endIdx = curMatcher.end() - 1;
+                        int startLine = getLineNumber(startIdx, curAllLines);
+                        int endLine = getLineNumber(endIdx, curAllLines);
+                        rs.computeIfAbsent(treeWalk.getPathString(), k->new ArrayList<>())
+                                .add(new MissingChangeInfo(startLine, endLine, curMatcher.group()));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return rs;
     }
 }

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.*;
 
@@ -38,7 +39,7 @@ public class ParserHelper {
         return result;
     }
     public static List<String> parseMetaJson(String repoName, String commitId) throws IOException, ParseException, org.json.simple.parser.ParseException {
-        String fileName = "./output/" + repoName + "/" + commitId + "/meta.json";
+        String fileName = Paths.get(Config.CLDIFF_OUTPUT_PATH, repoName, commitId, "meta.json").toString();
         System.out.println("Link json path " + fileName);
         List<String> result = new ArrayList<>();
         JSONArray ob = (JSONArray)((JSONObject) new JSONParser().parse(new FileReader(fileName))).get("files");
@@ -202,6 +203,77 @@ public class ParserHelper {
             finalList.add(new ArrayList<>(relatedLineNumberByHigerGroup));
             result.put(higerLevelKey, finalList);
         }
+    }
+
+    public static HashMap<Integer, List<List<Integer>>> parseSingleFile(String commitId, String parsedName, String repoName) throws IOException, ParseException, org.json.simple.parser.ParseException {
+        System.out.println("start parse");
+        String linkFileName = Paths.get(Config.CLDIFF_OUTPUT_PATH, repoName, commitId, "link.json").toString();
+        String groupingFileName = "./src/edu/ucla/se/utils/grouping.txt";
+        // For example sourceCodeFile = xxx.java
+        String[] sourceCodePath = parsedName.split("/");
+        String sourceCodeFile = sourceCodePath[sourceCodePath.length - 1];
+        ParserHelper ph = new ParserHelper();
+        // Parse json file and generate unionfind/disjoint set
+        ph.parseLinkJson(linkFileName);
+        // Step1. parse function and generate function groups
+
+        List<List<Integer>> changeLinksDisjointSetId = ph.parseDiffFile(groupingFileName, sourceCodeFile);
+
+        /**
+         *
+         *
+         previous result:
+
+         0: [0， 2， 3， 4, 6， 7】
+
+         1: [1, 5]
+
+         addNumber1: 0, 1
+         addNumber2: 0, 0
+         addNumber3: 0, 1
+         addNumber4: 0, 0
+
+         1. [5, 5]
+         2. [0, 2, 3]
+         3. [0, 2]
+         */
+
+
+        // [0 -> 4]
+        // [2 -> 4]
+        // [3 -> 5]
+        // TODO Get disjoint id --> higher-level group id
+        HashMap<Integer, Integer> linkToHigerLevel = new HashMap<>();
+        // TODO Add some fake data
+        linkToHigerLevel.put(0, 6);
+        linkToHigerLevel.put(1, 5);
+
+        //
+        HashMap<Integer, List<List<Integer>>> resultOfGroup = ph.getGroupedLines(linkToHigerLevel);
+        System.out.println(resultOfGroup);
+        return resultOfGroup;
+    }
+
+    /**
+     * The entry point of getting group info
+     * @param repoName the name of the repo
+     * @param commitId current commit id
+     * @return grouping information to be used by step 2
+     * @throws IOException
+     * @throws ParseException
+     * @throws org.json.simple.parser.ParseException
+     */
+    public static HashMap<Integer, HashMap<String, List<List<Integer>>>> getChangeGroups (String repoName, String commitId)
+            throws IOException, ParseException, org.json.simple.parser.ParseException {
+        List<String> listOfChangedFileNames = parseMetaJson(repoName, commitId);
+        System.out.println("All file names: " + listOfChangedFileNames);
+        HashMap<String, HashMap<Integer, List<List<Integer>>>> systematicChangeGroup = new HashMap<>();
+        for (String file : listOfChangedFileNames) {
+            systematicChangeGroup.put(file, parseSingleFile(commitId, file, repoName));
+        }
+        HashMap<Integer, HashMap<String, List<List<Integer>>>> groupChanges = mapConverter(systematicChangeGroup);
+        System.out.println("All grouped changes: " + groupChanges);
+        return groupChanges;
     }
 
     public static void main(String[] args) throws IOException, ParseException, org.json.simple.parser.ParseException {

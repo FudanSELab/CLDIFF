@@ -1,5 +1,6 @@
 package edu.ucla.se;
 
+import edu.ucla.se.utils.Config;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
@@ -14,18 +15,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GitCreator {
-    private final static String REPO_PATH = Paths.get("./repos").toString();
-
     private Map<String, Repository> repos;
 
     public GitCreator () {
-        File repoDir = new File(REPO_PATH);
+        File repoDir = new File(Config.REPO_PATH);
         if (!repoDir.exists()) repoDir.mkdir();
         repos = new HashMap<>();
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         try {
             for (String repoName : repoDir.list()) {
-                String curRepoPath = Paths.get(REPO_PATH, repoName, "\\.git").toString();
+                String curRepoPath = Paths.get(Config.REPO_PATH, repoName, "\\.git").toString();
                 Repository curRepo = builder.setGitDir(new File(curRepoPath)).readEnvironment().findGitDir().build();
                 repos.put(repoName, curRepo);
             }
@@ -44,7 +43,7 @@ public class GitCreator {
             return;
         }
 
-        File curRepoDir = new File(Paths.get(REPO_PATH, repoName).toString());
+        File curRepoDir = new File(Paths.get(Config.REPO_PATH, repoName).toString());
         if (!curRepoDir.exists()) curRepoDir.mkdir();
 
         try (Git git = Git.init().setDirectory(curRepoDir).call()) {
@@ -66,7 +65,7 @@ public class GitCreator {
             return null;
         }
         filePath = Paths.get(filePath).toString();
-        String repoPath = Paths.get(REPO_PATH, repoName).toString();
+        String repoPath = Paths.get(Config.REPO_PATH, repoName).toString();
         File srcDir = new File(filePath);
         File dstDir = new File(repoPath);
         Git git = new Git(repos.get(repoName));
@@ -94,7 +93,7 @@ public class GitCreator {
             System.out.printf("Repo %s does not exist!\n", repoName);
             return;
         }
-        String curRepoPath = Paths.get(REPO_PATH, repoName).toString();
+        String curRepoPath = Paths.get(Config.REPO_PATH, repoName).toString();
         File curRepoDir = new File(curRepoPath);
         try {
             FileUtils.deleteDirectory(curRepoDir);
@@ -116,7 +115,7 @@ public class GitCreator {
             return null;
         }
 
-        return Paths.get(REPO_PATH, repoName).toString();
+        return Paths.get(Config.REPO_PATH, repoName).toString();
     }
 
 

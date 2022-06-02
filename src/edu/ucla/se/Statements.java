@@ -1,4 +1,5 @@
 package edu.ucla.se;
+import java.rmi.server.ExportException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.nio.file.Path;
@@ -12,8 +13,13 @@ public class Statements {
 	}
 	
 	public Statements(Path file_name) throws IOException {
-		String code = Files.readString(file_name);
-		SplitCode(code);
+		try {
+			byte[] codeBytes = Files.readAllBytes(file_name);
+			String code = new String(codeBytes);
+			SplitCode(code);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String GetStatementAt(int pos) {

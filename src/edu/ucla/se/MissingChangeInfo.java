@@ -4,8 +4,7 @@ public class MissingChangeInfo {
     public int startLine;
     public int endLine;
     public String content;
-    public boolean foundByRegex;
-    public boolean foundByToken;
+    int groupNumber;
 
     MissingChangeInfo (int s, int e, String c) {
         startLine = s;
