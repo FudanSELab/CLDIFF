@@ -19,6 +19,22 @@ public class ParserHelper {
         uf = new UnionFind();
         listOfComponent = new ArrayList<>();
     }
+    public static List<String> parseMetaJson(String repoName, String commitId) throws IOException, ParseException, org.json.simple.parser.ParseException {
+        String fileName = "./output/" + repoName + "/" + commitId + "/meta.json";
+        System.out.println("Link json path " + fileName);
+        List<String> result = new ArrayList<>();
+        JSONArray ob = (JSONArray)((JSONObject) new JSONParser().parse(new FileReader(fileName))).get("files");
+        for (int i = 0; i < ob.size(); i++) {
+            JSONObject temp = (JSONObject) ob.get(i);
+            String s = (String) temp.get("prev_file_path");
+            if (s != null && s.contains("java")) {
+                result.add(s);
+            }
+        }
+
+        return result;
+    }
+
     public void parseLinkJson(String fileName) throws IOException, ParseException, org.json.simple.parser.ParseException {
         JSONArray ob = (JSONArray)((JSONObject) new JSONParser().parse(new FileReader(fileName))).get("links");
         JSONArray subob = (JSONArray) ((JSONObject) ob.get(0)).get("links");
@@ -34,7 +50,7 @@ public class ParserHelper {
                 uf.add(from);
                 uf.add(to);
                 uf.merge(from, to);
-                System.out.println(changeType);
+//                System.out.println(changeType);
             }
 
         }
@@ -43,24 +59,41 @@ public class ParserHelper {
     }
 
     public List<List<Integer>> parseDiffFile(String filename, String sourceFileName) {
+        sourceFileName = sourceFileName.substring(0, sourceFileName.length() - 4);
         boolean flag = true;
         MethodComponent currComponent = new MethodComponent(uf);
         try {
             File myObj = new File(filename);
             Scanner myReader = new Scanner(myObj);
+            boolean dirty = false; // true when we find an object
+
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
+                System.out.println(data);
                 List<String> list = Arrays.asList(data.split(" "));
                 if (list.size() == 1) {
                     // finish reading a component
+                    if (dirty) {
+                        currComponent.calculateRoots();
+                        listOfComponent.add(currComponent);
+                    }
                     flag = false;
-                    currComponent.calculateRoots();
-                    listOfComponent.add(currComponent);
+                    dirty = false;
+
+                    continue;
                 } else if (list.get(0).equals(sourceFileName)) {
                     // start a new component
                     flag = true;
+                    dirty = true;
                     currComponent = new MethodComponent(uf);
                     currComponent.setFunctionName(list.get(2));
+                    continue;
+                } else if (list.get(0).charAt(0) < '0' || list.get(0).charAt(0) > '9'){ // not a link, but another file name
+                    dirty = false;
+                    continue;
+                }
+
+                if (!dirty) {
                     continue;
                 }
 
@@ -74,8 +107,11 @@ public class ParserHelper {
 
                 }
             }
-            currComponent.calculateRoots();
-            listOfComponent.add(currComponent);
+
+            if (dirty) {
+                currComponent.calculateRoots();
+                listOfComponent.add(currComponent);
+            }
 
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -152,16 +188,22 @@ public class ParserHelper {
 
     public static void main(String[] args) throws IOException, ParseException, org.json.simple.parser.ParseException {
 //        String linkFileName = "/Users/jiayuesun/2022/SP-2022/CLDIFF/output/JavaCLIDiff/785b5c927f4396e6b2562e617492904a7664c853/link.json";
-        String linkFileName = "/Users/junyu/Desktop/2022spring/cs230/Project/CLDIFF/output/CLIDIFFTEST/9dfd6f7e97adf435c8d3bfe61d42b43e0b4e0713/link.json";
+//        String currentPath = new java.io.File(".").getCanonicalPath();
+//        System.out.println("Current dir:" + currentPath);
+
+        String linkFileName = "./output/CLIDIFFTEST/9dfd6f7e97adf435c8d3bfe61d42b43e0b4e0713/link.json";
 //        String groupingFileName = "/Users/jiayuesun/2022/SP-2022/CLDIFF/src/edu/ucla/se/utils/grouping.txt";
         String groupingFileName = "/Users/junyu/Desktop/2022spring/cs230/Project/CLDIFF/src/edu/ucla/se/utils/grouping.txt";
+        String metaFileName = "/Users/junyu/Desktop/2022spring/cs230/Project/CLDIFF/output/CLIDIFFTEST/9dfd6f7e97adf435c8d3bfe61d42b43e0b4e0713/meta.json";
         String sourceCodeFile = "A";
         ParserHelper ph = new ParserHelper();
         // Parse json file and generate unionfind/disjoint set
         ph.parseLinkJson(linkFileName);
         // parse function and generate function groups
         List<List<Integer>> result = ph.parseDiffFile(groupingFileName, sourceCodeFile+".");
+//        List<String> changedFileNames = ph.parseMetaJson(metaFileName);
 
+//        System.out.println(changedFileNames);
         /**
          *
          *
