@@ -3,17 +3,11 @@ package edu.ucla.se;
 import edu.fdu.se.cldiff.CLDiffLocal;
 import edu.ucla.se.utils.Config;
 import edu.ucla.se.utils.ParserHelper;
+import org.apache.commons.io.FileUtils;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SearchEngine {
     private String repoPath;
@@ -38,11 +32,15 @@ public class SearchEngine {
         String commitId = gitCreator.commitFilesToRepo(repoName, newPath);
         this.repoName = repoName;
         this.commitId = commitId;
-        this.gitHandler = new GitHandler(gitCreator.getRepo(repoName), commitId, lang);
+        this.gitHandler = new GitHandler(gitCreator.getRepo(repoName), repoName, commitId, lang);
     }
 
     public void run() {
         try {
+            //====================== CLEAR PREVIOUSLY GENERATED FILES ============================
+            File outputDir = new File(Paths.get(Config.CLDIFF_OUTPUT_PATH, repoName).toString());
+            FileUtils.deleteDirectory(outputDir);
+
             //=============================== RUN CLDIFF =========================================
             CLDiffLocal clDiffLocal = new CLDiffLocal();
             clDiffLocal.run(commitId, Paths.get(repoPath, ".git").toString(), Config.CLDIFF_OUTPUT_PATH);
@@ -51,11 +49,14 @@ public class SearchEngine {
             HashMap<Integer, HashMap<String, List<List<Integer>>>> groups = ParserHelper.getChangeGroups(repoName, commitId);
 
             //============== STEP 2.1: GENERATE REGEX AND MATCH IN CURRENT COMMIT ================
-            List<String> regex = generateRegex(groups);
+            List<String> regex = new RegexGenerator(groups, this.gitHandler).generateRegex();
             Map<String, List<MissingChangeInfo>> regexResults = gitHandler.matchRegex(regex);
 
-            //============= STEP 2.2: GENERATE AND MATCH TOKENS IN CURRENT COMMIT ================
+            //=================== STEP 2.2: LCS MATCH IN CURRENT COMMIT ==========================
+            Map<String, List<MissingChangeInfo>> LCSResults = LCSMatcher.matchLCS(gitHandler, groups);
 
+            //======================== STEP 3: COMBINE MATCHING OUTPUT ===========================
+            //TODO
 
             for (Map.Entry<String, List<MissingChangeInfo>> entry : regexResults.entrySet()) {
                 System.out.printf("Possible Missing Changes in %s:\n", entry.getKey());
@@ -68,12 +69,4 @@ public class SearchEngine {
             System.exit(1);
         }
     }
-
-    private List<String> generateRegex(HashMap<Integer, HashMap<String, List<List<Integer>>>> grouping) {
-        RegexGenerator regexGenerator = new RegexGenerator(grouping, this.gitHandler);
-        return regexGenerator.generateRegex();
-    }
-
-
-
 }

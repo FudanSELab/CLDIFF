@@ -1,6 +1,7 @@
 package edu.ucla.se;
 
 import com.github.gumtreediff.tree.Tree;
+import edu.ucla.se.utils.Config;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
@@ -33,31 +34,31 @@ public class GitHandler {
         }
     }
 
+    String repoPath;
     private Repository repository;
     private RevWalk revWalk;
     private RevCommit curCommit;
-    private Git git;
     private P_LANG lang;
 
     public GitHandler(String repoPath, String commitId, P_LANG lang) {
+        this.repoPath = repoPath;
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         try {
             repository = builder.setGitDir(new File(repoPath)).readEnvironment().findGitDir().build();
             revWalk = new RevWalk(repository);
             curCommit = revWalk.parseCommit(ObjectId.fromString(commitId));
-            git = new Git(repository);
             this.lang = lang;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public GitHandler(Repository repository, String commitId, P_LANG lang) {
+    public GitHandler(Repository repository, String repoName, String commitId, P_LANG lang) {
+        this.repoPath = Paths.get(Config.REPO_PATH, repoName).toString();
         this.repository = repository;
         try {
             this.revWalk = new RevWalk(repository);
             curCommit = revWalk.parseCommit(ObjectId.fromString(commitId));
-            git = new Git(repository);
             this.lang = lang;
         } catch (IOException e) {
             e.printStackTrace();
@@ -279,6 +280,13 @@ public class GitHandler {
         return lcMap;
     }
 
+
+    /**
+     * Match regex to all source files in current commit
+     * @param regex the list of regex to be matched
+     * @return the map from file name to all possible missing change it contains
+     * @throws IOException
+     */
     public Map<String, List<MissingChangeInfo>> matchRegex(List<String> regex) throws IOException {
         Map<String, List<MissingChangeInfo>> rs = new HashMap<>();
 
@@ -314,6 +322,38 @@ public class GitHandler {
                     e.printStackTrace();
                 }
             }
+        }
+
+        return rs;
+    }
+
+    /**
+     * Apply LCS match to  all source files in current commit
+     * @param peam a PEAM object
+     * @param max_interval
+     * @param min_stmt_cnt
+     * @param min_hit_patterns
+     * @param match_score
+     * @return the map from file name to all possible missing changes it contains
+     * @throws IOException
+     */
+    public Map<String, List<MissingChangeInfo>> matchLCS(PEAM peam,
+                                                         int max_interval,
+                                                         int min_stmt_cnt,
+                                                         int min_hit_patterns,
+                                                         double match_score) throws IOException {
+        Map<String, List<MissingChangeInfo>> rs = new HashMap<>();
+        RevTree tree = curCommit.getTree();
+        TreeWalk treeWalk = new TreeWalk(repository);
+        treeWalk.addTree(tree);
+        treeWalk.setRecursive(true);
+
+        while (treeWalk.next()) {
+            String curPathName = treeWalk.getPathString();
+            int dotIdx = curPathName.lastIndexOf(".");
+            if (dotIdx < 0 || !curPathName.substring(dotIdx + 1).equals(lang.getExtension())) continue;
+            Path curFilePath = Paths.get(repoPath, curPathName);
+            rs.putAll(peam.FindMatch(curFilePath, max_interval, min_stmt_cnt, min_hit_patterns, match_score));
         }
 
         return rs;

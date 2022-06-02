@@ -52,7 +52,7 @@ public class LCSMatchMain {
         String repoPath = gitCreator.getRepoPath(repoName);
         gitCreator.commitFilesToRepo(repoName, oldPath);
         String commitId = gitCreator.commitFilesToRepo(repoName, newPath);
-        GitHandler gitHandler = new GitHandler(gitCreator.getRepo(repoName), commitId, P_LANG.JAVA);
+        GitHandler gitHandler = new GitHandler(gitCreator.getRepo(repoName), repoName, commitId, P_LANG.JAVA);
         
         HashMap<Integer,ArrayList<String>> oldContents = new HashMap<>();
 
@@ -100,7 +100,7 @@ public class LCSMatchMain {
 		System.out.println("Done");
 		
 		int pattern_cnt = peam.GetPatternCnt();
-		Map<String, List <MissingChangeInfo> > matches = peam.RecursiveFindMatch(searchPath, 
+		Map<String, List <MissingChangeInfo>> matches = peam.RecursiveFindMatch(searchPath,
 					4, 
 					(int) Math.max((pattern_cnt*0.7),1), 
 					(int) Math.max((pattern_cnt*0.7),1), 
