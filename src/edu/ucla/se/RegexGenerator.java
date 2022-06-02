@@ -90,7 +90,7 @@ public class RegexGenerator {
             }
             if (func.charAt(i) == ',') args++;
         }
-        String [] raw = func.split("\\,|\\(|\\)");
+        String [] raw = func.split(",|\\(|\\)");
         ret.add("funcstart");
         ret.add(args.toString());
 
@@ -101,23 +101,23 @@ public class RegexGenerator {
     public String generator(ArrayList<String> tokens){
         String unit = ".*"; //  or [^0-9a-ZA-Z\_]*;
         String regex = "";
-        char [] math = {'+','-','*','/','%','&','^','|','=', '<', '>'};
+        char [] escape = {'*', '.', '?', '+', '$', '^', '|', '\\', '/'};
         for (int i = 0; i < tokens.size(); ++i){
             String s = tokens.get(i);
             if (s.length() == 0){
                 continue;
             }
             if(s.charAt(0) == '.'){
-                regex += "\\\\";
+                regex += "\\";
                 regex += s;
             }else if (s.equals("funcstart")){
                 regex += unit;
                 Integer argsNum = Integer.parseInt(tokens.get(i+1));
                 if (tokens.get(i+2).equals("elseif")){
-                    regex = regex + "else\\\\sif.*";
+                    regex = regex + "else\\sif.*";
                 }else{
                     if (tokens.get(i+2).charAt(0) == '.'){
-                        regex += "\\\\";
+                        regex += "\\";
                     }
                     regex += tokens.get(i+2);
                     regex += unit;
@@ -131,9 +131,9 @@ public class RegexGenerator {
                 i += 2;
             }else if (s.equals("#")){
                 regex += unit;
-            }else if (new String(math).indexOf(s.charAt(0)) != -1){
+            }else if (new String(escape).indexOf(s.charAt(0)) != -1){
                 regex += unit;
-                regex += "\\\\";
+                regex += "\\";
                 regex += s.charAt(0);
                 regex += unit;
             }
@@ -180,14 +180,14 @@ public class RegexGenerator {
                 shortest = i;
             }
         }
-        System.out.println(tokens);
+//        System.out.println(tokens);
 
         //Step2: union set
         ArrayList<String> based = tokens.get(shortest);
         for (ArrayList<String> other: tokens){
             based.retainAll(other);
         }
-        System.out.println(based);
+//        System.out.println(based);
 
         String regex = generator(based);
 
