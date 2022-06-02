@@ -18,7 +18,7 @@ public class GroupMain {
         String groupingFileName = "/Users/jiayuesun/2022/SP-2022/CLDIFF/src/edu/ucla/se/utils/grouping.txt";
         ParserHelper ph = new ParserHelper();
         ph.parseLinkJson(linkFileName);
-        List<List<Integer>> result = ph.parseDiffFile(groupingFileName);
+        List<List<Integer>> result = ph.parseDiffFile(groupingFileName, "");
 
         GroupLinkedDiffs linkedDiffGrouper = new GroupLinkedDiffs(result);
         HashMap<Integer, Integer> linkedStmt2Group = linkedDiffGrouper.getStmtGroupMap();
