@@ -137,11 +137,14 @@ public class PEAM {
 			try (Stream<Path> paths = Files.walk(search_path)){
 				for(Path p : paths.filter(Files::isRegularFile).toArray(Path[]::new)) {
 					// there will not be duplicate key, so putAll is safe
-					return_results.putAll(FindMatch(p,
+					String fname = p.toString();
+					if (fname.endsWith(".java")) {
+						return_results.putAll(FindMatch(p,
 							max_interval, 
 							min_stmt_cnt,
 							min_hit_patterns, 
 							match_score));
+					}
 				}
 			}
 			return return_results;
@@ -160,14 +163,15 @@ public class PEAM {
 		int cur_interval = 0;
 		boolean cur_activate_status = false;
 		HashSet <Integer> cur_matched_patterns = new HashSet<Integer>();
-		System.out.println("Start Matching");
-		System.out.println(stmt_cnt);
+		//System.out.println("Start Matching");
+		//System.out.println(stmt_cnt);
 		int i = 0;
 		while (i < stmt_cnt) {
- 			if (i%100==0) {
-				System.out.println(i);
-			}
+ 			//System.out.println(stmts_with_line.GetStatementAt(i));
 			HashSet <Integer> hit_patterns = new HashSet<>(match_results.get(i));
+			//for(Integer k : hit_patterns) {
+			//	System.out.println(k);
+			//}
 			if (cur_activate_status == false) {
 				if (hit_patterns.size()>0) {
 					cur_activate_status = true;
@@ -211,14 +215,12 @@ public class PEAM {
 								stmts_with_line.GetEndLineFor(cur_end),
 								"");
 						results.add(m);
+							
 					}
 					
-					if (i < stmt_cnt - 1) {
-						//System.out.println(cur_interval);
-						//System.out.println(max_interval);
-						//System.out.println("here");
+					//if (i < stmt_cnt - 1) {
 						i = cur_end;
-					}
+					//}
 				}
 			}
 			i++;
