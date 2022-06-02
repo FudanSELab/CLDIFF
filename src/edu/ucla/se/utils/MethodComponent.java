@@ -1,19 +1,22 @@
 package edu.ucla.se.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MethodComponent {
     private List<Integer> changeItems;
-    private List<Integer> changeIndex; // the list of links within each function group
-    private List<Integer> roots;       // the roots of changedIndex
+    public List<Integer> changeIndex; // the list of links within each function group
+    public List<Integer> roots;       // the roots of changedIndex
     private String description;
     private String functionName;
+    public List<Integer> lineNumbers;
     public UnionFind uf;               // call api here to find unionId
 
     public MethodComponent(UnionFind uf) {
         changeItems = new ArrayList<>();
         changeIndex = new ArrayList<>();
+        lineNumbers = new ArrayList<>();
         description = "";
         roots = new ArrayList<>();
         this.uf = uf;
