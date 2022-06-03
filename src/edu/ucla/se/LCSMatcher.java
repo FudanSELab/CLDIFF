@@ -7,23 +7,23 @@ import java.util.List;
 import java.util.Map;
 
 public class LCSMatcher {
-    public static Map<String, List<MissingChangeInfo>> matchLCS(GitHandler gitHandler,
+    public static Map<String, Map<Integer, List<MissingChangeInfo>>> matchLCS(GitHandler gitHandler,
                                                                 HashMap<Integer, HashMap<String, List<List<Integer>>>> groups)
                                                                 throws IOException {
-        Map<String, List<MissingChangeInfo>> rs = new HashMap<>();
+        Map<String, Map<Integer, List<MissingChangeInfo>>> rs = new HashMap<>();
 
         for (int curGroup : groups.keySet()) {
             Map<String, List<MissingChangeInfo>> curGroupRs = matchSingleGroup(gitHandler, groups.get(curGroup));
-            for (List<MissingChangeInfo> curFileInfo : curGroupRs.values()) {
-                for (MissingChangeInfo info : curFileInfo) info.group = curGroup;
+            for (Map.Entry<String, List<MissingChangeInfo>> entry : curGroupRs.entrySet()) {
+                if (entry.getValue().size() == 0) continue;
+                rs.computeIfAbsent(entry.getKey(), k -> new HashMap<>()).put(curGroup, entry.getValue());
             }
-            rs.putAll(curGroupRs);
         }
 
         return rs;
     }
 
-    private static Map<String, List <MissingChangeInfo>> matchSingleGroup(GitHandler gitHandler,
+    private static Map<String, List<MissingChangeInfo>> matchSingleGroup(GitHandler gitHandler,
                                                                           Map<String, List<List<Integer>>> curGroup) throws IOException {
         Map<String, Map<Integer, String>> dict = gitHandler.getOldFileContentByLine(curGroup);
         ArrayList<String> oldContentsCode = new ArrayList<>();
