@@ -21,8 +21,9 @@ public class GroupMain {
         List<Integer> M1 = Arrays.asList(1, 2, 3, 4, 1, 2, 3);
         List<Integer> M2 = Arrays.asList(1, 2, 3, 1);
         List<Integer> M3 = Arrays.asList(4, 1, 1, 2, 3);
+        List<Integer> M4 = Arrays.asList(1, 1, 4);
 
-        List<List<Integer>> testLinkGroups = Arrays.asList(M1,M2,M3);
+        List<List<Integer>> testLinkGroups = Arrays.asList(M1,M2,M3, M4);
 
         GroupLinkedDiffs linkedDiffGrouper = new GroupLinkedDiffs(testLinkGroups);
         HashMap<List<Integer>, Set<List<Integer>>> linkedStmt2Group = linkedDiffGrouper.getLinkedStmtGroups();
