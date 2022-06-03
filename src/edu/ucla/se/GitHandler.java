@@ -16,10 +16,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -143,7 +140,7 @@ public class GitHandler {
      * @param lines the map from file name to a list of line numbers
      * @return the map from file name to a map from line number to contents
      */
-    public Map<String, Map<Integer, String>> getFileContentByLine(Map<String, List<Integer>> lines) {
+    private Map<String, Map<Integer, String>> getFileContentByLine(Map<String, List<Integer>> lines) {
         Map<String, Map<Integer, String>> fileLineContentMap = new HashMap<>();
         try {
             RevTree tree = curCommit.getTree();
@@ -151,13 +148,13 @@ public class GitHandler {
             treeWalk.addTree(tree);
             treeWalk.setRecursive(true);
             while (treeWalk.next()) {
-                if (!lines.containsKey(treeWalk.getNameString())) continue;
+                if (!lines.containsKey(treeWalk.getPathString())) continue;
                 ObjectId curEntryId = treeWalk.getObjectId(0);
                 try (ObjectReader objectReader = repository.newObjectReader()) {
                     ObjectLoader objectLoader = objectReader.open(curEntryId);
                     InputStream in = objectLoader.openStream();
-                    fileLineContentMap.put(treeWalk.getNameString(),
-                            getLineContentMap(lines.get(treeWalk.getNameString()), in));
+                    fileLineContentMap.put(treeWalk.getPathString(),
+                            getLineContentMap(lines.get(treeWalk.getPathString()), in));
                 }
             }
         } catch (Exception e) {
@@ -287,11 +284,13 @@ public class GitHandler {
      * @return the map from file name to all possible missing change it contains
      * @throws IOException
      */
-    public Map<String, List<MissingChangeInfo>> matchRegex(List<String> regex) throws IOException {
-        Map<String, List<MissingChangeInfo>> rs = new HashMap<>();
+    public Map<String, Map<Integer, List<MissingChangeInfo>>> matchRegex(List<String> regex) throws IOException {
+        Map<String, Map<Integer, List<MissingChangeInfo>>> rs = new HashMap<>();
 
-        for (String r : regex) {
-            System.out.printf("Matching regex %s\n", r);
+        for (int groupId = 0; groupId < regex.size(); groupId++) {
+            String r = regex.get(groupId);
+
+            System.out.printf("Matching regex %s of group %d\n", r, groupId);
             java.util.regex.Pattern curPattern = Pattern.compile(r);
             RevTree tree = curCommit.getTree();
             TreeWalk treeWalk = new TreeWalk(repository);
@@ -302,6 +301,7 @@ public class GitHandler {
                 String curFileName = treeWalk.getNameString();
                 int dotIdx = curFileName.lastIndexOf(".");
                 if (dotIdx < 0 || !curFileName.substring(dotIdx + 1).equals(lang.getExtension())) continue;
+
                 try {
                     ObjectId curEntryId = treeWalk.getObjectId(0);
                     ObjectReader objectReader = repository.newObjectReader();
@@ -315,8 +315,9 @@ public class GitHandler {
                         int endIdx = curMatcher.end() - 1;
                         int startLine = getLineNumber(startIdx, curAllLines);
                         int endLine = getLineNumber(endIdx, curAllLines);
-                        rs.computeIfAbsent(treeWalk.getPathString(), k->new ArrayList<>())
-                                .add(new MissingChangeInfo(startLine, endLine, curMatcher.group()));
+                        rs.computeIfAbsent(treeWalk.getPathString(), k -> new HashMap<>())
+                                .computeIfAbsent(groupId, k -> new ArrayList<>())
+                                .add(new MissingChangeInfo(startLine, endLine));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -357,5 +358,71 @@ public class GitHandler {
         }
 
         return rs;
+    }
+
+
+    /**
+     * Format and print possible missing change found without line contents
+     * @param rs the missing change found by SearchEngine
+     */
+    public void printSimpleResult(Map<String, Map<Integer, List<MissingChangeInfo>>> rs) {
+        for (Map.Entry<String, Map<Integer, List<MissingChangeInfo>>> entry : rs.entrySet()) {
+            String curFile = entry.getKey();
+            Map<Integer, List<MissingChangeInfo>> groupedChanges = entry.getValue();
+            System.out.printf("Possible missing changes in %s:\n", curFile);
+
+            for (Map.Entry<Integer, List<MissingChangeInfo>> curChangeGroup : groupedChanges.entrySet()) {
+                int groupid = curChangeGroup.getKey();
+                List<MissingChangeInfo> missingChanges = curChangeGroup.getValue();
+                System.out.printf("\tgroup %d:\n", groupid);
+
+                for (MissingChangeInfo info : missingChanges) {
+                    System.out.printf("\t\t(line %d - line %d:)\n", info.startLine, info.endLine);
+                }
+            }
+        }
+    }
+
+    /**
+     * Format and print out all possible missing changes found
+     * @param rs the missing changes found by SearchEngine
+     */
+    public void printResult(Map<String, Map<Integer, List<MissingChangeInfo>>> rs) {
+        Map<String, List<Integer>> linesToBeReadPerFile = new HashMap<>();
+        for (Map.Entry<String, Map<Integer, List<MissingChangeInfo>>> entry : rs.entrySet()) {
+            String fileName = entry.getKey();
+            Map<Integer, List<MissingChangeInfo>> groups = entry.getValue();
+            SortedSet<Integer> lineSet = new TreeSet<>();
+            for (List<MissingChangeInfo> groupInfo : groups.values()) {
+                for (MissingChangeInfo info : groupInfo)
+                    for (int line = info.startLine; line <= info.endLine; line++) lineSet.add(line);
+            }
+            List<Integer> allLines = new ArrayList<>();
+            for (int line : lineSet) allLines.add(line);
+            linesToBeReadPerFile.put(fileName, allLines);
+        }
+
+        Map<String, Map<Integer, String>> lineContents = getFileContentByLine(linesToBeReadPerFile);
+
+        for (Map.Entry<String, Map<Integer, List<MissingChangeInfo>>> entry : rs.entrySet()) {
+            String curFile = entry.getKey();
+            Map<Integer, List<MissingChangeInfo>> groupedChanges = entry.getValue();
+            System.out.printf("Possible missing changes in %s:\n", curFile);
+
+            for (Map.Entry<Integer, List<MissingChangeInfo>> curChangeGroup : groupedChanges.entrySet()) {
+                int groupid = curChangeGroup.getKey();
+                List<MissingChangeInfo> missingChanges = curChangeGroup.getValue();
+                System.out.printf("\tgroup %d:\n", groupid);
+
+                for (MissingChangeInfo info : missingChanges) {
+                    System.out.printf("\t\t(line %d - line %d:)\n", info.startLine, info.endLine);
+                    for (int line = info.startLine; line <= info.endLine; line++) {
+                        String lineContent = lineContents.get(curFile).get(line);
+                        System.out.printf("\t\t-> %s\n", lineContent);
+                    }
+                    System.out.println();
+                }
+            }
+        }
     }
 }

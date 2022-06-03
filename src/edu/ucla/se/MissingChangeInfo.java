@@ -3,19 +3,16 @@ package edu.ucla.se;
 public class MissingChangeInfo {
     public int startLine;
     public int endLine;
-    public String content;
     int group;
 
-    MissingChangeInfo (int s, int e, String c) {
+    MissingChangeInfo (int s, int e) {
         startLine = s;
         endLine = e;
-        content = c;
     }
 
-    MissingChangeInfo (int s, int e, String c, int g) {
+    MissingChangeInfo (int s, int e, int g) {
         startLine = s;
         endLine = e;
-        content = c;
         group = g;
     }
 }

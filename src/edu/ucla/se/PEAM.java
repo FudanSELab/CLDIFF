@@ -212,8 +212,7 @@ public class PEAM {
 					if (cur_end - cur_start + 1 >= min_stmt_cnt && cur_matched_patterns.size() >= min_hit_patterns) {
 						MissingChangeInfo m = new MissingChangeInfo( 
 								stmts_with_line.GetStartLineFor(cur_start),
-								stmts_with_line.GetEndLineFor(cur_end),
-								"");
+								stmts_with_line.GetEndLineFor(cur_end));
 						results.add(m);
 							
 					}

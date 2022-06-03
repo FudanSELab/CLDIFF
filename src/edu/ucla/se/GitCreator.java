@@ -75,7 +75,9 @@ public class GitCreator {
             FileUtils.copyDirectory(srcDir, dstDir);
             git.add().addFilepattern(localPath).call();
             RevCommit revCommit = git.commit().setMessage("Commit files at " + filePath).call();
-            return revCommit.getId().toString().split(" ")[1];
+            String commitId = revCommit.getId().toString().split(" ")[1];
+            System.out.printf("Created in repo %s a new commit %s\n", repoName, commitId);
+            return commitId;
         } catch (Exception e) {
             e.printStackTrace();
         }
