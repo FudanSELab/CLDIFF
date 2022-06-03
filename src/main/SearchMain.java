@@ -46,7 +46,7 @@ public class SearchMain {
 //        curGroup.put("A.java", curFile);
 //        groups.put(0, curGroup);
 
-        SearchEngine searchEngine = new SearchEngine(oldPath, newPath, "abc", P_LANG.JAVA);
+        SearchEngine searchEngine = new SearchEngine(oldPath, newPath, "testpatch1", P_LANG.JAVA);
         searchEngine.run();
     }
 }

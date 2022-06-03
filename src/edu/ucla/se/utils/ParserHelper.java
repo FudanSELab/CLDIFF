@@ -200,7 +200,7 @@ public class ParserHelper {
     public static HashMap<Integer, List<List<Integer>>> parseSingleFile(String commitId, String parsedName, String repoName) throws IOException, ParseException, org.json.simple.parser.ParseException {
         System.out.println("start parse");
         String linkFileName = Paths.get(Config.CLDIFF_OUTPUT_PATH, repoName, commitId, "link.json").toString();
-        String groupingFileName = "./src/edu/ucla/se/utils/grouping.txt";
+        String groupingFileName = "./src/edu/ucla/se/utils/grouping_testpatch1.txt";
         // For example sourceCodeFile = xxx.java
         String[] sourceCodePath = parsedName.split("/");
         String sourceCodeFile = sourceCodePath[sourceCodePath.length - 1];
