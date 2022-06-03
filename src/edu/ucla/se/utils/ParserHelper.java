@@ -24,20 +24,29 @@ public class ParserHelper {
     }
 
     public Integer getEditId(Integer method_id, Integer edit_pos){
-        return listOfComponent.get(method_id).changeIndex.get(edit_pos);
+        return listOfComponent.get(method_id).lineNumbers.get(edit_pos);
     }
 
     public static  HashMap<Integer, HashMap<String, List<List<Integer>>>>  mapConverter( HashMap<String, HashMap<Integer, List<List<Integer>>>> origin) {
         HashMap<Integer, HashMap<String, List<List<Integer>>>> result = new HashMap<>();
         for (String fileName : origin.keySet()) {
             String[] namePath = fileName.split("/");
-            String subFileName = namePath[namePath.length - 1];
+
+            // discard prefix
+            StringBuilder sb = new StringBuilder();
+            for (int i = 2; i < namePath.length; i ++) {
+                sb.append(namePath[i]);
+                sb.append("/");
+            }
+            String newFileName = sb.toString();
+            newFileName = newFileName.substring(0, newFileName.length() - 1);
+
             // for each file name
             HashMap<Integer, List<List<Integer>>> temp = origin.get(fileName);
             for (Integer k : temp.keySet()) {
                 List<List<Integer>> changes = temp.get(k);
                 HashMap<String, List<List<Integer>>> tempMap = new HashMap<>();
-                tempMap.put(subFileName, changes);
+                tempMap.put(newFileName, changes);
                 result.put(k, tempMap);
             }
         }
