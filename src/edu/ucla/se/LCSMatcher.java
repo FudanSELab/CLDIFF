@@ -25,10 +25,8 @@ public class LCSMatcher {
 
     private static Map<String, List <MissingChangeInfo>> matchSingleGroup(GitHandler gitHandler,
                                                                           Map<String, List<List<Integer>>> curGroup) throws IOException {
-        HashMap<Integer, ArrayList<String>> oldContents = new HashMap<>();
-
         Map<String, Map<Integer, String>> dict = gitHandler.getOldFileContentByLine(curGroup);
-        ArrayList<String> val = new ArrayList<>();
+        ArrayList<String> oldContentsCode = new ArrayList<>();
 
         for (Map.Entry f: curGroup.entrySet()){        // file
             String fileName = (String)f.getKey();
@@ -48,12 +46,10 @@ public class LCSMatcher {
                         code += fileCodeDict.get(idx);
                     }
                 }
-                val.add(code);
+                oldContentsCode.add(code);
             }
         }
-        oldContents.put(0, val);
 
-        ArrayList<String> oldContentsCode = oldContents.get(0);
         for (String s : oldContentsCode) {
             System.out.println("code snippet");
             System.out.println(s);
