@@ -118,13 +118,13 @@ public class GitHandler {
                 treeWalk.addTree(tree);
                 treeWalk.setRecursive(true);
                 while (treeWalk.next()) {
-                    if (!allLines.containsKey(treeWalk.getNameString())) continue;
+                    if (!allLines.containsKey(treeWalk.getPathString())) continue;
                     ObjectId curEntryId = treeWalk.getObjectId(0);
                     try (ObjectReader objectReader = repository.newObjectReader()) {
                         ObjectLoader objectLoader = objectReader.open(curEntryId);
                         InputStream in = objectLoader.openStream();
-                        fileLineContentMap.put(treeWalk.getNameString(),
-                                getLineContentMap(allLines.get(treeWalk.getNameString()), in));
+                        fileLineContentMap.put(treeWalk.getPathString(),
+                                getLineContentMap(allLines.get(treeWalk.getPathString()), in));
                     }
                 }
             } catch (Exception e) {
