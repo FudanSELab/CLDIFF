@@ -277,20 +277,17 @@ public class ParserHelper {
     }
 
     public static void main(String[] args) throws IOException, ParseException, org.json.simple.parser.ParseException {
-//        String linkFileName = "/Users/jiayuesun/2022/SP-2022/CLDIFF/output/JavaCLIDiff/785b5c927f4396e6b2562e617492904a7664c853/link.json";
-//        String currentPath = new java.io.File(".").getCanonicalPath();
-//        System.out.println("Current dir:" + currentPath);
 
         String linkFileName = "./output/CLIDIFFTEST/9dfd6f7e97adf435c8d3bfe61d42b43e0b4e0713/link.json";
-//        String groupingFileName = "/Users/jiayuesun/2022/SP-2022/CLDIFF/src/edu/ucla/se/utils/grouping.txt";
-        String groupingFileName = "/Users/junyu/Desktop/2022spring/cs230/Project/CLDIFF/src/edu/ucla/se/utils/grouping.txt";
-        String metaFileName = "/Users/junyu/Desktop/2022spring/cs230/Project/CLDIFF/output/CLIDIFFTEST/9dfd6f7e97adf435c8d3bfe61d42b43e0b4e0713/meta.json";
-        String sourceCodeFile = "A";
+        String groupingFileName = "./src/edu/ucla/se/utils/grouping.txt";
+//        String groupingFileName = "/Users/junyu/Desktop/2022spring/cs230/Project/CLDIFF/src/edu/ucla/se/utils/grouping.txt";
+        String metaFileName = "./CLIDIFFTEST/9dfd6f7e97adf435c8d3bfe61d42b43e0b4e0713/meta.json";
+        String sourceCodeFile = "A.java";
         ParserHelper ph = new ParserHelper();
         // Parse json file and generate unionfind/disjoint set
         ph.parseLinkJson(linkFileName);
         // parse function and generate function groups
-        List<List<Integer>> result = ph.parseDiffFile(groupingFileName, sourceCodeFile+".");
+        List<List<Integer>> result = ph.parseDiffFile(groupingFileName, sourceCodeFile);
 //        List<String> changedFileNames = ph.parseMetaJson(metaFileName);
 
 //        System.out.println(changedFileNames);

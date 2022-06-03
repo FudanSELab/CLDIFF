@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 // m1, m2, m3
@@ -14,84 +15,99 @@ import java.util.stream.IntStream;
 // 1
 
 public class GroupLinkedDiffs {
-    private List<List<Integer>> setIds;
-    private HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> group2Loc = new HashMap<>();
+    private List<List<Integer>> methodLinkedEdits;
+    private HashMap<Integer, HashMap<String, ArrayList<Integer>>> group2Loc = new HashMap<>();
 
-    private int nStatementGroup;
+    private Set<Integer> editSetIds;
     private int minMethodEditLen;
 
-    public GroupLinkedDiffs(List<List<Integer>> setIds){
-        this.setIds = setIds;
-        this.populateGroup2Locations(setIds);
+    public GroupLinkedDiffs(List<List<Integer>> methodlinkedEdits){
+        System.out.println(methodlinkedEdits);
+        this.methodLinkedEdits = methodlinkedEdits;
+        this.populateGroup2Locations(methodlinkedEdits);
     }
 
-    private void populateGroup2Locations(List<List<Integer>> setIds){
-        this.nStatementGroup = -1;
+    private void populateGroup2Locations(List<List<Integer>> methodLinkedEdits){
+        this.editSetIds = new HashSet<>();
         this.minMethodEditLen = Integer.MAX_VALUE;
-        for (int i=0; i< setIds.size(); i++){
-            int methodEditLen = setIds.get(i).size();
+        for (int i=0; i< methodLinkedEdits.size(); i++){
+            int methodEditLen = methodLinkedEdits.get(i).size();
             if (minMethodEditLen > methodEditLen){
                 minMethodEditLen = methodEditLen;
             }
             for (int j = 0; j< methodEditLen; j++) {
-                Integer group_i = setIds.get(i).get(j);
+                Integer group_i = methodLinkedEdits.get(i).get(j);
 
                 if (!group2Loc.containsKey(group_i)){
-                    group2Loc.put(group_i, new HashMap<Integer, ArrayList<Integer>> ());
+                    group2Loc.put(group_i, new HashMap<> ());
                 }
-                for (int k=0; k< 2; k++) {
-                    if (!group2Loc.get(group_i).containsKey((Integer) k)) {
-                        group2Loc.get(group_i).put((Integer) k, new ArrayList<Integer>());
+                String[] loc_types = new String[] {"method", "index"};
+                for (String type : loc_types) {
+                    if (!group2Loc.get(group_i).containsKey(type)) {
+                        group2Loc.get(group_i).put(type, new ArrayList<>());
                     }
                 }
 
-                group2Loc.get(group_i).get((Integer) 0).add( (Integer) i);
-                group2Loc.get(group_i).get((Integer) 1).add( (Integer) j);
+                group2Loc.get(group_i).get("method").add(i);
+                group2Loc.get(group_i).get("index").add(j);
 
-                if (this.nStatementGroup < group_i) {
-                    this.nStatementGroup = group_i;
-                }
+                this.editSetIds.add(group_i);
             }
         }
     }
 
     private int getSetIds(int i,  int j){
-        if (i < this.setIds.size() && j < this.setIds.get(i).size()){
-            return this.setIds.get(i).get(j);
+        if (i < this.methodLinkedEdits.size() && j < this.methodLinkedEdits.get(i).size()){
+            return this.methodLinkedEdits.get(i).get(j);
         }
         else{
             return -1;
         }
     }
 
-    public ArrayList<Set<Integer>> getLinkedStmtGroups(List<List<Integer>> setIds){
-        this.populateGroup2Locations(setIds);
-        ArrayList<Set<Integer>> resultEditGroups = new ArrayList<> ();
+    public List<List<Integer>> getLinkedStmtGroups(List<List<Integer>> methodLinkedEdits){
+        this.populateGroup2Locations(methodLinkedEdits);
+        System.out.println("group2Loc");
+        System.out.println(this.group2Loc);
+        System.out.println("editSetIds");
+        System.out.println(this.editSetIds);
+        System.out.println();
+        List<List<Integer>> resultEditGroups = new ArrayList<> ();
 
         Set<Integer> visitedGroups = new HashSet<>();
 
-        for (int i = 0; i < this.nStatementGroup; i++){
-            if (visitedGroups.contains(i)){
+        for (Integer set_i : this.editSetIds){
+            if (visitedGroups.contains(set_i)){
                 continue;
             }
-            visitedGroups.add((Integer) i);
+            visitedGroups.add(set_i);
 
-            ArrayList<Integer> method_locs = group2Loc.get(i).get(0);
-            ArrayList<Integer> init_locs = group2Loc.get(i).get(1);
+            ArrayList<Integer> method_locs = group2Loc.get(set_i).get("method");
+            ArrayList<Integer> init_locs = group2Loc.get(set_i).get("index");
 
-            Set<Integer> curGroup = new HashSet<>();
+            List<Integer> curGroup = new ArrayList<>();
 
             for (int j = 0; j < this.minMethodEditLen; j++) {
-                ArrayList<Integer> cur_locs = new ArrayList<Integer>(init_locs.stream().map(n -> n + 1)
+                final Integer offset = j;
+                ArrayList<Integer> cur_locs = new ArrayList<>(init_locs.stream().map(n -> n + offset)
                         .collect(Collectors.toList()));
-                ArrayList<Integer> group_vals = new ArrayList<Integer>(IntStream.range(0, cur_locs.size())
+                System.out.println("set_i=" + set_i.toString());
+                System.out.println("j=" + j);
+                System.out.println("method_locs");
+                System.out.println(method_locs);
+                System.out.println("cur_locs");
+                System.out.println(cur_locs);
+
+                ArrayList<Integer> group_vals = new ArrayList<>(IntStream.range(0, cur_locs.size())
                         .mapToObj(k -> this.getSetIds(method_locs.get(k), cur_locs.get(k)))
                         .collect(Collectors.toList()));
+                System.out.println(group_vals);
+                System.out.println();
 
                 Integer same_group_val = group_vals.get(0);
-                if (group_vals.stream().distinct().count() == 1){
+                if (group_vals.stream().distinct().count() == 1 && same_group_val != -1){
                     curGroup.add(same_group_val);
-                    if (i != same_group_val){
+                    if (set_i != same_group_val){
                         visitedGroups.add(same_group_val);
                     }
                 }
@@ -108,12 +124,14 @@ public class GroupLinkedDiffs {
     }
 
     public HashMap<Integer, Integer> getStmtGroupMap(){
-        ArrayList<Set<Integer>> groupedStmtGroups = this.getLinkedStmtGroups(this.setIds);
+        List<List<Integer>> groupedStmtGroups = this.getLinkedStmtGroups(this.methodLinkedEdits);
+        System.out.println("statement groups");
+        System.out.println(groupedStmtGroups);
         HashMap<Integer, Integer> linkedStmt2Group = new HashMap<> ();
         for (int i = 0; i < groupedStmtGroups.size(); i++){
-            Set<Integer> curGroup = groupedStmtGroups.get(i);
+            List<Integer> curGroup = groupedStmtGroups.get(i);
             for (Integer g: curGroup){
-                linkedStmt2Group.put(g, (Integer) i);
+                linkedStmt2Group.put(g, i);
             }
         }
         return linkedStmt2Group;
