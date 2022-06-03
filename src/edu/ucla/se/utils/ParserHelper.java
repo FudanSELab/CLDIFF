@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ParserHelper {
     private UnionFind uf;
@@ -19,6 +21,10 @@ public class ParserHelper {
     public ParserHelper() {
         uf = new UnionFind();
         listOfComponent = new ArrayList<>();
+    }
+
+    public Integer getEditId(Integer method_id, Integer edit_pos){
+        return listOfComponent.get(method_id).changeIndex.get(edit_pos);
     }
 
     public static  HashMap<Integer, HashMap<String, List<List<Integer>>>>  mapConverter( HashMap<String, HashMap<Integer, List<List<Integer>>>> origin) {
@@ -163,48 +169,32 @@ public class ParserHelper {
         return Integer.parseInt(s.substring(left, right));
     }
 
-    public HashMap<Integer, List<List<Integer>>> getGroupedLines(HashMap<Integer, Integer> linkToHigerLevel) {
+    private List<Integer> methodLocsToEditNumbers (List<Integer> curLocs){
+        Integer method_loc = curLocs.get(0);
+        Integer init_loc = curLocs.get(1);
+        Integer cur_loc = curLocs.get(2);
+        List<Integer> editNumberList = new ArrayList<>(IntStream.range(init_loc, cur_loc)
+                .mapToObj(pos -> this.getEditId(method_loc, pos))
+                .collect(Collectors.toList()));
+        return editNumberList;
+    }
+
+    public HashMap<Integer, List<List<Integer>>> getGroupedLines(HashMap<List<Integer>, Set<List<Integer>>> groupLocs) {
         HashMap<Integer, List<List<Integer>>> result = new HashMap<>();
 
         // calculate each method component
-        for (MethodComponent c : listOfComponent) {
-            // store result of each component in a hashmap
-            HashMap<Integer, List<Integer>> groupingInfoByComponent = new HashMap<>();
-            for (int idx = 0; idx < c.roots.size(); idx ++ ) { // iterate every disjoint set id
-                int currentSetId = c.roots.get(idx);
-                if (linkToHigerLevel.containsKey(currentSetId)) {
-                    // set key as the higher level group number, value as the changed line code
-                    List<Integer> currList;
-                    if (groupingInfoByComponent.containsKey(linkToHigerLevel.get(currentSetId))) {
-                        currList = groupingInfoByComponent.get(linkToHigerLevel.get(currentSetId));
-                    } else {
-                        currList = new ArrayList<>();
-                    }
-                    currList.add(c.lineNumbers.get(idx));
-                    groupingInfoByComponent.put(linkToHigerLevel.get(currentSetId), currList);
-                }
+        int group_i = 0;
+        for (List<Integer> group : groupLocs.keySet()){
+            List<List<Integer>> editNumberLists = new ArrayList<>();
+            for (List<Integer> curLocs : groupLocs.get(group)){
+                List<Integer> editNumberList = this.methodLocsToEditNumbers(curLocs);
+                editNumberLists.add(editNumberList);
             }
-            // add the result of a component to final result
-            addMethodToFinalResult(result,groupingInfoByComponent );
+            result.put(group_i, editNumberLists);
+            group_i++;
         }
 
         return result;
-    }
-
-
-    // add the result of each component to the final result
-    private void addMethodToFinalResult(HashMap<Integer, List<List<Integer>>> result, HashMap<Integer, List<Integer>> componentResult) {
-        for (Integer higerLevelKey : componentResult.keySet()) {
-            List<List<Integer>>  finalList = new ArrayList<>();
-            if (result.containsKey(higerLevelKey)) {
-                finalList = result.get(higerLevelKey);
-            } else {
-                finalList = new ArrayList<>();
-            }
-            List<Integer> relatedLineNumberByHigerGroup = componentResult.get(higerLevelKey);
-            finalList.add(new ArrayList<>(relatedLineNumberByHigerGroup));
-            result.put(higerLevelKey, finalList);
-        }
     }
 
     public static HashMap<Integer, List<List<Integer>>> parseSingleFile(String commitId, String parsedName, String repoName) throws IOException, ParseException, org.json.simple.parser.ParseException {
@@ -241,14 +231,8 @@ public class ParserHelper {
          */
 
 
-        // [0 -> 4]
-        // [2 -> 4]
-        // [3 -> 5]
-        // TODO Get disjoint id --> higher-level group id
-        HashMap<Integer, Integer> linkToHigerLevel = new HashMap<>();
-        // TODO Add some fake data
-        linkToHigerLevel.put(0, 6);
-        linkToHigerLevel.put(1, 5);
+        GroupLinkedDiffs linkedDiffGrouper = new GroupLinkedDiffs(changeLinksDisjointSetId);
+        HashMap<List<Integer>, Set<List<Integer>>> linkToHigerLevel = linkedDiffGrouper.getLinkedStmtGroups();
 
         //
         HashMap<Integer, List<List<Integer>>> resultOfGroup = ph.getGroupedLines(linkToHigerLevel);
@@ -309,11 +293,8 @@ public class ParserHelper {
 
          */
 
-        // TODO Get disjoint id --> higher-level group id
-        HashMap<Integer, Integer> linkToHigerLevel = new HashMap<>();
-        // TODO Add some fake data
-        linkToHigerLevel.put(0, 6);
-        linkToHigerLevel.put(1, 5);
+        GroupLinkedDiffs linkedDiffGrouper = new GroupLinkedDiffs(result);
+        HashMap<List<Integer>, Set<List<Integer>>> linkToHigerLevel = linkedDiffGrouper.getLinkedStmtGroups();
 
         //
         HashMap<Integer, List<List<Integer>>> resultOfGroup = ph.getGroupedLines(linkToHigerLevel);

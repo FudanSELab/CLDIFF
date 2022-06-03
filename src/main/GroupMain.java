@@ -1,10 +1,8 @@
 package main;
 
 import edu.ucla.se.utils.*;
-import edu.ucla.se.*;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.*;
 
@@ -23,10 +21,11 @@ public class GroupMain {
         List<Integer> M1 = Arrays.asList(1, 2, 3, 4, 1, 2, 3);
         List<Integer> M2 = Arrays.asList(1, 2, 3, 1);
         List<Integer> M3 = Arrays.asList(4, 1, 1, 2, 3);
+
         List<List<Integer>> testLinkGroups = Arrays.asList(M1,M2,M3);
 
         GroupLinkedDiffs linkedDiffGrouper = new GroupLinkedDiffs(testLinkGroups);
-        HashMap<Integer, Integer> linkedStmt2Group = linkedDiffGrouper.getStmtGroupMap();
+        HashMap<List<Integer>, Set<List<Integer>>> linkedStmt2Group = linkedDiffGrouper.getLinkedStmtGroups();
 
         System.out.println(linkedStmt2Group);
 
