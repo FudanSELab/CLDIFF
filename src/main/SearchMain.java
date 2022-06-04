@@ -13,9 +13,11 @@ public class SearchMain {
 
     public static void main(String[] args) throws IOException, ParseException, org.json.simple.parser.ParseException {
         System.out.println("Start running search...");
+        String currentPath = new java.io.File(".").getCanonicalPath();
+        System.out.println("Current dir:" + currentPath);
 
-        String oldPath = "../DataSet/testPatch/new";
-        String newPath = "../DataSet/testPatch/old";
+        String oldPath = "./DataSet/Patch1/OLD_JDT9800";
+        String newPath = "./DataSet/Patch1/NEW_JDT9801";
 
         // Get all changed old file names
         // TOOD

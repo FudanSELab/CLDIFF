@@ -21,7 +21,7 @@ public class GroupLinkedDiffs {
     private final HashMap<Integer, HashMap<String, ArrayList<Integer>>> group2Loc = new HashMap<>();
 
     private Set<Integer> editSetIds;
-    private int minMethodEditLen;
+    private int maxMethodEditLen;
 
     public GroupLinkedDiffs(List<List<Integer>> methodlinkedEdits){
         this.methodLinkedEdits = methodlinkedEdits;
@@ -30,11 +30,16 @@ public class GroupLinkedDiffs {
 
     private void populateGroup2Locations(List<List<Integer>> methodLinkedEdits){
         this.editSetIds = new HashSet<>();
-        this.minMethodEditLen = Integer.MAX_VALUE;
+        this.maxMethodEditLen = 0;
+        for (int i= methodLinkedEdits.size() - 1; i >= 0 ; i--){
+            if (methodLinkedEdits.get(i).isEmpty()){
+                methodLinkedEdits.remove(i);
+            }
+        }
         for (int i=0; i< methodLinkedEdits.size(); i++){
             int methodEditLen = methodLinkedEdits.get(i).size();
-            if (minMethodEditLen > methodEditLen){
-                minMethodEditLen = methodEditLen;
+            if (maxMethodEditLen < methodEditLen){
+                maxMethodEditLen = methodEditLen;
             }
             for (int j = 0; j< methodEditLen; j++) {
                 Integer group_i = methodLinkedEdits.get(i).get(j);
@@ -109,7 +114,7 @@ public class GroupLinkedDiffs {
             Set<Integer> chosenLocInds = new HashSet<>(IntStream.range(0, init_locs.size()).boxed().
                     collect(Collectors.toList()));
             HashMap<List<Integer>, List<List<Integer>>> group_index_intervals = new HashMap<> ();
-            for (int j = 1; j < this.minMethodEditLen+2; j++) {
+            for (int j = 1; j < this.maxMethodEditLen+2; j++) {
                 /**
                 System.out.println("set_i=" + set_i);
                 System.out.println("j=" + j);

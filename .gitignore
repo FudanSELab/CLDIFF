@@ -3,6 +3,8 @@
 /resource/config.properties
 /.idea/
 /.vscode/
+repos/*
+repos/testpatch1/
 *.iml
 resource/test/
 src/test/
